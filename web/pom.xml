@@ -7,7 +7,7 @@
     <name>whp-tb web</name>
     <parent>
         <artifactId>whp-tb</artifactId>
-        <groupId>org.motechproject.whp-tb</groupId>
+        <groupId>org.motechproject</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <properties>
