@@ -1,4 +1,4 @@
 package org.motechproject.whp.adherence.domain;
 
-public class AdherenceLogTest {
+public class DosageLogTest {
 }
