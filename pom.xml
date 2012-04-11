@@ -148,7 +148,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-security.version>3.0.5.RELEASE</spring-security.version>
         <build.dir>build</build.dir>
-        <motech.version>0.9-SNAPSHOT</motech.version>
+        <motech.version>0.10-SNAPSHOT</motech.version>
     </properties>
 
     <build>
