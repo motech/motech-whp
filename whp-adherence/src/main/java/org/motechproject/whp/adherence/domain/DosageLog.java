@@ -1,10 +1,10 @@
 package org.motechproject.whp.adherence.domain;
 
-import com.sun.istack.internal.NotNull;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
