@@ -6,6 +6,7 @@ import org.motechproject.whp.adherence.repository.AllDosageLogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,15 +19,14 @@ public class AdherenceService {
         this.allDosageLogs = allDosageLogs;
     }
 
-    public String recordAdherence(String patientId, LocalDate startDate, LocalDate endDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
+    public DosageLog recordAdherence(String patientId, LocalDate startDate, LocalDate endDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
         DosageLog dosageLog = new DosageLog(patientId, startDate, endDate, doseTakenCount, idealDoseCount, metaData);
         allDosageLogs.add(dosageLog);
-        return dosageLog.getId();
+        return dosageLog;
     }
 
-
-
-
-
+    public List<DosageLog> getDosageLogs(String patientId, LocalDate fromDate, LocalDate toDate) {
+        return allDosageLogs.findAllByPatientIdAndDateRange(patientId, fromDate, toDate);
+    }
 
 }

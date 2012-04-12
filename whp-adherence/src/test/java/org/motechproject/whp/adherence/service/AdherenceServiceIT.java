@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.domain.DosageLog;
 import org.motechproject.whp.adherence.repository.AllDosageLogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,8 +28,7 @@ public class AdherenceServiceIT {
 
     @Test
     public void shouldRecordAdherence() {
-        String logId = adherenceService.recordAdherence("patientId", DateUtil.today().minusDays(2), DateUtil.today(), 2, 10, null);
-        assertNotNull(logId);
+        DosageLog dosageLog = adherenceService.recordAdherence("patientId", DateUtil.today().minusDays(2), DateUtil.today(), 2, 10, null);
+        assertNotNull(dosageLog.getId());
     }
-
 }

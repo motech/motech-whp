@@ -96,4 +96,20 @@ public class DosageLog extends MotechBaseDataObject {
         this.metaData.putAll(metaData);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DosageLog dosageLog = (DosageLog) o;
+
+        if (this.getId() != null ? !this.getId().equals(dosageLog.getId()) : dosageLog.getId() != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId() != null ? this.getId().hashCode() : 0;
+    }
 }

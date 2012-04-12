@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AllDosageLogs extends MotechBaseRepository<DosageLog> {
 
@@ -38,5 +40,12 @@ public class AllDosageLogs extends MotechBaseRepository<DosageLog> {
         final ComplexKey key = ComplexKey.of(patientId, fromDate, toDate);
         ViewQuery q = createQuery("findByPatientIdAndDateRange").key(key).includeDocs(true);
         return singleResult(db.queryView(q, DosageLog.class));
+    }
+
+    public List<DosageLog> findAllByPatientIdAndDateRange(String patientId, LocalDate fromDate, LocalDate toDate) {
+        final ComplexKey startKey = ComplexKey.of(patientId, fromDate);
+        final ComplexKey endKey = ComplexKey.of(patientId, toDate);
+        ViewQuery q = createQuery("findByPatientIdAndDateRange").startKey(startKey).endKey(endKey).includeDocs(true);
+        return db.queryView(q, DosageLog.class);
     }
 }

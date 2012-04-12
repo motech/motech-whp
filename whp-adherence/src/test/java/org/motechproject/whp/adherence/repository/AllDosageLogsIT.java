@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.repository;
 
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -8,7 +9,9 @@ import org.motechproject.whp.adherence.testutils.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
@@ -57,4 +60,25 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
         assertEquals("newValue2", updatedDosageLog.getMetaData().get("key2"));
     }
 
+    @Test
+    public void findAllDosageLogsForAPatientBetweenGivenDateRange() {
+        LocalDate logsStartDate = DateUtil.today();
+        DosageLog beforeDateRange = addLog("patientId", logsStartDate);
+        DosageLog inRange_1 = addLog("patientId", logsStartDate.plusDays(3));
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", logsStartDate.plusDays(4));
+        DosageLog inRange_2 = addLog("patientId", logsStartDate.plusDays(5));
+        DosageLog afterDateRange = addLog("patientId", logsStartDate.plusDays(7));
+
+        List<DosageLog> dosageLogs = allDosageLogs.findAllByPatientIdAndDateRange("patientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        assertEquals(Arrays.asList(inRange_1, inRange_2), dosageLogs);
+
+        List<DosageLog> otherPatientDosageLogs = allDosageLogs.findAllByPatientIdAndDateRange("otherPatientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        assertEquals(Arrays.asList(inRangeOtherPatient), otherPatientDosageLogs);
+    }
+
+    private DosageLog addLog(String patientId, LocalDate fromDate) {
+        DosageLog dosageLog = new DosageLog(patientId, fromDate, fromDate, 2, 10, null);
+        allDosageLogs.add(dosageLog);
+        return dosageLog;
+    }
 }
