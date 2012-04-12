@@ -2,6 +2,7 @@ package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.DosageLog;
+import org.motechproject.whp.adherence.domain.DosageSummary;
 import org.motechproject.whp.adherence.repository.AllDosageLogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,10 @@ public class AdherenceService {
 
     public List<DosageLog> getDosageLogs(LocalDate fromDate, LocalDate toDate) {
         return allDosageLogs.getAllInDateRange(fromDate, toDate);
+    }
+
+    public DosageSummary getPatientDosageSummary(String patientId, LocalDate fromDate, LocalDate toDate) {
+        return allDosageLogs.getPatientDosageSummary(patientId, fromDate, toDate);
     }
 
 }

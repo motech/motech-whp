@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.DosageLog;
+import org.motechproject.whp.adherence.domain.DosageSummary;
 import org.motechproject.whp.adherence.testutils.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,6 +20,9 @@ import static junit.framework.Assert.assertNotNull;
 
 @ContextConfiguration(locations = {"classpath:applicationAdherenceContext.xml"})
 public class AllDosageLogsIT extends SpringIntegrationTest {
+
+    public static final String PATIENT_ID = "patientId";
+    public static final int IDEAL_DOSE_COUNT = 10;
 
     @Autowired
     private AllDosageLogs allDosageLogs;
@@ -63,11 +67,11 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
     @Test
     public void shouldFindAllDosageLogsForAPatientBetweenGivenDateRange() {
         LocalDate logsStartDate = DateUtil.today();
-        DosageLog beforeDateRange = addLog("patientId", logsStartDate);
-        DosageLog inRange_1 = addLog("patientId", logsStartDate.plusDays(3));
-        DosageLog inRangeOtherPatient = addLog("otherPatientId", logsStartDate.plusDays(4));
-        DosageLog inRange_2 = addLog("patientId", logsStartDate.plusDays(5));
-        DosageLog afterDateRange = addLog("patientId", logsStartDate.plusDays(7));
+        DosageLog beforeDateRange = addLog("patientId", 2, logsStartDate);
+        DosageLog inRange_1 = addLog("patientId", 2, logsStartDate.plusDays(3));
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", 2, logsStartDate.plusDays(4));
+        DosageLog inRange_2 = addLog("patientId", 2, logsStartDate.plusDays(5));
+        DosageLog afterDateRange = addLog("patientId", 2, logsStartDate.plusDays(7));
 
         List<DosageLog> dosageLogs = allDosageLogs.getAllByPatientIdAndDateRange("patientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
         assertEquals(Arrays.asList(inRange_1, inRange_2), dosageLogs);
@@ -79,19 +83,32 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
     @Test
     public void shouldFindAllDosageLogsBetweenGivenDateRange() {
         LocalDate logsStartDate = DateUtil.today();
-        DosageLog beforeDateRange = addLog("patientId", logsStartDate);
-        DosageLog inRange_1 = addLog("patientId", logsStartDate.plusDays(3));
-        DosageLog inRangeOtherPatient = addLog("otherPatientId", logsStartDate.plusDays(4));
-        DosageLog inRange_2 = addLog("patientId", logsStartDate.plusDays(5));
-        DosageLog afterDateRange = addLog("patientId", logsStartDate.plusDays(7));
+        DosageLog beforeDateRange = addLog("patientId", 2, logsStartDate);
+        DosageLog inRange_1 = addLog("patientId", 2, logsStartDate.plusDays(3));
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", 2, logsStartDate.plusDays(4));
+        DosageLog inRange_2 = addLog("patientId", 2, logsStartDate.plusDays(5));
+        DosageLog afterDateRange = addLog("patientId", 2, logsStartDate.plusDays(7));
 
         List<DosageLog> dosageLogs = allDosageLogs.getAllInDateRange(logsStartDate.plusDays(2), logsStartDate.plusDays(6));
         assertEquals(Arrays.asList(inRange_1, inRangeOtherPatient, inRange_2), dosageLogs);
     }
 
+    @Test
+    public void shouldGetDosageSummary() {
+        LocalDate logsStartDate = DateUtil.today().plusDays(15);
+        DosageLog beforeDateRange = addLog(PATIENT_ID, 2, logsStartDate);
+        DosageLog inRange_1 = addLog(PATIENT_ID, 2, logsStartDate.plusDays(3));
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", 2, logsStartDate.plusDays(4));
+        DosageLog inRange_2 = addLog(PATIENT_ID, 3, logsStartDate.plusDays(5));
 
-    private DosageLog addLog(String patientId, LocalDate fromDate) {
-        DosageLog dosageLog = new DosageLog(patientId, fromDate, fromDate, 2, 10, null);
+        DosageLog afterDateRange = addLog(PATIENT_ID, 2, logsStartDate.plusDays(7));
+        DosageSummary dosageSummary = allDosageLogs.getPatientDosageSummary(PATIENT_ID, logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        assertEquals(5, dosageSummary.getTotalDoseTakenCount());
+        assertEquals(20, dosageSummary.getTotalIdealDoseCount());
+    }
+
+    private DosageLog addLog(String patientId, int doseTakenCount, LocalDate fromDate) {
+        DosageLog dosageLog = new DosageLog(patientId, fromDate, fromDate, doseTakenCount, IDEAL_DOSE_COUNT, null);
         allDosageLogs.add(dosageLog);
         return dosageLog;
     }

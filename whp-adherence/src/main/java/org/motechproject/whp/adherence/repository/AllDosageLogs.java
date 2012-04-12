@@ -7,6 +7,7 @@ import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.adherence.domain.DosageLog;
+import org.motechproject.whp.adherence.domain.DosageSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -56,4 +57,18 @@ public class AllDosageLogs extends MotechBaseRepository<DosageLog> {
         ViewQuery q = createQuery("byDateRange").startKey(startKey).endKey(endKey).includeDocs(true);
         return db.queryView(q, DosageLog.class);
     }
+
+    @View(
+            name = "patientSummaryByDateRange",
+            map = "function(doc) {if (doc.type =='DosageLog') { emit([doc.patientId, doc.fromDate, doc.toDate], { patientId:  doc.patientId, doseTakenCount: doc.doseTakenCount, idealDoseCount: doc.idealDoseCount});}}",
+            reduce = "function(keys, values, rereduce) { return {patientId: values[0].patientId, totalDoseTakenCount: sum(values.map(function(elt){ return elt.doseTakenCount})), totalIdealDoseCount : sum(values.map(function(elt){return elt.idealDoseCount}))} }"
+    )
+    public DosageSummary getPatientDosageSummary(String patientId, LocalDate fromDate, LocalDate toDate) {
+        final ComplexKey startKey = ComplexKey.of(patientId, fromDate);
+        final ComplexKey endKey = ComplexKey.of(patientId, toDate);
+        ViewQuery q = createQuery("patientSummaryByDateRange").startKey(startKey).endKey(endKey).reduce(true).groupLevel(1);
+        List<DosageSummary> resultSet = db.queryView(q, DosageSummary.class);
+        return (resultSet == null || resultSet.isEmpty()) ? null : resultSet.get(0);
+    }
+
 }
