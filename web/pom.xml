@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>web</artifactId>
     <packaging>war</packaging>
-    <name>whp-tb web</name>
+    <name>motech-whp web</name>
     <parent>
-        <artifactId>whp-tb</artifactId>
+        <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
