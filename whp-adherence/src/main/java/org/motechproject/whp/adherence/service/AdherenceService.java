@@ -26,7 +26,11 @@ public class AdherenceService {
     }
 
     public List<DosageLog> getDosageLogs(String patientId, LocalDate fromDate, LocalDate toDate) {
-        return allDosageLogs.findAllByPatientIdAndDateRange(patientId, fromDate, toDate);
+        return allDosageLogs.getAllByPatientIdAndDateRange(patientId, fromDate, toDate);
+    }
+
+    public List<DosageLog> getDosageLogs(LocalDate fromDate, LocalDate toDate) {
+        return allDosageLogs.getAllInDateRange(fromDate, toDate);
     }
 
 }

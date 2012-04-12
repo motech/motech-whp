@@ -61,7 +61,7 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void findAllDosageLogsForAPatientBetweenGivenDateRange() {
+    public void shouldFindAllDosageLogsForAPatientBetweenGivenDateRange() {
         LocalDate logsStartDate = DateUtil.today();
         DosageLog beforeDateRange = addLog("patientId", logsStartDate);
         DosageLog inRange_1 = addLog("patientId", logsStartDate.plusDays(3));
@@ -69,12 +69,26 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
         DosageLog inRange_2 = addLog("patientId", logsStartDate.plusDays(5));
         DosageLog afterDateRange = addLog("patientId", logsStartDate.plusDays(7));
 
-        List<DosageLog> dosageLogs = allDosageLogs.findAllByPatientIdAndDateRange("patientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        List<DosageLog> dosageLogs = allDosageLogs.getAllByPatientIdAndDateRange("patientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
         assertEquals(Arrays.asList(inRange_1, inRange_2), dosageLogs);
 
-        List<DosageLog> otherPatientDosageLogs = allDosageLogs.findAllByPatientIdAndDateRange("otherPatientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        List<DosageLog> otherPatientDosageLogs = allDosageLogs.getAllByPatientIdAndDateRange("otherPatientId", logsStartDate.plusDays(2), logsStartDate.plusDays(6));
         assertEquals(Arrays.asList(inRangeOtherPatient), otherPatientDosageLogs);
     }
+
+    @Test
+    public void shouldFindAllDosageLogsBetweenGivenDateRange() {
+        LocalDate logsStartDate = DateUtil.today();
+        DosageLog beforeDateRange = addLog("patientId", logsStartDate);
+        DosageLog inRange_1 = addLog("patientId", logsStartDate.plusDays(3));
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", logsStartDate.plusDays(4));
+        DosageLog inRange_2 = addLog("patientId", logsStartDate.plusDays(5));
+        DosageLog afterDateRange = addLog("patientId", logsStartDate.plusDays(7));
+
+        List<DosageLog> dosageLogs = allDosageLogs.getAllInDateRange(logsStartDate.plusDays(2), logsStartDate.plusDays(6));
+        assertEquals(Arrays.asList(inRange_1, inRangeOtherPatient, inRange_2), dosageLogs);
+    }
+
 
     private DosageLog addLog(String patientId, LocalDate fromDate) {
         DosageLog dosageLog = new DosageLog(patientId, fromDate, fromDate, 2, 10, null);
