@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository;
 
+import junit.framework.Assert;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         allPatients.add(patient);
 
         List<Patient> patients = allPatients.getAll();
+        Assert.assertTrue(patients.size() > 0);
     }
 
 }
