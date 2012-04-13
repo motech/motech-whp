@@ -35,7 +35,7 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldRecordAdherence() {
-        DosageLog dosageLog = adherenceService.recordAdherence("patientId", DateUtil.today().minusDays(2), DateUtil.today(), 2, 10, null);
+        DosageLog dosageLog = adherenceService.recordAdherence("patientId", "treatmentCourseId", DateUtil.today().minusDays(2), DateUtil.today(), 2, 10, null);
         assertNotNull(dosageLog.getId());
     }
 

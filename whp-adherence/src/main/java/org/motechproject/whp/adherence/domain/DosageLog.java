@@ -14,6 +14,8 @@ public class DosageLog extends MotechBaseDataObject {
     @NotNull
     private String patientId;
     @NotNull
+    private String treatmentCourseId;
+    @NotNull
     private LocalDate fromDate;
     @NotNull
     private LocalDate toDate;
@@ -28,14 +30,32 @@ public class DosageLog extends MotechBaseDataObject {
         super();
     }
 
-    public DosageLog(String patientId, LocalDate fromDate, LocalDate toDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
+    public DosageLog(String patientId, String treatmentCourseId, LocalDate fromDate, LocalDate toDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
         super();
         setPatientId(patientId);
+        setTreatmentCourseId(treatmentCourseId);
         setFromDate(fromDate);
         setToDate(toDate);
         setDoseTakenCount(doseTakenCount);
         setIdealDoseCount(idealDoseCount);
         setMetaData(metaData);
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getTreatmentCourseId() {
+        return treatmentCourseId;
+    }
+
+    public DosageLog setTreatmentCourseId(String treatmentCourseId) {
+        this.treatmentCourseId = treatmentCourseId;
+        return this;
     }
 
     public LocalDate getFromDate() {
@@ -82,14 +102,6 @@ public class DosageLog extends MotechBaseDataObject {
         if (metaData != null)
             this.metaData = metaData;
         return this;
-    }
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
     }
 
     public void addMetaData(Map<String, String> metaData) {

@@ -20,22 +20,22 @@ public class AdherenceService {
         this.allDosageLogs = allDosageLogs;
     }
 
-    public DosageLog recordAdherence(String patientId, LocalDate startDate, LocalDate endDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
-        DosageLog dosageLog = new DosageLog(patientId, startDate, endDate, doseTakenCount, idealDoseCount, metaData);
+    public DosageLog recordAdherence(String patientId, String treatmentCourseId, LocalDate startDate, LocalDate endDate, int doseTakenCount, int idealDoseCount, Map<String, String> metaData) {
+        DosageLog dosageLog = new DosageLog(patientId, treatmentCourseId, startDate, endDate, doseTakenCount, idealDoseCount, metaData);
         allDosageLogs.add(dosageLog);
         return dosageLog;
     }
 
-    public List<DosageLog> getDosageLogs(String patientId, LocalDate fromDate, LocalDate toDate) {
-        return allDosageLogs.getAllByPatientIdAndDateRange(patientId, fromDate, toDate);
+    public List<DosageLog> getDosageLogs(String patientId, String treatmentCourseId, LocalDate fromDate, LocalDate toDate) {
+        return allDosageLogs.getAllBy(patientId, treatmentCourseId, fromDate, toDate);
     }
 
     public List<DosageLog> getDosageLogs(LocalDate fromDate, LocalDate toDate) {
         return allDosageLogs.getAllInDateRange(fromDate, toDate);
     }
 
-    public DosageSummary getPatientDosageSummary(String patientId, LocalDate fromDate, LocalDate toDate) {
-        return allDosageLogs.getPatientDosageSummary(patientId, fromDate, toDate);
+    public DosageSummary getPatientDosageSummary(String patientId, String treatmentCourseId, LocalDate fromDate, LocalDate toDate) {
+        return allDosageLogs.getPatientDosageSummary(patientId, treatmentCourseId, fromDate, toDate);
     }
 
 }

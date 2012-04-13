@@ -2,7 +2,8 @@ package org.motechproject.whp.adherence.domain;
 
 public class DosageSummary {
 
-    String patientId;
+    private String patientId;
+    private String treatmentCourseId;
     private int totalDoseTakenCount;
     private int totalIdealDoseCount;
 
@@ -12,6 +13,15 @@ public class DosageSummary {
 
     public DosageSummary setPatientId(String patientId) {
         this.patientId = patientId;
+        return this;
+    }
+
+    public String getTreatmentCourseId() {
+        return treatmentCourseId;
+    }
+
+    public DosageSummary setTreatmentCourseId(String treatmentCourseId) {
+        this.treatmentCourseId = treatmentCourseId;
         return this;
     }
 
@@ -32,5 +42,4 @@ public class DosageSummary {
         this.totalIdealDoseCount = totalIdealDoseCount;
         return this;
     }
-
 }
