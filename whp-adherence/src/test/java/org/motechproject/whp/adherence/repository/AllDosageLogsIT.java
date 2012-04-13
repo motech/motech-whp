@@ -94,17 +94,22 @@ public class AllDosageLogsIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldGetDosageSummary() {
-        LocalDate logsStartDate = DateUtil.today().plusDays(15);
+    public void shouldGetPatientDosageSummary() {
+        LocalDate logsStartDate = DateUtil.newDate(2012, 1, 1);
         DosageLog beforeDateRange = addLog(PATIENT_ID, 2, logsStartDate);
-        DosageLog inRange_1 = addLog(PATIENT_ID, 2, logsStartDate.plusDays(3));
-        DosageLog inRangeOtherPatient = addLog("otherPatientId", 2, logsStartDate.plusDays(4));
-        DosageLog inRange_2 = addLog(PATIENT_ID, 3, logsStartDate.plusDays(5));
 
-        DosageLog afterDateRange = addLog(PATIENT_ID, 2, logsStartDate.plusDays(7));
-        DosageSummary dosageSummary = allDosageLogs.getPatientDosageSummary(PATIENT_ID, logsStartDate.plusDays(2), logsStartDate.plusDays(6));
-        assertEquals(5, dosageSummary.getTotalDoseTakenCount());
-        assertEquals(20, dosageSummary.getTotalIdealDoseCount());
+        //Create DosageLog for PATIENT for 25 days in range to test ReReduce
+        int averageDoseTakenCount = 3;
+        for(int day = 5; day < 30; day++){
+            addLog(PATIENT_ID, averageDoseTakenCount, logsStartDate.plusDays(day));
+        }
+        DosageLog inRangeOtherPatient = addLog("otherPatientId", 2, logsStartDate.plusDays(5));
+        DosageLog afterDateRange = addLog(PATIENT_ID, 2, logsStartDate.plusDays(40));
+
+        DosageSummary dosageSummary = allDosageLogs.getPatientDosageSummary(PATIENT_ID, logsStartDate.plusDays(4), logsStartDate.plusDays(35));
+
+        assertEquals(averageDoseTakenCount * 25, dosageSummary.getTotalDoseTakenCount());
+        assertEquals(IDEAL_DOSE_COUNT * 25, dosageSummary.getTotalIdealDoseCount());
     }
 
     private DosageLog addLog(String patientId, int doseTakenCount, LocalDate fromDate) {
