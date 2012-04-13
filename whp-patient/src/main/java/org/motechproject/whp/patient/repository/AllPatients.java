@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * Created by IntelliJ IDEA.
  * User: pchandra
@@ -29,10 +27,6 @@ public class AllPatients  extends MotechBaseRepository<Patient> {
     @GenerateView
     public Patient findByPatientId(String patientId) {
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId).includeDocs(true);
-        List<Patient> patients = db.queryView(find_by_patientId, Patient.class);
-        if (patients == null || patients.isEmpty()) {
-            return null;
-        }
-        return patients.get(0);
+        return singleResult(db.queryView(find_by_patientId, Patient.class));
     }
 }
