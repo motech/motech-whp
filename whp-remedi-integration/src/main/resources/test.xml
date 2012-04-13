@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<case xmlns="http://commcarehq.org/case/transaction/v2" patientId="cha01100001" date_modified="03/04/12 11:23:40" user_id="test">
+<create>
+<caseType>whp_tb_patient </caseType>
+<case_name>RAJU</case_name>
+</create>
+<update>
+<tb_id> cha01102001</tb_id>
+<providerId>cha011</providerId>
+<patient_type>New/PHS Transfer In</patient_type>
+<firstName> Raju</firstName >
+<lastName> Singh</lastName >
+<age>35</age >
+<gender>M</gender >
+<smear_sample_instance>Pre-treatment</smear_sample_instance >
+<smear_test_date>2012-03-01</smear_test_date>
+<smear_result>Positive</smear_result>
+<treatment_category>01</treatment_category>
+<registration_date>2012-03-03</registration_date>
+</update>
+</case>
