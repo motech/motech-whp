@@ -1,30 +1,5 @@
 {
-    "map" : "function(doc) {
-        if (doc.type =='DosageLog') {
+    "map" : "function(doc) { if (doc.type =='DosageLog') { var emitValue = { patientId: doc.patientId, doseTakenCount: doc.doseTakenCount, idealDoseCount: doc.idealDoseCount }; emit([doc.patientId, doc.fromDate, doc.toDate], emitValue); } }",
 
-            var emitValue = {
-                patientId: doc.patientId,
-                doseTakenCount: doc.doseTakenCount,
-                idealDoseCount: doc.idealDoseCount
-            };
-
-            emit([doc.patientId, doc.fromDate, doc.toDate], emitValue);
-        }
-    }",
-
-    "reduce" : "function(keys, values, reReduce) {
-        if( !reReduce) {
-            return {
-                patientId: values[0].patientId,
-                totalDoseTakenCount : sum(values.map(function(elt){ return elt.doseTakenCount })),
-                totalIdealDoseCount : sum(values.map(function(elt){ return elt.idealDoseCount }))
-            }
-        } else {
-            return {
-                patientId: values[0].patientId,
-                totalDoseTakenCount : sum(values.map(function(elt){ return elt.totalDoseTakenCount })),
-                totalIdealDoseCount : sum(values.map(function(elt){ return elt.totalIdealDoseCount }))
-            }
-        }
-    }"
+    "reduce" : "function(keys, values, reReduce) { if( !reReduce) { return { patientId: values[0].patientId, totalDoseTakenCount : sum(values.map(function(elt){ return elt.doseTakenCount })), totalIdealDoseCount : sum(values.map(function(elt){ return elt.idealDoseCount })) } } else { return { patientId: values[0].patientId, totalDoseTakenCount : sum(values.map(function(elt){ return elt.totalDoseTakenCount })), totalIdealDoseCount : sum(values.map(function(elt){ return elt.totalIdealDoseCount })) } } }"
 }
