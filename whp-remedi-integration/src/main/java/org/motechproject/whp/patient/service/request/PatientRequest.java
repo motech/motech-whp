@@ -8,6 +8,13 @@ package org.motechproject.whp.patient.service.request;
  * To change this template use File | Settings | File Templates.
  */
 public class PatientRequest {
+
+    private String case_id;
+    private String case_type;
+    private String provider_id;
+    private String first_name;
+    private String last_name;
+
     public String getCase_id() {
         return case_id;
     }
@@ -47,11 +54,4 @@ public class PatientRequest {
     public void setLast_name(String last_name) {
         this.last_name = last_name;
     }
-
-    private String case_id;
-    private String case_type;
-    private String provider_id;
-    private String first_name;
-    private String last_name;
-
 }
