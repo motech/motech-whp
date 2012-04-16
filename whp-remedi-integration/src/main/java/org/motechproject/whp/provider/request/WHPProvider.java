@@ -1,4 +1,4 @@
-package org.motechproject.whp.provider.domain;
+package org.motechproject.whp.provider.request;
 
 /**
  * Created by IntelliJ IDEA.

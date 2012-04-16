@@ -12,6 +12,7 @@
         <module>whp-adherence</module>
         <module>whp-remedi-integration</module>
         <module>whp-patient</module>
+        <module>whp-provider</module>
     </modules>
 
     <repositories>

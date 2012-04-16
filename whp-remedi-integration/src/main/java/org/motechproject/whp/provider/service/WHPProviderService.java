@@ -1,7 +1,7 @@
 package org.motechproject.whp.provider.service;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
-import org.motechproject.whp.provider.domain.WHPProvider;
+import org.motechproject.whp.provider.request.WHPProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

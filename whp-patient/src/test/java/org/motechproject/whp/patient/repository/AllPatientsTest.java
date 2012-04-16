@@ -1,12 +1,12 @@
 package org.motechproject.whp.patient.repository;
 
-import junit.framework.Assert;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.List;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,8 +25,14 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Patient patient = new Patient("cha01100001", "cha011", "01", "cha01102001", "Raju", "Singh", "M");
         allPatients.add(patient);
 
-        List<Patient> patients = allPatients.getAll();
-        Assert.assertTrue(patients.size() > 0);
+        Patient patientReturned = allPatients.findByPatientId("cha01100001");
+        assertNotNull(patientReturned);
+        assertEquals("Raju",patientReturned.getFirstName());
+        assertEquals("Singh",patientReturned.getLastName());
+        assertEquals("cha011",patientReturned.getProviderId());
+        assertEquals("01",patientReturned.getCategory());
+       // assertEquals("cha01102001",patientReturned.getTbId());
+        assertEquals("M",patientReturned.getGender());
     }
 
 }

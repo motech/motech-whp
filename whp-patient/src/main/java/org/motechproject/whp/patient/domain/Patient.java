@@ -25,11 +25,10 @@ public class Patient extends MotechBaseDataObject {
     private String lastName;
     @JsonProperty
     private String category;
-
-
-
     @JsonProperty
     private String gender;
+    @JsonProperty
+    private String tbId;
 
     public Patient(){
 
@@ -42,6 +41,7 @@ public class Patient extends MotechBaseDataObject {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
+        this.tbId = tbID;
     }
 
     public String getCategory() {
@@ -74,6 +74,14 @@ public class Patient extends MotechBaseDataObject {
 
     public void setCaseType(String caseType) {
         this.caseType = caseType;
+    }
+
+    public String getTbId() {
+        return tbId;
+    }
+
+    public void setTbId(String tbId) {
+        this.tbId = tbId;
     }
 
     public String getProviderId() {
