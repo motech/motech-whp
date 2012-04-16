@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.repository;
+package org.motechproject.whp.common.integration.repository;
 
 import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;
@@ -12,10 +12,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
 public abstract class SpringIntegrationTest {
+
     @Qualifier("whpDbConnector")
     @Autowired
     protected CouchDbConnector whpDbConnector;
@@ -33,13 +35,18 @@ public abstract class SpringIntegrationTest {
     }
 
     protected void deleteAll() {
-        whpDbConnector.executeBulk(toDelete);
+        if (toDelete.size() > 0)
+            whpDbConnector.executeBulk(toDelete);
         toDelete.clear();
     }
 
     protected void markForDeletion(Object... documents) {
         for (Object document : documents)
             markForDeletion(document);
+    }
+
+    protected void markForDeletion(List documents) {
+        markForDeletion(documents.toArray());
     }
 
     protected void markForDeletion(Object document) {

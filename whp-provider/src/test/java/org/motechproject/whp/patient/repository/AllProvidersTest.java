@@ -5,6 +5,7 @@ import org.motechproject.whp.provider.domain.WHPProvider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;

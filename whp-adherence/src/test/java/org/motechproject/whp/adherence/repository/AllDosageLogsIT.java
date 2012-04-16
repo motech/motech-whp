@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.DosageLog;
 import org.motechproject.whp.adherence.domain.DosageSummary;
-import org.motechproject.whp.adherence.testutils.SpringIntegrationTest;
+import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

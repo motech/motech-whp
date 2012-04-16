@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.repository;
 
 import org.junit.Test;
+import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
