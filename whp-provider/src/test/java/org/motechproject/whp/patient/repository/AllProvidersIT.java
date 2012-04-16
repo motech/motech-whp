@@ -1,11 +1,12 @@
 package org.motechproject.whp.patient.repository;
 
+import org.junit.After;
 import org.junit.Test;
-import org.motechproject.whp.provider.domain.WHPProvider;
+import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
+import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -18,18 +19,23 @@ import static junit.framework.Assert.assertNotNull;
  * To change this template use File | Settings | File Templates.
  */
 @ContextConfiguration(locations = "classpath*:/applicationProviderContext.xml")
-public class AllProvidersTest extends SpringIntegrationTest {
+public class AllProvidersIT extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;
 
+    @After
+    public void tearDown() {
+        markForDeletion(allProviders.getAll().toArray());
+    }
+
     @Test
-    public void shouldSaveProviderInfo(){
-        WHPProvider provider = new WHPProvider("P00001", "984567876");
+    public void shouldSaveProviderInfo() {
+        Provider provider = new Provider("P00001", "984567876");
         allProviders.add(provider);
 
-        WHPProvider providerReturned = allProviders.findByProviderId("P00001");
+        Provider providerReturned = allProviders.findByProviderId("P00001");
         assertNotNull(providerReturned);
-        assertEquals("984567876",providerReturned.getPrimaryMobile());
+        assertEquals("984567876", providerReturned.getPrimaryMobile());
     }
 
 }

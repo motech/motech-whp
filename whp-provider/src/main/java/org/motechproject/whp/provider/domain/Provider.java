@@ -11,8 +11,8 @@ import org.motechproject.model.MotechBaseDataObject;
  * Time: 3:55 PM
  * To change this template use File | Settings | File Templates.
  */
-@TypeDiscriminator("doc.type == 'WHPProvider'")
-public class WHPProvider extends MotechBaseDataObject {
+@TypeDiscriminator("doc.type == 'Provider'")
+public class Provider extends MotechBaseDataObject {
     @JsonProperty
     private String primaryMobile;
     @JsonProperty
@@ -24,12 +24,12 @@ public class WHPProvider extends MotechBaseDataObject {
     @JsonProperty
     private String district;
 
-    public WHPProvider(String providerId, String primaryMobile) {
+    public Provider(String providerId, String primaryMobile) {
         this.providerId = providerId;
         this.primaryMobile = primaryMobile;
     }
 
-    public WHPProvider() {
+    public Provider() {
     }
 
     public String getPrimaryMobile() {
