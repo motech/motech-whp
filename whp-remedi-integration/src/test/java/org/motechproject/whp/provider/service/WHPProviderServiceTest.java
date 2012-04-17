@@ -11,14 +11,10 @@ import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
- * Created by IntelliJ IDEA.
  * User: preethi
  * Date: 16/4/12
- * Time: 11:33 AM
- * To change this template use File | Settings | File Templates.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class WHPProviderServiceTest extends TestCase {
@@ -26,7 +22,7 @@ public class WHPProviderServiceTest extends TestCase {
     @Mock
     private AllProviders allProviders;
     WHPProviderService whpProviderService;
-    
+
     @Before
     public void setUp() {
         whpProviderService = new WHPProviderService(allProviders);
@@ -44,16 +40,9 @@ public class WHPProviderServiceTest extends TestCase {
         verify(allProviders).addOrReplace(whpProvider);
     }
 
-    @Test
+    @Test(expected = WHPValidationException.class)
     public void shouldThrowAnExceptionIfMandatoryFieldsAreAbsent() {
-        try {
-            Provider provider = new Provider("P00001", "984567876");
-            whpProviderService.createOrUpdate(provider);
-            fail();
-        } catch (WHPValidationException exception) {
-
-        }
-        verifyNoMoreInteractions(allProviders);
-
+        Provider provider = new Provider("P00001", "984567876");
+        whpProviderService.createOrUpdate(provider);
     }
 }

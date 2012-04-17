@@ -1,0 +1,25 @@
+<html>
+<head>
+    <script type="text/javascript">
+        function addFormAction() {
+        alert("hello: " + document.testSubmit.url.value);
+        document.testSubmit.action = document.testSubmit.url.value;
+        document.testSubmit.submit();
+        }
+    </script>
+
+</head>
+
+<body>
+
+<br/>
+<form name="testSubmit" method="post" onsubmit="addFormAction();">
+    Enter url: <input type="text" id="url" name="url"></input>
+    <br/>
+    <br/>
+    Enter caseXML: <input type="text" id="data" name="data"></input>
+    <br/>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
