@@ -1,4 +1,4 @@
-package org.motechproject.whp.provider.service;
+package org.motechproject.whp.service;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
 import org.motechproject.util.StringUtil;
@@ -9,20 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/16/12
- * Time: 4:57 AM
- * To change this template use File | Settings | File Templates.
- */
 @Controller
 @RequestMapping("/whp/provider/**")
-public class WHPProviderService extends ProviderRegistrationService<Provider> {
+public class ProviderService extends ProviderRegistrationService<Provider> {
     private AllProviders allProviders;
 
     @Autowired
-    public WHPProviderService(AllProviders allProviders) {
+    public ProviderService(AllProviders allProviders) {
         super(Provider.class);
         this.allProviders = allProviders;
     }

@@ -1,24 +1,23 @@
-package org.motechproject.whp.patient.service;
+package org.motechproject.whp.service;
 
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.whp.patient.service.request.PatientRequest;
+import org.motechproject.whp.mapper.PatientMapper;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.request.PatientRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/12/12
- * Time: 11:43 AM
- * To change this template use File | Settings | File Templates.
- */
 @Controller
 @RequestMapping("/whp/patient/**")
 public class PatientService extends CaseService<PatientRequest>{
 
+    AllPatients allPatients;
 
-    public PatientService() {
+
+    public PatientService(AllPatients allPatients) {
         super(PatientRequest.class);
+        this.allPatients = allPatients;
     }
 
     @Override
@@ -33,8 +32,11 @@ public class PatientService extends CaseService<PatientRequest>{
 
     @Override
     public void createCase(PatientRequest patientRequest) {
-        System.out.println(patientRequest.getCase_id());
-        System.out.println(patientRequest.getFirst_name());
-        //To change body of implemented methods use File | Settings | File Templates.
+        Patient patient = new PatientMapper().map(patientRequest);
+        Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
+        if(patientReturned == null)
+            allPatients.add(patient);
+        else
+            allPatients.update(patient);
     }
 }

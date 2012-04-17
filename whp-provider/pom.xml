@@ -17,8 +17,12 @@
         <build.dir>../build</build.dir>
     </properties>
 
-
     <dependencies>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>case-service</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>whp-common</artifactId>
@@ -33,7 +37,5 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
-
 
 </project>

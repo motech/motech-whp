@@ -1,4 +1,4 @@
-package org.motechproject.whp.provider.service;
+package org.motechproject.whp.service;
 
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -11,21 +11,25 @@ import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
+ * Created by IntelliJ IDEA.
  * User: preethi
  * Date: 16/4/12
+ * Time: 11:33 AM
+ * To change this template use File | Settings | File Templates.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class WHPProviderServiceTest extends TestCase {
+public class ProviderServiceTest extends TestCase {
 
     @Mock
     private AllProviders allProviders;
-    WHPProviderService whpProviderService;
-
+    ProviderService whpProviderService;
+    
     @Before
     public void setUp() {
-        whpProviderService = new WHPProviderService(allProviders);
+        whpProviderService = new ProviderService(allProviders);
     }
 
     @Test
@@ -40,9 +44,16 @@ public class WHPProviderServiceTest extends TestCase {
         verify(allProviders).addOrReplace(whpProvider);
     }
 
-    @Test(expected = WHPValidationException.class)
+    @Test
     public void shouldThrowAnExceptionIfMandatoryFieldsAreAbsent() {
-        Provider provider = new Provider("P00001", "984567876");
-        whpProviderService.createOrUpdate(provider);
+        try {
+            Provider provider = new Provider("P00001", "984567876");
+            whpProviderService.createOrUpdate(provider);
+            fail();
+        } catch (WHPValidationException exception) {
+
+        }
+        verifyNoMoreInteractions(allProviders);
+
     }
 }

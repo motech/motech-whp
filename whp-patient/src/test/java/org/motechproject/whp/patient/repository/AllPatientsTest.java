@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.repository;
 
 import org.junit.Test;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,18 +23,15 @@ public class AllPatientsTest extends SpringIntegrationTest {
     AllPatients allPatients;
 
     @Test
-    public void shouldSavePatientInfo(){
-        Patient patient = new Patient("cha01100001", "cha011", "01", "cha01102001", "Raju", "Singh", "M");
+    public void shouldSavePatientInfo() {
+        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male);
         allPatients.add(patient);
 
         Patient patientReturned = allPatients.findByPatientId("cha01100001");
         assertNotNull(patientReturned);
-        assertEquals("Raju",patientReturned.getFirstName());
-        assertEquals("Singh",patientReturned.getLastName());
-        assertEquals("cha011",patientReturned.getProviderId());
-        assertEquals("01",patientReturned.getCategory());
-       // assertEquals("cha01102001",patientReturned.getTbId());
-        assertEquals("M",patientReturned.getGender());
+        assertEquals("Raju", patientReturned.getFirstName());
+        assertEquals("Singh", patientReturned.getLastName());
+        assertEquals(Gender.Male, patientReturned.getGender());
     }
 
 }

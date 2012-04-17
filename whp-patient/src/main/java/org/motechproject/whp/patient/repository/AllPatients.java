@@ -29,4 +29,8 @@ public class AllPatients  extends MotechBaseRepository<Patient> {
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId).includeDocs(true);
         return singleResult(db.queryView(find_by_patientId, Patient.class));
     }
+
+     public void addOrReplace(Patient patient) {
+        addOrReplace(patient, "patientId", patient.getPatientId());
+    }
 }
