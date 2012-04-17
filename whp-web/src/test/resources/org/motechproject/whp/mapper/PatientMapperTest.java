@@ -3,10 +3,7 @@ package org.motechproject.whp.mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.domain.Category;
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +19,7 @@ public class PatientMapperTest {
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M")
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name())
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setRegistrationDetails("registrationNumber", DateUtil.today().toString())
                 .setTreatmentData("01", "providerId01seq1", "providerId");
@@ -39,6 +36,7 @@ public class PatientMapperTest {
         assertEquals("Foo", patient.getFirstName());
         assertEquals("Bar", patient.getLastName());
         assertEquals(Gender.Male, patient.getGender());
+        assertEquals(PatientType.PHSTransfer, patient.getPatientType());
     }
 
     private void assertSmearTests(Patient patient) {

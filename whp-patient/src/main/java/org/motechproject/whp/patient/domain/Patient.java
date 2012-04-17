@@ -18,6 +18,8 @@ public class Patient extends MotechBaseDataObject {
     private String lastName;
     @JsonProperty
     private Gender gender;
+    @JsonProperty
+    private PatientType patientType;
 
     @JsonProperty
     private SmearTestResult smearTestResult;
@@ -27,11 +29,12 @@ public class Patient extends MotechBaseDataObject {
     public Patient(){
     }
 
-    public Patient(String patientId, String firstName, String lastName, Gender gender) {
+    public Patient(String patientId, String firstName, String lastName, Gender gender, PatientType patientType) {
         this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
+        this.patientType = patientType;
     }
 
     public Gender getGender() {
@@ -82,8 +85,12 @@ public class Patient extends MotechBaseDataObject {
         this.smearTestResult = smearTestResult;
     }
 
-    public void addTreatment(Category category, String providerId, String tbId) {
-        treatments.add(new Treatment(category, providerId, tbId));
+    public PatientType getPatientType() {
+        return patientType;
+    }
+
+    public void setPatientType(PatientType patientType) {
+        this.patientType = patientType;
     }
 
     public void addTreatment(Treatment treatment) {

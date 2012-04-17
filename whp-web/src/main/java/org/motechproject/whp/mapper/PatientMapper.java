@@ -7,7 +7,8 @@ import org.motechproject.whp.request.PatientRequest;
 public class PatientMapper {
 
     public Patient map(PatientRequest patientRequest) {
-        Patient patient = new Patient(patientRequest.getCase_id(), patientRequest.getFirst_name(), patientRequest.getLast_name(), Gender.get(patientRequest.getGender()));
+        Patient patient = new Patient(patientRequest.getCase_id(), patientRequest.getFirst_name(), patientRequest.getLast_name(),
+                Gender.get(patientRequest.getGender()), PatientType.get(patientRequest.getPatient_type()));
 
         LocalDate smearTestDate1 = LocalDate.parse(patientRequest.getSmear_test_date_1());
         LocalDate smearTestDate2 = LocalDate.parse(patientRequest.getSmear_test_date_2());

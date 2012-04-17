@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.domain.Category;
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.request.PatientRequest;
 
@@ -34,7 +31,7 @@ public class PatientServiceTest {
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M")
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name())
                 .setRegistrationDetails("regNum", DateUtil.today().toString())
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setTreatmentData("01", "providerId01seq1", "providerId");
@@ -55,11 +52,11 @@ public class PatientServiceTest {
     public void shouldUpdatePatientIfPatientIdExists() {
 
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M")
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.New.name())
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setTreatmentData("01", "providerId01seq1", "providerId");
 
-        Patient patient = new Patient("caseId", "Foo", "Bar", Gender.Male);
+        Patient patient = new Patient("caseId", "Foo", "Bar", Gender.Male, PatientType.New);
         Treatment treatment = new Treatment(Category.get("01"), "providerId", "providerId01seq1").setRegistrationDetails("regNum", DateUtil.today());
 
         patient.addTreatment(treatment);

@@ -10,6 +10,7 @@ public class PatientRequest {
     private String first_name;
     private String last_name;
     private String gender;
+    private String patient_type;
 
     private String smear_sample_instance_1;
     private String smear_test_date_1;
@@ -28,11 +29,12 @@ public class PatientRequest {
     public PatientRequest() {
     }
 
-    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender) {
+    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType) {
         this.case_id = caseId;
         this.first_name = firstName;
         this.last_name = lastName;
         this.gender = gender;
+        this.patient_type = patientType;
         return this;
     }
 
