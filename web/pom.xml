@@ -10,26 +10,16 @@
         <groupId>org.motechproject</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
+
     <properties>
         <build.dir>../build</build.dir>
     </properties>
-    <dependencies>
 
+    <dependencies>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -41,6 +31,26 @@
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>case-service</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>whp-common</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>whp-provider</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>openrosa-registration-service</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.webflow</groupId>
@@ -121,12 +131,6 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.4</version>
-        </dependency>
-
     </dependencies>
     <build>
         <plugins>
@@ -141,11 +145,11 @@
                             <target unless="skipTests">
                                 <echo message="Recreating DB: START"/>
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <java classname="org.motechproject.tama.tools.RecreateDB">
+                                <!--<java classname="org.motechproject.whp.tools.RecreateDB">
                                     <classpath>
                                         <pathelement path="${compile_classpath}"/>
                                     </classpath>
-                                </java>
+                                </java>-->
                                 <echo message="Recreating DB: END"/>
                             </target>
                         </configuration>
@@ -160,107 +164,17 @@
                             <target unless="skipTests">
                                 <echo message="Seed data loading: START"/>
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <java classname="org.motechproject.tama.tools.seed.SetupSeedData">
+                                <!--<java classname="org.motechproject.whp.tools.seed.SetupSeedData">
                                     <classpath>
                                         <pathelement path="${compile_classpath}"/>
                                     </classpath>
-                                </java>
+                                </java>-->
                                 <echo message="Seed data loading: END"/>
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>start-activemq</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <target name="start.activemq" unless="skipTests">
-                                <condition property="script.interpreter" value="bash" else="cmd">
-                                    <os family="unix"/>
-                                </condition>
-                                <condition property="script.switch" value="/c" else="">
-                                    <not>
-                                        <os family="unix"/>
-                                    </not>
-                                </condition>
-                                <condition property="script.suffix" value="sh" else="bat">
-                                    <os family="unix"/>
-                                </condition>
-                                <condition property="activemq.home" value="${activemq.unix.home}"
-                                           else="${activemq.windows.home}">
-                                    <os family="unix"/>
-                                </condition>
-
-                                <echo message="Waiting for ActiveMQ to start on ${os.name}"/>
-                                <exec executable="${script.interpreter}" dir="${activemq.home}" spawn="true">
-                                    <arg line="${script.switch} ${activemq.home}/bin/activemq.${script.suffix}"/>
-                                </exec>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>setup-quartz-schema</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <target unless="skipTests">
-                                <echo message="Quartz schema loading: START"/>
-                                <path id="dependencies">
-                                    <fileset file="${project.basedir}/../build/lib/mysql-connector-java-5.1.13.jar"/>
-                                </path>
-                                <sql driver="${mysql.driver}"
-                                     url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db}?autoReconnect=true"
-                                     userid="${mysql.user}"
-                                     classpathref="dependencies"
-                                     password="${mysql.password}">
-                                    drop database ${mysql.db};
-                                    create database ${mysql.db};
-                                </sql>
-                                <sql driver="${mysql.driver}"
-                                     url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db}?autoReconnect=true"
-                                     userid="${mysql.user}"
-                                     classpathref="dependencies"
-                                     password="${mysql.password}"
-                                     src="${project.basedir}/../build/sql/tables_mysql_innodb.sql"/>
-                                <echo message="Quartz schema loading: END"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--SELENIUM-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>selenium-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start-server</goal>
-                        </goals>
-                        <configuration>
-                            <background>true</background>
-                            <logOutput>true</logOutput>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop-server</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -290,10 +204,6 @@
                             <name>jetty.port</name>
                             <value>${jetty.port}</value>
                         </systemProperty>
-                        <systemProperty>
-                            <name>test.driver</name>
-                            <value>${test.driver}</value>
-                        </systemProperty>
                     </systemProperties>
                     <webAppConfig>
                         <contextPath>/${project.name}</contextPath>
@@ -301,26 +211,6 @@
                     <stopKey>secret</stopKey>
                     <stopPort>6667</stopPort>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <daemon>true</daemon>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!--RELEASE-->
             <plugin>
@@ -336,6 +226,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
+                <configuration>
+                    <warName>whp</warName>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

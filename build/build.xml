@@ -16,9 +16,8 @@
     <property file="${basedir}\build.properties"/>
     <property file="${basedir}\maven.properties"/>
 
-
     <target name="drop.all.dbs">
-        <for list="motech-whp"
+        <for list="whp"
              param="db.name">
             <sequential>
                 <exec executable="curl">
