@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>web</artifactId>
     <packaging>war</packaging>
-    <name>motech-whp web</name>
+    <name>motech-whp-web</name>
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject</groupId>
@@ -45,6 +45,11 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>whp-provider</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>whp-patient</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -206,7 +211,7 @@
                         </systemProperty>
                     </systemProperties>
                     <webAppConfig>
-                        <contextPath>/${project.name}</contextPath>
+                        <contextPath>/whp</contextPath>
                     </webAppConfig>
                     <stopKey>secret</stopKey>
                     <stopPort>6667</stopPort>
