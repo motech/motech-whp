@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository;
 
+import org.junit.After;
 import org.junit.Test;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.patient.domain.Gender;
@@ -16,6 +17,11 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     @Autowired
     AllPatients allPatients;
+
+    @After
+    public void tearDown() {
+        markForDeletion(allPatients.getAll().toArray());
+    }
 
     @Test
     public void shouldSavePatientInfo() {
