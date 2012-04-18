@@ -240,7 +240,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
-                    <warName>whp</warName>
+                    <warName>whp-${version}</warName>
                 </configuration>
             </plugin>
             <plugin>
