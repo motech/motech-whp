@@ -11,6 +11,14 @@ public class PatientRequest {
     private String last_name;
     private String gender;
     private String patient_type;
+    private String patient_mobile_num;
+
+    private String patient_address_house_num;
+    private String patient_address_landmark;
+    private String patient_address_village;
+    private String patient_address_block;
+    private String patient_address_district;
+    private String patient_address_state;
 
     private String smear_sample_instance_1;
     private String smear_test_date_1;
@@ -29,12 +37,23 @@ public class PatientRequest {
     public PatientRequest() {
     }
 
-    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType) {
+    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber) {
         this.case_id = caseId;
         this.first_name = firstName;
         this.last_name = lastName;
         this.gender = gender;
         this.patient_type = patientType;
+        this.patient_mobile_num = patientMobileNumber;
+        return this;
+    }
+
+    public PatientRequest setAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+        this.patient_address_house_num = houseNumber;
+        this.patient_address_landmark = landmark;
+        this.patient_address_block = block;
+        this.patient_address_village = village;
+        this.patient_address_district = district;
+        this.patient_address_state = state;
         return this;
     }
 

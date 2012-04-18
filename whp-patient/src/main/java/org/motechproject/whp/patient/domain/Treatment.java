@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.Data;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Treatment {
 
     @NotNull
@@ -28,6 +30,8 @@ public class Treatment {
     private String registrationNumber;
     @JsonProperty
     private LocalDate registrationDate;
+    @JsonProperty
+    private Address address;
 
     public Treatment() {
     }
@@ -35,70 +39,6 @@ public class Treatment {
     public Treatment(Category category, String providerId, String tbId) {
         this.setCategory(category);
         this.addTBId(tbId, providerId);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public List<TBId> getTbIds() {
-        return tbIds;
-    }
-
-    public void setTbIds(List<TBId> tbIds) {
-        this.tbIds = tbIds;
-    }
-
-    public TBId getCurrentTBId() {
-        return currentTBId;
-    }
-
-    public void setCurrentTBId(TBId currentTBId) {
-        this.currentTBId = currentTBId;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
     }
 
     public Treatment setRegistrationDetails(String registrationNumber, LocalDate registrationDate) {
@@ -113,4 +53,5 @@ public class Treatment {
         this.currentTBId = currentTBId;
         return this;
     }
+
 }

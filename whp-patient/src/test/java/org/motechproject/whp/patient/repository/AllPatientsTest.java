@@ -19,7 +19,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSavePatientInfo() {
-        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer);
+        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer, "1234567890");
         allPatients.add(patient);
 
         Patient patientReturned = allPatients.findByPatientId("cha01100001");

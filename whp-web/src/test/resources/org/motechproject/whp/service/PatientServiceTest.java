@@ -31,7 +31,7 @@ public class PatientServiceTest {
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name())
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "12345667890")
                 .setRegistrationDetails("regNum", DateUtil.today().toString())
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setTreatmentData("01", "providerId01seq1", "providerId");
@@ -52,11 +52,11 @@ public class PatientServiceTest {
     public void shouldUpdatePatientIfPatientIdExists() {
 
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.New.name())
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.New.name(), "12345667890")
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setTreatmentData("01", "providerId01seq1", "providerId");
 
-        Patient patient = new Patient("caseId", "Foo", "Bar", Gender.Male, PatientType.New);
+        Patient patient = new Patient("caseId", "Foo", "Bar", Gender.Male, PatientType.New, "1234567890");
         Treatment treatment = new Treatment(Category.get("01"), "providerId", "providerId01seq1").setRegistrationDetails("regNum", DateUtil.today());
 
         patient.addTreatment(treatment);

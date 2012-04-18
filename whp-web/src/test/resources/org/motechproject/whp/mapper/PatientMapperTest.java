@@ -19,7 +19,8 @@ public class PatientMapperTest {
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name())
+                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "12345667890")
+                .setAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setRegistrationDetails("registrationNumber", DateUtil.today().toString())
                 .setTreatmentData("01", "providerId01seq1", "providerId");
@@ -37,6 +38,11 @@ public class PatientMapperTest {
         assertEquals("Bar", patient.getLastName());
         assertEquals(Gender.Male, patient.getGender());
         assertEquals(PatientType.PHSTransfer, patient.getPatientType());
+        assertEquals("12345667890", patient.getPhoneNumber());
+    }
+
+    private void assertAddress(Address address) {
+        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state"), address);
     }
 
     private void assertSmearTests(Patient patient) {
@@ -57,6 +63,7 @@ public class PatientMapperTest {
         assertEquals(DateUtil.today(), treatment.getCurrentTBId().getStartDate());
         assertEquals("registrationNumber", treatment.getRegistrationNumber());
         assertEquals(DateUtil.today(), treatment.getRegistrationDate());
+        assertAddress(treatment.getAddress());
     }
 
 }

@@ -11,13 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/12/12
- * Time: 4:09 PM
- * To change this template use File | Settings | File Templates.
- */
 @ContextConfiguration(locations = "classpath*:/applicationProviderContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
     @Autowired
