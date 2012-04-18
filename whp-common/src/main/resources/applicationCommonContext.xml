@@ -23,7 +23,7 @@
     </bean>
 
     <bean id="whpDbConnector" class="org.ektorp.impl.StdCouchDbConnector">
-        <constructor-arg value="whp"/>
+        <constructor-arg value="motech-whp"/>
         <constructor-arg ref="whpDbInstance"/>
     </bean>
 
