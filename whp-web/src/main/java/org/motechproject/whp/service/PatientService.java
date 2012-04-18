@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/whp/patient/**")
+@RequestMapping("/patient/**")
 public class PatientService extends CaseService<PatientRequest> {
 
     AllPatients allPatients;

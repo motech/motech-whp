@@ -4,10 +4,27 @@
     </head>
     <body>
         <form name="testSubmit">
-            <span style="vertical-align:top;margin-right:50px">Enter url:</span><input type="text" id="url" name="url"></input>
+            <span style="vertical-align:top;margin-right:50px">Enter url:</span><input type="text" style="width:600" id="url" name="url" value="http://localhost:8080/whp/provider/process"></input>
+            <br/>
+            <span style="margin-left:110px">Eg: http://localhost:8080/whp/provider/process</span>
             <br/>
             <br/>
-            <span style="vertical-align:top">Enter caseXML:</span> <textarea id="data" rows="50" cols="90" style="vertical-align:top" name="data"></textarea>
+            <span style="vertical-align:top">Enter caseXML:</span> <textarea id="data" rows="30" cols="80" style="vertical-align:top" name="data">
+<?xml version="1.0"?>
+<Registration xmlns="http://openrosa.org/user/registration">
+    <username/>
+    <password/>
+    <uuid/>
+    <date>2012-02-02</date>
+    <user_data>
+        <data key="primaryMobile">9880123456</data>
+        <data key="secondaryMobile">9880123457</data>
+        <data key="tertiaryMobile">9880123458</data>
+        <data key="providerId">cha011</data>
+        <data key="district">Muzaffarpur</data>
+    </user_data>
+</Registration>
+            </textarea>
             <br/>
             <input type="button" id="submit" value="Submit"/>
             <script type="text/javascript">
