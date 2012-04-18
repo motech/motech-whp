@@ -5,6 +5,7 @@ import org.motechproject.whp.mapper.PatientMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.request.PatientRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,7 +15,7 @@ public class PatientService extends CaseService<PatientRequest>{
 
     AllPatients allPatients;
 
-
+    @Autowired
     public PatientService(AllPatients allPatients) {
         super(PatientRequest.class);
         this.allPatients = allPatients;
