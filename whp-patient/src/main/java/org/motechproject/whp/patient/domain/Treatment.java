@@ -1,44 +1,35 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
-import org.codehaus.jackson.annotate.JsonProperty;
+import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDate;
+import org.motechproject.model.MotechBaseDataObject;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Treatment {
+@TypeDiscriminator("doc.type == 'Treatment'")
+public class Treatment extends MotechBaseDataObject {
 
     @NotNull
-    @JsonProperty
     private String id;
     @NotNull
-    @JsonProperty
     private Category category;
-    @JsonProperty
-    List<TBId> tbIds = new ArrayList<TBId>();
-    @NotNull
-    @JsonProperty
-    private TBId currentTBId;
-    @JsonProperty
     private LocalDate startDate;
-    @JsonProperty
     private LocalDate endDate;
-    @JsonProperty
     private String registrationNumber;
-    @JsonProperty
     private LocalDate registrationDate;
-    @JsonProperty
-    private Address address;
+    private List<SmearTestResult> smearTestResults;
 
     public Treatment() {
     }
 
-    public Treatment(Category category, String providerId, String tbId) {
-        this.setCategory(category);
-        this.addTBId(tbId, providerId);
+    public Treatment(Category category, LocalDate startDate) {
+        smearTestResults = new ArrayList<SmearTestResult>();
+        this.category = category;
+        this.startDate = startDate;
     }
 
     public Treatment setRegistrationDetails(String registrationNumber, LocalDate registrationDate) {
@@ -47,11 +38,8 @@ public class Treatment {
         return this;
     }
 
-    private Treatment addTBId(String tbId, String providerId) {
-        TBId currentTBId = new TBId(tbId, providerId);
-        this.tbIds.add(currentTBId);
-        this.currentTBId = currentTBId;
-        return this;
+    public void addSmearTestResult(SmearTestResult smearTestResult){
+       smearTestResults.add(smearTestResult);
     }
 
 }

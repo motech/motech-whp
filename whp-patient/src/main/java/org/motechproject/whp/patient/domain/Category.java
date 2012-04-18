@@ -10,6 +10,10 @@ public enum Category {
         this.value = value;
     }
 
+    public String value() {
+        return value;
+    }
+
     public static Category get(String category) {
         if (Category1.value.equals(category)) return Category1;
         if (Category2.value.equals(category)) return Category2;

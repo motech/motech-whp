@@ -14,6 +14,9 @@ public class SmearTestResult {
     private LocalDate testDate2;
     private String result2;
 
+    public SmearTestResult() {
+    }
+
     public SmearTestResult(String sampleInstance1, LocalDate testDate1, String result1, String sampleInstance2, LocalDate testDate2, String result2) {
         this.sampleInstance1 = sampleInstance1;
         this.testDate1 = testDate1;

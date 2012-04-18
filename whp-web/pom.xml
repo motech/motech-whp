@@ -44,6 +44,14 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
+            <artifactId>whp-common</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
             <artifactId>whp-provider</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>

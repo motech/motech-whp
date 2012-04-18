@@ -18,11 +18,10 @@ public class Patient extends MotechBaseDataObject {
     private PatientType patientType;
     private String phoneNumber;
 
-    private SmearTestResult smearTestResult;
+    List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
+    ProvidedTreatment latestProvidedTreatment;
 
-    List<Treatment> treatments = new ArrayList<Treatment>();
-
-    public Patient(){
+    public Patient() {
     }
 
     public Patient(String patientId, String firstName, String lastName, Gender gender, PatientType patientType, String phoneNumber) {
@@ -34,8 +33,9 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void addTreatment(Treatment treatment) {
-        treatments.add(treatment);
+    public void addProvidedTreatment(ProvidedTreatment providedTreatment) {
+        providedTreatments.add(providedTreatment);
+        latestProvidedTreatment = providedTreatment;
     }
 
 }

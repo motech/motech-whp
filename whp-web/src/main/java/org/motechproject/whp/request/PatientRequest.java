@@ -47,7 +47,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
         this.patient_address_house_num = houseNumber;
         this.patient_address_landmark = landmark;
         this.patient_address_block = block;

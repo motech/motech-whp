@@ -5,32 +5,41 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/12/12
- * Time: 4:06 PM
- * To change this template use File | Settings | File Templates.
- */
 @Repository
-public class AllPatients  extends MotechBaseRepository<Patient> {
+public class AllPatients extends MotechBaseRepository<Patient> {
+
+    AllTreatments allTreatments;
 
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
+    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTreatments allTreatments) {
         super(Patient.class, dbCouchDbConnector);
+        this.allTreatments = allTreatments;
     }
 
     @GenerateView
     public Patient findByPatientId(String patientId) {
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId).includeDocs(true);
-        return singleResult(db.queryView(find_by_patientId, Patient.class));
+        Patient patient = singleResult(db.queryView(find_by_patientId, Patient.class));
+        if (patient != null)
+            loadPatientDependencies(patient);
+        return patient;
     }
 
-     public void addOrReplace(Patient patient) {
-        addOrReplace(patient, "patientId", patient.getPatientId());
+    private void loadPatientDependencies(Patient patient) {
+        ProvidedTreatment latestProvidedTreatment = patient.getLatestProvidedTreatment();
+        Treatment latestTreatment = allTreatments.get(latestProvidedTreatment.getTreatmentDocId());
+        latestProvidedTreatment.setTreatment(latestTreatment);
+
+        for (ProvidedTreatment providedTreatment : patient.getProvidedTreatments()) {
+            Treatment treatment = allTreatments.get(providedTreatment.getTreatmentDocId());
+            providedTreatment.setTreatment(treatment);
+        }
     }
+
 }
