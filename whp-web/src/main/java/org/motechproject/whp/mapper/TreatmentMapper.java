@@ -8,9 +8,9 @@ import org.motechproject.whp.request.PatientRequest;
 public class TreatmentMapper {
 
     public Treatment map(PatientRequest patientRequest) {
-
         Category category = Category.get(patientRequest.getTreatment_category());
-        Treatment treatment = new Treatment(category, DateUtil.today());
+        DiseaseClass diseaseClass = DiseaseClass.valueOf(patientRequest.getDisease_class());
+        Treatment treatment = new Treatment(category, DateUtil.today(), diseaseClass);
 
         mapRegistrationDetails(patientRequest, treatment);
         mapSmearTestResults(patientRequest, treatment);

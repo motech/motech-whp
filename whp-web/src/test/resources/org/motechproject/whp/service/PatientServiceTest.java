@@ -4,9 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
+import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
@@ -33,12 +32,7 @@ public class PatientServiceTest {
 
     @Test
     public void shouldCreatePatient() {
-        PatientRequest patientRequest = new PatientRequest()
-                .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "12345667890")
-                .setRegistrationDetails("regNum", DateUtil.today().toString())
-                .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
-                .setTreatmentData("01", "providerId01seq1", "providerId");
-
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         when(allPatients.findByPatientId("caseId")).thenReturn(null);
         patientService.createCase(patientRequest);
 

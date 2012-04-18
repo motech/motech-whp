@@ -16,7 +16,7 @@ public class PatientRequestBuilder {
                 .setSmearTestResults("Pre-treatment1", DateUtil.today().minusDays(10).toString(), "result1", "Pre-treatment2", DateUtil.today().minusDays(5).toString(), "result2")
                 .setWeightStatistics(WeightInstance.preTreatment.name(), "99.7")
                 .setRegistrationDetails("registrationNumber", DateUtil.today().toString())
-                .setTreatmentData("01", "providerId01seq1", "providerId")  ;
+                .setTreatmentData("01", "providerId01seq1", "providerId", "P")  ;
         return this;
     }
 

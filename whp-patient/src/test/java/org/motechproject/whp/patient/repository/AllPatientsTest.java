@@ -26,7 +26,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSavePatientInfo() {
-        Treatment treatment = new Treatment(Category.Category1, DateUtil.today());
+        Treatment treatment = new Treatment(Category.Category1, DateUtil.today(), DiseaseClass.P);
         allTreatments.add(treatment);
 
         Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer, "1234567890");
