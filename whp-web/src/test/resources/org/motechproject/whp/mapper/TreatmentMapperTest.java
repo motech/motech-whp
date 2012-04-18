@@ -31,6 +31,7 @@ public class TreatmentMapperTest {
 
 
     private void assertTreatment(PatientRequest patientRequest, Treatment treatment) {
+        assertEquals(Integer.parseInt(patientRequest.getPatient_age()), treatment.getPatientAge());
         assertEquals(patientRequest.getTreatment_category(), treatment.getCategory().value());
         assertEquals(DateUtil.today(), treatment.getStartDate());
 

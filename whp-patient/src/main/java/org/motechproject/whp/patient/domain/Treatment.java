@@ -5,7 +5,6 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +12,7 @@ import java.util.List;
 @TypeDiscriminator("doc.type == 'Treatment'")
 public class Treatment extends MotechBaseDataObject {
 
-    @NotNull
-    private String id;
-    @NotNull
+    private int patientAge;
     private Category category;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -28,10 +25,11 @@ public class Treatment extends MotechBaseDataObject {
     public Treatment() {
     }
 
-    public Treatment(Category category, LocalDate startDate, DiseaseClass diseaseClass) {
+    public Treatment(Category category, LocalDate startDate, DiseaseClass diseaseClass, int patientAge) {
         this.category = category;
         this.startDate = startDate;
         this.diseaseClass = diseaseClass;
+        this.patientAge = patientAge;
     }
 
     public Treatment setRegistrationDetails(String registrationNumber, LocalDate registrationDate) {

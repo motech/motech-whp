@@ -37,6 +37,7 @@ public class PatientRequest {
     private String treatment_category;
     private String registration_number;
     private String registration_date;
+    private String patient_age;
 
 
     public PatientRequest() {
@@ -63,11 +64,12 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass) {
+    public PatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge) {
         this.treatment_category = category;
         this.tb_id = tbId;
         this.provider_id = providerId;
         this.disease_class = diseaseClass;
+        this.patient_age = patientAge;
         return this;
     }
 
