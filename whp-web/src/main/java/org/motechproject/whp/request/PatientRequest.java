@@ -20,6 +20,7 @@ public class PatientRequest {
     private String patient_address_block;
     private String patient_address_district;
     private String patient_address_state;
+    private String patient_postal_code;
 
     private String smear_sample_instance_1;
     private String smear_test_date_1;
@@ -51,13 +52,14 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state, String postalCode) {
         this.patient_address_house_num = houseNumber;
         this.patient_address_landmark = landmark;
         this.patient_address_block = block;
         this.patient_address_village = village;
         this.patient_address_district = district;
         this.patient_address_state = state;
+        this.patient_postal_code = postalCode;
         return this;
     }
 

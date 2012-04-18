@@ -11,17 +11,19 @@ public class Address {
     private String village;
     private String district;
     private String state;
+    private String postalCode;
 
     public Address() {
     }
 
-    public Address(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public Address(String houseNumber, String landmark, String block, String village, String district, String state, String postalCode) {
         this.houseNumber = houseNumber;
         this.landmark = landmark;
         this.block = block;
         this.village = village;
         this.district = district;
         this.state = state;
+        this.postalCode = postalCode;
     }
 
 }

@@ -10,6 +10,7 @@ import org.motechproject.whp.request.PatientRequest;
 import static org.junit.Assert.assertEquals;
 
 public class PatientMapperTest {
+
     PatientMapper patientMapper;
 
     @Before
@@ -47,7 +48,7 @@ public class PatientMapperTest {
     }
 
     private void assertPatientAddress(Address address) {
-        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state"), address);
+        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state", "postal code"), address);
     }
 
 }
