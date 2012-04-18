@@ -29,11 +29,17 @@ public class TreatmentMapper {
 
 
     private void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
+
         LocalDate smearTestDate1 = LocalDate.parse(patientRequest.getSmear_test_date_1());
+        SmearTestSampleInstance smearSampleInstance1 = SmearTestSampleInstance.valueOf(patientRequest.getSmear_sample_instance_1());
+
         LocalDate smearTestDate2 = LocalDate.parse(patientRequest.getSmear_test_date_2());
+        SmearTestSampleInstance smearSampleInstance2 = SmearTestSampleInstance.valueOf(patientRequest.getSmear_sample_instance_2());
+
         treatment.addSmearTestResult(new SmearTestResult(
-                patientRequest.getSmear_sample_instance_1(), smearTestDate1, patientRequest.getSmear_result_1(),
-                patientRequest.getSmear_sample_instance_2(), smearTestDate2, patientRequest.getSmear_result_2()));
+                smearSampleInstance1, smearTestDate1, patientRequest.getSmear_result_1(),
+                smearSampleInstance2, smearTestDate2, patientRequest.getSmear_result_2()));
+
     }
 
     private void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
