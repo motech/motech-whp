@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/whp/patient/**")
-public class PatientService extends CaseService<PatientRequest>{
+public class PatientService extends CaseService<PatientRequest> {
 
     AllPatients allPatients;
 
@@ -23,19 +23,17 @@ public class PatientService extends CaseService<PatientRequest>{
 
     @Override
     public void closeCase(PatientRequest patientRequest) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void updateCase(PatientRequest patientRequest) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void createCase(PatientRequest patientRequest) {
         Patient patient = new PatientMapper().map(patientRequest);
         Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
-        if(patientReturned == null)
+        if (patientReturned == null)
             allPatients.add(patient);
         else
             allPatients.update(patient);

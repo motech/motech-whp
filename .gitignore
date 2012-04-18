@@ -20,3 +20,4 @@ out/
 *.out
 test-output/
 .DS_Store
+web/src/main/webapp/emulator/.fuse*
