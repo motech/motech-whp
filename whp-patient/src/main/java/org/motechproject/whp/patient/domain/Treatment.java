@@ -21,7 +21,8 @@ public class Treatment extends MotechBaseDataObject {
     private LocalDate endDate;
     private String registrationNumber;
     private LocalDate registrationDate;
-    private List<SmearTestResult> smearTestResults;
+    private List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>();
+    private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
 
     public Treatment() {
     }
@@ -38,8 +39,12 @@ public class Treatment extends MotechBaseDataObject {
         return this;
     }
 
-    public void addSmearTestResult(SmearTestResult smearTestResult){
-       smearTestResults.add(smearTestResult);
+    public void addSmearTestResult(SmearTestResult smearTestResult) {
+        smearTestResults.add(smearTestResult);
+    }
+
+    public void addWeightStatistics(WeightStatistics weightStatistics) {
+        weightStatisticsList.add(weightStatistics);
     }
 
 }

@@ -2,18 +2,19 @@ package org.motechproject.whp.mapper;
 
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.domain.Category;
-import org.motechproject.whp.patient.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
 public class TreatmentMapper {
 
     public Treatment map(PatientRequest patientRequest) {
+
         Category category = Category.get(patientRequest.getTreatment_category());
         Treatment treatment = new Treatment(category, DateUtil.today());
+
         mapRegistrationDetails(patientRequest, treatment);
         mapSmearTestResults(patientRequest, treatment);
+        mapWeightStatistics(patientRequest, treatment);
 
         return treatment;
     }
@@ -31,6 +32,12 @@ public class TreatmentMapper {
         treatment.addSmearTestResult(new SmearTestResult(
                 patientRequest.getSmear_sample_instance_1(), smearTestDate1, patientRequest.getSmear_result_1(),
                 patientRequest.getSmear_sample_instance_2(), smearTestDate2, patientRequest.getSmear_result_2()));
+    }
+
+    private void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
+        WeightInstance weightInstance = WeightInstance.valueOf(patientRequest.getPatient_weight_instance());
+        float weight = Float.parseFloat(patientRequest.getPatient_weight());
+        treatment.addWeightStatistics(new WeightStatistics(weightInstance, weight, DateUtil.today()));
     }
 
 }

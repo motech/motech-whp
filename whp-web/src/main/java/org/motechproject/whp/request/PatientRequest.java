@@ -27,6 +27,9 @@ public class PatientRequest {
     private String smear_test_date_2;
     private String smear_result_2;
 
+    private String patient_weight_instance;
+    private String patient_weight;
+
     private String tb_id;
     private String provider_id;
     private String treatment_category;
@@ -80,4 +83,9 @@ public class PatientRequest {
         return this;
     }
 
+    public PatientRequest setWeightStatistics(String weightInstance, String weight) {
+        this.patient_weight_instance = weightInstance;
+        this.patient_weight = weight;
+        return this;
+    }
 }

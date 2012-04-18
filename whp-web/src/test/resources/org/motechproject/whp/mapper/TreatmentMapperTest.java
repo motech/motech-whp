@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.WeightInstance;
 import org.motechproject.whp.request.PatientRequest;
 
 import static junit.framework.Assert.assertEquals;
@@ -21,13 +22,11 @@ public class TreatmentMapperTest {
     }
 
     @Test
-    public void shouldMapTreatment(){
+    public void shouldMapTreatment() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         Treatment treatment = treatmentMapper.map(patientRequest);
 
-        //assert
-
-
+        assertTreatment(patientRequest, treatment);
     }
 
 
@@ -39,6 +38,7 @@ public class TreatmentMapperTest {
         assertEquals(patientRequest.getRegistration_date(), treatment.getRegistrationDate().toString());
 
         assertSmearTests(patientRequest, treatment);
+        assertWeightStatistics(patientRequest, treatment);
     }
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
@@ -48,6 +48,12 @@ public class TreatmentMapperTest {
         Assert.assertEquals(patientRequest.getSmear_sample_instance_2(), treatment.getSmearTestResults().get(0).getSampleInstance2());
         Assert.assertEquals(patientRequest.getSmear_result_2(), treatment.getSmearTestResults().get(0).getResult2());
         Assert.assertEquals(patientRequest.getSmear_test_date_2(), treatment.getSmearTestResults().get(0).getTestDate2().toString());
+    }
+
+    private void assertWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
+        Assert.assertEquals(WeightInstance.valueOf(patientRequest.getPatient_weight_instance()), treatment.getWeightStatisticsList().get(0).getWeightInstance());
+        Assert.assertEquals(Float.parseFloat(patientRequest.getPatient_weight()), treatment.getWeightStatisticsList().get(0).getWeight(), 0.0);
+        Assert.assertEquals(DateUtil.today(), treatment.getWeightStatisticsList().get(0).getMeasuringDate());
     }
 
 
