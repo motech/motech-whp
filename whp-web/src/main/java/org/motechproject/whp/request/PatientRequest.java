@@ -1,11 +1,15 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.motechproject.whp.request.validator.DateFieldValidator;
+import org.motechproject.whp.exception.WHPValidationException;
 
 @Data
 public class PatientRequest {
 
     private String case_id;
+    private String last_modified_date;
     private String case_type;
     private String first_name;
     private String last_name;
@@ -37,8 +41,10 @@ public class PatientRequest {
     private String treatment_category;
     private String registration_number;
     private String registration_date;
-    private String patient_age;
+    private String age;
 
+    @JsonIgnore
+    private final DateFieldValidator dateFieldValidator = new DateFieldValidator();
 
     public PatientRequest() {
     }
@@ -69,7 +75,7 @@ public class PatientRequest {
         this.tb_id = tbId;
         this.provider_id = providerId;
         this.disease_class = diseaseClass;
-        this.patient_age = patientAge;
+        this.age = patientAge;
         return this;
     }
 
@@ -93,5 +99,16 @@ public class PatientRequest {
         this.patient_weight_instance = weightInstance;
         this.patient_weight = weight;
         return this;
+    }
+
+    public void validate() throws WHPValidationException {
+        validateDateFields();
+    }
+
+    private void validateDateFields() {
+        dateFieldValidator.validateDateTime("last_modified_date", last_modified_date);
+        dateFieldValidator.validateLocalDate("registration_date", registration_date);
+        dateFieldValidator.validateLocalDate("smear_test_date_1", smear_test_date_1);
+        dateFieldValidator.validateLocalDate("smear_test_date_2", smear_test_date_2);
     }
 }

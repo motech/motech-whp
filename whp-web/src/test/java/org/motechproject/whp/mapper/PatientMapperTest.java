@@ -25,17 +25,18 @@ public class PatientMapperTest {
 
         Patient patient = patientMapper.map(patientRequest, treatment);
 
-        assertBasicPatientInfo(patient);
+        assertBasicPatientInfo(patient, patientRequest);
         assertProvidedTreatment(patient);
     }
 
-    private void assertBasicPatientInfo(Patient patient) {
+    private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
         assertEquals("caseId", patient.getPatientId());
         assertEquals("Foo", patient.getFirstName());
         assertEquals("Bar", patient.getLastName());
         assertEquals(Gender.Male, patient.getGender());
         assertEquals(PatientType.PHSTransfer, patient.getPatientType());
         assertEquals("12345667890", patient.getPhoneNumber());
+        assertEquals(patientRequest.getLast_modified_date(), patient.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
     }
 
     private void assertProvidedTreatment(Patient patient) {

@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
+import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Patient extends MotechBaseDataObject {
     private PatientType patientType;
     private String phoneNumber;
     private PatientStatus status = PatientStatus.Open;
+    private DateTime lastModifiedDate;
 
     List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
     ProvidedTreatment latestProvidedTreatment;

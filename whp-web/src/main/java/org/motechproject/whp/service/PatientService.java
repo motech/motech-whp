@@ -36,6 +36,7 @@ public class PatientService extends CaseService<PatientRequest> {
 
     @Override
     public void createCase(PatientRequest patientRequest) {
+        patientRequest.validate();
 
         Treatment treatment = new TreatmentMapper().map(patientRequest);
         allTreatments.add(treatment);

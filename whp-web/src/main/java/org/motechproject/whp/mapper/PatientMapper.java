@@ -1,10 +1,15 @@
 package org.motechproject.whp.mapper;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
 public class PatientMapper {
+
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");
+
 
     public Patient map(PatientRequest patientRequest, Treatment treatment) {
         Patient patient = mapBasicInfo(patientRequest);
@@ -13,13 +18,15 @@ public class PatientMapper {
     }
 
     private Patient mapBasicInfo(PatientRequest patientRequest) {
-        return new Patient(
+        Patient patient = new Patient(
                 patientRequest.getCase_id(),
                 patientRequest.getFirst_name(),
                 patientRequest.getLast_name(),
                 Gender.get(patientRequest.getGender()),
                 PatientType.get(patientRequest.getPatient_type()),
                 patientRequest.getPatient_mobile_num());
+        patient.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getLast_modified_date()));
+        return patient;
     }
 
     private void mapProvidedTreatment(PatientRequest patientRequest, Patient patient, Treatment treatment) {
