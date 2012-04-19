@@ -1,6 +1,8 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
@@ -8,23 +10,37 @@ import org.motechproject.model.MotechBaseDataObject;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @TypeDiscriminator("doc.type == 'Patient'")
 public class Patient extends MotechBaseDataObject {
 
+    @Getter
+    @Setter
     private String patientId;
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String lastName;
+    @Getter
+    @Setter
     private Gender gender;
+    @Getter
+    @Setter
     private PatientType patientType;
+    @Getter
+    @Setter
     private String phoneNumber;
+    @Getter
+    @Setter
     private PatientStatus status = PatientStatus.Open;
+    @Getter
+    @Setter
     private DateTime lastModifiedDate;
 
-    List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
-
-
-    ProvidedTreatment latestProvidedTreatment;
+    @Getter
+    @Setter
+    private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
 
     public Patient() {
     }
@@ -40,7 +56,11 @@ public class Patient extends MotechBaseDataObject {
 
     public void addProvidedTreatment(ProvidedTreatment providedTreatment) {
         providedTreatments.add(providedTreatment);
-        latestProvidedTreatment = providedTreatment;
+    }
+
+    @JsonIgnore
+    public ProvidedTreatment getLatestProvidedTreatment() {
+        return providedTreatments.get(providedTreatments.size() - 1);
     }
 
 }
