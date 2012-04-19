@@ -34,7 +34,7 @@ public class TreatmentMapperTest {
         assertEquals(patientRequest.getTreatment_category(), treatment.getCategory().value());
         assertEquals(DateUtil.today(), treatment.getStartDate());
 
-        assertEquals(patientRequest.getRegistration_number(), treatment.getRegistrationNumber());
+        assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertEquals("20/01/1982", treatment.getRegistrationDate().toString("dd/MM/YYYY"));
 
         assertSmearTests(patientRequest, treatment);
@@ -43,16 +43,16 @@ public class TreatmentMapperTest {
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
         Assert.assertEquals(patientRequest.getSmear_sample_instance_1(), treatment.getSmearTestResults().get(0).getSampleInstance1().name());
-        Assert.assertEquals(patientRequest.getSmear_result_1(), treatment.getSmearTestResults().get(0).getResult1());
+        Assert.assertEquals(patientRequest.getSmear_test_result_1(), treatment.getSmearTestResults().get(0).getResult1());
         Assert.assertEquals(patientRequest.getSmear_test_date_1(), treatment.getSmearTestResults().get(0).getTestDate1().toString("dd/MM/YYYY"));
         Assert.assertEquals(patientRequest.getSmear_sample_instance_2(), treatment.getSmearTestResults().get(0).getSampleInstance2().name());
-        Assert.assertEquals(patientRequest.getSmear_result_2(), treatment.getSmearTestResults().get(0).getResult2());
+        Assert.assertEquals(patientRequest.getSmear_test_result_2(), treatment.getSmearTestResults().get(0).getResult2());
         Assert.assertEquals(patientRequest.getSmear_test_date_2(), treatment.getSmearTestResults().get(0).getTestDate2().toString("dd/MM/YYYY"));
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
-        Assert.assertEquals(WeightInstance.valueOf(patientRequest.getPatient_weight_instance()), treatment.getWeightStatisticsList().get(0).getWeightInstance());
-        Assert.assertEquals(Float.parseFloat(patientRequest.getPatient_weight()), treatment.getWeightStatisticsList().get(0).getWeight(), 0.0);
+        Assert.assertEquals(WeightInstance.valueOf(patientRequest.getWeight_instance()), treatment.getWeightStatisticsList().get(0).getWeightInstance());
+        Assert.assertEquals(Float.parseFloat(patientRequest.getWeight()), treatment.getWeightStatisticsList().get(0).getWeight(), 0.0);
         Assert.assertEquals(DateUtil.today(), treatment.getWeightStatisticsList().get(0).getMeasuringDate());
     }
 

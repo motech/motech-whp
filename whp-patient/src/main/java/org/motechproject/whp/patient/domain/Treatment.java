@@ -16,7 +16,7 @@ public class Treatment extends MotechBaseDataObject {
     private Category category;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String registrationNumber;
+    private String tbRegistrationNumber;
     private LocalDate registrationDate;
     private DiseaseClass diseaseClass;
     private List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>();
@@ -33,7 +33,7 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     public Treatment setRegistrationDetails(String registrationNumber, LocalDate registrationDate) {
-        this.setRegistrationNumber(registrationNumber);
+        this.setTbRegistrationNumber(registrationNumber);
         this.setRegistrationDate(registrationDate);
         return this;
     }

@@ -23,8 +23,8 @@ public class PatientMapper {
                 patientRequest.getFirst_name(),
                 patientRequest.getLast_name(),
                 Gender.get(patientRequest.getGender()),
-                PatientType.get(patientRequest.getPatient_type()),
-                patientRequest.getPatient_mobile_num());
+                PatientType.valueOf(patientRequest.getPatient_type()),
+                patientRequest.getMobile_number());
         patient.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()));
         return patient;
     }
@@ -42,13 +42,13 @@ public class PatientMapper {
 
     private void mapPatientAddress(PatientRequest patientRequest, ProvidedTreatment providedTreatment) {
         providedTreatment.setPatientAddress(new Address(
-                patientRequest.getPatient_address_house_num(),
-                patientRequest.getPatient_address_landmark(),
-                patientRequest.getPatient_address_block(),
-                patientRequest.getPatient_address_village(),
-                patientRequest.getPatient_address_district(),
-                patientRequest.getPatient_address_state(),
-                patientRequest.getPatient_postal_code()));
+                patientRequest.getAddress_house_number(),
+                patientRequest.getAddress_landmark(),
+                patientRequest.getAddress_block(),
+                patientRequest.getAddress_village(),
+                patientRequest.getAddress_district(),
+                patientRequest.getAddress_state(),
+                patientRequest.getAddress_postal_code()));
     }
 
 }
