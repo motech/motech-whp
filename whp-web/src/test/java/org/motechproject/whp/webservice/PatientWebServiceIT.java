@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.webservice;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,19 +17,19 @@ import static junit.framework.Assert.assertNotNull;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ContextConfiguration(locations = "classpath*:/applicationContext.xml")
-public class PatientServiceIT extends SpringIntegrationTest {
+public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     AllPatients allPatients;
     @Autowired
     AllTreatments allTreatments;
 
-    PatientService patientService;
+    PatientWebService patientWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patientService = new PatientService(allPatients, allTreatments);
+        patientWebService = new PatientWebService(allPatients, allTreatments);
     }
 
     @After
@@ -42,7 +42,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
 
-        patientService.createCase(patientRequest);
+        patientWebService.createCase(patientRequest);
 
         Patient patient = allPatients.findByPatientId("caseId");
 

@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.webservice;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ContextConfiguration(locations = "classpath*:/applicationContext.xml")
-public class ProviderServiceIT extends SpringIntegrationTest {
+public class ProviderWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     private AllProviders allProviders;
@@ -22,18 +22,18 @@ public class ProviderServiceIT extends SpringIntegrationTest {
     @Autowired
     private Validator validator;
 
-    ProviderService whpProviderService;
+    ProviderWebService whpProviderWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        whpProviderService = new ProviderService(allProviders, validator);
+        whpProviderWebService = new ProviderWebService(allProviders, validator);
     }
 
     @Test
     public void shouldCreateProvider() {
         Provider whpProvider = new Provider("providerId", "9880123456", "district");
-        whpProviderService.createOrUpdate(whpProvider);
+        whpProviderWebService.createOrUpdate(whpProvider);
         markForDeletion(whpProvider);
 
         assertNotNull(allProviders.get(whpProvider.getId()));
@@ -43,7 +43,7 @@ public class ProviderServiceIT extends SpringIntegrationTest {
     public void shouldThrowAnExceptionIfMandatoryFieldsAreAbsent() {
         try {
             Provider provider = new Provider("P00001", "9880000000", null);
-            whpProviderService.createOrUpdate(provider);
+            whpProviderWebService.createOrUpdate(provider);
             fail("Should have thrown validation exception");
         } catch (WHPValidationException exception) {
             assertTrue(exception.getMessage().toString().contains("district may not be empty"));

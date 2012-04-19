@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
 import org.motechproject.whp.exception.WHPValidationException;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/provider/**")
-public class ProviderService extends ProviderRegistrationService<Provider> {
+public class ProviderWebService extends ProviderRegistrationService<Provider> {
 
     private AllProviders allProviders;
     private Validator providerValidator;
 
     @Autowired
-    public ProviderService(AllProviders allProviders, Validator validator) {
+    public ProviderWebService(AllProviders allProviders, Validator validator) {
         super(Provider.class);
         this.allProviders = allProviders;
         providerValidator = validator;

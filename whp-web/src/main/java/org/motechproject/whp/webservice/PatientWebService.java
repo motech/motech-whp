@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.mapper.PatientMapper;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/patient/**")
-public class PatientService extends CaseService<PatientRequest> {
+public class PatientWebService extends CaseService<PatientRequest> {
 
     AllPatients allPatients;
     AllTreatments allTreatments;
 
     @Autowired
-    public PatientService( AllPatients allPatients, AllTreatments allTreatments) {
+    public PatientWebService(AllPatients allPatients, AllTreatments allTreatments) {
         super(PatientRequest.class);
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;

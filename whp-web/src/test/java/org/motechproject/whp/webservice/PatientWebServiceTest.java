@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.webservice;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,26 +15,26 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class PatientServiceTest {
+public class PatientWebServiceTest {
 
     @Mock
     AllPatients allPatients;
     @Mock
     AllTreatments allTreatments;
 
-    PatientService patientService;
+    PatientWebService patientWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patientService = new PatientService(allPatients, allTreatments);
+        patientWebService = new PatientWebService(allPatients, allTreatments);
     }
 
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         when(allPatients.findByPatientId("caseId")).thenReturn(null);
-        patientService.createCase(patientRequest);
+        patientWebService.createCase(patientRequest);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
 
@@ -43,6 +43,4 @@ public class PatientServiceTest {
         Patient patient = patientArgumentCaptor.getValue();
         assertEquals("caseId", patient.getPatientId());
     }
-
-
 }
