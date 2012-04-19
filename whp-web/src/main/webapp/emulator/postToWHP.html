@@ -1,12 +1,21 @@
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var egUrl = $(location).attr('origin') + "/whp/provider/process";
+                $('#egUrl').html(egUrl);
+            })
+        </script>
     </head>
     <body>
+        <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
+        <br/>
+        <br/>
         <form name="testSubmit">
             <span style="vertical-align:top;margin-right:50px">Enter url:</span><input type="text" style="width:600" id="url" name="url" value="http://localhost:8080/whp/provider/process"></input>
             <br/>
-            <span style="margin-left:110px">Eg: http://localhost:8080/whp/provider/process</span>
+            <span id="egUrl" style="margin-left:110px"></span>
             <br/>
             <br/>
             <span style="vertical-align:top">Enter caseXML:</span> <textarea id="data" rows="30" cols="80" style="vertical-align:top" name="data">
@@ -37,7 +46,10 @@
                         dataType : 'xml',
                         contentType: "application/xml; charset=utf-8",
                         success:function() {
-                             alert('Provider saved');
+                            $('#statusMessage').html("Status of request: SUCCESS");
+                        },
+                        error: function(xhr, status, error) {
+                            $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);
                         }
                     })
                 });
