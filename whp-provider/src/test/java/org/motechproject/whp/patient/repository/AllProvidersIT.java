@@ -1,6 +1,5 @@
 package org.motechproject.whp.patient.repository;
 
-import org.junit.After;
 import org.junit.Test;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.provider.domain.Provider;
@@ -16,15 +15,11 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;
 
-    @After
-    public void tearDown() {
-        markForDeletion(allProviders.getAll().toArray());
-    }
-
     @Test
     public void shouldSaveProviderInfo() {
-        Provider provider = new Provider("P00001", "984567876");
+        Provider provider = new Provider("P00001", "984567876", "district");
         allProviders.add(provider);
+        markForDeletion(provider);
 
         Provider providerReturned = allProviders.findByProviderId("P00001");
         assertNotNull(providerReturned);

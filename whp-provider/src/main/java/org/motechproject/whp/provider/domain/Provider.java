@@ -2,34 +2,38 @@ package org.motechproject.whp.provider.domain;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.ektorp.support.TypeDiscriminator;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.model.MotechBaseDataObject;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/12/12
- * Time: 3:55 PM
- * To change this template use File | Settings | File Templates.
- */
 @TypeDiscriminator("doc.type == 'Provider'")
 public class Provider extends MotechBaseDataObject {
+
     @JsonProperty
+    @NotEmpty
     private String primaryMobile;
+
     @JsonProperty
     private String secondaryMobile;
+
     @JsonProperty
     private String tertiaryMobile;
+
     @JsonProperty
+    @NotEmpty
     private String providerId;
+
     @JsonProperty
+    @NotEmpty
     private String district;
 
-    public Provider(String providerId, String primaryMobile) {
-        this.providerId = providerId;
-        this.primaryMobile = primaryMobile;
+    // Required for ektorp
+    public Provider() {
     }
 
-    public Provider() {
+    public Provider(String providerId, String primaryMobile, String district) {
+        this.providerId = providerId;
+        this.primaryMobile = primaryMobile;
+        this.district = district;
     }
 
     public String getPrimaryMobile() {
@@ -71,7 +75,4 @@ public class Provider extends MotechBaseDataObject {
     public void setDistrict(String district) {
         this.district = district;
     }
-
-
-
 }
