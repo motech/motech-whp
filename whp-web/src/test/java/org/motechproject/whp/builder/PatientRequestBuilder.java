@@ -15,10 +15,10 @@ public class PatientRequestBuilder {
                 .setPatientInfo("caseId", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "12345667890")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state", "postal code")
                 .setSmearTestResults("PreTreatment", "19/07/1888", "result1", "PreTreatment", "21/09/1985", "result2")
-                .setWeightStatistics(WeightInstance.preTreatment.name(), "99.7")
+                .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setRegistrationDetails("registrationNumber", "20/01/1982")
                 .setTreatmentData("01", "providerId01seq1", "providerId", "P", "200");
-        patientRequest.setLast_modified_date(DateUtil.now().toString("dd/MM/YYYY HH:mm:ss"));
+        patientRequest.setDate_modified(DateUtil.now().toString("dd/MM/YYYY HH:mm:ss"));
 
         return this;
     }
@@ -33,7 +33,7 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withLastModifiedDate(String lastModifiedDate) {
-        patientRequest.setLast_modified_date(lastModifiedDate);
+        patientRequest.setDate_modified(lastModifiedDate);
         return this;
     }
 

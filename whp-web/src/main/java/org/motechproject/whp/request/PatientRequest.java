@@ -9,7 +9,7 @@ import org.motechproject.whp.exception.WHPValidationException;
 public class PatientRequest {
 
     private String case_id;
-    private String last_modified_date;
+    private String date_modified;
     private String case_type;
     private String first_name;
     private String last_name;
@@ -106,7 +106,7 @@ public class PatientRequest {
     }
 
     private void validateDateFields() {
-        dateFieldValidator.validateDateTime("last_modified_date", last_modified_date);
+        dateFieldValidator.validateDateTime("date_modified", date_modified);
         dateFieldValidator.validateLocalDate("registration_date", registration_date);
         dateFieldValidator.validateLocalDate("smear_test_date_1", smear_test_date_1);
         dateFieldValidator.validateLocalDate("smear_test_date_2", smear_test_date_2);

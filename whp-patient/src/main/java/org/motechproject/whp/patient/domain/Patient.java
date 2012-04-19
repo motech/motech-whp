@@ -22,6 +22,8 @@ public class Patient extends MotechBaseDataObject {
     private DateTime lastModifiedDate;
 
     List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
+
+
     ProvidedTreatment latestProvidedTreatment;
 
     public Patient() {

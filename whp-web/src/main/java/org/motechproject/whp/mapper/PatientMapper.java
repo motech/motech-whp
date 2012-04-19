@@ -25,7 +25,7 @@ public class PatientMapper {
                 Gender.get(patientRequest.getGender()),
                 PatientType.get(patientRequest.getPatient_type()),
                 patientRequest.getPatient_mobile_num());
-        patient.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getLast_modified_date()));
+        patient.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()));
         return patient;
     }
 

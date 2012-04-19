@@ -1,13 +1,7 @@
 package org.motechproject.whp.request;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/16/12
- * Time: 4:58 AM
- * To change this template use File | Settings | File Templates.
- */
 public class ProviderRequest {
+
     private String primary_mobile;
     private String secondary_mobile;
     private String tertiary_mobile;

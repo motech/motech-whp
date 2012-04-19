@@ -36,7 +36,7 @@ public class PatientMapperTest {
         assertEquals(Gender.Male, patient.getGender());
         assertEquals(PatientType.PHSTransfer, patient.getPatientType());
         assertEquals("12345667890", patient.getPhoneNumber());
-        assertEquals(patientRequest.getLast_modified_date(), patient.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals(patientRequest.getDate_modified(), patient.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
     }
 
     private void assertProvidedTreatment(Patient patient) {

@@ -9,7 +9,7 @@ public class DateFieldValidator {
     private final DateTimeFormatter localDateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");
 
-    public void validateLocalDate(String date, String fieldName) throws WHPValidationException {
+    public void validateLocalDate(String fieldName, String date) throws WHPValidationException {
         try {
             localDateFormatter.parseLocalDate(date);
         } catch (IllegalArgumentException e) {
@@ -17,7 +17,7 @@ public class DateFieldValidator {
         }
     }
 
-    public void validateDateTime(String dateTime, String fieldName) {
+    public void validateDateTime(String fieldName, String dateTime) {
         try {
             dateTimeFormatter.parseLocalDate(dateTime);
         } catch (IllegalArgumentException e) {
