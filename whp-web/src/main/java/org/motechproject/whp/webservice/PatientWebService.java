@@ -32,21 +32,26 @@ public class PatientWebService extends CaseService<PatientRequest> {
 
     @Override
     public void updateCase(PatientRequest patientRequest) {
+        Patient patient = mapPatient(patientRequest);
+        Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
+        if(patientReturned != null)
+            allPatients.update(patientReturned,patient);
     }
 
     @Override
     public void createCase(PatientRequest patientRequest) {
         patientRequest.validate();
-
-        Treatment treatment = new TreatmentMapper().map(patientRequest);
-        allTreatments.add(treatment);
-
-        Patient patient = new PatientMapper().map(patientRequest, treatment);
+        Patient patient = mapPatient(patientRequest);
         Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
         if (patientReturned == null)
             allPatients.add(patient);
-        else
-            allPatients.update(patient); // TODO
+    }
+
+    private Patient mapPatient(PatientRequest patientRequest) {
+        Treatment treatment = new TreatmentMapper().map(patientRequest);
+        allTreatments.add(treatment);
+
+        return new PatientMapper().map(patientRequest, treatment);
     }
 
 }

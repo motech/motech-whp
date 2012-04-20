@@ -5,7 +5,9 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
@@ -42,5 +44,22 @@ public class PatientWebServiceTest {
 
         Patient patient = patientArgumentCaptor.getValue();
         assertEquals("caseId", patient.getPatientId());
+    }
+
+    @Test
+    public void shouldUpdatePatient() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        Patient patientReturned = new Patient("caseId","fn","ln", Gender.Male, PatientType.New,"87777987987");
+        when(allPatients.findByPatientId("caseId")).thenReturn(patientReturned);
+
+        patientWebService.updateCase(patientRequest);
+
+        ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
+        ArgumentCaptor<Patient> patientReturnedArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
+
+        verify(allPatients).update(patientReturnedArgumentCaptor.capture(),patientArgumentCaptor.getValue());
+
+        Patient patient = patientReturnedArgumentCaptor.getValue();
+        assertEquals(patientReturned,patient);
     }
 }

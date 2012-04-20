@@ -42,4 +42,8 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         }
     }
 
+    public void update(Patient patientReturned, Patient patient) {
+
+
+    }
 }
