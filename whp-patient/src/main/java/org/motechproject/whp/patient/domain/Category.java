@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 public enum Category {
 
-    Category1("01"), Category2("02");
+    Category01("01"), Category02("02"), Category11("11"), Category12("12");
 
     private String value;
 
@@ -15,8 +15,10 @@ public enum Category {
     }
 
     public static Category get(String category) {
-        if (Category1.value.equals(category)) return Category1;
-        if (Category2.value.equals(category)) return Category2;
+        if (Category01.value.equals(category)) return Category01;
+        if (Category02.value.equals(category)) return Category02;
+        if (Category11.value.equals(category)) return Category11;
+        if (Category12.value.equals(category)) return Category12;
         return null;
     }
 

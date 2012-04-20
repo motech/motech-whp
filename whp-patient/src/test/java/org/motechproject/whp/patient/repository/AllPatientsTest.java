@@ -29,7 +29,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSavePatientInfo() {
-        Treatment treatment = new Treatment(Category.Category1, DateUtil.today(), DiseaseClass.P, 200);
+        Treatment treatment = new Treatment(Category.Category01, DateUtil.today(), DiseaseClass.P, 200);
         allTreatments.add(treatment);
 
         Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer, "1234567890");
@@ -48,7 +48,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSaveSmearTestDetails() {
-        Treatment treatment = new Treatment(Category.Category1, DateUtil.today(), DiseaseClass.P, 200);
+        Treatment treatment = new Treatment(Category.Category01, DateUtil.today(), DiseaseClass.P, 200);
         treatment.setSmearTestResults(smearTestResults());
         allTreatments.add(treatment);
 
