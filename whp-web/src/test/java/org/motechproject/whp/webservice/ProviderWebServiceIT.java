@@ -2,7 +2,7 @@ package org.motechproject.whp.webservice;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.provider.registration.service.exception.OpenRosaRegistrationException;
+import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
@@ -31,7 +31,7 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldCreateProvider() throws OpenRosaRegistrationException {
+    public void shouldCreateProvider() throws OpenRosaRegistrationValidationException {
         Provider whpProvider = new Provider("providerId", "9880123456", "district");
         whpProviderWebService.createOrUpdate(whpProvider);
         markForDeletion(whpProvider);
@@ -45,7 +45,7 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
             Provider provider = new Provider("P00001", "9880000000", null);
             whpProviderWebService.createOrUpdate(provider);
             fail("Should have thrown validation exception");
-        } catch (OpenRosaRegistrationException exception) {
+        } catch (OpenRosaRegistrationValidationException exception) {
             assertTrue(exception.getMessage().contains("district may not be empty"));
         }
     }

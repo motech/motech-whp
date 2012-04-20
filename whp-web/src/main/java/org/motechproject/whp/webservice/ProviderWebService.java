@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice;
 
+import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
-import org.motechproject.provider.registration.service.exception.OpenRosaRegistrationException;
 import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
@@ -27,11 +27,11 @@ public class ProviderWebService extends ProviderRegistrationService<Provider> {
     }
 
     @Override
-    public void createOrUpdate(Provider provider) throws OpenRosaRegistrationException {
+    public void createOrUpdate(Provider provider) throws OpenRosaRegistrationValidationException {
         BeanPropertyBindingResult validationErrors = new BeanPropertyBindingResult(provider, "provider");
         providerValidator.validate(provider, validationErrors);
         if (validationErrors.hasErrors()) {
-            throw new OpenRosaRegistrationException(MultipleFieldErrorsMessage.getMessage(validationErrors), HttpStatus.BAD_REQUEST);
+            throw new OpenRosaRegistrationValidationException(MultipleFieldErrorsMessage.getMessage(validationErrors), HttpStatus.BAD_REQUEST);
         }
         allProviders.addOrReplace(provider);
     }
