@@ -57,7 +57,7 @@ public class PatientWebServiceTest {
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
         ArgumentCaptor<Patient> patientReturnedArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
 
-        verify(allPatients).update(patientReturnedArgumentCaptor.capture(),patientArgumentCaptor.getValue());
+        verify(allPatients).update(patientReturnedArgumentCaptor.capture(),patientArgumentCaptor.capture());
 
         Patient patient = patientReturnedArgumentCaptor.getValue();
         assertEquals(patientReturned,patient);
