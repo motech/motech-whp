@@ -9,13 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by IntelliJ IDEA.
- * User: pchandra
- * Date: 4/12/12
- * Time: 4:06 PM
- * To change this template use File | Settings | File Templates.
- */
 @Repository
 public class AllProviders extends MotechBaseRepository<Provider> {
 

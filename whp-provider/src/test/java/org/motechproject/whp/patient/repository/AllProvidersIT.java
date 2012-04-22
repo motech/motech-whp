@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository;
 
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.provider.domain.Provider;
@@ -17,7 +18,8 @@ public class AllProvidersIT extends SpringIntegrationTest {
 
     @Test
     public void shouldSaveProviderInfo() {
-        Provider provider = new Provider("P00001", "984567876", "district");
+        Provider provider = new Provider("P00001", "984567876", "district",
+                DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss").parseDateTime("12/01/2012 10:10:10"));
         allProviders.add(provider);
         markForDeletion(provider);
 

@@ -5,6 +5,7 @@
             $(document).ready(function () {
                 var egUrl = $(location).attr('origin') + "/whp/provider/process";
                 $('#egUrl').html(egUrl);
+                $('#url').val(egUrl);
             })
         </script>
     </head>
@@ -13,7 +14,7 @@
         <br/>
         <br/>
         <form name="testSubmit">
-            <span style="vertical-align:top;margin-right:50px">Enter url:</span><input type="text" style="width:600" id="url" name="url" value="http://localhost:8080/whp/provider/process"></input>
+            <span style="vertical-align:top;margin-right:50px">Enter url:</span><input type="text" style="width:600" id="url" name="url" > </input>
             <br/>
             <span id="egUrl" style="margin-left:110px"></span>
             <br/>
@@ -24,12 +25,12 @@
     <username/>
     <password/>
     <uuid/>
-    <date>2012-02-02</date>
+    <date>20/02/2012 10:10:15</date>
     <user_data>
-        <data key="primaryMobile">9880123456</data>
-        <data key="secondaryMobile">9880123457</data>
-        <data key="tertiaryMobile">9880123458</data>
-        <data key="providerId">cha011</data>
+        <data key="primary_mobile">9880123456</data>
+        <data key="secondary_mobile">9880123457</data>
+        <data key="tertiary_mobile">9880123458</data>
+        <data key="provider_id">cha011</data>
         <data key="district">Muzaffarpur</data>
     </user_data>
 </Registration>

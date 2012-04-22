@@ -1,50 +1,27 @@
 package org.motechproject.whp.request;
 
+import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+@Data
 public class ProviderRequest {
 
-    private String primary_mobile;
-    private String secondary_mobile;
-    private String tertiary_mobile;
+    @NotEmpty
     private String provider_id;
+
+    @NotEmpty
     private String district;
 
-    public String getPrimary_mobile() {
-        return primary_mobile;
-    }
+    @NotEmpty
+    private String primary_mobile;
 
-    public void setPrimary_mobile(String primary_mobile) {
-        this.primary_mobile = primary_mobile;
-    }
+    private String secondary_mobile;
+    private String tertiary_mobile;
 
-    public String getSecondary_mobile() {
-        return secondary_mobile;
-    }
+    private String username;
+    private String password;
+    private String uuid;
 
-    public void setSecondary_mobile(String secondary_mobile) {
-        this.secondary_mobile = secondary_mobile;
-    }
-
-    public String getTertiary_mobile() {
-        return tertiary_mobile;
-    }
-
-    public void setTertiary_mobile(String tertiary_mobile) {
-        this.tertiary_mobile = tertiary_mobile;
-    }
-
-    public String getProvider_id() {
-        return provider_id;
-    }
-
-    public void setProvider_id(String provider_id) {
-        this.provider_id = provider_id;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
+    @NotEmpty
+    private String date;
 }
