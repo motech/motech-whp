@@ -9,7 +9,6 @@
     <name>motech-whp</name>
 
     <modules>
-        <module>whp-adherence</module>
         <module>whp-patient</module>
         <module>whp-provider</module>
         <module>whp-common</module>
