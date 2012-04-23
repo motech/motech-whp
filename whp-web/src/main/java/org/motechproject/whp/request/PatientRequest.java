@@ -29,7 +29,7 @@ public class PatientRequest {
     private String mobile_number;
     private String disease_class;
 
-    private String address_house_number;
+    private String address_location;
     private String address_landmark;
     private String address_village;
     private String address_block;
@@ -77,7 +77,7 @@ public class PatientRequest {
     }
 
     public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
-        this.address_house_number = houseNumber;
+        this.address_location = houseNumber;
         this.address_landmark = landmark;
         this.address_block = block;
         this.address_village = village;

@@ -42,7 +42,7 @@ public class PatientMapper {
 
     private void mapPatientAddress(PatientRequest patientRequest, ProvidedTreatment providedTreatment) {
         providedTreatment.setPatientAddress(new Address(
-                patientRequest.getAddress_house_number(),
+                patientRequest.getAddress_location(),
                 patientRequest.getAddress_landmark(),
                 patientRequest.getAddress_block(),
                 patientRequest.getAddress_village(),
