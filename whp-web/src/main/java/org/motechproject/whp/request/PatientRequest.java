@@ -9,6 +9,8 @@ import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BeanPropertyBindingResult;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
@@ -36,29 +38,40 @@ public class PatientRequest {
     private String address_district;
     private String address_state;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String smear_sample_instance_1;
 
     @Scope(scope = {ValidationScope.create})
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     private String smear_test_date_1;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String smear_test_result_1;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String smear_sample_instance_2;
 
-    @Scope(scope = {ValidationScope.create})
     @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @Scope(scope = {ValidationScope.create})
     private String smear_test_date_2;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String smear_test_result_2;
 
     private String weight_instance;
     private String weight;
 
+    @Size(min = 11, max = 11)
     private String tb_id;
 
     @Size(min = 5, max = 6)
     private String provider_id;
 
+    @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
     private String tb_registration_number;
     private String age;

@@ -16,7 +16,7 @@ public class PatientRequestBuilder {
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/1888", "result1", "PreTreatment", "21/09/1985", "result2")
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", "providerId01seq1", "123456", "P", "200", "registrationNumber");
+                .setTreatmentData("01", "12345678901", "123456", "P", "200", "registrationNumber");
         patientRequest.setDate_modified(DateUtil.now().toString("dd/MM/YYYY HH:mm:ss"));
 
         return this;
@@ -38,6 +38,11 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withProviderId(String providerId) {
         patientRequest.setProvider_id(providerId);
+        return this;
+    }
+
+    public PatientRequestBuilder withTreatmentCategory(String category) {
+        patientRequest.setTreatment_category(category);
         return this;
     }
 

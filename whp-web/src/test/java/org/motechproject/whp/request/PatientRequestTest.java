@@ -104,6 +104,21 @@ public class PatientRequestTest extends SpringIntegrationTest {
         request.validate(validator);
     }
 
+    @Test
+    public void shouldThrowExceptionWhenTreatmentCategoryIsValid() {
+        new PatientRequestBuilder().withDefaults().withTreatmentCategory("01").build().validate(validator);
+        new PatientRequestBuilder().withDefaults().withTreatmentCategory("02").build().validate(validator);
+        new PatientRequestBuilder().withDefaults().withTreatmentCategory("11").build().validate(validator);
+        new PatientRequestBuilder().withDefaults().withTreatmentCategory("12").build().validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenTreatmentCategoryIsNotValid() {
+        expectException("field:treatment_category:must match \"[0|1][1|2]\"");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withTreatmentCategory("99").build();
+        request.validate(validator);
+    }
+
     private void expectException(String message) {
         exceptionThrown.expect(WHPValidationException.class);
         exceptionThrown.expectMessage(new Contains(message));
