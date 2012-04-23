@@ -17,6 +17,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-validation</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.13</version>

@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
+import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -23,13 +24,15 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     AllPatients allPatients;
     @Autowired
     AllTreatments allTreatments;
+    @Autowired
+    private BeanValidator validator;
 
-    PatientWebService patientWebService;
+    private PatientWebService patientWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patientWebService = new PatientWebService(allPatients, allTreatments);
+        patientWebService = new PatientWebService(allPatients, allTreatments, validator);
     }
 
     @After

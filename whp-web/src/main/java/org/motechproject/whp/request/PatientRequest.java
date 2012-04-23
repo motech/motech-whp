@@ -1,15 +1,23 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.whp.request.validator.DateFieldValidator;
 import org.motechproject.whp.exception.WHPValidationException;
+import org.motechproject.whp.util.MultipleFieldErrorsMessage;
+import org.motechproject.whp.validation.ValidationScope;
+import org.motechproject.whp.validation.constraints.Scope;
+import org.motechproject.whp.validation.validator.BeanValidator;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.BeanPropertyBindingResult;
 
 @Data
 public class PatientRequest {
 
     private String case_id;
+
+    @Scope(scope = {ValidationScope.create})
+    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date_modified;
+
     private String case_type;
     private String first_name;
     private String last_name;
@@ -27,10 +35,18 @@ public class PatientRequest {
     private String address_postal_code;
 
     private String smear_sample_instance_1;
+
+    @Scope(scope = {ValidationScope.create})
+    @DateTimeFormat(pattern = "dd/MM/YYYY")
     private String smear_test_date_1;
+
     private String smear_test_result_1;
     private String smear_sample_instance_2;
+
+    @Scope(scope = {ValidationScope.create})
+    @DateTimeFormat(pattern = "dd/MM/YYYY")
     private String smear_test_date_2;
+
     private String smear_test_result_2;
 
     private String weight_instance;
@@ -40,11 +56,12 @@ public class PatientRequest {
     private String provider_id;
     private String treatment_category;
     private String tb_registration_number;
-    private String registration_date;
-    private String age;
 
-    @JsonIgnore
-    private final DateFieldValidator dateFieldValidator = new DateFieldValidator();
+    @Scope(scope = {ValidationScope.create})
+    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    private String registration_date;
+
+    private String age;
 
     public PatientRequest() {
     }
@@ -101,14 +118,12 @@ public class PatientRequest {
         return this;
     }
 
-    public void validate() throws WHPValidationException {
-        validateDateFields();
+    public void validate(BeanValidator validator) throws WHPValidationException {
+        BeanPropertyBindingResult requestValidationResult = new BeanPropertyBindingResult(this, "patient");
+        validator.validate(requestValidationResult.getTarget(), ValidationScope.create, requestValidationResult);
+        if (requestValidationResult.hasErrors()) {
+            throw new WHPValidationException(MultipleFieldErrorsMessage.getMessage(requestValidationResult));
+        }
     }
 
-    private void validateDateFields() {
-        dateFieldValidator.validateDateTime("date_modified", date_modified);
-        dateFieldValidator.validateLocalDate("registration_date", registration_date);
-        dateFieldValidator.validateLocalDate("smear_test_date_1", smear_test_date_1);
-        dateFieldValidator.validateLocalDate("smear_test_date_2", smear_test_date_2);
-    }
 }

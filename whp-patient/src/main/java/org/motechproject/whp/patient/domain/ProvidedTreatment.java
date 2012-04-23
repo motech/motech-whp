@@ -8,19 +8,25 @@ import org.joda.time.LocalDate;
 
 public class ProvidedTreatment {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String providerId;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String tbId;
-    @Getter @Setter
+    @Getter
+    @Setter
     private LocalDate startDate;
-    @Getter @Setter
+    @Getter
+    @Setter
     private LocalDate endDate;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private Address patientAddress;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String treatmentDocId;
 
     private Treatment treatment;

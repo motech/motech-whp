@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
+import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +20,14 @@ public class PatientWebService extends CaseService<PatientRequest> {
     AllPatients allPatients;
     AllTreatments allTreatments;
 
+    private BeanValidator validator;
+
     @Autowired
-    public PatientWebService(AllPatients allPatients, AllTreatments allTreatments) {
+    public PatientWebService(AllPatients allPatients, AllTreatments allTreatments, BeanValidator validator) {
         super(PatientRequest.class);
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
+        this.validator = validator;
     }
 
     @Override
@@ -34,13 +38,13 @@ public class PatientWebService extends CaseService<PatientRequest> {
     public void updateCase(PatientRequest patientRequest) {
         Patient patient = mapPatient(patientRequest);
         Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
-        if(patientReturned != null)
-            allPatients.update(patientReturned,patient);
+        if (patientReturned != null)
+            allPatients.update(patientReturned, patient);
     }
 
     @Override
     public void createCase(PatientRequest patientRequest) {
-        patientRequest.validate();
+        patientRequest.validate(validator);
         Patient patient = mapPatient(patientRequest);
         Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
         if (patientReturned == null)

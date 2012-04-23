@@ -64,19 +64,19 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Treatment treatmentReturned = patientReturned.getProvidedTreatments().get(0).getTreatment();
         SmearTestResult smearTestResult = treatmentReturned.getSmearTestResults().get(0);
 
-        assertEquals(SmearTestSampleInstance.PreTreatment,smearTestResult.getSampleInstance1());
-        assertEquals("Passed",smearTestResult.getResult1());
-        assertEquals(DateUtil.today(),smearTestResult.getTestDate1());
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResult.getSampleInstance1());
+        assertEquals("Passed", smearTestResult.getResult1());
+        assertEquals(DateUtil.today(), smearTestResult.getTestDate1());
 
         SmearTestResult smearTestResult2 = treatmentReturned.getSmearTestResults().get(1);
-        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP,smearTestResult2.getSampleInstance1());
-        assertEquals("Passed",smearTestResult2.getResult1());
-        assertEquals(DateUtil.today(),smearTestResult2.getTestDate1());
+        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP, smearTestResult2.getSampleInstance1());
+        assertEquals("Passed", smearTestResult2.getResult1());
+        assertEquals(DateUtil.today(), smearTestResult2.getTestDate1());
 
     }
 
     private List<SmearTestResult> smearTestResults() {
-        List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>() ;
+        List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>();
         smearTestResults.add(smearTestResult1());
         smearTestResults.add(smearTestResult2());
         return smearTestResults;

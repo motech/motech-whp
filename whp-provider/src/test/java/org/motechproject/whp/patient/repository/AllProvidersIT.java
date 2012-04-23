@@ -13,6 +13,7 @@ import static junit.framework.Assert.assertNotNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationProviderContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
+
     @Autowired
     AllProviders allProviders;
 

@@ -7,11 +7,12 @@ import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
+import org.motechproject.whp.validation.ValidationScope;
+import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -19,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProviderWebService extends ProviderRegistrationService<ProviderRequest> {
 
     private AllProviders allProviders;
-    private Validator providerValidator;
+    private BeanValidator providerValidator;
 
     @Autowired
-    public ProviderWebService(AllProviders allProviders, Validator validator) {
+    public ProviderWebService(AllProviders allProviders, BeanValidator validator) {
         super(ProviderRequest.class);
         this.allProviders = allProviders;
         providerValidator = validator;
@@ -37,7 +38,7 @@ public class ProviderWebService extends ProviderRegistrationService<ProviderRequ
 
     private void validateProvider(ProviderRequest providerRequest) throws OpenRosaRegistrationValidationException {
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(providerRequest, "provider");
-        providerValidator.validate(providerRequest, errors);
+        providerValidator.validate(providerRequest, ValidationScope.create, errors);
         if (errors.hasErrors()) {
             throw new OpenRosaRegistrationValidationException(MultipleFieldErrorsMessage.getMessage(errors), HttpStatus.BAD_REQUEST);
         }

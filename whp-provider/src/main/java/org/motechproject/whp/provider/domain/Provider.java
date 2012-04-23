@@ -32,39 +32,4 @@ public class Provider extends MotechBaseDataObject {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getPrimaryMobile() {
-        return primaryMobile;
-    }
-
-    public String getSecondaryMobile() {
-        return secondaryMobile;
-    }
-
-    public void setSecondaryMobile(String secondaryMobile) {
-        this.secondaryMobile = secondaryMobile;
-    }
-
-    public String getTertiaryMobile() {
-        return tertiaryMobile;
-    }
-
-    public void setTertiaryMobile(String tertiaryMobile) {
-        this.tertiaryMobile = tertiaryMobile;
-    }
-
-    public String getProviderId() {
-        return providerId;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public DateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
 }

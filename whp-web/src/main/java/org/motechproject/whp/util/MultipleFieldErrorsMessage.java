@@ -9,7 +9,7 @@ public class MultipleFieldErrorsMessage {
         StringBuilder errorMessage = new StringBuilder();
         errorMessage.append("Following errors were found : \n");
         for (FieldError fieldError : error.getFieldErrors()) {
-            errorMessage.append(String.format("Field : %s %s\n", fieldError.getField(), fieldError.getDefaultMessage()));
+            errorMessage.append(String.format("field:%s:%s\n", fieldError.getField(), fieldError.getDefaultMessage()));
         }
         return errorMessage.toString();
     }

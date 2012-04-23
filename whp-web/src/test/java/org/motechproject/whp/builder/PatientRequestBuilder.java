@@ -7,7 +7,7 @@ import org.motechproject.whp.request.PatientRequest;
 
 public class PatientRequestBuilder {
 
-    private PatientRequest patientRequest= new PatientRequest();
+    private PatientRequest patientRequest = new PatientRequest();
 
     public PatientRequestBuilder withDefaults() {
 

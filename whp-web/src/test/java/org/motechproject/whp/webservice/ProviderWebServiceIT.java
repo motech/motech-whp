@@ -8,9 +8,9 @@ import org.motechproject.whp.common.integration.repository.SpringIntegrationTest
 import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
+import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.validation.Validator;
 
 import static junit.framework.Assert.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -20,9 +20,8 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     private AllProviders allProviders;
-
     @Autowired
-    private Validator validator;
+    private BeanValidator validator;
 
     ProviderWebService whpProviderWebService;
 
@@ -48,10 +47,10 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
         try {
             ProviderRequest providerRequest = new ProviderRequestBuilder().withProviderId("P00001").withPrimaryMobile("9880000000").build();
             whpProviderWebService.createOrUpdate(providerRequest);
-            fail("Should have thrown validation exception");
+            fail("Should have exceptionThrown validation exception");
         } catch (OpenRosaRegistrationValidationException exception) {
-            assertTrue(exception.getMessage().contains("district may not be empty"));
-            assertTrue(exception.getMessage().contains("date may not be empty"));
+            assertTrue(exception.getMessage().contains("field:district:may not be empty"));
+            assertTrue(exception.getMessage().contains("field:date:may not be empty"));
         }
     }
 }

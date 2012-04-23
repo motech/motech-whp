@@ -13,6 +13,7 @@
         <module>whp-provider</module>
         <module>whp-common</module>
         <module>whp-web</module>
+        <module>whp-validation</module>
     </modules>
 
     <repositories>

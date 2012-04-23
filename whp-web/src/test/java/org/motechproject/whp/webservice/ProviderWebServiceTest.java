@@ -10,8 +10,9 @@ import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.provider.domain.Provider;
 import org.motechproject.whp.provider.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
+import org.motechproject.whp.validation.ValidationScope;
+import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
@@ -23,9 +24,8 @@ public class ProviderWebServiceTest {
 
     @Mock
     AllProviders allProviders;
-
     @Mock
-    Validator validator;
+    BeanValidator validator;
 
     ProviderWebService providerWebService;
 
@@ -42,7 +42,7 @@ public class ProviderWebServiceTest {
 
         ArgumentCaptor<Provider> providerArgumentCaptor = ArgumentCaptor.forClass(Provider.class);
 
-        verify(validator).validate(eq(providerRequest), Matchers.<Errors>any());
+        verify(validator).validate(eq(providerRequest), eq(ValidationScope.create), Matchers.<Errors>any());
         verify(allProviders).addOrReplace(providerArgumentCaptor.capture());
 
         Provider provider = providerArgumentCaptor.getValue();
@@ -53,4 +53,5 @@ public class ProviderWebServiceTest {
         assertEquals("Patna", provider.getDistrict());
         assertEquals("12/01/2012 10:10:10", provider.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
     }
+
 }
