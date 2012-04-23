@@ -47,8 +47,7 @@ public class PatientMapper {
                 patientRequest.getAddress_block(),
                 patientRequest.getAddress_village(),
                 patientRequest.getAddress_district(),
-                patientRequest.getAddress_state(),
-                patientRequest.getAddress_postal_code()));
+                patientRequest.getAddress_state()));
     }
 
 }

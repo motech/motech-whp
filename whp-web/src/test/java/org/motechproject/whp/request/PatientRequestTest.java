@@ -21,6 +21,58 @@ public class PatientRequestTest extends SpringIntegrationTest {
     private BeanValidator validator;
 
     @Test
+    public void shouldNotThrowException_WhenCaseIdIs10Characters() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("1234567890").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenCaseIdIs11Characters() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("12345678901").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenCaseIdIsLessThan10Characters() {
+        expectException("field:case_id:size must be between 10 and 11");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("123456789").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenCaseIdIsMoreThan11Characters() {
+        expectException("field:case_id:size must be between 10 and 11");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("123456789012").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenProviderIdIs5Characters() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenProviderIdIs6Characters() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("123456").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenProviderIdIsLessThan5Characters() {
+        expectException("field:provider_id:size must be between 5 and 6");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("1234").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenProviderIdIsMoreThan6Characters() {
+        expectException("field:provider_id:size must be between 5 and 6");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("1234567").build();
+        request.validate(validator);
+    }
+
+    @Test
     public void shouldNotThrowException_WhenLastModifiedDateFormatIsCorrect() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012 02:20:30").build();
         request.validate(validator);
@@ -28,28 +80,15 @@ public class PatientRequestTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNull() {
-        exceptionThrown.expect(WHPValidationException.class);
-        exceptionThrown.expectMessage(new Contains("field:date_modified:null"));
-
+        expectException("field:date_modified:null");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate(null).build();
         request.validate(validator);
     }
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNotTheCorrectDateTimeFormat() {
-        exceptionThrown.expect(WHPValidationException.class);
-        exceptionThrown.expectMessage(new Contains("03-04-2012\" is malformed at \"-04-2012"));
-
+        expectException("03-04-2012\" is malformed at \"-04-2012");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate("03-04-2012").build();
-        request.validate(validator);
-    }
-
-    @Test
-    public void shouldThrowException_WhenRegistrationDateFormatIsNotTheCorrectLocalDateFormat() {
-        exceptionThrown.expect(WHPValidationException.class);
-        exceptionThrown.expectMessage(new Contains("field:registration_date:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\""));
-
-        PatientRequest request = new PatientRequestBuilder().withDefaults().withRegistrationDate("03/04/2012  11:23:40").build();
         request.validate(validator);
     }
 
@@ -65,5 +104,9 @@ public class PatientRequestTest extends SpringIntegrationTest {
         request.validate(validator);
     }
 
+    private void expectException(String message) {
+        exceptionThrown.expect(WHPValidationException.class);
+        exceptionThrown.expectMessage(new Contains(message));
+    }
 
 }

@@ -35,7 +35,6 @@ public class TreatmentMapperTest {
         assertEquals(DateUtil.today(), treatment.getStartDate());
 
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals("20/01/1982", treatment.getRegistrationDate().toString("dd/MM/YYYY"));
 
         assertSmearTests(patientRequest, treatment);
         assertWeightStatistics(patientRequest, treatment);

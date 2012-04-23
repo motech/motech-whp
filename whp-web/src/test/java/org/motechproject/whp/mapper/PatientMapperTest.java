@@ -26,11 +26,11 @@ public class PatientMapperTest {
         Patient patient = patientMapper.map(patientRequest, treatment);
 
         assertBasicPatientInfo(patient, patientRequest);
-        assertProvidedTreatment(patient);
+        assertProvidedTreatment(patient, patientRequest);
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
-        assertEquals("caseId", patient.getPatientId());
+        assertEquals(patientRequest.getCase_id(), patient.getPatientId());
         assertEquals("Foo", patient.getFirstName());
         assertEquals("Bar", patient.getLastName());
         assertEquals(Gender.Male, patient.getGender());
@@ -39,17 +39,17 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getDate_modified(), patient.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
     }
 
-    private void assertProvidedTreatment(Patient patient) {
+    private void assertProvidedTreatment(Patient patient, PatientRequest patientRequest) {
         ProvidedTreatment providedTreatment = patient.getLatestProvidedTreatment();
         assertEquals("providerId01seq1", providedTreatment.getTbId());
-        assertEquals("providerId", providedTreatment.getProviderId());
+        assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
         assertEquals(DateUtil.today(), providedTreatment.getStartDate());
 
         assertPatientAddress(providedTreatment.getPatientAddress());
     }
 
     private void assertPatientAddress(Address address) {
-        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state", "postal code"), address);
+        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state"), address);
     }
 
 }

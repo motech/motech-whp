@@ -26,11 +26,8 @@ public class TreatmentMapper {
     }
 
     private void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {
-        String registrationNumber = patientRequest.getTb_registration_number();
-        LocalDate registrationDate = localDateFormatter.parseLocalDate(patientRequest.getRegistration_date());
-        treatment.setRegistrationDetails(registrationNumber, registrationDate);
+        treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
     }
-
 
     private void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
 

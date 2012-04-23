@@ -47,7 +47,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         patientWebService.createCase(patientRequest);
 
-        Patient patient = allPatients.findByPatientId("caseId");
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
         assertNotNull(patient);
         assertNotNull(patient.getLatestProvidedTreatment().getTreatment());

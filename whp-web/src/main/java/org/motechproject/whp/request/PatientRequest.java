@@ -9,9 +9,12 @@ import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BeanPropertyBindingResult;
 
+import javax.validation.constraints.Size;
+
 @Data
 public class PatientRequest {
 
+    @Size(min = 10, max = 11)
     private String case_id;
 
     @Scope(scope = {ValidationScope.create})
@@ -32,7 +35,6 @@ public class PatientRequest {
     private String address_block;
     private String address_district;
     private String address_state;
-    private String address_postal_code;
 
     private String smear_sample_instance_1;
 
@@ -53,14 +55,12 @@ public class PatientRequest {
     private String weight;
 
     private String tb_id;
+
+    @Size(min = 5, max = 6)
     private String provider_id;
+
     private String treatment_category;
     private String tb_registration_number;
-
-    @Scope(scope = {ValidationScope.create})
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
-    private String registration_date;
-
     private String age;
 
     public PatientRequest() {
@@ -76,23 +76,23 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state, String postalCode) {
+    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
         this.address_house_number = houseNumber;
         this.address_landmark = landmark;
         this.address_block = block;
         this.address_village = village;
         this.address_district = district;
         this.address_state = state;
-        this.address_postal_code = postalCode;
         return this;
     }
 
-    public PatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge) {
+    public PatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge, String registrationNumber) {
         this.treatment_category = category;
         this.tb_id = tbId;
         this.provider_id = providerId;
         this.disease_class = diseaseClass;
         this.age = patientAge;
+        this.tb_registration_number = registrationNumber;
         return this;
     }
 
@@ -103,12 +103,6 @@ public class PatientRequest {
         this.smear_sample_instance_2 = smear_sample_instance_2;
         this.smear_test_date_2 = smear_test_date_2;
         this.smear_test_result_2 = smear_result_2;
-        return this;
-    }
-
-    public PatientRequest setRegistrationDetails(String registrationNumber, String registrationDate) {
-        this.tb_registration_number = registrationNumber;
-        this.registration_date = registrationDate;
         return this;
     }
 
@@ -125,5 +119,4 @@ public class PatientRequest {
             throw new WHPValidationException(MultipleFieldErrorsMessage.getMessage(requestValidationResult));
         }
     }
-
 }

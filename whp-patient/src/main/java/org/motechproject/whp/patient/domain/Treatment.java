@@ -17,7 +17,6 @@ public class Treatment extends MotechBaseDataObject {
     private LocalDate startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
-    private LocalDate registrationDate;
     private DiseaseClass diseaseClass;
     private List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
@@ -32,9 +31,8 @@ public class Treatment extends MotechBaseDataObject {
         this.patientAge = patientAge;
     }
 
-    public Treatment setRegistrationDetails(String registrationNumber, LocalDate registrationDate) {
+    public Treatment setRegistrationDetails(String registrationNumber) {
         this.setTbRegistrationNumber(registrationNumber);
-        this.setRegistrationDate(registrationDate);
         return this;
     }
 

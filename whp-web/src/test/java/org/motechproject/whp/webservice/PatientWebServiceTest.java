@@ -51,14 +51,14 @@ public class PatientWebServiceTest {
         verify(validator).validate(eq(patientRequest), eq(ValidationScope.create), Matchers.<Errors>any());
 
         Patient patient = patientArgumentCaptor.getValue();
-        assertEquals("caseId", patient.getPatientId());
+        assertEquals(patientRequest.getCase_id(), patient.getPatientId());
     }
 
     @Test
     public void shouldUpdatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        Patient patientReturned = new Patient("caseId", "fn", "ln", Gender.Male, PatientType.New, "87777987987");
-        when(allPatients.findByPatientId("caseId")).thenReturn(patientReturned);
+        Patient patientReturned = new Patient("1234567890", "fn", "ln", Gender.Male, PatientType.New, "87777987987");
+        when(allPatients.findByPatientId("1234567890")).thenReturn(patientReturned);
 
         patientWebService.updateCase(patientRequest);
 
