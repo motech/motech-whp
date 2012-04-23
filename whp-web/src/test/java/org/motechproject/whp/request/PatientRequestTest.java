@@ -119,6 +119,32 @@ public class PatientRequestTest extends SpringIntegrationTest {
         request.validate(validator);
     }
 
+    @Test
+    public void shouldNotThrowException_WhenMobileNumberIsEmpty() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenMobileNumberIs10Digits() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("1234567890").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
+        expectException("field:mobile_number:must match \"^$|[0-9]{10}\"");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("123456789").build();
+        request.validate(validator);
+    }
+
+    @Test
+    public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
+        expectException("field:mobile_number:must match \"^$|[0-9]{10}\"");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
+        request.validate(validator);
+    }
+
     private void expectException(String message) {
         exceptionThrown.expect(WHPValidationException.class);
         exceptionThrown.expectMessage(new Contains(message));

@@ -24,10 +24,22 @@ public class PatientRequest {
     private String date_modified;
 
     private String case_type;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String first_name;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String last_name;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String gender;
+
     private String patient_type;
+
+    @Pattern(regexp = "^$|[0-9]{10}")
     private String mobile_number;
     private String disease_class;
 

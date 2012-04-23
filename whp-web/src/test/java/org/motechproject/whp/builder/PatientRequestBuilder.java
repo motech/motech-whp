@@ -12,7 +12,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withDefaults() {
 
         patientRequest = new PatientRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "12345667890")
+                .setPatientInfo("1234567890", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "1234567890")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/1888", "result1", "PreTreatment", "21/09/1985", "result2")
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
@@ -55,4 +55,10 @@ public class PatientRequestBuilder {
         patientRequest.setSmear_test_date_2(smearTestDate2);
         return this;
     }
+
+    public PatientRequestBuilder withMobileNumber(String mobileNumber) {
+        patientRequest.setMobile_number(mobileNumber);
+        return this;
+    }
+
 }
