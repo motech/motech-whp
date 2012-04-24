@@ -62,39 +62,38 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertNotNull(patientReturned);
 
         Treatment treatmentReturned = patientReturned.getProvidedTreatments().get(0).getTreatment();
-        SmearTestResult smearTestResult = treatmentReturned.getSmearTestResults().get(0);
 
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResult.getSampleInstance1());
-        assertEquals("Passed", smearTestResult.getResult1());
-        assertEquals(DateUtil.today(), smearTestResult.getTestDate1());
+        SmearTestResults smearTestResults1 = treatmentReturned.getSmearTestResults().get(0);
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults1.getSampleInstance1());
+        assertEquals(SmearTestResult.Positive, smearTestResults1.getResult1());
+        assertEquals(DateUtil.today(), smearTestResults1.getTestDate1());
 
-        SmearTestResult smearTestResult2 = treatmentReturned.getSmearTestResults().get(1);
-        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP, smearTestResult2.getSampleInstance1());
-        assertEquals("Passed", smearTestResult2.getResult1());
-        assertEquals(DateUtil.today(), smearTestResult2.getTestDate1());
-
+        SmearTestResults smearTestResults2 = treatmentReturned.getSmearTestResults().get(1);
+        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP, smearTestResults2.getSampleInstance1());
+        assertEquals(SmearTestResult.Positive, smearTestResults2.getResult1());
+        assertEquals(DateUtil.today(), smearTestResults2.getTestDate1());
     }
 
-    private List<SmearTestResult> smearTestResults() {
-        List<SmearTestResult> smearTestResults = new ArrayList<SmearTestResult>();
+    private List<SmearTestResults> smearTestResults() {
+        List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
         smearTestResults.add(smearTestResult1());
         smearTestResults.add(smearTestResult2());
         return smearTestResults;
     }
 
-    private SmearTestResult smearTestResult2() {
-        SmearTestResult smearTestResult = new SmearTestResult();
-        smearTestResult.setSampleInstance1(SmearTestSampleInstance.TwoMonthsIntoCP);
-        smearTestResult.setTestDate1(DateUtil.today());
-        smearTestResult.setResult1("Passed");
-        return smearTestResult;
+    private SmearTestResults smearTestResult2() {
+        SmearTestResults smearTestResults = new SmearTestResults();
+        smearTestResults.setSampleInstance1(SmearTestSampleInstance.TwoMonthsIntoCP);
+        smearTestResults.setTestDate1(DateUtil.today());
+        smearTestResults.setResult1(SmearTestResult.Positive);
+        return smearTestResults;
     }
 
-    private SmearTestResult smearTestResult1() {
-        SmearTestResult smearTestResult = new SmearTestResult();
-        smearTestResult.setSampleInstance1(SmearTestSampleInstance.PreTreatment);
-        smearTestResult.setTestDate1(DateUtil.today());
-        smearTestResult.setResult1("Passed");
-        return smearTestResult;
+    private SmearTestResults smearTestResult1() {
+        SmearTestResults smearTestResults = new SmearTestResults();
+        smearTestResults.setSampleInstance1(SmearTestSampleInstance.PreTreatment);
+        smearTestResults.setTestDate1(DateUtil.today());
+        smearTestResults.setResult1(SmearTestResult.Positive);
+        return smearTestResults;
     }
 }

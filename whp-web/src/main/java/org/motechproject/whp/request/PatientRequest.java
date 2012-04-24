@@ -4,6 +4,7 @@ import lombok.Data;
 import org.motechproject.whp.exception.WHPValidationException;
 import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.SmearTestResult;
 import org.motechproject.whp.patient.domain.SmearTestSampleInstance;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;
@@ -79,7 +80,7 @@ public class PatientRequest {
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     private String smear_test_date_1;
 
-    @NotNull
+    @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_1;
 
@@ -91,7 +92,7 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String smear_test_date_2;
 
-    @NotNull
+    @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_2;
 

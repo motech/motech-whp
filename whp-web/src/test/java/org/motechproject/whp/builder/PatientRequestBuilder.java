@@ -2,6 +2,7 @@ package org.motechproject.whp.builder;
 
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.SmearTestResult;
 import org.motechproject.whp.patient.domain.WeightInstance;
 import org.motechproject.whp.request.PatientRequest;
 
@@ -14,7 +15,7 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "1234567890")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setSmearTestResults("PreTreatment", "19/07/1888", "result1", "PreTreatment", "21/09/1985", "result2")
+                .setSmearTestResults("PreTreatment", "19/07/1888", SmearTestResult.Positive.name(), "PreTreatment", "21/09/1985", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "200", "registrationNumber");
         patientRequest.setDate_modified(DateUtil.now().toString("dd/MM/YYYY HH:mm:ss"));
