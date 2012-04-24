@@ -15,7 +15,6 @@
         <module>whp-provider</module>
         <module>whp-validation</module>
         <module>whp-web</module>
-        <module>whp-tools</module>
     </modules>
 
     <repositories>
