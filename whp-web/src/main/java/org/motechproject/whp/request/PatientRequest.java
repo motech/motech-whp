@@ -21,6 +21,7 @@ import javax.validation.constraints.Size;
 @Data
 public class PatientRequest {
 
+    @NotNull
     @Size(min = 10, max = 11)
     private String case_id;
 
@@ -29,6 +30,7 @@ public class PatientRequest {
     private String date_modified;
 
     private String case_type;
+    private String phi;
 
     @NotNull
     @Scope(scope = {ValidationScope.create})
@@ -105,18 +107,17 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String weight;
 
-
+    @NotNull
     @Size(min = 11, max = 11)
     private String tb_id;
 
+    @NotNull
     @Size(min = 5, max = 6)
     private String provider_id;
 
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
 
-    @NotNull
-    @Scope(scope = {ValidationScope.create})
     private String tb_registration_number;
 
     @NotNull
@@ -126,13 +127,14 @@ public class PatientRequest {
     public PatientRequest() {
     }
 
-    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber) {
+    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber, String phi) {
         this.case_id = caseId;
         this.first_name = firstName;
         this.last_name = lastName;
         this.gender = gender;
         this.patient_type = patientType;
         this.mobile_number = patientMobileNumber;
+        this.phi = phi;
         return this;
     }
 

@@ -1,6 +1,5 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.domain.SmearTestResult;
 import org.motechproject.whp.patient.domain.WeightInstance;
@@ -13,12 +12,12 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withDefaults() {
 
         patientRequest = new PatientRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "1234567890")
+                .setPatientInfo("1234567890", "Foo", "Bar", "M", PatientType.PHSTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/1888", SmearTestResult.Positive.name(), "PreTreatment", "21/09/1985", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "200", "registrationNumber");
-        patientRequest.setDate_modified(DateUtil.now().toString("dd/MM/YYYY HH:mm:ss"));
+        patientRequest.setDate_modified("10/10/2010 10:10:10");
 
         return this;
     }
@@ -59,6 +58,16 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withMobileNumber(String mobileNumber) {
         patientRequest.setMobile_number(mobileNumber);
+        return this;
+    }
+
+    public PatientRequestBuilder withSmearTestResult1(String smearTestResult) {
+        patientRequest.setSmear_test_result_1(smearTestResult);
+        return this;
+    }
+
+    public PatientRequestBuilder withTBId(String tbId) {
+        patientRequest.setTb_id(tbId);
         return this;
     }
 

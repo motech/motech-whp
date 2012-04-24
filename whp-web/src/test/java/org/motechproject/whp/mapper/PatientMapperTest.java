@@ -2,7 +2,6 @@ package org.motechproject.whp.mapper;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
@@ -36,6 +35,7 @@ public class PatientMapperTest {
         assertEquals(Gender.Male, patient.getGender());
         assertEquals(PatientType.PHSTransfer, patient.getPatientType());
         assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
+        assertEquals(patientRequest.getPhi(), patient.getPhi());
         assertEquals(patientRequest.getDate_modified(), patient.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
     }
 
@@ -43,7 +43,7 @@ public class PatientMapperTest {
         ProvidedTreatment providedTreatment = patient.getLatestProvidedTreatment();
         assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
-        assertEquals(DateUtil.today(), providedTreatment.getStartDate());
+        assertEquals("10/10/2010", providedTreatment.getStartDate().toString("dd/MM/YYYY"));
 
         assertPatientAddress(providedTreatment.getPatientAddress());
     }

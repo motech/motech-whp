@@ -33,6 +33,9 @@ public class Patient extends MotechBaseDataObject {
     private String phoneNumber;
     @Getter
     @Setter
+    private String phi;
+    @Getter
+    @Setter
     private PatientStatus status = PatientStatus.Open;
     @Getter
     @Setter

@@ -2,7 +2,6 @@ package org.motechproject.whp.mapper;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
@@ -25,6 +24,7 @@ public class PatientMapper {
                 Gender.get(patientRequest.getGender()),
                 PatientType.valueOf(patientRequest.getPatient_type()),
                 patientRequest.getMobile_number());
+        patient.setPhi(patientRequest.getPhi());
         patient.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()));
         return patient;
     }
@@ -33,7 +33,7 @@ public class PatientMapper {
         String providerId = patientRequest.getProvider_id();
         String tbId = patientRequest.getTb_id();
 
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, DateUtil.today());
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()).toLocalDate());
         providedTreatment.setTreatment(treatment);
         mapPatientAddress(patientRequest, providedTreatment);
 

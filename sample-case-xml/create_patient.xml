@@ -1,36 +1,35 @@
 <?xml version="1.0"?>
-<case xmlns="http://openrosa.org/javarosa" case_id="cha01100001" date_modified="03/04/2012 11:23:40" user_id="system">
+<case xmlns="http://openrosa.org/javarosa" case_id="1234567890" date_modified="03/04/2012 11:23:40" user_id="system">
     <create>
         <case_type>whp_tb_patient</case_type>
-        <case_name>RAJU</case_name>
+        <case_name>Raju Singh</case_name>
     </create>
     <update>
-        <tb_id>cha01102001</tb_id>
-        <tb_registration_no>xxxxxxxxxxx</tb_registration_no>
-        <provider_id>cha011</provider_id>
-        <patient_type>New/PHS Transfer In</patient_type>
+        <tb_id>12345678901</tb_id>
+        <!--<tb_registration_number>xxxxxxxxxxx</tb_registration_number>-->
+        <provider_id>123456</provider_id>
+        <patient_type>New</patient_type>
         <first_name>Raju</first_name>
         <last_name>Singh</last_name>
         <age>35</age>
         <gender>M</gender>
         <smear_sample_instance_1>PreTreatment</smear_sample_instance_1>
         <smear_test_date_1>01/03/2012</smear_test_date_1>
-        <smear_result_1>Positive</smear_result_1>
+        <smear_test_result_1>Positive</smear_test_result_1>
         <smear_sample_instance_2>PreTreatment</smear_sample_instance_2>
         <smear_test_date_2>01/03/2012</smear_test_date_2>
-        <smear_result_2>Positive</smear_result_2>
+        <smear_test_result_2>Positive</smear_test_result_2>
         <treatment_category>01</treatment_category>
-        <registration_date>03/01/2012</registration_date>
-        <patient_address_house_num>1001</patient_address_house_num>
-        <patient_address_landmark>Near banyan tree</patient_address_landmark>
-        <patient_address_village>Chambal</patient_address_village>
-        <patient_address_block>Vijayanagar</patient_address_block>
-        <patient_address_district>Muzafarrpur</patient_address_district>
-        <patient_address_state>Bihar</patient_address_state>
-        <patient_mobile_num>9880123456</patient_mobile_num>
-        <patient_PHI>WHP</patient_PHI>
+        <address_location>1001</address_location>
+        <address_landmark>Near banyan tree</address_landmark>
+        <address_village>Chambal</address_village>
+        <address_block>Vijayanagar</address_block>
+        <address_district>Muzafarrpur</address_district>
+        <address_state>Bihar</address_state>
+        <mobile_number>9880123456</mobile_number>
+        <phi>WHP</phi>
         <disease_class>P</disease_class>
-        <patient_weight_instance>PreTreatment</patient_weight_instance>
-        <patient_weight>80</patient_weight>
+        <weight_instance>PreTreatment</weight_instance>
+        <weight>80</weight>
     </update>
 </case>

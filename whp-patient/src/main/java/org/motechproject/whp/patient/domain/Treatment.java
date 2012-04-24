@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 
@@ -17,6 +18,7 @@ public class Treatment extends MotechBaseDataObject {
     private LocalDate startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
+    private DateTime registrationDate;
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
@@ -29,11 +31,6 @@ public class Treatment extends MotechBaseDataObject {
         this.startDate = startDate;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;
-    }
-
-    public Treatment setRegistrationDetails(String registrationNumber) {
-        this.setTbRegistrationNumber(registrationNumber);
-        return this;
     }
 
     public void addSmearTestResult(SmearTestResults smearTestResults) {

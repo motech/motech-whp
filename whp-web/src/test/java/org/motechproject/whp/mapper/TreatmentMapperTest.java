@@ -3,7 +3,6 @@ package org.motechproject.whp.mapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.WeightInstance;
@@ -32,9 +31,10 @@ public class TreatmentMapperTest {
     private void assertTreatment(PatientRequest patientRequest, Treatment treatment) {
         assertEquals(Integer.parseInt(patientRequest.getAge()), treatment.getPatientAge());
         assertEquals(patientRequest.getTreatment_category(), treatment.getCategory().value());
-        assertEquals(DateUtil.today(), treatment.getStartDate());
+        assertEquals("10/10/2010", treatment.getStartDate().toString("dd/MM/YYYY"));
 
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
+        assertEquals(patientRequest.getDate_modified(), treatment.getRegistrationDate().toString("dd/MM/YYYY HH:mm:ss"));
 
         assertSmearTests(patientRequest, treatment);
         assertWeightStatistics(patientRequest, treatment);
@@ -52,7 +52,7 @@ public class TreatmentMapperTest {
     private void assertWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
         Assert.assertEquals(WeightInstance.valueOf(patientRequest.getWeight_instance()), treatment.getWeightStatisticsList().get(0).getWeightInstance());
         Assert.assertEquals(Float.parseFloat(patientRequest.getWeight()), treatment.getWeightStatisticsList().get(0).getWeight(), 0.0);
-        Assert.assertEquals(DateUtil.today(), treatment.getWeightStatisticsList().get(0).getMeasuringDate());
+        Assert.assertEquals("10/10/2010", treatment.getWeightStatisticsList().get(0).getMeasuringDate().toString("dd/MM/YYYY"));
     }
 
 

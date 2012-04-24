@@ -26,7 +26,7 @@ public class EnumValidator extends PropertyValidator {
         field.setAccessible(true);
         try {
             return !allEnumerations.contains(field.get(target).toString());
-        } catch (IllegalAccessException ignored) {
+        } catch (Exception ignored) {
         }
         return true;
     }
