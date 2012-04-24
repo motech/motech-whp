@@ -170,6 +170,11 @@
             <artifactId>whp-refdata</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-tools</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -184,11 +189,11 @@
                             <target unless="skipTests">
                                 <echo message="Recreating DB: START"/>
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <!--<java classname="org.motechproject.whp.tools.RecreateDB">
+                                <java classname="org.motechproject.whp.tools.RecreateDB">
                                     <classpath>
                                         <pathelement path="${compile_classpath}"/>
                                     </classpath>
-                                </java>-->
+                                </java>
                                 <echo message="Recreating DB: END"/>
                             </target>
                         </configuration>
