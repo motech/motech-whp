@@ -160,6 +160,16 @@
             <artifactId>motech-web-security</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-seed</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-refdata</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -193,11 +203,11 @@
                             <target unless="skipTests">
                                 <echo message="Seed data loading: START"/>
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <!--<java classname="org.motechproject.whp.tools.seed.SetupSeedData">
+                                <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
                                     <classpath>
                                         <pathelement path="${compile_classpath}"/>
                                     </classpath>
-                                </java>-->
+                                </java>
                                 <echo message="Seed data loading: END"/>
                             </target>
                         </configuration>

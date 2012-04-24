@@ -11,7 +11,7 @@ import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(locations = "classpath*:/applicationContext.xml")
+@ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
 public class PatientRequestTest extends SpringIntegrationTest {
 
     @Rule
