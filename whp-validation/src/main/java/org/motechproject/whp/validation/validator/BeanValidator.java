@@ -1,6 +1,5 @@
 package org.motechproject.whp.validation.validator;
 
-import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,10 +20,10 @@ public class BeanValidator {
         this.fieldValidators = fieldValidators;
     }
 
-    public void validate(Object target, ValidationScope scope, Errors errors) {
+    public void validate(Object target, String scope, Errors errors) {
         for (Field field : target.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Scope.class)) {
-                List<ValidationScope> scopeList = Arrays.asList(field.getAnnotation(Scope.class).scope());
+                List<String> scopeList = Arrays.asList(field.getAnnotation(Scope.class).scope());
                 if (scopeList.contains(scope)) {
                     validateField(target, errors, field);
                 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 
 @Data
-public class SmearTestResult {
+public class SmearTestResults {
 
     private SmearTestSampleInstance sampleInstance1;
     private LocalDate testDate1;
@@ -14,10 +14,10 @@ public class SmearTestResult {
     private LocalDate testDate2;
     private String result2;
 
-    public SmearTestResult() {
+    public SmearTestResults() {
     }
 
-    public SmearTestResult(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, String result1, SmearTestSampleInstance sampleInstance2, LocalDate testDate2, String result2) {
+    public SmearTestResults(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, String result1, SmearTestSampleInstance sampleInstance2, LocalDate testDate2, String result2) {
         this.sampleInstance1 = sampleInstance1;
         this.testDate1 = testDate1;
         this.result1 = result1;

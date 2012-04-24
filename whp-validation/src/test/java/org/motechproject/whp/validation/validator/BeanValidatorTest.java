@@ -3,7 +3,6 @@ package org.motechproject.whp.validation.validator;
 import lombok.Data;
 import org.junit.Test;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
-import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,7 +22,7 @@ public class BeanValidatorTest extends SpringIntegrationTest {
     public void shouldValidateFieldUnderAllScopesWhenNotAnnotatedWithScope() {
         ClassWithValidations target = new ClassWithValidations(null, "someValue");
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, "classWithValidations");
-        beanValidator.validate(target, ValidationScope.simpleUpdate, errors);
+        beanValidator.validate(target, "simpleUpdate", errors);
 
         assertEquals("may not be null", errors.getFieldError("fieldWithoutScope").getDefaultMessage());
     }
@@ -32,7 +31,7 @@ public class BeanValidatorTest extends SpringIntegrationTest {
     public void shouldNotValidateScopedFieldsUnderADifferentScope() {
         ClassWithValidations target = new ClassWithValidations("someValue", null);
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, "classWithValidations");
-        beanValidator.validate(target, ValidationScope.simpleUpdate, errors);
+        beanValidator.validate(target, "simpleUpdate", errors);
 
         assertEquals(0, errors.getFieldErrors().size());
     }
@@ -41,7 +40,7 @@ public class BeanValidatorTest extends SpringIntegrationTest {
     public void shouldValidateScopedFieldUnderMatchingScope() {
         ClassWithValidations target = new ClassWithValidations("someValue", null);
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, "classWithValidations");
-        beanValidator.validate(target, ValidationScope.create, errors);
+        beanValidator.validate(target, "create", errors);
 
         assertEquals("may not be null", errors.getFieldError("scopedField").getDefaultMessage());
     }
@@ -53,7 +52,7 @@ public class BeanValidatorTest extends SpringIntegrationTest {
         private String fieldWithoutScope;
 
         @NotNull
-        @Scope(scope = {ValidationScope.create})
+        @Scope(scope = {"create"})
         private String scopedField;
 
         public ClassWithValidations(String fieldWithoutScope, String scopedField) {

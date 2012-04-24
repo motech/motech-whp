@@ -2,8 +2,12 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.motechproject.whp.exception.WHPValidationException;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.SmearTestSampleInstance;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;
+import org.motechproject.whp.validation.constraints.Enumeration;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,20 +41,37 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String gender;
 
+    @Enumeration(type = PatientType.class)
+    @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
     @Pattern(regexp = "^$|[0-9]{10}")
     private String mobile_number;
+
+    @Enumeration(type = DiseaseClass.class)
+    @Scope(scope = {ValidationScope.create})
     private String disease_class;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_location;
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_landmark;
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_village;
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_block;
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_district;
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String address_state;
 
-    @NotNull
+    @Enumeration(type = SmearTestSampleInstance.class)
     @Scope(scope = {ValidationScope.create})
     private String smear_sample_instance_1;
 
@@ -62,7 +83,7 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_1;
 
-    @NotNull
+    @Enumeration(type = SmearTestSampleInstance.class)
     @Scope(scope = {ValidationScope.create})
     private String smear_sample_instance_2;
 
@@ -74,8 +95,15 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_2;
 
+
+    @Enumeration(type = SmearTestSampleInstance.class)
+    @Scope(scope = {ValidationScope.create})
     private String weight_instance;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String weight;
+
 
     @Size(min = 11, max = 11)
     private String tb_id;
@@ -85,7 +113,13 @@ public class PatientRequest {
 
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String tb_registration_number;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     private String age;
 
     public PatientRequest() {

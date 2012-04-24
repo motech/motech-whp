@@ -8,6 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({FIELD})
 @Retention(RUNTIME)
-public @interface Scope {
-    String[] scope();
+public @interface Enumeration {
+    Class<? extends java.lang.Enum> type();
 }
