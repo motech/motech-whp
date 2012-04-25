@@ -146,14 +146,14 @@ public class PatientRequestTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowException_WhenEnumFieldIsNull() {
+    public void shouldThrowException_WhenEnumFieldIsNull() throws WHPValidationException {
         expectException("field:smear_test_result_1:The value should be one of : [Positive, Negative]");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withSmearTestResult1(null).build();
         request.validate(validator);
     }
 
     @Test
-    public void shouldThrowException_WhenTbIdFieldIsNull() {
+    public void shouldThrowException_WhenTbIdFieldIsNull() throws WHPValidationException {
         expectException("field:tb_id:may not be null");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withTBId(null).build();
         request.validate(validator);
