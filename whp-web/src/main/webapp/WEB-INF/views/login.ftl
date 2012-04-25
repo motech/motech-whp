@@ -2,6 +2,10 @@
     <@layout.defaultLayout "Login">
 
     <div class="span12" id="loginForm">
+        <#if RequestParameters.login_error?exists>
+            <div class="alert alert-error"> The username or password you entered is incorrect. Please enter the correct credentials. </div>
+        </#if>
+
         <form action="/whp/security/j_spring_security_check" method="POST" class="well form-horizontal">
             <div class="control-group">
                 <label class="control-label" for="j_username"> User Name</label>
