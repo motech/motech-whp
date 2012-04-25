@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.motechproject.whp.application.service.PatientRegistrationService;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.domain.Patient;
-import org.motechproject.whp.repository.AllPatients;
 import org.motechproject.whp.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -17,7 +16,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 

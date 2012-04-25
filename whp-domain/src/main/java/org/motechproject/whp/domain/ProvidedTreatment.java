@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.springframework.context.annotation.Scope;
 
 
 public class ProvidedTreatment {

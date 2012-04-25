@@ -48,14 +48,14 @@ public class BeanValidator {
         }
     }
 
+    private boolean isValidatedMemberInstance(Field field) {
+        return field.isAnnotationPresent(Valid.class);
+    }
+
     private void validateMemberInstance(Object target, String scope, Errors errors, Field field) throws IllegalAccessException {
         Object fieldValue = field.get(target);
         errors.pushNestedPath(field.getName());
         this.validate(fieldValue, scope, errors);
         errors.popNestedPath();
-    }
-
-    private boolean isValidatedMemberInstance(Field field) {
-        return field.isAnnotationPresent(Valid.class);
     }
 }
