@@ -6,14 +6,14 @@
             <div class="control-group">
                 <label class="control-label" for="j_username"> User Name</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" id='j_username'/>
+                    <input class="input-xlarge" type="text" name='j_username' id="j_username"/>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="j_password">Password</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="password" id='j_password'/>
+                    <input class="input-xlarge" type="password" name='j_password' id="j_password"/>
                 </div>
             </div>
 
