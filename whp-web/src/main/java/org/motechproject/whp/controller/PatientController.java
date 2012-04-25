@@ -10,6 +10,6 @@ public class PatientController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String index() {
-        return "login";
+        return "patient";
     }
 }
