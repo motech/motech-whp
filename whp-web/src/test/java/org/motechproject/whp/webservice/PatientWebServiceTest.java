@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.motechproject.whp.builder.PatientRequestBuilder;
+import org.motechproject.whp.exception.WHPValidationException;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientType;
@@ -40,7 +41,7 @@ public class PatientWebServiceTest {
     }
 
     @Test
-    public void shouldCreatePatient() {
+    public void shouldCreatePatient() throws WHPValidationException {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         when(allPatients.findByPatientId("caseId")).thenReturn(null);
         patientWebService.createCase(patientRequest);

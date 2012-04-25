@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
+import org.motechproject.whp.exception.WHPValidationException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -42,7 +43,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldCreatePatient() {
+    public void shouldCreatePatient() throws WHPValidationException {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
 
         patientWebService.createCase(patientRequest);

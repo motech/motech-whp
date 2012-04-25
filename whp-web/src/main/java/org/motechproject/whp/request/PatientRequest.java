@@ -12,6 +12,7 @@ import org.motechproject.whp.validation.constraints.Enumeration;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BeanPropertyBindingResult;
 
 import javax.validation.constraints.NotNull;
@@ -178,7 +179,7 @@ public class PatientRequest {
         BeanPropertyBindingResult requestValidationResult = new BeanPropertyBindingResult(this, "patient");
         validator.validate(requestValidationResult.getTarget(), ValidationScope.create, requestValidationResult);
         if (requestValidationResult.hasErrors()) {
-            throw new WHPValidationException(MultipleFieldErrorsMessage.getMessage(requestValidationResult));
+            throw new WHPValidationException(MultipleFieldErrorsMessage.getMessage(requestValidationResult), HttpStatus.BAD_REQUEST);
         }
     }
 }

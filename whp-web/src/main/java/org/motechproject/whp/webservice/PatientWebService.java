@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
+import org.motechproject.whp.exception.WHPValidationException;
 import org.motechproject.whp.mapper.PatientMapper;
 import org.motechproject.whp.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.domain.Patient;
@@ -43,7 +44,7 @@ public class PatientWebService extends CaseService<PatientRequest> {
     }
 
     @Override
-    public void createCase(PatientRequest patientRequest) {
+    public void createCase(PatientRequest patientRequest) throws WHPValidationException {
         patientRequest.validate(validator);
         Patient patient = mapPatient(patientRequest);
         Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
