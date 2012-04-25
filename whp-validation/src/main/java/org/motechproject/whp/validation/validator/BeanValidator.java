@@ -3,6 +3,7 @@ package org.motechproject.whp.validation.validator;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import java.lang.reflect.Field;

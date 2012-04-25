@@ -18,7 +18,6 @@ public class PatientRequestBuilder {
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "200", "registrationNumber");
         patientRequest.setDate_modified("10/10/2010 10:10:10");
-
         return this;
     }
 

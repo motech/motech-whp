@@ -1,19 +1,11 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
-import org.motechproject.whp.exception.WHPException;
-import org.motechproject.whp.domain.DiseaseClass;
-import org.motechproject.whp.domain.PatientType;
-import org.motechproject.whp.domain.SmearTestResult;
-import org.motechproject.whp.domain.SmearTestSampleInstance;
-import org.motechproject.whp.util.MultipleFieldErrorsMessage;
+import org.motechproject.whp.domain.*;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Enumeration;
 import org.motechproject.whp.validation.constraints.Scope;
-import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.BeanPropertyBindingResult;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -31,6 +23,7 @@ public class PatientRequest {
     private String date_modified;
 
     private String case_type;
+
     private String phi;
 
     @NotNull
@@ -59,18 +52,23 @@ public class PatientRequest {
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_location;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_landmark;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_village;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_block;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_district;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_state;
@@ -99,8 +97,7 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_2;
 
-
-    @Enumeration(type = SmearTestSampleInstance.class)
+    @Enumeration(type = WeightInstance.class)
     @Scope(scope = {ValidationScope.create})
     private String weight_instance;
 
@@ -173,13 +170,5 @@ public class PatientRequest {
         this.weight_instance = weightInstance;
         this.weight = weight;
         return this;
-    }
-
-    public void validate(BeanValidator validator) throws WHPException {
-        BeanPropertyBindingResult requestValidationResult = new BeanPropertyBindingResult(this, "patient");
-        validator.validate(requestValidationResult.getTarget(), ValidationScope.create, requestValidationResult);
-        if (requestValidationResult.hasErrors()) {
-            throw new WHPException(MultipleFieldErrorsMessage.getMessage(requestValidationResult), HttpStatus.BAD_REQUEST);
-        }
     }
 }

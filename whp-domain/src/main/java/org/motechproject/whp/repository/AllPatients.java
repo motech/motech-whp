@@ -7,6 +7,7 @@ import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.domain.Patient;
 import org.motechproject.whp.domain.ProvidedTreatment;
 import org.motechproject.whp.domain.Treatment;
+import org.motechproject.whp.exception.WHPDomainException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,14 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTreatments allTreatments) {
         super(Patient.class, dbCouchDbConnector);
         this.allTreatments = allTreatments;
+    }
+
+    public void insert(Patient patient) {
+        Patient savedPatient = findByPatientId(patient.getPatientId());
+        if (savedPatient == null)
+            add(patient);
+        else
+            throw new WHPDomainException("Patient already present");
     }
 
     @GenerateView
@@ -40,10 +49,5 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             Treatment treatment = allTreatments.get(providedTreatment.getTreatmentDocId());
             providedTreatment.setTreatment(treatment);
         }
-    }
-
-    public void update(Patient patientReturned, Patient patient) {
-
-
     }
 }

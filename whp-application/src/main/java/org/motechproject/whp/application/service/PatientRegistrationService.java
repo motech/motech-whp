@@ -18,5 +18,4 @@ public class PatientRegistrationService {
     public void register(Patient patient) {
         patientService.add(patient);
     }
-
 }
