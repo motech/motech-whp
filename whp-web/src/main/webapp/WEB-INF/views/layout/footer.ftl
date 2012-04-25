@@ -1,1 +1,2 @@
-Test Footer
+<div class="span12">
+</div>
