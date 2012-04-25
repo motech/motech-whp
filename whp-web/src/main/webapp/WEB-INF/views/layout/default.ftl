@@ -1,5 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#macro defaultLayout title="WHP">
+    <!DOCTYPE html>
     <html>
         <head>
             <title> ${title} </title>
