@@ -3,13 +3,14 @@ package org.motechproject.whp.webservice;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.application.service.PatientRegistrationService;
 import org.motechproject.whp.builder.PatientRequestBuilder;
-import org.motechproject.whp.common.integration.repository.SpringIntegrationTest;
 import org.motechproject.whp.exception.WHPValidationException;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.domain.Patient;
+import org.motechproject.whp.domain.ProvidedTreatment;
+import org.motechproject.whp.repository.AllPatients;
+import org.motechproject.whp.repository.AllTreatments;
+import org.motechproject.whp.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
+    PatientRegistrationService patientRegistrationService;
+    @Autowired
     AllPatients allPatients;
     @Autowired
     AllTreatments allTreatments;
@@ -33,7 +36,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientWebService = new PatientWebService(allPatients, allTreatments, validator);
+        patientWebService = new PatientWebService(patientRegistrationService, allTreatments, validator);
     }
 
     @After

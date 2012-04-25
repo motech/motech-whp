@@ -20,12 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-common</artifactId>
+            <artifactId>whp-domain</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-common</artifactId>
+            <artifactId>whp-domain</artifactId>
             <version>0.1-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>

@@ -9,10 +9,9 @@
     <name>motech-whp</name>
 
     <modules>
-        <module>whp-common</module>
         <module>whp-refdata</module>
-        <module>whp-patient</module>
-        <module>whp-provider</module>
+        <module>whp-domain</module>
+        <module>whp-application</module>
         <module>whp-validation</module>
         <module>whp-web</module>
     </modules>
@@ -155,6 +154,11 @@
             <groupId>org.ektorp</groupId>
             <artifactId>org.ektorp.spring</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>0.10.8</version>
         </dependency>
     </dependencies>
 

@@ -1,32 +1,35 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.whp.exception.WHPValidationException;
+import org.motechproject.whp.application.service.PatientRegistrationService;
+import org.motechproject.whp.domain.Patient;
+import org.motechproject.whp.domain.Treatment;
+import org.motechproject.whp.exception.WHPDomainException;
+import org.motechproject.whp.exception.WHPException;
 import org.motechproject.whp.mapper.PatientMapper;
 import org.motechproject.whp.mapper.TreatmentMapper;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @Controller
 @RequestMapping("/patient/**")
 public class PatientWebService extends CaseService<PatientRequest> {
 
-    AllPatients allPatients;
+    PatientRegistrationService patientRegistrationService;
     AllTreatments allTreatments;
 
     private BeanValidator validator;
 
     @Autowired
-    public PatientWebService(AllPatients allPatients, AllTreatments allTreatments, BeanValidator validator) {
+    public PatientWebService(PatientRegistrationService patientRegistrationService, AllTreatments allTreatments, BeanValidator validator) {
         super(PatientRequest.class);
-        this.allPatients = allPatients;
+        this.patientRegistrationService = patientRegistrationService;
         this.allTreatments = allTreatments;
         this.validator = validator;
     }
@@ -37,19 +40,20 @@ public class PatientWebService extends CaseService<PatientRequest> {
 
     @Override
     public void updateCase(PatientRequest patientRequest) {
-        Patient patient = mapPatient(patientRequest);
-        Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
-        if (patientReturned != null)
-            allPatients.update(patientReturned, patient);
+        throw new NotImplementedException();
     }
 
     @Override
-    public void createCase(PatientRequest patientRequest) throws WHPValidationException {
-        patientRequest.validate(validator);
-        Patient patient = mapPatient(patientRequest);
-        Patient patientReturned = allPatients.findByPatientId(patient.getPatientId());
-        if (patientReturned == null)
-            allPatients.add(patient);
+    public void createCase(PatientRequest patientRequest) throws WHPException {
+        try {
+            patientRequest.validate(validator);
+            Patient patient = mapPatient(patientRequest);
+            patientRegistrationService.register(patient);
+        } catch (WHPException e) {
+            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (WHPDomainException e) {
+            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {

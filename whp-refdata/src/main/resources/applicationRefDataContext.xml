@@ -10,7 +10,7 @@
     <import resource="classpath:applicationWebSecurityContext.xml" />
 
     <context:component-scan base-package="org.motechproject.whp.refdata"/>
-    <import resource="classpath:applicationCommonContext.xml"/>
+    <import resource="classpath:applicationDomainContext.xml"/>
 
     <context:annotation-config/>
     <context:spring-configured/>

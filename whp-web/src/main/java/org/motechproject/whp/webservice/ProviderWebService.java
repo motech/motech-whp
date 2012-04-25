@@ -2,9 +2,9 @@ package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
+import org.motechproject.whp.domain.Provider;
 import org.motechproject.whp.mapper.ProviderMapper;
-import org.motechproject.whp.provider.domain.Provider;
-import org.motechproject.whp.provider.repository.AllProviders;
+import org.motechproject.whp.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;

@@ -16,7 +16,12 @@
         <form-login login-processing-url="/security/j_spring_security_check" login-page="/login"
                     authentication-failure-url="/login?login_error=t"/>
         <logout logout-url="/security/j_spring_security_logout" invalidate-session="false"/>
+
+        <!--Dont change the order of the rules-->
+
         <!-- Only admin -->
+        <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
+
         <intercept-url pattern="/patient/**" access="hasRole('ADMIN')" requires-channel="any"/>
     </http>
 

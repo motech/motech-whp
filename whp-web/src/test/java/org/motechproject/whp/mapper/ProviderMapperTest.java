@@ -3,7 +3,7 @@ package org.motechproject.whp.mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
-import org.motechproject.whp.provider.domain.Provider;
+import org.motechproject.whp.domain.Provider;
 import org.motechproject.whp.request.ProviderRequest;
 
 import static junit.framework.Assert.assertEquals;

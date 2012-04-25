@@ -1,11 +1,11 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
-import org.motechproject.whp.exception.WHPValidationException;
-import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.patient.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.SmearTestSampleInstance;
+import org.motechproject.whp.exception.WHPException;
+import org.motechproject.whp.domain.DiseaseClass;
+import org.motechproject.whp.domain.PatientType;
+import org.motechproject.whp.domain.SmearTestResult;
+import org.motechproject.whp.domain.SmearTestSampleInstance;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Enumeration;
@@ -175,11 +175,11 @@ public class PatientRequest {
         return this;
     }
 
-    public void validate(BeanValidator validator) throws WHPValidationException {
+    public void validate(BeanValidator validator) throws WHPException {
         BeanPropertyBindingResult requestValidationResult = new BeanPropertyBindingResult(this, "patient");
         validator.validate(requestValidationResult.getTarget(), ValidationScope.create, requestValidationResult);
         if (requestValidationResult.hasErrors()) {
-            throw new WHPValidationException(MultipleFieldErrorsMessage.getMessage(requestValidationResult), HttpStatus.BAD_REQUEST);
+            throw new WHPException(MultipleFieldErrorsMessage.getMessage(requestValidationResult), HttpStatus.BAD_REQUEST);
         }
     }
 }
