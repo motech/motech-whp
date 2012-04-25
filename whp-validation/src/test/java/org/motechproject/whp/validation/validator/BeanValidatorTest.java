@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.validation.BeanPropertyBindingResult;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static junit.framework.Assert.assertEquals;
@@ -45,20 +46,54 @@ public class BeanValidatorTest extends SpringIntegrationTest {
         assertEquals("may not be null", errors.getFieldError("scopedField").getDefaultMessage());
     }
 
+    @Test
+    public void shouldValidateComposedFields() {
+        ClassWithValidations target = new ClassWithValidations("someValue", new MemberField(null), "someValue");
+        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, "classWithValidations");
+        beanValidator.validate(target, "create", errors);
+
+        assertEquals("may not be null", errors.getFieldError("memberField.notNullField").getDefaultMessage());
+    }
+
     @Data
     public static class ClassWithValidations {
 
         @NotNull
         private String fieldWithoutScope;
 
+        @Valid
+        private MemberField memberField;
+
         @NotNull
         @Scope(scope = {"create"})
         private String scopedField;
 
         public ClassWithValidations(String fieldWithoutScope, String scopedField) {
+            this(fieldWithoutScope, new MemberField("notNullValue"), scopedField);
+        }
+
+        public ClassWithValidations(String fieldWithoutScope, MemberField memberField, String scopedField) {
             this.fieldWithoutScope = fieldWithoutScope;
+            this.memberField = memberField;
             this.scopedField = scopedField;
         }
     }
 
+    public static class MemberField {
+
+        @NotNull
+        private String notNullField;
+
+        public MemberField(String notNullField) {
+            this.notNullField = notNullField;
+        }
+
+        public String getNotNullField() {
+            return notNullField;
+        }
+
+        public void setNotNullField(String notNullField) {
+            this.notNullField = notNullField;
+        }
+    }
 }
