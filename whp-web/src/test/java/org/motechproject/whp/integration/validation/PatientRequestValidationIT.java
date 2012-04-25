@@ -1,11 +1,16 @@
 package org.motechproject.whp.integration.validation;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientRequestBuilder;
+import org.motechproject.whp.domain.Provider;
 import org.motechproject.whp.exception.WHPException;
+import org.motechproject.whp.repository.AllProviders;
 import org.motechproject.whp.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -21,6 +26,17 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
 
     @Autowired
     private RequestValidator validator;
+
+    @Autowired
+    AllProviders allProviders;
+
+    @Before
+    public void setUpDefaultProvider() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        String defaultProviderId = patientRequest.getProvider_id();
+        Provider defaultProvider = new Provider(defaultProviderId, "1234567890", "chambal", DateUtil.now());
+        allProviders.add(defaultProvider);
+    }
 
     @Test
     public void shouldNotThrowException_WhenCaseIdIs10Characters() throws WHPException {
@@ -50,6 +66,7 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
 
     @Test
     public void shouldNotThrowException_WhenProviderIdIs5Characters() throws WHPException {
+        allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
@@ -107,7 +124,6 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     }
 
     @Test
-
     public void shouldThrowExceptionWhenTreatmentCategoryIsValid() throws WHPException {
         validate(new PatientRequestBuilder().withDefaults().withTreatmentCategory("01").build());
         validate(new PatientRequestBuilder().withDefaults().withTreatmentCategory("02").build());
@@ -171,4 +187,8 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
         validator.validate(patientRequest, ValidationScope.create, "patient");
     }
 
+    @After
+    public void tearDown() {
+        markForDeletion(allProviders.getAll().toArray());
+    }
 }

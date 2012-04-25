@@ -2,8 +2,10 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.motechproject.whp.domain.*;
+import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Enumeration;
+import org.motechproject.whp.validation.constraints.NamedConstraint;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -110,6 +112,7 @@ public class PatientRequest {
     private String tb_id;
 
     @NotNull
+    @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
     @Size(min = 5, max = 6)
     private String provider_id;
 

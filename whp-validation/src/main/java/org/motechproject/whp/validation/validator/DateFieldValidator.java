@@ -1,6 +1,7 @@
 package org.motechproject.whp.validation.validator;
 
 import org.joda.time.format.DateTimeFormatter;
+import org.motechproject.whp.validation.validator.root.PropertyValidator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

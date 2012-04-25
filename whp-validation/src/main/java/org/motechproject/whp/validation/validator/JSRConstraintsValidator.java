@@ -1,5 +1,6 @@
 package org.motechproject.whp.validation.validator;
 
+import org.motechproject.whp.validation.validator.root.PropertyValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 

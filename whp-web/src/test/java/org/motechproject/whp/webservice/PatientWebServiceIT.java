@@ -81,7 +81,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test(expected = WHPException.class)
-    @Ignore
     public void shouldNotCreatePatientWhenProviderIdIsInvalid() {
         String unknownProviderId = "012900";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();

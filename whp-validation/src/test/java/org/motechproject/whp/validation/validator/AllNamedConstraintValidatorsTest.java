@@ -6,6 +6,7 @@ import org.motechproject.whp.repository.SpringIntegrationTest;
 import org.motechproject.whp.validation.NoValidatorFoundException;
 import org.motechproject.whp.validation.constraints.NamedConstraint;
 import org.motechproject.whp.validation.constraints.Scope;
+import org.motechproject.whp.validation.validator.root.NamedConstraintValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
