@@ -14,7 +14,7 @@ public class ProviderWebUserSeed {
     @Autowired
     private MotechAuthenticationService authenticationService;
 
-    @Seed(priority = 0)
+    @Seed(priority = 1)
     public void load() {
         authenticationService.register("raj", "password", "WHPProviderUser", null, Arrays.asList(WHPRole.PROVIDER.name()));
     }
