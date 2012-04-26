@@ -13,3 +13,7 @@ body {
 .login-btn {
     width: 100px;
 }
+
+.white {
+    background-color: white;
+}

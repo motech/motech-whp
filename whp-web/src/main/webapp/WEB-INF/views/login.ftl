@@ -9,7 +9,7 @@
         </div>
     </#if>
 
-    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="well form-horizontal">
+    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="row well form-horizontal">
         <div class="control-group">
             <label class="control-label" for="j_username"> User Name</label>
 
