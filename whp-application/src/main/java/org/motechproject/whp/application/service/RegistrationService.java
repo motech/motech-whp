@@ -25,7 +25,12 @@ public class RegistrationService {
     }
 
     public void registerProvider(CreateProviderRequest createProviderRequest) {
-        providerService.add(createProviderRequest);
+        providerService.add(createProviderRequest.getProviderId(),
+                createProviderRequest.getPrimaryMobile(),
+                createProviderRequest.getSecondaryMobile(),
+                createProviderRequest.getTertiaryMobile(),
+                createProviderRequest.getDistrict(),
+                createProviderRequest.getLastModifiedDate());
     }
 
 }

@@ -1,8 +1,7 @@
 package org.motechproject.whp.patient.service;
 
-import org.motechproject.whp.patient.contract.CreateProviderRequest;
+import org.joda.time.DateTime;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.mapper.ProviderMapper;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,10 @@ public class ProviderService {
         this.allProviders = allProviders;
     }
 
-    public void add(CreateProviderRequest createProviderRequest) {
-        Provider provider = new ProviderMapper().map(createProviderRequest);
+    public void add(String providerId, String primaryMobile, String secondaryMobile, String tertiaryMobile, String district, DateTime lastModifiedDate) {
+        Provider provider = new Provider(providerId, primaryMobile, district, lastModifiedDate);
+        provider.setSecondaryMobile(secondaryMobile);
+        provider.setTertiaryMobile(tertiaryMobile);
         allProviders.addOrReplace(provider);
     }
 
