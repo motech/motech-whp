@@ -8,13 +8,12 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <name>whp-refdata</name>
+    <version>0.1-SNAPSHOT</version>
     <artifactId>whp-refdata</artifactId>
-
     <properties>
         <build.dir>../build</build.dir>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -32,6 +31,4 @@
             <version>${motech.delivery.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>
