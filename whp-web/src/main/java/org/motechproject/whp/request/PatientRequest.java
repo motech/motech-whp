@@ -17,7 +17,6 @@ import javax.validation.constraints.Size;
 public class PatientRequest {
 
     @NotNull
-    @Size(min = 10, max = 11)
     private String case_id;
 
     @Scope(scope = {ValidationScope.create})
@@ -37,6 +36,7 @@ public class PatientRequest {
     private String last_name;
 
     @NotNull
+    @Enumeration(type = Gender.class)
     @Scope(scope = {ValidationScope.create})
     private String gender;
 
@@ -109,7 +109,6 @@ public class PatientRequest {
 
     @NotNull
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Size(min = 5, max = 6)
     private String provider_id;
 
     @Pattern(regexp = "[0|1][1|2]")

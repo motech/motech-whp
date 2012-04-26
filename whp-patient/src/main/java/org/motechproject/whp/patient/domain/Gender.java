@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 public enum Gender {
 
-    Male("M"), Female("F"), Other("O");
+    M("M"), F("F"), O("O");
 
     private String value;
 
@@ -11,9 +11,9 @@ public enum Gender {
     }
 
     public static Gender get(String gender) {
-        if (Male.getValue().equals(gender.toUpperCase())) return Male;
-        if (Female.getValue().equals(gender.toUpperCase())) return Female;
-        if (Other.getValue().equals(gender.toUpperCase())) return Other;
+        if (M.getValue().equals(gender.toUpperCase())) return M;
+        if (F.getValue().equals(gender.toUpperCase())) return F;
+        if (O.getValue().equals(gender.toUpperCase())) return O;
         return null;
     }
 

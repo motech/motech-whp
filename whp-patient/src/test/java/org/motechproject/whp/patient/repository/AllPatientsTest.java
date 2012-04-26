@@ -31,7 +31,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Treatment treatment = new Treatment(Category.Category01, DateUtil.today(), DiseaseClass.P, 200);
         allTreatments.add(treatment);
 
-        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer, "1234567890");
+        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId", DateUtil.today());
         providedTreatment.setTreatment(treatment);
         patient.addProvidedTreatment(providedTreatment);
@@ -41,7 +41,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertNotNull(patientReturned);
         assertEquals("Raju", patientReturned.getFirstName());
         assertEquals("Singh", patientReturned.getLastName());
-        assertEquals(Gender.Male, patientReturned.getGender());
+        assertEquals(Gender.M, patientReturned.getGender());
         assertEquals(PatientType.PHSTransfer, patientReturned.getPatientType());
     }
 
@@ -51,7 +51,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         treatment.setSmearTestResults(smearTestResults());
         allTreatments.add(treatment);
 
-        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.Male, PatientType.PHSTransfer, "1234567890");
+        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId", DateUtil.today());
         providedTreatment.setTreatment(treatment);
         patient.addProvidedTreatment(providedTreatment);

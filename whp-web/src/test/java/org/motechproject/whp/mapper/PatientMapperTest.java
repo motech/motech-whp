@@ -32,7 +32,7 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getCase_id(), patient.getPatientId());
         assertEquals("Foo", patient.getFirstName());
         assertEquals("Bar", patient.getLastName());
-        assertEquals(Gender.Male, patient.getGender());
+        assertEquals(Gender.M, patient.getGender());
         assertEquals(PatientType.PHSTransfer, patient.getPatientType());
         assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(patientRequest.getPhi(), patient.getPhi());
