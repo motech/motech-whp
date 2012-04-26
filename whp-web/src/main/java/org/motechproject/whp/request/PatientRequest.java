@@ -9,6 +9,7 @@ import org.motechproject.whp.validation.constraints.NamedConstraint;
 import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -44,7 +45,7 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
-    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 dijits")
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
 
     @Enumeration(type = DiseaseClass.class)
@@ -117,6 +118,7 @@ public class PatientRequest {
     private String tb_registration_number;
 
     @NotNull
+    @Digits(integer = 3, fraction = 0, message = "Age must be numeric")
     @Scope(scope = {ValidationScope.create})
     private String age;
 

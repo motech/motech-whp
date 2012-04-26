@@ -75,4 +75,9 @@ public class PatientRequestBuilder {
         patientRequest.setGender(gender);
         return this;
     }
+
+    public PatientRequestBuilder withAge(String age) {
+        patientRequest.setAge(age);
+        return this;
+    }
 }

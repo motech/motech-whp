@@ -147,14 +147,14 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
-        expectException("field:mobile_number:Mobile number should be empty or should have 10 dijits");
+        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("123456789").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
-        expectException("field:mobile_number:Mobile number should be empty or should have 10 dijits");
+        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
@@ -170,6 +170,26 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     public void shouldThrowException_WhenTbIdFieldIsNull() {
         expectException("field:tb_id:may not be null");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withTBId(null).build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAgeIsNotNumeric() {
+        expectException("field:age:Age must be numeric");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("A").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAgeIsAFraction(){
+        expectException("field:age:Age must be numeric");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10.1").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenAgeIsNumeric(){
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
 
