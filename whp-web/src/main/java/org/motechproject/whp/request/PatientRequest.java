@@ -44,7 +44,7 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
-    @Pattern(regexp = "^$|[0-9]{10}")
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 dijits")
     private String mobile_number;
 
     @Enumeration(type = DiseaseClass.class)

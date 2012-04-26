@@ -147,14 +147,14 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
-        expectException("field:mobile_number:must match \"^$|[0-9]{10}\"");
+        expectException("field:mobile_number:Mobile number should be empty or should have 10 dijits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("123456789").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
-        expectException("field:mobile_number:must match \"^$|[0-9]{10}\"");
+        expectException("field:mobile_number:Mobile number should be empty or should have 10 dijits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
