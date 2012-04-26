@@ -1,9 +1,15 @@
-body{
+body {
     margin-top: 20px;
 }
+
 #mainContent {
     margin-top: 20px;
 }
+
 #whplogo {
     padding-top: 5px;
+}
+
+.login-btn {
+    width: 100px;
 }
