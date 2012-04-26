@@ -1,6 +1,8 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
@@ -21,8 +23,11 @@ public class Patient extends MotechBaseDataObject {
     private String phi;
     private PatientStatus status = PatientStatus.Open;
     private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
-
     private DateTime lastModifiedDate;
+
+    @Getter
+    @Setter
+    private ProvidedTreatment currentProviderTreatment;
 
     public Patient() {
     }
@@ -37,11 +42,13 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void addProvidedTreatment(ProvidedTreatment providedTreatment) {
-        providedTreatments.add(providedTreatment);
+        if (currentProviderTreatment != null) {
+            providedTreatments.add(currentProviderTreatment);
+        }
+        currentProviderTreatment = providedTreatment;
     }
 
     public ProvidedTreatment latestProvidedTreatment() {
-        return providedTreatments.get(providedTreatments.size() - 1);
+        return currentProviderTreatment;
     }
-
 }

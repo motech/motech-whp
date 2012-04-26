@@ -60,7 +60,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Patient patientReturned = allPatients.findByPatientId("cha01100001");
         assertNotNull(patientReturned);
 
-        Treatment treatmentReturned = patientReturned.getProvidedTreatments().get(0).getTreatment();
+        Treatment treatmentReturned = patientReturned.getCurrentProviderTreatment().getTreatment();
 
         SmearTestResults smearTestResults1 = treatmentReturned.getSmearTestResults().get(0);
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults1.getSampleInstance());

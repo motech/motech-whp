@@ -35,14 +35,14 @@ public class ProvidedTreatment {
     public ProvidedTreatment() {
     }
 
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
-        this.treatmentDocId = treatment.getId();
-    }
-
     public ProvidedTreatment(String providerId, String tbId) {
         this.providerId = providerId;
         this.tbId = tbId;
+    }
+
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
+        this.treatmentDocId = treatment.getId();
     }
 
     @JsonIgnore
