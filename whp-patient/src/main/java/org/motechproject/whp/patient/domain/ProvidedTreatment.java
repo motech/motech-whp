@@ -40,10 +40,9 @@ public class ProvidedTreatment {
         this.treatmentDocId = treatment.getId();
     }
 
-    public ProvidedTreatment(String providerId, String tbId, LocalDate startDate) {
+    public ProvidedTreatment(String providerId, String tbId) {
         this.providerId = providerId;
         this.tbId = tbId;
-        this.startDate = startDate;
     }
 
     @JsonIgnore

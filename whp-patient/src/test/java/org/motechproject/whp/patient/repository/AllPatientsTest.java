@@ -32,7 +32,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         allTreatments.add(treatment);
 
         Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
-        ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId", DateUtil.today());
+        ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId");
         providedTreatment.setTreatment(treatment);
         patient.addProvidedTreatment(providedTreatment);
         allPatients.add(patient);
@@ -52,7 +52,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         allTreatments.add(treatment);
 
         Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
-        ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId", DateUtil.today());
+        ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId");
         providedTreatment.setTreatment(treatment);
         patient.addProvidedTreatment(providedTreatment);
         allPatients.add(patient);

@@ -33,7 +33,7 @@ public class PatientMapper {
         String providerId = patientRequest.getProvider_id();
         String tbId = patientRequest.getTb_id();
 
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()).toLocalDate());
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId);
         providedTreatment.setTreatment(treatment);
         mapPatientAddress(patientRequest, providedTreatment);
 

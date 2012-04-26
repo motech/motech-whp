@@ -43,7 +43,6 @@ public class PatientMapperTest {
         ProvidedTreatment providedTreatment = patient.getLatestProvidedTreatment();
         assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
-        assertEquals("10/10/2010", providedTreatment.getStartDate().toString("dd/MM/YYYY"));
 
         assertPatientAddress(providedTreatment.getPatientAddress());
     }
