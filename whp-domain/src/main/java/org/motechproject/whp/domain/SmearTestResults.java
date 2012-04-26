@@ -17,7 +17,7 @@ public class SmearTestResults {
     public SmearTestResults() {
     }
 
-    public SmearTestResults(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, SmearTestResult result1, SmearTestSampleInstance sampleInstance2, LocalDate testDate2, SmearTestResult result2) {
+    public SmearTestResults(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2) {
         this.sampleInstance1 = sampleInstance1;
         this.testDate1 = testDate1;
         this.result1 = result1;

@@ -77,7 +77,7 @@ public class PatientRequest {
 
     @Enumeration(type = SmearTestSampleInstance.class)
     @Scope(scope = {ValidationScope.create})
-    private String smear_sample_instance_1;
+    private String smear_sample_instance;
 
     @Scope(scope = {ValidationScope.create})
     @DateTimeFormat(pattern = "dd/MM/YYYY")
@@ -86,10 +86,6 @@ public class PatientRequest {
     @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {ValidationScope.create})
     private String smear_test_result_1;
-
-    @Enumeration(type = SmearTestSampleInstance.class)
-    @Scope(scope = {ValidationScope.create})
-    private String smear_sample_instance_2;
 
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     @Scope(scope = {ValidationScope.create})
@@ -159,11 +155,10 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_sample_instance_2, String smear_test_date_2, String smear_result_2) {
-        this.smear_sample_instance_1 = smear_sample_instance_1;
+    public PatientRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2) {
+        this.smear_sample_instance = smear_sample_instance_1;
         this.smear_test_date_1 = smear_test_date_1;
         this.smear_test_result_1 = smear_result_1;
-        this.smear_sample_instance_2 = smear_sample_instance_2;
         this.smear_test_date_2 = smear_test_date_2;
         this.smear_test_result_2 = smear_result_2;
         return this;
