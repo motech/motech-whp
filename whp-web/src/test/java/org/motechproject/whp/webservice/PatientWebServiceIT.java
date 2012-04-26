@@ -1,5 +1,6 @@
 package org.motechproject.whp.webservice;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +35,10 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     RequestValidator validator;
     @Autowired
     AllProviders allProviders;
+    @Autowired
+    VelocityEngine velocityEngine;
 
-    private PatientWebService patientWebService;
+    PatientWebService patientWebService;
 
     @Before
     public void setUpDefaultProvider() {
@@ -47,7 +50,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, allTreatments, validator);
+        patientWebService = new PatientWebService(patientRegistrationService, allTreatments, validator, velocityEngine);
     }
 
     @Test

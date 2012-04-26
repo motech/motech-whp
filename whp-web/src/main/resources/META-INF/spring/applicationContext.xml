@@ -8,6 +8,8 @@
     <import resource="classpath*:applicationWHPContext.xml"/>
     <import resource="classpath*:applicationValidationContext.xml"/>
     <import resource="classpath*:applicationWebSecurityContext.xml"/>
+    <import resource="classpath:applicationContext-caseService.xml"/>
+
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp"/>

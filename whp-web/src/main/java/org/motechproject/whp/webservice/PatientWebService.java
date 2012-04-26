@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.velocity.app.VelocityEngine;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.mapper.CreatePatientRequestMapper;
@@ -26,8 +27,8 @@ public class PatientWebService extends CaseService<PatientRequest> {
     RequestValidator validator;
 
     @Autowired
-    public PatientWebService(RegistrationService registrationService, AllTreatments allTreatments, RequestValidator validator) {
-        super(PatientRequest.class);
+    public PatientWebService(RegistrationService registrationService, AllTreatments allTreatments, RequestValidator validator, VelocityEngine velocityEngine) {
+        super(PatientRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.allTreatments = allTreatments;
         this.validator = validator;
