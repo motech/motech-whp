@@ -1,6 +1,6 @@
 package org.motechproject.whp.application.service;
 
-import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.contract.CreatePatientRequest;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.ProviderService;
@@ -20,8 +20,8 @@ public class RegistrationService {
         this.patientService = patientService;
     }
 
-    public void registerPatient(Patient patient) {
-        patientService.add(patient);
+    public void registerPatient(CreatePatientRequest patientRequest) {
+        patientService.add(patientRequest);
     }
 
     public void registerProvider(Provider provider) {

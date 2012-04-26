@@ -18,8 +18,8 @@ public class RequestValidator {
         this.validator = validator;
     }
 
-    public void validate(Object target, String scope, String name) {
-        BeanPropertyBindingResult result = new BeanPropertyBindingResult(target, name);
+    public void validate(Object target, String scope) {
+        BeanPropertyBindingResult result = new BeanPropertyBindingResult(target, target.getClass().getSimpleName());
         validator.validate(target, scope, result);
         if (result.hasErrors()) {
             throw new WHPException(MultipleFieldErrorsMessage.getMessage(result), HttpStatus.BAD_REQUEST);

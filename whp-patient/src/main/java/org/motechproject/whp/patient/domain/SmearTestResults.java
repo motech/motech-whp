@@ -6,8 +6,9 @@ import org.joda.time.LocalDate;
 @Data
 public class SmearTestResults {
 
-    private LocalDate testDate1;
     private SmearTestSampleInstance sampleInstance;
+
+    private LocalDate testDate1;
     private SmearTestResult result1;
 
     private LocalDate testDate2;

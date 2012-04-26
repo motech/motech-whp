@@ -1,11 +1,10 @@
 package org.motechproject.whp.webservice;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.mapper.PatientMapper;
-import org.motechproject.whp.mapper.TreatmentMapper;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.mapper.CreatePatientRequestMapper;
+import org.motechproject.whp.patient.contract.CreatePatientRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -16,20 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @Controller
 @RequestMapping("/patient/**")
 public class PatientWebService extends CaseService<PatientRequest> {
 
-    RegistrationService patientRegistrationService;
+    RegistrationService registrationService;
+
     AllTreatments allTreatments;
     RequestValidator validator;
 
     @Autowired
-    public PatientWebService(RegistrationService patientRegistrationService, AllTreatments allTreatments, RequestValidator validator) {
+    public PatientWebService(RegistrationService registrationService, AllTreatments allTreatments, RequestValidator validator) {
         super(PatientRequest.class);
-        this.patientRegistrationService = patientRegistrationService;
+        this.registrationService = registrationService;
         this.allTreatments = allTreatments;
         this.validator = validator;
     }
@@ -45,18 +44,13 @@ public class PatientWebService extends CaseService<PatientRequest> {
 
     @Override
     public void createCase(PatientRequest patientRequest) {
-        validator.validate(patientRequest, ValidationScope.create, "patient");
-        Patient patient = mapPatient(patientRequest);
+        validator.validate(patientRequest, ValidationScope.create);
+        CreatePatientRequest createPatientRequest = new CreatePatientRequestMapper().map(patientRequest);
         try {
-            patientRegistrationService.registerPatient(patient);
+            registrationService.registerPatient(createPatientRequest);
         } catch (WHPDomainException e) {
             throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    private Patient mapPatient(PatientRequest patientRequest) {
-        Treatment treatment = new TreatmentMapper().map(patientRequest);
-        allTreatments.add(treatment);
-        return new PatientMapper().map(patientRequest, treatment);
-    }
 }

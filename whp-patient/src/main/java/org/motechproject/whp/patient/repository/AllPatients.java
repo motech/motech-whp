@@ -23,10 +23,11 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         this.allTreatments = allTreatments;
     }
 
-    public void insert(Patient patient) {
+    @Override
+    public void add(Patient patient) {
         Patient savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient == null)
-            add(patient);
+            super.add(patient);
         else
             throw new WHPDomainException("Patient already present");
     }

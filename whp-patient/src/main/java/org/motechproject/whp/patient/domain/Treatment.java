@@ -14,11 +14,11 @@ import java.util.List;
 public class Treatment extends MotechBaseDataObject {
 
     private int patientAge;
-    private Category category;
-    private LocalDate startDate;
+    private TreatmentCategory treatmentCategory;
+    private LocalDate doseStartDate;
+    private DateTime startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
-    private DateTime registrationDate;
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
@@ -27,8 +27,8 @@ public class Treatment extends MotechBaseDataObject {
     public Treatment() {
     }
 
-    public Treatment(Category category, DiseaseClass diseaseClass, int patientAge) {
-        this.category = category;
+    public Treatment(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, int patientAge) {
+        this.treatmentCategory = treatmentCategory;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;
     }

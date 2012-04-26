@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<case xmlns="http://openrosa.org/javarosa" case_id="cha01100001" date_modified="03/04/2012 11:23:40" user_id="remedi"
+      api_key="3F2504E04F8911D39A0C0305E82C3301">
+    <update>
+        <age>35</age>
+        <tb_registration_number>xxxxxxxxxxx</tb_registration_number>
+        <smear_sample_instance>PreTreatment</smear_sample_instance>
+        <smear_test_date_1>01/03/2012</smear_test_date_1>
+        <smear_test_result_1>Positive</smear_test_result_1>
+        <smear_test_date_2>01/03/2012</smear_test_date_2>
+        <smear_test_result_2>Positive</smear_test_result_2>
+        <address_location>1001</address_location>
+        <address_landmark>Near banyan tree</address_landmark>
+        <address_village>Chambal</address_village>
+        <address_block>Vijayanagar</address_block>
+        <address_district>Muzafarrpur</address_district>
+        <address_state>Bihar</address_state>
+        <mobile_number>9880123456</mobile_number>
+        <weight_instance>PreTreatment</weight_instance>
+        <weight>80</weight>
+    </update>
+</case>
+

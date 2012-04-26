@@ -37,9 +37,6 @@ public class Patient extends MotechBaseDataObject {
     @Getter
     @Setter
     private PatientStatus status = PatientStatus.Open;
-    @Getter
-    @Setter
-    private DateTime lastModifiedDate;
 
     @Getter
     @Setter

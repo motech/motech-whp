@@ -42,13 +42,13 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     @Test
     public void shouldNotThrowException_WhenCaseIdIs10Characters() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("1234567890").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowException_WhenCaseIdIs11Characters() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withCaseId("12345678901").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
@@ -56,60 +56,60 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
         expectException("field:gender:The value should be one of : [M, F, O]");
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").withGender("H").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenGenderIsMale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.M.getValue()).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenGenderIsFemale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.F.getValue()).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenGenderIsOther() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientRequest request = new PatientRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.O.getValue()).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowException_WhenLastModifiedDateFormatIsCorrect() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012 02:20:30").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNull() {
         expectException("field:date_modified:null");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate(null).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNotTheCorrectDateTimeFormat() {
         expectException("03-04-2012\" is malformed at \"-04-2012");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withLastModifiedDate("03-04-2012").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test(expected = WHPException.class)
     public void shouldThrowException_WhenSmearTest1DateFormatIsIncorrect() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withSmearTestDate1("03/04/2012  11:23:40").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test(expected = WHPException.class)
     public void shouldThrowException_WhenSmearTest2DateFormatIsIncorrect() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withSmearTestDate2("03/04/2012  11:23:40").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
@@ -123,106 +123,106 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     @Test
     public void shouldNotValidateTreatmentCategoryOnSimpleUpdate() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withTreatmentCategory(null).withLastModifiedDate("03/04/2012 02:20:30").build();
-        validator.validate(request, ValidationScope.simpleUpdate, "patient");
+        validator.validate(request, ValidationScope.simpleUpdate);
     }
 
     @Test
     public void shouldThrowException_WhenTreatmentCategoryIsNotValid() {
         expectException("field:treatment_category:must match \"[0|1][1|2]\"");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withTreatmentCategory("99").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowException_WhenMobileNumberIsEmpty() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowException_WhenMobileNumberIs10Digits() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("1234567890").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
         expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("123456789").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
         expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenEnumFieldIsNull() {
         expectException("field:smear_test_result_1:The value should be one of : [Positive, Negative]");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withSmearTestResult1(null).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {
         expectException("field:tb_id:may not be null");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withTBId(null).build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsNotNumeric() {
         expectException("field:age:Age must be numeric");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("A").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFraction() {
         expectException("field:age:Age must be numeric");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10.1").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenAgeIsNumeric() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightIsNotNumeric() {
         expectException("field:weight:Weight must be a real number");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("A").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
         expectException("field:weight:Weight must be a real number");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("1A").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenWeightIsAFraction() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10.1").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenWeightIsAnInteger() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenWeightIsAFractionWithZeroInFractionPart() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10.0").build();
-        validator.validate(request, ValidationScope.create, "patient");
+        validator.validate(request, ValidationScope.create);
     }
 
     private void expectException(String message) {
@@ -231,7 +231,7 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     }
 
     private void validate(PatientRequest patientRequest) {
-        validator.validate(patientRequest, ValidationScope.create, "patient");
+        validator.validate(patientRequest, ValidationScope.create);
     }
 
     @After

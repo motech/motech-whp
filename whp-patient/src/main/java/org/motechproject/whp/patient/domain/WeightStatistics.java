@@ -7,13 +7,13 @@ import org.joda.time.LocalDate;
 public class WeightStatistics {
 
     private WeightInstance weightInstance;
-    private float weight;
+    private double weight;
     private LocalDate measuringDate;
 
     public WeightStatistics() {
     }
 
-    public WeightStatistics(WeightInstance weightInstance, float weight, LocalDate measuringDate) {
+    public WeightStatistics(WeightInstance weightInstance, double weight, LocalDate measuringDate) {
         this.weightInstance = weightInstance;
         this.weight = weight;
         this.measuringDate = measuringDate;
