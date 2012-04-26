@@ -3,6 +3,7 @@ package org.motechproject.whp.webservice;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.domain.Provider;
 import org.motechproject.whp.repository.AllProviders;
@@ -22,13 +23,15 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
     private AllProviders allProviders;
     @Autowired
     private BeanValidator validator;
+    @Autowired
+    private RegistrationService registrationService;
 
     ProviderWebService whpProviderWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        whpProviderWebService = new ProviderWebService(allProviders, validator);
+        whpProviderWebService = new ProviderWebService(validator, registrationService);
     }
 
     @Test

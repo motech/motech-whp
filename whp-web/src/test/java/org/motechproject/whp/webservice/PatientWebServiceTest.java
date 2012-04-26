@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.whp.application.service.PatientRegistrationService;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.domain.Patient;
 import org.motechproject.whp.repository.AllTreatments;
@@ -24,7 +24,7 @@ public class PatientWebServiceTest {
     @Mock
     AllTreatments allTreatments;
     @Mock
-    PatientRegistrationService patientRegistrationService;
+    RegistrationService patientRegistrationService;
     @Mock
     private RequestValidator validator;
 
@@ -43,7 +43,7 @@ public class PatientWebServiceTest {
         patientWebService.createCase(patientRequest);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
-        verify(patientRegistrationService).register(patientArgumentCaptor.capture());
+        verify(patientRegistrationService).registerPatient(patientArgumentCaptor.capture());
         verify(validator).validate(eq(patientRequest), eq(ValidationScope.create), eq("patient"));
 
         Patient patient = patientArgumentCaptor.getValue();

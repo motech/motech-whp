@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.whp.application.service.PatientRegistrationService;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.domain.Patient;
 import org.motechproject.whp.domain.Treatment;
 import org.motechproject.whp.mapper.PatientMapper;
@@ -19,12 +19,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 @RequestMapping("/patient/**")
 public class PatientWebService extends CaseService<PatientRequest> {
 
-    PatientRegistrationService patientRegistrationService;
+    RegistrationService patientRegistrationService;
     AllTreatments allTreatments;
     RequestValidator validator;
 
     @Autowired
-    public PatientWebService(PatientRegistrationService patientRegistrationService, AllTreatments allTreatments, RequestValidator validator) {
+    public PatientWebService(RegistrationService patientRegistrationService, AllTreatments allTreatments, RequestValidator validator) {
         super(PatientRequest.class);
         this.patientRegistrationService = patientRegistrationService;
         this.allTreatments = allTreatments;
@@ -44,7 +44,7 @@ public class PatientWebService extends CaseService<PatientRequest> {
     public void createCase(PatientRequest patientRequest) {
         validator.validate(patientRequest, ValidationScope.create, "patient");
         Patient patient = mapPatient(patientRequest);
-        patientRegistrationService.register(patient);
+        patientRegistrationService.registerPatient(patient);
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {

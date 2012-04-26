@@ -2,10 +2,9 @@ package org.motechproject.whp.webservice;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.application.service.PatientRegistrationService;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.PatientRequestBuilder;
 import org.motechproject.whp.domain.Patient;
 import org.motechproject.whp.domain.ProvidedTreatment;
@@ -26,7 +25,7 @@ import static junit.framework.Assert.assertNotNull;
 public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
-    PatientRegistrationService patientRegistrationService;
+    RegistrationService patientRegistrationService;
     @Autowired
     AllPatients allPatients;
     @Autowired

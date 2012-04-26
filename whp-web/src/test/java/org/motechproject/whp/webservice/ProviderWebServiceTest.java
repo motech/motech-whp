@@ -6,9 +6,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.domain.Provider;
-import org.motechproject.whp.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.validator.BeanValidator;
@@ -23,7 +23,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ProviderWebServiceTest {
 
     @Mock
-    AllProviders allProviders;
+    RegistrationService registrationService;
     @Mock
     BeanValidator validator;
 
@@ -32,7 +32,7 @@ public class ProviderWebServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        providerWebService = new ProviderWebService(allProviders, validator);
+        providerWebService = new ProviderWebService(validator, registrationService);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ProviderWebServiceTest {
         ArgumentCaptor<Provider> providerArgumentCaptor = ArgumentCaptor.forClass(Provider.class);
 
         verify(validator).validate(eq(providerRequest), eq(ValidationScope.create), Matchers.<Errors>any());
-        verify(allProviders).addOrReplace(providerArgumentCaptor.capture());
+        verify(registrationService).registerProvider(providerArgumentCaptor.capture());
 
         Provider provider = providerArgumentCaptor.getValue();
         assertEquals("providerId", provider.getProviderId());

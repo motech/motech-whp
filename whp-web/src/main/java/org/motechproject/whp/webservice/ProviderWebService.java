@@ -2,9 +2,9 @@ package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
+import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.domain.Provider;
 import org.motechproject.whp.mapper.ProviderMapper;
-import org.motechproject.whp.repository.AllProviders;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;
@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/provider/**")
 public class ProviderWebService extends ProviderRegistrationService<ProviderRequest> {
 
-    private AllProviders allProviders;
+    private RegistrationService registrationService;
     private BeanValidator providerValidator;
 
     @Autowired
-    public ProviderWebService(AllProviders allProviders, BeanValidator validator) {
+    public ProviderWebService(BeanValidator validator, RegistrationService registrationService) {
         super(ProviderRequest.class);
-        this.allProviders = allProviders;
         providerValidator = validator;
+        this.registrationService = registrationService;
     }
 
     @Override
     public void createOrUpdate(ProviderRequest providerRequest) throws OpenRosaRegistrationValidationException {
         validateProvider(providerRequest);
         Provider provider = new ProviderMapper().map(providerRequest);
-        allProviders.addOrReplace(provider);
+        registrationService.registerProvider(provider);
     }
 
     private void validateProvider(ProviderRequest providerRequest) throws OpenRosaRegistrationValidationException {
