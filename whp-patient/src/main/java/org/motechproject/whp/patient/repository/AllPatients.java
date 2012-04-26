@@ -42,7 +42,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     private void loadPatientDependencies(Patient patient) {
-        ProvidedTreatment latestProvidedTreatment = patient.getLatestProvidedTreatment();
+        ProvidedTreatment latestProvidedTreatment = patient.latestProvidedTreatment();
         Treatment latestTreatment = allTreatments.get(latestProvidedTreatment.getTreatmentDocId());
         latestProvidedTreatment.setTreatment(latestTreatment);
 

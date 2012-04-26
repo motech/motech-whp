@@ -1,8 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
@@ -11,36 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TypeDiscriminator("doc.type == 'Patient'")
+@Data
 public class Patient extends MotechBaseDataObject {
 
-    @Getter
-    @Setter
     private String patientId;
-    @Getter
-    @Setter
     private String firstName;
-    @Getter
-    @Setter
     private String lastName;
-    @Getter
-    @Setter
     private Gender gender;
-    @Getter
-    @Setter
     private PatientType patientType;
-    @Getter
-    @Setter
     private String phoneNumber;
-    @Getter
-    @Setter
     private String phi;
-    @Getter
-    @Setter
     private PatientStatus status = PatientStatus.Open;
-
-    @Getter
-    @Setter
     private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
+
+    private DateTime lastModifiedDate;
 
     public Patient() {
     }
@@ -58,8 +40,7 @@ public class Patient extends MotechBaseDataObject {
         providedTreatments.add(providedTreatment);
     }
 
-    @JsonIgnore
-    public ProvidedTreatment getLatestProvidedTreatment() {
+    public ProvidedTreatment latestProvidedTreatment() {
         return providedTreatments.get(providedTreatments.size() - 1);
     }
 

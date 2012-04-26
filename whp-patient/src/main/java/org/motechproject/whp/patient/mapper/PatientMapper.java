@@ -27,6 +27,7 @@ public class PatientMapper {
                 createPatientRequest.getPatientType(),
                 createPatientRequest.getMobileNumber());
         patient.setPhi(createPatientRequest.getPhi());
+        patient.setLastModifiedDate(createPatientRequest.getLastModifiedDate());
         return patient;
     }
 

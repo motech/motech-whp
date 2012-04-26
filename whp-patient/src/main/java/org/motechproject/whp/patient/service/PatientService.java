@@ -23,11 +23,11 @@ public class PatientService {
 
     public void add(CreatePatientRequest patientRequest) {
         Patient patient = new PatientMapper().map(patientRequest);
-        Treatment treatment = patient.getLatestProvidedTreatment().getTreatment();
+        Treatment treatment = patient.latestProvidedTreatment().getTreatment();
 
         allPatients.add(patient);
         allTreatments.add(treatment);
-        patient.getLatestProvidedTreatment().setTreatmentDocId(treatment.getId());
+        patient.latestProvidedTreatment().setTreatmentDocId(treatment.getId());
         allPatients.update(patient);
     }
 

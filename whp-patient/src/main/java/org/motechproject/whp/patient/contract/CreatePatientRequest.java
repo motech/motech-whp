@@ -9,38 +9,23 @@ import org.motechproject.whp.patient.domain.*;
 public class CreatePatientRequest {
 
     private String caseId;
-
     private DateTime treatmentStartDate;
-
     private String phi;
-
     private String firstName;
-
     private String lastName;
-
     private Gender gender;
-
     private PatientType patientType;
-
     private String mobileNumber;
-
     private DiseaseClass diseaseClass;
-
     private Address address;
-
     private SmearTestResults smearTestResults;
-
     private WeightStatistics weightStatistics;
-
     private String tbId;
-
     private String providerId;
-
     private TreatmentCategory treatmentCategory;
-
     private String tbRegistrationNumber;
-
     private int age;
+    private DateTime lastModifiedDate;
 
     public CreatePatientRequest() {
     }

@@ -42,6 +42,7 @@ public class CreatePatientRequestMapper {
                 patientRequest.getPatient_type(),
                 patientRequest.getMobile_number(),
                 patientRequest.getPhi());
+        createPatientRequest.setLastModifiedDate(dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()));
     }
 
     private void mapPatientAddress(PatientRequest patientRequest, CreatePatientRequest createPatientRequest) {

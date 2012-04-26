@@ -40,7 +40,7 @@ public class PatientMapperTest {
     }
 
     private void assertProvidedTreatment(Patient patient, CreatePatientRequest createPatientRequest) {
-        ProvidedTreatment providedTreatment = patient.getLatestProvidedTreatment();
+        ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
         assertEquals(createPatientRequest.getTbId(), providedTreatment.getTbId());
         assertEquals(createPatientRequest.getProviderId(), providedTreatment.getProviderId());
         assertEquals(createPatientRequest.getTreatmentStartDate().toLocalDate(), providedTreatment.getStartDate());
@@ -51,7 +51,7 @@ public class PatientMapperTest {
     }
 
     private void assertTreatment(Patient patient, CreatePatientRequest createPatientRequest) {
-        Treatment treatment = patient.getLatestProvidedTreatment().getTreatment();
+        Treatment treatment = patient.latestProvidedTreatment().getTreatment();
         assertEquals(createPatientRequest.getAge(), treatment.getPatientAge());
         assertEquals(createPatientRequest.getTreatmentCategory(), treatment.getTreatmentCategory());
         assertNull(treatment.getDoseStartDate());
