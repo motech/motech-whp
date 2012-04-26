@@ -63,12 +63,12 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Treatment treatmentReturned = patientReturned.getProvidedTreatments().get(0).getTreatment();
 
         SmearTestResults smearTestResults1 = treatmentReturned.getSmearTestResults().get(0);
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults1.getSampleInstance1());
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults1.getSampleInstance());
         assertEquals(SmearTestResult.Positive, smearTestResults1.getResult1());
         assertEquals(DateUtil.today(), smearTestResults1.getTestDate1());
 
         SmearTestResults smearTestResults2 = treatmentReturned.getSmearTestResults().get(1);
-        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP, smearTestResults2.getSampleInstance1());
+        assertEquals(SmearTestSampleInstance.TwoMonthsIntoCP, smearTestResults2.getSampleInstance());
         assertEquals(SmearTestResult.Positive, smearTestResults2.getResult1());
         assertEquals(DateUtil.today(), smearTestResults2.getTestDate1());
     }
@@ -82,7 +82,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     private SmearTestResults smearTestResult2() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.setSampleInstance1(SmearTestSampleInstance.TwoMonthsIntoCP);
+        smearTestResults.setSampleInstance(SmearTestSampleInstance.TwoMonthsIntoCP);
         smearTestResults.setTestDate1(DateUtil.today());
         smearTestResults.setResult1(SmearTestResult.Positive);
         return smearTestResults;
@@ -90,7 +90,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     private SmearTestResults smearTestResult1() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.setSampleInstance1(SmearTestSampleInstance.PreTreatment);
+        smearTestResults.setSampleInstance(SmearTestSampleInstance.PreTreatment);
         smearTestResults.setTestDate1(DateUtil.today());
         smearTestResults.setResult1(SmearTestResult.Positive);
         return smearTestResults;

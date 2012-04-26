@@ -7,10 +7,9 @@ import org.joda.time.LocalDate;
 public class SmearTestResults {
 
     private LocalDate testDate1;
-    private SmearTestSampleInstance sampleInstance1;
+    private SmearTestSampleInstance sampleInstance;
     private SmearTestResult result1;
 
-    private SmearTestSampleInstance sampleInstance2;
     private LocalDate testDate2;
     private SmearTestResult result2;
 
@@ -18,10 +17,9 @@ public class SmearTestResults {
     }
 
     public SmearTestResults(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2) {
-        this.sampleInstance1 = sampleInstance1;
+        this.sampleInstance = sampleInstance1;
         this.testDate1 = testDate1;
         this.result1 = result1;
-        this.sampleInstance2 = sampleInstance2;
         this.testDate2 = testDate2;
         this.result2 = result2;
     }

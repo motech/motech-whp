@@ -41,7 +41,7 @@ public class TreatmentMapperTest {
     }
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
-        Assert.assertEquals(patientRequest.getSmear_sample_instance(), treatment.getSmearTestResults().get(0).getSampleInstance1().name());
+        Assert.assertEquals(patientRequest.getSmear_sample_instance(), treatment.getSmearTestResults().get(0).getSampleInstance().name());
         Assert.assertEquals(patientRequest.getSmear_test_result_1(), treatment.getSmearTestResults().get(0).getResult1().name());
         Assert.assertEquals(patientRequest.getSmear_test_date_1(), treatment.getSmearTestResults().get(0).getTestDate1().toString("dd/MM/YYYY"));
         Assert.assertEquals(patientRequest.getSmear_test_result_2(), treatment.getSmearTestResults().get(0).getResult2().name());
