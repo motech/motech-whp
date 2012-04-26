@@ -2,15 +2,18 @@ package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.mapper.PatientMapper;
 import org.motechproject.whp.mapper.TreatmentMapper;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.exception.WHPDomainException;
+import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -44,7 +47,11 @@ public class PatientWebService extends CaseService<PatientRequest> {
     public void createCase(PatientRequest patientRequest) {
         validator.validate(patientRequest, ValidationScope.create, "patient");
         Patient patient = mapPatient(patientRequest);
-        patientRegistrationService.registerPatient(patient);
+        try {
+            patientRegistrationService.registerPatient(patient);
+        } catch (WHPDomainException e) {
+            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {
