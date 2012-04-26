@@ -3,26 +3,26 @@ package org.motechproject.whp.mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.contract.CreateProviderRequest;
 import org.motechproject.whp.request.ProviderRequest;
 
 import static junit.framework.Assert.assertEquals;
 
 
-public class ProviderMapperTest {
+public class CreateProviderRequestMapperTest {
 
-    ProviderMapper providerMapper;
+    CreateProviderRequestMapper createProviderRequestMapper;
 
     @Before
     public void setUp() {
-        providerMapper = new ProviderMapper();
+        createProviderRequestMapper = new CreateProviderRequestMapper();
     }
 
     @Test
     public void shouldCreatePatient() {
         ProviderRequest providerRequest = new ProviderRequestBuilder().withDefaults().build();
 
-        Provider provider = providerMapper.map(providerRequest);
+        CreateProviderRequest provider = createProviderRequestMapper.map(providerRequest);
 
         assertEquals("providerId", provider.getProviderId());
         assertEquals("9880123456", provider.getPrimaryMobile());

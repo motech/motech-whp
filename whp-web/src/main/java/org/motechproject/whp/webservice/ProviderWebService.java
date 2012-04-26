@@ -3,8 +3,8 @@ package org.motechproject.whp.webservice;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.mapper.ProviderMapper;
+import org.motechproject.whp.mapper.CreateProviderRequestMapper;
+import org.motechproject.whp.patient.contract.CreateProviderRequest;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
 import org.motechproject.whp.validation.ValidationScope;
@@ -32,8 +32,8 @@ public class ProviderWebService extends ProviderRegistrationService<ProviderRequ
     @Override
     public void createOrUpdate(ProviderRequest providerRequest) throws OpenRosaRegistrationValidationException {
         validateProvider(providerRequest);
-        Provider provider = new ProviderMapper().map(providerRequest);
-        registrationService.registerProvider(provider);
+        CreateProviderRequest createProviderRequest = new CreateProviderRequestMapper().map(providerRequest);
+        registrationService.registerProvider(createProviderRequest);
     }
 
     private void validateProvider(ProviderRequest providerRequest) throws OpenRosaRegistrationValidationException {
