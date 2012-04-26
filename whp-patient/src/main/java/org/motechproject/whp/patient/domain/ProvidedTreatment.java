@@ -31,6 +31,7 @@ public class ProvidedTreatment {
 
     private Treatment treatment;
 
+    // Required for ektorp
     public ProvidedTreatment() {
     }
 

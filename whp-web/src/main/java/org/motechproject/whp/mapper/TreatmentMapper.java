@@ -16,7 +16,7 @@ public class TreatmentMapper {
         Category category = Category.get(patientRequest.getTreatment_category());
         DiseaseClass diseaseClass = DiseaseClass.valueOf(patientRequest.getDisease_class());
         int patientAge = Integer.parseInt(patientRequest.getAge());
-        Treatment treatment = new Treatment(category, dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()).toLocalDate(), diseaseClass, patientAge);
+        Treatment treatment = new Treatment(category, diseaseClass, patientAge);
 
         mapRegistrationDetails(patientRequest, treatment);
         mapSmearTestResults(patientRequest, treatment);

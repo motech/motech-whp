@@ -23,12 +23,12 @@ public class Treatment extends MotechBaseDataObject {
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
 
+    // Required for ektorp
     public Treatment() {
     }
 
-    public Treatment(Category category, LocalDate startDate, DiseaseClass diseaseClass, int patientAge) {
+    public Treatment(Category category, DiseaseClass diseaseClass, int patientAge) {
         this.category = category;
-        this.startDate = startDate;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;
     }
