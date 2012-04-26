@@ -1,9 +1,9 @@
 package org.motechproject.whp.application.service;
 
-import org.motechproject.whp.domain.Patient;
-import org.motechproject.whp.domain.Provider;
-import org.motechproject.whp.service.PatientService;
-import org.motechproject.whp.service.ProviderService;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

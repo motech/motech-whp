@@ -3,7 +3,7 @@ package org.motechproject.whp.mapper;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.domain.*;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
 public class TreatmentMapper {

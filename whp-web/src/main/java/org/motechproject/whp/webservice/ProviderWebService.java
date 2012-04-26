@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.domain.Provider;
+import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.mapper.ProviderMapper;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;

@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
-import org.motechproject.whp.domain.Provider;
+import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.request.ProviderRequest;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.validator.BeanValidator;

@@ -2,7 +2,7 @@ package org.motechproject.whp.validation.validator;
 
 import lombok.Data;
 import org.junit.Test;
-import org.motechproject.whp.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.test.context.ContextConfiguration;

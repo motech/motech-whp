@@ -2,7 +2,7 @@ package org.motechproject.whp.mapper;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.domain.Provider;
+import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.request.ProviderRequest;
 
 public class ProviderMapper {

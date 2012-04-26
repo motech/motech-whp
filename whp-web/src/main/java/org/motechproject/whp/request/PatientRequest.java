@@ -1,7 +1,7 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
-import org.motechproject.whp.domain.*;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.motechproject.whp.validation.constraints.Enumeration;

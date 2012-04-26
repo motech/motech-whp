@@ -10,7 +10,7 @@
 
     <modules>
         <module>whp-refdata</module>
-        <module>whp-domain</module>
+        <module>whp-patient</module>
         <module>whp-application</module>
         <module>whp-validation</module>
         <module>whp-web</module>

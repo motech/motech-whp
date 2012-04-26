@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientRequestBuilder;
-import org.motechproject.whp.domain.Treatment;
-import org.motechproject.whp.domain.WeightInstance;
+import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.WeightInstance;
 import org.motechproject.whp.request.PatientRequest;
 
 import static junit.framework.Assert.assertEquals;

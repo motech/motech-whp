@@ -2,11 +2,11 @@ package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.domain.Patient;
-import org.motechproject.whp.domain.Treatment;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.mapper.PatientMapper;
 import org.motechproject.whp.mapper.TreatmentMapper;
-import org.motechproject.whp.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;

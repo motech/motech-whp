@@ -1,8 +1,8 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.domain.PatientType;
-import org.motechproject.whp.domain.SmearTestResult;
-import org.motechproject.whp.domain.WeightInstance;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.WeightInstance;
 import org.motechproject.whp.request.PatientRequest;
 
 public class PatientRequestBuilder {
