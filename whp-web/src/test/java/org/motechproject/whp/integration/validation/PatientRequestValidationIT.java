@@ -181,15 +181,47 @@ public class PatientRequestValidationIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenAgeIsAFraction(){
+    public void shouldThrowExceptionWhenAgeIsAFraction() {
         expectException("field:age:Age must be numeric");
         PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10.1").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
 
     @Test
-    public void shouldNotThrowExceptionWhenAgeIsNumeric(){
+    public void shouldNotThrowExceptionWhenAgeIsNumeric() {
         PatientRequest request = new PatientRequestBuilder().withDefaults().withAge("10").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightIsNotNumeric() {
+        expectException("field:weight:Weight must be a real number");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("A").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
+        expectException("field:weight:Weight must be a real number");
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("1A").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenWeightIsAFraction() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10.1").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenWeightIsAnInteger() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10").build();
+        validator.validate(request, ValidationScope.create, "patient");
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenWeightIsAFractionWithZeroInFractionPart() {
+        PatientRequest request = new PatientRequestBuilder().withDefaults().withWeight("10.0").build();
         validator.validate(request, ValidationScope.create, "patient");
     }
 

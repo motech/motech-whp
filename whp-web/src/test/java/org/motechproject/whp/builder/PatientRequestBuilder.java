@@ -80,4 +80,9 @@ public class PatientRequestBuilder {
         patientRequest.setAge(age);
         return this;
     }
+
+    public PatientRequestBuilder withWeight(String weight) {
+        patientRequest.setWeight(weight);
+        return this;
+    }
 }

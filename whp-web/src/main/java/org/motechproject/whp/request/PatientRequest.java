@@ -101,6 +101,7 @@ public class PatientRequest {
     private String weight_instance;
 
     @NotNull
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
     @Scope(scope = {ValidationScope.create})
     private String weight;
 
