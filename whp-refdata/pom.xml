@@ -24,12 +24,12 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-web-security</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-seed</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>${motech.delivery.version}</version>
         </dependency>
     </dependencies>
 

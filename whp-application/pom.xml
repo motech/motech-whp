@@ -12,7 +12,6 @@
     <artifactId>whp-application</artifactId>
     <properties>
         <spring.version>3.0.5.RELEASE</spring.version>
-        <motech.version>0.10-SNAPSHOT</motech.version>
         <build.dir>../build</build.dir>
     </properties>
 

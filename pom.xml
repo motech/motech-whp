@@ -9,10 +9,10 @@
     <name>motech-whp</name>
 
     <modules>
-        <module>whp-refdata</module>
+        <module>whp-validation</module>
         <module>whp-patient</module>
         <module>whp-application</module>
-        <module>whp-validation</module>
+        <module>whp-refdata</module>
         <module>whp-web</module>
     </modules>
 
@@ -34,21 +34,6 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
-    <distributionManagement>
-        <repository>
-            <id>motech.nexus</id>
-            <name>MoTeCH Releases Repository</name>
-            <url>http://nexus.motechproject.org/content/repositories/releases</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>motech.nexus</id>
-            <name>MoTeCH Snapshots Repository</name>
-            <url>http://nexus.motechproject.org/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -170,6 +155,8 @@
         <spring-security.version>3.0.5.RELEASE</spring-security.version>
         <build.dir>build</build.dir>
         <motech.version>0.10-SNAPSHOT</motech.version>
+        <motech.contrib.version>0.1-SNAPSHOT</motech.contrib.version>
+        <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
     </properties>
 
     <build>
