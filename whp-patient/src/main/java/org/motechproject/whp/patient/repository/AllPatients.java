@@ -29,6 +29,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         if (savedPatient != null) {
             throw new WHPDomainException("Patient already present");
         }
+        if (!patient.isValid()) {
+            throw new WHPDomainException("Invalid patient data");
+        }
         super.add(patient);
     }
 

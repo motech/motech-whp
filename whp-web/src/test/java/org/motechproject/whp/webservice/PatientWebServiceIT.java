@@ -55,7 +55,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, allTreatments, validator, velocityEngine);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine);
     }
 
     @Test

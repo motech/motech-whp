@@ -7,7 +7,6 @@ import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
-import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -24,15 +23,13 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     RegistrationService registrationService;
     PatientService patientService;
 
-    AllTreatments allTreatments;
     RequestValidator validator;
 
     @Autowired
-    public PatientWebService(RegistrationService registrationService, PatientService patientService, AllTreatments allTreatments, RequestValidator validator, VelocityEngine velocityEngine) {
+    public PatientWebService(RegistrationService registrationService, PatientService patientService, RequestValidator validator, VelocityEngine velocityEngine) {
         super(PatientWebRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.patientService = patientService;
-        this.allTreatments = allTreatments;
         this.validator = validator;
     }
 
