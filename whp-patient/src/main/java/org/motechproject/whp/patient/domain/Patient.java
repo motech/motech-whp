@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,8 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return currentProvidedTreatment.isValid();
+    public boolean isValid(ValidationErrors validationErrors) {
+        return currentProvidedTreatment.isValid(validationErrors);
     }
+
 }

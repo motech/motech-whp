@@ -18,16 +18,18 @@ public class AllTreatments extends MotechBaseRepository<Treatment> {
 
     @Override
     public void add(Treatment treatment) {
-        if (!treatment.isValid()) {
-            throw new WHPDomainException("Invalid treatment data");
+        ValidationErrors validationErrors = new ValidationErrors();
+        if (!treatment.isValid(validationErrors)) {
+            throw new WHPDomainException("invalid treatment data." + validationErrors);
         }
         super.add(treatment);
     }
 
     @Override
     public void update(Treatment treatment) {
-        if (!treatment.isValid()) {
-            throw new WHPDomainException("Invalid treatment data");
+        ValidationErrors validationErrors = new ValidationErrors();
+        if (!treatment.isValid(validationErrors)) {
+            throw new WHPDomainException("invalid treatment data." + validationErrors);
         }
         super.update(treatment);
     }

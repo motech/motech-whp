@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 @Data
 public class SmearTestResults {
@@ -27,8 +28,12 @@ public class SmearTestResults {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return sampleInstance != null && testDate1 != null && result1 != null && testDate2 != null && result2 != null;
+    public boolean isValid(ValidationErrors validationErrors) {
+        boolean isFilled = sampleInstance != null && testDate1 != null && result1 != null && testDate2 != null && result2 != null;
+        if (!isFilled) {
+            validationErrors.add("Invalid smear test results : null value");
+        }
+        return isFilled;
     }
 
     @JsonIgnore

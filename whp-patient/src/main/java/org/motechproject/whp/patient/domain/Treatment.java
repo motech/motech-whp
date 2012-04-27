@@ -6,6 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,8 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return latestSmearTestResult().isValid() && latestWeightStatistics().isValid();
+    public boolean isValid(ValidationErrors validationErrors) {
+        return latestSmearTestResult().isValid(validationErrors) && latestWeightStatistics().isValid(validationErrors);
     }
 
 }

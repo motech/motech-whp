@@ -35,7 +35,7 @@ public class PatientService {
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCaseId());
         if(patient == null) {
-            throw new WHPDomainException("No such patient exists");
+            throw new WHPDomainException("Invalid case-id. No such patient.");
         }
 
         Patient updatedPatient = new PatientMapper().mapUpdates(patientRequest, patient);

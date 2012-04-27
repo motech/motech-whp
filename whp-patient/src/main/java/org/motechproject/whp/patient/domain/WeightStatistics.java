@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 @Data
 public class WeightStatistics {
@@ -21,8 +22,12 @@ public class WeightStatistics {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return weightInstance != null && weight != null && measuringDate != null;
+    public boolean isValid(ValidationErrors validationErrors) {
+        boolean isFilled = weightInstance != null && weight != null && measuringDate != null;
+        if (!isFilled) {
+            validationErrors.add("Invalid weight statistics : null value");
+        }
+        return isFilled;
     }
 
     @JsonIgnore

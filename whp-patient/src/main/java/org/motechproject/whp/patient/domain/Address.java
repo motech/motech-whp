@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 @Data
 public class Address {
@@ -26,8 +27,12 @@ public class Address {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return houseNumber != null && block != null && village != null && district != null && state != null;
+    public boolean isValid(ValidationErrors validationErrors) {
+        boolean isFilled = houseNumber != null && block != null && village != null && district != null && state != null;
+        if (!isFilled) {
+            validationErrors.add("Invalid address : null value");
+        }
+        return isFilled;
     }
 
     @JsonIgnore

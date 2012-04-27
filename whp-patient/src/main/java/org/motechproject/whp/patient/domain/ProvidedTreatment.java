@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.repository.ValidationErrors;
 
 
 public class ProvidedTreatment {
@@ -51,7 +52,7 @@ public class ProvidedTreatment {
     }
 
     @JsonIgnore
-    public boolean isValid() {
-        return treatment.isValid() && patientAddress.isValid();
+    public boolean isValid(ValidationErrors validationErrors) {
+        return treatment.isValid(validationErrors) && patientAddress.isValid(validationErrors);
     }
 }

@@ -27,10 +27,11 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public void add(Patient patient) {
         Patient savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient != null) {
-            throw new WHPDomainException("Patient already present");
+            throw new WHPDomainException("patient with the same case-id is already registered.");
         }
-        if (!patient.isValid()) {
-            throw new WHPDomainException("Invalid patient data");
+        ValidationErrors validationErrors = new ValidationErrors();
+        if (!patient.isValid(validationErrors)) {
+            throw new WHPDomainException("invalid patient data:" + validationErrors);
         }
         super.add(patient);
     }
@@ -38,8 +39,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     @Override
     public void update(Patient patient) {
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
-        if (!patient.isValid()) {
-            throw new WHPDomainException("Invalid patient data");
+        ValidationErrors validationErrors = new ValidationErrors();
+        if (!patient.isValid(validationErrors)) {
+            throw new WHPDomainException("invalid patient data." + validationErrors);
         }
         super.update(patient);
     }
