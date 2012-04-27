@@ -23,7 +23,7 @@
         <!-- Only admin -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
 
-        <intercept-url pattern="/patient/**" access="hasRole('ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/patient/**" access="hasAnyRole('ADMIN', 'PROVIDER')" requires-channel="any"/>
     </http>
 
     <authentication-manager alias="authenticationManager">
