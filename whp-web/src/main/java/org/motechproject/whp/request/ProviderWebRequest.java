@@ -4,7 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
-public class ProviderRequest {
+public class ProviderWebRequest {
 
     @NotEmpty
     private String provider_id;

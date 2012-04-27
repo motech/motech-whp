@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service;
 
-import org.motechproject.whp.patient.contract.CreatePatientRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -22,7 +22,7 @@ public class PatientService {
         this.allTreatments = allTreatments;
     }
 
-    public void add(CreatePatientRequest patientRequest) {
+    public void add(PatientRequest patientRequest) {
         Patient patient = new PatientMapper().map(patientRequest);
         Treatment treatment = patient.latestProvidedTreatment().getTreatment();
 
@@ -32,16 +32,16 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void simpleUpdate(CreatePatientRequest createPatientRequest) {
-        Patient patient = allPatients.findByPatientId(createPatientRequest.getCaseId());
+    public void simpleUpdate(PatientRequest patientRequest) {
+        Patient patient = allPatients.findByPatientId(patientRequest.getCaseId());
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment currentTreatment = currentProvidedTreatment.getTreatment();
 
-        patient.setPhoneNumber(createPatientRequest.getMobileNumber());
-        currentProvidedTreatment.setPatientAddress(createPatientRequest.getAddress());
-        currentTreatment.addSmearTestResult(createPatientRequest.getSmearTestResults());
-        currentTreatment.addWeightStatistics(createPatientRequest.getWeightStatistics());
-        currentTreatment.setTbRegistrationNumber(createPatientRequest.getTbRegistrationNumber());
+        patient.setPhoneNumber(patientRequest.getMobileNumber());
+        currentProvidedTreatment.setPatientAddress(patientRequest.getAddress());
+        currentTreatment.addSmearTestResult(patientRequest.getSmearTestResults());
+        currentTreatment.addWeightStatistics(patientRequest.getWeightStatistics());
+        currentTreatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
 
         allPatients.update(patient);
     }

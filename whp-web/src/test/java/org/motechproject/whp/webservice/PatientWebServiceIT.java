@@ -16,7 +16,7 @@ import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.request.PatientRequest;
+import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -47,8 +47,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUpDefaultProvider() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        String defaultProviderId = patientRequest.getProvider_id();
+        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        String defaultProviderId = patientWebRequest.getProvider_id();
         Provider defaultProvider = new Provider(defaultProviderId, "1234567890", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
     }
@@ -60,18 +60,18 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldCreatePatient() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        patientWebService.createCase(patientRequest);
-        assertNotNull(allPatients.findByPatientId(patientRequest.getCase_id()));
+        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        patientWebService.createCase(patientWebRequest);
+        assertNotNull(allPatients.findByPatientId(patientWebRequest.getCase_id()));
     }
 
     @Test
     public void shouldRecordProvidedTreatmentsWhenCreatingPatient() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
 
-        patientWebService.createCase(patientRequest);
+        patientWebService.createCase(patientWebRequest);
 
-        Patient recordedPatient = allPatients.findByPatientId(patientRequest.getCase_id());
+        Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
         for (ProvidedTreatment providedTreatment : recordedPatient.getProvidedTreatments()) {
             assertNotNull(providedTreatment.getTreatment());
         }
@@ -80,22 +80,22 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @Test(expected = WHPException.class)
     public void shouldNotCreatePatientWhenProviderIdIsInvalid() {
         String unknownProviderId = "012900";
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        patientRequest.setProvider_id(unknownProviderId);
-        patientWebService.createCase(patientRequest);
+        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        patientWebRequest.setProvider_id(unknownProviderId);
+        patientWebService.createCase(patientWebRequest);
     }
 
     @Test
     public void shouldUpdatePatient(){
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId("12341234").build();
-        patientWebService.createCase(patientRequest);
+        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().withCaseId("12341234").build();
+        patientWebService.createCase(patientWebRequest);
 
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        PatientRequest simpleUpdateRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
-        patientWebService.updateCase(simpleUpdateRequest);
+        PatientWebRequest simpleUpdateWebRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
+        patientWebService.updateCase(simpleUpdateWebRequest);
 
-        Patient updatedPatient = allPatients.findByPatientId(simpleUpdateRequest.getCase_id());
+        Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
         assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());

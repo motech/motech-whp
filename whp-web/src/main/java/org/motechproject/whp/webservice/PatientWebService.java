@@ -4,12 +4,12 @@ import org.apache.velocity.app.VelocityEngine;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.mapper.PatientRequestMapper;
-import org.motechproject.whp.patient.contract.CreatePatientRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.request.PatientRequest;
+import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/patient/**")
-public class PatientWebService extends CaseService<PatientRequest> {
+public class PatientWebService extends CaseService<PatientWebRequest> {
 
     RegistrationService registrationService;
     PatientService patientService;
@@ -29,7 +29,7 @@ public class PatientWebService extends CaseService<PatientRequest> {
 
     @Autowired
     public PatientWebService(RegistrationService registrationService, PatientService patientService, AllTreatments allTreatments, RequestValidator validator, VelocityEngine velocityEngine) {
-        super(PatientRequest.class, velocityEngine);
+        super(PatientWebRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.patientService = patientService;
         this.allTreatments = allTreatments;
@@ -37,26 +37,26 @@ public class PatientWebService extends CaseService<PatientRequest> {
     }
 
     @Override
-    public void closeCase(PatientRequest patientRequest) {
+    public void closeCase(PatientWebRequest patientWebRequest) {
     }
 
     @Override
-    public void updateCase(PatientRequest patientRequest) {
-        validator.validate(patientRequest, ValidationScope.simpleUpdate);
-        CreatePatientRequest createPatientRequest = new PatientRequestMapper().map(patientRequest);
+    public void updateCase(PatientWebRequest patientWebRequest) {
+        validator.validate(patientWebRequest, ValidationScope.simpleUpdate);
+        PatientRequest patientRequest = new PatientRequestMapper().map(patientWebRequest);
         try {
-            patientService.simpleUpdate(createPatientRequest);
+            patientService.simpleUpdate(patientRequest);
         } catch (WHPDomainException e) {
             throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public void createCase(PatientRequest patientRequest) {
-        validator.validate(patientRequest, ValidationScope.create);
-        CreatePatientRequest createPatientRequest = new PatientRequestMapper().map(patientRequest);
+    public void createCase(PatientWebRequest patientWebRequest) {
+        validator.validate(patientWebRequest, ValidationScope.create);
+        PatientRequest patientRequest = new PatientRequestMapper().map(patientWebRequest);
         try {
-            registrationService.registerPatient(createPatientRequest);
+            registrationService.registerPatient(patientRequest);
         } catch (WHPDomainException e) {
             throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

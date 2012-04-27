@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class PatientRequest {
+public class PatientWebRequest {
 
     @NotNull
     private String case_id;
@@ -123,10 +123,10 @@ public class PatientRequest {
     @Scope(scope = {ValidationScope.create})
     private String age;
 
-    public PatientRequest() {
+    public PatientWebRequest() {
     }
 
-    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber, String phi) {
+    public PatientWebRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber, String phi) {
         this.case_id = caseId;
         this.first_name = firstName;
         this.last_name = lastName;
@@ -137,7 +137,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public PatientWebRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
         this.address_location = houseNumber;
         this.address_landmark = landmark;
         this.address_block = block;
@@ -147,7 +147,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge, String registrationNumber) {
+    public PatientWebRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge, String registrationNumber) {
         this.treatment_category = category;
         this.tb_id = tbId;
         this.provider_id = providerId;
@@ -157,7 +157,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2) {
+    public PatientWebRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2) {
         this.smear_sample_instance = smear_sample_instance_1;
         this.smear_test_date_1 = smear_test_date_1;
         this.smear_test_result_1 = smear_result_1;
@@ -166,7 +166,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setWeightStatistics(String weightInstance, String weight) {
+    public PatientWebRequest setWeightStatistics(String weightInstance, String weight) {
         this.weight_instance = weightInstance;
         this.weight = weight;
         return this;

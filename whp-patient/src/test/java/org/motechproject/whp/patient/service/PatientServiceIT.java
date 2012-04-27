@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.service;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.patient.builder.CreatePatientRequestBuilder;
-import org.motechproject.whp.patient.contract.CreatePatientRequest;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -39,11 +39,11 @@ public class PatientServiceIT extends SpringIntegrationTest{
 
     @Test
     public void shouldUpdatePatient() {
-        CreatePatientRequest createPatientRequest = new CreatePatientRequestBuilder().withDefaults().withCaseId(CASE_ID).build();
-        patientService.add(createPatientRequest);
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(CASE_ID).build();
+        patientService.add(patientRequest);
         Patient createPatient = allPatients.findByPatientId(CASE_ID);
 
-        CreatePatientRequest updatePatientRequest = new CreatePatientRequestBuilder().withSimpleUpdateFields().withCaseId(CASE_ID).build();
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId(CASE_ID).build();
         patientService.simpleUpdate(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();

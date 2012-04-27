@@ -4,7 +4,7 @@ import lombok.Data;
 import org.joda.time.DateTime;
 
 @Data
-public class CreateProviderRequest {
+public class ProviderRequest {
 
     private String providerId;
 
@@ -22,7 +22,7 @@ public class CreateProviderRequest {
 
     private DateTime lastModifiedDate;
 
-    public CreateProviderRequest(String providerId, String district, String primaryMobile, DateTime lastModifiedDate) {
+    public ProviderRequest(String providerId, String district, String primaryMobile, DateTime lastModifiedDate) {
         this.providerId = providerId;
         this.district = district;
         this.primaryMobile = primaryMobile;

@@ -4,80 +4,80 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.patient.contract.CreatePatientRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.request.PatientRequest;
+import org.motechproject.whp.request.PatientWebRequest;
 
 public class PatientRequestMapper {
 
     protected final DateTimeFormatter localDateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
     protected final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");
 
-    public CreatePatientRequest map(PatientRequest patientRequest) {
-        CreatePatientRequest createPatientRequest = new CreatePatientRequest();
+    public PatientRequest map(PatientWebRequest patientWebRequest) {
+        PatientRequest patientRequest = new PatientRequest();
 
-        mapBasicInfo(patientRequest, createPatientRequest);
-        mapPatientAddress(patientRequest, createPatientRequest);
-        mapTreatmentData(patientRequest, createPatientRequest);
-        mapSmearTestResults(patientRequest, createPatientRequest);
-        mapWeightStatistics(patientRequest, createPatientRequest);
-        return createPatientRequest;
+        mapBasicInfo(patientWebRequest, patientRequest);
+        mapPatientAddress(patientWebRequest, patientRequest);
+        mapTreatmentData(patientWebRequest, patientRequest);
+        mapSmearTestResults(patientWebRequest, patientRequest);
+        mapWeightStatistics(patientWebRequest, patientRequest);
+        return patientRequest;
     }
 
-    protected void mapPatientAddress(PatientRequest patientRequest, CreatePatientRequest createPatientRequest) {
-        createPatientRequest.setPatientAddress(
-                patientRequest.getAddress_location(),
-                patientRequest.getAddress_landmark(),
-                patientRequest.getAddress_block(),
-                patientRequest.getAddress_village(),
-                patientRequest.getAddress_district(),
-                patientRequest.getAddress_state());
+    protected void mapPatientAddress(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
+        patientRequest.setPatientAddress(
+                patientWebRequest.getAddress_location(),
+                patientWebRequest.getAddress_landmark(),
+                patientWebRequest.getAddress_block(),
+                patientWebRequest.getAddress_village(),
+                patientWebRequest.getAddress_district(),
+                patientWebRequest.getAddress_state());
     }
 
-    protected void mapBasicInfo(PatientRequest patientRequest, CreatePatientRequest createpatientrequest) {
-        Gender gender = patientRequest.getGender() == null ? null : Gender.valueOf(patientRequest.getGender());
-        PatientType patientType = patientRequest.getPatient_type() == null ? null : PatientType.valueOf(patientRequest.getPatient_type());
-        DateTime lastModifiedDate = patientRequest.getDate_modified() == null ? null : dateTimeFormatter.parseDateTime(patientRequest.getDate_modified());
-        createpatientrequest.setPatientInfo(
-                patientRequest.getCase_id(),
-                patientRequest.getFirst_name(),
-                patientRequest.getLast_name(),
+    protected void mapBasicInfo(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
+        Gender gender = patientWebRequest.getGender() == null ? null : Gender.valueOf(patientWebRequest.getGender());
+        PatientType patientType = patientWebRequest.getPatient_type() == null ? null : PatientType.valueOf(patientWebRequest.getPatient_type());
+        DateTime lastModifiedDate = patientWebRequest.getDate_modified() == null ? null : dateTimeFormatter.parseDateTime(patientWebRequest.getDate_modified());
+        patientRequest.setPatientInfo(
+                patientWebRequest.getCase_id(),
+                patientWebRequest.getFirst_name(),
+                patientWebRequest.getLast_name(),
                 gender,
                 patientType,
-                patientRequest.getMobile_number(),
-                patientRequest.getPhi());
-        createpatientrequest.setLastModifiedDate(lastModifiedDate);
+                patientWebRequest.getMobile_number(),
+                patientWebRequest.getPhi());
+        patientRequest.setLastModifiedDate(lastModifiedDate);
     }
 
-    protected void mapTreatmentData(PatientRequest patientRequest, CreatePatientRequest CreatePatientRequest) {
-        TreatmentCategory treatment_category = patientRequest.getTreatment_category() == null ? null : TreatmentCategory.get(patientRequest.getTreatment_category());
-        DiseaseClass disease_class = patientRequest.getDisease_class() == null ? null : DiseaseClass.valueOf(patientRequest.getDisease_class());
-        DateTime treatmentStartDate = patientRequest.getDate_modified() == null ? null : dateTimeFormatter.parseDateTime(patientRequest.getDate_modified());
-        CreatePatientRequest.setTreatmentData(
+    protected void mapTreatmentData(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
+        TreatmentCategory treatment_category = patientWebRequest.getTreatment_category() == null ? null : TreatmentCategory.get(patientWebRequest.getTreatment_category());
+        DiseaseClass disease_class = patientWebRequest.getDisease_class() == null ? null : DiseaseClass.valueOf(patientWebRequest.getDisease_class());
+        DateTime treatmentStartDate = patientWebRequest.getDate_modified() == null ? null : dateTimeFormatter.parseDateTime(patientWebRequest.getDate_modified());
+        patientRequest.setTreatmentData(
                 treatment_category,
-                patientRequest.getTb_id(),
-                patientRequest.getProvider_id(),
+                patientWebRequest.getTb_id(),
+                patientWebRequest.getProvider_id(),
                 disease_class,
-                Integer.parseInt(patientRequest.getAge()),
-                patientRequest.getTb_registration_number(),
+                Integer.parseInt(patientWebRequest.getAge()),
+                patientWebRequest.getTb_registration_number(),
                 treatmentStartDate);
     }
 
-    protected void mapSmearTestResults(PatientRequest patientRequest, CreatePatientRequest createPatientRequest) {
+    protected void mapSmearTestResults(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
 
-        SmearTestSampleInstance smearSampleInstance = patientRequest.getSmear_sample_instance() == null ? null : SmearTestSampleInstance.valueOf(patientRequest.getSmear_sample_instance());
-        LocalDate smearTestDate1 = localDateFormatter.parseLocalDate(patientRequest.getSmear_test_date_1());
-        SmearTestResult smearTestResult1 = patientRequest.getSmear_test_result_1() == null ? null : SmearTestResult.valueOf(patientRequest.getSmear_test_result_1());
+        SmearTestSampleInstance smearSampleInstance = patientWebRequest.getSmear_sample_instance() == null ? null : SmearTestSampleInstance.valueOf(patientWebRequest.getSmear_sample_instance());
+        LocalDate smearTestDate1 = localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_1());
+        SmearTestResult smearTestResult1 = patientWebRequest.getSmear_test_result_1() == null ? null : SmearTestResult.valueOf(patientWebRequest.getSmear_test_result_1());
 
-        LocalDate smearTestDate2 = localDateFormatter.parseLocalDate(patientRequest.getSmear_test_date_2());
-        SmearTestResult smearTestResult2 = patientRequest.getSmear_test_result_2() == null ? null : SmearTestResult.valueOf(patientRequest.getSmear_test_result_2());
+        LocalDate smearTestDate2 = localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_2());
+        SmearTestResult smearTestResult2 = patientWebRequest.getSmear_test_result_2() == null ? null : SmearTestResult.valueOf(patientWebRequest.getSmear_test_result_2());
 
-        createPatientRequest.setSmearTestResults(smearSampleInstance, smearTestDate1, smearTestResult1, smearTestDate2, smearTestResult2);
+        patientRequest.setSmearTestResults(smearSampleInstance, smearTestDate1, smearTestResult1, smearTestDate2, smearTestResult2);
     }
 
-    protected void mapWeightStatistics(PatientRequest patientRequest, CreatePatientRequest createPatientRequest) {
-        WeightInstance weightInstance = patientRequest.getWeight_instance() == null ?  null : WeightInstance.valueOf(patientRequest.getWeight_instance());
-        Double weight = patientRequest.getWeight() == null ? null : Double.parseDouble(patientRequest.getWeight());
-        createPatientRequest.setWeightStatistics(weightInstance, weight, dateTimeFormatter.parseDateTime(patientRequest.getDate_modified()).toLocalDate());
+    protected void mapWeightStatistics(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
+        WeightInstance weightInstance = patientWebRequest.getWeight_instance() == null ?  null : WeightInstance.valueOf(patientWebRequest.getWeight_instance());
+        Double weight = patientWebRequest.getWeight() == null ? null : Double.parseDouble(patientWebRequest.getWeight());
+        patientRequest.setWeightStatistics(weightInstance, weight, dateTimeFormatter.parseDateTime(patientWebRequest.getDate_modified()).toLocalDate());
     }
 }

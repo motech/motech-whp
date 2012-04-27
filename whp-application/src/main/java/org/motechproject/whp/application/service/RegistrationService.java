@@ -1,7 +1,7 @@
 package org.motechproject.whp.application.service;
 
-import org.motechproject.whp.patient.contract.CreatePatientRequest;
-import org.motechproject.whp.patient.contract.CreateProviderRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,17 @@ public class RegistrationService {
         this.patientService = patientService;
     }
 
-    public void registerPatient(CreatePatientRequest createPatientRequest) {
-        patientService.add(createPatientRequest);
+    public void registerPatient(PatientRequest patientRequest) {
+        patientService.add(patientRequest);
     }
 
-    public void registerProvider(CreateProviderRequest createProviderRequest) {
-        providerService.add(createProviderRequest.getProviderId(),
-                createProviderRequest.getPrimaryMobile(),
-                createProviderRequest.getSecondaryMobile(),
-                createProviderRequest.getTertiaryMobile(),
-                createProviderRequest.getDistrict(),
-                createProviderRequest.getLastModifiedDate());
+    public void registerProvider(ProviderRequest providerRequest) {
+        providerService.add(providerRequest.getProviderId(),
+                providerRequest.getPrimaryMobile(),
+                providerRequest.getSecondaryMobile(),
+                providerRequest.getTertiaryMobile(),
+                providerRequest.getDistrict(),
+                providerRequest.getLastModifiedDate());
     }
 
 }

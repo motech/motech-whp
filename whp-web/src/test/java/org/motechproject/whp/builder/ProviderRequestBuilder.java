@@ -1,53 +1,53 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.request.ProviderRequest;
+import org.motechproject.whp.request.ProviderWebRequest;
 
 public class ProviderRequestBuilder {
 
-    private ProviderRequest providerRequest = new ProviderRequest();
+    private ProviderWebRequest providerWebRequest = new ProviderWebRequest();
 
     public ProviderRequestBuilder withDefaults() {
-        providerRequest = new ProviderRequest();
-        providerRequest.setProvider_id("providerId");
-        providerRequest.setPrimary_mobile("9880123456");
-        providerRequest.setSecondary_mobile("9880123457");
-        providerRequest.setTertiary_mobile("9880123458");
-        providerRequest.setDistrict("Patna");
-        providerRequest.setDate("12/01/2012 10:10:10");
+        providerWebRequest = new ProviderWebRequest();
+        providerWebRequest.setProvider_id("providerId");
+        providerWebRequest.setPrimary_mobile("9880123456");
+        providerWebRequest.setSecondary_mobile("9880123457");
+        providerWebRequest.setTertiary_mobile("9880123458");
+        providerWebRequest.setDistrict("Patna");
+        providerWebRequest.setDate("12/01/2012 10:10:10");
         return this;
     }
 
-    public ProviderRequest build() {
-        return providerRequest;
+    public ProviderWebRequest build() {
+        return providerWebRequest;
     }
 
     public ProviderRequestBuilder withProviderId(String providerId) {
-        providerRequest.setProvider_id(providerId);
+        providerWebRequest.setProvider_id(providerId);
         return this;
     }
 
     public ProviderRequestBuilder withPrimaryMobile(String primaryMobile) {
-        providerRequest.setPrimary_mobile(primaryMobile);
+        providerWebRequest.setPrimary_mobile(primaryMobile);
         return this;
     }
 
     public ProviderRequestBuilder withSecondaryMobile(String secondaryMobile) {
-        providerRequest.setSecondary_mobile(secondaryMobile);
+        providerWebRequest.setSecondary_mobile(secondaryMobile);
         return this;
     }
 
     public ProviderRequestBuilder withTertiaryMobile(String tertiaryMobile) {
-        providerRequest.setTertiary_mobile(tertiaryMobile);
+        providerWebRequest.setTertiary_mobile(tertiaryMobile);
         return this;
     }
 
     public ProviderRequestBuilder withDistrict(String district) {
-        providerRequest.setDistrict(district);
+        providerWebRequest.setDistrict(district);
         return this;
     }
 
     public ProviderRequestBuilder withDate(String date) {
-        providerRequest.setDate(date);
+        providerWebRequest.setDate(date);
         return this;
     }
 }

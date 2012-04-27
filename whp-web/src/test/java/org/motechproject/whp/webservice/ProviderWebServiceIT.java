@@ -8,7 +8,7 @@ import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
-import org.motechproject.whp.request.ProviderRequest;
+import org.motechproject.whp.request.ProviderWebRequest;
 import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,8 +36,8 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldCreateProvider() throws OpenRosaRegistrationValidationException {
-        ProviderRequest whpProvider = new ProviderRequestBuilder().withDefaults().build();
-        whpProviderWebService.createOrUpdate(whpProvider);
+        ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().build();
+        whpProviderWebService.createOrUpdate(whpProviderWeb);
 
         Provider provider = allProviders.findByProviderId("providerId");
         assertNotNull(provider);
@@ -48,8 +48,8 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldThrowAnExceptionIfMandatoryFieldsAreAbsent() {
         try {
-            ProviderRequest providerRequest = new ProviderRequestBuilder().withProviderId("P00001").withPrimaryMobile("9880000000").build();
-            whpProviderWebService.createOrUpdate(providerRequest);
+            ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withPrimaryMobile("9880000000").build();
+            whpProviderWebService.createOrUpdate(providerWebRequest);
             fail("Should have exceptionThrown validation exception");
         } catch (OpenRosaRegistrationValidationException exception) {
             assertTrue(exception.getMessage().contains("field:district:may not be empty"));

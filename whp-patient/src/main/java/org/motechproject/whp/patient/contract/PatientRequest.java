@@ -6,7 +6,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.*;
 
 @Data
-public class CreatePatientRequest {
+public class PatientRequest {
 
     private String caseId;
     private DateTime treatmentStartDate;
@@ -27,10 +27,10 @@ public class CreatePatientRequest {
     private int age;
     private DateTime lastModifiedDate;
 
-    public CreatePatientRequest() {
+    public PatientRequest() {
     }
 
-    public CreatePatientRequest setPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
+    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
         this.caseId = caseId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,12 +41,12 @@ public class CreatePatientRequest {
         return this;
     }
 
-    public CreatePatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
         this.address = new Address(houseNumber, landmark, block, village, district, state);
         return this;
     }
 
-    public CreatePatientRequest setTreatmentData(TreatmentCategory category, String tbId, String providerId, DiseaseClass diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
+    public PatientRequest setTreatmentData(TreatmentCategory category, String tbId, String providerId, DiseaseClass diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
         this.treatmentCategory = category;
         this.tbId = tbId;
         this.providerId = providerId;
@@ -57,12 +57,12 @@ public class CreatePatientRequest {
         return this;
     }
 
-    public CreatePatientRequest setSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
+    public PatientRequest setSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
         this.smearTestResults = new SmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
         return this;
     }
 
-    public CreatePatientRequest setWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
+    public PatientRequest setWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
         weightStatistics = new WeightStatistics(weightInstance, weight, measuringDate);
         return this;
     }
