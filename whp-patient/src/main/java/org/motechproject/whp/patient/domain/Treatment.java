@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -47,6 +48,11 @@ public class Treatment extends MotechBaseDataObject {
 
     public WeightStatistics latestWeightStatistics() {
         return weightStatisticsList.get(weightStatisticsList.size() - 1);
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return latestSmearTestResult().isValid() && latestWeightStatistics().isValid();
     }
 
 }

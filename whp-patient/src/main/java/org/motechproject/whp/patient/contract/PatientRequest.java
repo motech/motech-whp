@@ -17,9 +17,9 @@ public class PatientRequest {
     private PatientType patientType;
     private String mobileNumber;
     private DiseaseClass diseaseClass;
-    private Address address;
-    private SmearTestResults smearTestResults;
-    private WeightStatistics weightStatistics;
+    private Address address = new Address();
+    private SmearTestResults smearTestResults = new SmearTestResults();
+    private WeightStatistics weightStatistics = new WeightStatistics();
     private String tbId;
     private String providerId;
     private TreatmentCategory treatmentCategory;

@@ -54,8 +54,6 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String address_location;
 
-    @NotNull
-    @Scope(scope = {ValidationScope.create})
     private String address_landmark;
 
     @NotNull

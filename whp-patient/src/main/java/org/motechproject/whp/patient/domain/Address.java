@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Data
 public class Address {
@@ -22,6 +23,16 @@ public class Address {
         this.village = village;
         this.district = district;
         this.state = state;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return houseNumber != null && block != null && village != null && district != null && state != null;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return houseNumber == null && block == null && village == null && district == null && state == null;
     }
 
 }

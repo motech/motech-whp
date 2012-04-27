@@ -2,7 +2,6 @@ package org.motechproject.whp.patient.service;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -34,15 +33,8 @@ public class PatientService {
 
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCaseId());
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        Treatment currentTreatment = currentProvidedTreatment.getTreatment();
 
-        patient.setPhoneNumber(patientRequest.getMobileNumber());
-        currentProvidedTreatment.setPatientAddress(patientRequest.getAddress());
-        currentTreatment.addSmearTestResult(patientRequest.getSmearTestResults());
-        currentTreatment.addWeightStatistics(patientRequest.getWeightStatistics());
-        currentTreatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
-
-        allPatients.update(patient);
+        Patient updatedPatient = new PatientMapper().mapUpdates(patientRequest, patient);
+        allPatients.update(updatedPatient);
     }
 }

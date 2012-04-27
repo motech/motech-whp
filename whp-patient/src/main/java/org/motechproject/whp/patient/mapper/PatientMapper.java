@@ -18,6 +18,21 @@ public class PatientMapper {
         return patient;
     }
 
+    public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
+        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        Treatment currentTreatment = currentProvidedTreatment.getTreatment();
+
+        patient.setPhoneNumber(patientRequest.getMobileNumber());
+
+        mapPatientAddress(patientRequest, currentProvidedTreatment);
+        mapSmearTestResults(patientRequest, currentTreatment);
+        mapWeightStatistics(patientRequest, currentTreatment);
+
+        currentTreatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
+
+        return patient;
+    }
+
     private Patient mapBasicInfo(PatientRequest patientRequest) {
         Patient patient = new Patient(
                 patientRequest.getCaseId(),
@@ -32,7 +47,10 @@ public class PatientMapper {
     }
 
     private void mapPatientAddress(PatientRequest patientRequest, ProvidedTreatment providedTreatment) {
-        providedTreatment.setPatientAddress(patientRequest.getAddress());
+        Address address = patientRequest.getAddress();
+        if (!address.isEmpty()) {
+            providedTreatment.setPatientAddress(address);
+        }
     }
 
     private void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {
@@ -61,12 +79,17 @@ public class PatientMapper {
     }
 
     private void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
-        treatment.addSmearTestResult(patientRequest.getSmearTestResults());
+        SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
+        if (!smearTestResults.isEmpty()) {
+            treatment.addSmearTestResult(smearTestResults);
+        }
     }
 
     private void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
-        treatment.addWeightStatistics(patientRequest.getWeightStatistics());
+        WeightStatistics weightStatistics = patientRequest.getWeightStatistics();
+        if (!weightStatistics.isEmpty()) {
+            treatment.addWeightStatistics(weightStatistics);
+        }
     }
-
 
 }

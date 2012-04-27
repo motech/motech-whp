@@ -49,4 +49,9 @@ public class ProvidedTreatment {
     public Treatment getTreatment() {
         return treatment;
     }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return treatment.isValid() && patientAddress.isValid();
+    }
 }

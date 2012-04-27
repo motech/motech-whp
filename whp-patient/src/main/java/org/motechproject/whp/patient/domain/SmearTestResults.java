@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 
 @Data
@@ -23,6 +24,16 @@ public class SmearTestResults {
         this.result1 = result1;
         this.testDate2 = testDate2;
         this.result2 = result2;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return sampleInstance != null && testDate1 != null && result1 != null && testDate2 != null && result2 != null;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return sampleInstance == null && testDate1 == null && result1 == null && testDate2 == null && result2 == null;
     }
 
 }

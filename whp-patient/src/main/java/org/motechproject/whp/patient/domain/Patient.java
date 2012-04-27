@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
@@ -50,5 +51,10 @@ public class Patient extends MotechBaseDataObject {
 
     public ProvidedTreatment latestProvidedTreatment() {
         return currentProvidedTreatment;
+    }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return currentProvidedTreatment.isValid();
     }
 }

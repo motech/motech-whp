@@ -26,16 +26,18 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     @Override
     public void add(Patient patient) {
         Patient savedPatient = findByPatientId(patient.getPatientId());
-        if (savedPatient == null)
-            super.add(patient);
-        else
+        if (savedPatient != null) {
             throw new WHPDomainException("Patient already present");
+        }
+        super.add(patient);
     }
-
 
     @Override
     public void update(Patient patient) {
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
+        if (!patient.isValid()) {
+            throw new WHPDomainException("Invalid patient data");
+        }
         super.update(patient);
     }
 
