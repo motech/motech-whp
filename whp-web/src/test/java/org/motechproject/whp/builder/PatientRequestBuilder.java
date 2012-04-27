@@ -1,9 +1,6 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.patient.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.WeightInstance;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientRequest;
 
 public class PatientRequestBuilder {
@@ -15,10 +12,21 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.getValue(), PatientType.PHSTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setSmearTestResults("PreTreatment", "19/07/1888", SmearTestResult.Positive.name(), "21/09/1985", SmearTestResult.Positive.name())
+                .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", "12345678901", "123456", "P", "200", "registrationNumber");
+                .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
         patientRequest.setDate_modified("10/10/2010 10:10:10");
+        return this;
+    }
+
+    public PatientRequestBuilder withSimpleUpdateFields() {
+        patientRequest = new PatientRequest()
+                .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
+                .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
+                .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
+                .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
+                .setTreatmentData(null, null, null, null, "50", null);
+        patientRequest.setDate_modified("15/10/2010 10:10:10");
         return this;
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-@ContextConfiguration(locations = "classpath*:/applicationDomainContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class AllPatientsTest extends SpringIntegrationTest {
 
     @Autowired
@@ -60,7 +60,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         Patient patientReturned = allPatients.findByPatientId("cha01100001");
         assertNotNull(patientReturned);
 
-        Treatment treatmentReturned = patientReturned.getCurrentProviderTreatment().getTreatment();
+        Treatment treatmentReturned = patientReturned.getCurrentProvidedTreatment().getTreatment();
 
         SmearTestResults smearTestResults1 = treatmentReturned.getSmearTestResults().get(0);
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults1.getSampleInstance());

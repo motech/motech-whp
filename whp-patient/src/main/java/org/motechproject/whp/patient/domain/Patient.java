@@ -27,7 +27,7 @@ public class Patient extends MotechBaseDataObject {
 
     @Getter
     @Setter
-    private ProvidedTreatment currentProviderTreatment;
+    private ProvidedTreatment currentProvidedTreatment;
 
     public Patient() {
     }
@@ -42,13 +42,13 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void addProvidedTreatment(ProvidedTreatment providedTreatment) {
-        if (currentProviderTreatment != null) {
-            providedTreatments.add(currentProviderTreatment);
+        if (currentProvidedTreatment != null) {
+            providedTreatments.add(currentProvidedTreatment);
         }
-        currentProviderTreatment = providedTreatment;
+        currentProvidedTreatment = providedTreatment;
     }
 
     public ProvidedTreatment latestProvidedTreatment() {
-        return currentProviderTreatment;
+        return currentProvidedTreatment;
     }
 }

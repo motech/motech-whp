@@ -1,6 +1,6 @@
 package org.motechproject.whp.request;
 
-import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
@@ -14,13 +14,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
 public class PatientRequest {
 
     @NotNull
     private String case_id;
 
-    @Scope(scope = {ValidationScope.create})
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date_modified;
 
@@ -107,10 +105,12 @@ public class PatientRequest {
 
     @NotNull
     @Size(min = 11, max = 11)
+    @Scope(scope = {ValidationScope.create})
     private String tb_id;
 
     @NotNull
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
+    @Scope(scope = {ValidationScope.create})
     private String provider_id;
 
     @Pattern(regexp = "[0|1][1|2]")
@@ -171,4 +171,229 @@ public class PatientRequest {
         this.weight = weight;
         return this;
     }
+
+    public String getCase_id() {
+        return StringUtils.isNotEmpty(case_id) ? case_id : null;
+    }
+
+    public void setCase_id(String case_id) {
+        this.case_id = case_id;
+    }
+
+    public String getDate_modified() {
+        return StringUtils.isNotEmpty(date_modified) ? date_modified : null;
+    }
+
+    public void setDate_modified(String date_modified) {
+        this.date_modified = date_modified;
+    }
+
+    public String getCase_type() {
+        return StringUtils.isNotEmpty(case_type) ? case_type : null;
+    }
+
+    public void setCase_type(String case_type) {
+        this.case_type = case_type;
+    }
+
+    public String getPhi() {
+        return StringUtils.isNotEmpty(phi) ? phi : null;
+    }
+
+    public void setPhi(String phi) {
+        this.phi = phi;
+    }
+
+    public String getFirst_name() {
+        return StringUtils.isNotEmpty(first_name) ? first_name : null;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return StringUtils.isNotEmpty(last_name) ? last_name : null;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public String getGender() {
+        return StringUtils.isNotEmpty(gender) ? gender : null;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPatient_type() {
+        return StringUtils.isNotEmpty(patient_type) ? patient_type : null;
+    }
+
+    public void setPatient_type(String patient_type) {
+        this.patient_type = patient_type;
+    }
+
+    public String getMobile_number() {
+        return StringUtils.isNotEmpty(mobile_number) ? mobile_number : null;
+    }
+
+    public void setMobile_number(String mobile_number) {
+        this.mobile_number = mobile_number;
+    }
+
+    public String getDisease_class() {
+        return StringUtils.isNotEmpty(disease_class) ? disease_class : null;
+    }
+
+    public void setDisease_class(String disease_class) {
+        this.disease_class = disease_class;
+    }
+
+    public String getAddress_location() {
+        return StringUtils.isNotEmpty(address_location) ? address_location : null;
+    }
+
+    public void setAddress_location(String address_location) {
+        this.address_location = address_location;
+    }
+
+    public String getAddress_landmark() {
+        return StringUtils.isNotEmpty(address_landmark) ? address_landmark : null;
+    }
+
+    public void setAddress_landmark(String address_landmark) {
+        this.address_landmark = address_landmark;
+    }
+
+    public String getAddress_village() {
+        return StringUtils.isNotEmpty(address_village) ? address_village : null;
+    }
+
+    public void setAddress_village(String address_village) {
+        this.address_village = address_village;
+    }
+
+    public String getAddress_block() {
+        return StringUtils.isNotEmpty(address_block) ? address_block : null;
+    }
+
+    public void setAddress_block(String address_block) {
+        this.address_block = address_block;
+    }
+
+    public String getAddress_district() {
+        return StringUtils.isNotEmpty(address_district) ? address_district : null;
+    }
+
+    public void setAddress_district(String address_district) {
+        this.address_district = address_district;
+    }
+
+    public String getAddress_state() {
+        return StringUtils.isNotEmpty(address_state) ? address_state : null;
+    }
+
+    public void setAddress_state(String address_state) {
+        this.address_state = address_state;
+    }
+
+    public String getSmear_sample_instance() {
+        return StringUtils.isNotEmpty(smear_sample_instance) ? smear_sample_instance : null;
+    }
+
+    public void setSmear_sample_instance(String smear_sample_instance) {
+        this.smear_sample_instance = smear_sample_instance;
+    }
+
+    public String getSmear_test_date_1() {
+        return StringUtils.isNotEmpty(smear_test_date_1) ? smear_test_date_1 : null;
+    }
+
+    public void setSmear_test_date_1(String smear_test_date_1) {
+        this.smear_test_date_1 = smear_test_date_1;
+    }
+
+    public String getSmear_test_result_1() {
+        return StringUtils.isNotEmpty(smear_test_result_1) ? smear_test_result_1 : null;
+    }
+
+    public void setSmear_test_result_1(String smear_test_result_1) {
+        this.smear_test_result_1 = smear_test_result_1;
+    }
+
+    public String getSmear_test_date_2() {
+        return StringUtils.isNotEmpty(smear_test_date_2) ? smear_test_date_2 : null;
+    }
+
+    public void setSmear_test_date_2(String smear_test_date_2) {
+        this.smear_test_date_2 = smear_test_date_2;
+    }
+
+    public String getSmear_test_result_2() {
+        return StringUtils.isNotEmpty(smear_test_result_2) ? smear_test_result_2 : null;
+    }
+
+    public void setSmear_test_result_2(String smear_test_result_2) {
+        this.smear_test_result_2 = smear_test_result_2;
+    }
+
+    public String getWeight_instance() {
+        return StringUtils.isNotEmpty(weight_instance) ? weight_instance : null;
+    }
+
+    public void setWeight_instance(String weight_instance) {
+        this.weight_instance = weight_instance;
+    }
+
+    public String getWeight() {
+        return StringUtils.isNotEmpty(weight) ? weight : null;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getTb_id() {
+        return StringUtils.isNotEmpty(tb_id) ? tb_id : null;
+    }
+
+    public void setTb_id(String tb_id) {
+        this.tb_id = tb_id;
+    }
+
+    public String getProvider_id() {
+        return StringUtils.isNotEmpty(provider_id) ? provider_id : null;
+    }
+
+    public void setProvider_id(String provider_id) {
+        this.provider_id = provider_id;
+    }
+
+    public String getTreatment_category() {
+        return StringUtils.isNotEmpty(treatment_category) ? treatment_category : null;
+    }
+
+    public void setTreatment_category(String treatment_category) {
+        this.treatment_category = treatment_category;
+    }
+
+    public String getTb_registration_number() {
+        return StringUtils.isNotEmpty(tb_registration_number) ? tb_registration_number : null;
+    }
+
+    public void setTb_registration_number(String tb_registration_number) {
+        this.tb_registration_number = tb_registration_number;
+    }
+
+    public String getAge() {
+        return StringUtils.isNotEmpty(age) ? age : null;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
 }

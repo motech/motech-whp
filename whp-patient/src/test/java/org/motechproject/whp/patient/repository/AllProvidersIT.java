@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-@ContextConfiguration(locations = "classpath*:/applicationDomainContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
 
     @Autowired

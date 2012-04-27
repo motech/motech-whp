@@ -41,4 +41,12 @@ public class Treatment extends MotechBaseDataObject {
         weightStatisticsList.add(weightStatistics);
     }
 
+    public SmearTestResults latestSmearTestResult() {
+        return smearTestResults.get(smearTestResults.size() - 1);
+    }
+
+    public WeightStatistics latestWeightStatistics() {
+        return weightStatisticsList.get(weightStatisticsList.size() - 1);
+    }
+
 }

@@ -32,6 +32,13 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             throw new WHPDomainException("Patient already present");
     }
 
+
+    @Override
+    public void update(Patient patient) {
+        allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
+        super.update(patient);
+    }
+
     @GenerateView
     public Patient findByPatientId(String patientId) {
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId).includeDocs(true);

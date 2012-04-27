@@ -12,19 +12,19 @@ import org.motechproject.whp.request.PatientRequest;
 
 import static org.junit.Assert.assertEquals;
 
-public class CreatePatientRequestMapperTest {
+public class PatientRequestMapperTest {
 
-    CreatePatientRequestMapper createPatientRequestMapper;
+    PatientRequestMapper patientRequestMapper;
 
     @Before
     public void setUp() {
-        createPatientRequestMapper = new CreatePatientRequestMapper();
+        patientRequestMapper = new PatientRequestMapper();
     }
 
     @Test
     public void shouldCreatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        CreatePatientRequest createPatientRequest = createPatientRequestMapper.map(patientRequest);
+        CreatePatientRequest createPatientRequest = patientRequestMapper.map(patientRequest);
         assertBasicPatientInfo(createPatientRequest, patientRequest);
         assertProvidedTreatment(createPatientRequest, patientRequest);
         assertTreatment(createPatientRequest, patientRequest);
@@ -73,7 +73,7 @@ public class CreatePatientRequestMapperTest {
 
     private void assertWeightStatistics(CreatePatientRequest createPatientRequest, PatientRequest patientRequest) {
         assertEquals(WeightInstance.valueOf(patientRequest.getWeight_instance()), createPatientRequest.getWeightStatistics().getWeightInstance());
-        assertEquals(Float.parseFloat(patientRequest.getWeight()), createPatientRequest.getWeightStatistics().getWeight(), 0.0);
+        assertEquals(Double.parseDouble(patientRequest.getWeight()), createPatientRequest.getWeightStatistics().getWeight(), 0.0);
         assertEquals("10/10/2010", createPatientRequest.getWeightStatistics().getMeasuringDate().toString("dd/MM/YYYY"));
     }
 

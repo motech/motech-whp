@@ -30,12 +30,12 @@ public class CreatePatientRequest {
     public CreatePatientRequest() {
     }
 
-    public CreatePatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber, String phi) {
+    public CreatePatientRequest setPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
         this.caseId = caseId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.gender = Gender.valueOf(gender);
-        this.patientType = PatientType.valueOf(patientType);
+        this.gender = gender;
+        this.patientType = patientType;
         this.mobileNumber = patientMobileNumber;
         this.phi = phi;
         return this;
@@ -46,27 +46,24 @@ public class CreatePatientRequest {
         return this;
     }
 
-    public CreatePatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
-        this.treatmentCategory = TreatmentCategory.get(category);
+    public CreatePatientRequest setTreatmentData(TreatmentCategory category, String tbId, String providerId, DiseaseClass diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
+        this.treatmentCategory = category;
         this.tbId = tbId;
         this.providerId = providerId;
-        this.diseaseClass = DiseaseClass.valueOf(diseaseClass);
+        this.diseaseClass = diseaseClass;
         this.age = patientAge;
         this.tbRegistrationNumber = registrationNumber;
         this.treatmentStartDate = treatmentStartDate;
         return this;
     }
 
-    public CreatePatientRequest setSmearTestResults(String smear_sample_instance, LocalDate smearTestDate1, String smear_result_1, LocalDate smearTestDate2, String smear_result_2) {
-        SmearTestSampleInstance smearTestSampleInstance = SmearTestSampleInstance.valueOf(smear_sample_instance);
-        SmearTestResult smearTestResult1 = SmearTestResult.valueOf(smear_result_1);
-        SmearTestResult smearTestResult2 = SmearTestResult.valueOf(smear_result_2);
-        this.smearTestResults = new SmearTestResults(smearTestSampleInstance, smearTestDate1, smearTestResult1, smearTestDate2, smearTestResult2);
+    public CreatePatientRequest setSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
+        this.smearTestResults = new SmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
         return this;
     }
 
-    public CreatePatientRequest setWeightStatistics(String weightInstance, double weight, LocalDate measuringDate) {
-        weightStatistics = new WeightStatistics(WeightInstance.valueOf(weightInstance), weight, measuringDate);
+    public CreatePatientRequest setWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
+        weightStatistics = new WeightStatistics(weightInstance, weight, measuringDate);
         return this;
     }
 

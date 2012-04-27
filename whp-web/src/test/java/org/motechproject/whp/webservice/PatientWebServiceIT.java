@@ -15,12 +15,14 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.request.PatientRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotSame;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
 public class PatientWebServiceIT extends SpringIntegrationTest {
@@ -37,8 +39,11 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     AllProviders allProviders;
     @Autowired
     VelocityEngine velocityEngine;
+    @Autowired
+    private PatientService patientService;
 
     PatientWebService patientWebService;
+
 
     @Before
     public void setUpDefaultProvider() {
@@ -50,7 +55,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, allTreatments, validator, velocityEngine);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, allTreatments, validator, velocityEngine);
     }
 
     @Test
@@ -61,17 +66,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldRecordLastProvidedTreatmentWhenCreatingPatient() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-
-        patientWebService.createCase(patientRequest);
-
-        Patient recordedPatient = allPatients.findByPatientId(patientRequest.getCase_id());
-        assertNotNull(recordedPatient.latestProvidedTreatment().getTreatment());
-    }
-
-    @Test
-    public void shouldRecordAllProvidedTreatmentsWhenCreatingPatient() {
+    public void shouldRecordProvidedTreatmentsWhenCreatingPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
 
         patientWebService.createCase(patientRequest);
@@ -88,6 +83,22 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientRequest.setProvider_id(unknownProviderId);
         patientWebService.createCase(patientRequest);
+    }
+
+    @Test
+    public void shouldUpdatePatient(){
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId("12341234").build();
+        patientWebService.createCase(patientRequest);
+
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+
+        PatientRequest simpleUpdateRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
+        patientWebService.updateCase(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(simpleUpdateRequest.getCase_id());
+
+        assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
+        assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());
     }
 
     @After

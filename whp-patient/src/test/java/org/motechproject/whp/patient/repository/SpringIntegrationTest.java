@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDomainContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public abstract class SpringIntegrationTest {
 
     @Qualifier("whpDbConnector")
