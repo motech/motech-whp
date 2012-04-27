@@ -66,10 +66,10 @@ public class PatientRequestMapper {
     protected void mapSmearTestResults(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
 
         SmearTestSampleInstance smearSampleInstance = patientWebRequest.getSmear_sample_instance() == null ? null : SmearTestSampleInstance.valueOf(patientWebRequest.getSmear_sample_instance());
-        LocalDate smearTestDate1 = localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_1());
+        LocalDate smearTestDate1 = patientWebRequest.getSmear_test_date_1() == null ? null : localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_1());
         SmearTestResult smearTestResult1 = patientWebRequest.getSmear_test_result_1() == null ? null : SmearTestResult.valueOf(patientWebRequest.getSmear_test_result_1());
 
-        LocalDate smearTestDate2 = localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_2());
+        LocalDate smearTestDate2 = patientWebRequest.getSmear_test_date_2() == null ? null : localDateFormatter.parseLocalDate(patientWebRequest.getSmear_test_date_2());
         SmearTestResult smearTestResult2 = patientWebRequest.getSmear_test_result_2() == null ? null : SmearTestResult.valueOf(patientWebRequest.getSmear_test_result_2());
 
         patientRequest.setSmearTestResults(smearSampleInstance, smearTestDate1, smearTestResult1, smearTestDate2, smearTestResult2);

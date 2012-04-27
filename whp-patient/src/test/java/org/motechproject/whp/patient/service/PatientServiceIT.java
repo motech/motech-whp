@@ -52,6 +52,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
 
         assertEquals(updatePatientRequest.getMobileNumber(), updatedPatient.getPhoneNumber());
+        assertEquals(updatePatientRequest.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
         assertEquals(updatePatientRequest.getTbRegistrationNumber(), treatment.getTbRegistrationNumber());
         assertEquals(updatePatientRequest.getAge(), treatment.getPatientAge());

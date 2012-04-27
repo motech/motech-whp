@@ -29,6 +29,7 @@ public class PatientMapper {
         mapWeightStatistics(patientRequest, currentTreatment);
 
         currentTreatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
+        patient.setLastModifiedDate(patientRequest.getLastModifiedDate());
 
         return patient;
     }
