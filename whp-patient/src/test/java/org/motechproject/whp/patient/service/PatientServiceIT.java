@@ -100,5 +100,10 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.simpleUpdate(updatePatientRequest);
     }
 
+    @Test(expected = WHPDomainException.class)
+    public void shouldThrowExceptionWhenPatientWithGivenCaseIdDoesNotExist() {
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
+        patientService.simpleUpdate(updatePatientRequest);
+    }
 
 }

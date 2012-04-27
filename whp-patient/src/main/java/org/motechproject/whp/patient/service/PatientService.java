@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.service;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -33,6 +34,9 @@ public class PatientService {
 
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCaseId());
+        if(patient == null) {
+            throw new WHPDomainException("No such patient exists");
+        }
 
         Patient updatedPatient = new PatientMapper().mapUpdates(patientRequest, patient);
         allPatients.update(updatedPatient);
