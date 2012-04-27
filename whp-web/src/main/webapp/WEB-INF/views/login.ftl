@@ -4,7 +4,7 @@
 
 <div class="span12" id="loginForm">
     <#if RequestParameters.login_error?exists>
-        <div id="loginError" class="alert alert-error"> The username or password you entered is incorrect. Please enter the correct
+        <div id="loginError" class="alert alert-error row"> The username or password you entered is incorrect. Please enter the correct
             credentials.
         </div>
     </#if>
