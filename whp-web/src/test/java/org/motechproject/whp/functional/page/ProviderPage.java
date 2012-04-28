@@ -7,7 +7,7 @@ import org.openqa.selenium.support.How;
 
 public class ProviderPage extends Page {
     
-    @FindBy(how = How.ID, using = "welcomeMessage")
+    @FindBy(how = How.ID, using = "links")
     private WebElement welcomeDiv;
 
     public ProviderPage(WebDriver webDriver) {
@@ -16,7 +16,7 @@ public class ProviderPage extends Page {
 
     @Override
     protected void waitForPageToLoad() {
-        waitForElementWithIdToLoad("welcomeMessage");
+        waitForElementWithIdToLoad("links");
     }
 
     public String getWelcomeText() {

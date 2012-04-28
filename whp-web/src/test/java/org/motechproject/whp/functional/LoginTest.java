@@ -20,14 +20,14 @@ public class LoginTest extends BaseTest {
     @Test
     public void testLoginSuccessForAdministrator() {
         ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome admin!"));
+        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome admin"));
         providerPage.logout();
     }
 
     @Test
     public void testLoginSuccessForProvider() {
         ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword("raj", "password");
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome raj!"));
+        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome raj"));
         providerPage.logout();
     }
 }

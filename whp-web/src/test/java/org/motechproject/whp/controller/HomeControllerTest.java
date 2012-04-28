@@ -8,6 +8,7 @@ import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.refdata.WHPRefDataConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,14 +37,22 @@ public class HomeControllerTest {
     @Test
     public void shouldRedirectToTheListPageForProviderUponLogin() {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
-        login(provider);
+        login(authenticatedUserFor(provider));
         setupProvider(provider);
         assertEquals("redirect:/providers/" + provider.getProviderId(), homeController.homePage(request));
     }
 
-    private void login(Provider provider) {
+    @Test
+    public void shouldRedirectToTheAdminPageWhenAdminLogsIn() {
+        Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
+        login(authenticatedAdmin());
+        setupProvider(provider);
+        assertEquals("admin", homeController.homePage(request));
+    }
+
+    private void login(AuthenticatedUser authenticatedUser) {
         HttpSession session = mock(HttpSession.class);
-        AuthenticatedUser user = authenticatedUserFor(provider);
+        AuthenticatedUser user = authenticatedUser;
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(user);
     }
@@ -51,6 +60,13 @@ public class HomeControllerTest {
     private AuthenticatedUser authenticatedUserFor(Provider provider) {
         AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
         when(authenticatedUser.getExternalId()).thenReturn(provider.getId());
+        when(authenticatedUser.getUserType()).thenReturn(WHPRefDataConstants.PROVIDER_USER_TYPE);
+        return authenticatedUser;
+    }
+
+    private AuthenticatedUser authenticatedAdmin() {
+        AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
+        when(authenticatedUser.getUserType()).thenReturn(WHPRefDataConstants.ADMIN_USER_TYPE);
         return authenticatedUser;
     }
 

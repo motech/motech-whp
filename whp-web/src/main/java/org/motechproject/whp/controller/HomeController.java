@@ -3,6 +3,7 @@ package org.motechproject.whp.controller;
 import org.motechproject.security.LoginSuccessHandler;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.refdata.WHPRefDataConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,10 @@ public class HomeController {
     @RequestMapping("/")
     public String homePage(HttpServletRequest request) {
         AuthenticatedUser user = (AuthenticatedUser) request.getSession().getAttribute(LoginSuccessHandler.LOGGED_IN_USER);
-        return "redirect:/providers/" + allProviders.get(user.getExternalId()).getProviderId();
+        if (user.getUserType().equals(WHPRefDataConstants.ADMIN_USER_TYPE)) {
+            return "admin";
+        } else {
+            return "redirect:/providers/" + allProviders.get(user.getExternalId()).getProviderId();
+        }
     }
 }

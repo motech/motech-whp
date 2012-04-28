@@ -27,11 +27,6 @@ public class WHPWebElement implements ExtendedWebElement {
     }
 
     @Override
-    public String getValue() {
-        return webElement.getValue();
-    }
-
-    @Override
     public void sendKeys(CharSequence... charSequences) {
         click();
         clear();
@@ -54,18 +49,8 @@ public class WHPWebElement implements ExtendedWebElement {
     }
 
     @Override
-    public boolean toggle() {
-        return webElement.toggle();
-    }
-
-    @Override
     public boolean isSelected() {
         return webElement.isSelected();
-    }
-
-    @Override
-    public void setSelected() {
-        webElement.setSelected();
     }
 
     @Override
@@ -90,6 +75,26 @@ public class WHPWebElement implements ExtendedWebElement {
         } catch (NoSuchElementException e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean isDisplayed() {
+        return webElement.isDisplayed();
+    }
+
+    @Override
+    public Point getLocation() {
+        return webElement.getLocation();
+    }
+
+    @Override
+    public Dimension getSize() {
+        return webElement.getSize();
+    }
+
+    @Override
+    public String getCssValue(String s) {
+        return webElement.getCssValue(s);
     }
 
     @Override

@@ -3,17 +3,17 @@ package org.motechproject.whp.functional.page;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.TimeoutException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class Page {
-    
+
     private Logger logger = LoggerFactory.getLogger(Page.class);
     protected WebDriver webDriver;
     private static final long MaxPageLoadTime = 30;
@@ -41,7 +41,6 @@ public abstract class Page {
     @FindBy(how = How.LINK_TEXT, using = "Logout")
     private WebElement logoutLink;
 
-    
 
     private void searchById(String id) {
         searchBox = WebDriverFactory.createWebElement(searchBox);
@@ -89,8 +88,7 @@ public abstract class Page {
                     }
                 });
                 if (foundElement) break;
-            }
-            catch (TimeoutException e) {
+            } catch (WebDriverException e) {
                 logger.info(String.format("Retried %s time(s) ...", i));
                 if (i == RetryTimes)
                     throw e;
