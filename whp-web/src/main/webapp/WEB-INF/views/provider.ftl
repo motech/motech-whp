@@ -29,17 +29,24 @@
         </tr>
         </thead>
         <tbody>
-            <#list patientList as patient>
+            <#if patientList?size == 0>
             <tr>
-                <td>${patient.firstName}</td>
-                <td>${patient.lastName}</td>
-                <td>${patient.currentProvidedTreatment.treatment.patientAge}</td>
-                <td>${patient.gender}</td>
-                <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
-                <td>${patient.currentProvidedTreatment.treatment.treatmentCategory}</td>
-                <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
+                <td  style="text-align: center" colspan="7">No patients to show</td>
             </tr>
-            </#list>
+            <#else>
+                <#list patientList as patient>
+                <tr>
+                    <td>${patient.firstName}</td>
+                    <td>${patient.lastName}</td>
+                    <td>${patient.currentProvidedTreatment.treatment.patientAge}</td>
+                    <td>${patient.gender}</td>
+                    <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
+                    <td>${patient.currentProvidedTreatment.treatment.treatmentCategory}</td>
+                    <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
+                </tr>
+                </#list>
+            </#if>
+
         </tbody>
     </table>
 </div>
