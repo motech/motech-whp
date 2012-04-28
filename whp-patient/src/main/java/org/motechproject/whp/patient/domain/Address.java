@@ -39,5 +39,4 @@ public class Address {
     public boolean isEmpty() {
         return houseNumber == null && block == null && village == null && district == null && state == null;
     }
-
 }

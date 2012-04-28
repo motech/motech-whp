@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.repository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
+import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
@@ -11,6 +12,8 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> {
@@ -65,4 +68,15 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             providedTreatment.setTreatment(treatment);
         }
     }
+
+    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentProvidedTreatment) {emit(doc.currentProvidedTreatment.providerId, doc._id);}}")
+    public List<Patient> findByCurrentProviderId(String providerId) {
+        ViewQuery q = createQuery("find_by_providerId").key(providerId).includeDocs(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        for (Patient patient : patients) {
+            loadPatientDependencies(patient);
+        }
+        return patients;
+    }
+
 }

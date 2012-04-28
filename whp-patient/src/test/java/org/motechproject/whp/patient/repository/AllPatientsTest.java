@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class AllPatientsTest extends SpringIntegrationTest {
@@ -18,14 +19,9 @@ public class AllPatientsTest extends SpringIntegrationTest {
     @Autowired
     AllTreatments allTreatments;
 
-    @After
-    public void tearDown() {
-        markForDeletion(allPatients.getAll().toArray());
-    }
-
     @Test
     public void shouldSavePatientInfo() {
-        allPatients.add(createPatient());
+        createPatient("cha01100001", "providerId");
 
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
         Treatment treatment = savedPatient.getCurrentProvidedTreatment().getTreatment();
@@ -42,17 +38,35 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertEquals(DateUtil.today(), smearTestResults.getTestDate1());
     }
 
-    private Patient createPatient() {
+    @Test
+    public void shouldFetchPatientsByCurrentProviderId() {
+        Patient requiredPatient = createPatient("patientId1", "providerId1");
+        createPatient("patientId2", "providerId2");
+
+        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.findByCurrentProviderId("providerId1").toArray());
+    }
+
+    @Test
+    public void shouldFetchAllPatientsForAProvider() {
+        Patient patient1 = createPatient("patientId1", "providerId1");
+        Patient patient2 = createPatient("patientId2", "providerId1");
+
+        assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.findByCurrentProviderId("providerId1").toArray());
+    }
+
+    private Patient createPatient(String patientId, String providerId) {
         Treatment treatment = new Treatment(TreatmentCategory.Category01, DiseaseClass.P, 200);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);
 
-        Patient patient = new Patient("cha01100001", "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
-        ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tdId");
+        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId");
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);
         patient.addProvidedTreatment(providedTreatment);
+
+        allPatients.add(patient);
         return patient;
     }
 
@@ -68,5 +82,11 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     private WeightStatistics weightStatistics() {
         return new WeightStatistics(WeightInstance.PreTreatment, 88.0, DateUtil.today());
+    }
+
+    @After
+    public void tearDown() {
+        markForDeletion(allPatients.getAll().toArray());
+        markForDeletion(allTreatments.getAll().toArray());
     }
 }

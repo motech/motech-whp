@@ -12,18 +12,18 @@
     <http auto-config="false" use-expressions="true">
 
 
-
         <form-login login-processing-url="/security/j_spring_security_check"
                     login-page="/login"
                     authentication-failure-url="/login?login_error=t"
                     authentication-success-handler-ref="loginSuccessHandler"/>
-        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false" success-handler-ref="logoutSuccessHandler"/>
+        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false"
+                success-handler-ref="logoutSuccessHandler"/>
 
         <!--Dont change the order of the rules-->
         <!-- Only admin -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
-
-        <intercept-url pattern="/patient/**" access="hasAnyRole('ADMIN', 'PROVIDER')" requires-channel="any"/>
+        <intercept-url pattern="/" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/providers/**" access="hasRole('PROVIDER')" requires-channel="any"/>
     </http>
 
     <authentication-manager alias="authenticationManager">

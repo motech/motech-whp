@@ -28,7 +28,9 @@ public class PatientService {
 
         allPatients.add(patient);
         allTreatments.add(treatment);
+
         patient.latestProvidedTreatment().setTreatmentDocId(treatment.getId());
+
         allPatients.update(patient);
     }
 

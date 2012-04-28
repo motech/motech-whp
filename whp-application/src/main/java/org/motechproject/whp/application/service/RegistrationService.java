@@ -32,5 +32,4 @@ public class RegistrationService {
                 providerRequest.getDistrict(),
                 providerRequest.getLastModifiedDate());
     }
-
 }

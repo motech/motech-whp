@@ -35,6 +35,11 @@ public class Treatment extends MotechBaseDataObject {
         this.patientAge = patientAge;
     }
 
+    @JsonIgnore
+    public String getStartDateAsDate() {
+        return startDate.toLocalDate().toString("dd/MM/YYYY");
+    }
+
     public void addSmearTestResult(SmearTestResults smearTestResults) {
         this.smearTestResults.add(smearTestResults);
     }

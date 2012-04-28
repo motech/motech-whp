@@ -45,9 +45,9 @@ public class LoginPage extends Page {
         return this;
     }
 
-    public PatientPage loginWithCorrectAdminUserNamePassword() {
+    public ProviderPage loginWithCorrectAdminUserNamePassword() {
         login(CORRECT_USERNAME, CORRECT_PASSWORD);
-        return MyPageFactory.initElements(webDriver, PatientPage.class);
+        return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
 
     private void login(String userName, String password) {
@@ -62,9 +62,9 @@ public class LoginPage extends Page {
         return errorMessage.getText();
     }
 
-    public PatientPage loginWithProviderUserNamePassword(String username, String password) {
+    public ProviderPage loginWithProviderUserNamePassword(String username, String password) {
         login(username, password);
-        return MyPageFactory.initElements(webDriver, PatientPage.class);
+        return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
 
     @Override

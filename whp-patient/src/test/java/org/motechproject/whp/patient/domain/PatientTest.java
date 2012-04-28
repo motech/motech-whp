@@ -32,4 +32,12 @@ public class PatientTest {
         Patient patientWithoutProvidedTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, PatientType.New, "1111111111");
         assertTrue(patientWithoutProvidedTreatment.getProvidedTreatments().isEmpty());
     }
+
+    @Test
+    public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAddedForPatientWhoHasAHistory() {
+        ProvidedTreatment newerProviderTreatment = new ProvidedTreatment("newerProviderId", "newerTbId");
+        patient.addProvidedTreatment(newerProviderTreatment);
+
+        assertArrayEquals(new Object[]{providedTreatment, newProviderTreatment}, patient.getProvidedTreatments().toArray());
+    }
 }

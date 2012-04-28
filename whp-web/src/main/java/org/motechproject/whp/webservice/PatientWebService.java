@@ -58,5 +58,4 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
             throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 }

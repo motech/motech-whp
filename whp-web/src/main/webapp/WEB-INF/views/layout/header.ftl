@@ -7,6 +7,7 @@
     </div>
     <div class="row pull-right">
         <#if Session.loggedInUser?exists>
+            Welcome Raj |
             <a href="<@spring.url '/' />">Home</a>
             | ${Session.loggedInUser.username}
             | <a href="<@spring.url '/security/j_spring_security_logout' />">Logout</a>

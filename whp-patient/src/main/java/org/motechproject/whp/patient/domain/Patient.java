@@ -1,8 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
@@ -26,9 +24,6 @@ public class Patient extends MotechBaseDataObject {
     private PatientStatus status = PatientStatus.Open;
     private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
     private DateTime lastModifiedDate;
-
-    @Getter
-    @Setter
     private ProvidedTreatment currentProvidedTreatment;
 
     public Patient() {
@@ -58,5 +53,4 @@ public class Patient extends MotechBaseDataObject {
     public boolean isValid(ValidationErrors validationErrors) {
         return currentProvidedTreatment.isValid(validationErrors);
     }
-
 }

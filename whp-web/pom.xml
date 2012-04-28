@@ -157,7 +157,7 @@
                 <executions>
                     <execution>
                         <id>load-seed-data-in-Db</id>
-                        <phase>pre-integration-test</phase>
+                        <phase>post-integration-test</phase>
                         <configuration>
                             <target unless="skipTests">
                                 <echo message="Seed data loading: START"/>

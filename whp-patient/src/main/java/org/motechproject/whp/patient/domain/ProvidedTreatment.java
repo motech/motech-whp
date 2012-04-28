@@ -6,18 +6,20 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.repository.ValidationErrors;
 
-
 public class ProvidedTreatment {
 
     @Getter
     @Setter
     private String providerId;
+
     @Getter
     @Setter
     private String tbId;
+
     @Getter
     @Setter
     private LocalDate startDate;
+
     @Getter
     @Setter
     private LocalDate endDate;

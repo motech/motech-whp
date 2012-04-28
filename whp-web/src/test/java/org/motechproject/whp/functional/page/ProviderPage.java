@@ -5,12 +5,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
-public class PatientPage extends Page {
+public class ProviderPage extends Page {
     
     @FindBy(how = How.ID, using = "welcomeMessage")
     private WebElement welcomeDiv;
 
-    public PatientPage(WebDriver webDriver) {
+    public ProviderPage(WebDriver webDriver) {
         super(webDriver);
     }
 

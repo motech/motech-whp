@@ -31,5 +31,4 @@ public class Provider extends MotechBaseDataObject {
         this.district = district;
         this.lastModifiedDate = lastModifiedDate;
     }
-
 }
