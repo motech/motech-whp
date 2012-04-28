@@ -17,7 +17,7 @@ import static junit.framework.Assert.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class ProviderWebServiceIT extends SpringIntegrationTest {
+public class ProviderWebServiceTest extends SpringIntegrationTest {
 
     @Autowired
     private AllProviders allProviders;

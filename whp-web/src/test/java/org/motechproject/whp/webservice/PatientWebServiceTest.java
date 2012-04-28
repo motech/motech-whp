@@ -25,7 +25,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class PatientWebServiceIT extends SpringIntegrationTest {
+public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Autowired
     RegistrationService patientRegistrationService;

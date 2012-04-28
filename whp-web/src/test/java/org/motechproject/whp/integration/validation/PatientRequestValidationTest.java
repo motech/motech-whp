@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class PatientRequestValidationIT extends SpringIntegrationTest {
+public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();

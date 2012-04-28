@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class PatientServiceIT extends SpringIntegrationTest {
+public class PatientServiceTest extends SpringIntegrationTest {
 
     public static final String CASE_ID = "123456";
     @Autowired

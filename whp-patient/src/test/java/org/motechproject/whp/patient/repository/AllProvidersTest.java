@@ -10,7 +10,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class AllProvidersIT extends SpringIntegrationTest {
+public class AllProvidersTest extends SpringIntegrationTest {
 
     @Autowired
     AllProviders allProviders;
