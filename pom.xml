@@ -9,7 +9,6 @@
     <name>motech-whp</name>
 
     <modules>
-        <module>whp-validation</module>
         <module>whp-patient</module>
         <module>whp-application</module>
         <module>whp-refdata</module>
