@@ -3,13 +3,13 @@ package org.motechproject.whp.webservice;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
+import org.motechproject.validation.validator.BeanValidator;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.ProviderWebRequest;
-import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

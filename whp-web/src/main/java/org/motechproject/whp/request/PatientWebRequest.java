@@ -1,12 +1,12 @@
 package org.motechproject.whp.request;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.validation.constraints.Enumeration;
+import org.motechproject.validation.constraints.NamedConstraint;
+import org.motechproject.validation.constraints.Scope;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
-import org.motechproject.whp.validation.constraints.Enumeration;
-import org.motechproject.whp.validation.constraints.NamedConstraint;
-import org.motechproject.whp.validation.constraints.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Digits;

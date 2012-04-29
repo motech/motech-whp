@@ -1,8 +1,8 @@
 package org.motechproject.whp.validation;
 
+import org.motechproject.validation.validator.BeanValidator;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.util.MultipleFieldErrorsMessage;
-import org.motechproject.whp.validation.validator.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;

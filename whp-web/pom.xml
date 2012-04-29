@@ -15,8 +15,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-validation</artifactId>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-validation</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
