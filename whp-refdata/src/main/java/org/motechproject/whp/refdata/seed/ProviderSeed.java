@@ -15,12 +15,14 @@ import java.util.Arrays;
 
 @Service
 public class ProviderSeed {
+
     @Autowired
     private MotechAuthenticationService authenticationService;
     @Autowired
     private AllProviders allProviders;
 
-    @Seed(priority = 1)
+    // Need not have this, till we create logins for acutal providers
+//    @Seed(priority = 1)
     public void load() {
         Provider provider = createProvider();
         authenticationService.register("raj", "password", WHPRefDataConstants.PROVIDER_USER_TYPE, provider.getId(), Arrays.asList(WHPRole.PROVIDER.name()));
