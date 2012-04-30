@@ -74,7 +74,6 @@
             type:'POST',
             url: "http://localhost:8080/whp/provider/process",
             data: providerXML,
-            dataType : 'xml',
             contentType: "application/xml; charset=utf-8",
             success:function(data, textStatus, jqXHR) {
                 $('#statusMessage').html("Status of request: SUCCESS");

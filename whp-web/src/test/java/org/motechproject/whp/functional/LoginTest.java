@@ -2,6 +2,7 @@ package org.motechproject.whp.functional;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
@@ -18,12 +19,14 @@ public class LoginTest extends BaseTest {
     private ProviderCreatePage providerCreatePage;
     private PatientCreatePage patientCreatePage;
 
+    @Ignore
     @Test
     public void testLoginFailure() {
         LoginPage page = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithIncorrectAdminUserNamePassword();
         assertEquals(LoginPage.FAILURE_MESSAGE, page.errorMessage());
     }
 
+    @Ignore
     @Test
     public void testLoginSuccessForAdministrator() {
         ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
@@ -31,6 +34,7 @@ public class LoginTest extends BaseTest {
         providerPage.logout();
     }
 
+    @Ignore
     @Test
     public void testLoginSuccessForProvider() {
         providerCreatePage = ProviderCreatePage.fetch(webDriver);
