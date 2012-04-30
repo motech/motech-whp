@@ -30,7 +30,7 @@ public class HomeController {
         if (user.getUserType().equals(WHPRefDataConstants.ADMIN_USER_TYPE)) {
             return "admin";
         } else {
-            return "redirect:/providers/" + allProviders.get(user.getExternalId()).getProviderId();
+            return "redirect:/patients?provider=" + allProviders.get(user.getExternalId()).getProviderId();
         }
     }
 

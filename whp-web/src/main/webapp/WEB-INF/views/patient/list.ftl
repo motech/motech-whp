@@ -1,4 +1,5 @@
-<#import "layout/default.ftl" as layout>
+<#import "/spring.ftl" as spring />
+<#import "../layout/default.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-TB">
 <div class="row" id="welcomeMessage">
 
@@ -32,6 +33,9 @@
             <th>
                 Treatment Startdate
             </th>
+            <th>
+                Adherence
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +55,7 @@
                     <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
                     <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                     <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
+                    <td><a href="<@spring.url '/adherence/${patient.patientId}' />">Edit</a></td>
                 </tr>
                 </#list>
             </#if>

@@ -39,7 +39,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUserFor(provider));
         setupProvider(provider);
-        assertEquals("redirect:/providers/" + provider.getProviderId(), homeController.homePage(request));
+        assertEquals("redirect:/patients?provider=" + provider.getProviderId(), homeController.homePage(request));
     }
 
     @Test
@@ -52,9 +52,8 @@ public class HomeControllerTest {
 
     private void login(AuthenticatedUser authenticatedUser) {
         HttpSession session = mock(HttpSession.class);
-        AuthenticatedUser user = authenticatedUser;
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(user);
+        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }
 
     private AuthenticatedUser authenticatedUserFor(Provider provider) {
