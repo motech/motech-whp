@@ -2,10 +2,13 @@ package org.motechproject.whp.patient.repository;
 
 import org.junit.After;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -55,7 +58,8 @@ public class AllPatientsTest extends SpringIntegrationTest {
     }
 
     private Patient createPatient(String patientId, String providerId) {
-        Treatment treatment = new Treatment(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18), DiseaseClass.P, 200);
+        TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);

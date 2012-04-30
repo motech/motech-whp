@@ -3,11 +3,14 @@ package org.motechproject.whp.mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.request.PatientWebRequest;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -20,12 +23,10 @@ public class PatientRequestMapperTest {
 
     PatientRequestMapper patientRequestMapper;
 
-    private TreatmentCategory treatmentCategory;
-
     @Before
     public void setUp() {
         initMocks(this);
-        treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22);
+        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, Arrays.asList(DayOfWeek.Monday));
         patientRequestMapper = new PatientRequestMapper(allTreatmentCategories);
         when(allTreatmentCategories.findByCode("01")).thenReturn(treatmentCategory);
     }

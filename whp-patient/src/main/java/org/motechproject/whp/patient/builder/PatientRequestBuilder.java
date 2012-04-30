@@ -1,9 +1,12 @@
 package org.motechproject.whp.patient.builder;
 
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
+
+import java.util.Arrays;
 
 public class PatientRequestBuilder {
 
@@ -14,9 +17,10 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withDefaults() {
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHSTransfer, "1234567890", "phi")
-                .setTreatmentData(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18), "12345678901", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category, "12345678901", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .setSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19));

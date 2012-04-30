@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout>
-<@layout.defaultLayout "MoTeCH-TB">
-<div class="row" id="welcomeMessage">
+<@layout.defaultLayout "Patient List">
+<div class="row">
 
     <table class="table">
         <thead>
