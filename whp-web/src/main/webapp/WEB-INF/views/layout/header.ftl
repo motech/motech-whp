@@ -5,6 +5,11 @@
             <img class="pull-right" src="<@spring.url '/resources/images/whplogo.png'/>"/>
         </div>
     </div>
+    <div id="version" class="row pull-left">
+        <#if Session.version?exists>
+            Version 1.0.${Session.version}
+        </#if>
+    </div>
     <div id="links" class="row pull-right">
         <#if Session.loggedInUser?exists>
             Welcome ${Session.loggedInUser.username} |
