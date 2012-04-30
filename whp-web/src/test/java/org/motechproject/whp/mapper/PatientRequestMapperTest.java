@@ -2,23 +2,32 @@ package org.motechproject.whp.mapper;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.patient.domain.WeightInstance;
+import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.request.PatientWebRequest;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PatientRequestMapperTest {
 
+    @Mock
+    AllTreatmentCategories allTreatmentCategories;
+
     PatientRequestMapper patientRequestMapper;
+
+    private TreatmentCategory treatmentCategory;
 
     @Before
     public void setUp() {
-        patientRequestMapper = new PatientRequestMapper();
+        initMocks(this);
+        treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22);
+        patientRequestMapper = new PatientRequestMapper(allTreatmentCategories);
+        when(allTreatmentCategories.findByCode("01")).thenReturn(treatmentCategory);
     }
 
     @Test
@@ -54,7 +63,7 @@ public class PatientRequestMapperTest {
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
-        assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatmentCategory().value());
+        assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatmentCategory().getCode());
 
         assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTbRegistrationNumber());
         assertEquals(patientWebRequest.getDate_modified(), patientRequest.getTreatmentStartDate().toString("dd/MM/YYYY HH:mm:ss"));

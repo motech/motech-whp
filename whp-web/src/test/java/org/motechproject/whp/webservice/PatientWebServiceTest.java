@@ -11,10 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPException;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.patient.repository.AllTreatments;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.repository.*;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -33,6 +30,8 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     AllPatients allPatients;
     @Autowired
     AllTreatments allTreatments;
+    @Autowired
+    AllTreatmentCategories allTreatmentCategories;
     @Autowired
     RequestValidator validator;
     @Autowired
@@ -55,7 +54,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, allTreatmentCategories);
     }
 
     @Test

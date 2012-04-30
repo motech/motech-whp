@@ -55,7 +55,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
     }
 
     private Patient createPatient(String patientId, String providerId) {
-        Treatment treatment = new Treatment(TreatmentCategory.Category01, DiseaseClass.P, 200);
+        Treatment treatment = new Treatment(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18), DiseaseClass.P, 200);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);

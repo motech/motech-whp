@@ -6,13 +6,24 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.request.PatientWebRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PatientRequestMapper {
+
+    AllTreatmentCategories allTreatmentCategories;
 
     protected final DateTimeFormatter localDateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
     protected final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");
 
+    @Autowired
+    public PatientRequestMapper(AllTreatmentCategories allTreatmentCategories) {
+        this.allTreatmentCategories = allTreatmentCategories;
+    }
+    
     public PatientRequest map(PatientWebRequest patientWebRequest) {
         PatientRequest patientRequest = new PatientRequest();
 
@@ -50,7 +61,7 @@ public class PatientRequestMapper {
     }
 
     protected void mapTreatmentData(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
-        TreatmentCategory treatment_category = patientWebRequest.getTreatment_category() == null ? null : TreatmentCategory.get(patientWebRequest.getTreatment_category());
+        TreatmentCategory treatment_category = patientWebRequest.getTreatment_category() == null ? null : allTreatmentCategories.findByCode((patientWebRequest.getTreatment_category()));
         DiseaseClass disease_class = patientWebRequest.getDisease_class() == null ? null : DiseaseClass.valueOf(patientWebRequest.getDisease_class());
         DateTime treatmentStartDate = patientWebRequest.getDate_modified() == null ? null : dateTimeFormatter.parseDateTime(patientWebRequest.getDate_modified());
         patientRequest.setTreatmentData(

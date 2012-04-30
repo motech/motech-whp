@@ -7,6 +7,7 @@ import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -20,17 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/patient/**")
 public class PatientWebService extends CaseService<PatientWebRequest> {
 
+    AllTreatmentCategories allTreatmentCategories;
     RegistrationService registrationService;
     PatientService patientService;
 
     RequestValidator validator;
 
     @Autowired
-    public PatientWebService(RegistrationService registrationService, PatientService patientService, RequestValidator validator, VelocityEngine velocityEngine) {
+    public PatientWebService(RegistrationService registrationService, PatientService patientService, RequestValidator validator, VelocityEngine velocityEngine, AllTreatmentCategories allTreatmentCategories) {
         super(PatientWebRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.patientService = patientService;
         this.validator = validator;
+        this.allTreatmentCategories = allTreatmentCategories;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         validator.validate(patientWebRequest, ValidationScope.simpleUpdate);
-        PatientRequest patientRequest = new PatientRequestMapper().map(patientWebRequest);
+        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories).map(patientWebRequest);
         try {
             patientService.simpleUpdate(patientRequest);
         } catch (WHPDomainException e) {
@@ -51,7 +54,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void createCase(PatientWebRequest patientWebRequest) {
         validator.validate(patientWebRequest, ValidationScope.create);
-        PatientRequest patientRequest = new PatientRequestMapper().map(patientWebRequest);
+        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories).map(patientWebRequest);
         try {
             registrationService.registerPatient(patientRequest);
         } catch (WHPDomainException e) {
