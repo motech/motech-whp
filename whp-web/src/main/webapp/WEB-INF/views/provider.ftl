@@ -49,7 +49,7 @@
                     <td>${patient.currentProvidedTreatment.treatment.patientAge}</td>
                     <td>${patient.gender}</td>
                     <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
-                    <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.displayName}</td>
+                    <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                     <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
                 </tr>
                 </#list>
