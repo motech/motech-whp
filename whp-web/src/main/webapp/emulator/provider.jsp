@@ -6,7 +6,7 @@
 <%@page import="java.util.Arrays"%>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <%
         ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
         MotechAuthenticationService authenticationService = (MotechAuthenticationService) appCtx.getBean("motechAuthenticationService", MotechAuthenticationService.class);
@@ -22,7 +22,7 @@
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
 <br/>
 <br/>
-<form name="testSubmit" action="provider.jsp" method="POST">
+<form name="testSubmit" action="/whp/emulator/provider.jsp" method="POST">
     <span style="vertical-align:top">Enter Provider Id:</span>
     <input id="provider_id" name="provider_id" type="text" value="raj"/>
     <br/>
@@ -43,8 +43,7 @@
     <br/>
     <input type="button" id="post-button" value="Submit"/>
 </form>
-<textarea id="template" style="display:none">
-    <$REGISTRATION$ xmlns="http://openrosa.org/user/registration">
+<textarea id="template" style="display:none"><$REGISTRATION$ xmlns="http://openrosa.org/user/registration">
     <username></username>
     <password></password>
     <uuid></uuid>
@@ -56,10 +55,10 @@
         <data key="provider_id">$PROVIDER_ID$</data>
         <data key="district">$DISTRICT$</data>
     </user_data>
-    </$REGISTRATION$>
-</textarea>
+    </$REGISTRATION$></textarea>
 <script type="text/javascript">
     var providerXML = $("#template").val();
+    providerXML = $.trim(providerXML);
     function replaceTemplateValues(){
         providerXML = providerXML.replace('$PROVIDER_ID$', $("#provider_id").val());
         providerXML = providerXML.replace('$PRIMARY_MOBILE$', $("#primary_mobile").val());
@@ -73,11 +72,11 @@
         replaceTemplateValues();
         $.ajax({
             type:'POST',
-            url: $(location).attr('origin') + "/whp/provider/process",
+            url: "http://localhost:8080/whp/provider/process",
             data: providerXML,
             dataType : 'xml',
             contentType: "application/xml; charset=utf-8",
-            success:function() {
+            success:function(data, textStatus, jqXHR) {
                 $('#statusMessage').html("Status of request: SUCCESS");
                 document.forms["testSubmit"].submit();
             },
