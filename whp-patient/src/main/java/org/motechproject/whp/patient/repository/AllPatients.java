@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository;
 
+import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
@@ -69,9 +70,11 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         }
     }
 
-    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentProvidedTreatment) {emit(doc.currentProvidedTreatment.providerId, doc._id);}}")
+    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentProvidedTreatment) {emit([doc.currentProvidedTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> findByCurrentProviderId(String providerId) {
-        ViewQuery q = createQuery("find_by_providerId").key(providerId).includeDocs(true);
+        ComplexKey startKey = ComplexKey.of(providerId, null);
+        ComplexKey endKey = ComplexKey.of(providerId, ComplexKey.emptyObject());
+        ViewQuery q = createQuery("find_by_providerId").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         for (Patient patient : patients) {
             loadPatientDependencies(patient);

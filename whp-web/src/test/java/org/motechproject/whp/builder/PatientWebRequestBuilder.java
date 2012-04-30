@@ -3,11 +3,11 @@ package org.motechproject.whp.builder;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.request.PatientWebRequest;
 
-public class PatientRequestBuilder {
+public class PatientWebRequestBuilder {
 
     private PatientWebRequest patientWebRequest = new PatientWebRequest();
 
-    public PatientRequestBuilder withDefaults() {
+    public PatientWebRequestBuilder withDefaults() {
 
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.getValue(), PatientType.PHSTransfer.name(), "1234567890", "phi")
@@ -19,7 +19,7 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withSimpleUpdateFields() {
+    public PatientWebRequestBuilder withSimpleUpdateFields() {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
@@ -34,62 +34,62 @@ public class PatientRequestBuilder {
         return patientWebRequest;
     }
 
-    public PatientRequestBuilder withCaseId(String caseId) {
+    public PatientWebRequestBuilder withCaseId(String caseId) {
         patientWebRequest.setCase_id(caseId);
         return this;
     }
 
-    public PatientRequestBuilder withLastModifiedDate(String lastModifiedDate) {
+    public PatientWebRequestBuilder withLastModifiedDate(String lastModifiedDate) {
         patientWebRequest.setDate_modified(lastModifiedDate);
         return this;
     }
 
-    public PatientRequestBuilder withProviderId(String providerId) {
+    public PatientWebRequestBuilder withProviderId(String providerId) {
         patientWebRequest.setProvider_id(providerId);
         return this;
     }
 
-    public PatientRequestBuilder withTreatmentCategory(String category) {
+    public PatientWebRequestBuilder withTreatmentCategory(String category) {
         patientWebRequest.setTreatment_category(category);
         return this;
     }
 
-    public PatientRequestBuilder withSmearTestDate1(String smearTestDate1) {
+    public PatientWebRequestBuilder withSmearTestDate1(String smearTestDate1) {
         patientWebRequest.setSmear_test_date_1(smearTestDate1);
         return this;
     }
 
-    public PatientRequestBuilder withSmearTestDate2(String smearTestDate2) {
+    public PatientWebRequestBuilder withSmearTestDate2(String smearTestDate2) {
         patientWebRequest.setSmear_test_date_2(smearTestDate2);
         return this;
     }
 
-    public PatientRequestBuilder withMobileNumber(String mobileNumber) {
+    public PatientWebRequestBuilder withMobileNumber(String mobileNumber) {
         patientWebRequest.setMobile_number(mobileNumber);
         return this;
     }
 
-    public PatientRequestBuilder withSmearTestResult1(String smearTestResult) {
+    public PatientWebRequestBuilder withSmearTestResult1(String smearTestResult) {
         patientWebRequest.setSmear_test_result_1(smearTestResult);
         return this;
     }
 
-    public PatientRequestBuilder withTBId(String tbId) {
+    public PatientWebRequestBuilder withTBId(String tbId) {
         patientWebRequest.setTb_id(tbId);
         return this;
     }
 
-    public PatientRequestBuilder withGender(String gender) {
+    public PatientWebRequestBuilder withGender(String gender) {
         patientWebRequest.setGender(gender);
         return this;
     }
 
-    public PatientRequestBuilder withAge(String age) {
+    public PatientWebRequestBuilder withAge(String age) {
         patientWebRequest.setAge(age);
         return this;
     }
 
-    public PatientRequestBuilder withWeight(String weight) {
+    public PatientWebRequestBuilder withWeight(String weight) {
         patientWebRequest.setWeight(weight);
         return this;
     }

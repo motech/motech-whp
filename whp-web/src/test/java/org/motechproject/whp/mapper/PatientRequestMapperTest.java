@@ -2,7 +2,7 @@ package org.motechproject.whp.mapper;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.builder.PatientRequestBuilder;
+import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Gender;
@@ -23,7 +23,7 @@ public class PatientRequestMapperTest {
 
     @Test
     public void shouldCreatePatient() {
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertBasicPatientInfo(patientRequest, patientWebRequest);
         assertProvidedTreatment(patientRequest, patientWebRequest);

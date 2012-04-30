@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.application.service.RegistrationService;
-import org.motechproject.whp.builder.PatientRequestBuilder;
+import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
@@ -47,7 +47,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUpDefaultProvider() {
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         String defaultProviderId = patientWebRequest.getProvider_id();
         Provider defaultProvider = new Provider(defaultProviderId, "1234567890", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
@@ -60,14 +60,14 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldCreatePatient() {
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         patientWebService.createCase(patientWebRequest);
         assertNotNull(allPatients.findByPatientId(patientWebRequest.getCase_id()));
     }
 
     @Test
     public void shouldRecordProvidedTreatmentsWhenCreatingPatient() {
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
 
         patientWebService.createCase(patientWebRequest);
 
@@ -80,19 +80,19 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Test(expected = WHPException.class)
     public void shouldNotCreatePatientWhenProviderIdIsInvalid() {
         String unknownProviderId = "012900";
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         patientWebRequest.setProvider_id(unknownProviderId);
         patientWebService.createCase(patientWebRequest);
     }
 
     @Test
     public void shouldUpdatePatient(){
-        PatientWebRequest patientWebRequest = new PatientRequestBuilder().withDefaults().withCaseId("12341234").build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withCaseId("12341234").build();
         patientWebService.createCase(patientWebRequest);
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        PatientWebRequest simpleUpdateWebRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
+        PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
         patientWebService.updateCase(simpleUpdateWebRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());

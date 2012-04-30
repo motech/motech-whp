@@ -2,16 +2,23 @@ package org.motechproject.whp.patient.domain;
 
 public enum TreatmentCategory {
 
-    Category01("01"), Category02("02"), Category11("11"), Category12("12");
+    Category01("01", "RNTCP Category 1"), Category02("02", "RNTCP Category 2"), Category11("11", "Commercial/Private Category 1"), Category12("12", "Commercial/Private Category 2");
 
     private String value;
 
-    TreatmentCategory(String value) {
+    private String displayName;
+
+    TreatmentCategory(String value, String displayName) {
         this.value = value;
+        this.displayName = displayName;
     }
 
     public String value() {
         return value;
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
     }
 
     public static TreatmentCategory get(String category) {

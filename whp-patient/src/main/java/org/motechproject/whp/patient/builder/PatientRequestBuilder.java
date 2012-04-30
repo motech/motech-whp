@@ -14,7 +14,6 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withDefaults() {
-
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHSTransfer, "1234567890", "phi")
                 .setTreatmentData(TreatmentCategory.Category01, "12345678901", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
@@ -24,6 +23,10 @@ public class PatientRequestBuilder {
         return this;
     }
 
+    public static PatientRequestBuilder startRecording(){
+        return new PatientRequestBuilder();
+    }
+
     public PatientRequestBuilder withSimpleUpdateFields() {
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
@@ -31,6 +34,11 @@ public class PatientRequestBuilder {
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
                 .setWeightStatistics(WeightInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .setTreatmentData(null, null, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
+        return this;
+    }
+
+    public PatientRequestBuilder withProviderId(String providerId){
+        patientRequest.setProviderId(providerId);
         return this;
     }
 
@@ -46,6 +54,11 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
         patientRequest.setPatientInfo(caseId, firstName, lastName, gender, patientType, patientMobileNumber, phi);
+        return this;
+    }
+
+    public PatientRequestBuilder withFirstName(String firstName){
+        patientRequest.setFirstName(firstName);
         return this;
     }
 
