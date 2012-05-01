@@ -2,31 +2,32 @@ package org.motechproject.whp.functional;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoginPage;
-import org.motechproject.whp.functional.page.PatientCreatePage;
-import org.motechproject.whp.functional.page.ProviderCreatePage;
 import org.motechproject.whp.functional.page.ProviderPage;
+import org.motechproject.whp.functional.service.ProviderDataService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LoginTest extends BaseTest {
 
-    private ProviderCreatePage providerCreatePage;
-    private PatientCreatePage patientCreatePage;
+    ProviderDataService providerDataService;
 
-    @Ignore
+    @Before
+    public void setup() {
+        providerDataService = new ProviderDataService(webDriver);
+    }
+
     @Test
     public void testLoginFailure() {
         LoginPage page = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithIncorrectAdminUserNamePassword();
         assertEquals(LoginPage.FAILURE_MESSAGE, page.errorMessage());
     }
 
-    @Ignore
     @Test
     public void testLoginSuccessForAdministrator() {
         ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
@@ -34,13 +35,12 @@ public class LoginTest extends BaseTest {
         providerPage.logout();
     }
 
-    @Ignore
     @Test
     public void testLoginSuccessForProvider() {
-        providerCreatePage = ProviderCreatePage.fetch(webDriver);
-        LoginPage loginPage = providerCreatePage.createProviderWithLogin("testProvider", "password");
-        ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword("testProvider", "password");
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome testProvider"));
+        TestProvider provider = providerDataService.createProvider();
+        LoginPage loginPage = MyPageFactory.initElements(webDriver, LoginPage.class);
+        ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
+        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome " + provider.getProviderId()));
         providerPage.logout();
     }
 }

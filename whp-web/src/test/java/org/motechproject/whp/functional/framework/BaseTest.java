@@ -18,7 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class BaseTest {
-    
+
     private Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
     @Rule
@@ -64,6 +64,7 @@ public abstract class BaseTest {
             System.err.println("Unable to write html result to file " + ignore.getMessage());
         } finally {
             webDriver.manage().deleteAllCookies();
+            webDriver.close();
             webDriver.quit();
             if (output != null)
                 output.close();
