@@ -14,8 +14,9 @@
 
         <form-login login-processing-url="/security/j_spring_security_check"
                     login-page="/login"
-                    authentication-failure-url="/login?login_error=t"
+                    authentication-failure-handler-ref="loginFailureHandler"
                     authentication-success-handler-ref="loginSuccessHandler"/>
+
         <logout logout-url="/security/j_spring_security_logout" invalidate-session="false"
                 success-handler-ref="logoutSuccessHandler"/>
 
@@ -26,6 +27,10 @@
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
         <intercept-url pattern="/adherence/**" access="hasRole('PROVIDER')" requires-channel="any"/>
     </http>
+
+    <beans:bean id="loginFailureHandler" class="org.motechproject.security.LoginFailureHandler">
+        <beans:constructor-arg value="/login?login_error=t"></beans:constructor-arg>
+    </beans:bean>
 
     <authentication-manager alias="authenticationManager">
         <authentication-provider ref="authenticationProvider"/>

@@ -4,9 +4,7 @@
 
 <div class="span12" id="loginForm">
     <#if RequestParameters.login_error?exists>
-        <div id="loginError" class="alert alert-error row"> The username or password you entered is incorrect. Please enter the correct
-            credentials.
-        </div>
+        <div id="loginError" class="alert alert-error row">${Session.loginFailure}</div>
     </#if>
 
     <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="row well form-horizontal">
