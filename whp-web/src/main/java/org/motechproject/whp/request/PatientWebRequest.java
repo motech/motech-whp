@@ -24,6 +24,8 @@ public class PatientWebRequest {
 
     private String case_type;
 
+    private String tb_registration_number;
+
     private String phi;
 
     @NotNull
@@ -34,7 +36,6 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String last_name;
 
-    @NotNull
     @Enumeration(type = Gender.class)
     @Scope(scope = {ValidationScope.create})
     private String gender;
@@ -106,15 +107,14 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String tb_id;
 
-    @NotNull
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
     @Scope(scope = {ValidationScope.create})
     private String provider_id;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.create})
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
-
-    private String tb_registration_number;
 
     @NotNull
     @Digits(integer = 3, fraction = 0, message = "Age must be numeric")

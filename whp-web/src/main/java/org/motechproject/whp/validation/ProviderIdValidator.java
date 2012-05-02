@@ -31,7 +31,7 @@ public class ProviderIdValidator extends NamedConstraintValidator {
         field.setAccessible(true);
         try {
             String providerId = field.get(target).toString();
-            if (providerWithIdExists(providerId)) {
+            if (providerWithIdDoesNotExist(providerId)) {
                 String message = String.format("%s:%s", "No provider is found with id", providerId);
                 errors.rejectValue(field.getName(), "provider-not-found", message);
             }
@@ -41,7 +41,7 @@ public class ProviderIdValidator extends NamedConstraintValidator {
         }
     }
 
-    private boolean providerWithIdExists(String providerId) {
+    private boolean providerWithIdDoesNotExist(String providerId) {
         return null == allProviders.findByProviderId(providerId);
     }
 }

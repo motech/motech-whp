@@ -19,12 +19,15 @@ import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
+
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
 public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
-
+    
     @Autowired
     private RequestValidator validator;
 
@@ -60,21 +63,21 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenGenderIsMale() {
+    public void shouldNotThrowExceptionWhenGenderIsMale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.M.getValue()).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
-    public void shouldThrowExceptionWhenGenderIsFemale() {
+    public void shouldNotThrowExceptionWhenGenderIsFemale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.F.getValue()).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
-    public void shouldThrowExceptionWhenGenderIsOther() {
+    public void shouldNotThrowExceptionWhenGenderIsOther() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.O.getValue()).build();
         validator.validate(webRequest, ValidationScope.create);
@@ -83,13 +86,6 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     @Test
     public void shouldNotThrowException_WhenLastModifiedDateFormatIsCorrect() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012 02:20:30").build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
-    public void shouldThrowException_WhenLastModifiedDateFormatIsNull() {
-        expectException("field:date_modified:null");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
@@ -160,16 +156,9 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowException_WhenEnumFieldIsNull() {
-        expectException("field:smear_test_result_1:The value should be one of : [Positive, Negative]");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestResult1(null).build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
-    public void shouldThrowException_WhenTbIdFieldIsNull() {
-        expectException("field:tb_id:may not be null");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
+    public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits() {
+        expectException("field:tb_id:size must be between 11 and 11");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
@@ -204,6 +193,119 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
         expectException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("1A").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenProviderIdIsNotFound() {
+        expectException("No provider is found with id:providerId");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowSingleExceptionWhenProviderIdIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:provider_id:may not be null")){
+                fail("Not Null validation is not required.");
+            }
+            assertTrue(e.getMessage().contains("field:provider_id:Provider Id cannot be null"));
+        }
+    }
+
+    @Test
+    public void shouldThrowSingleException_WhenTreatmentCategoryIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:treatment_category:Treatment Category cannot be null")){
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            assertTrue(e.getMessage().contains("field:treatment_category:may not be null"));
+        }
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenMobileNumberIsNull() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber(null).build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    //Any enum field
+    @Test
+    public void shouldThrowSingleExceptionWhenGenderIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:gender:may not be null")){
+                fail("Not Null validation is not required.");
+            }
+            assertTrue(e.getMessage().contains("field:gender:The value should be one of : [M, F, O]"));
+        }
+    }
+
+    @Test
+    public void shouldThrowSingleExceptionWhenWeightIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:weight:Weight cannot be null")){
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            assertTrue(e.getMessage().contains("field:weight:may not be null"));
+        }
+    }
+
+    @Test
+    public void shouldThrowSingleException_WhenLastModifiedDateFormatIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:date_modified:Date Modified cannot be null")){
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            assertTrue(e.getMessage().contains("field:date_modified:null"));
+        }
+    }
+
+    @Test
+    public void shouldThrowException_WhenTbIdFieldIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:tb_id:TB ID cannot be null")){
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            assertTrue(e.getMessage().contains("field:tb_id:may not be null"));
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAgeIsNull() {
+        try{
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:age:Age cannot be null")){
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            assertTrue(e.getMessage().contains("field:age:may not be null"));
+        }
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenProviderIdIsFound() {
+        Provider defaultProvider = new Provider("providerId", "1231231231", "chambal", DateUtil.now());
+        allProviders.add(defaultProvider);
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
