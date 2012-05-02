@@ -13,6 +13,7 @@
         <module>whp-application</module>
         <module>whp-refdata</module>
         <module>whp-web</module>
+        <module>whp-adherence</module>
     </modules>
 
     <repositories>
@@ -35,6 +36,12 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-testing-utils</artifactId>
+            <version>0.10-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

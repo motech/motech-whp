@@ -163,6 +163,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.1.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-adherence</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

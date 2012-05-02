@@ -2,14 +2,16 @@ package org.motechproject.whp.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.ui.Model;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -35,7 +37,10 @@ public class WeeklyAdherenceControllerTest {
         when(allPatients.findByPatientId("patientId")).thenReturn(patient);
 
         weeklyAdherenceController.update("patientId", uiModel);
-        verify(uiModel).addAttribute(eq(WeeklyAdherenceController.PATIENT), same(patient));
+        verify(uiModel).addAttribute(eq("patientId"),eq(patient.getPatientId()));
+        ArgumentCaptor<WeeklyAdherenceForm> adherenceForm = ArgumentCaptor.forClass(WeeklyAdherenceForm.class);
+        verify(uiModel).addAttribute(eq("weeklyAdherenceForm"), adherenceForm.capture());
+        assertEquals(3, adherenceForm.getValue().getAllDailyAdherenceForms().size());
     }
 
 }

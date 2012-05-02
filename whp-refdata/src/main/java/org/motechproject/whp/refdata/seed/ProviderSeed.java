@@ -22,7 +22,7 @@ public class ProviderSeed {
     private AllProviders allProviders;
 
     // Need not have this, till we create logins for acutal providers
-//    @Seed(priority = 1)
+    @Seed(priority = 1)
     public void load() {
         Provider provider = createProvider();
         authenticationService.register("raj", "password", WHPRefDataConstants.PROVIDER_USER_TYPE, provider.getId(), Arrays.asList(WHPRole.PROVIDER.name()));

@@ -3,55 +3,42 @@
 <@layout.defaultLayout "Update Adherence">
 <div class="row">
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>
-                Patient ID
-            </th>
-            <th>
-                TB-ID
-            </th>
-            <th>
-                First Name
-            </th>
-            <th>
-                Last Name
-            </th>
-            <th>
-                Age
-            </th>
-            <th>
-                Gender
-            </th>
-            <th>
-                District
-            </th>
-            <th>
-                Treatment Category
-            </th>
-            <th>
-                Treatment Startdate
-            </th>
-            <th>
-                Adherence
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>${patient.patientId}</td>
-            <td>${patient.currentProvidedTreatment.tbId}</td>
-            <td class="name">${patient.firstName}</td>
-            <td>${patient.lastName}</td>
-            <td>${patient.currentProvidedTreatment.treatment.patientAge}</td>
-            <td>${patient.gender}</td>
-            <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
-            <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
-            <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
-            <td><a href="<@spring.url '/adherence/${patient.patientId}' />">Edit</a></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="well page-header"><h3>Update last week's adherence</h3></div>
+
+    <form action="<@spring.url '/adherence/update/' + patientId/>" method="POST">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>
+                    Day of week
+                </th>
+                <th>
+                    Taken
+                </th>
+                <th>
+                    Not taken
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <#list weeklyAdherenceForm.allDailyAdherenceForms as dailyAdherenceForm>
+                <tr>
+                    <td>${dailyAdherenceForm.pillDay}</td>
+                    <td><input type="checkbox"
+                               name="weeklyAdherenceForm.allDailyAdherenceForms[${dailyAdherenceForm_index}].taken" <#if dailyAdherenceForm.taken>
+                               checked </#if> /></td>
+                    <td><input type="checkbox"
+                               name="weeklyAdherenceForm.allDailyAdherenceForms[${dailyAdherenceForm_index}].notTaken" <#if dailyAdherenceForm.notTaken>
+                               checked </#if>/></td>
+                </tr>
+                </#list >
+            </tbody>
+        </table>
+        <div class="control-group">
+            <div class="controls pull-right">
+                <input type="submit" class="btn btn-primary login-btn"/>
+            </div>
+        </div>
+    </form>
 </div>
 </@layout.defaultLayout>

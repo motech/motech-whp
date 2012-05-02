@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value = "/adherence")
 public class WeeklyAdherenceController {
 
-    public static final String PATIENT = "patient";
-
     AllPatients allPatients;
 
     @Autowired
@@ -22,10 +21,19 @@ public class WeeklyAdherenceController {
         this.allPatients = allPatients;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{patientId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
-        uiModel.addAttribute(PATIENT, patient);
+        uiModel.addAttribute("patientId", patientId);
+        uiModel.addAttribute("weeklyAdherenceForm", new WeeklyAdherenceForm(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays()));
+        return "adherence/update";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
+    public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, Model uiModel) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        uiModel.addAttribute("patientId", patientId);
+        uiModel.addAttribute("weeklyAdherenceForm", new WeeklyAdherenceForm(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays()));
         return "adherence/update";
     }
 

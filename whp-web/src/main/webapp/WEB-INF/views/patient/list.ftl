@@ -3,7 +3,9 @@
 <@layout.defaultLayout "Patient List">
 <div class="row">
 
-    <table class="table">
+    <h3 class="well">Patients</h3>
+    <div >
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>
@@ -55,7 +57,7 @@
                     <td>${patient.currentProvidedTreatment.patientAddress.district}</td>
                     <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                     <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
-                    <td><a href="<@spring.url '/adherence/${patient.patientId}' />">Edit</a></td>
+                    <td><a href="<@spring.url '/adherence/update/${patient.patientId}' />">Edit</a></td>
                 </tr>
                 </#list>
             </#if>
@@ -63,4 +65,5 @@
         </tbody>
     </table>
 </div>
+    </div>
 </@layout.defaultLayout>
