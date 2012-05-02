@@ -13,6 +13,9 @@
                     Day of week
                 </th>
                 <th>
+                    Date
+                </th>
+                <th>
                     Taken
                 </th>
                 <th>
@@ -23,13 +26,20 @@
             <tbody>
                 <#list weeklyAdherenceForm.allDailyAdherenceForms as dailyAdherenceForm>
                 <tr>
-                    <td>${dailyAdherenceForm.pillDay}</td>
-                    <td><input type="checkbox"
-                               name="weeklyAdherenceForm.allDailyAdherenceForms[${dailyAdherenceForm_index}].taken" <#if dailyAdherenceForm.taken>
-                               checked </#if> /></td>
-                    <td><input type="checkbox"
-                               name="weeklyAdherenceForm.allDailyAdherenceForms[${dailyAdherenceForm_index}].notTaken" <#if dailyAdherenceForm.notTaken>
-                               checked </#if>/></td>
+                    <td>
+                        ${dailyAdherenceForm.pillDay}
+                        <input type="hidden" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillDay" value="${dailyAdherenceForm.pillDay}"/>
+                    </td>
+                    <td>
+                        ${dailyAdherenceForm.pillDateString}
+                        <input type="hidden" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillDateString" value="${dailyAdherenceForm.pillDateString}"/>
+                    </td>
+                    <td>
+                        <input type="radio" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillStatus" value="Taken" <#if dailyAdherenceForm.isTaken> selected </#if>/>
+                    </td>
+                    <td>
+                        <input type="radio" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillStatus" value="NotTaken" <#if dailyAdherenceForm.isNotTaken> selected </#if>/>
+                    </td>
                 </tr>
                 </#list >
             </tbody>

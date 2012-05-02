@@ -9,12 +9,14 @@ import java.util.List;
 @Data
 public class WeeklyAdherenceForm {
 
-    List<DailyAdherenceForm> allDailyAdherenceForms = new ArrayList<DailyAdherenceForm>();
+    private List<DailyAdherenceForm> allDailyAdherenceForms;
 
     public WeeklyAdherenceForm() {
+        allDailyAdherenceForms = new ArrayList<DailyAdherenceForm>();
     }
 
     public WeeklyAdherenceForm(List<DayOfWeek> pillDays) {
+        this();
         for (DayOfWeek pillDay : pillDays) {
             allDailyAdherenceForms.add(new DailyAdherenceForm(pillDay));
         }
