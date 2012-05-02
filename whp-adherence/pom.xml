@@ -10,9 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
     <name>whp-adherence</name>
     <artifactId>whp-adherence</artifactId>
+    <groupId>org.motechproject.whp</groupId>
+    <version>0.1-SNAPSHOT</version>
 
     <properties>
         <build.dir>../build</build.dir>
     </properties>
+
+
 
 </project>

@@ -1,15 +1,14 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.PillStatus;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
 
 @Data
-public class DailyAdherenceForm {
+public class DailyAdherenceLog {
 
     private DayOfWeek pillDay;
 
@@ -17,10 +16,10 @@ public class DailyAdherenceForm {
 
     private PillStatus pillStatus = PillStatus.Unknown;
 
-    public DailyAdherenceForm() {
+    public DailyAdherenceLog() {
     }
 
-    public DailyAdherenceForm(DayOfWeek pillDay) {
+    public DailyAdherenceLog(DayOfWeek pillDay) {
         this.pillDay = pillDay;
         this.pillDate = DateUtil.today().minusWeeks(1).withDayOfWeek(pillDay.getValue());
     }

@@ -24,21 +24,21 @@
             </tr>
             </thead>
             <tbody>
-                <#list weeklyAdherenceForm.allDailyAdherenceForms as dailyAdherenceForm>
+                <#list weeklyAdherenceLog.allDailyAdherenceLogs as dailyAdherenceLog>
                 <tr>
                     <td>
-                        ${dailyAdherenceForm.pillDay}
-                        <input type="hidden" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillDay" value="${dailyAdherenceForm.pillDay}"/>
+                        ${dailyAdherenceLog.pillDay}
+                        <input type="hidden" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillDay" value="${dailyAdherenceLog.pillDay}"/>
                     </td>
                     <td>
-                        ${dailyAdherenceForm.pillDateString}
-                        <input type="hidden" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillDateString" value="${dailyAdherenceForm.pillDateString}"/>
+                        ${dailyAdherenceLog.pillDateString}
+                        <input type="hidden" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillDateString" value="${dailyAdherenceLog.pillDateString}"/>
                     </td>
                     <td>
-                        <input type="radio" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillStatus" value="Taken" <#if dailyAdherenceForm.isTaken> selected </#if>/>
+                        <input type="radio" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillStatus" value="Taken" <#if dailyAdherenceLog.isTaken> selected </#if>/>
                     </td>
                     <td>
-                        <input type="radio" name="allDailyAdherenceForms[${dailyAdherenceForm_index}].pillStatus" value="NotTaken" <#if dailyAdherenceForm.isNotTaken> selected </#if>/>
+                        <input type="radio" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillStatus" value="NotTaken" <#if dailyAdherenceLog.isNotTaken> selected </#if>/>
                     </td>
                 </tr>
                 </#list >
