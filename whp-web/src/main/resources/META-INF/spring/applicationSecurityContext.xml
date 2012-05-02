@@ -10,22 +10,22 @@
 
 
     <http auto-config="false" use-expressions="true">
-
-
-        <form-login login-processing-url="/security/j_spring_security_check"
-                    login-page="/login"
+        <form-login login-processing-url="/security/j_spring_security_check" login-page="/login"
                     authentication-failure-handler-ref="loginFailureHandler"
                     authentication-success-handler-ref="loginSuccessHandler"/>
 
-        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false"
-                success-handler-ref="logoutSuccessHandler"/>
+        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false" success-handler-ref="logoutSuccessHandler"/>
 
-        <!--Dont change the order of the rules-->
-        <!-- Only admin -->
+        <!-- Permit all -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
+
+        <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>
+
+        <!-- Only providers -->
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
         <intercept-url pattern="/adherence/**" access="hasRole('PROVIDER')" requires-channel="any"/>
+
     </http>
 
     <beans:bean id="loginFailureHandler" class="org.motechproject.security.LoginFailureHandler">
@@ -36,8 +36,7 @@
         <authentication-provider ref="authenticationProvider"/>
     </authentication-manager>
 
-    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint"
-                class="org.motechproject.security.AjaxAwareAuthenticationEntryPoint">
+    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint" class="org.motechproject.security.AjaxAwareAuthenticationEntryPoint">
         <beans:property name="loginFormUrl" value="/login"/>
         <beans:property name="forceHttps" value="false"/>
     </beans:bean>

@@ -31,7 +31,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void testLoginSuccessForAdministrator() {
         ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome admin"));
+        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "admin"));
         providerPage.logout();
     }
 
@@ -40,7 +40,7 @@ public class LoginTest extends BaseTest {
         TestProvider provider = providerDataService.createProvider();
         LoginPage loginPage = MyPageFactory.initElements(webDriver, LoginPage.class);
         ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "Welcome " + provider.getProviderId()));
+        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), provider.getProviderId()));
         providerPage.logout();
     }
 }
