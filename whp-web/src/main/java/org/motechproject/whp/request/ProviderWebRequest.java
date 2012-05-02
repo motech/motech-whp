@@ -2,6 +2,9 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.Pattern;
 
 @Data
 public class ProviderWebRequest {
@@ -13,6 +16,7 @@ public class ProviderWebRequest {
     private String district;
 
     @NotEmpty
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should have 10 digits")
     private String primary_mobile;
 
     private String secondary_mobile;
@@ -23,6 +27,6 @@ public class ProviderWebRequest {
     private String password;
     private String uuid;
 
-    @NotEmpty
+    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date;
 }

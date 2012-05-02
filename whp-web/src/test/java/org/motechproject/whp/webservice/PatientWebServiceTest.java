@@ -76,14 +76,6 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         }
     }
 
-    @Test(expected = WHPException.class)
-    public void shouldNotCreatePatientWhenProviderIdIsInvalid() {
-        String unknownProviderId = "012900";
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebRequest.setProvider_id(unknownProviderId);
-        patientWebService.createCase(patientWebRequest);
-    }
-
     @Test
     public void shouldUpdatePatient(){
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withCaseId("12341234").build();

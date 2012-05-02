@@ -8,12 +8,14 @@ import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.request.ProviderWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +98,20 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
         validator.validate(webRequest, ValidationScope.create);
     }
 
+    @Test
+    public void shouldThrowException_WhenLastModifiedDateFormatDoesNotHaveTimeComponent() {
+        expectException("field:date_modified:Invalid format: \"03/04/2012\" is too short");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfDateIsEmpty() {
+        expectException("field:date_modified:Invalid format: \"\"");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
     @Test(expected = WHPException.class)
     public void shouldThrowException_WhenSmearTest1DateFormatIsIncorrect() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1("03/04/2012  11:23:40").build();
@@ -152,6 +168,13 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
         expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowException_WhenMobileNumberIsNotNumeric() {
+        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("123456789a").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
