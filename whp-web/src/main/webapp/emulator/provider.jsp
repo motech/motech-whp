@@ -16,7 +16,7 @@
             String providerId = request.getParameter("provider_id");
             String password = request.getParameter("password");
             Provider provider = ((AllProviders) appCtx.getBean("allProviders", AllProviders.class)).findByProviderId(providerId);
-            authenticationService.register(providerId, password, "PROVIDER", provider.getId(), Arrays.asList("PROVIDER"));
+            authenticationService.register(providerId, password, provider.getId(), Arrays.asList("PROVIDER"));
         }
 
         String posted = (null != request.getParameter("provider_id")) ? "POSTED" : "SomethingElse";

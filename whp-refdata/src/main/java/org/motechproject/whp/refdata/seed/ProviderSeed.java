@@ -6,7 +6,6 @@ import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.refdata.WHPRefDataConstants;
 import org.motechproject.whp.refdata.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class ProviderSeed {
     @Seed(priority = 1)
     public void load() {
         Provider provider = createProvider();
-        authenticationService.register("raj", "password", WHPRefDataConstants.PROVIDER_USER_TYPE, provider.getId(), Arrays.asList(WHPRole.PROVIDER.name()));
+        authenticationService.register("raj", "password", provider.getId(), Arrays.asList(WHPRole.PROVIDER.name()));
     }
 
     private Provider createProvider() {

@@ -5,13 +5,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.LoginSuccessHandler;
 import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.security.domain.Role;
+import org.motechproject.security.domain.Roles;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.refdata.WHPRefDataConstants;
+import org.motechproject.whp.refdata.domain.WHPRole;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -59,13 +62,13 @@ public class HomeControllerTest {
     private AuthenticatedUser authenticatedUserFor(Provider provider) {
         AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
         when(authenticatedUser.getExternalId()).thenReturn(provider.getId());
-        when(authenticatedUser.getUserType()).thenReturn(WHPRefDataConstants.PROVIDER_USER_TYPE);
+        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.PROVIDER.name()))));
         return authenticatedUser;
     }
 
     private AuthenticatedUser authenticatedAdmin() {
         AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-        when(authenticatedUser.getUserType()).thenReturn(WHPRefDataConstants.ADMIN_USER_TYPE);
+        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.ADMIN.name()))));
         return authenticatedUser;
     }
 
