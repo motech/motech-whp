@@ -23,18 +23,20 @@ public class WeeklyAdherenceController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        uiModel.addAttribute("patientId", patientId);
-        uiModel.addAttribute("weeklyAdherenceLog", new WeeklyAdherenceLog(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays()));
+        prepareModel(patientId, uiModel);
         return "adherence/update";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceLog weeklyAdherenceLog, Model uiModel) {
+        prepareModel(patientId, uiModel);
+        return "adherence/update";
+    }
+
+    private void prepareModel(String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
         uiModel.addAttribute("patientId", patientId);
         uiModel.addAttribute("weeklyAdherenceLog", new WeeklyAdherenceLog(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays()));
-        return "adherence/update";
     }
 
 }
