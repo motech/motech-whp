@@ -6,8 +6,16 @@ body {
     margin-top: 20px;
 }
 
-#whplogo {
-    padding-top: 5px;
+#logo {
+    padding-right: 0px;
+    padding-bottom: 15px;
+    margin-bottom: 5px;
+    padding-left: 0px;
+    border-bottom: 1px inset;
+}
+
+#whp-logo {
+    margin-right: 0px;
 }
 
 .login-btn {
