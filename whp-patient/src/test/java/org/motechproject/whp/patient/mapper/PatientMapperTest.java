@@ -30,20 +30,19 @@ public class PatientMapperTest {
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
-        assertEquals(patientRequest.getCaseId(), patient.getPatientId());
-        assertEquals(patientRequest.getFirstName(), patient.getFirstName());
-        assertEquals(patientRequest.getLastName(), patient.getLastName());
+        assertEquals(patientRequest.getCase_id(), patient.getPatientId());
+        assertEquals(patientRequest.getFirst_name(), patient.getFirstName());
+        assertEquals(patientRequest.getLast_name(), patient.getLastName());
         assertEquals(patientRequest.getGender(), patient.getGender());
-        assertEquals(patientRequest.getPatientType(), patient.getPatientType());
-        assertEquals(patientRequest.getMobileNumber(), patient.getPhoneNumber());
+        assertEquals(patientRequest.getPatient_type(), patient.getPatientType());
+        assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(patientRequest.getPhi(), patient.getPhi());
     }
 
     private void assertProvidedTreatment(Patient patient, PatientRequest patientRequest) {
         ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
-        assertEquals(patientRequest.getTbId(), providedTreatment.getTbId());
-        assertEquals(patientRequest.getProviderId(), providedTreatment.getProviderId());
-        assertEquals(patientRequest.getTreatmentStartDate().toLocalDate(), providedTreatment.getStartDate());
+        assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
+        assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
 
         assertEquals(patientRequest.getAddress(), providedTreatment.getPatientAddress());
 
@@ -53,10 +52,10 @@ public class PatientMapperTest {
     private void assertTreatment(Patient patient, PatientRequest patientRequest) {
         Treatment treatment = patient.latestProvidedTreatment().getTreatment();
         assertEquals(patientRequest.getAge(), treatment.getPatientAge());
-        assertEquals(patientRequest.getTreatmentCategory(), treatment.getTreatmentCategory());
+        assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
         assertNull(treatment.getDoseStartDate());
 
-        assertEquals(patientRequest.getTbRegistrationNumber(), treatment.getTbRegistrationNumber());
+        assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertEquals(patientRequest.getTreatmentStartDate(), treatment.getStartDate());
 
         assertSmearTests(patientRequest, treatment);
@@ -66,11 +65,11 @@ public class PatientMapperTest {
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
         SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
-        assertEquals(smearTestResults.getSampleInstance(), treatment.getSmearTestResults().get(0).getSampleInstance());
-        assertEquals(smearTestResults.getResult1(), treatment.getSmearTestResults().get(0).getResult1());
-        assertEquals(smearTestResults.getTestDate1(), treatment.getSmearTestResults().get(0).getTestDate1());
-        assertEquals(smearTestResults.getResult2(), treatment.getSmearTestResults().get(0).getResult2());
-        assertEquals(smearTestResults.getTestDate2(), treatment.getSmearTestResults().get(0).getTestDate2());
+        assertEquals(smearTestResults.getSmear_sample_instance(), treatment.getSmearTestResults().get(0).getSmear_sample_instance());
+        assertEquals(smearTestResults.getSmear_test_result_1(), treatment.getSmearTestResults().get(0).getSmear_test_result_1());
+        assertEquals(smearTestResults.getSmear_test_date_1(), treatment.getSmearTestResults().get(0).getSmear_test_date_1());
+        assertEquals(smearTestResults.getSmear_test_result_2(), treatment.getSmearTestResults().get(0).getSmear_test_result_2());
+        assertEquals(smearTestResults.getSmear_test_date_2(), treatment.getSmearTestResults().get(0).getSmear_test_date_2());
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, Treatment treatment) {

@@ -1,5 +1,7 @@
 package org.motechproject.whp.mapper;
 
+import org.dozer.DozerBeanMapper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -8,7 +10,10 @@ import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
+import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.PatientWebRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 
@@ -16,10 +21,15 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class PatientRequestMapperTest {
 
-    @Mock
+@ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
+public class PatientRequestMapperTest extends SpringIntegrationTest {
+
+    @Autowired
     AllTreatmentCategories allTreatmentCategories;
+
+    @Autowired
+    DozerBeanMapper mapper;
 
     PatientRequestMapper patientRequestMapper;
 
@@ -27,8 +37,8 @@ public class PatientRequestMapperTest {
     public void setUp() {
         initMocks(this);
         TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, Arrays.asList(DayOfWeek.Monday));
-        patientRequestMapper = new PatientRequestMapper(allTreatmentCategories);
-        when(allTreatmentCategories.findByCode("01")).thenReturn(treatmentCategory);
+        patientRequestMapper = new PatientRequestMapper(allTreatmentCategories, mapper);
+        allTreatmentCategories.add(treatmentCategory);
     }
 
     @Test
@@ -41,19 +51,18 @@ public class PatientRequestMapperTest {
     }
 
     private void assertBasicPatientInfo(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(patientWebRequest.getCase_id(), patientRequest.getCaseId());
-        assertEquals("Foo", patientRequest.getFirstName());
-        assertEquals("Bar", patientRequest.getLastName());
+        assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
+        assertEquals("Foo", patientRequest.getFirst_name());
+        assertEquals("Bar", patientRequest.getLast_name());
         assertEquals(Gender.M, patientRequest.getGender());
-        assertEquals(PatientType.PHSTransfer, patientRequest.getPatientType());
-        assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobileNumber());
+        assertEquals(PatientType.PHSTransfer, patientRequest.getPatient_type());
+        assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobile_number());
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
     }
 
     private void assertProvidedTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(patientWebRequest.getTb_id(), patientRequest.getTbId());
-        assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProviderId());
-        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getTreatmentStartDate().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
+        assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
 
         assertPatientAddress(patientRequest.getAddress());
     }
@@ -64,28 +73,30 @@ public class PatientRequestMapperTest {
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
-        assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatmentCategory().getCode());
+        assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
 
-        assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTbRegistrationNumber());
-        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getTreatmentStartDate().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTb_registration_number());
 
         assertSmearTests(patientRequest, patientWebRequest);
         assertWeightStatistics(patientRequest, patientWebRequest);
     }
 
     private void assertSmearTests(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(patientWebRequest.getSmear_sample_instance(), patientRequest.getSmearTestResults().getSampleInstance().name());
-        assertEquals(patientWebRequest.getSmear_test_result_1(), patientRequest.getSmearTestResults().getResult1().name());
-        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().getTestDate1().toString("dd/MM/YYYY"));
-        assertEquals(patientWebRequest.getSmear_test_result_2(), patientRequest.getSmearTestResults().getResult2().name());
-        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().getTestDate2().toString("dd/MM/YYYY"));
+        assertEquals(patientWebRequest.getSmear_sample_instance(), patientRequest.getSmearTestResults().getSmear_sample_instance().name());
+        assertEquals(patientWebRequest.getSmear_test_result_1(), patientRequest.getSmearTestResults().getSmear_test_result_1().name());
+        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().getSmear_test_date_1().toString("dd/MM/YYYY"));
+        assertEquals(patientWebRequest.getSmear_test_result_2(), patientRequest.getSmearTestResults().getSmear_test_result_2().name());
+        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().getSmear_test_date_2().toString("dd/MM/YYYY"));
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(WeightInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().getWeightInstance());
+        assertEquals(WeightInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().getWeight_instance());
         assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().getWeight(), 0.0);
         assertEquals("10/10/2010", patientRequest.getWeightStatistics().getMeasuringDate().toString("dd/MM/YYYY"));
     }
 
-
+    @After
+    public void tearDown(){
+        allTreatmentCategories.removeAll();
+    }
 }

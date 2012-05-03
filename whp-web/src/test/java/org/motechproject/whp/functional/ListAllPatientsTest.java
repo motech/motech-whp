@@ -63,7 +63,7 @@ public class ListAllPatientsTest extends BaseTest {
     @Test
     public void shouldLoginAsProviderAndListAllPatientsForProvider() {
         ProviderPage providerPage = loginAsProvider();
-        assertTrue(providerPage.hasPatient(patientRequest.getFirstName()));
+        assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
     }
 
     ProviderPage loginAsProvider() {

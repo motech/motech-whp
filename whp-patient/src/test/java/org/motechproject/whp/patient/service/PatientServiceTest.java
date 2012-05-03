@@ -51,10 +51,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
 
-        assertEquals(updatePatientRequest.getMobileNumber(), updatedPatient.getPhoneNumber());
-        assertEquals(updatePatientRequest.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
+        assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
+        assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(updatePatientRequest.getTbRegistrationNumber(), treatment.getTbRegistrationNumber());
+        assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertEquals(updatePatientRequest.getAge(), treatment.getPatientAge());
         assertEquals(updatePatientRequest.getSmearTestResults(), treatment.latestSmearTestResult());
         assertEquals(updatePatientRequest.getWeightStatistics(), treatment.latestWeightStatistics());
@@ -73,8 +73,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
 
-        assertEquals(updatePatientRequest.getMobileNumber(), updatedPatient.getPhoneNumber());
-        assertEquals(updatePatientRequest.getTbRegistrationNumber(), treatment.getTbRegistrationNumber());
+        assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
+        assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());

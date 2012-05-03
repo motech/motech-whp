@@ -36,9 +36,9 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertEquals(PatientType.PHSTransfer, savedPatient.getPatientType());
 
         SmearTestResults smearTestResults = treatment.latestSmearTestResult();
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSampleInstance());
-        assertEquals(SmearTestResult.Positive, smearTestResults.getResult1());
-        assertEquals(DateUtil.today(), smearTestResults.getTestDate1());
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
+        assertEquals(SmearTestResult.Positive, smearTestResults.getSmear_test_result_1());
+        assertEquals(DateUtil.today(), smearTestResults.getSmear_test_date_1());
     }
 
     @Test
@@ -76,11 +76,11 @@ public class AllPatientsTest extends SpringIntegrationTest {
 
     private SmearTestResults smearTestResult() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.setSampleInstance(SmearTestSampleInstance.PreTreatment);
-        smearTestResults.setTestDate1(DateUtil.today());
-        smearTestResults.setResult1(SmearTestResult.Positive);
-        smearTestResults.setTestDate2(DateUtil.today());
-        smearTestResults.setResult2(SmearTestResult.Positive);
+        smearTestResults.setSmear_sample_instance(SmearTestSampleInstance.PreTreatment);
+        smearTestResults.setSmear_test_date_1(DateUtil.today());
+        smearTestResults.setSmear_test_result_1(SmearTestResult.Positive);
+        smearTestResults.setSmear_test_date_2(DateUtil.today());
+        smearTestResults.setSmear_test_result_2(SmearTestResult.Positive);
         return smearTestResults;
     }
 

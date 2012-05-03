@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <configuration>
+        <stop-on-errors>true</stop-on-errors>
+        <date-format>MM/dd/yyyy HH:mm:ss</date-format>
+        <wildcard>true</wildcard>
+        <custom-converters>
+            <converter type="org.motechproject.whp.application.mapping.StringToDateTime">
+                <class-a>java.lang.String</class-a>
+                <class-b>org.joda.time.DateTime</class-b>
+            </converter>
+            <converter type="org.motechproject.whp.application.mapping.StringToTreatmentCategory">
+                <class-a>java.lang.String</class-a>
+                <class-b>org.motechproject.whp.patient.domain.TreatmentCategory</class-b>
+            </converter>
+        </custom-converters>
+    </configuration>
+
+</mappings>

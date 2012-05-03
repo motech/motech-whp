@@ -65,6 +65,12 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
+        <!-- Bean to bean mapping framework -->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <version>5.3.2</version>
+        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

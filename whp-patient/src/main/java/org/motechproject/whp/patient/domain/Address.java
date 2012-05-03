@@ -7,28 +7,28 @@ import org.motechproject.whp.patient.repository.ValidationErrors;
 @Data
 public class Address {
 
-    private String houseNumber;
-    private String landmark;
-    private String block;
-    private String village;
-    private String district;
-    private String state;
+    private String address_location;
+    private String address_landmark;
+    private String address_block;
+    private String address_village;
+    private String address_district;
+    private String address_state;
 
     public Address() {
     }
 
     public Address(String houseNumber, String landmark, String block, String village, String district, String state) {
-        this.houseNumber = houseNumber;
-        this.landmark = landmark;
-        this.block = block;
-        this.village = village;
-        this.district = district;
-        this.state = state;
+        this.address_location = houseNumber;
+        this.address_landmark = landmark;
+        this.address_block = block;
+        this.address_village = village;
+        this.address_district = district;
+        this.address_state = state;
     }
 
     @JsonIgnore
     public boolean isValid(ValidationErrors validationErrors) {
-        boolean isFilled = houseNumber != null && block != null && village != null && district != null && state != null;
+        boolean isFilled = address_location != null && address_block != null && address_village != null && address_district != null && address_state != null;
         if (!isFilled) {
             validationErrors.add("Invalid address : null value");
         }
@@ -37,6 +37,6 @@ public class Address {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return houseNumber == null && block == null && village == null && district == null && state == null;
+        return address_location == null && address_block == null && address_village == null && address_district == null && address_state == null;
     }
 }

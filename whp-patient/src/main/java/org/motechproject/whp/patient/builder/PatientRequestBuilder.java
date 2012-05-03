@@ -27,7 +27,7 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public static PatientRequestBuilder startRecording(){
+    public static PatientRequestBuilder startRecording() {
         return new PatientRequestBuilder();
     }
 
@@ -41,18 +41,18 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withProviderId(String providerId){
-        patientRequest.setProviderId(providerId);
+    public PatientRequestBuilder withProviderId(String providerId) {
+        patientRequest.setProvider_id(providerId);
         return this;
     }
 
     public PatientRequestBuilder withCaseId(String caseId) {
-        patientRequest.setCaseId(caseId);
+        patientRequest.setCase_id(caseId);
         return this;
     }
 
     public PatientRequestBuilder withTbRegistrationNumber(String tbRegistationNumber) {
-        patientRequest.setTbRegistrationNumber(tbRegistationNumber);
+        patientRequest.setTb_registration_number(tbRegistationNumber);
         return this;
     }
 
@@ -61,8 +61,8 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withFirstName(String firstName){
-        patientRequest.setFirstName(firstName);
+    public PatientRequestBuilder withFirstName(String firstName) {
+        patientRequest.setFirst_name(firstName);
         return this;
     }
 

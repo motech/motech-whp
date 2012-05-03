@@ -8,35 +8,35 @@ import org.motechproject.whp.patient.domain.*;
 @Data
 public class PatientRequest {
 
-    private String caseId;
+    private String case_id;
     private DateTime treatmentStartDate;
     private String phi;
-    private String firstName;
-    private String lastName;
+    private String first_name;
+    private String last_name;
     private Gender gender;
-    private PatientType patientType;
-    private String mobileNumber;
-    private DiseaseClass diseaseClass;
+    private PatientType patient_type;
+    private String mobile_number;
+    private DiseaseClass disease_class;
     private Address address = new Address();
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
-    private String tbId;
-    private String providerId;
-    private TreatmentCategory treatmentCategory;
-    private String tbRegistrationNumber;
+    private String tb_id;
+    private String provider_id;
+    private TreatmentCategory treatment_category;
+    private String tb_registration_number;
     private int age;
-    private DateTime lastModifiedDate;
+    private DateTime date_modified;
 
     public PatientRequest() {
     }
 
     public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
-        this.caseId = caseId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.case_id = caseId;
+        this.first_name = firstName;
+        this.last_name = lastName;
         this.gender = gender;
-        this.patientType = patientType;
-        this.mobileNumber = patientMobileNumber;
+        this.patient_type = patientType;
+        this.mobile_number = patientMobileNumber;
         this.phi = phi;
         return this;
     }
@@ -47,12 +47,12 @@ public class PatientRequest {
     }
 
     public PatientRequest setTreatmentData(TreatmentCategory category, String tbId, String providerId, DiseaseClass diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
-        this.treatmentCategory = category;
-        this.tbId = tbId;
-        this.providerId = providerId;
-        this.diseaseClass = diseaseClass;
+        this.treatment_category = category;
+        this.tb_id = tbId;
+        this.provider_id = providerId;
+        this.disease_class = diseaseClass;
         this.age = patientAge;
-        this.tbRegistrationNumber = registrationNumber;
+        this.tb_registration_number = registrationNumber;
         this.treatmentStartDate = treatmentStartDate;
         return this;
     }

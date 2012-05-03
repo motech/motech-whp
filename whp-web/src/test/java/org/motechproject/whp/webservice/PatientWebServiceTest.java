@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.dozer.DozerBeanMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,9 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Autowired
     VelocityEngine velocityEngine;
     @Autowired
-    private PatientService patientService;
+    PatientService patientService;
+    @Autowired
+    DozerBeanMapper mapper;
 
     PatientWebService patientWebService;
 
@@ -54,7 +57,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, allTreatmentCategories);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, allTreatmentCategories, mapper);
     }
 
     @Test
@@ -77,7 +80,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldUpdatePatient(){
+    public void shouldUpdatePatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withCaseId("12341234").build();
         patientWebService.createCase(patientWebRequest);
 

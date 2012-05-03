@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.dozer.DozerBeanMapper;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.mapper.PatientRequestMapper;
@@ -26,14 +27,23 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     PatientService patientService;
 
     RequestValidator validator;
+    DozerBeanMapper mapper;
 
     @Autowired
-    public PatientWebService(RegistrationService registrationService, PatientService patientService, RequestValidator validator, VelocityEngine velocityEngine, AllTreatmentCategories allTreatmentCategories) {
+    public PatientWebService(
+            RegistrationService registrationService,
+            PatientService patientService,
+            RequestValidator validator,
+            VelocityEngine velocityEngine,
+            AllTreatmentCategories allTreatmentCategories,
+            DozerBeanMapper mapper
+    ) {
         super(PatientWebRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.patientService = patientService;
         this.validator = validator;
         this.allTreatmentCategories = allTreatmentCategories;
+        this.mapper = mapper;
     }
 
     @Override
@@ -43,7 +53,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         validator.validate(patientWebRequest, ValidationScope.simpleUpdate);
-        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories).map(patientWebRequest);
+        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories, mapper).map(patientWebRequest);
         try {
             patientService.simpleUpdate(patientRequest);
         } catch (WHPDomainException e) {
@@ -54,7 +64,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void createCase(PatientWebRequest patientWebRequest) {
         validator.validate(patientWebRequest, ValidationScope.create);
-        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories).map(patientWebRequest);
+        PatientRequest patientRequest = new PatientRequestMapper(allTreatmentCategories, mapper).map(patientWebRequest);
         try {
             registrationService.registerPatient(patientRequest);
         } catch (WHPDomainException e) {

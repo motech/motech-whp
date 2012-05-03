@@ -22,28 +22,28 @@ public class PatientMapper {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment currentTreatment = currentProvidedTreatment.getTreatment();
 
-        patient.setPhoneNumber(patientRequest.getMobileNumber());
+        patient.setPhoneNumber(patientRequest.getMobile_number());
 
         mapPatientAddress(patientRequest, currentProvidedTreatment);
         mapSmearTestResults(patientRequest, currentTreatment);
         mapWeightStatistics(patientRequest, currentTreatment);
 
-        currentTreatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
-        patient.setLastModifiedDate(patientRequest.getLastModifiedDate());
+        currentTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
+        patient.setLastModifiedDate(patientRequest.getDate_modified());
 
         return patient;
     }
 
     private Patient mapBasicInfo(PatientRequest patientRequest) {
         Patient patient = new Patient(
-                patientRequest.getCaseId(),
-                patientRequest.getFirstName(),
-                patientRequest.getLastName(),
+                patientRequest.getCase_id(),
+                patientRequest.getFirst_name(),
+                patientRequest.getLast_name(),
                 patientRequest.getGender(),
-                patientRequest.getPatientType(),
-                patientRequest.getMobileNumber());
+                patientRequest.getPatient_type(),
+                patientRequest.getMobile_number());
         patient.setPhi(patientRequest.getPhi());
-        patient.setLastModifiedDate(patientRequest.getLastModifiedDate());
+        patient.setLastModifiedDate(patientRequest.getDate_modified());
         return patient;
     }
 
@@ -55,25 +55,24 @@ public class PatientMapper {
     }
 
     private void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {
-        treatment.setTbRegistrationNumber(patientRequest.getTbRegistrationNumber());
+        treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setStartDate(patientRequest.getTreatmentStartDate());
     }
 
     private void mapProvidedTreatment(PatientRequest patientRequest, Patient patient, Treatment treatment) {
-        String providerId = patientRequest.getProviderId();
-        String tbId = patientRequest.getTbId();
+        String providerId = patientRequest.getProvider_id();
+        String tbId = patientRequest.getTb_id();
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId);
 
         providedTreatment.setTreatment(treatment);
-        providedTreatment.setStartDate(patientRequest.getTreatmentStartDate().toLocalDate());
         mapPatientAddress(patientRequest, providedTreatment);
 
         patient.addProvidedTreatment(providedTreatment);
     }
 
     private Treatment createTreatment(PatientRequest patientRequest) {
-        TreatmentCategory treatmentCategory = patientRequest.getTreatmentCategory();
-        DiseaseClass diseaseClass = patientRequest.getDiseaseClass();
+        TreatmentCategory treatmentCategory = patientRequest.getTreatment_category();
+        DiseaseClass diseaseClass = patientRequest.getDisease_class();
         int patientAge = patientRequest.getAge();
 
         return new Treatment(treatmentCategory, diseaseClass, patientAge);
