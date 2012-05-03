@@ -75,27 +75,21 @@ public class PatientWebRequest {
     private String address_state;
 
     @Enumeration(type = SmearTestSampleInstance.class)
-    @Scope(scope = {ValidationScope.create})
     private String smear_sample_instance;
 
-    @Scope(scope = {ValidationScope.create})
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     private String smear_test_date_1;
 
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {ValidationScope.create})
     private String smear_test_result_1;
 
     @DateTimeFormat(pattern = "dd/MM/YYYY")
-    @Scope(scope = {ValidationScope.create})
     private String smear_test_date_2;
 
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {ValidationScope.create})
     private String smear_test_result_2;
 
     @Enumeration(type = WeightInstance.class)
-    @Scope(scope = {ValidationScope.create})
     private String weight_instance;
 
     @NotNull

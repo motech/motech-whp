@@ -22,6 +22,7 @@ public class PatientMapper {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment currentTreatment = currentProvidedTreatment.getTreatment();
 
+        currentTreatment.setPatientAge(patientRequest.getAge());
         patient.setPhoneNumber(patientRequest.getMobile_number());
 
         mapPatientAddress(patientRequest, currentProvidedTreatment);

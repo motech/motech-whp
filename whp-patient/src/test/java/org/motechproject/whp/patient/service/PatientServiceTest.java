@@ -43,10 +43,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldUpdatePatient() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(CASE_ID).build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(CASE_ID).withPatientAge(50).build();
         patientService.add(patientRequest);
 
-        PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId(CASE_ID).build();
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId(CASE_ID).withPatientAge(66).build();
         patientService.simpleUpdate(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
@@ -55,9 +55,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
         assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals(updatePatientRequest.getAge(), treatment.getPatientAge());
         assertEquals(updatePatientRequest.getSmearTestResults(), treatment.latestSmearTestResult());
         assertEquals(updatePatientRequest.getWeightStatistics(), treatment.latestWeightStatistics());
+        assertEquals(66, treatment.getPatientAge());
     }
 
     @Test

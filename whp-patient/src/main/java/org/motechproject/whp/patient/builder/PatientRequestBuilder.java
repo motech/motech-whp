@@ -71,6 +71,11 @@ public class PatientRequestBuilder {
         return this;
     }
 
+    public PatientRequestBuilder withPatientAge(int age){
+        patientRequest.setAge(age);
+        return this;
+    }
+
     public PatientRequestBuilder withSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
         patientRequest.setSmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
         return this;
