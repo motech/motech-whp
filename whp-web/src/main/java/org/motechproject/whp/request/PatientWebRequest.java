@@ -1,6 +1,7 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.Scope;
@@ -29,6 +30,8 @@ public class PatientWebRequest {
 
     private String phi;
 
+    private String address_landmark;
+
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String first_name;
@@ -45,6 +48,18 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
+    @Enumeration(type = TreatmentUpdate.class)
+    @Scope(scope = {ValidationScope.treatmentUpdate})
+    private String treatment_update;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.closeTreatment})
+    private String reason_for_closure;
+
+    @Enumeration(type = TreatmentComplete.class)
+    @Scope(scope = {ValidationScope.closeTreatment})
+    private String treatment_complete;
+
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
 
@@ -55,8 +70,6 @@ public class PatientWebRequest {
     @NotNull
     @Scope(scope = {ValidationScope.create})
     private String address_location;
-
-    private String address_landmark;
 
     @NotNull
     @Scope(scope = {ValidationScope.create})
@@ -99,15 +112,20 @@ public class PatientWebRequest {
 
     @NotNull
     @Size(min = 11, max = 11)
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment, ValidationScope.closeTreatment, ValidationScope.transferIn, ValidationScope.pauseTreatment, ValidationScope.restartTreatment})
     private String tb_id;
 
+    @NotNull
+    @Size(min = 11, max = 11)
+    @Scope(scope = {ValidationScope.transferIn})
+    private String old_tb_id;
+
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {ValidationScope.create, ValidationScope.transferIn})
     private String provider_id;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
 

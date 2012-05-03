@@ -27,22 +27,19 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     AllTreatmentCategories allTreatmentCategories;
 
     @Autowired
-    DozerBeanMapper mapper;
-
-    PatientRequestMapper patientRequestMapper;
+    DozerBeanMapper patientRequestMapper;
 
     @Before
     public void setUp() {
         initMocks(this);
         TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, Arrays.asList(DayOfWeek.Monday));
-        patientRequestMapper = new PatientRequestMapper(allTreatmentCategories, mapper);
         allTreatmentCategories.add(treatmentCategory);
     }
 
     @Test
     public void shouldCreatePatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
         assertBasicPatientInfo(patientRequest, patientWebRequest);
         assertProvidedTreatment(patientRequest, patientWebRequest);
         assertTreatment(patientRequest, patientWebRequest);

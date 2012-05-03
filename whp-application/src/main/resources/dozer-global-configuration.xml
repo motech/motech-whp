@@ -8,16 +8,6 @@
         <stop-on-errors>true</stop-on-errors>
         <date-format>MM/dd/yyyy HH:mm:ss</date-format>
         <wildcard>true</wildcard>
-        <custom-converters>
-            <converter type="org.motechproject.whp.application.mapping.StringToDateTime">
-                <class-a>java.lang.String</class-a>
-                <class-b>org.joda.time.DateTime</class-b>
-            </converter>
-            <converter type="org.motechproject.whp.application.mapping.StringToTreatmentCategory">
-                <class-a>java.lang.String</class-a>
-                <class-b>org.motechproject.whp.patient.domain.TreatmentCategory</class-b>
-            </converter>
-        </custom-converters>
     </configuration>
 
 </mappings>

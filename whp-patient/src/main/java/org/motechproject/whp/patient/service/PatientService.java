@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.service;
 
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.exception.WHPDomainException;
@@ -50,4 +51,12 @@ public class PatientService {
         patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(DateUtil.today());
         allPatients.update(patient);
     }
+
+    public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
+        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+        if(patient == null) {
+            throw new WHPDomainException("Invalid case-id. No such patient.");
+        }
+    }
+
 }
