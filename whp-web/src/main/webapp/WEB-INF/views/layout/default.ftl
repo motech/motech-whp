@@ -8,6 +8,7 @@
             <link rel="stylesheet" type="text/css" href="<@spring.url '/resources/styles/standard.css'/>"/>
             <link rel="SHORTCUT ICON" href="<@spring.url '/resources/images/favicon.ico'/>" />
             <script type="text/javascript" src="<@spring.url '/resources/js/jquery/jquery-1.7.2.js'/>"></script>
+            <script type="text/javascript" src="<@spring.url '/resources/js/jquery/jquery.validate.js'/>"></script>
             <script type="text/javascript" src="<@spring.url '/resources/js/bootstrap/bootstrap-modal.js'/>"></script>
         </head>
         <body>
