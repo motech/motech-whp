@@ -43,7 +43,7 @@
         <tbody>
             <#if patientList?size == 0>
             <tr>
-                <td  style="text-align: center" colspan="9">No patients to show</td>
+                <td  style="text-align: center" colspan="10">No patients to show</td>
             </tr>
             <#else>
                 <#list patientList as patient>
