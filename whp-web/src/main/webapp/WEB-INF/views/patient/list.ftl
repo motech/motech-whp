@@ -56,7 +56,11 @@
                     <td>${patient.gender}</td>
                     <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
                     <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
-                    <td>${patient.currentProvidedTreatment.treatment.startDateAsDate}</td>
+                    <td>
+                        <#if patient.currentProvidedTreatment.treatment.doseStartDate?? >
+                            ${patient.currentProvidedTreatment.treatment.doseStartDate?date?string("dd/mm/yyyy") }
+                        </#if>
+                    </td>
                     <td><a href="<@spring.url '/adherence/update/${patient.patientId}' />">Edit</a></td>
                 </tr>
                 </#list>

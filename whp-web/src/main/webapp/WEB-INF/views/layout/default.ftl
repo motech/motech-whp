@@ -13,6 +13,7 @@
         <body>
             <div class="container">
                 <div class="row-fluid" id="headerContent">
+                    <#setting date_format="yyyy-mm-dd"/>
                     <#include "header.ftl"/>
                 </div>
 
