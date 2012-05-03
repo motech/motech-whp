@@ -32,7 +32,7 @@ public class WeightStatistics {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return weight_instance == null && weight == null && measuringDate == null;
+        return weight_instance == null && weight == null;
     }
 
 }

@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.mapper;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -22,11 +23,22 @@ public class PatientMapperTest {
     }
 
     @Test
-    public void shouldCreatePatient() {
+    public void shouldMapPatientRequestToPatientDomain() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         Patient patient = patientMapper.map(patientRequest);
         assertBasicPatientInfo(patient, patientRequest);
         assertProvidedTreatment(patient, patientRequest);
+    }
+
+    @Test
+    public void shouldMapWeightStatisticsAsEmpty_WhenMissing() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withWeightStatistics(null, null, DateUtil.today()).build();
+        Patient patient = patientMapper.map(patientRequest);
+
+        assertBasicPatientInfo(patient, patientRequest);
+
+        ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
+        assertEquals(0, providedTreatment.getTreatment().getWeightStatisticsList().size());
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
