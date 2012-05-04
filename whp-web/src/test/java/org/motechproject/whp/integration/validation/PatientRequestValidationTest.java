@@ -8,14 +8,12 @@ import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.request.PatientWebRequest;
-import org.motechproject.whp.request.ProviderWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
         String defaultProviderId = patientWebRequest.getProvider_id();
         Provider defaultProvider = new Provider(defaultProviderId, "1234567890", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
+    }
+
+    @After
+    public void tearDown() {
+        markForDeletion(allProviders.getAll().toArray());
     }
 
     @Test
@@ -350,6 +353,18 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
         validator.validate(webRequest, ValidationScope.create);
     }
 
+    @Test
+    public void shouldNotThrowException_WhenWeightInstanceIsNull_ForUpdateScope(){
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
+        validator.validate(webRequest, ValidationScope.simpleUpdate);
+    }
+
+    @Test
+    public void shouldNotThrowException_WhenSmearTestResultsIsNull_ForUpdateScope(){
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withSmearTestResults(null, null, null, null, null).build();
+        validator.validate(webRequest, ValidationScope.simpleUpdate);
+    }
+
     private void expectException(String message) {
         exceptionThrown.expect(WHPException.class);
         exceptionThrown.expectMessage(new Contains(message));
@@ -359,8 +374,4 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
         validator.validate(patientWebRequest, ValidationScope.create);
     }
 
-    @After
-    public void tearDown() {
-        markForDeletion(allProviders.getAll().toArray());
-    }
 }

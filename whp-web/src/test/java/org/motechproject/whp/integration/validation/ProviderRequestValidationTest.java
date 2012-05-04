@@ -35,8 +35,7 @@ public class ProviderRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionIfDateIsNull() {
-        expectException("field:date:null");
+    public void shouldNotThrowAnExceptionIfDateIsNull() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate(null).withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }

@@ -93,4 +93,14 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setWeight(weight);
         return this;
     }
+
+    public PatientWebRequestBuilder withWeightStatistics(String weightInstance, String weight) {
+        patientWebRequest.setWeightStatistics(weightInstance, weight);
+        return this;
+    }
+    public PatientWebRequestBuilder withSmearTestResults(String smearSampleInstance, String testResultDate1, String testResult1, String testResultDate2, String testResult2) {
+        patientWebRequest.setSmearTestResults(smearSampleInstance, testResultDate1, testResult1, testResultDate2, testResult2);
+        return this;
+    }
+
 }
