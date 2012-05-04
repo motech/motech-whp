@@ -27,18 +27,23 @@
                 <#list adherence.adherenceLogs as adherenceLog>
                 <tr>
                     <td>
-                        ${adherenceLog.pillDay}
-                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay" value="${adherenceLog.pillDay}"/>
+                    ${adherenceLog.pillDay}
+                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay"
+                               value="${adherenceLog.pillDay}"/>
                     </td>
                     <td>
-                        ${adherenceLog.pillDateString}
-                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDateString" value="${adherenceLog.pillDateString}"/>
+                    ${adherenceLog.pillDateString}
+                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDateString"
+                               value="${adherenceLog.pillDateString}"/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="Taken" <#if adherenceLog.isTaken> checked </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                               value="Taken" <#if adherenceLog.isTaken> checked </#if> <#if readOnly > disabled </#if>/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                               value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if> <#if readOnly >
+                               disabled </#if>/>
                     </td>
                 </tr>
                 </#list >
@@ -46,7 +51,9 @@
         </table>
         <div class="control-group">
             <div class="controls pull-right">
-                <input type="submit" class="btn btn-primary login-btn"/>
+                <#if !readOnly>
+                    <input type="submit" class="btn btn-primary login-btn"/>
+                </#if>
             </div>
         </div>
     </form>

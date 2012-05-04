@@ -1,5 +1,7 @@
 package org.motechproject.whp.controller;
 
+import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -37,9 +39,16 @@ public class AdherenceController {
     }
 
     private void prepareModel(String patientId, Model uiModel, Adherence adherence) {
-
         uiModel.addAttribute("patientId", patientId);
         uiModel.addAttribute("adherence", adherence);
+        uiModel.addAttribute("readOnly", shouldBeReadOnly());
+    }
+
+    private boolean shouldBeReadOnly() {
+        LocalDate today = DateUtil.today();
+        boolean isLaterThanTuesday = today.getDayOfWeek() > 2;
+        boolean isEarlierThanSunday = today.getDayOfWeek() < 7;
+        return (isLaterThanTuesday && isEarlierThanSunday) ? true : false;
     }
 
 }
