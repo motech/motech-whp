@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.service;
 
+import org.ektorp.CouchDbConnector;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
 import static java.util.Arrays.asList;
@@ -21,6 +23,9 @@ import static org.motechproject.model.DayOfWeek.Tuesday;
 public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     LocalDate currentWednesday = DateUtil.today();
+
+    @Qualifier(value = "whpDbConnector")
+    CouchDbConnector couchDbConnector;
 
     @Autowired
     private WHPAdherenceService adherenceService;
@@ -43,7 +48,12 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         markForDeletion(allAdherenceLogs.getAll().toArray());
+    }
+
+    @Override
+    public CouchDbConnector getDBConnector() {
+        return couchDbConnector;
     }
 }
