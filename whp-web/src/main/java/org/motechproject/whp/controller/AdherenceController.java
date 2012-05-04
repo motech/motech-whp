@@ -33,7 +33,7 @@ public class AdherenceController {
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Adherence adherence) {
         adherenceService.recordAdherence(patientId, adherence);
-        return "patients";
+        return "forward:/";
     }
 
     private void prepareModel(String patientId, Model uiModel, Adherence adherence) {

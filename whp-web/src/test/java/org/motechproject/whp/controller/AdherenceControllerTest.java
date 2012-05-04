@@ -80,10 +80,10 @@ public class AdherenceControllerTest {
     }
 
     @Test
-    public void shouldShowAdherenceCardAfterCapturingAdherence() {
+    public void shouldShowForwardToProviderHomeAfterCapturingAdherence() {
         Adherence adherence = new Adherence();
         String form = adherenceController.update(PATIENT_ID, adherence);
-        assertEquals("patients", form);
+        assertEquals("forward:/", form);
     }
 
     private class ArgumentCaptors {
