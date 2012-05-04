@@ -67,7 +67,7 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withPatientAge(int age){
+    public PatientRequestBuilder withPatientAge(int age) {
         patientRequest.setAge(age);
         return this;
     }
@@ -79,6 +79,11 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
         patientRequest.setWeightStatistics(weightInstance, weight, measuringDate);
+        return this;
+    }
+
+    public PatientRequestBuilder withPatientType(PatientType type) {
+        patientRequest.setPatient_type(type);
         return this;
     }
 }

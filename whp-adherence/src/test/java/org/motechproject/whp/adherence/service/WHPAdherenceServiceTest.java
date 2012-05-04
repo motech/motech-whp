@@ -3,6 +3,7 @@ package org.motechproject.whp.adherence.service;
 import org.ektorp.CouchDbConnector;
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.testing.utils.SpringIntegrationTest;
@@ -23,8 +24,10 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
+import static org.motechproject.whp.patient.domain.PatientType.New;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
@@ -32,8 +35,8 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     public static final String PATIENT_ID = "patientId";
 
-    LocalDate wednesday = DateUtil.newDate(2012, 5, 3);
-    TreatmentWeek week = new TreatmentWeek(wednesday).minusWeeks(1);
+    LocalDate today = DateUtil.newDate(2012, 5, 3);
+    TreatmentWeek treatmentWeek = new TreatmentWeek(today).minusWeeks(1);
 
     @Autowired
     @Qualifier(value = "whpDbConnector")
@@ -42,12 +45,11 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     @Autowired
     @Qualifier(value = "adherenceDbConnector")
     CouchDbConnector adherenceDbConnector;
-
     @Autowired
     private WHPAdherenceService adherenceService;
+
     @Autowired
     private PatientService patientService;
-
     @Autowired
     private AllAdherenceLogs allAdherenceLogs;
     @Autowired
@@ -55,10 +57,18 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     @Autowired
     private AllTreatments allTreatments;
 
+    @Before
+    public void setup(){
+        mockCurrentDate(today);
+    }
+
     @Test
     public void shouldRecordAdherenceForPatient() {
-        AdherenceLog logForMonday = new AdherenceLog(Monday, week.dateOf(Monday));
-        AdherenceLog logForTuesday = new AdherenceLog(Tuesday, week.dateOf(Tuesday));
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(PATIENT_ID).build();
+        patientService.add(patientRequest);
+
+        AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
+        AdherenceLog logForTuesday = new AdherenceLog(Tuesday, treatmentWeek.dateOf(Tuesday));
 
         Adherence logs = new Adherence();
         logs.setAdherenceLogs(asList(logForMonday, logForTuesday));
@@ -66,7 +76,19 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         adherenceService.recordAdherence(PATIENT_ID, logs);
         assertArrayEquals(
                 new AdherenceLog[]{logForMonday, logForTuesday},
-                adherenceService.adherenceAsOf(PATIENT_ID, wednesday).getAdherenceLogs().toArray()
+                adherenceService.adherenceAsOf(PATIENT_ID, today).getAdherenceLogs().toArray()
+        );
+    }
+
+    @Test
+    public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(PATIENT_ID).withPatientType(New).build();
+        patientService.add(patientRequest);
+
+        adherenceService.recordAdherence(PATIENT_ID, new Adherence());
+        assertEquals(
+                today,
+                allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
         );
     }
 
@@ -74,10 +96,11 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public void shouldReturnAdherenceWhenCurrentWeekAdherenceIsCaptured() {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
         patientService.add(withDosesOnMonWedFri);
+
         Adherence expectedAdherence = new AdherenceBuilder()
-                .withLog(Monday, week.dateOf(Monday), true)
-                .withLog(Wednesday, week.dateOf(Wednesday), true)
-                .withLog(Friday, week.dateOf(Friday), true).build();
+                .withLog(Monday, treatmentWeek.dateOf(Monday), true)
+                .withLog(Wednesday, treatmentWeek.dateOf(Wednesday), true)
+                .withLog(Friday, treatmentWeek.dateOf(Friday), true).build();
         adherenceService.recordAdherence(withDosesOnMonWedFri.getCase_id(), expectedAdherence);
 
         Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
@@ -95,6 +118,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @After
     public void tearDown() {
+        super.tearDown();
         deleteAdherenceLogs();
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allTreatments.getAll().toArray());

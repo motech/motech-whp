@@ -55,4 +55,19 @@ public class PatientBuilder {
     private Address defaultAddress() {
         return new Address("10", "banyan tree", "10", "chambal", "muzzrafapur", "bhiar");
     }
+
+    public PatientBuilder withType(PatientType type) {
+        patient.setPatientType(type);
+        return this;
+    }
+
+    public PatientBuilder withPatientId(String patientId) {
+        patient.setPatientId(patientId);
+        return this;
+    }
+
+    public PatientBuilder onTreatmentFrom(LocalDate date) {
+        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(date);
+        return this;
+    }
 }

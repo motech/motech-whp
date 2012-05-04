@@ -11,7 +11,9 @@ import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRequestMapper;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TreatmentStartCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +25,26 @@ public class WHPAdherenceService {
 
     AllPatients allPatients;
     AdherenceService adherenceService;
+    TreatmentStartCriteria treatmentStartCriteria;
+    PatientService patientService;
 
     @Autowired
-    public WHPAdherenceService(AdherenceService adherenceService, AllPatients allPatients) {
+    public WHPAdherenceService(AdherenceService adherenceService,
+                               AllPatients allPatients,
+                               TreatmentStartCriteria treatmentStartCriteria,
+                               PatientService patientService) {
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
+        this.treatmentStartCriteria = treatmentStartCriteria;
+        this.patientService = patientService;
     }
 
-    public void recordAdherence(String patientId, Adherence logs) {
-        for (RecordAdherenceRequest request : recordAdherenceRequests(patientId, logs)) {
+    public void recordAdherence(String patientId, Adherence adherence) {
+        for (RecordAdherenceRequest request : recordAdherenceRequests(patientId, adherence)) {
             adherenceService.recordAdherence(request);
+        }
+        if (treatmentStartCriteria.shouldStartTreatment(patientId)) {
+            patientService.startOnTreatment(patientId);
         }
     }
 
@@ -52,10 +64,10 @@ public class WHPAdherenceService {
         return new AdherenceMapper(adherenceRecords).map();
     }
 
-    private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence logs) {
+    private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence adherence) {
         List<RecordAdherenceRequest> requests = new ArrayList<RecordAdherenceRequest>();
-        for (AdherenceLog log : logs.getAdherenceLogs()) {
-            requests.add(new AdherenceRequestMapper(patientId, log).request());
+        for (AdherenceLog adherenceLog : adherence.getAdherenceLogs()) {
+            requests.add(new AdherenceRequestMapper(patientId, adherenceLog).request());
         }
         return requests;
     }
