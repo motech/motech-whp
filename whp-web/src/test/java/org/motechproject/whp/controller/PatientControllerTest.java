@@ -34,7 +34,7 @@ public class PatientControllerTest {
 
     @Test
     public void shouldListAllPatientsForProvider() {
-        Patient patient = PatientBuilder.startRecording().withDefaults().build();
+        Patient patient = new PatientBuilder().withDefaults().build();
         List<Patient> patientsForProvider = Arrays.asList(patient);
 
         when(allPatients.findByCurrentProviderId("providerId")).thenReturn(patientsForProvider);

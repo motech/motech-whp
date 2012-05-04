@@ -4,27 +4,30 @@ import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.contract.RecordAdherenceRequest;
 import org.motechproject.adherence.service.AdherenceService;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
-import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
+import org.motechproject.whp.adherence.domain.TreatmentWeek;
+import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRequestMapper;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
-import static org.motechproject.util.DateUtil.newDateTime;
-
 @Service
 public class WHPAdherenceService {
 
+    AllPatients allPatients;
     AdherenceService adherenceService;
 
     @Autowired
-    public WHPAdherenceService(AdherenceService adherenceService) {
+    public WHPAdherenceService(AdherenceService adherenceService, AllPatients allPatients) {
         this.adherenceService = adherenceService;
+        this.allPatients = allPatients;
     }
 
     public void recordAdherence(String patientId, Adherence logs) {
@@ -34,16 +37,19 @@ public class WHPAdherenceService {
     }
 
     public Adherence adherenceAsOf(String patientId, LocalDate asOf) {
-        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, newDateTime(asOf));
-        return adherenceLogs(adherenceRecords);
+        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, asOf);
+        return new AdherenceMapper(adherenceRecords).map();
     }
 
-    private Adherence adherenceLogs(AdherenceRecords adherenceRecords) {
-        Adherence logs = new Adherence();
-        for (AdherenceRecord record : adherenceRecords.adherenceRecords()) {
-            logs.addAdherenceLog(new AdherenceRecordMapper(record).adherenceLog());
+    public Adherence currentWeeksAdherence(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        TreatmentWeek treatmentWeek = new TreatmentWeek(DateUtil.today().minusWeeks(1));
+        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, treatmentWeek.startDate(), treatmentWeek.endDate());
+
+        if (adherenceRecords.size() > 0) {
+            return new AdherenceMapper(adherenceRecords).map();
         }
-        return logs;
+        return new Adherence(treatmentWeek, patient.getCurrentProvidedTreatment());
     }
 
     private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence logs) {
@@ -53,4 +59,5 @@ public class WHPAdherenceService {
         }
         return requests;
     }
+
 }

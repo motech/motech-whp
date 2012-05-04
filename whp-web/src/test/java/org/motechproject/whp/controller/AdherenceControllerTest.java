@@ -22,6 +22,7 @@ import static org.motechproject.model.DayOfWeek.Monday;
 
 public class AdherenceControllerTest {
 
+    public static final String PATIENT_ID = "patientId";
     @Mock
     AllPatients allPatients;
     Patient patient;
@@ -48,58 +49,44 @@ public class AdherenceControllerTest {
     }
 
     private void setUpPatient() {
-        patient = PatientBuilder.startRecording().withDefaults().build();
+        patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
 
     @Test
-    public void shouldShowTreatmentForm() {
-        String form = adherenceController.update("patientId", uiModel);
+    public void shouldShowAdherenceCard() {
+        String form = adherenceController.update(PATIENT_ID, uiModel);
         assertEquals("adherence/update", form);
     }
 
     @Test
-    public void shouldPassPatientIdToTreatmentForm() {
-        adherenceController.update("patientId", uiModel);
-        verify(uiModel).addAttribute(eq("patientId"), eq(patient.getPatientId()));
+    public void shouldPassPatientIdToAdherenceCard() {
+        adherenceController.update(PATIENT_ID, uiModel);
+        verify(uiModel).addAttribute(eq(PATIENT_ID), eq(patient.getPatientId()));
     }
 
     @Test
-    public void shouldPassWeeklyAdherenceLogToTreatmentForm() {
-        adherenceController.update("patientId", uiModel);
+    public void shouldPassWeeklyAdherenceLogToAdherenceCard() {
+        Adherence adherence = new Adherence();
+        when(adherenceService.currentWeeksAdherence(PATIENT_ID)).thenReturn(adherence);
+        adherenceController.update(PATIENT_ID, uiModel);
 
         verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());
-        assertEquals(3, captors.adherenceForm.getValue().getAdherenceLogs().size());
+        assertEquals(adherence, captors.adherenceForm.getValue());
     }
 
     @Test
     public void shouldCaptureAdherence() {
-        Adherence adherence = new Adherence(DateUtil.today(), asList(Monday));
-        adherenceController.update("patientId", adherence, uiModel);
-        verify(adherenceService).recordAdherence("patientId", adherence);
+        Adherence adherence = new Adherence();
+        adherenceController.update(PATIENT_ID, adherence);
+        verify(adherenceService).recordAdherence(PATIENT_ID, adherence);
     }
 
     @Test
-    public void shouldShowTreatmentFormAfterCapturingAdherence() {
-        Adherence adherence = new Adherence(DateUtil.today(), asList(Monday));
-        String form = adherenceController.update("patientId", adherence, uiModel);
+    public void shouldShowAdherenceCardAfterCapturingAdherence() {
+        Adherence adherence = new Adherence();
+        String form = adherenceController.update(PATIENT_ID, adherence);
         assertEquals("patients", form);
-    }
-
-    @Test
-    public void shouldPassPatientIdToTreatmentFormAfterCapturingAdherence() {
-        Adherence adherence = new Adherence(DateUtil.today(), asList(Monday));
-        adherenceController.update("patientId", adherence, uiModel);
-        verify(uiModel).addAttribute(eq("patientId"), eq(patient.getPatientId()));
-    }
-
-    @Test
-    public void shouldPassWeeklyAdherenceLogToTreatmentFormAfterCapturingAdherence() {
-        Adherence adherence = new Adherence(DateUtil.today(), asList(Monday));
-        adherenceController.update("patientId", adherence, uiModel);
-
-        verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());
-        assertEquals(3, captors.adherenceForm.getValue().getAdherenceLogs().size());
     }
 
     private class ArgumentCaptors {

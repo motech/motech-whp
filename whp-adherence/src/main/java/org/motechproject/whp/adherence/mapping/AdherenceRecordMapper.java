@@ -15,13 +15,11 @@ public class AdherenceRecordMapper {
     }
 
     public AdherenceLog adherenceLog() {
-        LocalDate recordDate = record.recordDate().toLocalDate();
+        LocalDate recordDate = record.recordDate();
         AdherenceLog log = new AdherenceLog();
-
         log.setIsTaken(isTaken());
         log.setPillDate(recordDate);
         log.setPillDay(dayOfWeekOfRecord(recordDate));
-
         return log;
     }
 

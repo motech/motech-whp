@@ -27,21 +27,21 @@ public class AdherenceController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        prepareModel(patientId, uiModel);
+        Adherence adherence = adherenceService.currentWeeksAdherence(patientId);
+        prepareModel(patientId, uiModel, adherence);
         return "adherence/update";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, Adherence adherence, Model uiModel) {
-        prepareModel(patientId, uiModel);
+    public String update(@PathVariable("patientId") String patientId, Adherence adherence) {
         adherenceService.recordAdherence(patientId, adherence);
         return "patients";
     }
 
-    private void prepareModel(String patientId, Model uiModel) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    private void prepareModel(String patientId, Model uiModel, Adherence adherence) {
+
         uiModel.addAttribute("patientId", patientId);
-        uiModel.addAttribute("adherence", new Adherence(DateUtil.today(), patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays()));
+        uiModel.addAttribute("adherence", adherence);
     }
 
 }

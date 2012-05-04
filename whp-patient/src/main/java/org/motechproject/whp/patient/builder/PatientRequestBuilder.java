@@ -17,7 +17,7 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withDefaults() {
-        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHSTransfer, "1234567890", "phi")
                 .setTreatmentData(category, "12345678901", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
@@ -25,10 +25,6 @@ public class PatientRequestBuilder {
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19));
         return this;
-    }
-
-    public static PatientRequestBuilder startRecording() {
-        return new PatientRequestBuilder();
     }
 
     public PatientRequestBuilder withSimpleUpdateFields() {

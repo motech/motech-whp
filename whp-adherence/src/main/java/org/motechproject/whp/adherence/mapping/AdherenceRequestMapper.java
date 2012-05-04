@@ -1,8 +1,6 @@
 package org.motechproject.whp.adherence.mapping;
 
-import org.joda.time.DateTime;
 import org.motechproject.adherence.contract.RecordAdherenceRequest;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 
 public class AdherenceRequestMapper {
@@ -16,14 +14,10 @@ public class AdherenceRequestMapper {
     }
 
     public RecordAdherenceRequest request() {
-        RecordAdherenceRequest request = new RecordAdherenceRequest(patientId, null, logDateTime());
+        RecordAdherenceRequest request = new RecordAdherenceRequest(patientId, null, log.getPillDate());
         request.dosesTaken(numberOfDosesTaken());
         request.dosesMissed(numberOfDosesMissed());
         return request;
-    }
-
-    private DateTime logDateTime() {
-        return DateUtil.newDateTime(log.getPillDate());
     }
 
     private int numberOfDosesMissed() {

@@ -19,10 +19,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-tb-adherence</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+
     </dependencies>
 
 </project>

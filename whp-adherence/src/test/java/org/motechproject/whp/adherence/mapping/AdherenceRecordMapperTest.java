@@ -1,6 +1,6 @@
 package org.motechproject.whp.adherence.mapping;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -10,7 +10,7 @@ import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRec
 
 public class AdherenceRecordMapperTest {
 
-    private DateTime today = DateUtil.now();
+    private LocalDate today = DateUtil.today();
 
     @Test
     public void shouldSetIsTaken() {
@@ -27,13 +27,13 @@ public class AdherenceRecordMapperTest {
     @Test
     public void shouldSetPillDate() {
         AdherenceRecord record = new AdherenceRecord(today, 0, 1, null);
-        assertEquals(today.toLocalDate(), new AdherenceRecordMapper(record).adherenceLog().getPillDate());
+        assertEquals(today, new AdherenceRecordMapper(record).adherenceLog().getPillDate());
     }
 
     @Test
     public void shouldSetPillDay() {
         AdherenceRecord record = new AdherenceRecord(today, 0, 1, null);
-        assertEquals(DayOfWeek.getDayOfWeek(today.toLocalDate()), new AdherenceRecordMapper(record).adherenceLog().getPillDay());
+        assertEquals(DayOfWeek.getDayOfWeek(today), new AdherenceRecordMapper(record).adherenceLog().getPillDay());
     }
 
 }

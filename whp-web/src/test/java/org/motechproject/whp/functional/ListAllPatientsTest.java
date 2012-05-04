@@ -1,7 +1,6 @@
 package org.motechproject.whp.functional;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.functional.data.TestProvider;
@@ -51,8 +50,7 @@ public class ListAllPatientsTest extends BaseTest {
     }
 
     public void setupPatientForProvider() {
-        patientRequest = PatientRequestBuilder
-                .startRecording()
+        patientRequest = new PatientRequestBuilder()
                 .withDefaults()
                 .withCaseId(UUID.randomUUID().toString())
                 .withProviderId(provider.getProviderId())
