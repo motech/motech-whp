@@ -35,7 +35,7 @@ public class AdherenceController {
     public String update(@PathVariable("patientId") String patientId, Adherence adherence, Model uiModel) {
         prepareModel(patientId, uiModel);
         adherenceService.recordAdherence(patientId, adherence);
-        return "adherence/update";
+        return "patients";
     }
 
     private void prepareModel(String patientId, Model uiModel) {

@@ -83,7 +83,7 @@ public class AdherenceControllerTest {
     public void shouldShowTreatmentFormAfterCapturingAdherence() {
         Adherence adherence = new Adherence(DateUtil.today(), asList(Monday));
         String form = adherenceController.update("patientId", adherence, uiModel);
-        assertEquals("adherence/update", form);
+        assertEquals("patients", form);
     }
 
     @Test
