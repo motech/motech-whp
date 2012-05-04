@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -12,13 +11,11 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.ui.Model;
 
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.model.DayOfWeek.Monday;
 
 public class AdherenceControllerTest {
 
@@ -68,7 +65,7 @@ public class AdherenceControllerTest {
     @Test
     public void shouldPassWeeklyAdherenceLogToAdherenceCard() {
         Adherence adherence = new Adherence();
-        when(adherenceService.currentWeeksAdherence(PATIENT_ID)).thenReturn(adherence);
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
         adherenceController.update(PATIENT_ID, uiModel);
 
         verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());

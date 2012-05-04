@@ -36,12 +36,7 @@ public class WHPAdherenceService {
         }
     }
 
-    public Adherence adherenceAsOf(String patientId, LocalDate asOf) {
-        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, asOf);
-        return new AdherenceMapper(adherenceRecords).map();
-    }
-
-    public Adherence currentWeeksAdherence(String patientId) {
+    public Adherence currentWeekAdherence(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         TreatmentWeek treatmentWeek = new TreatmentWeek(DateUtil.today().minusWeeks(1));
         AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, treatmentWeek.startDate(), treatmentWeek.endDate());
@@ -50,6 +45,11 @@ public class WHPAdherenceService {
             return new AdherenceMapper(adherenceRecords).map();
         }
         return new Adherence(treatmentWeek, patient.getCurrentProvidedTreatment());
+    }
+
+    public Adherence adherenceAsOf(String patientId, LocalDate asOf) {
+        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, asOf);
+        return new AdherenceMapper(adherenceRecords).map();
     }
 
     private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence logs) {

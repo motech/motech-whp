@@ -71,16 +71,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnEmptyAdherence_WhenAdherenceHasNeverBeenCaptured() {
-        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
-        patientService.add(withDosesOnMonWedFri);
-
-        Adherence adherence = adherenceService.currentWeeksAdherence(withDosesOnMonWedFri.getCase_id());
-        AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
-    }
-
-    @Test
-    public void shouldReturnCapturedAdherence() {
+    public void shouldReturnAdherenceWhenCurrentWeekAdherenceIsCaptured() {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
         patientService.add(withDosesOnMonWedFri);
         Adherence expectedAdherence = new AdherenceBuilder()
@@ -89,8 +80,17 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withLog(Friday, week.dateOf(Friday), true).build();
         adherenceService.recordAdherence(withDosesOnMonWedFri.getCase_id(), expectedAdherence);
 
-        Adherence adherence = adherenceService.currentWeeksAdherence(withDosesOnMonWedFri.getCase_id());
+        Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
         areSame(expectedAdherence, adherence);
+    }
+
+    @Test
+    public void shouldReturnEmptyAdherenceWhenCurrentWeekAdherenceIsNotCaptured() {
+        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
+        patientService.add(withDosesOnMonWedFri);
+
+        Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
+        AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
     }
 
     @After

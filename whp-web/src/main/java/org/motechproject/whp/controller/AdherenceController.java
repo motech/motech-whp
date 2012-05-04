@@ -1,9 +1,7 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +25,7 @@ public class AdherenceController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        Adherence adherence = adherenceService.currentWeeksAdherence(patientId);
+        Adherence adherence = adherenceService.currentWeekAdherence(patientId);
         prepareModel(patientId, uiModel, adherence);
         return "adherence/update";
     }
