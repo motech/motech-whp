@@ -57,7 +57,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertEquals(updatePatientRequest.getSmearTestResults(), treatment.latestSmearTestResult());
         assertEquals(updatePatientRequest.getWeightStatistics(), treatment.latestWeightStatistics());
-        assertEquals(66, treatment.getPatientAge());
+        assertEquals((Integer) 66, treatment.getPatientAge());
     }
 
     @Test

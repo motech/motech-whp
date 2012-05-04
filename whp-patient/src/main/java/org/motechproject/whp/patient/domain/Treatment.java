@@ -15,7 +15,7 @@ import java.util.List;
 @TypeDiscriminator("doc.type == 'Treatment'")
 public class Treatment extends MotechBaseDataObject {
 
-    private int patientAge;
+    private Integer patientAge;
     private TreatmentCategory treatmentCategory;
     private LocalDate doseStartDate;
     private DateTime startDate;

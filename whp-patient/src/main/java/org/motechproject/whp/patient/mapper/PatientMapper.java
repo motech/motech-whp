@@ -22,8 +22,10 @@ public class PatientMapper {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment currentTreatment = currentProvidedTreatment.getTreatment();
 
-        currentTreatment.setPatientAge(patientRequest.getAge());
-        patient.setPhoneNumber(patientRequest.getMobile_number());
+        if (patientRequest.getAge() != null )
+            currentTreatment.setPatientAge(patientRequest.getAge());
+        if (patientRequest.getMobile_number() != null)
+            patient.setPhoneNumber(patientRequest.getMobile_number());
 
         mapPatientAddress(patientRequest, currentProvidedTreatment);
         mapSmearTestResults(patientRequest, currentTreatment);

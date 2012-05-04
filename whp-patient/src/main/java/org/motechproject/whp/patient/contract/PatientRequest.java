@@ -24,7 +24,7 @@ public class PatientRequest {
     private String provider_id;
     private TreatmentCategory treatment_category;
     private String tb_registration_number;
-    private int age;
+    private Integer age;
     private DateTime date_modified;
 
     public PatientRequest() {

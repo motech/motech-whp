@@ -4,7 +4,6 @@ import org.dozer.DozerBeanMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -18,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
@@ -72,7 +70,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     }
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
+        assertEquals((Integer) Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
 
         assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTb_registration_number());
