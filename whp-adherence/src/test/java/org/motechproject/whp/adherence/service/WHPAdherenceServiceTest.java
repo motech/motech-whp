@@ -64,7 +64,10 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldRecordAdherenceForPatient() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(PATIENT_ID).build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withCaseId(PATIENT_ID)
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .build();
         patientService.add(patientRequest);
 
         AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
@@ -82,7 +85,11 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withCaseId(PATIENT_ID).withPatientType(New).build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withCaseId(PATIENT_ID)
+                                                                   .withPatientType(New)
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .build();
         patientService.add(patientRequest);
 
         adherenceService.recordAdherence(PATIENT_ID, new Adherence());
@@ -94,7 +101,9 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldReturnAdherenceWhenCurrentWeekAdherenceIsCaptured() {
-        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
+        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
+                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                         .build();
         patientService.add(withDosesOnMonWedFri);
 
         Adherence expectedAdherence = new AdherenceBuilder()
@@ -109,7 +118,9 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldReturnEmptyAdherenceWhenCurrentWeekAdherenceIsNotCaptured() {
-        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults().build();
+        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
+                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                         .build();
         patientService.add(withDosesOnMonWedFri);
 
         Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());

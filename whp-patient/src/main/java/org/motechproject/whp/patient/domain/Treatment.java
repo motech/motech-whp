@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public class Treatment extends MotechBaseDataObject {
     private DateTime startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
+    private String treatmentComplete;
+    private String reasonForClosure;
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
@@ -53,6 +56,14 @@ public class Treatment extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean isValid(ValidationErrors validationErrors) {
-        return latestSmearTestResult().isValid(validationErrors) && latestWeightStatistics().isValid(validationErrors);
+        boolean isLatestSmearResultValid = true;
+        boolean isLatestWeightStatisticValid = true;
+        if(!CollectionUtils.isEmpty(smearTestResults)) {
+            isLatestSmearResultValid = latestSmearTestResult().isValid(validationErrors);
+        }
+        if(!CollectionUtils.isEmpty(weightStatisticsList)) {
+            isLatestWeightStatisticValid = latestWeightStatistics().isValid(validationErrors);
+        }
+        return isLatestSmearResultValid && isLatestWeightStatisticValid;
     }
 }

@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.builder;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -84,6 +85,16 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withPatientType(PatientType type) {
         patientRequest.setPatient_type(type);
+        return this;
+    }
+
+    public PatientRequestBuilder withTbId(String tbId) {
+        patientRequest.setTb_id(tbId);
+        return this;
+    }
+
+    public PatientRequestBuilder withLastModifiedDate(DateTime lastModifiedDate) {
+        patientRequest.setDate_modified(lastModifiedDate);
         return this;
     }
 }

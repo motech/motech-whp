@@ -3,6 +3,7 @@ package org.motechproject.whp.functional;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
@@ -52,6 +53,7 @@ public class ListAllPatientsTest extends BaseTest {
     public void setupPatientForProvider() {
         patientRequest = new PatientRequestBuilder()
                 .withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withCaseId(UUID.randomUUID().toString())
                 .withProviderId(provider.getProviderId())
                 .build();

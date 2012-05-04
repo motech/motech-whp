@@ -1,7 +1,6 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.Scope;
@@ -21,6 +20,7 @@ public class PatientWebRequest {
     @NotNull
     private String case_id;
 
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date_modified;
 
@@ -40,14 +40,17 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String last_name;
 
+    @NotNull
     @Enumeration(type = Gender.class)
     @Scope(scope = {ValidationScope.create})
     private String gender;
 
+    @NotNull
     @Enumeration(type = PatientType.class)
     @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
+    @NotNull
     @Enumeration(type = TreatmentUpdate.class)
     @Scope(scope = {ValidationScope.treatmentUpdate})
     private String treatment_update;
@@ -56,6 +59,7 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.closeTreatment})
     private String reason_for_closure;
 
+    @NotNull
     @Enumeration(type = TreatmentComplete.class)
     @Scope(scope = {ValidationScope.closeTreatment})
     private String treatment_complete;
@@ -63,6 +67,7 @@ public class PatientWebRequest {
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
 
+    @NotNull
     @Enumeration(type = DiseaseClass.class)
     @Scope(scope = {ValidationScope.create})
     private String disease_class;
@@ -165,6 +170,14 @@ public class PatientWebRequest {
         this.disease_class = diseaseClass;
         this.age = patientAge;
         this.tb_registration_number = registrationNumber;
+        return this;
+    }
+
+    public PatientWebRequest setTreatmentUpdateData(String treatment_update, String reason_for_closure, String treatment_complete, String old_tb_id) {
+        this.treatment_update = treatment_update;
+        this.reason_for_closure = reason_for_closure;
+        this.treatment_complete = treatment_complete;
+        this.old_tb_id = old_tb_id;
         return this;
     }
 

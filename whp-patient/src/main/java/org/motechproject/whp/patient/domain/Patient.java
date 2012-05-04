@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.repository.ValidationErrors;
 
 import java.util.ArrayList;
@@ -47,6 +48,10 @@ public class Patient extends MotechBaseDataObject {
 
     public ProvidedTreatment latestProvidedTreatment() {
         return currentProvidedTreatment;
+    }
+
+    public DateTime getLastModifiedDate(){
+        return DateUtil.setTimeZone(lastModifiedDate);
     }
 
     @JsonIgnore

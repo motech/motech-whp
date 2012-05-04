@@ -18,7 +18,7 @@ public class TreatmentUpdateRequest {
     private TreatmentUpdate treatment_update;
     private String reason_for_closure;
     private String treatment_complete;
-    private String treatment_category;
+    private TreatmentCategory treatment_category;
     private String old_tb_id;
 
 }

@@ -43,6 +43,8 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     PatientService patientService;
     @Autowired
     DozerBeanMapper patientRequestMapper;
+    @Autowired
+    DozerBeanMapper treatmentUpdateRequestMapper;
 
     PatientWebService patientWebService;
 
@@ -57,7 +59,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, patientRequestMapper);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, patientRequestMapper, treatmentUpdateRequestMapper);
     }
 
     @Test
@@ -92,6 +94,29 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
+        assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());
+    }
+
+    @Test
+    public void shouldUpdatePatientTreatment() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                                                                            .withTBId("elevenDigit")
+                                                                            .withCaseId("12341234")
+                                                                            .build();
+        patientWebService.createCase(patientWebRequest);
+
+        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+
+        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields()
+                                                                                 .withTBId("elevenDigit")
+                                                                                 .withCaseId("12341234")
+                                                                                 .build();
+        patientWebService.updateCase(treatmentUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+
+        assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
+        assertNotSame(patient.getCurrentProvidedTreatment().getEndDate(), updatedPatient.getCurrentProvidedTreatment().getEndDate());
         assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());
     }
 

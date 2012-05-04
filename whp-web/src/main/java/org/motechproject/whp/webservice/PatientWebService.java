@@ -27,6 +27,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
 
     RequestValidator validator;
     DozerBeanMapper patientRequestMapper;
+    DozerBeanMapper treatmentUpdateRequestMapper;
 
     @Autowired
     public PatientWebService(
@@ -34,13 +35,15 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
             PatientService patientService,
             RequestValidator validator,
             VelocityEngine velocityEngine,
-            DozerBeanMapper patientRequestMapper
-    ) {
+            DozerBeanMapper patientRequestMapper,
+            DozerBeanMapper treatmentUpdateRequestMapper) {
+
         super(PatientWebRequest.class, velocityEngine);
         this.registrationService = registrationService;
         this.patientService = patientService;
         this.validator = validator;
         this.patientRequestMapper = patientRequestMapper;
+        this.treatmentUpdateRequestMapper = treatmentUpdateRequestMapper;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
             if (requestHasTreatmentUpdate(patientWebRequest)) {
                 TreatmentUpdate treatmentUpdate = TreatmentUpdate.valueOf(patientWebRequest.getTreatment_update());
                 validator.validate(patientWebRequest, treatmentUpdate.getScope());
-                TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+                TreatmentUpdateRequest treatmentUpdateRequest = treatmentUpdateRequestMapper.map(patientWebRequest, TreatmentUpdateRequest.class);
                 patientService.performTreatmentUpdate(treatmentUpdateRequest);
             } else {
                 validator.validate(patientWebRequest, ValidationScope.simpleUpdate);

@@ -231,6 +231,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowSingleExceptionWhenProviderIdIsNull() {
+        String errorMessage = "";
         try{
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId(null).build();
             validator.validate(webRequest, ValidationScope.create);
@@ -238,12 +239,14 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
             if(e.getMessage().contains("field:provider_id:may not be null")){
                 fail("Not Null validation is not required.");
             }
-            assertTrue(e.getMessage().contains("field:provider_id:Provider Id cannot be null"));
+            errorMessage = e.getMessage();
         }
+        assertTrue(errorMessage.contains("field:provider_id:Provider Id cannot be null"));
     }
 
     @Test
     public void shouldThrowSingleException_WhenTreatmentCategoryIsNull() {
+        String errorMessage = "";
         try{
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).build();
             validator.validate(webRequest, ValidationScope.create);
@@ -251,8 +254,9 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
             if(e.getMessage().contains("field:treatment_category:Treatment Category cannot be null")){
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
-            assertTrue(e.getMessage().contains("field:treatment_category:may not be null"));
+            errorMessage = e.getMessage();
         }
+        assertTrue(errorMessage.contains("field:treatment_category:may not be null"));
     }
 
     @Test
@@ -263,20 +267,22 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     //Any enum field
     @Test
-    public void shouldThrowSingleExceptionWhenGenderIsNull() {
-        try{
-            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
-            validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:gender:may not be null")){
-                fail("Not Null validation is not required.");
-            }
-            assertTrue(e.getMessage().contains("field:gender:The value should be one of : [M, F, O]"));
-        }
+    public void shouldThrowExceptionWhenGenderIsNull() {
+        expectException("field:gender:may not be null");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenLastModifiedDateFormatIsNull() {
+        expectException("field:date_modified:may not be null");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
+        validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowSingleExceptionWhenWeightIsNull() {
+        String errorMessage = "";
         try{
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
             validator.validate(webRequest, ValidationScope.create);
@@ -284,21 +290,9 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
             if(e.getMessage().contains("field:weight:Weight cannot be null")){
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
-            assertTrue(e.getMessage().contains("field:weight:may not be null"));
+            errorMessage = e.getMessage();
         }
-    }
-
-    @Test
-    public void shouldThrowSingleException_WhenLastModifiedDateFormatIsNull() {
-        try{
-            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
-            validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:date_modified:Date Modified cannot be null")){
-                fail("Not Null validation is not required. Validator implements null validation.");
-            }
-            assertTrue(e.getMessage().contains("field:date_modified:null"));
-        }
+        assertTrue(errorMessage.contains("field:weight:may not be null"));
     }
 
     @Test
@@ -316,6 +310,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenAgeIsNull() {
+        String errorMessage = "";
         try{
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
             validator.validate(webRequest, ValidationScope.create);
@@ -323,8 +318,9 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
             if(e.getMessage().contains("field:age:Age cannot be null")){
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
-            assertTrue(e.getMessage().contains("field:age:may not be null"));
+            errorMessage = e.getMessage();
         }
+        assertTrue(errorMessage.contains("field:age:may not be null"));
     }
 
     @Test

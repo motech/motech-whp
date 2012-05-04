@@ -30,6 +30,15 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+    public PatientWebRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
+        patientWebRequest = new PatientWebRequest()
+                .setPatientInfo("1234567890", null, null, null, null, null, null)
+                .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
+                .setTreatmentUpdateData(TreatmentUpdate.CloseTreatment.name(), "Cured", "Yes", "oldTbID");
+        patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        return this;
+    }
+
     public PatientWebRequest build() {
         return patientWebRequest;
     }

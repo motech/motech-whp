@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.builder;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -68,6 +69,21 @@ public class PatientBuilder {
 
     public PatientBuilder onTreatmentFrom(LocalDate date) {
         patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(date);
+        return this;
+    }
+
+    public PatientBuilder withTbId(String tbId){
+        patient.getCurrentProvidedTreatment().setTbId(tbId);
+        return this;
+    }
+
+    public PatientBuilder withTreatmentEndDate(LocalDate endDate) {
+        patient.getCurrentProvidedTreatment().getTreatment().setEndDate(endDate);
+        return this;
+    }
+
+    public PatientBuilder withCurrentProvidedTreatment(ProvidedTreatment currentProvidedTreatment) {
+        patient.setCurrentProvidedTreatment(currentProvidedTreatment);
         return this;
     }
 }
