@@ -24,21 +24,21 @@
             </tr>
             </thead>
             <tbody>
-                <#list weeklyAdherenceLog.allDailyAdherenceLogs as dailyAdherenceLog>
+                <#list adherence.adherenceLogs as adherenceLog>
                 <tr>
                     <td>
-                        ${dailyAdherenceLog.pillDay}
-                        <input type="hidden" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillDay" value="${dailyAdherenceLog.pillDay}"/>
+                        ${adherenceLog.pillDay}
+                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay" value="${adherenceLog.pillDay}"/>
                     </td>
                     <td>
-                        ${dailyAdherenceLog.pillDateString}
-                        <input type="hidden" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillDateString" value="${dailyAdherenceLog.pillDateString}"/>
+                        ${adherenceLog.pillDateString}
+                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDateString" value="${adherenceLog.pillDateString}"/>
                     </td>
                     <td>
-                        <input type="radio" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillStatus" value="Taken" <#if dailyAdherenceLog.isTaken> selected </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="Taken" <#if adherenceLog.isTaken> selected </#if>/>
                     </td>
                     <td>
-                        <input type="radio" name="allDailyAdherenceLogs[${dailyAdherenceLog_index}].pillStatus" value="NotTaken" <#if dailyAdherenceLog.isNotTaken> selected </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="NotTaken" <#if adherenceLog.isNotTaken> selected </#if>/>
                     </td>
                 </tr>
                 </#list >
