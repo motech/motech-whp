@@ -1,5 +1,5 @@
 <#macro changePassword>
-    <form class="modal hide fade" id="changePasswordModal">
+    <form class="modal hide fade" id="changePasswordModal" action="<@spring.url '/changePassword'/>">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">×</button>
             <h3>Change Password</h3>
@@ -30,7 +30,7 @@
         </div>
         <div class="modal-footer">
             <a href="#" class="btn" data-dismiss="modal">Close</a>
-            <a class="btn btn-primary" id="changePassword">Save</a>
+            <button type="submit" class="btn btn-primary" id="changePassword">Save</button>
         </div>
     </form>
     <script type="text/javascript" src="<@spring.url '/resources/js/changePassword.js'/>"></script>
