@@ -35,10 +35,10 @@
                         <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDateString" value="${adherenceLog.pillDateString}"/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="Taken" <#if adherenceLog.isTaken> selected </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="Taken" <#if adherenceLog.isTaken> checked </#if>/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="NotTaken" <#if adherenceLog.isNotTaken> selected </#if>/>
+                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus" value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if>/>
                     </td>
                 </tr>
                 </#list >
