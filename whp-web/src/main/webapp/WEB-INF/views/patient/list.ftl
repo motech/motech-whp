@@ -55,7 +55,7 @@
                     <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>
                     <td>${patient.gender}</td>
                     <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
-                    <td>${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
+                    <td class="category">${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                     <td>
                         <#if patient.currentProvidedTreatment.treatment.doseStartDate?? >
                             ${patient.currentProvidedTreatment.treatment.doseStartDate?date?string("dd/mm/yyyy") }

@@ -73,6 +73,5 @@ public class ListAllPatientsTest extends BaseTest {
     @After
     public void tearDown() throws IOException {
         super.tearDown();
-        allPatients.removeAll();
     }
 }

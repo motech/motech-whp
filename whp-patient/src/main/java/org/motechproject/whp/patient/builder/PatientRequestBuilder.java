@@ -97,4 +97,9 @@ public class PatientRequestBuilder {
         patientRequest.setDate_modified(lastModifiedDate);
         return this;
     }
+
+    public PatientRequestBuilder withTreatmentCategory(TreatmentCategory treatmentCategory) {
+        patientRequest.setTreatment_category(treatmentCategory);
+        return this;
+    }
 }

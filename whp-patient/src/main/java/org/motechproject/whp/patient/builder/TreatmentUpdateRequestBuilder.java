@@ -62,18 +62,23 @@ public class TreatmentUpdateRequestBuilder {
         return this;
     }
 
-    public TreatmentUpdateRequestBuilder withDateModified(DateTime dateModified){
+    public TreatmentUpdateRequestBuilder withDateModified(DateTime dateModified) {
         treatmentUpdateRequest.setDate_modified(dateModified);
         return this;
     }
 
-    public TreatmentUpdateRequestBuilder withTbId(String tbId){
+    public TreatmentUpdateRequestBuilder withTbId(String tbId) {
         treatmentUpdateRequest.setTb_id(tbId);
         return this;
     }
 
     public TreatmentUpdateRequestBuilder withCaseId(String caseId) {
         treatmentUpdateRequest.setCase_id(caseId);
+        return this;
+    }
+
+    public TreatmentUpdateRequestBuilder withTreatmentCategory(TreatmentCategory treatmentCategory) {
+        treatmentUpdateRequest.setTreatment_category(treatmentCategory);
         return this;
     }
 }
