@@ -290,7 +290,32 @@
                         <version>2.9</version>
                         <executions>
                             <execution>
-                                <id>smoke</id>
+                                <id>serial-func-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <argLine>-XX:MaxPermSize=256M</argLine>
+                                    <systemProperties>
+                                        <property>
+                                            <name>jetty.port</name>
+                                            <value>${jetty.port}</value>
+                                        </property>
+                                        <property>
+                                            <name>test.driver</name>
+                                            <value>${test.driver}</value>
+                                        </property>
+                                    </systemProperties>
+                                    <runOrder>reversealphabetical</runOrder>
+                                    <includes>
+                                        <include>**/functional/serial/**/*.java</include>
+                                    </includes>
+                                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>parallel-func-tests</id>
                                 <goals>
                                     <goal>integration-test</goal>
                                     <goal>verify</goal>
@@ -311,12 +336,12 @@
                                     <parallel>classes</parallel>
                                     <threadCount>4</threadCount>
                                     <perCoreThreadCount>false</perCoreThreadCount>
-                                    <excludes>
-                                        <exclude>**/*IT.java</exclude>
-                                    </excludes>
                                     <includes>
                                         <include>**/functional/**/*.java</include>
                                     </includes>
+                                    <excludes>
+                                        <exclude>**/functional/serial/**/*.java</exclude>
+                                    </excludes>
                                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                                 </configuration>
                             </execution>

@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional;
+package org.motechproject.whp.functional.serial;
 
 import org.junit.Test;
 import org.motechproject.whp.functional.framework.BaseTest;
