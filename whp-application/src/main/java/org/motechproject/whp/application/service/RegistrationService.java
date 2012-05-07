@@ -28,7 +28,7 @@ public class RegistrationService {
     }
 
     public void registerPatient(PatientRequest patientRequest) {
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
     }
 
     public void registerProvider(ProviderRequest providerRequest) {

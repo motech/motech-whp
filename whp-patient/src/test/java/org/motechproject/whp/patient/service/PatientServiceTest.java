@@ -61,7 +61,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withPatientAge(50)
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields()
                                                                          .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -87,7 +87,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(CASE_ID)
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
         Patient patient = allPatients.findByPatientId(CASE_ID);
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withPatientInfo(CASE_ID, "newFirstName", "newLastName", null, null, "9087654321", null)
@@ -113,7 +113,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(CASE_ID)
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null).build();
 
         patientService.simpleUpdate(updatePatientRequest);
@@ -126,7 +126,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(CASE_ID)
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withWeightStatistics(null, 100.0, DateUtil.tomorrow()).build();
 
         patientService.simpleUpdate(updatePatientRequest);
@@ -154,7 +154,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
         patientService.performTreatmentUpdate(treatmentUpdateRequest);
@@ -169,7 +169,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         //first properly closing treatment
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
@@ -191,7 +191,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         //first properly closing treatment
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
@@ -212,7 +212,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withTbId("tbId").build();
         patientService.performTreatmentUpdate(treatmentUpdateRequest);
@@ -226,7 +226,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
                                                                                      .withMandatoryFieldsForCloseTreatment()
@@ -247,7 +247,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                                                                    .withCaseId(caseId)
                                                                    .withTbId("tbId")
                                                                    .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
                                                                                            .withMandatoryFieldsForCloseTreatment()

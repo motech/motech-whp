@@ -16,7 +16,6 @@ import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -61,7 +60,7 @@ public class TreatmentUpdateTest extends BaseTest {
                 .withCaseId(UUID.randomUUID().toString())
                 .withProviderId(provider.getProviderId())
                 .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
     }
 
     @Test

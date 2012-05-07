@@ -68,7 +68,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withCaseId(PATIENT_ID)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
 
         AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
         AdherenceLog logForTuesday = new AdherenceLog(Tuesday, treatmentWeek.dateOf(Tuesday));
@@ -108,7 +108,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        patientService.add(withDosesOnMonWedFri);
+        patientService.createPatient(withDosesOnMonWedFri);
 
         Adherence expectedAdherence = new AdherenceBuilder()
                 .withLog(Monday, treatmentWeek.dateOf(Monday), true)
@@ -126,7 +126,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        patientService.add(withDosesOnMonWedFri);
+        patientService.createPatient(withDosesOnMonWedFri);
 
         Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
         AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
@@ -151,7 +151,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withPatientType(PatientType.New)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
         adherenceService.recordAdherence(PATIENT_ID, new Adherence());
     }
 

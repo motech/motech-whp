@@ -33,16 +33,12 @@ public class PatientService {
         this.updateTreatmentCriteria = updateTreatmentCriteria;
     }
 
-    public void add(PatientRequest patientRequest) {
+    public void createPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
-
-        Treatment treatment = mapTreatmentInfo(patientRequest);
-        allTreatments.add(treatment);
+        Treatment treatment = createTreatment(patientRequest);
 
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
-
         patient.addProvidedTreatment(providedTreatment);
-
         allPatients.add(patient);
     }
 
@@ -83,6 +79,12 @@ public class PatientService {
                     throw new WHPDomainException(CANNOT_CLOSE_CURRENT_TREATMENT + criteriaErrors);
                 }
         }
+    }
+
+    private Treatment createTreatment(PatientRequest patientRequest) {
+        Treatment treatment = mapTreatmentInfo(patientRequest);
+        allTreatments.add(treatment);
+        return treatment;
     }
 
     private void addNewTreatmentForCategoryChange(TreatmentUpdateRequest treatmentUpdateRequest, Patient patient) {

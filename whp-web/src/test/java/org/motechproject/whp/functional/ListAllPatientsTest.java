@@ -12,7 +12,6 @@ import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -54,7 +53,7 @@ public class ListAllPatientsTest extends BaseTest {
                 .withCaseId(UUID.randomUUID().toString())
                 .withProviderId(provider.getProviderId())
                 .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
     }
 
     @Test
