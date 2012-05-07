@@ -109,7 +109,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
-        expectException("invalid treatment data.[Invalid smear test results : null value]");
+        expectWHPDomainException("invalid treatment data.[Invalid smear test results : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(CASE_ID)
@@ -122,7 +122,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
-        expectException("invalid treatment data.[Invalid weight statistics : null value]");
+        expectWHPDomainException("invalid treatment data.[Invalid weight statistics : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(CASE_ID)
@@ -135,20 +135,20 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectException("Invalid case-id. No such patient.");
+        expectWHPDomainException("Invalid case-id. No such patient.");
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
         patientService.simpleUpdate(updatePatientRequest);
     }
 
     @Test
     public void shouldThrowExceptionForTreatmentUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectException("Invalid case-id. No such patient.");
+        expectWHPDomainException("Invalid case-id. No such patient.");
         patientService.performTreatmentUpdate(TreatmentUpdateRequestBuilder.startRecording().withCaseId("invalidCaseId").build());
     }
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrong() {
-        expectException("Cannot close current treatment for case: [No such tb id for current treatment]");
+        expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -163,7 +163,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseItIsAlreadyClosed() {
-        expectException("Cannot close current treatment for case: [Current treatment is already closed]");
+        expectWHPDomainException("Cannot close current treatment for case: [Current treatment is already closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -185,7 +185,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
-        expectException("Cannot close current treatment for case: [No such tb id for current treatment, Current treatment is already closed]");
+        expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment, Current treatment is already closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -206,7 +206,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfNewTreatmentCannotBeOpenedBecauseCurrentTreatmentIsNotClosed() {
-        expectException("Cannot open new treatment for this case: [Current treatment is not closed]");
+        expectWHPDomainException("Cannot open new treatment for this case: [Current treatment is not closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -285,7 +285,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
-    private void expectException(String message) {
+    private void expectWHPDomainException(String message) {
         exceptionThrown.expect(WHPDomainException.class);
         exceptionThrown.expectMessage(new Contains(message));
     }

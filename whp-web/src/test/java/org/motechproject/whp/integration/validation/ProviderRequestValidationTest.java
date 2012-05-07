@@ -29,95 +29,182 @@ public class ProviderRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowAnExceptionIfDistrictIsNull() {
-        expectException("field:district:may not be empty");
+        expectWHPException("field:district:may not be empty");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("17/03/1990").withDistrict(null).withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldThrowAnExceptionIfDateIsNull() {
-        expectException("field:date:may not be null");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate(null).withDistrict("Chambal").withPrimaryMobile("9880000000").build();
-        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
-    }
-
-    @Test
     public void shouldThrowAnExceptionIfDistrictIsEmpty() {
-        expectException("field:district:may not be empty");
+        expectWHPException("field:district:may not be empty");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("17/03/1990").withDistrict("").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
+    public void shouldThrowAnExceptionIfDateIsNull() {
+        expectWHPException("field:date:may not be null");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate(null).withDistrict("Chambal").withPrimaryMobile("9880000000").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
     public void shouldThrowAnExceptionIfDateIsEmpty() {
-        expectException("field:date:Invalid format: \"\"");
+        expectWHPException("field:date:Invalid format: \"\"");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowExceptionWhenDateFormatIsNotTheCorrectDateFormat() {
-        expectException("field:date:Invalid format: \"17-03-1990 17:03:56\" is malformed at \"-03-1990 17:03:56\"");
+        expectWHPException("field:date:Invalid format: \"17-03-1990 17:03:56\" is malformed at \"-03-1990 17:03:56\"");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("17-03-1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowExceptionWhenDateFormatDoesNotHaveTimeComponent() {
-        expectException("field:date:Invalid format: \"17/03/1990\" is too short");
+        expectWHPException("field:date:Invalid format: \"17/03/1990\" is too short");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowAnExceptionIfProviderIdIsNull() {
-        expectException("field:provider_id:may not be empty");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId(null).withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
+        expectWHPException("field:provider_id:may not be empty");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId(null).withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowAnExceptionIfProviderIdIsEmpty() {
-        expectException("field:provider_id:may not be empty");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
+        expectWHPException("field:provider_id:may not be empty");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldThrowExceptionWhenMobileNumberIsEmpty() {
-        expectException("field:primary_mobile:may not be empty");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("").build();
+    public void shouldThrowExceptionWhenPrimaryMobileNumberIsEmpty() {
+        expectWHPException("field:primary_mobile:may not be empty");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldThrowExceptionWhenMobileNumberIsLessThan10Digits() {
-        expectException("field:primary_mobile:Mobile number should have 10 digits");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("1234").build();
+    public void shouldThrowExceptionWhenPrimaryMobileNumberIsNull() {
+        expectWHPException("field:primary_mobile:may not be empty");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile(null).build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
-        expectException("field:primary_mobile:Mobile number should have 10 digits");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("12345678901").build();
+    public void shouldThrowExceptionWhenPrimaryMobileNumberIsLessThan10Digits() {
+        expectWHPException("field:primary_mobile:Mobile number should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("1234").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldThrowException_WhenMobileNumberIsNotNumeric() {
-        expectException("field:primary_mobile:Mobile number should have 10 digits");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990").withDistrict("Chambal").withPrimaryMobile("123456789a").build();
+    public void shouldThrowExceptionWhenPrimaryMobileNumberIsMoreThan10Digits() {
+        expectWHPException("field:primary_mobile:Mobile number should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("12345678901").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
-    public void shouldNotThrowException_WhenMobileNumberIs10Digits() {
+    public void shouldThrowExceptionWhenPrimaryMobileNumberIsNotNumeric() {
+        expectWHPException("field:primary_mobile:Mobile number should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("123456789a").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenPrimaryMobileNumberIs10Digits() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("1234567890").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
-    private void expectException(String message) {
+    @Test
+    public void shouldNotThrowExceptionWhenSecondaryMobileNumberIsEmpty() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenSecondaryMobileNumberIsNull() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile(null).build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+
+    @Test
+    public void shouldThrowExceptionWhenSecondaryMobileNumberIsLessThan10Digits() {
+        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("1234").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenSecondaryMobileNumberIsMoreThan10Digits() {
+        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("12345678901").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenSecondaryMobileNumberIsNotNumeric() {
+        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("123456789a").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenSecondaryMobileNumberIs10Digits() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("1234567890").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+
+    @Test
+    public void shouldNotThrowExceptionWhenTertiaryMobileNumberIsEmpty() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withTertiaryMobile("").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenTertiaryMobileNumberIsNull() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withTertiaryMobile(null).build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTertiaryMobileNumberIsLessThan10Digits() {
+        expectWHPException("field:tertiary_mobile:Tertiary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withTertiaryMobile("1234").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTertiaryMobileNumberIsMoreThan10Digits() {
+        expectWHPException("field:tertiary_mobile:Tertiary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990").withDistrict("Chambal").withTertiaryMobile("12345678901").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTertiaryMobileNumberIsNotNumeric() {
+        expectWHPException("field:tertiary_mobile:Tertiary mobile number should be empty or should have 10 digits");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withTertiaryMobile("123456789a").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenTertiaryMobileNumberIs10Digits() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withTertiaryMobile("1234567890").build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    private void expectWHPException(String message) {
         exceptionThrown.expect(WHPException.class);
         exceptionThrown.expectMessage(new Contains(message));
     }

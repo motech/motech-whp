@@ -61,7 +61,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenGenderNotEnumerated() {
-        expectException("field:gender:The value should be one of : [M, F, O]");
+        expectWHPException("field:gender:The value should be one of : [M, F, O]");
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender("H").build();
         validator.validate(webRequest, ValidationScope.create);
@@ -96,21 +96,21 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNotTheCorrectDateTimeFormat() {
-        expectException("03-04-2012\" is malformed at \"-04-2012");
+        expectWHPException("03-04-2012\" is malformed at \"-04-2012");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03-04-2012").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatDoesNotHaveTimeComponent() {
-        expectException("field:date_modified:Invalid format: \"03/04/2012\" is too short");
+        expectWHPException("field:date_modified:Invalid format: \"03/04/2012\" is too short");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowAnExceptionIfDateIsEmpty() {
-        expectException("field:date_modified:Invalid format: \"\"");
+        expectWHPException("field:date_modified:Invalid format: \"\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("").build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -143,7 +143,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenTreatmentCategoryIsNotValid() {
-        expectException("field:treatment_category:must match \"[0|1][1|2]\"");
+        expectWHPException("field:treatment_category:must match \"[0|1][1|2]\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory("99").build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -162,42 +162,42 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
-        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("123456789").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
-        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsNotNumeric() {
-        expectException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("123456789a").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits() {
-        expectException("field:tb_id:size must be between 11 and 11");
+        expectWHPException("field:tb_id:size must be between 11 and 11");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsNotNumeric() {
-        expectException("field:age:Age must be numeric");
+        expectWHPException("field:age:Age must be numeric");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFraction() {
-        expectException("field:age:Age must be numeric");
+        expectWHPException("field:age:Age must be numeric");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -210,21 +210,21 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenWeightIsNotNumeric() {
-        expectException("field:weight:Weight must be a real number");
+        expectWHPException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
-        expectException("field:weight:Weight must be a real number");
+        expectWHPException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("1A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenProviderIdIsNotFound() {
-        expectException("No provider is found with id:providerId");
+        expectWHPException("No provider is found with id:providerId");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -268,14 +268,14 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     //Any enum field
     @Test
     public void shouldThrowExceptionWhenGenderIsNull() {
-        expectException("field:gender:may not be null");
+        expectWHPException("field:gender:may not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenLastModifiedDateFormatIsNull() {
-        expectException("field:date_modified:may not be null");
+        expectWHPException("field:date_modified:may not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -361,7 +361,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
         validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
 
-    private void expectException(String message) {
+    private void expectWHPException(String message) {
         exceptionThrown.expect(WHPException.class);
         exceptionThrown.expectMessage(new Contains(message));
     }

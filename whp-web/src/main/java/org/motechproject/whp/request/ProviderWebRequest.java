@@ -26,8 +26,10 @@ public class ProviderWebRequest {
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should have 10 digits")
     private String primary_mobile;
 
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Secondary mobile number should be empty or should have 10 digits")
     private String secondary_mobile;
 
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Tertiary mobile number should be empty or should have 10 digits")
     private String tertiary_mobile;
 
     private String username;
