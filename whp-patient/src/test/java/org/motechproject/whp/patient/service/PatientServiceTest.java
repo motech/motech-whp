@@ -147,17 +147,75 @@ public class PatientServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosed() {
-        expectException("Cannot close current treatment for case: either wrong tb id, there is no current treatment or it is already closed.");
+    public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrong() {
+        expectException("Cannot close current treatment for case: [No such tb id for current treatment]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withCaseId(caseId)
-                                                                   .withTbId("wrongTbId")
+                                                                   .withTbId("tbId")
                                                                    .build();
         patientService.add(patientRequest);
 
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+    }
+
+    @Test
+    public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseItIsAlreadyClosed() {
+        expectException("Cannot close current treatment for case: [Current treatment is already closed]");
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withCaseId(caseId)
+                                                                   .withTbId("tbId")
+                                                                   .build();
+        patientService.add(patientRequest);
+
+        //first properly closing treatment
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
+        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+
+        TreatmentUpdateRequest wrongTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
+        //now trying to close a closed treatment
+        patientService.performTreatmentUpdate(wrongTreatmentUpdateRequest);
+    }
+
+
+
+    @Test
+    public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
+        expectException("Cannot close current treatment for case: [No such tb id for current treatment, Current treatment is already closed]");
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withCaseId(caseId)
+                                                                   .withTbId("tbId")
+                                                                   .build();
+        patientService.add(patientRequest);
+
+        //first properly closing treatment
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
+        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+
+        TreatmentUpdateRequest wrongTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+
+        //now trying to close a closed treatment, that too with wrong tbId
+        patientService.performTreatmentUpdate(wrongTreatmentUpdateRequest);
+    }
+
+    @Test
+    public void shouldThrowExceptionIfNewTreatmentCannotBeOpenedBecauseCurrentTreatmentIsNotClosed() {
+        expectException("Cannot open new treatment for this case: [Current treatment is not closed]");
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withCaseId(caseId)
+                                                                   .withTbId("tbId")
+                                                                   .build();
+        patientService.add(patientRequest);
+
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withTbId("tbId").build();
         patientService.performTreatmentUpdate(treatmentUpdateRequest);
     }
 

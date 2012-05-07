@@ -30,9 +30,6 @@ public class ListAllPatientsTest extends BaseTest {
     @Autowired
     PatientService patientService;
 
-    @Autowired
-    AllPatients allPatients;
-
     ProviderDataService providerDataService;
 
     PatientRequest patientRequest;

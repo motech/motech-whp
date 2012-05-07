@@ -7,7 +7,11 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 
+import java.util.Arrays;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -20,9 +24,12 @@ public class UpdateTreatmentCriteriaTest {
 
     UpdateTreatmentCriteria updateTreatmentCriteria;
 
+    CriteriaErrors criteriaErrors;
+
     public UpdateTreatmentCriteriaTest() {
         initMocks(this);
         updateTreatmentCriteria = new UpdateTreatmentCriteria(allPatients);
+        criteriaErrors = new CriteriaErrors();
     }
 
     @Test
@@ -36,7 +43,21 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertTrue(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest));
+        assertTrue(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{}, criteriaErrors.toArray());
+    }
+
+    @Test
+    public void shouldReturnTrueForCanOpenNewTreatmentIfNewTreatmentCanBeOpenedForPatient() {
+        Patient patient = new PatientBuilder().withDefaults().withTreatmentEndDate(today()).build();
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+
+        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+
+        assertTrue(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{}, criteriaErrors.toArray());
     }
 
     @Test
@@ -50,7 +71,8 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest));
+        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Current treatment is already closed"}, criteriaErrors.toArray());
     }
 
     @Test
@@ -65,7 +87,24 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest));
+        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"No such tb id for current treatment"}, criteriaErrors.toArray());
+    }
+
+    @Test
+    public void shouldReturnFalseForCanCloseCurrentTreatmentIfPatientTreatmentTbIdDoesNotMatchRequestTbIdAndTreatmentIsAlreadyClosed() {
+        String tbId = "tbId";
+        String someOtherTbId = "someOtherTbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).withTreatmentEndDate(today()).build();
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+        treatmentUpdateRequest.setTb_id(someOtherTbId);
+
+        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+
+        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is already closed"}, criteriaErrors.toArray());
     }
 
     @Test
@@ -79,23 +118,12 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest));
+        assertFalse(updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Case does not have any current treatment"}, criteriaErrors.toArray());
     }
 
     @Test
-    public void shouldReturnTrueForCanOpenNewTreatmentIfNewTreatmentCanBeOpenedForPatient() {
-        Patient patient = new PatientBuilder().withDefaults().withTreatmentEndDate(today()).build();
-
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
-
-        assertTrue(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest));
-    }
-
-    @Test
-    public void shouldReturnFalseForCanOpenNewTreatmentIfPatientAlreadyHasAnOpenTreatment() {
+    public void shouldReturnFalseForCanOpenNewTreatmentIfPatientAlreadyHasACurrentTreatment() {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
@@ -103,7 +131,8 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertFalse(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest));
+        assertFalse(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Current treatment is not closed"}, criteriaErrors.toArray());
     }
 
     @Test
@@ -115,6 +144,7 @@ public class UpdateTreatmentCriteriaTest {
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        assertFalse(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest));
+        assertFalse(updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Case does not have any current treatment"}, criteriaErrors.toArray());
     }
 }

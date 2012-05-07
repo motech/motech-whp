@@ -6,6 +6,7 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.domain.criteria.UpdateTreatmentCriteria;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -22,6 +23,8 @@ public class PatientService {
     private AllTreatments allTreatments;
     private AllPatients allPatients;
     private UpdateTreatmentCriteria updateTreatmentCriteria;
+    private final String CANNOT_OPEN_NEW_TREATMENT = "Cannot open new treatment for this case: ";
+    private final String CANNOT_CLOSE_CURRENT_TREATMENT = "Cannot close current treatment for case: ";
 
     @Autowired
     public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateTreatmentCriteria updateTreatmentCriteria) {
@@ -64,19 +67,20 @@ public class PatientService {
         if (patient == null) {
             throw new WHPDomainException("Invalid case-id. No such patient.");
         }
+        CriteriaErrors criteriaErrors = new CriteriaErrors();
         switch (treatmentUpdateRequest.getTreatment_update()) {
             case NewTreatment:
-                if (updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest)) {
+                if (updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest, criteriaErrors)) {
                     addNewTreatmentForCategoryChange(treatmentUpdateRequest, patient);
                 } else {
-                    throw new WHPDomainException("Cannot open new treatment for this case: either case does not have any current treatment or current treatment is not closed.");
+                    throw new WHPDomainException(CANNOT_OPEN_NEW_TREATMENT + criteriaErrors);
                 }
                 break;
             case CloseTreatment:
-                if (updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest)){
+                if (updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors)){
                     closeCurrentTreatment(patient, treatmentUpdateRequest);
                 } else {
-                    throw new WHPDomainException("Cannot close current treatment for case: either wrong tb id, there is no current treatment or it is already closed.");
+                    throw new WHPDomainException(CANNOT_CLOSE_CURRENT_TREATMENT + criteriaErrors);
                 }
         }
     }
