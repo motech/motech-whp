@@ -2,12 +2,10 @@ package org.motechproject.whp.functional.page;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class ProviderCreatePage extends Page {
 
@@ -51,19 +49,7 @@ public class ProviderCreatePage extends Page {
     }
 
     private LoginPage transitionToNextPage() {
-        waitForPageToPost();
         webDriver.get(LoginPage.LOGIN_URL);
         return MyPageFactory.initElements(webDriver, LoginPage.class);
-    }
-
-    private void waitForPageToPost() {
-        wait.until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                MyPageFactory.initElements(webDriver, ProviderCreatePage.class);
-                WebElement posted = webDriver.findElement(By.id("posted_successfully"));
-                return posted != null && posted.getAttribute("value").equals("POSTED");
-            }
-        });
     }
 }

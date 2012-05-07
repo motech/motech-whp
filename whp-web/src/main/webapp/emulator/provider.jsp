@@ -20,8 +20,6 @@
     <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
 
     <form name="testSubmit" action="/whp/emulator/provider.jsp" method="POST">
-        <input type="hidden" id="posted_successfully" value="<%=posted%>"/>
-
         <div class="row-fluid">
             <span style="vertical-align:top" class="pull-left span3">Enter Provider Id</span>
             <input id="provider_id" class="span" name="provider_id" type="text" value="raj"/>
