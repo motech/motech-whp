@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.page.AdminPage;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
@@ -30,9 +31,9 @@ public class LoginTest extends BaseTest {
 
     @Test
     public void testLoginSuccessForAdministrator() {
-        ProviderPage providerPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), "admin"));
-        providerPage.logout();
+        AdminPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
+        assertTrue(StringUtils.contains(adminPage.getWelcomeText(), "admin"));
+        adminPage.logout();
     }
 
     @Test

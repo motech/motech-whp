@@ -45,9 +45,9 @@ public class LoginPage extends Page {
         return this;
     }
 
-    public ProviderPage loginWithCorrectAdminUserNamePassword() {
+    public AdminPage loginWithCorrectAdminUserNamePassword() {
         login(CORRECT_USERNAME, CORRECT_PASSWORD);
-        return MyPageFactory.initElements(webDriver, ProviderPage.class);
+        return MyPageFactory.initElements(webDriver, AdminPage.class);
     }
 
     private void login(String userName, String password) {

@@ -7,13 +7,7 @@ import org.openqa.selenium.support.How;
 
 import java.util.List;
 
-public class ProviderPage extends Page {
-
-    @FindBy(how = How.ID, using = "links")
-    private WebElement welcomeDiv;
-
-    @FindBy(how = How.ID, using = "logout")
-    private WebElement logoutLink;
+public class ProviderPage extends LoggedInUserPage {
 
     @FindBy(how = How.CLASS_NAME, using = "name")
     private List<WebElement> patientNames;
@@ -22,18 +16,8 @@ public class ProviderPage extends Page {
     private List<WebElement> treatmentCategories;
 
 
-
     public ProviderPage(WebDriver webDriver) {
         super(webDriver);
-    }
-
-    @Override
-    protected void waitForPageToLoad() {
-        waitForElementWithIdToLoad("links");
-    }
-
-    public String getWelcomeText() {
-        return welcomeDiv.getText();
     }
 
     public boolean hasPatient(String patientName) {
@@ -52,10 +36,5 @@ public class ProviderPage extends Page {
             }
         }
         return false;
-    }
-
-    @Override
-    public void logout() {
-        logoutLink.click();
     }
 }
