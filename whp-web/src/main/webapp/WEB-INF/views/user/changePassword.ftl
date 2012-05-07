@@ -6,7 +6,7 @@
             <h3>Change Password</h3>
         </div>
         <div class="modal-body">
-            <div id="validationError" class="alert alert-error hide"></div>
+            <div id="changePasswordError" class="alert alert-error hide"></div>
             <div class="control-group">
                 <label class="control-label" for="currentPassword">Current Password *</label>
 

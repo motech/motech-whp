@@ -1,13 +1,13 @@
 $('#changePasswordModal').on('show', function() {
     $('#currentPassword').focus();
-    $('#validationError').empty();
+    $('#changePasswordError').empty();
     $('#changePasswordModal').find("input").val("");
-    $('#validationError').hide();
+    $('#changePasswordError').hide();
 });
 
 $('#changePasswordModal').submit(function(event) {
     if (!$('#changePasswordModal').valid()) {
-        $('#validationError').show();
+        $('#changePasswordError').show();
     }
     else {
         event.preventDefault();
@@ -54,7 +54,7 @@ $('#changePasswordModal').validate({
         }
     },
     errorPlacement: function(error, element) {
-        $('#validationError').append(error);
+        $('#changePasswordError').append(error);
     },
-    errorLabelContainer: '#validationError'
+    errorLabelContainer: '#changePasswordError'
 });

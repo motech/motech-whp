@@ -38,6 +38,7 @@ public class LoginPage extends Page {
     public void postInitialize() {
         userName = WebDriverFactory.createWebElement(userName);
         password = WebDriverFactory.createWebElement(password);
+        errorMessage = WebDriverFactory.createWebElement(errorMessage);
     }
 
     public LoginPage loginWithIncorrectAdminUserNamePassword() {
@@ -46,7 +47,11 @@ public class LoginPage extends Page {
     }
 
     public AdminPage loginWithCorrectAdminUserNamePassword() {
-        login(CORRECT_USERNAME, CORRECT_PASSWORD);
+        return loginWithCorrectAdminUserAnd(CORRECT_PASSWORD);
+    }
+
+    public AdminPage loginWithCorrectAdminUserAnd(String password) {
+        login(CORRECT_USERNAME, password);
         return MyPageFactory.initElements(webDriver, AdminPage.class);
     }
 
@@ -57,17 +62,12 @@ public class LoginPage extends Page {
     }
 
     public String errorMessage() {
-        if(!errorMessage.isEnabled())
-            errorMessage = WebDriverFactory.createWebElement(errorMessage);
+        waitForElementWithIdToLoad(errorMessage.getAttribute("id"));
         return errorMessage.getText();
     }
 
     public ProviderPage loginWithProviderUserNamePassword(String username, String password) {
         login(username, password);
         return MyPageFactory.initElements(webDriver, ProviderPage.class);
-    }
-
-    @Override
-    public void logout() {
     }
 }
