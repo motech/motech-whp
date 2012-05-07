@@ -190,22 +190,35 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenAgeIsNotNumeric() {
-        expectWHPException("field:age:Age must be numeric");
+        expectWHPException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
-    public void shouldThrowExceptionWhenAgeIsAFraction() {
-        expectWHPException("field:age:Age must be numeric");
+    public void shouldThrowExceptionWhenAgeIsAFractionInCreateScope() {
+        expectWHPException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
-    public void shouldNotThrowExceptionWhenAgeIsNumeric() {
+    public void shouldThrowExceptionWhenAgeIsAFractionInSimpleUpdateScope() {
+        expectWHPException("field:age:Age must be numeric and not fractional");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
+        validator.validate(webRequest, ValidationScope.simpleUpdate);
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenAgeIsNumericInCreateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10").build();
         validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldNotThrowExceptionWhenAgeIsNumericInSimpleUpdateScope() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10").build();
+        validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
 
     @Test
@@ -307,6 +320,7 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
             assertTrue(e.getMessage().contains("field:tb_id:may not be null"));
         }
     }
+
 
     @Test
     public void shouldThrowExceptionWhenAgeIsNull() {

@@ -140,8 +140,8 @@ public class PatientWebRequest {
     private String treatment_category;
 
     @NotNull
-    @Digits(integer = 3, fraction = 0, message = "Age must be numeric")
-    @Scope(scope = {ValidationScope.create})
+    @Digits(integer = 3, fraction = 0, message = "Age must be numeric and not fractional")
+    @Scope(scope = {ValidationScope.create, ValidationScope.simpleUpdate})
     private String age;
 
     public PatientWebRequest() {
