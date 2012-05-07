@@ -16,11 +16,12 @@ public class ProviderService {
         this.allProviders = allProviders;
     }
 
-    public void add(String providerId, String primaryMobile, String secondaryMobile, String tertiaryMobile, String district, DateTime lastModifiedDate) {
+    public String add(String providerId, String primaryMobile, String secondaryMobile, String tertiaryMobile, String district, DateTime lastModifiedDate) {
         Provider provider = new Provider(providerId, primaryMobile, district, lastModifiedDate);
         provider.setSecondaryMobile(secondaryMobile);
         provider.setTertiaryMobile(tertiaryMobile);
         allProviders.addOrReplace(provider);
+        return provider.getId();
     }
 
 }

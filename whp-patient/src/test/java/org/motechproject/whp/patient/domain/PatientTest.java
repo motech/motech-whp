@@ -1,6 +1,8 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
+import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;

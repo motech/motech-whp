@@ -9,9 +9,9 @@
     <name>motech-whp</name>
 
     <modules>
+        <module>whp-refdata</module>
         <module>whp-patient</module>
         <module>whp-application</module>
-        <module>whp-refdata</module>
         <module>whp-web</module>
         <module>whp-adherence</module>
     </modules>

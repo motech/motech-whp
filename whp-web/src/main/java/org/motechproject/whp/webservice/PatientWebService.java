@@ -6,7 +6,7 @@ import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.application.service.RegistrationService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.domain.TreatmentUpdate;
+import org.motechproject.whp.refdata.domain.TreatmentUpdate;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.service.PatientService;

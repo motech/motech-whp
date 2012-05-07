@@ -1,6 +1,6 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.request.PatientWebRequest;
 
 public class PatientWebRequestBuilder {

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 
 @Data
 public class WeightStatistics {

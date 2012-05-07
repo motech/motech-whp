@@ -7,6 +7,9 @@ import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientStatus;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 import java.util.ArrayList;
 import java.util.List;

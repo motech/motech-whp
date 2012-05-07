@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;

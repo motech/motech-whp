@@ -18,6 +18,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,7 +28,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
-import static org.motechproject.whp.patient.domain.PatientType.New;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
@@ -148,7 +148,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     private void adherenceIsRecordedForTheFirstTime() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withCaseId(PATIENT_ID)
-                .withPatientType(New)
+                .withPatientType(PatientType.New)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         patientService.add(patientRequest);

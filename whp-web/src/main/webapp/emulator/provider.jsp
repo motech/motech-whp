@@ -9,18 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/whp/resources/styles/bootstrap.css/"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources/styles/standard.css"/>
-    <%
-        ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-        MotechAuthenticationService authenticationService = (MotechAuthenticationService) appCtx.getBean("motechAuthenticationService", MotechAuthenticationService.class);
-        if (null != request.getParameter("provider_id")) {
-            String providerId = request.getParameter("provider_id");
-            String password = request.getParameter("password");
-            Provider provider = ((AllProviders) appCtx.getBean("allProviders", AllProviders.class)).findByProviderId(providerId);
-            authenticationService.register(providerId, password, provider.getId(), Arrays.asList("PROVIDER"));
-        }
-
-        String posted = (null != request.getParameter("provider_id")) ? "POSTED" : "SomethingElse";
-    %>
 </head>
 <body>
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>

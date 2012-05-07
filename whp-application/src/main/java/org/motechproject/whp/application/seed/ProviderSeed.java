@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.application.seed;
 
 
 import org.motechproject.deliverytools.seed.Seed;

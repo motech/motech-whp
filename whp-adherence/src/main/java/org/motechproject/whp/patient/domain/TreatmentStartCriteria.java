@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -4,6 +4,8 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 
 @Data
 public class SmearTestResults {

@@ -1,16 +1,13 @@
 package org.motechproject.whp.patient.builder;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.refdata.domain.*;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.motechproject.whp.patient.domain.SmearTestResult.Negative;
-import static org.motechproject.whp.patient.domain.SmearTestSampleInstance.PreTreatment;
 
 public class PatientBuilder {
 
@@ -48,7 +45,7 @@ public class PatientBuilder {
         Treatment treatment = new Treatment();
         LocalDate today = DateUtil.today();
         treatment.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
-        treatment.addSmearTestResult(new SmearTestResults(PreTreatment, today, Negative, today, Negative));
+        treatment.addSmearTestResult(new SmearTestResults(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
         treatment.addWeightStatistics(new WeightStatistics(WeightInstance.PreTreatment, 100.0, today));
         return treatment;
     }

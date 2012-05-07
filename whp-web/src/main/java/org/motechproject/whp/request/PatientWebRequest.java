@@ -4,8 +4,10 @@ import lombok.Data;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.Scope;
+
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
+import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.format.annotation.DateTimeFormat;

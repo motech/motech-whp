@@ -1,12 +1,9 @@
 package org.motechproject.whp.patient.contract;
 
 import lombok.Data;
-import lombok.Getter;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentUpdate;
 
 @Data
 public class TreatmentUpdateRequest {

@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.mapper;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
 
 public class PatientMapper {
 

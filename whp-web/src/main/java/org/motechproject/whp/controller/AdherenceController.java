@@ -48,7 +48,7 @@ public class AdherenceController {
         LocalDate today = DateUtil.today();
         boolean isLaterThanTuesday = today.getDayOfWeek() > 2;
         boolean isEarlierThanSunday = today.getDayOfWeek() < 7;
-        return (isLaterThanTuesday && isEarlierThanSunday) ? true : false;
+        return isLaterThanTuesday && isEarlierThanSunday;
     }
 
 }

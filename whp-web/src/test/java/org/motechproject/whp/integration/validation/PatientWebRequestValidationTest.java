@@ -8,7 +8,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllProviders;

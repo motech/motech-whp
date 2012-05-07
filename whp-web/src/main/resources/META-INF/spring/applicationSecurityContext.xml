@@ -22,6 +22,7 @@
         <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>
 
         <!-- Only providers -->
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
