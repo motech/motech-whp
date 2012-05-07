@@ -3,8 +3,6 @@ package org.motechproject.whp.patient.builder;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Provider;
 
-import java.util.UUID;
-
 public class ProviderBuilder {
 
     private Provider provider;

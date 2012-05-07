@@ -22,8 +22,8 @@ public class Patient extends MotechBaseDataObject {
     private String firstName;
     private String lastName;
     private Gender gender;
-    private PatientType patientType;
     private String phoneNumber;
+    private PatientType patientType;
     private String phi;
     private PatientStatus status = PatientStatus.Open;
     private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();

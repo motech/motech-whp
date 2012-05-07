@@ -1,6 +1,5 @@
 package org.motechproject.whp.patient.mapper;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;

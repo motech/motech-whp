@@ -28,7 +28,11 @@ public class Address {
 
     @JsonIgnore
     public boolean isValid(ValidationErrors validationErrors) {
-        boolean isFilled = address_location != null && address_block != null && address_village != null && address_district != null && address_state != null;
+        boolean isFilled = address_location != null
+                && address_block != null
+                && address_village != null
+                && address_district != null
+                && address_state != null;
         if (!isFilled) {
             validationErrors.add("Invalid address : null value");
         }
@@ -37,6 +41,10 @@ public class Address {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return address_location == null && address_block == null && address_village == null && address_district == null && address_state == null;
+        return address_location == null
+                && address_block == null
+                && address_village == null
+                && address_district == null
+                && address_state == null;
     }
 }
