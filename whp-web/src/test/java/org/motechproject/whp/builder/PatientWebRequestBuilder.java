@@ -116,4 +116,8 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+    public PatientWebRequestBuilder withAPIKey(String api_key) {
+        patientWebRequest.setApi_key(api_key);
+        return this;
+    }
 }

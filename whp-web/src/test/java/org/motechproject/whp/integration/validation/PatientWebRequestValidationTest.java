@@ -23,11 +23,11 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class PatientRequestValidationTest extends SpringIntegrationTest {
+public class PatientWebRequestValidationTest extends SpringIntegrationTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
-    
+
     @Autowired
     private RequestValidator validator;
 
@@ -236,6 +236,19 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldBeValidWhenAPIKeyIsValid() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("api_key").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldBeInvalidWhenAPIIsInvalid() {
+        expectException("field:api_key:api_key:is invalid.");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("invalid_api_key").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
     public void shouldThrowExceptionWhenProviderIdIsNotFound() {
         expectWHPException("No provider is found with id:providerId");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
@@ -245,11 +258,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     @Test
     public void shouldThrowSingleExceptionWhenProviderIdIsNull() {
         String errorMessage = "";
-        try{
+        try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:provider_id:may not be null")){
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:provider_id:may not be null")) {
                 fail("Not Null validation is not required.");
             }
             errorMessage = e.getMessage();
@@ -260,11 +273,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     @Test
     public void shouldThrowSingleException_WhenTreatmentCategoryIsNull() {
         String errorMessage = "";
-        try{
+        try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:treatment_category:Treatment Category cannot be null")){
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:treatment_category:Treatment Category cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
             errorMessage = e.getMessage();
@@ -296,11 +309,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     @Test
     public void shouldThrowSingleExceptionWhenWeightIsNull() {
         String errorMessage = "";
-        try{
+        try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:weight:Weight cannot be null")){
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:weight:Weight cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
             errorMessage = e.getMessage();
@@ -310,11 +323,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {
-        try{
+        try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:tb_id:TB ID cannot be null")){
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:tb_id:TB ID cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
             assertTrue(e.getMessage().contains("field:tb_id:may not be null"));
@@ -325,11 +338,11 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     @Test
     public void shouldThrowExceptionWhenAgeIsNull() {
         String errorMessage = "";
-        try{
+        try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e){
-            if(e.getMessage().contains("field:age:Age cannot be null")){
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:age:Age cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
             errorMessage = e.getMessage();
@@ -364,13 +377,13 @@ public class PatientRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldNotThrowException_WhenWeightInstanceIsNull_ForUpdateScope(){
+    public void shouldNotThrowException_WhenWeightInstanceIsNull_ForUpdateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
         validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
 
     @Test
-    public void shouldNotThrowException_WhenSmearTestResultsIsNull_ForUpdateScope(){
+    public void shouldNotThrowException_WhenSmearTestResultsIsNull_ForUpdateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withSmearTestResults(null, null, null, null, null).build();
         validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
