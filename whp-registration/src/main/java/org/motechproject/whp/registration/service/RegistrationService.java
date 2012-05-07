@@ -1,4 +1,4 @@
-package org.motechproject.whp.application.service;
+package org.motechproject.whp.registration.service;
 
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.patient.contract.PatientRequest;

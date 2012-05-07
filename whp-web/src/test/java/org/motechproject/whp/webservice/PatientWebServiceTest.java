@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.application.service.RegistrationService;
+import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;

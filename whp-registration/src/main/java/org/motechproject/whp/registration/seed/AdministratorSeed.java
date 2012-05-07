@@ -1,4 +1,4 @@
-package org.motechproject.whp.application.seed;
+package org.motechproject.whp.registration.seed;
 
 
 import org.motechproject.deliverytools.seed.Seed;

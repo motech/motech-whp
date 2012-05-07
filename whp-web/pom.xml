@@ -42,7 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-application</artifactId>
+            <artifactId>whp-registration</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

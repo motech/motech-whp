@@ -1,9 +1,9 @@
-package org.motechproject.whp.application.seed;
+package org.motechproject.whp.registration.seed;
 
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.application.service.RegistrationService;
+import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

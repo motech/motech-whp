@@ -1,4 +1,4 @@
-package org.motechproject.whp.application.service;
+package org.motechproject.whp.registration.service;
 
 import org.joda.time.DateTime;
 import org.junit.Before;

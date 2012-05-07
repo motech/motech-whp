@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice;
 import org.apache.velocity.app.VelocityEngine;
 import org.dozer.DozerBeanMapper;
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.whp.application.service.RegistrationService;
+import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.refdata.domain.TreatmentUpdate;

@@ -8,7 +8,7 @@
     <import resource="classpath*:applicationPatientContext.xml"/>
 
     <context:annotation-config/>
-    <context:component-scan base-package="org.motechproject.whp.application"/>
+    <context:component-scan base-package="org.motechproject.whp.registration"/>
 
     <bean id="patientRequestMapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
