@@ -13,6 +13,6 @@
         ${Session.loggedInUser.username} |
         <a id="changePasswordLink" data-toggle="modal" href="#changePasswordModal">Change Password</a> |
         <a id="logout" href="<@spring.url '/security/j_spring_security_logout' />">Logout</a>
+        <@changePassword/>
     </#if>
 </div>
-<@changePassword/>

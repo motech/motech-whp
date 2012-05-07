@@ -24,7 +24,10 @@ $('#changePasswordModal').submit(function(event) {
 
 $('#changePasswordModal').validate({
     rules: {
-        currentPassword: "required",
+        currentPassword: {
+            required: true,
+            equalTo: '#userPassword'
+        },
         newPassword:  {
             required: true,
             minlength: 4,
@@ -36,7 +39,10 @@ $('#changePasswordModal').validate({
         }
     },
     messages: {
-        currentPassword: "Please enter 'Current Password'",
+        currentPassword: {
+            required: "Please enter 'Current Password'",
+            equalTo: "'Current Password' you entered does not match our records"
+        },
         newPassword: {
             required: "Please enter 'New Password'",
             minlength: "'New Password' should at least be 4 characters long",
