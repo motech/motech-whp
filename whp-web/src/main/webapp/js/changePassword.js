@@ -40,16 +40,16 @@ $('#changePasswordModal').validate({
     },
     messages: {
         currentPassword: {
-            required: "Please enter 'Current Password'",
-            equalTo: "'Current Password' you entered does not match our records"
+            required: "'Current Password' cannot be empty",
+            equalTo: "'Current Password' you entered is incorrect"
         },
         newPassword: {
-            required: "Please enter 'New Password'",
-            minlength: "'New Password' should at least be 4 characters long",
+            required: "'New Password' cannot be empty",
+            minlength: "'New Password' should be at least 4 characters long",
             notEqualTo: "'New Password' should not be the same as the 'Current Password'"
         },
         confirmNewPassword: {
-            required: "Please enter 'Confirm New Password'",
+            required: "'Confirm New Password' cannot be empty",
             equalTo: "'Confirm New Password' should match 'New Password'"
         }
     },

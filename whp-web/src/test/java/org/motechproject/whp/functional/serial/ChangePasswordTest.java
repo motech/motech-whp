@@ -37,15 +37,15 @@ public class ChangePasswordTest extends BaseTest {
     }
 
     private void validateMandatoryFields(LoggedInUserPage adminPage) {
-        changePasswordAndValidate(adminPage, "", "", "", Arrays.asList("Please enter 'Current Password'", "Please enter 'New Password'", "Please enter 'Confirm New Password'"));
+        changePasswordAndValidate(adminPage, "", "", "", Arrays.asList("'Current Password' cannot be empty", "'New Password' cannot be empty", "'Confirm New Password' cannot be empty"));
     }
 
     private void validateCurrentPasswordToMatchExistingPassword(LoggedInUserPage adminPage) {
-        changePasswordAndValidate(adminPage, "incorrectoldpassword", "newpassword", "newpassword", Arrays.asList("'Current Password' you entered does not match our records"));
+        changePasswordAndValidate(adminPage, "incorrectoldpassword", "newpassword", "newpassword", Arrays.asList("'Current Password' you entered is incorrect"));
     }
 
     private void validateNewPasswordForLength(LoggedInUserPage adminPage) {
-        changePasswordAndValidate(adminPage, "password", "3ch", "3ch", Arrays.asList("'New Password' should at least be 4 characters long"));
+        changePasswordAndValidate(adminPage, "password", "3ch", "3ch", Arrays.asList("'New Password' should be at least 4 characters long"));
     }
 
     private void validateNewPasswordToNotMatchCurrentPassword(LoggedInUserPage adminPage) {
