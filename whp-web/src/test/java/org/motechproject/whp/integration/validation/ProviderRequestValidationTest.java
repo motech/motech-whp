@@ -5,15 +5,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
+import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.request.ProviderWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
 public class ProviderRequestValidationTest extends SpringIntegrationTest {
@@ -49,10 +54,18 @@ public class ProviderRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionIfDateIsEmpty() {
-        expectWHPException("field:date:Invalid format: \"\"");
-        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
-        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    public void shouldThrowSingleExceptionIfDateIsEmpty() {
+        String errorMessage = "";
+        try{
+            ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("P00001").withDate("").withDistrict("Chambal").withPrimaryMobile("9880000000").build();
+            validator.validate(providerWebRequest, ValidationScope.create);
+        } catch (WHPException e){
+            if(e.getMessage().contains("field:date: may not be empty")){
+                fail("Use @NotNull instead of @NotEmpty to validate null condition. @DateTimeFormat already validates empty date field.");
+            }
+            errorMessage = e.getMessage();
+        }
+        assertTrue(errorMessage.contains("field:date:Invalid format: \"\""));
     }
 
     @Test
