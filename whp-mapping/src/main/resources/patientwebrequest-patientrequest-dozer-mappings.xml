@@ -7,11 +7,11 @@
     <mapping wildcard="true">
         <class-a>org.motechproject.whp.request.PatientWebRequest</class-a>
         <class-b>org.motechproject.whp.patient.contract.PatientRequest</class-b>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>treatmentStartDate</b>
         </field>
@@ -19,15 +19,15 @@
             <a>treatment_category</a>
             <b>treatment_category</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>disease_class</a>
             <b>disease_class</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>gender</a>
             <b>gender</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>patient_type</a>
             <b>patient_type</b>
         </field>
@@ -57,28 +57,28 @@
             <b>address.address_state</b>
         </field>
         <!--Nested smear Test result Fields-->
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>smear_sample_instance</a>
             <b>smearTestResults.smear_sample_instance</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>smear_test_date_1</a>
             <b>smearTestResults.smear_test_date_1</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>smear_test_result_1</a>
             <b>smearTestResults.smear_test_result_1</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>smear_test_date_2</a>
             <b>smearTestResults.smear_test_date_2</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>smear_test_result_2</a>
             <b>smearTestResults.smear_test_result_2</b>
         </field>
         <!--Nested weight statistics Fields-->
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>weight_instance</a>
             <b>weightStatistics.weight_instance</b>
         </field>
@@ -86,7 +86,7 @@
             <a>weight</a>
             <b>weightStatistics.weight</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>weightStatistics.measuringDate</b>
         </field>

@@ -1,4 +1,4 @@
-package org.motechproject.whp.application.mapping;
+package org.motechproject.whp.mapping;
 
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,7 +7,7 @@
     <mapping wildcard="true">
         <class-a>org.motechproject.whp.request.PatientWebRequest</class-a>
         <class-b>org.motechproject.whp.patient.contract.TreatmentUpdateRequest</class-b>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
@@ -15,7 +15,7 @@
             <a>treatment_category</a>
             <b>treatment_category</b>
         </field>
-        <field custom-converter="org.motechproject.whp.application.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>treatment_update</a>
             <b>treatment_update</b>
         </field>

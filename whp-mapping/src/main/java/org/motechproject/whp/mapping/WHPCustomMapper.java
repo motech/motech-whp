@@ -1,4 +1,4 @@
-package org.motechproject.whp.application.mapping;
+package org.motechproject.whp.mapping;
 
 import org.dozer.CustomConverter;
 import org.dozer.MappingException;
