@@ -60,7 +60,7 @@
         </div>
         <input type="button" id="post-button" value="Submit"/>
     </form>
-    <textarea id="template" style="display:none"><$REGISTRATION$ xmlns="http://openrosa.org/user/registration">
+    <textarea id="template" style="display:none"><$REGISTRATION$ api_key="api_key" xmlns="http://openrosa.org/user/registration">
         <username></username>
         <password></password>
         <uuid></uuid>

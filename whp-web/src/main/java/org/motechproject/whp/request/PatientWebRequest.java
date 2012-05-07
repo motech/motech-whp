@@ -5,6 +5,7 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.Scope;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,10 @@ public class PatientWebRequest {
 
     @NotNull
     private String case_id;
+
+    @NotNull
+    @NamedConstraint(name = APIKeyValidator.API_KEY_VALIDATION)
+    private String api_key;
 
     @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -193,6 +198,11 @@ public class PatientWebRequest {
     public PatientWebRequest setWeightStatistics(String weightInstance, String weight) {
         this.weight_instance = weightInstance;
         this.weight = weight;
+        return this;
+    }
+
+    public PatientWebRequest setApi_key(String apiKey) {
+        this.api_key = apiKey;
         return this;
     }
 }

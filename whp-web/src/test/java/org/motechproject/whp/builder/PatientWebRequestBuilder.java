@@ -10,6 +10,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaults() {
 
         patientWebRequest = new PatientWebRequest()
+                .setApi_key("api_key")
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.getValue(), PatientType.PHSTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
@@ -21,6 +22,7 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withSimpleUpdateFields() {
         patientWebRequest = new PatientWebRequest()
+                .setApi_key("api_key")
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
@@ -32,6 +34,7 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
         patientWebRequest = new PatientWebRequest()
+                .setApi_key("api_key")
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdate.CloseTreatment.name(), "Cured", "Yes", "oldTbID");

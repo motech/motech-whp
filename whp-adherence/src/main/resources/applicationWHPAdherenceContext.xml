@@ -9,8 +9,8 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp"/>
+    <context:component-scan base-package="org.motechproject.adherence"/>
 
-    <import resource="classpath*:applicationAdherenceContext.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
 
 </beans>

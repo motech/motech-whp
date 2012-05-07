@@ -6,6 +6,10 @@ public class ProviderRequestBuilder {
 
     private ProviderWebRequest providerWebRequest = new ProviderWebRequest();
 
+    public ProviderRequestBuilder() {
+        withDefaults();
+    }
+
     public ProviderRequestBuilder withDefaults() {
         providerWebRequest = new ProviderWebRequest();
         providerWebRequest.setProvider_id("providerId");
@@ -14,6 +18,7 @@ public class ProviderRequestBuilder {
         providerWebRequest.setTertiary_mobile("9880123458");
         providerWebRequest.setDistrict("Patna");
         providerWebRequest.setDate("12/01/2012 10:10:10");
+        providerWebRequest.setApi_key("api_key");
         return this;
     }
 
