@@ -1,7 +1,9 @@
 package org.motechproject.whp.mapper;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.request.ProviderWebRequest;
@@ -10,6 +12,9 @@ import static junit.framework.Assert.assertEquals;
 
 
 public class ProviderRequestMapperTest {
+
+    @Rule
+    public ExpectedException exceptionThrown = ExpectedException.none();
 
     ProviderRequestMapper providerRequestMapper;
 
@@ -30,6 +35,18 @@ public class ProviderRequestMapperTest {
         assertEquals("9880123458", provider.getTertiaryMobile());
         assertEquals("Patna", provider.getDistrict());
         assertEquals("12/01/2012 10:10:10", provider.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfDateIsNull() {
+        expectNullPointerException();
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withDefaults().withDate(null).build();
+
+        providerRequestMapper.map(providerWebRequest);
+    }
+
+    private void expectNullPointerException() {
+        exceptionThrown.expect(NullPointerException.class);
     }
 }
 

@@ -34,6 +34,7 @@ public class ProviderWebRequest {
     private String password;
     private String uuid;
 
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date;
 }
