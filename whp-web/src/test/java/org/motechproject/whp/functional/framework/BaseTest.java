@@ -1,6 +1,10 @@
 package org.motechproject.whp.functional.framework;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,6 +20,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import static junit.framework.Assert.assertEquals;
 
 public abstract class BaseTest {
 
@@ -69,5 +75,24 @@ public abstract class BaseTest {
             if (output != null)
                 output.close();
         }
+        adjustDateTime(DateUtil.now());
+    }
+
+    public void adjustDateTime(DateTime dateTime) {
+        String url = WHPUrl.baseFor("motech-delivery-tools/datetime/update");
+        GetMethod getMethod = new GetMethod(url);
+        NameValuePair[] queryString = new NameValuePair[3];
+        queryString[0] = new NameValuePair("date", dateTime.toString("yyyy-MM-dd"));
+        queryString[1] = new NameValuePair("hour", String.valueOf(dateTime.getHourOfDay()));
+        queryString[2] = new NameValuePair("minute", String.valueOf(dateTime.getMinuteOfHour()));
+        getMethod.setQueryString(queryString);
+
+        int statusCode = 0;
+        try {
+            statusCode = new HttpClient().executeMethod(getMethod);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals(200, statusCode);
     }
 }

@@ -19,7 +19,7 @@
     <div class="pull-right"><a href="/whp/emulator/">home</a></div>
     <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
 
-    <form name="testSubmit" action="/whp/emulator/provider.jsp" method="POST">
+    <form name="testSubmit">
         <div class="row-fluid">
             <span style="vertical-align:top" class="pull-left span3">Enter Provider Id</span>
             <input id="provider_id" class="span" name="provider_id" type="text" value="raj"/>
@@ -81,7 +81,6 @@
                 contentType:"application/xml; charset=utf-8",
                 success:function (data, textStatus, jqXHR) {
                     $('#statusMessage').html("Status of request: SUCCESS");
-                    document.forms["testSubmit"].submit();
                 },
                 error:function (xhr, status, error) {
                     $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);

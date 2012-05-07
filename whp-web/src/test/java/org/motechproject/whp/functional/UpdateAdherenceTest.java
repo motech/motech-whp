@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,10 +64,20 @@ public class UpdateAdherenceTest extends BaseTest {
     }
 
     @Test
-    public void shouldUpdateAdherence() {
+    public void shouldAllowUpdateAdherenceOnSunday() {
+        adjustDateTime(DateTime.now().withDayOfWeek(7));
+
         UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id()).markAsTaken("Monday");
         boolean isTaken = updateAdherencePage.submit().clickEditAdherenceLink(patientRequest.getCase_id()).isTaken("Monday");
         assertTrue(isTaken);
+    }
+
+    @Test
+    public void shouldNotAllowUpdateAdherenceOnWednesday() {
+        adjustDateTime(DateTime.now().withDayOfWeek(3));
+
+        boolean isReadOnly = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id()).isReadOnly();
+        assertTrue(isReadOnly);
     }
 
     ProviderPage loginAsProvider() {

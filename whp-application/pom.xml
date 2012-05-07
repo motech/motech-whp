@@ -34,7 +34,11 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-datetime-simulator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
     </dependencies>
-
 
 </project>

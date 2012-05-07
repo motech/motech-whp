@@ -18,6 +18,7 @@
 
         <!-- Permit all -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
+        <intercept-url pattern="/motech-delivery-tools/**" access="permitAll" requires-channel="any"/>
 
         <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','ADMIN')" requires-channel="any"/>

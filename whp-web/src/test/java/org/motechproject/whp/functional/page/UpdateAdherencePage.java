@@ -47,8 +47,13 @@ public class UpdateAdherencePage extends Page {
         return this;
     }
 
+    public boolean isReadOnly() {
+        return !adherenceRows.get(0).findElement(By.className("pillStatusTaken")).isEnabled();
+    }
+
     public ProviderPage submit() {
         adherenceForm.submit();
         return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
+
 }
