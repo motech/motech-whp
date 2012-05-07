@@ -67,7 +67,7 @@ public class LoggedInUserPage extends Page {
         currentPassword.sendKeys(currentPasswordText);
         newPassword.sendKeys(newPasswordText);
         confirmNewPassword.sendKeys(confirmNewPasswordText);
-        changePassword.submit();
+        confirmNewPassword.submit();
     }
 
     public List<String> getChangePasswordErrorMessages() {
