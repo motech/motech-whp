@@ -5,7 +5,7 @@
 
     <div class="well page-header"><h3>Update last week's adherence</h3></div>
 
-    <form action="<@spring.url '/adherence/update/' + patientId/>" method="POST">
+    <form id="adherenceForm" action="<@spring.url '/adherence/update/' + patientId/>" method="POST">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -25,10 +25,10 @@
             </thead>
             <tbody>
                 <#list adherence.adherenceLogs as adherenceLog>
-                <tr>
+                <tr class="adherenceRow">
                     <td>
                     ${adherenceLog.pillDay}
-                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay"
+                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay" class="pillDay"
                                value="${adherenceLog.pillDay}"/>
                     </td>
                     <td>
@@ -38,10 +38,12 @@
                     </td>
                     <td>
                         <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                               class="pillStatusTaken"
                                value="Taken" <#if adherenceLog.isTaken> checked </#if> <#if readOnly > disabled </#if>/>
                     </td>
                     <td>
                         <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                               class="pillStatusNotTaken"
                                value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if> <#if readOnly >
                                disabled </#if>/>
                     </td>
