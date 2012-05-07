@@ -1,6 +1,5 @@
 package org.motechproject.whp.functional.serial;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
@@ -16,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 public class ChangePasswordTest extends BaseTest {
 
     @Test
-    @Ignore
     public void testChangePasswordForAdministrator() {
         LoggedInUserPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().openChangePasswordModal();
         verifyValidations(adminPage);
@@ -26,6 +24,8 @@ public class ChangePasswordTest extends BaseTest {
 
         adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserAnd(newPassword).openChangePasswordModal();
         changePassword(adminPage, newPassword, LoginPage.CORRECT_PASSWORD).logout();
+
+        MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().logout();
     }
 
     private void verifyValidations(LoggedInUserPage adminPage) {
