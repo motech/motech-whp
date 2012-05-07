@@ -62,7 +62,7 @@ public class LoginPage extends Page {
     }
 
     public String errorMessage() {
-        waitForElementWithIdToLoad(errorMessage.getAttribute("id"));
+        waitForElementWithIdToLoad(ERROR_MESSAGE);
         return errorMessage.getText();
     }
 
