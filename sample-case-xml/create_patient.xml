@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<case xmlns="http://openrosa.org/javarosa" case_id="1234567890" date_modified="03/04/2012 11:23:40" api_key="API_KEY" user_id="system">
+<case xmlns="http://openrosa.org/javarosa" case_id="1234567890" date_modified="03/04/2012 11:23:40" api_key="api_key" user_id="system">
     <create>
         <case_type>whp_tb_patient</case_type>
         <case_name>Raju Singh</case_name>
