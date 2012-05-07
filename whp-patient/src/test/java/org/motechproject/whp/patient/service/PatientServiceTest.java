@@ -19,6 +19,7 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -57,17 +58,17 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withCaseId(CASE_ID)
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withPatientAge(50)
-                                                                   .build();
+                .withCaseId(CASE_ID)
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withPatientAge(50)
+                .build();
         patientService.createPatient(patientRequest);
 
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields()
-                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                         .withPatientAge(66)
-                                                                         .withCaseId(CASE_ID)
-                                                                         .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withPatientAge(66)
+                .withCaseId(CASE_ID)
+                .build();
         patientService.simpleUpdate(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
@@ -84,9 +85,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdateOnlyTheSpecifiedFieldsOnPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(CASE_ID)
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(CASE_ID)
+                .build();
         patientService.createPatient(patientRequest);
         Patient patient = allPatients.findByPatientId(CASE_ID);
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
@@ -110,9 +111,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
         expectWHPDomainException("invalid treatment data.[Invalid smear test results : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(CASE_ID)
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(CASE_ID)
+                .build();
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null).build();
 
@@ -123,9 +124,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
         expectWHPDomainException("invalid treatment data.[Invalid weight statistics : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(CASE_ID)
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(CASE_ID)
+                .build();
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withWeightStatistics(null, 100.0, DateUtil.tomorrow()).build();
 
@@ -150,10 +151,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
@@ -165,10 +166,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         expectWHPDomainException("Cannot close current treatment for case: [Current treatment is already closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         //first properly closing treatment
@@ -180,6 +181,26 @@ public class PatientServiceTest extends SpringIntegrationTest {
         patientService.performTreatmentUpdate(wrongTreatmentUpdateRequest);
     }
 
+    @Test
+    public void shouldClosePatientAfterClosingTreatment() {
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
+        patientService.createPatient(patientRequest);
+
+        TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+                .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(caseId);
+
+        assertEquals(PatientStatus.Closed, updatedPatient.getStatus());
+    }
 
 
     @Test
@@ -187,10 +208,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment, Current treatment is already closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         //first properly closing treatment
@@ -208,10 +229,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         expectWHPDomainException("Cannot open new treatment for this case: [Current treatment is not closed]");
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withTbId("tbId").build();
@@ -222,16 +243,16 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void shouldCloseCurrentTreatmentForPatient() {
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                                                                                     .withMandatoryFieldsForCloseTreatment()
-                                                                                     .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                                     .build();
+                .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(caseId);
@@ -243,23 +264,23 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void shouldOpenNewTreatmentForPatient() {
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withCaseId(caseId)
-                                                                   .withTbId("tbId")
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
         patientService.createPatient(patientRequest);
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                                                                                           .withMandatoryFieldsForCloseTreatment()
-                                                                                           .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                                           .build();
+                .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
 
         TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                                                                                     .withMandatoryFieldsForOpenNewTreatment()
-                                                                                     .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                                     .withTbId("newTbId")
-                                                                                     .build();
+                .withMandatoryFieldsForOpenNewTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withTbId("newTbId")
+                .build();
         patientService.performTreatmentUpdate(openNewTreatmentUpdateRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(caseId);

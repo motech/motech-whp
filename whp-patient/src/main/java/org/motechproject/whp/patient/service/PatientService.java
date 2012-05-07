@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.criteria.UpdateTreatmentCriteria;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,12 +74,18 @@ public class PatientService {
                 }
                 break;
             case CloseTreatment:
-                if (updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors)){
+                if (updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors)) {
                     closeCurrentTreatment(patient, treatmentUpdateRequest);
+                    closePatient(patient);
                 } else {
                     throw new WHPDomainException(CANNOT_CLOSE_CURRENT_TREATMENT + criteriaErrors);
                 }
         }
+    }
+
+    private void closePatient(Patient patient) {
+        patient.setStatus(PatientStatus.Closed);
+        allPatients.update(patient);
     }
 
     private Treatment createTreatment(PatientRequest patientRequest) {
