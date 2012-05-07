@@ -58,16 +58,16 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     private AllTreatments allTreatments;
 
     @Before
-    public void setup(){
+    public void setup() {
         mockCurrentDate(today);
     }
 
     @Test
     public void shouldRecordAdherenceForPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withCaseId(PATIENT_ID)
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
+                .withCaseId(PATIENT_ID)
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         patientService.add(patientRequest);
 
         AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
@@ -85,13 +85,17 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withCaseId(PATIENT_ID)
-                                                                   .withPatientType(New)
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
-        patientService.add(patientRequest);
+        adherenceIsRecordedForTheFirstTime();
+        assertEquals(
+                today,
+                allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
+        );
+    }
 
+    @Test
+    public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceNotForTheFirstTime() {
+        adherenceIsRecordedForTheFirstTime();
+        mockCurrentDate(today.plusDays(1));
         adherenceService.recordAdherence(PATIENT_ID, new Adherence());
         assertEquals(
                 today,
@@ -102,8 +106,8 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldReturnAdherenceWhenCurrentWeekAdherenceIsCaptured() {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
-                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                         .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         patientService.add(withDosesOnMonWedFri);
 
         Adherence expectedAdherence = new AdherenceBuilder()
@@ -116,11 +120,12 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         areSame(expectedAdherence, adherence);
     }
 
+
     @Test
     public void shouldReturnEmptyAdherenceWhenCurrentWeekAdherenceIsNotCaptured() {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
-                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                         .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         patientService.add(withDosesOnMonWedFri);
 
         Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
@@ -135,15 +140,25 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         markForDeletion(allTreatments.getAll().toArray());
     }
 
+    @Override
+    public CouchDbConnector getDBConnector() {
+        return couchDbConnector;
+    }
+
+    private void adherenceIsRecordedForTheFirstTime() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withCaseId(PATIENT_ID)
+                .withPatientType(New)
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        patientService.add(patientRequest);
+        adherenceService.recordAdherence(PATIENT_ID, new Adherence());
+    }
+
     private void deleteAdherenceLogs() {
         for (Object log : allAdherenceLogs.getAll().toArray()) {
             adherenceDbConnector.delete(log);
         }
-    }
-
-    @Override
-    public CouchDbConnector getDBConnector() {
-        return couchDbConnector;
     }
 
 }
