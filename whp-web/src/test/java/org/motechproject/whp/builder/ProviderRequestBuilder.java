@@ -55,4 +55,9 @@ public class ProviderRequestBuilder {
         providerWebRequest.setDate(date);
         return this;
     }
+
+    public ProviderRequestBuilder withAPIKey(String api_key) {
+        providerWebRequest.setApi_key(api_key);
+        return this;
+    }
 }

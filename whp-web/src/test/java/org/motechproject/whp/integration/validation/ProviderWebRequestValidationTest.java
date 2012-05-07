@@ -21,7 +21,7 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class ProviderRequestValidationTest extends SpringIntegrationTest {
+public class ProviderWebRequestValidationTest extends SpringIntegrationTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
@@ -32,6 +32,26 @@ public class ProviderRequestValidationTest extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;
 
+    @Test
+    public void shouldBeValidWhenAPIKeyIsValid() {
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()
+                .withDefaults()
+                .build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
+
+    @Test
+    public void shouldBeInvalidWhenAPIIsInvalid() {
+        expectWHPException("field:api_key:api_key:is invalid.");
+        ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()
+                .withProviderId("P00001")
+                .withDate("17/03/1990")
+                .withDistrict("district")
+                .withPrimaryMobile("9880000000")
+                .withAPIKey("invalid_api_key")
+                .build();
+        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+    }
     @Test
     public void shouldThrowAnExceptionIfDistrictIsNull() {
         expectWHPException("field:district:may not be empty");

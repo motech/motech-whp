@@ -243,7 +243,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldBeInvalidWhenAPIIsInvalid() {
-        expectException("field:api_key:api_key:is invalid.");
+        expectWHPException("field:api_key:api_key:is invalid.");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("invalid_api_key").build();
         validator.validate(webRequest, ValidationScope.create);
     }
