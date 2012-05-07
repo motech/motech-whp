@@ -10,23 +10,24 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.springframework.ui.Model;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
 
 public class AdherenceControllerTest extends BaseUnitTest {
 
     public static final String PATIENT_ID = "patientId";
+
     @Mock
     AllPatients allPatients;
     Patient patient;
@@ -36,6 +37,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Mock
     Model uiModel;
+
     ArgumentCaptors captors;
 
     AdherenceController adherenceController;
@@ -44,7 +46,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     public void setUp() {
         setUpMocks();
         setUpPatient();
-        adherenceController = new AdherenceController(allPatients, adherenceService);
+        adherenceController = new AdherenceController(allPatients, adherenceService, new UpdateAdherenceCriteria(allPatients));
     }
 
     private void setUpMocks() {
@@ -53,7 +55,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     private void setUpPatient() {
-        patient = new PatientBuilder().withDefaults().build();
+        patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withStatus(PatientStatus.Open).build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
 

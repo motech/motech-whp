@@ -69,7 +69,7 @@ public class PatientBuilder {
         return this;
     }
 
-    public PatientBuilder withTbId(String tbId){
+    public PatientBuilder withTbId(String tbId) {
         patient.getCurrentProvidedTreatment().setTbId(tbId);
         return this;
     }
@@ -81,6 +81,11 @@ public class PatientBuilder {
 
     public PatientBuilder withCurrentProvidedTreatment(ProvidedTreatment currentProvidedTreatment) {
         patient.setCurrentProvidedTreatment(currentProvidedTreatment);
+        return this;
+    }
+
+    public PatientBuilder withStatus(PatientStatus status) {
+        patient.setStatus(status);
         return this;
     }
 }

@@ -60,7 +60,7 @@ public class UpdateAdherenceTest extends BaseTest {
                 .withCaseId(UUID.randomUUID().toString())
                 .withProviderId(provider.getProviderId())
                 .build();
-        patientService.add(patientRequest);
+        patientService.createPatient(patientRequest);
     }
 
     @Test
