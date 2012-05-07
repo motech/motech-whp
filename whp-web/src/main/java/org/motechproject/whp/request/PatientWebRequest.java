@@ -201,8 +201,7 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setApi_key(String apiKey) {
+    public void setApi_key(String apiKey) {
         this.api_key = apiKey;
-        return this;
     }
 }

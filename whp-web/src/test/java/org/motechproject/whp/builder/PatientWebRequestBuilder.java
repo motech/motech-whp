@@ -10,35 +10,35 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaults() {
 
         patientWebRequest = new PatientWebRequest()
-                .setApi_key("api_key")
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.getValue(), PatientType.PHSTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
+        patientWebRequest.setApi_key("api_key");
         return this;
     }
 
     public PatientWebRequestBuilder withSimpleUpdateFields() {
         patientWebRequest = new PatientWebRequest()
-                .setApi_key("api_key")
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, null, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setApi_key("api_key");
         return this;
     }
 
     public PatientWebRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
         patientWebRequest = new PatientWebRequest()
-                .setApi_key("api_key")
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdate.CloseTreatment.name(), "Cured", "Yes", "oldTbID");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setApi_key("api_key");
         return this;
     }
 
@@ -110,6 +110,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setWeightStatistics(weightInstance, weight);
         return this;
     }
+
     public PatientWebRequestBuilder withSmearTestResults(String smearSampleInstance, String testResultDate1, String testResult1, String testResultDate2, String testResult2) {
         patientWebRequest.setSmearTestResults(smearSampleInstance, testResultDate1, testResult1, testResultDate2, testResult2);
         return this;
