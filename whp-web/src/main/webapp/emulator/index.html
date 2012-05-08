@@ -23,19 +23,19 @@
     <br/>
     <span style="vertical-align:top">Enter caseXML:</span>
     <textarea id="data" rows="30" cols="80" style="vertical-align:top" name="data"><?xml version="1.0"?>
-<Registration api_key="api_key" xmlns="http://openrosa.org/user/registration">
-    <username/>
-    <password/>
-    <uuid/>
-    <date>20/02/2012 10:10:15</date>
-    <user_data>
-        <data key="primary_mobile">9880123456</data>
-        <data key="secondary_mobile">9880123457</data>
-        <data key="tertiary_mobile">9880123458</data>
-        <data key="provider_id">cha011</data>
-        <data key="district">Muzaffarpur</data>
-    </user_data>
-</Registration>
+        <Registration api_key="api_key" xmlns="http://openrosa.org/user/registration">
+            <username/>
+            <password/>
+            <uuid/>
+            <date>20/02/2012 10:10:15</date>
+            <user_data>
+                <data key="primary_mobile">9880123456</data>
+                <data key="secondary_mobile">9880123457</data>
+                <data key="tertiary_mobile">9880123458</data>
+                <data key="provider_id">cha011</data>
+                <data key="district">Muzaffarpur</data>
+            </user_data>
+        </Registration>
     </textarea>
     <br/>
     <input type="button" id="submit" value="Submit"/>
@@ -52,7 +52,7 @@
                     $('#statusMessage').html("Status of request: SUCCESS");
                 },
                 error: function(xhr, status, error) {
-                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);
+                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error + "</br>" + xhr.responseText);
                 }
             })
         });

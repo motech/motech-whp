@@ -83,7 +83,7 @@
                     $('#statusMessage').html("Status of request: SUCCESS");
                 },
                 error:function (xhr, status, error) {
-                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);
+                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error + "</br>" + xhr.responseText);
                 }
             });
 
