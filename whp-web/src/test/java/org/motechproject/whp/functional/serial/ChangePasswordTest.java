@@ -19,7 +19,7 @@ public class ChangePasswordTest extends BaseTest {
         LoggedInUserPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().openChangePasswordModal();
         verifyValidations(adminPage);
 
-        String newPassword = "p@ssw0rd";
+        String newPassword = "&\"~!@#$%^&*()_+{}|:\";<>?q';2";
         changePassword(adminPage, LoginPage.CORRECT_PASSWORD, newPassword).logout();
 
         adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserAnd(newPassword).openChangePasswordModal();
