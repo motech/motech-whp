@@ -34,9 +34,6 @@ public class LoggedInUserPage extends Page {
     @FindBy(how = How.ID, using = "changePasswordError")
     private WebElement changePasswordError;
 
-    @FindBy(how = How.ID, using = "changePassword")
-    private WebElement changePassword;
-
     public LoggedInUserPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -67,7 +64,7 @@ public class LoggedInUserPage extends Page {
         currentPassword.sendKeys(currentPasswordText);
         newPassword.sendKeys(newPasswordText);
         confirmNewPassword.sendKeys(confirmNewPasswordText);
-        changePassword.click();
+        currentPassword.submit();
     }
 
     public List<String> getChangePasswordErrorMessages() {

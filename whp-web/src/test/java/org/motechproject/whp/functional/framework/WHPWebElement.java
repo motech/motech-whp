@@ -23,7 +23,7 @@ public class WHPWebElement implements ExtendedWebElement {
 
     @Override
     public void submit() {
-        webElement.sendKeys(Keys.ENTER);
+        webElement.sendKeys(Keys.RETURN);
     }
 
     @Override
