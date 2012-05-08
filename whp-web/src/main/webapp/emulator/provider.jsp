@@ -17,7 +17,6 @@
 
 <div class="container">
     <div class="pull-right"><a href="/whp/emulator/">home</a></div>
-    <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
 
     <form name="testSubmit">
         <div class="row-fluid">
