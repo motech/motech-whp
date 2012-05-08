@@ -28,26 +28,30 @@ public class UserControllerTest {
     private MotechAuthenticationService motechAuthenticationService;
     @Mock
     private HttpServletRequest request;
+    @Mock
+    private HttpSession session;
 
     @Before
     public void setup() {
         initMocks(this);
         userController = new UserController(motechAuthenticationService);
+        when(request.getSession()).thenReturn(session);
     }
 
     @Test
     public void shouldChangePassword() {
-        login(authenticatedAdmin());
+        AuthenticatedUser authenticatedUser = authenticatedAdmin();
+        login(authenticatedUser);
+
+        when(motechAuthenticationService.changePassword("admin", "newPassword")).thenReturn(authenticatedUser);
 
         String responseBody = userController.changePassword("newPassword", request);
-        assertEquals("", responseBody);
 
-        verify(motechAuthenticationService).changePassword("admin", "newPassword");
+        assertEquals("", responseBody);
+        verify(session).setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
     }
 
     private void login(AuthenticatedUser authenticatedUser) {
-        HttpSession session = mock(HttpSession.class);
-        when(request.getSession()).thenReturn(session);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }
 

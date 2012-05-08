@@ -1,4 +1,4 @@
-$('#changePasswordModal').on('show', function() {
+$('#changePasswordModal').on('shown', function() {
     $('#currentPassword').focus();
     $('#changePasswordError').empty();
     $('#changePasswordModal').find("input").val("");
@@ -15,6 +15,7 @@ $('#changePasswordModal').submit(function(event) {
         $.post(url, $form.serialize(),
             function(data) {
                 if (data == '') {
+                    $('#userPassword').val($('#newPassword').val());
                     $('#changePasswordModal').modal('hide');
                 }
             }

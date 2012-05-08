@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.security.LoginSuccessHandler;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class UserController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/changePassword")
     @ResponseBody
     public String changePassword(String newPassword, HttpServletRequest request) {
-        AuthenticatedUser authenticatedUser = loggedInUser(request);
-        motechAuthenticationService.changePassword(authenticatedUser.getUsername(), newPassword);
+        AuthenticatedUser authenticatedUser = motechAuthenticationService.changePassword(loggedInUser(request).getUsername(), newPassword);
+        request.getSession().setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
         return "";
     }
 
