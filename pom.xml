@@ -11,7 +11,7 @@
     <modules>
         <module>whp-refdata</module>
         <module>whp-patient</module>
-        <module>whp-registration</module>
+        <module>whp-application</module>
         <module>whp-mapping</module>
         <module>whp-web</module>
         <module>whp-adherence</module>
