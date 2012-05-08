@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional;
+package org.motechproject.whp.functional.serial;
 
 import org.joda.time.DateTime;
 import org.junit.After;
