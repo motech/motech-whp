@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Registration xmlns="http://openrosa.org/user/registration">
+<Registration xmlns="http://openrosa.org/user/registration" api_key="3F2504E04F8911D39A0C0305E82C3301">
     <username/>
     <password/>
     <uuid/>

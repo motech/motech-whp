@@ -237,7 +237,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldBeValidWhenAPIKeyIsValid() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("api_key").build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("3F2504E04F8911D39A0C0305E82C3301").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 

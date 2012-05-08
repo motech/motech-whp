@@ -16,7 +16,7 @@ public class PatientWebRequestBuilder {
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
-        patientWebRequest.setApi_key("api_key");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
     }
 
@@ -28,7 +28,7 @@ public class PatientWebRequestBuilder {
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, null, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
-        patientWebRequest.setApi_key("api_key");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
     }
 
@@ -38,7 +38,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdate.CloseTreatment.name(), "Cured", "Yes", "oldTbID");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
-        patientWebRequest.setApi_key("api_key");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
     }
 
