@@ -14,7 +14,6 @@
     <import resource="classpath*:applicationValidationContext.xml"/>
     <import resource="classpath*:applicationWebSecurityContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
-    <import resource="classpath:applicationContext-caseService.xml"/>
     <import resource="classpath*:placeholderPluginContext.xml"/>
 
     <util:properties id="whpAPIValidationProperty" location="classpath:/whpAPIValidationProperty.properties"/>
