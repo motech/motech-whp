@@ -61,4 +61,14 @@ public class Patient extends MotechBaseDataObject {
     public boolean isValid(ValidationErrors validationErrors) {
         return currentProvidedTreatment.isValid(validationErrors);
     }
+
+    @JsonIgnore
+    public boolean hasCurrentTreatment(){
+        return currentProvidedTreatment != null;
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentClosed(){
+        return currentProvidedTreatment.getTreatment().getEndDate() != null;
+    }
 }

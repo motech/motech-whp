@@ -182,10 +182,17 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits() {
+    public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InCreateScope() {
         expectWHPException("field:tb_id:size must be between 11 and 11");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
         validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InSimpleUpdateScope() {
+        expectWHPException("field:tb_id:size must be between 11 and 11");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
+        validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
 
     @Test

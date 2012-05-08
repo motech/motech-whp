@@ -14,7 +14,7 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.criteria.UpdateTreatmentCriteria;
+import org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -39,14 +39,12 @@ public class PatientServiceTest extends SpringIntegrationTest {
     private AllTreatments allTreatments;
     @Autowired
     private AllPatients allPatients;
-    @Autowired
-    private UpdateTreatmentCriteria openNewTreatmentCriteria;
 
     PatientService patientService;
 
     @Before
     public void setUp() {
-        patientService = new PatientService(allPatients, allTreatments, openNewTreatmentCriteria);
+        patientService = new PatientService(allPatients, allTreatments);
     }
 
     @After
@@ -58,17 +56,19 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withCaseId(CASE_ID)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withPatientAge(50)
-                .build();
+                                                                   .withCaseId(CASE_ID)
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withPatientAge(50)
+                                                                   .withTbId("elevenDigit")
+                                                                   .build();
         patientService.createPatient(patientRequest);
 
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withPatientAge(66)
-                .withCaseId(CASE_ID)
-                .build();
+                                                                         .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                         .withPatientAge(66)
+                                                                         .withTbId("elevenDigit")
+                                                                         .withCaseId(CASE_ID)
+                                                                         .build();
         patientService.simpleUpdate(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
@@ -85,14 +85,16 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdateOnlyTheSpecifiedFieldsOnPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withCaseId(CASE_ID)
-                .build();
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withCaseId(CASE_ID)
+                                                                   .withTbId("elevenDigit")
+                                                                   .build();
         patientService.createPatient(patientRequest);
         Patient patient = allPatients.findByPatientId(CASE_ID);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder()
-                .withPatientInfo(CASE_ID, "newFirstName", "newLastName", null, null, "9087654321", null)
-                .withTbRegistrationNumber("newTbRegNum").build();
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withPatientInfo(CASE_ID, "newFirstName", "newLastName", null, null, "9087654321", null)
+                                                                         .withTbRegistrationNumber("newTbRegNum")
+                                                                         .withTbId("elevenDigit")
+                                                                         .build();
 
         patientService.simpleUpdate(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
@@ -108,15 +110,32 @@ public class PatientServiceTest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldThrowExceptionWhenSimpleUpdateOnPatientIsTriedWithWrongTbId() {
+        expectWHPDomainException("Cannot update details for this case: [No such tb id for current treatment]");
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withTbId("tbId")
+                                                                   .withCaseId(CASE_ID)
+                                                                   .build();
+        patientService.createPatient(patientRequest);
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withTbId("wrongTbId").build();
+
+        patientService.simpleUpdate(updatePatientRequest);
+    }
+
+    @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
         expectWHPDomainException("invalid treatment data.[Invalid smear test results : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withCaseId(CASE_ID)
-                .build();
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withTbId("elevenDigit")
+                                                                   .withCaseId(CASE_ID)
+                                                                   .build();
         patientService.createPatient(patientRequest);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null).build();
-
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID)
+                                                                         .withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null)
+                                                                         .withTbId("elevenDigit")
+                                                                         .build();
         patientService.simpleUpdate(updatePatientRequest);
     }
 
@@ -124,26 +143,29 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
         expectWHPDomainException("invalid treatment data.[Invalid weight statistics : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withCaseId(CASE_ID)
-                .build();
+                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                                                                   .withTbId("elevenDigit")
+                                                                   .withCaseId(CASE_ID)
+                                                                   .build();
         patientService.createPatient(patientRequest);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID).withWeightStatistics(null, 100.0, DateUtil.tomorrow()).build();
-
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID)
+                                                                         .withWeightStatistics(null, 100.0, DateUtil.tomorrow())
+                                                                         .withTbId("elevenDigit")
+                                                                         .build();
         patientService.simpleUpdate(updatePatientRequest);
     }
 
     @Test
     public void shouldThrowExceptionWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPDomainException("Invalid case-id. No such patient.");
+        expectWHPDomainException("Cannot update details for this case: [Invalid case-id. No such patient.]");
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
         patientService.simpleUpdate(updatePatientRequest);
     }
 
     @Test
     public void shouldThrowExceptionForTreatmentUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPDomainException("Invalid case-id. No such patient.");
-        patientService.performTreatmentUpdate(TreatmentUpdateRequestBuilder.startRecording().withCaseId("invalidCaseId").build());
+        expectWHPDomainException("Cannot open new treatment for this case: [Invalid case-id. No such patient.]");
+        patientService.performTreatmentUpdate(TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withCaseId("invalidCaseId").build());
     }
 
     @Test
@@ -201,7 +223,6 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
         assertEquals(PatientStatus.Closed, updatedPatient.getStatus());
     }
-
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {

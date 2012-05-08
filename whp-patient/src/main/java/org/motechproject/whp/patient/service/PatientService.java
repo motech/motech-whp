@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
-import org.motechproject.whp.patient.domain.criteria.UpdateTreatmentCriteria;
+import org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPerformSimpleUpdate;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
 
 @Service
@@ -23,15 +26,15 @@ public class PatientService {
 
     private AllTreatments allTreatments;
     private AllPatients allPatients;
-    private UpdateTreatmentCriteria updateTreatmentCriteria;
+
     private final String CANNOT_OPEN_NEW_TREATMENT = "Cannot open new treatment for this case: ";
     private final String CANNOT_CLOSE_CURRENT_TREATMENT = "Cannot close current treatment for case: ";
+    private final String CANNOT_SIMPLE_UPDATE = "Cannot update details for this case: ";
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateTreatmentCriteria updateTreatmentCriteria) {
+    public PatientService(AllPatients allPatients, AllTreatments allTreatments) {
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
-        this.updateTreatmentCriteria = updateTreatmentCriteria;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -45,12 +48,13 @@ public class PatientService {
 
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        if (patient == null) {
-            throw new WHPDomainException("Invalid case-id. No such patient.");
+        CriteriaErrors criteriaErrors = new CriteriaErrors();
+        if(canPerformSimpleUpdate(patient, patientRequest, criteriaErrors)){
+            Patient updatedPatient = mapUpdates(patientRequest, patient);
+            allPatients.update(updatedPatient);
+        } else {
+            throw new WHPDomainException(CANNOT_SIMPLE_UPDATE + criteriaErrors);
         }
-
-        Patient updatedPatient = mapUpdates(patientRequest, patient);
-        allPatients.update(updatedPatient);
     }
 
     public void startOnTreatment(String patientId) {
@@ -61,20 +65,17 @@ public class PatientService {
 
     public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
-        if (patient == null) {
-            throw new WHPDomainException("Invalid case-id. No such patient.");
-        }
         CriteriaErrors criteriaErrors = new CriteriaErrors();
         switch (treatmentUpdateRequest.getTreatment_update()) {
             case NewTreatment:
-                if (updateTreatmentCriteria.canOpenNewTreatment(treatmentUpdateRequest, criteriaErrors)) {
+                if (canOpenNewTreatment(patient, criteriaErrors)) {
                     addNewTreatmentForCategoryChange(treatmentUpdateRequest, patient);
                 } else {
                     throw new WHPDomainException(CANNOT_OPEN_NEW_TREATMENT + criteriaErrors);
                 }
                 break;
             case CloseTreatment:
-                if (updateTreatmentCriteria.canCloseCurrentTreatment(treatmentUpdateRequest, criteriaErrors)) {
+                if (canCloseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors)){
                     closeCurrentTreatment(patient, treatmentUpdateRequest);
                     closePatient(patient);
                 } else {

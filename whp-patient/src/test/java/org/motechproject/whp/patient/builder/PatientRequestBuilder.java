@@ -35,7 +35,7 @@ public class PatientRequestBuilder {
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
                 .setWeightStatistics(WeightInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
-                .setTreatmentData(null, null, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
+                .setTreatmentData(null, "elevenDigit", null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
         return this;
     }
 

@@ -26,7 +26,7 @@ public class PatientWebRequestBuilder {
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
-                .setTreatmentData(null, null, null, null, "50", null);
+                .setTreatmentData(null, "elevenDigit", null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;

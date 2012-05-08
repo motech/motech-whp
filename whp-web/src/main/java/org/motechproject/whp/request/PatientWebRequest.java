@@ -124,7 +124,13 @@ public class PatientWebRequest {
 
     @NotNull
     @Size(min = 11, max = 11)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment, ValidationScope.closeTreatment, ValidationScope.transferIn, ValidationScope.pauseTreatment, ValidationScope.restartTreatment})
+    @Scope(scope = {ValidationScope.create,
+                    ValidationScope.simpleUpdate,
+                    ValidationScope.openTreatment,
+                    ValidationScope.closeTreatment,
+                    ValidationScope.transferIn,
+                    ValidationScope.pauseTreatment,
+                    ValidationScope.restartTreatment})
     private String tb_id;
 
     @NotNull

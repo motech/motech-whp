@@ -83,12 +83,18 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldUpdatePatient() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withCaseId("12341234").build();
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                                                                            .withTBId("elevenDigit")
+                                                                            .withCaseId("12341234")
+                                                                            .build();
         patientWebService.createCase(patientWebRequest);
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withCaseId("12341234").build();
+        PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields()
+                                                                                 .withCaseId("12341234")
+                                                                                 .withTBId("elevenDigit")
+                                                                                 .build();
         patientWebService.updateCase(simpleUpdateWebRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
