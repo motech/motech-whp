@@ -34,11 +34,10 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
             RegistrationService registrationService,
             PatientService patientService,
             RequestValidator validator,
-            VelocityEngine velocityEngine,
             DozerBeanMapper patientRequestMapper,
             DozerBeanMapper treatmentUpdateRequestMapper) {
 
-        super(PatientWebRequest.class, velocityEngine);
+        super(PatientWebRequest.class);
         this.registrationService = registrationService;
         this.patientService = patientService;
         this.validator = validator;

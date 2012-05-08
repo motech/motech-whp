@@ -38,8 +38,6 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;
     @Autowired
-    VelocityEngine velocityEngine;
-    @Autowired
     PatientService patientService;
     @Autowired
     DozerBeanMapper patientRequestMapper;
@@ -59,7 +57,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, velocityEngine, patientRequestMapper, treatmentUpdateRequestMapper);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, patientRequestMapper, treatmentUpdateRequestMapper);
     }
 
     @Test
