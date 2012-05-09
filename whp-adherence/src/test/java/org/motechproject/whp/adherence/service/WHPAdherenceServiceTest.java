@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.builder.AdherenceBuilder;
+import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
@@ -110,7 +110,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(withDosesOnMonWedFri);
 
-        WeeklyAdherence expectedAdherence = new AdherenceBuilder()
+        WeeklyAdherence expectedAdherence = new WeeklyAdherenceBuilder()
                 .withLog(Monday, treatmentWeek.dateOf(Monday), true)
                 .withLog(Wednesday, treatmentWeek.dateOf(Wednesday), true)
                 .withLog(Friday, treatmentWeek.dateOf(Friday), true).build();
@@ -152,7 +152,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         patientService.createPatient(patientRequest);
-        adherenceService.recordAdherence(PATIENT_ID, new AdherenceBuilder().withDefaultLogs().build());
+        adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherenceBuilder().withDefaultLogs().build());
     }
 
     private void deleteAdherenceLogs() {
