@@ -20,8 +20,8 @@ public class AdherenceMapper {
     public Adherence map() {
         List<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>();
         for (AdherenceRecord adherenceRecord : adherenceRecords.adherenceRecords()) {
-            AdherenceRecordMapper adherenceRecordMapper = new AdherenceRecordMapper(adherenceRecord);
-            AdherenceLog log = adherenceRecordMapper.adherenceLog();
+            AdherenceLogMapper adherenceLogMapper = new AdherenceLogMapper(adherenceRecord);
+            AdherenceLog log = adherenceLogMapper.adherenceLog();
             adherenceLogs.add(log);
         }
         return new Adherence(adherenceLogs);

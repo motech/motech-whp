@@ -13,18 +13,10 @@ public class AdherenceRequestMapper {
         this.log = log;
     }
 
-    public RecordAdherenceRequest request() {
+    public RecordAdherenceRequest map() {
         RecordAdherenceRequest request = new RecordAdherenceRequest(patientId, null, log.getPillDate());
-        request.dosesTaken(numberOfDosesTaken());
-        request.dosesMissed(numberOfDosesMissed());
+        request.status(log.getPillStatus().getStatus());
         return request;
     }
 
-    private int numberOfDosesMissed() {
-        return log.getIsNotTaken() ? 1 : 0;
-    }
-
-    private int numberOfDosesTaken() {
-        return log.getIsTaken() ? 1 : 0;
-    }
 }

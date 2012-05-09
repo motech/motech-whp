@@ -16,7 +16,7 @@ public class AdherenceRequestMapperTest {
         AdherenceLog log = new AdherenceLog(Monday, DateUtil.today());
         AdherenceRequestMapper mapper = new AdherenceRequestMapper(PATIENT_ID, log);
 
-        assertEquals(PATIENT_ID, mapper.request().externalId());
+        assertEquals(PATIENT_ID, mapper.map().externalId());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class AdherenceRequestMapperTest {
         log.setIsTaken(true);
 
         AdherenceRequestMapper mapper = new AdherenceRequestMapper(PATIENT_ID, log);
-        assertEquals(1, mapper.request().dosesTaken());
+        assertEquals(1, mapper.map().status());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AdherenceRequestMapperTest {
         log.setIsTaken(false);
 
         AdherenceRequestMapper mapper = new AdherenceRequestMapper(PATIENT_ID, log);
-        assertEquals(0, mapper.request().dosesTaken());
+        assertEquals(0, mapper.map().status());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AdherenceRequestMapperTest {
         log.setIsNotTaken(true);
 
         AdherenceRequestMapper mapper = new AdherenceRequestMapper(PATIENT_ID, log);
-        assertEquals(1, mapper.request().dosesMissed());
+        assertEquals(2, mapper.map().status());
     }
 
     @Test
@@ -52,6 +52,6 @@ public class AdherenceRequestMapperTest {
         log.setIsNotTaken(false);
 
         AdherenceRequestMapper mapper = new AdherenceRequestMapper(PATIENT_ID, log);
-        assertEquals(0, mapper.request().dosesMissed());
+        assertEquals(0, mapper.map().status());
     }
 }

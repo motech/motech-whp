@@ -67,7 +67,7 @@ public class WHPAdherenceService {
     private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence adherence) {
         List<RecordAdherenceRequest> requests = new ArrayList<RecordAdherenceRequest>();
         for (AdherenceLog adherenceLog : adherence.getAdherenceLogs()) {
-            requests.add(new AdherenceRequestMapper(patientId, adherenceLog).request());
+            requests.add(new AdherenceRequestMapper(patientId, adherenceLog).map());
         }
         return requests;
     }

@@ -51,4 +51,8 @@ public class AdherenceLog {
         }
     }
 
+    public void status(PillStatus pillStatus) {
+        this.pillStatus = pillStatus;
+    }
+
 }
