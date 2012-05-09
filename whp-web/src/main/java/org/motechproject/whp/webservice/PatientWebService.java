@@ -52,7 +52,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
-            if (requestHasTreatmentUpdate(patientWebRequest)) {
+            if (requestHasValidTreatmentUpdate(patientWebRequest)) {
                 TreatmentUpdate treatmentUpdate = TreatmentUpdate.valueOf(patientWebRequest.getTreatment_update());
                 validator.validate(patientWebRequest, treatmentUpdate.getScope());
                 TreatmentUpdateRequest treatmentUpdateRequest = treatmentUpdateRequestMapper.map(patientWebRequest, TreatmentUpdateRequest.class);
@@ -69,12 +69,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
         }
     }
 
-    private boolean requestHasTreatmentUpdate(PatientWebRequest patientWebRequest) {
-        try {
-            validator.validate(patientWebRequest, ValidationScope.treatmentUpdate);
-        } catch (WHPException e) {
-            return false;
-        }
+    private boolean requestHasValidTreatmentUpdate(PatientWebRequest patientWebRequest) {
+        if (patientWebRequest.getTreatment_update() == null) return false;
+        validator.validate(patientWebRequest, ValidationScope.treatmentUpdate);
         return true;
     }
 
