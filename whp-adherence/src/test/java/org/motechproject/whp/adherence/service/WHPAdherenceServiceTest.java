@@ -9,7 +9,7 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.AdherenceBuilder;
-import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.util.AssertAdherence;
@@ -73,13 +73,13 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
         AdherenceLog logForTuesday = new AdherenceLog(Tuesday, treatmentWeek.dateOf(Tuesday));
 
-        Adherence logs = new Adherence();
+        WeeklyAdherence logs = new WeeklyAdherence();
         logs.setAdherenceLogs(asList(logForMonday, logForTuesday));
 
         adherenceService.recordAdherence(PATIENT_ID, logs);
         assertArrayEquals(
                 new AdherenceLog[]{logForMonday, logForTuesday},
-                adherenceService.adherenceAsOf(PATIENT_ID, today).getAdherenceLogs().toArray()
+                adherenceService.currentWeekAdherence(PATIENT_ID).getAdherenceLogs().toArray()
         );
     }
 
@@ -96,7 +96,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceNotForTheFirstTime() {
         adherenceIsRecordedForTheFirstTime();
         mockCurrentDate(today.plusDays(1));
-        adherenceService.recordAdherence(PATIENT_ID, new Adherence());
+        adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherence());
         assertEquals(
                 today,
                 allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
@@ -110,13 +110,13 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(withDosesOnMonWedFri);
 
-        Adherence expectedAdherence = new AdherenceBuilder()
+        WeeklyAdherence expectedAdherence = new AdherenceBuilder()
                 .withLog(Monday, treatmentWeek.dateOf(Monday), true)
                 .withLog(Wednesday, treatmentWeek.dateOf(Wednesday), true)
                 .withLog(Friday, treatmentWeek.dateOf(Friday), true).build();
         adherenceService.recordAdherence(withDosesOnMonWedFri.getCase_id(), expectedAdherence);
 
-        Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
+        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
         areSame(expectedAdherence, adherence);
     }
 
@@ -128,7 +128,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(withDosesOnMonWedFri);
 
-        Adherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
+        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
         AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
     }
 

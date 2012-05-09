@@ -2,20 +2,22 @@ package org.motechproject.whp.adherence.mapping;
 
 import org.motechproject.adherence.contract.RecordAdherenceRequest;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.patient.domain.Patient;
 
 public class AdherenceRequestMapper {
 
-    String patientId;
     AdherenceLog log;
+    private Patient patient;
 
-    public AdherenceRequestMapper(String patientId, AdherenceLog log) {
-        this.patientId = patientId;
+    public AdherenceRequestMapper(Patient patient, AdherenceLog log) {
+        this.patient = patient;
         this.log = log;
     }
 
-    public RecordAdherenceRequest map() {
-        RecordAdherenceRequest request = new RecordAdherenceRequest(patientId, null, log.getPillDate());
+    public RecordAdherenceRequest request() {
+        RecordAdherenceRequest request = new RecordAdherenceRequest(patient.getPatientId(), null, log.getPillDate());
         request.status(log.getPillStatus().getStatus());
+        request.addMeta("tb_id", patient.tbId());
         return request;
     }
 

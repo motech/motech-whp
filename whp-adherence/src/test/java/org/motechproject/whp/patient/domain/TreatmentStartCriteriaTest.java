@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.AdherenceBuilder;
-import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -32,7 +32,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeTrueWhenPatientTypeIsNew() {
-        Adherence adherence = new AdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -41,7 +41,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeTrueWhenPatientNotOnTreatment() {
-        Adherence adherence = new AdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -50,7 +50,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeFalseWhenPatientTypeIsNotNew() {
-        Adherence adherence = new AdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.PHSTransfer).build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -59,7 +59,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeFalseWhenPatientOnTreatment() {
-        Adherence adherence = new AdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).onTreatmentFrom(DateUtil.today()).withType(PatientType.New).build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -68,7 +68,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeTrueIfAnyOfTheDosesAreTaken() {
-        Adherence adherence = new AdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().withDefaultLogs().build();
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
 
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -77,7 +77,7 @@ public class TreatmentStartCriteriaTest {
 
     @Test
     public void shouldBeFalseIfNoneOfTheDosesAreTaken() {
-        Adherence adherence = new AdherenceBuilder().zeroDosesTaken().build();
+        WeeklyAdherence adherence = new AdherenceBuilder().zeroDosesTaken().build();
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
 
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);

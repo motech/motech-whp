@@ -1,15 +1,15 @@
 package org.motechproject.whp.adherence.service;
 
-import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.contract.RecordAdherenceRequest;
 import org.motechproject.adherence.service.AdherenceService;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.adherence.mapping.AdherenceMapper;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.mapping.AdherenceRequestMapper;
+import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentStartCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -39,8 +39,9 @@ public class WHPAdherenceService {
         this.patientService = patientService;
     }
 
-    public void recordAdherence(String patientId, Adherence adherence) {
-        for (RecordAdherenceRequest request : recordAdherenceRequests(patientId, adherence)) {
+    public void recordAdherence(String patientId, WeeklyAdherence adherence) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        for (RecordAdherenceRequest request : recordAdherenceRequests(patient, adherence)) {
             adherenceService.recordAdherence(request);
         }
         if (treatmentStartCriteria.shouldStartTreatment(patientId, adherence)) {
@@ -48,26 +49,25 @@ public class WHPAdherenceService {
         }
     }
 
-    public Adherence currentWeekAdherence(String patientId) {
+    public WeeklyAdherence currentWeekAdherence(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         TreatmentWeek treatmentWeek = new TreatmentWeek(DateUtil.today().minusWeeks(1));
         AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, treatmentWeek.startDate(), treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
-            return new AdherenceMapper(adherenceRecords).map();
+            return new WeeklyAdherenceMapper(adherenceRecords).map();
         }
-        return new Adherence(treatmentWeek, patient.getCurrentProvidedTreatment());
+        return new WeeklyAdherence(treatmentWeek, pillDays(patient));
     }
 
-    public Adherence adherenceAsOf(String patientId, LocalDate asOf) {
-        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, asOf);
-        return new AdherenceMapper(adherenceRecords).map();
+    private List<DayOfWeek> pillDays(Patient patient) {
+        return patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays();
     }
 
-    private List<RecordAdherenceRequest> recordAdherenceRequests(String patientId, Adherence adherence) {
+    private List<RecordAdherenceRequest> recordAdherenceRequests(Patient patient, WeeklyAdherence adherence) {
         List<RecordAdherenceRequest> requests = new ArrayList<RecordAdherenceRequest>();
         for (AdherenceLog adherenceLog : adherence.getAdherenceLogs()) {
-            requests.add(new AdherenceRequestMapper(patientId, adherenceLog).map());
+            requests.add(new AdherenceRequestMapper(patient, adherenceLog).request());
         }
         return requests;
     }

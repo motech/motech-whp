@@ -18,6 +18,10 @@ public class AdherenceLog {
     public AdherenceLog() {
     }
 
+    public AdherenceLog(LocalDate logDate) {
+        this.pillDate = logDate;
+    }
+
     public AdherenceLog(DayOfWeek pillDay, LocalDate logDate) {
         this.pillDay = pillDay;
         this.pillDate = logDate;

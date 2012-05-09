@@ -8,7 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -73,7 +73,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldPassWeeklyAdherenceLogToAdherenceCard() {
-        Adherence adherence = new Adherence();
+        WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
         adherenceController.update(PATIENT_ID, uiModel);
 
@@ -83,7 +83,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldCaptureAdherence() {
-        Adherence adherence = new Adherence();
+        WeeklyAdherence adherence = new WeeklyAdherence();
         adherenceController.update(PATIENT_ID, adherence);
         verify(adherenceService).recordAdherence(PATIENT_ID, adherence);
     }
@@ -123,7 +123,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldShowForwardToProviderHomeAfterCapturingAdherence() {
-        Adherence adherence = new Adherence();
+        WeeklyAdherence adherence = new WeeklyAdherence();
         String form = adherenceController.update(PATIENT_ID, adherence);
         assertEquals("forward:/", form);
     }
@@ -134,6 +134,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     private class ArgumentCaptors {
-        private ArgumentCaptor<Adherence> adherenceForm = ArgumentCaptor.forClass(Adherence.class);
+        private ArgumentCaptor<WeeklyAdherence> adherenceForm = ArgumentCaptor.forClass(WeeklyAdherence.class);
     }
 }

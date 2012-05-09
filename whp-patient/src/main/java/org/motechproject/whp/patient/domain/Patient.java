@@ -53,7 +53,7 @@ public class Patient extends MotechBaseDataObject {
         return currentProvidedTreatment;
     }
 
-    public DateTime getLastModifiedDate(){
+    public DateTime getLastModifiedDate() {
         return DateUtil.setTimeZone(lastModifiedDate);
     }
 
@@ -63,12 +63,17 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean hasCurrentTreatment(){
+    public boolean hasCurrentTreatment() {
         return currentProvidedTreatment != null;
     }
 
     @JsonIgnore
-    public boolean isCurrentTreatmentClosed(){
+    public boolean isCurrentTreatmentClosed() {
         return currentProvidedTreatment.getTreatment().getEndDate() != null;
+    }
+
+    @JsonIgnore
+    public String tbId() {
+        return currentProvidedTreatment.getTbId();
     }
 }

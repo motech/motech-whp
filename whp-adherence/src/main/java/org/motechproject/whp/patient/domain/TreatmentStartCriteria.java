@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
-import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class TreatmentStartCriteria {
         this.allPatients = allPatients;
     }
 
-    public boolean shouldStartTreatment(String patientId, Adherence adherence) {
+    public boolean shouldStartTreatment(String patientId, WeeklyAdherence adherence) {
         Patient patient = allPatients.findByPatientId(patientId);
         return isNotOnTreatment(patient.getCurrentProvidedTreatment()) && isNewPatient(patient) && isAnyDoseTaken(adherence);
     }
@@ -29,7 +29,7 @@ public class TreatmentStartCriteria {
         return patient.getPatientType().equals(PatientType.New);
     }
 
-    private boolean isAnyDoseTaken(Adherence adherence) {
+    private boolean isAnyDoseTaken(WeeklyAdherence adherence) {
         return adherence.isAnyDoseTaken();
     }
 

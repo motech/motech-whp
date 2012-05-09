@@ -10,25 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Adherence {
+public class WeeklyAdherence {
 
     private List<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>();
+    private String patientId;
 
-    public Adherence() {
+    public WeeklyAdherence() {
     }
 
-    public Adherence(TreatmentWeek week, ProvidedTreatment providedTreatment) {
-        Treatment treatment = providedTreatment.getTreatment();
-        for (DayOfWeek pillDay : treatment.getTreatmentCategory().getPillDays()) {
+    public WeeklyAdherence(TreatmentWeek week, List<DayOfWeek> pillDays) {
+        for (DayOfWeek pillDay : pillDays) {
             adherenceLogs.add(new AdherenceLog(pillDay, week.dateOf(pillDay)));
         }
     }
 
-    public Adherence(List<AdherenceLog> adherenceLogs) {
-        this.adherenceLogs = adherenceLogs;
-    }
-
-    public Adherence addAdherenceLog(AdherenceLog log) {
+    public WeeklyAdherence addAdherenceLog(DayOfWeek dayOfWeek, AdherenceLog log) {
+        log.setPillDay(dayOfWeek);
         adherenceLogs.add(log);
         return this;
     }

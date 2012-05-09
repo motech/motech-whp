@@ -1,29 +1,27 @@
 package org.motechproject.whp.adherence.mapping;
 
 import org.motechproject.adherence.contract.AdherenceRecords;
-import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 
 import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
 
-public class AdherenceMapper {
+public class WeeklyAdherenceMapper {
 
     AdherenceRecords adherenceRecords;
 
-    public AdherenceMapper(AdherenceRecords adherenceRecords) {
+    public WeeklyAdherenceMapper(AdherenceRecords adherenceRecords) {
         this.adherenceRecords = adherenceRecords;
     }
 
-    public Adherence map() {
-        List<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>();
+    public WeeklyAdherence map() {
+        WeeklyAdherence weeklyAdherence = new WeeklyAdherence();
+
         for (AdherenceRecord adherenceRecord : adherenceRecords.adherenceRecords()) {
             AdherenceLogMapper adherenceLogMapper = new AdherenceLogMapper(adherenceRecord);
             AdherenceLog log = adherenceLogMapper.adherenceLog();
-            adherenceLogs.add(log);
+            weeklyAdherence.addAdherenceLog(log.getPillDay(), log);
         }
-        return new Adherence(adherenceLogs);
+        return weeklyAdherence;
     }
 }

@@ -1,8 +1,6 @@
 package org.motechproject.whp.controller;
 
-import org.joda.time.LocalDate;
-import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -30,18 +28,18 @@ public class AdherenceController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        Adherence adherence = adherenceService.currentWeekAdherence(patientId);
+        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patientId);
         prepareModel(patientId, uiModel, adherence);
         return "adherence/update";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, Adherence adherence) {
+    public String update(@PathVariable("patientId") String patientId, WeeklyAdherence adherence) {
         adherenceService.recordAdherence(patientId, adherence);
         return "forward:/";
     }
 
-    private void prepareModel(String patientId, Model uiModel, Adherence adherence) {
+    private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {
         uiModel.addAttribute("patientId", patientId);
         uiModel.addAttribute("adherence", adherence);
         uiModel.addAttribute("readOnly", !(adherenceCriteria.canUpdate(patientId)));
