@@ -1,5 +1,6 @@
 package org.motechproject.whp.builder;
 
+import org.joda.time.DateTime;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.request.PatientWebRequest;
@@ -129,6 +130,16 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withAPIKey(String api_key) {
         patientWebRequest.setApi_key(api_key);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withOldTb_Id(String oldTbId) {
+        patientWebRequest.setOld_tb_id(oldTbId);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDate_Modified(DateTime date_modified) {
+        patientWebRequest.setDate_modified(date_modified.toString("dd/MM/YYYY HH:mm:ss"));
         return this;
     }
 }

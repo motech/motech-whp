@@ -21,11 +21,10 @@ public class CloseCurrentTreatment implements TreatmentUpdateScenario {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 
-        if (canCloseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors)){
-            closeCurrentTreatment(patient, treatmentUpdateRequest, allPatients, allTreatments);
-        } else {
+        if (!canCloseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors)){
             throw new WHPDomainException(CANNOT_CLOSE_CURRENT_TREATMENT + criteriaErrors);
         }
+        closeCurrentTreatment(patient, treatmentUpdateRequest, allPatients, allTreatments);
     }
 
     private void closeCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {

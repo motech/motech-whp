@@ -22,11 +22,10 @@ public class OpenNewTreatment implements TreatmentUpdateScenario {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 
-        if (canOpenNewTreatment(patient, criteriaErrors)) {
-            addNewTreatmentForCategoryChange(patient, treatmentUpdateRequest, allPatients, allTreatments);
-        } else {
+        if (!canOpenNewTreatment(patient, criteriaErrors)) {
             throw new WHPDomainException(CANNOT_OPEN_NEW_TREATMENT + criteriaErrors);
         }
+        addNewTreatmentForCategoryChange(patient, treatmentUpdateRequest, allPatients, allTreatments);
     }
 
     private void addNewTreatmentForCategoryChange(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {

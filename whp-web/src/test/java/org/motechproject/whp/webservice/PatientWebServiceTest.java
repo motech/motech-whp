@@ -2,6 +2,7 @@ package org.motechproject.whp.webservice;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.dozer.DozerBeanMapper;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -106,10 +107,15 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsTransferIn() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         patientWebService.createCase(patientWebRequest);
-
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder().withDefaultsForTransferIn().withCaseId(patientWebRequest.getCase_id()).build();
+        DateTime dateModified = DateUtil.now();
+        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder()
+                .withDefaultsForTransferIn()
+                .withDate_Modified(dateModified)
+                .withCaseId(patientWebRequest.getCase_id())
+                .withOldTb_Id(patient.getCurrentProvidedTreatment().getTbId())
+                .build();
         Provider newProvider = new Provider(treatmentUpdateRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
         allProviders.add(newProvider);
 
@@ -119,9 +125,10 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         assertEquals(treatmentUpdateRequest.getProvider_id(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertEquals(treatmentUpdateRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
+
         assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertNotSame(patient.getCurrentProvidedTreatment().getTbId(), updatedPatient.getCurrentProvidedTreatment().getTbId());
-
     }
 
     @Test
