@@ -229,33 +229,6 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenWeightIsNotNumeric() {
-        expectWHPException("field:weight:Weight must be a real number");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("A").build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
-        expectWHPException("field:weight:Weight must be a real number");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("1A").build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
-    public void shouldBeValidWhenAPIKeyIsValid() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("3F2504E04F8911D39A0C0305E82C3301").build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
-    public void shouldBeInvalidWhenAPIIsInvalid() {
-        expectWHPException("field:api_key:api_key:is invalid.");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("invalid_api_key").build();
-        validator.validate(webRequest, ValidationScope.create);
-    }
-
-    @Test
     public void shouldThrowExceptionWhenProviderIdIsNotFound() {
         expectWHPException("No provider is found with id:providerId");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
@@ -289,7 +262,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
             }
             errorMessage = e.getMessage();
         }
-        assertTrue(errorMessage.contains("field:treatment_category:may not be null"));
+        assertTrue(errorMessage.contains("field:treatment_category:value should not be null"));
     }
 
     @Test
@@ -301,14 +274,14 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
     //Any enum field
     @Test
     public void shouldThrowExceptionWhenGenderIsNull() {
-        expectWHPException("field:gender:may not be null");
+        expectWHPException("field:gender:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenLastModifiedDateFormatIsNull() {
-        expectWHPException("field:date_modified:may not be null");
+        expectWHPException("field:date_modified:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -325,7 +298,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
             }
             errorMessage = e.getMessage();
         }
-        assertTrue(errorMessage.contains("field:weight:may not be null"));
+        assertTrue(errorMessage.contains("field:weight:value should not be null"));
     }
 
     @Test
@@ -337,7 +310,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
             if (e.getMessage().contains("field:tb_id:TB ID cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
-            assertTrue(e.getMessage().contains("field:tb_id:may not be null"));
+            assertTrue(e.getMessage().contains("field:tb_id:value should not be null"));
         }
     }
 
@@ -354,7 +327,7 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
             }
             errorMessage = e.getMessage();
         }
-        assertTrue(errorMessage.contains("field:age:may not be null"));
+        assertTrue(errorMessage.contains("field:age:value should not be null"));
     }
 
     @Test
@@ -362,6 +335,26 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
         Provider defaultProvider = new Provider("providerId", "1231231231", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
+        expectWHPException("field:weight:Weight must be a real number");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("1A").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldBeValidWhenAPIKeyIsValid() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("3F2504E04F8911D39A0C0305E82C3301").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldBeInvalidWhenAPIIsInvalid() {
+        expectWHPException("field:api_key:api_key:is invalid.");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("invalid_api_key").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
@@ -387,6 +380,27 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
     public void shouldNotThrowException_WhenWeightInstanceIsNull_ForUpdateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
         validator.validate(webRequest, ValidationScope.simpleUpdate);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightIsNotNumeric() {
+        expectWHPException("field:weight:Weight must be a real number");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("A").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightStringIsJustSpaces_ForCreateScope() {
+        expectWHPException("field:weight:Weight must be a real number");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(" ").build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWeightStringIsNotValid_ForCreateScope() {
+        expectWHPException("field:weight:Weight must be a real number");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("3 5").build();
+        validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test

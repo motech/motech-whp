@@ -14,7 +14,6 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -125,7 +124,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
-        expectWHPDomainException("invalid treatment data.[Invalid smear test results : null value]");
+        expectWHPDomainException("Invalid treatment data.[Invalid smear test results : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withTbId("elevenDigit")
@@ -141,7 +140,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
-        expectWHPDomainException("invalid treatment data.[Invalid weight statistics : null value]");
+        expectWHPDomainException("nvalid treatment data.[Invalid weight statistics : null value]");
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .withTbId("elevenDigit")

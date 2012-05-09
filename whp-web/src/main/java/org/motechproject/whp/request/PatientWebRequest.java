@@ -3,17 +3,15 @@ package org.motechproject.whp.request;
 import lombok.Data;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
+import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
-
-import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -117,9 +115,8 @@ public class PatientWebRequest {
     @Enumeration(type = WeightInstance.class)
     private String weight_instance;
 
-    @NotNull
+    @NotNull(scope = {ValidationScope.create})
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
-    @Scope(scope = {ValidationScope.create})
     private String weight;
 
     @NotNull

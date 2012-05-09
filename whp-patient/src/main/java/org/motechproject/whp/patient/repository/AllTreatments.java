@@ -20,7 +20,7 @@ public class AllTreatments extends MotechBaseRepository<Treatment> {
     public void add(Treatment treatment) {
         ValidationErrors validationErrors = new ValidationErrors();
         if (!treatment.isValid(validationErrors)) {
-            throw new WHPDomainException("invalid treatment data." + validationErrors);
+            throw new WHPDomainException("Invalid treatment data." + validationErrors);
         }
         super.add(treatment);
     }
@@ -29,7 +29,7 @@ public class AllTreatments extends MotechBaseRepository<Treatment> {
     public void update(Treatment treatment) {
         ValidationErrors validationErrors = new ValidationErrors();
         if (!treatment.isValid(validationErrors)) {
-            throw new WHPDomainException("invalid treatment data." + validationErrors);
+            throw new WHPDomainException("Invalid treatment data." + validationErrors);
         }
         super.update(treatment);
     }
