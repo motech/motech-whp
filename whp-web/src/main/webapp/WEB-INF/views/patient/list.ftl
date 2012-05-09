@@ -34,7 +34,7 @@
                     Treatment Category
                 </th>
                 <th>
-                    Treatment Startdate
+                    Treatment Start Date
                 </th>
                 <th>
                     Adherence
