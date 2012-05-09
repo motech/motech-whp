@@ -14,6 +14,9 @@
 
 <div class="container">
     <div class="pull-right"><a href="/whp/emulator/">home</a></div>
+    <div id="information">
+        Format of date field: yyyy-mm-dd
+    </div>
 
     <form name="fakeTimeSubmit">
         <div class="row-fluid">
