@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
 public enum TreatmentUpdate {
-    NewTreatment("openTreatment"), CloseTreatment("closeTreatment"), TransferIn("transferIn");
+    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn");
 
     private String scope;
 
@@ -15,8 +15,8 @@ public enum TreatmentUpdate {
 
     public TreatmentUpdateScenario getUpdateScenario(){
         switch (this){
-            case NewTreatment: return new OpenNewTreatment();
-            case CloseTreatment: return new CloseCurrentTreatment();
+            case New: return new OpenNewTreatment();
+            case Close: return new CloseCurrentTreatment();
             case TransferIn: return new TransferInPatient();
             default: return null;
         }

@@ -32,7 +32,7 @@ public class TreatmentUpdateRequestBuilder {
         treatmentUpdateRequest.setDate_modified(now());
         treatmentUpdateRequest.setProvider_id("providerId");
         treatmentUpdateRequest.setTb_id("tbId");
-        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.NewTreatment);
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.New);
         treatmentUpdateRequest.setReason_for_closure("Cured");
         treatmentUpdateRequest.setTreatment_complete("Yes");
         treatmentUpdateRequest.setTreatment_category(category);
@@ -44,7 +44,7 @@ public class TreatmentUpdateRequestBuilder {
         treatmentUpdateRequest.setCase_id("caseId");
         treatmentUpdateRequest.setDate_modified(now());
         treatmentUpdateRequest.setTb_id("tbId");
-        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.CloseTreatment);
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.Close);
         treatmentUpdateRequest.setReason_for_closure("Cured");
         treatmentUpdateRequest.setTreatment_complete("Yes");
         return this;
@@ -55,7 +55,7 @@ public class TreatmentUpdateRequestBuilder {
         treatmentUpdateRequest.setCase_id("caseId");
         treatmentUpdateRequest.setDate_modified(now());
         treatmentUpdateRequest.setTb_id("tbId");
-        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.NewTreatment);
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdate.New);
         treatmentUpdateRequest.setTreatment_category(category);
         return this;
     }
