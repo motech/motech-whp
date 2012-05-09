@@ -36,13 +36,12 @@
     <script type="text/javascript">
             $('#post-button').click(function () {
             var host = window.location.host;
-            var urlString = "/motech-delivery-tools/datetime/update?date=" + $("#date").val() + "&hour=" + $("#hour").val() + "&minute=" + $("#minute").val();
+            var urlString = "/whp/motech-delivery-tools/datetime/update?date=" + $("#date").val() + "&hour=" + $("#hour").val() + "&minute=" + $("#minute").val();
             $.ajax({
                 type:'GET',
                 url:"http://" + host + urlString,
                 contentType:"application/xml; charset=utf-8",
                 success:function (data, textStatus, jqXHR) {
-                    alert("'hello");
                     $('#statusMessage').html("Status of request: SUCCESS");
                 },
                 error:function (xhr, status, error) {
