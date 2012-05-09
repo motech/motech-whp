@@ -48,9 +48,9 @@
                 </tr>
                     <#else>
                         <#list patientList as patient>
-                        <tr>
+                        <tr id="patientList_${patient.patientId}">
                             <td class="patientId">${patient.patientId}</td>
-                            <td>${patient.currentProvidedTreatment.tbId}</td>
+                            <td class="tbId">${patient.currentProvidedTreatment.tbId}</td>
                             <td class="name">${patient.firstName}</td>
                             <td>${patient.lastName}</td>
                             <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>

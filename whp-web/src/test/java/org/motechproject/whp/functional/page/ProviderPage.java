@@ -23,6 +23,8 @@ public class ProviderPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "updateAdherenceLink")
     private List<WebElement> updateAdherenceLinks;
 
+    @FindBy(how = How.CLASS_NAME, using = "tbId")
+    private List<WebElement> tbIds;
 
     public ProviderPage(WebDriver webDriver) {
         super(webDriver);
@@ -58,4 +60,12 @@ public class ProviderPage extends LoggedInUserPage {
         return MyPageFactory.initElements(webDriver, UpdateAdherencePage.class);
     }
 
+    public boolean hasTbId(String tbId) {
+        for (WebElement tbIdElement : tbIds) {
+            if (tbIdElement.getText().equals(tbId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
