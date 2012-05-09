@@ -43,8 +43,8 @@ public class WHPAdherenceService {
         for (RecordAdherenceRequest request : recordAdherenceRequests(patientId, adherence)) {
             adherenceService.recordAdherence(request);
         }
-        if (treatmentStartCriteria.shouldStartTreatment(patientId)) {
-            patientService.startOnTreatment(patientId);
+        if (treatmentStartCriteria.shouldStartTreatment(patientId, adherence)) {
+            patientService.startOnTreatment(patientId, adherence.firstDoseTakenOn());
         }
     }
 

@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service;
 
-import org.motechproject.util.DateUtil;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -11,13 +11,9 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
-import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPerformSimpleUpdate;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
 
@@ -55,9 +51,9 @@ public class PatientService {
         }
     }
 
-    public void startOnTreatment(String patientId) {
+    public void startOnTreatment(String patientId, LocalDate firstDoseTakenDate) {
         Patient patient = allPatients.findByPatientId(patientId);
-        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(DateUtil.today());
+        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(firstDoseTakenDate);
         allPatients.update(patient);
     }
 

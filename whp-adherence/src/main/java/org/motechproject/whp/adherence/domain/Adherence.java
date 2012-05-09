@@ -1,6 +1,7 @@
 package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
+import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -30,5 +31,21 @@ public class Adherence {
     public Adherence addAdherenceLog(AdherenceLog log) {
         adherenceLogs.add(log);
         return this;
+    }
+
+    public boolean isAnyDoseTaken() {
+        for (AdherenceLog adherenceLog : adherenceLogs) {
+            if (adherenceLog.getIsTaken())
+                return true;
+        }
+        return false;
+    }
+
+    public LocalDate firstDoseTakenOn() {
+        for (AdherenceLog adherenceLog : adherenceLogs) {
+            if (adherenceLog.getIsTaken())
+                return adherenceLog.getPillDate();
+        }
+        return null;
     }
 }

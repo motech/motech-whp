@@ -152,7 +152,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         patientService.createPatient(patientRequest);
-        adherenceService.recordAdherence(PATIENT_ID, new Adherence());
+        adherenceService.recordAdherence(PATIENT_ID, new AdherenceBuilder().withDefaultLogs().build());
     }
 
     private void deleteAdherenceLogs() {

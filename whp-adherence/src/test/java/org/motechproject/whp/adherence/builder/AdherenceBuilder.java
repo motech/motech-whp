@@ -5,6 +5,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.domain.PillStatus;
 
 import static org.motechproject.model.DayOfWeek.*;
 
@@ -13,10 +14,14 @@ public class AdherenceBuilder {
     private Adherence adherence = new Adherence();
     private LocalDate today = DateUtil.today();
 
+    public Adherence build() {
+        return adherence;
+    }
+
     public AdherenceBuilder withDefaultLogs() {
-        adherence.addAdherenceLog(new AdherenceLog(Monday, today));
-        adherence.addAdherenceLog(new AdherenceLog(Wednesday, today));
-        adherence.addAdherenceLog(new AdherenceLog(Friday, today));
+        adherence.addAdherenceLog(taken(Monday));
+        adherence.addAdherenceLog(taken(Wednesday));
+        adherence.addAdherenceLog(taken(Friday));
         return this;
     }
 
@@ -27,7 +32,23 @@ public class AdherenceBuilder {
         return this;
     }
 
-    public Adherence build() {
-        return adherence;
+    public AdherenceBuilder zeroDosesTaken() {
+        adherence.addAdherenceLog(notTaken(Monday));
+        adherence.addAdherenceLog(notTaken(Wednesday));
+        adherence.addAdherenceLog(notTaken(Friday));
+        return this;
     }
+
+    private AdherenceLog taken(DayOfWeek dayOfWeek) {
+        AdherenceLog log = new AdherenceLog(dayOfWeek, today);
+        log.status(PillStatus.Taken);
+        return log;
+    }
+
+    private AdherenceLog notTaken(DayOfWeek dayOfWeek) {
+        AdherenceLog log = new AdherenceLog(dayOfWeek, today);
+        log.status(PillStatus.NotTaken);
+        return log;
+    }
+
 }
