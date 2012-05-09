@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.domain.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 
 import java.util.Arrays;
 

@@ -1,6 +1,5 @@
 package org.motechproject.whp.webservice;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.dozer.DozerBeanMapper;
 import org.dozer.MappingException;
 import org.motechproject.casexml.service.CaseService;
@@ -9,7 +8,7 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;

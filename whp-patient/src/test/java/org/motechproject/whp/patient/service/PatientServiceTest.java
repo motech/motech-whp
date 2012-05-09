@@ -203,27 +203,6 @@ public class PatientServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldClosePatientAfterClosingTreatment() {
-        String caseId = "caseId";
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withCaseId(caseId)
-                .withTbId("tbId")
-                .build();
-        patientService.createPatient(patientRequest);
-
-        TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                .withMandatoryFieldsForCloseTreatment()
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .build();
-        patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(caseId);
-
-        assertEquals(PatientStatus.Closed, updatedPatient.getStatus());
-    }
-
-    @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
         expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment, Current treatment is already closed]");
         String caseId = "caseId";

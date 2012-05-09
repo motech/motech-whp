@@ -1,5 +1,6 @@
 package org.motechproject.whp.builder;
 
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.request.PatientWebRequest;
 
@@ -37,6 +38,16 @@ public class PatientWebRequestBuilder {
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdate.CloseTreatment.name(), "Cured", "Yes", "oldTbID");
+        patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDefaultsForTransferIn() {
+        patientWebRequest = new PatientWebRequest()
+                .setTreatmentUpdateData("TransferIn", null, null, "oldElevenId")
+                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
+        patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;

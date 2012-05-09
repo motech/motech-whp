@@ -21,6 +21,7 @@ import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
 
@@ -99,6 +100,28 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
         assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());
+    }
+
+    @Test
+    public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsTransferIn() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        patientWebService.createCase(patientWebRequest);
+
+        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+
+        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder().withDefaultsForTransferIn().withCaseId(patientWebRequest.getCase_id()).build();
+        Provider newProvider = new Provider(treatmentUpdateRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
+        allProviders.add(newProvider);
+
+        patientWebService.updateCase(treatmentUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+
+        assertEquals(treatmentUpdateRequest.getProvider_id(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals(treatmentUpdateRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertNotSame(patient.getCurrentProvidedTreatment().getTbId(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+
     }
 
     @Test
