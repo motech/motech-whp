@@ -1,24 +1,9 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-public enum TreatmentUpdate {
-    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn");
+import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTreatments;
 
-    private String scope;
-
-    private TreatmentUpdate(String scope) {
-        this.scope = scope;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public TreatmentUpdateScenario getUpdateScenario(){
-        switch (this){
-            case New: return new OpenNewTreatment();
-            case Close: return new CloseCurrentTreatment();
-            case TransferIn: return new TransferInPatient();
-            default: return null;
-        }
-    }
+public interface TreatmentUpdate {
+    public void apply(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest);
 }

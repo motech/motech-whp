@@ -13,12 +13,12 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 import static org.motechproject.whp.patient.mapper.PatientMapper.createNewProvidedTreatmentForTreatmentCategoryChange;
 import static org.motechproject.whp.patient.mapper.PatientMapper.createNewTreatmentFrom;
 
-public class OpenNewTreatment implements TreatmentUpdateScenario {
+public class OpenNewTreatment implements TreatmentUpdate {
 
     private final String CANNOT_OPEN_NEW_TREATMENT = "Cannot open new treatment for this case: ";
 
     @Override
-    public void performUpdate(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest) {
+    public void apply(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest) {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 

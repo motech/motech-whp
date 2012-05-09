@@ -5,18 +5,17 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canTransferInPatient;
 
-public class TransferInPatient implements TreatmentUpdateScenario {
+public class TransferInPatient implements TreatmentUpdate {
 
     private final String CANNOT_TRANSFER_IN_PATIENT = "Cannot TransferIn patient: ";
 
     @Override
-    public void performUpdate(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest) {
+    public void apply(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest) {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
         if (!canTransferInPatient(patient, treatmentUpdateRequest, criteriaErrors)){

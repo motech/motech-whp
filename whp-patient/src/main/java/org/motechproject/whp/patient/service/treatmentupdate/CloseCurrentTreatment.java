@@ -12,12 +12,12 @@ import org.motechproject.whp.patient.repository.AllTreatments;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
 
-public class CloseCurrentTreatment implements TreatmentUpdateScenario {
+public class CloseCurrentTreatment implements TreatmentUpdate {
 
     private final String CANNOT_CLOSE_CURRENT_TREATMENT = "Cannot close current treatment for case: ";
 
     @Override
-    public void performUpdate(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest){
+    public void apply(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest){
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 

@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.contract;
 import lombok.Data;
 import org.joda.time.DateTime;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 
 @Data
 public class TreatmentUpdateRequest {
@@ -13,7 +13,7 @@ public class TreatmentUpdateRequest {
     private String provider_id;
     private String tb_id;
     private String old_tb_id;
-    private TreatmentUpdate treatment_update;
+    private TreatmentUpdateScenario treatment_update;
     private String reason_for_closure;
     private String treatment_complete;
     private TreatmentCategory treatment_category;

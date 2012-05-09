@@ -8,7 +8,7 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.exception.WHPException;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -53,8 +53,8 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
             if (requestHasValidTreatmentUpdate(patientWebRequest)) {
-                TreatmentUpdate treatmentUpdate = TreatmentUpdate.valueOf(patientWebRequest.getTreatment_update());
-                validator.validate(patientWebRequest, treatmentUpdate.getScope());
+                TreatmentUpdateScenario treatmentUpdateScenario = TreatmentUpdateScenario.valueOf(patientWebRequest.getTreatment_update());
+                validator.validate(patientWebRequest, treatmentUpdateScenario.getScope());
                 TreatmentUpdateRequest treatmentUpdateRequest = treatmentUpdateRequestMapper.map(patientWebRequest, TreatmentUpdateRequest.class);
                 patientService.performTreatmentUpdate(treatmentUpdateRequest);
             } else {

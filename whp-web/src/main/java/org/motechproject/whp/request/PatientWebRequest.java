@@ -5,7 +5,7 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
@@ -57,7 +57,7 @@ public class PatientWebRequest {
     private String patient_type;
 
     @NotNull
-    @Enumeration(type = TreatmentUpdate.class)
+    @Enumeration(type = TreatmentUpdateScenario.class)
     @Scope(scope = {ValidationScope.treatmentUpdate})
     private String treatment_update;
 

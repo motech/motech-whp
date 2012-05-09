@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,9 +58,9 @@ public class PatientService {
     }
 
     public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
-        TreatmentUpdateScenario treatmentUpdateScenario = treatmentUpdateRequest.getTreatment_update().getUpdateScenario();
+        TreatmentUpdate treatmentUpdate = treatmentUpdateRequest.getTreatment_update().getUpdateScenario();
         try{
-            treatmentUpdateScenario.performUpdate(allPatients, allTreatments, treatmentUpdateRequest);
+            treatmentUpdate.apply(allPatients, allTreatments, treatmentUpdateRequest);
         } catch (WHPDomainException e) {
             throw new WHPDomainException(e.getMessage());
         }

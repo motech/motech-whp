@@ -1,11 +1,29 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
-import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+public enum TreatmentUpdateScenario {
 
-public interface TreatmentUpdateScenario {
-    public void performUpdate(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest);
+    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn");
+
+    private String scope;
+
+    private TreatmentUpdateScenario(String scope) {
+        this.scope = scope;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public TreatmentUpdate getUpdateScenario() {
+        switch (this) {
+            case New:
+                return new OpenNewTreatment();
+            case Close:
+                return new CloseCurrentTreatment();
+            case TransferIn:
+                return new TransferInPatient();
+            default:
+                return null;
+        }
+    }
 }
