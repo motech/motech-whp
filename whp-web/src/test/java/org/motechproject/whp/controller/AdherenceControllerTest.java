@@ -6,9 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.security.LoginSuccessHandler;
+import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
@@ -19,6 +22,8 @@ import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.uimodel.AdherenceForm;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 import static java.util.Arrays.asList;
@@ -35,23 +40,30 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Mock
     AllPatients allPatients;
-    Patient patient;
-
     @Mock
     WHPAdherenceService adherenceService;
-
     @Mock
     Model uiModel;
+    @Mock
+    HttpServletRequest request;
 
-    ArgumentCaptors captors;
-
-    AdherenceController adherenceController;
+    private String loggedInUserName;
+    private Patient patient;
+    private ArgumentCaptors captors;
+    private AdherenceController adherenceController;
 
     @Before
     public void setUp() {
         setUpMocks();
         setUpPatient();
         adherenceController = new AdherenceController(allPatients, adherenceService, new UpdateAdherenceCriteria(allPatients));
+        loggedInUserName = "someProviderUserName";
+        setupLoggedInUser(loggedInUserName);
+    }
+
+    @After
+    public void tearDown() {
+        super.tearDown();
     }
 
     private void setUpMocks() {
@@ -105,10 +117,10 @@ public class AdherenceControllerTest extends BaseUnitTest {
     public void shouldCaptureAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
         ArrayList<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>(adherence.getAdherenceLogs());
-        adherenceController.update(PATIENT_ID, new AdherenceForm(adherence));
+        adherenceController.update(PATIENT_ID, new AdherenceForm(adherence), request);
 
         ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
-        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture());
+        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(loggedInUserName), eq(AdherenceSource.WEB));
         assertEquals(adherenceLogs, captor.getValue().getAdherenceLogs());
     }
 
@@ -156,16 +168,19 @@ public class AdherenceControllerTest extends BaseUnitTest {
         WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
 
-        String form = adherenceController.update(PATIENT_ID, new AdherenceForm(adherence));
+        String form = adherenceController.update(PATIENT_ID, new AdherenceForm(adherence), request);
         assertEquals("forward:/", form);
-    }
-
-    @After
-    public void tearDown() {
-        super.tearDown();
     }
 
     private class ArgumentCaptors {
         private ArgumentCaptor<AdherenceForm> adherenceForm = forClass(AdherenceForm.class);
+    }
+
+    private void setupLoggedInUser(String userName) {
+        HttpSession session = mock(HttpSession.class);
+        AuthenticatedUser loggedInUser = mock(AuthenticatedUser.class);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
+        when(loggedInUser.getUsername()).thenReturn(userName);
     }
 }

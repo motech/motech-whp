@@ -1,5 +1,7 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping(value = "/adherence")
-public class AdherenceController {
+public class AdherenceController extends BaseController {
 
     AllPatients allPatients;
     WHPAdherenceService adherenceService;
@@ -35,8 +39,9 @@ public class AdherenceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, AdherenceForm adherenceForm) {
-        adherenceService.recordAdherence(patientId, adherenceForm.weeklyAdherence());
+    public String update(@PathVariable("patientId") String patientId, AdherenceForm adherenceForm, HttpServletRequest httpServletRequest) {
+        AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
+        adherenceService.recordAdherence(patientId, adherenceForm.weeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
     }
 

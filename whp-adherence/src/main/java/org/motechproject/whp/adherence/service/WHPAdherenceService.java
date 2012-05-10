@@ -6,6 +6,7 @@ import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.mapping.AdherenceRequestMapper;
@@ -39,10 +40,10 @@ public class WHPAdherenceService {
         this.patientService = patientService;
     }
 
-    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence) {
+    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
         Patient patient = allPatients.findByPatientId(patientId);
         for (AdherenceData request : requests(patient, weeklyAdherence)) {
-            adherenceService.recordAdherence(request);
+            adherenceService.recordAdherence(user, source.name(), request);
         }
         if (treatmentStartCriteria.shouldStartTreatment(patientId, weeklyAdherence)) {
             patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
