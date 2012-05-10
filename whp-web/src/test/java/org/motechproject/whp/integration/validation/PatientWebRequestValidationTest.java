@@ -368,14 +368,14 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfTreatmentOutcomeIsEmpty() {
-        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
+        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTBTreatment, TreatmentCompleted]");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome("").build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }
 
     @Test
     public void shouldThrowExceptionIfTreatmentOutcomeIsAnInvalidReason() {
-        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
+        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTBTreatment, TreatmentCompleted]");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome("PatientGotBored").build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }

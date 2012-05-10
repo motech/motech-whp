@@ -25,3 +25,7 @@ body {
 .white {
     background-color: white;
 }
+
+.text-center {
+    text-align: center;
+}

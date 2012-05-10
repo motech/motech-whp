@@ -17,9 +17,6 @@ public class ProviderPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "name")
     private List<WebElement> patientNames;
 
-    @FindBy(how = How.CLASS_NAME, using = "category")
-    private List<WebElement> treatmentCategories;
-
     @FindBy(how = How.CLASS_NAME, using = "updateAdherenceLink")
     private List<WebElement> updateAdherenceLinks;
 
@@ -39,15 +36,6 @@ public class ProviderPage extends LoggedInUserPage {
         return false;
     }
 
-    public boolean hasTreatmentCategory(String treatmentCategory) {
-        for (WebElement treatmentCategoryElement : treatmentCategories) {
-            if (treatmentCategoryElement.getText().equals(treatmentCategory)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public UpdateAdherencePage clickEditAdherenceLink(String patientId) {
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {
@@ -58,6 +46,14 @@ public class ProviderPage extends LoggedInUserPage {
         }
         updateAdherenceLinks.get(index).findElement(By.linkText("Edit")).click();
         return MyPageFactory.initElements(webDriver, UpdateAdherencePage.class);
+    }
+
+    public String getTreatmentCategoryText(String patientId) {
+        return webDriver.findElement(By.id(String.format("patient_%s_TreatmentCategory", patientId))).getText();
+    }
+
+    public String getTreatmentOutcomeText(String patientId) {
+        return webDriver.findElement(By.id(String.format("patient_%s_TreatmentOutcome", patientId))).getText();
     }
 
     public boolean hasTbId(String tbId) {

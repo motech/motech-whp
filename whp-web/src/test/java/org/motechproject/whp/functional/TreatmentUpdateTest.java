@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -74,7 +75,7 @@ public class TreatmentUpdateTest extends BaseTest {
     public void shouldUpdateTreatmentCategoryForPatientOnCloseOfCurrentTreatmentAndOpenOfNewTreatment() {
         ProviderPage providerPage = loginAsProvider(provider);
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertTrue(providerPage.hasTreatmentCategory(patientRequest.getTreatment_category().getName()));
+        assertEquals(patientRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patientRequest.getCase_id()));
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
                                                                                           .withMandatoryFieldsForCloseTreatment()
@@ -83,6 +84,9 @@ public class TreatmentUpdateTest extends BaseTest {
                                                                                           .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                                           .build();
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
+        providerPage.logout();
+        providerPage = loginAsProvider(provider);
+        assertEquals("Cured", providerPage.getTreatmentOutcomeText(patientRequest.getCase_id()));
 
         TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
 
@@ -99,7 +103,7 @@ public class TreatmentUpdateTest extends BaseTest {
         providerPage = loginAsProvider(provider);
 
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertTrue(providerPage.hasTreatmentCategory(openNewTreatmentUpdateRequest.getTreatment_category().getName()));
+        assertEquals(openNewTreatmentUpdateRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patientRequest.getCase_id()));
     }
 
     ProviderPage loginAsProvider(TestProvider provider) {
