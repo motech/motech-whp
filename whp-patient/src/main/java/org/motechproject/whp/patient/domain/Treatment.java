@@ -8,8 +8,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.repository.ValidationErrors;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.ReasonForClosure;
-import org.motechproject.whp.refdata.domain.TreatmentComplete;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.util.CollectionUtils;
 
@@ -28,8 +27,7 @@ public class Treatment extends MotechBaseDataObject {
     private DateTime startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
-    private TreatmentComplete treatmentComplete;
-    private ReasonForClosure reasonForClosure;
+    private TreatmentOutcome treatmentOutcome;
     private TreatmentStatus status = TreatmentStatus.Ongoing;
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
@@ -61,11 +59,10 @@ public class Treatment extends MotechBaseDataObject {
         return weightStatisticsList.get(weightStatisticsList.size() - 1);
     }
 
-    public void close(String reasonForClosure, String treatmentComplete) {
+    public void close(String treatmentOutcome) {
         status = TreatmentStatus.Closed;
         endDate = today();
-        this.reasonForClosure = ReasonForClosure.valueOf(reasonForClosure);
-        this.treatmentComplete = TreatmentComplete.valueOf(treatmentComplete);
+        this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
     }
 
     @JsonIgnore

@@ -8,7 +8,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.refdata.domain.ReasonForClosure;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPException;
@@ -360,29 +360,29 @@ public class PatientWebRequestValidationTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfReasonForClosureIsNull() {
-        expectWHPException("field:reason_for_closure:value should not be null");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withReasonForClosure(null).build();
+    public void shouldThrowExceptionIfTreatmentOutcomeIsNull() {
+        expectWHPException("field:treatment_outcome:value should not be null");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome(null).build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }
 
     @Test
-    public void shouldThrowExceptionIfReasonForClosureIsEmpty() {
-        expectWHPException("field:reason_for_closure:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withReasonForClosure("").build();
+    public void shouldThrowExceptionIfTreatmentOutcomeIsEmpty() {
+        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome("").build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }
 
     @Test
-    public void shouldThrowExceptionIfReasonForClosureIsAnInvalidReason() {
-        expectWHPException("field:reason_for_closure:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withReasonForClosure("PatientGotBored").build();
+    public void shouldThrowExceptionIfTreatmentOutcomeIsAnInvalidReason() {
+        expectWHPException("field:treatment_outcome:The value should be one of : [Cured, Died, Failure, Defaulted, TransferredOut, SwitchedOverToMDRTreatment]");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome("PatientGotBored").build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }
 
     @Test
-    public void shouldNotThrowExceptionIfReasonForClosureIsValid() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withReasonForClosure(ReasonForClosure.Cured.name()).build();
+    public void shouldNotThrowExceptionIfTreatmentOutcomeIsValid() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome(TreatmentOutcome.Cured.name()).build();
         validator.validate(webRequest, ValidationScope.closeTreatment);
     }
 

@@ -1,21 +1,17 @@
 package org.motechproject.whp.patient.domain.criteria;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPerformSimpleUpdate;
@@ -45,7 +41,7 @@ public class UpdatePatientCriteriaTest {
     @Test
     public void shouldReturnTrueForCanOpenNewTreatmentIfNewTreatmentCanBeOpenedForPatient() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.closeCurrentTreatment("Cured", "Yes", now());
+        patient.closeCurrentTreatment("Cured", now());
 
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
@@ -72,7 +68,7 @@ public class UpdatePatientCriteriaTest {
     public void shouldReturnFalseForCanCloseCurrentTreatmentIfPatientTreatmentIsAlreadyClosed() {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
-        patient.closeCurrentTreatment("Cured", "Yes", now());
+        patient.closeCurrentTreatment("Cured", now());
 
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
@@ -101,7 +97,7 @@ public class UpdatePatientCriteriaTest {
         String tbId = "tbId";
         String someOtherTbId = "someOtherTbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
-        patient.closeCurrentTreatment("Cured", "Yes", now());
+        patient.closeCurrentTreatment("Cured", now());
 
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());

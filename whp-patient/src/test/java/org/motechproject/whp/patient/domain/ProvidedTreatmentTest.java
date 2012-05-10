@@ -13,9 +13,9 @@ public class ProvidedTreatmentTest {
         Treatment treatment = mock(Treatment.class);
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
         providedTreatment.setTreatment(treatment);
-        providedTreatment.close("Cured", "Yes");
+        providedTreatment.close("Cured");
 
         assertEquals(today(), providedTreatment.getEndDate());
-        verify(treatment, times(1)).close("Cured", "Yes");
+        verify(treatment, times(1)).close("Cured");
     }
 }

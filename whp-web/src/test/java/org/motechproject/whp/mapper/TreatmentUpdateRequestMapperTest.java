@@ -46,10 +46,9 @@ public class TreatmentUpdateRequestMapperTest extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getDate_modified(), treatmentUpdateRequest.getDate_modified().toString("dd/MM/YYYY HH:mm:ss"));
         assertEquals(patientWebRequest.getOld_tb_id(), treatmentUpdateRequest.getOld_tb_id());
         assertEquals(patientWebRequest.getProvider_id(), treatmentUpdateRequest.getProvider_id());
-        assertEquals(patientWebRequest.getReason_for_closure(), treatmentUpdateRequest.getReason_for_closure());
+        assertEquals(patientWebRequest.getTreatment_outcome(), treatmentUpdateRequest.getTreatment_outcome());
         assertEquals(patientWebRequest.getTb_id(), treatmentUpdateRequest.getTb_id());
         assertEquals(patientWebRequest.getTreatment_category(), treatmentUpdateRequest.getTreatment_category().getCode());
-        assertEquals(patientWebRequest.getTreatment_complete(), treatmentUpdateRequest.getTreatment_complete());
         assertEquals(patientWebRequest.getTreatment_update(), treatmentUpdateRequest.getTreatment_update().name());
     }
 }

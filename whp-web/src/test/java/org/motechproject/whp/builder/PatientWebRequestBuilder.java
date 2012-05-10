@@ -38,7 +38,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
-                .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured", "Yes", "oldTbID");
+                .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured", "oldTbID");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
@@ -46,7 +46,7 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDefaultsForTransferIn() {
         patientWebRequest = new PatientWebRequest()
-                .setTreatmentUpdateData("TransferIn", null, null, "oldElevenId")
+                .setTreatmentUpdateData("TransferIn", null, "oldElevenId")
                 .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
@@ -63,8 +63,8 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withReasonForClosure(String reasonForClosure){
-        patientWebRequest.setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), reasonForClosure, "Yes", "oldTbID");
+    public PatientWebRequestBuilder withTreatmentOutcome(String treatmentOutcome){
+        patientWebRequest.setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), treatmentOutcome, "oldTbID");
         return this;
     }
 

@@ -25,7 +25,7 @@ public class CloseCurrentTreatment implements TreatmentUpdate {
     }
 
     private void closeCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
-        patient.closeCurrentTreatment(treatmentUpdateRequest.getReason_for_closure(), treatmentUpdateRequest.getTreatment_complete(), treatmentUpdateRequest.getDate_modified());
+        patient.closeCurrentTreatment(treatmentUpdateRequest.getTreatment_outcome(), treatmentUpdateRequest.getDate_modified());
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
         allPatients.update(patient);
     }

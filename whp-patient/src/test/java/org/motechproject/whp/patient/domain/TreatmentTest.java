@@ -1,8 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.ReasonForClosure;
-import org.motechproject.whp.refdata.domain.TreatmentComplete;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
 
 import static junit.framework.Assert.assertEquals;
@@ -13,9 +12,8 @@ public class TreatmentTest {
     @Test
     public void shouldCloseTreatment() {
         Treatment treatment = new Treatment();
-        treatment.close("Cured", "Yes");
-        assertEquals(ReasonForClosure.Cured, treatment.getReasonForClosure());
-        assertEquals(TreatmentComplete.Yes, treatment.getTreatmentComplete());
+        treatment.close("Cured");
+        assertEquals(TreatmentOutcome.Cured, treatment.getTreatmentOutcome());
         assertEquals(TreatmentStatus.Closed, treatment.getStatus());
         assertEquals(today(), treatment.getEndDate());
     }

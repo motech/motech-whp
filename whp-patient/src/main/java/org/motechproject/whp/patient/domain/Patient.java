@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.repository.ValidationErrors;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,12 +75,17 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public TreatmentOutcome getTreatmentOutcome() {
+        return currentProvidedTreatment.getTreatment().getTreatmentOutcome();
+    }
+
+    @JsonIgnore
     public String tbId() {
         return currentProvidedTreatment.getTbId();
     }
 
-    public void closeCurrentTreatment(String reasonForClosure, String treatmentComplete, DateTime dateModified) {
+    public void closeCurrentTreatment(String treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
-        currentProvidedTreatment.close(reasonForClosure, treatmentComplete);
+        currentProvidedTreatment.close(treatmentOutcome);
     }
 }

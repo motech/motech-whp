@@ -5,7 +5,7 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
-import org.motechproject.whp.refdata.domain.ReasonForClosure;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
@@ -63,14 +63,9 @@ public class PatientWebRequest {
     private String treatment_update;
 
     @NotNull
-    @Enumeration(type = ReasonForClosure.class)
+    @Enumeration(type = TreatmentOutcome.class)
     @Scope(scope = {ValidationScope.closeTreatment})
-    private String reason_for_closure;
-
-    @NotNull
-    @Enumeration(type = TreatmentComplete.class)
-    @Scope(scope = {ValidationScope.closeTreatment})
-    private String treatment_complete;
+    private String treatment_outcome;
 
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
@@ -186,10 +181,9 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setTreatmentUpdateData(String treatment_update, String reason_for_closure, String treatment_complete, String old_tb_id) {
+    public PatientWebRequest setTreatmentUpdateData(String treatment_update, String treatment_outcome, String old_tb_id) {
         this.treatment_update = treatment_update;
-        this.reason_for_closure = reason_for_closure;
-        this.treatment_complete = treatment_complete;
+        this.treatment_outcome = treatment_outcome;
         this.old_tb_id = old_tb_id;
         return this;
     }
