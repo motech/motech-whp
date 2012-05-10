@@ -2,14 +2,11 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
 
 public class CloseCurrentTreatment implements TreatmentUpdate {
@@ -28,14 +25,8 @@ public class CloseCurrentTreatment implements TreatmentUpdate {
     }
 
     private void closeCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        currentProvidedTreatment.setEndDate(today());
-        Treatment treatment = currentProvidedTreatment.getTreatment();
-        treatment.setEndDate(today());
-        treatment.setReasonForClosure(treatmentUpdateRequest.getReason_for_closure());
-        treatment.setTreatmentComplete(treatmentUpdateRequest.getTreatment_complete());
-        patient.setLastModifiedDate(treatmentUpdateRequest.getDate_modified());
-        allTreatments.update(treatment);
+        patient.closeCurrentTreatment(treatmentUpdateRequest.getReason_for_closure(), treatmentUpdateRequest.getTreatment_complete(), treatmentUpdateRequest.getDate_modified());
+        allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
         allPatients.update(patient);
     }
 }

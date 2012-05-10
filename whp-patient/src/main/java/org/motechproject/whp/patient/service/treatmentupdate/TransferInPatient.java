@@ -21,14 +21,14 @@ public class TransferInPatient implements TreatmentUpdate {
         if (!canTransferInPatient(patient, treatmentUpdateRequest, criteriaErrors)){
             throw new WHPDomainException(CANNOT_TRANSFER_IN_PATIENT + criteriaErrors);
         }
-        transferInPatient(patient, treatmentUpdateRequest, allPatients, allTreatments);
+        transferInPatient(patient, treatmentUpdateRequest, allPatients);
     }
 
-    private void transferInPatient(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
+    private void transferInPatient(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients) {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(currentProvidedTreatment).updateForTransferIn(treatmentUpdateRequest.getTb_id(), treatmentUpdateRequest.getProvider_id(), treatmentUpdateRequest.getDate_modified().toLocalDate());
 
-        patient.addProvidedTreatment(newProvidedTreatment);
+        patient.addProvidedTreatment(newProvidedTreatment, treatmentUpdateRequest.getDate_modified());
 
         allPatients.update(patient);
     }

@@ -18,8 +18,7 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
-import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -299,8 +298,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
         assertEquals(today(), currentProvidedTreatment.getTreatment().getEndDate());
         assertEquals(today(), currentProvidedTreatment.getEndDate());
-        assertEquals("Cured", currentProvidedTreatment.getTreatment().getReasonForClosure());
-        assertEquals("Yes", currentProvidedTreatment.getTreatment().getTreatmentComplete());
+        assertEquals(ReasonForClosure.Cured, currentProvidedTreatment.getTreatment().getReasonForClosure());
+        assertEquals(TreatmentComplete.Yes, currentProvidedTreatment.getTreatment().getTreatmentComplete());
+        assertEquals(TreatmentStatus.Closed, currentProvidedTreatment.getTreatment().getStatus());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 

@@ -8,10 +8,15 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.repository.ValidationErrors;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.ReasonForClosure;
+import org.motechproject.whp.refdata.domain.TreatmentComplete;
+import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.motechproject.util.DateUtil.today;
 
 @Data
 @TypeDiscriminator("doc.type == 'Treatment'")
@@ -23,8 +28,9 @@ public class Treatment extends MotechBaseDataObject {
     private DateTime startDate;
     private LocalDate endDate;
     private String tbRegistrationNumber;
-    private String treatmentComplete;
-    private String reasonForClosure;
+    private TreatmentComplete treatmentComplete;
+    private ReasonForClosure reasonForClosure;
+    private TreatmentStatus status = TreatmentStatus.Ongoing;
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
@@ -55,6 +61,13 @@ public class Treatment extends MotechBaseDataObject {
         return weightStatisticsList.get(weightStatisticsList.size() - 1);
     }
 
+    public void close(String reasonForClosure, String treatmentComplete) {
+        status = TreatmentStatus.Closed;
+        endDate = today();
+        this.reasonForClosure = ReasonForClosure.valueOf(reasonForClosure);
+        this.treatmentComplete = TreatmentComplete.valueOf(treatmentComplete);
+    }
+
     @JsonIgnore
     public boolean isValid(ValidationErrors validationErrors) {
         boolean isLatestSmearResultValid = true;
@@ -66,5 +79,10 @@ public class Treatment extends MotechBaseDataObject {
             isLatestWeightStatisticValid = latestWeightStatistics().isValid(validationErrors);
         }
         return isLatestSmearResultValid && isLatestWeightStatisticValid;
+    }
+
+    @JsonIgnore
+    public boolean isClosed() {
+        return status == TreatmentStatus.Closed;
     }
 }

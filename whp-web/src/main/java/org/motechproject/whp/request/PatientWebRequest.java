@@ -5,6 +5,7 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
+import org.motechproject.whp.refdata.domain.ReasonForClosure;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
@@ -62,6 +63,7 @@ public class PatientWebRequest {
     private String treatment_update;
 
     @NotNull
+    @Enumeration(type = ReasonForClosure.class)
     @Scope(scope = {ValidationScope.closeTreatment})
     private String reason_for_closure;
 

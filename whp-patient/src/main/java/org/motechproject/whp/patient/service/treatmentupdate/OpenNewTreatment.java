@@ -32,8 +32,7 @@ public class OpenNewTreatment implements TreatmentUpdate {
         Treatment newTreatment = createNewTreatmentFrom(patient, treatmentUpdateRequest);
         allTreatments.add(newTreatment);
         ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, treatmentUpdateRequest, newTreatment);
-        patient.addProvidedTreatment(newProvidedTreatment);
-        patient.setLastModifiedDate(treatmentUpdateRequest.getDate_modified());
+        patient.addProvidedTreatment(newProvidedTreatment, treatmentUpdateRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

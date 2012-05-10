@@ -13,6 +13,8 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -69,7 +71,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId");
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);
-        patient.addProvidedTreatment(providedTreatment);
+        patient.addProvidedTreatment(providedTreatment, now());
 
         allPatients.add(patient);
         return patient;

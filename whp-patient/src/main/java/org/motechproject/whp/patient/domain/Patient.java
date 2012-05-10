@@ -42,11 +42,12 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void addProvidedTreatment(ProvidedTreatment providedTreatment) {
+    public void addProvidedTreatment(ProvidedTreatment providedTreatment, DateTime dateModified) {
         if (currentProvidedTreatment != null) {
             providedTreatments.add(currentProvidedTreatment);
         }
         currentProvidedTreatment = providedTreatment;
+        lastModifiedDate = dateModified;
     }
 
     public ProvidedTreatment latestProvidedTreatment() {
@@ -69,11 +70,16 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean isCurrentTreatmentClosed() {
-        return currentProvidedTreatment.getTreatment().getEndDate() != null;
+        return currentProvidedTreatment.getTreatment().isClosed();
     }
 
     @JsonIgnore
     public String tbId() {
         return currentProvidedTreatment.getTbId();
+    }
+
+    public void closeCurrentTreatment(String reasonForClosure, String treatmentComplete, DateTime dateModified) {
+        lastModifiedDate = dateModified;
+        currentProvidedTreatment.close(reasonForClosure, treatmentComplete);
     }
 }

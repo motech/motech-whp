@@ -107,7 +107,7 @@ public class PatientMapperTest {
         Patient patient = mapBasicInfo(patientRequest);
         Treatment treatment = mapTreatmentInfo(patientRequest);
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
-        patient.addProvidedTreatment(providedTreatment);
+        patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
         return patient;
     }
 

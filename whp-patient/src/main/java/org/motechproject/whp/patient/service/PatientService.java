@@ -36,7 +36,7 @@ public class PatientService {
         Treatment treatment = createTreatment(patientRequest);
 
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
-        patient.addProvidedTreatment(providedTreatment);
+        patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
         allPatients.add(patient);
     }
 

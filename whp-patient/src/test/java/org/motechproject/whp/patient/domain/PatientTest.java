@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -7,6 +8,10 @@ import org.motechproject.whp.refdata.domain.PatientType;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.motechproject.util.DateUtil.now;
 
 public class PatientTest {
 
@@ -15,8 +20,8 @@ public class PatientTest {
     ProvidedTreatment newProviderTreatment = new ProvidedTreatment("newProviderId", "newTbId");
 
     public PatientTest() {
-        patient.addProvidedTreatment(providedTreatment);
-        patient.addProvidedTreatment(newProviderTreatment);
+        patient.addProvidedTreatment(providedTreatment, now());
+        patient.addProvidedTreatment(newProviderTreatment, now());
     }
 
     @Test
@@ -38,8 +43,20 @@ public class PatientTest {
     @Test
     public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAddedForPatientWhoHasAHistory() {
         ProvidedTreatment newerProviderTreatment = new ProvidedTreatment("newerProviderId", "newerTbId");
-        patient.addProvidedTreatment(newerProviderTreatment);
+        patient.addProvidedTreatment(newerProviderTreatment, now());
 
         assertArrayEquals(new Object[]{providedTreatment, newProviderTreatment}, patient.getProvidedTreatments().toArray());
+    }
+
+    @Test
+    public void shouldCloseCurrentProvidedTreatment() {
+        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+
+        DateTime now = now();
+        patient.addProvidedTreatment(providedTreatment, now);
+
+        patient.closeCurrentTreatment("Cured", "Yes", now);
+        assertEquals(now, patient.getLastModifiedDate());
+        verify(providedTreatment, times(1)).close("Cured", "Yes");
     }
 }

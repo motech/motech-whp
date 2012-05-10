@@ -63,6 +63,11 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+    public PatientWebRequestBuilder withReasonForClosure(String reasonForClosure){
+        patientWebRequest.setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), reasonForClosure, "Yes", "oldTbID");
+        return this;
+    }
+
     public PatientWebRequestBuilder withLastModifiedDate(String lastModifiedDate) {
         patientWebRequest.setDate_modified(lastModifiedDate);
         return this;
