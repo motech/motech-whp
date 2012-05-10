@@ -31,7 +31,7 @@
     </target>
 
     <target name="drop.all.dbs">
-        <for list="motech-whp,motech-web-security,motech-adherence"
+        <for list="motech-whp,motech-web-security,motech-tb-adherence"
              param="db.name">
             <sequential>
                 <exec executable="curl">
