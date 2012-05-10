@@ -23,7 +23,7 @@
                 <tbody>
                     <#if patientList?size == 0>
                         <tr>
-                            <td style="text-align: center" colspan="10">No patients to show</td>
+                            <td style="text-align: center" colspan="11">No patients to show</td>
                         </tr>
                     <#else>
                         <#list patientList as patient>
@@ -48,7 +48,7 @@
                                 </td>
                                 <td>
                                     <#if patient.currentTreatmentClosed>
-                                        <div id="patient_${patient.patientId}_TreatmentOutcome" class="label label-info text-center">${patient.treatmentOutcome}</div>
+                                        <div id="patient_${patient.patientId}_TreatmentOutcome" class="label label-info text-center">${patient.treatmentOutcome.outcome}</div>
                                     </#if>
                                 </td>
                             </tr>
