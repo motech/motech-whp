@@ -84,6 +84,12 @@ public class Patient extends MotechBaseDataObject {
         return currentProvidedTreatment.getTbId();
     }
 
+    @JsonIgnore
+    public String currentTreatmentId() {
+        if (getCurrentProvidedTreatment() == null) return null;
+        return this.getCurrentProvidedTreatment().getTreatment().getId();
+    }
+
     public void closeCurrentTreatment(String treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
         currentProvidedTreatment.close(treatmentOutcome);

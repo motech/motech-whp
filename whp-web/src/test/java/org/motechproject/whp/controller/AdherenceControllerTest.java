@@ -10,7 +10,7 @@ import org.motechproject.security.LoginSuccessHandler;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -19,7 +19,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.uimodel.AdherenceForm;
+import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,22 +86,13 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldPassPatientIdToAdherenceCard() {
-        WeeklyAdherence adherence = new WeeklyAdherence();
-        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
-
-        adherenceController.update(PATIENT_ID, uiModel);
-        verify(uiModel).addAttribute(eq(PATIENT_ID), eq(patient.getPatientId()));
-    }
-
-    @Test
     public void shouldPassWeeklyAdherenceLogToAdherenceCard() {
         WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
         adherenceController.update(PATIENT_ID, uiModel);
 
         verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());
-        assertEquals(adherence.getAdherenceLogs(), captors.adherenceForm.getValue().getAdherenceLogs());
+        assertEquals(adherence.getAdherenceLogs(), captors.adherenceForm.getValue().getAdherenceList());
     }
 
     @Test
@@ -116,12 +107,12 @@ public class AdherenceControllerTest extends BaseUnitTest {
     @Test
     public void shouldCaptureAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
-        ArrayList<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>(adherence.getAdherenceLogs());
-        adherenceController.update(PATIENT_ID, new AdherenceForm(adherence), request);
+        ArrayList<Adherence> adherences = new ArrayList<Adherence>(adherence.getAdherenceLogs());
+        adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence), request);
 
         ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
         verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(loggedInUserName), eq(AdherenceSource.WEB));
-        assertEquals(adherenceLogs, captor.getValue().getAdherenceLogs());
+        assertEquals(adherences, captor.getValue().getAdherenceLogs());
     }
 
     @Test
@@ -168,12 +159,12 @@ public class AdherenceControllerTest extends BaseUnitTest {
         WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
 
-        String form = adherenceController.update(PATIENT_ID, new AdherenceForm(adherence), request);
+        String form = adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence), request);
         assertEquals("forward:/", form);
     }
 
     private class ArgumentCaptors {
-        private ArgumentCaptor<AdherenceForm> adherenceForm = forClass(AdherenceForm.class);
+        private ArgumentCaptor<WeeklyAdherenceForm> adherenceForm = forClass(WeeklyAdherenceForm.class);
     }
 
     private void setupLoggedInUser(String userName) {

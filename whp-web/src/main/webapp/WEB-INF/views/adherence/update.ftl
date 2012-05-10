@@ -5,7 +5,16 @@
 
     <div class="well page-header"><h3>Update last week's adherence</h3></div>
 
-    <form id="adherenceForm" action="<@spring.url '/adherence/update/' + patientId/>" method="POST">
+    <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
+        <input type="hidden" name="patientId"
+               value="${adherence.patientId}"/>
+        <input type="hidden" name="treatmentId"
+               value="${adherence.treatmentId}"/>
+        <input type="hidden" name="providerId"
+               value="${adherence.providerId}"/>
+        <input type="hidden" name="tbId"
+               value="${adherence.tbId}"/>
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -25,25 +34,25 @@
             </thead>
             <tbody>
             <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
-                <#list adherence.adherenceLogs as adherenceLog>
+                <#list adherence.adherenceList as adherenceLog>
                 <tr class="adherenceRow">
                     <td>
                     ${adherenceLog.pillDay}
-                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDay" class="pillDay"
+                        <input type="hidden" name="adherenceList[${adherenceLog_index}].pillDay" class="pillDay"
                                value="${adherenceLog.pillDay}"/>
                     </td>
                     <td>
                     ${adherenceLog.pillDateString}
-                        <input type="hidden" name="adherenceLogs[${adherenceLog_index}].pillDateString"
+                        <input type="hidden" name="adherenceList[${adherenceLog_index}].pillDateString"
                                value="${adherenceLog.pillDateString}"/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                        <input type="radio" name="adherenceList[${adherenceLog_index}].pillStatus"
                                class="pillStatusTaken"
                                value="Taken" <#if adherenceLog.isTaken> checked </#if> <#if readOnly > disabled </#if>/>
                     </td>
                     <td>
-                        <input type="radio" name="adherenceLogs[${adherenceLog_index}].pillStatus"
+                        <input type="radio" name="adherenceList[${adherenceLog_index}].pillStatus"
                                class="pillStatusNotTaken"
                                value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if> <#if readOnly >
                                disabled </#if>/>
@@ -55,7 +64,7 @@
         <div class="control-group">
             <div class="controls pull-right">
                 <#if !readOnly>
-                    <input type="submit" class="btn btn-primary login-btn"/>
+                    <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>
             </div>
         </div>

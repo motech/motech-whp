@@ -75,7 +75,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().forPatient(allPatients.findByPatientId(PATIENT_ID)).build();
 
         adherenceService.recordAdherence(PATIENT_ID, adherence, user, source);
         assertArrayEquals(
@@ -106,15 +106,17 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldReturnAdherenceWhenCurrentWeekAdherenceIsCaptured() {
-        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
+        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder()
+                .withDefaults()
+                .withCaseId(PATIENT_ID)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         patientService.createPatient(withDosesOnMonWedFri);
 
         WeeklyAdherence expectedAdherence = new WeeklyAdherenceBuilder()
-                .withLog(Monday, PillStatus.Taken)
-                .withLog(Wednesday, PillStatus.Taken)
-                .withLog(Friday, PillStatus.Taken).build();
+                .withDefaultLogs()
+                .forPatient(allPatients.findByPatientId(PATIENT_ID))
+                .build();
         adherenceService.recordAdherence(withDosesOnMonWedFri.getCase_id(), expectedAdherence, user, source);
 
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());

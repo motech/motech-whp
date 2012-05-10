@@ -1,7 +1,6 @@
 package org.motechproject.whp.adherence.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -13,25 +12,33 @@ import java.util.Set;
 
 public class WeeklyAdherence {
 
-    private Set<AdherenceLog> adherenceLogs = new LinkedHashSet<AdherenceLog>();
+    @Getter
+    private String patientId;
+    @Getter
+    private String treatmentId;
+    @Getter
+    private String tbId;
+    @Getter
+    private String providerId;
+
+    private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
 
     @Getter
     private TreatmentWeek week;
-
-    @Getter
-    @Setter
-    private String patientId;
-
 
     public WeeklyAdherence() {
         this.week = new TreatmentWeek(DateUtil.today()).minusWeeks(1);
     }
 
-    public WeeklyAdherence(TreatmentWeek week) {
+    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week) {
+        this.patientId = patientId;
+        this.treatmentId = treatmentId;
         this.week = week;
     }
 
-    public WeeklyAdherence(TreatmentWeek week, List<DayOfWeek> pillDays) {
+    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays) {
+        this.patientId = patientId;
+        this.treatmentId = treatmentId;
         this.week = week;
         for (DayOfWeek pillDay : pillDays) {
             addAdherenceLog(pillDay, PillStatus.Unknown);
@@ -39,30 +46,60 @@ public class WeeklyAdherence {
     }
 
     public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus) {
-        AdherenceLog adherenceLog = new AdherenceLog(pillDay, week.dateOf(pillDay));
-        adherenceLog.setPillStatus(pillStatus);
-        adherenceLogs.add(adherenceLog);
+        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay));
+        adherence.setPillStatus(pillStatus);
+        adherence.setProviderId(providerId);
+        adherence.setTbId(tbId);
+        adherenceList.add(adherence);
         return this;
     }
 
     public boolean isAnyDoseTaken() {
-        for (AdherenceLog adherenceLog : adherenceLogs) {
-            if (adherenceLog.getIsTaken())
+        for (Adherence adherence : adherenceList) {
+            if (PillStatus.Taken == adherence.getPillStatus())
                 return true;
         }
         return false;
     }
 
     public LocalDate firstDoseTakenOn() {
-        for (AdherenceLog adherenceLog : adherenceLogs) {
-            if (adherenceLog.getIsTaken())
-                return adherenceLog.getPillDate();
+        for (Adherence adherence : adherenceList) {
+            if (PillStatus.Taken == adherence.getPillStatus())
+                return adherence.getPillDate();
         }
         return null;
     }
 
-    public List<AdherenceLog> getAdherenceLogs() {
-        return new ArrayList<AdherenceLog>(adherenceLogs);
+    public List<Adherence> getAdherenceLogs() {
+        return new ArrayList<Adherence>(adherenceList);
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+        for (Adherence adherence : adherenceList) {
+            adherence.setPatientId(patientId);
+        }
+    }
+
+    public void setTreatmentId(String treatmentId) {
+        this.treatmentId = treatmentId;
+        for (Adherence adherence : adherenceList) {
+            adherence.setTreatmentId(treatmentId);
+        }
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+        for (Adherence adherence : adherenceList) {
+            adherence.setProviderId(providerId);
+        }
+    }
+
+    public void setTbId(String tbId) {
+        this.tbId = tbId;
+        for (Adherence adherence : adherenceList) {
+            adherence.setTbId(tbId);
+        }
     }
 
 }

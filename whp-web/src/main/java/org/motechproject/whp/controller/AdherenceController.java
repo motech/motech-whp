@@ -6,7 +6,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.uimodel.AdherenceForm;
+import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,17 +39,16 @@ public class AdherenceController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, AdherenceForm adherenceForm, HttpServletRequest httpServletRequest) {
+    public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
-        adherenceService.recordAdherence(patientId, adherenceForm.weeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
+        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
     }
 
     private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {
-        AdherenceForm adherenceForm = new AdherenceForm(adherence);
-        uiModel.addAttribute("patientId", patientId);
-        uiModel.addAttribute("adherence", adherenceForm);
-        uiModel.addAttribute("referenceDate", adherenceForm.getReferenceDateString());
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence);
+        uiModel.addAttribute("adherence", weeklyAdherenceForm);
+        uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("readOnly", !(adherenceCriteria.canUpdate(patientId)));
     }
 

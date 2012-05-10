@@ -2,7 +2,9 @@ package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 
@@ -14,31 +16,47 @@ import static org.joda.time.format.DateTimeFormat.forPattern;
 @Data
 public class AdherenceForm {
 
-    LocalDate referenceDate;
+    private DayOfWeek pillDay;
 
-    List<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>();
+    private LocalDate pillDate;
+
+    private PillStatus pillStatus =  PillStatus.Unknown;
 
     public AdherenceForm() {
     }
 
-    public AdherenceForm(WeeklyAdherence adherence) {
-        referenceDate = adherence.getWeek().getReference();
-        adherenceLogs = adherence.getAdherenceLogs();
+    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus) {
+        this.pillDay = pillDay;
+        this.pillDate = pillDate;
+        this.pillStatus = pillStatus;
     }
 
-    public WeeklyAdherence weeklyAdherence() {
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherence(new TreatmentWeek(referenceDate));
-        for (AdherenceLog log : adherenceLogs) {
-            weeklyAdherence.addAdherenceLog(log.getPillDay(), log.getPillStatus());
+    public String getPillDateString() {
+        return pillDate.toString("dd-MM-YYYY");
+    }
+
+    public void setPillDateString(String pillDate) {
+        this.pillDate = LocalDate.parse(pillDate, forPattern("dd-MM-YYYY"));
+    }
+
+    public boolean getIsTaken() {
+        return pillStatus == PillStatus.Taken;
+    }
+
+    public boolean getIsNotTaken() {
+        return pillStatus == PillStatus.NotTaken;
+    }
+
+    public void setIsTaken(boolean taken) {
+        if (taken) {
+            pillStatus = PillStatus.Taken;
         }
-        return weeklyAdherence;
     }
 
-    public String getReferenceDateString() {
-        return referenceDate.toString("dd-MM-YYYY");
+    public void setIsNotTaken(boolean notTaken) {
+        if (notTaken) {
+            pillStatus = PillStatus.NotTaken;
+        }
     }
 
-    public void setReferenceDateString(String pillDate) {
-        this.referenceDate = LocalDate.parse(pillDate, forPattern("dd-MM-YYYY"));
-    }
 }

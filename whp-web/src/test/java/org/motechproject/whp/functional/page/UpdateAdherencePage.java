@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UpdateAdherencePage extends Page {
 
-    @FindBy(how = How.ID, using = "adherenceForm")
+    @FindBy(how = How.ID, using = "weeklyAdherenceForm")
     private WebElement adherenceForm;
 
     @FindBy(how = How.CLASS_NAME, using = "adherenceRow")
@@ -23,7 +23,7 @@ public class UpdateAdherencePage extends Page {
 
     @Override
     protected void waitForPageToLoad() {
-        waitForElementWithIdToLoad("adherenceForm");
+        waitForElementWithIdToLoad("weeklyAdherenceForm");
     }
 
     public boolean isTaken(String dayOfWeek) {
