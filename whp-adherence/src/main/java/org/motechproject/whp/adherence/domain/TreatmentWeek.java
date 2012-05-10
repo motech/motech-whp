@@ -1,10 +1,12 @@
 package org.motechproject.whp.adherence.domain;
 
+import lombok.Getter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 
 public class TreatmentWeek {
 
+    @Getter
     private LocalDate reference;
 
     public TreatmentWeek(LocalDate dayInWeek) {

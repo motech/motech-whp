@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
@@ -15,10 +16,14 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientStatus;
+import org.motechproject.whp.uimodel.AdherenceForm;
 import org.springframework.ui.Model;
+
+import java.util.ArrayList;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -61,12 +66,18 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldShowAdherenceCard() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+
         String form = adherenceController.update(PATIENT_ID, uiModel);
         assertEquals("adherence/update", form);
     }
 
     @Test
     public void shouldPassPatientIdToAdherenceCard() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+
         adherenceController.update(PATIENT_ID, uiModel);
         verify(uiModel).addAttribute(eq(PATIENT_ID), eq(patient.getPatientId()));
     }
@@ -78,18 +89,34 @@ public class AdherenceControllerTest extends BaseUnitTest {
         adherenceController.update(PATIENT_ID, uiModel);
 
         verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());
-        assertEquals(adherence, captors.adherenceForm.getValue());
+        assertEquals(adherence.getAdherenceLogs(), captors.adherenceForm.getValue().getAdherenceLogs());
+    }
+
+    @Test
+    public void shouldPassReferenceDateToAdherenceCard() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+        adherenceController.update(PATIENT_ID, uiModel);
+
+        verify(uiModel).addAttribute(eq("referenceDate"), eq("03-05-2012"));
     }
 
     @Test
     public void shouldCaptureAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
-        adherenceController.update(PATIENT_ID, adherence);
-        verify(adherenceService).recordAdherence(PATIENT_ID, adherence);
+        ArrayList<AdherenceLog> adherenceLogs = new ArrayList<AdherenceLog>(adherence.getAdherenceLogs());
+        adherenceController.update(PATIENT_ID, new AdherenceForm(adherence));
+
+        ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
+        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture());
+        assertEquals(adherenceLogs, captor.getValue().getAdherenceLogs());
     }
 
     @Test
     public void shouldShowAnUpdateViewFromSundayTillTuesday() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+
         LocalDate today = DateUtil.today();
         for (LocalDate date :
                 asList(
@@ -106,6 +133,9 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldShowAReadOnlyViewFromWednesdayTillSaturday() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+
         LocalDate today = DateUtil.today();
         for (LocalDate date :
                 asList(
@@ -124,7 +154,9 @@ public class AdherenceControllerTest extends BaseUnitTest {
     @Test
     public void shouldShowForwardToProviderHomeAfterCapturingAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
-        String form = adherenceController.update(PATIENT_ID, adherence);
+        when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
+
+        String form = adherenceController.update(PATIENT_ID, new AdherenceForm(adherence));
         assertEquals("forward:/", form);
     }
 
@@ -134,6 +166,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     private class ArgumentCaptors {
-        private ArgumentCaptor<WeeklyAdherence> adherenceForm = ArgumentCaptor.forClass(WeeklyAdherence.class);
+        private ArgumentCaptor<AdherenceForm> adherenceForm = forClass(AdherenceForm.class);
     }
 }

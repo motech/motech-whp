@@ -55,7 +55,7 @@ public class WHPAdherenceService {
         AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, null, treatmentWeek.startDate(), treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
-            return new WeeklyAdherenceMapper(adherenceRecords).map();
+            return new WeeklyAdherenceMapper(treatmentWeek, adherenceRecords).weeklyAdherence();
         }
         return new WeeklyAdherence(treatmentWeek, pillDays(patient));
     }

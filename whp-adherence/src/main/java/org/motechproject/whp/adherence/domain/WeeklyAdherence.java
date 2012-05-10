@@ -4,40 +4,49 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class WeeklyAdherence {
 
-    private Map<DayOfWeek, AdherenceLog> adherenceLogs = new Hashtable<DayOfWeek, AdherenceLog>();
+    private Set<AdherenceLog> adherenceLogs = new LinkedHashSet<AdherenceLog>();
+
+    @Getter
+    private TreatmentWeek week;
 
     @Getter
     @Setter
     private String patientId;
 
-    private TreatmentWeek week;
 
     public WeeklyAdherence() {
+        this.week = new TreatmentWeek(DateUtil.today()).minusWeeks(1);
+    }
+
+    public WeeklyAdherence(TreatmentWeek week) {
+        this.week = week;
     }
 
     public WeeklyAdherence(TreatmentWeek week, List<DayOfWeek> pillDays) {
         this.week = week;
         for (DayOfWeek pillDay : pillDays) {
-            addAdherenceLog(pillDay, new AdherenceLog(week.dateOf(pillDay)));
+            addAdherenceLog(pillDay, PillStatus.Unknown);
         }
     }
 
-    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, AdherenceLog log) {
-        log.setPillDay(pillDay);
-        adherenceLogs.put(pillDay, log);
+    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus) {
+        AdherenceLog adherenceLog = new AdherenceLog(pillDay, week.dateOf(pillDay));
+        adherenceLog.setPillStatus(pillStatus);
+        adherenceLogs.add(adherenceLog);
         return this;
     }
 
     public boolean isAnyDoseTaken() {
-        for (AdherenceLog adherenceLog : adherenceLogs.values()) {
+        for (AdherenceLog adherenceLog : adherenceLogs) {
             if (adherenceLog.getIsTaken())
                 return true;
         }
@@ -45,7 +54,7 @@ public class WeeklyAdherence {
     }
 
     public LocalDate firstDoseTakenOn() {
-        for (AdherenceLog adherenceLog : adherenceLogs.values()) {
+        for (AdherenceLog adherenceLog : adherenceLogs) {
             if (adherenceLog.getIsTaken())
                 return adherenceLog.getPillDate();
         }
@@ -53,12 +62,7 @@ public class WeeklyAdherence {
     }
 
     public List<AdherenceLog> getAdherenceLogs() {
-        return new ArrayList<AdherenceLog>(adherenceLogs.values());
+        return new ArrayList<AdherenceLog>(adherenceLogs);
     }
 
-    public void setAdherenceLogs(List<AdherenceLog> adherenceLogs) {
-        for (AdherenceLog adherenceLog : adherenceLogs) {
-            this.adherenceLogs.put(adherenceLog.getPillDay(), adherenceLog);
-        }
-    }
 }

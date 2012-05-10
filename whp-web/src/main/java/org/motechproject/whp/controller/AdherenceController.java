@@ -4,6 +4,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.uimodel.AdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,14 +35,16 @@ public class AdherenceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, WeeklyAdherence adherence) {
-        adherenceService.recordAdherence(patientId, adherence);
+    public String update(@PathVariable("patientId") String patientId, AdherenceForm adherenceForm) {
+        adherenceService.recordAdherence(patientId, adherenceForm.weeklyAdherence());
         return "forward:/";
     }
 
     private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {
+        AdherenceForm adherenceForm = new AdherenceForm(adherence);
         uiModel.addAttribute("patientId", patientId);
-        uiModel.addAttribute("adherence", adherence);
+        uiModel.addAttribute("adherence", adherenceForm);
+        uiModel.addAttribute("referenceDate", adherenceForm.getReferenceDateString());
         uiModel.addAttribute("readOnly", !(adherenceCriteria.canUpdate(patientId)));
     }
 

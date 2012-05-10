@@ -24,6 +24,7 @@
             </tr>
             </thead>
             <tbody>
+            <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
                 <#list adherence.adherenceLogs as adherenceLog>
                 <tr class="adherenceRow">
                     <td>

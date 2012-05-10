@@ -9,8 +9,8 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
+import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.util.AssertAdherence;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
@@ -70,35 +69,31 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        AdherenceLog logForMonday = new AdherenceLog(Monday, treatmentWeek.dateOf(Monday));
-        AdherenceLog logForTuesday = new AdherenceLog(Tuesday, treatmentWeek.dateOf(Tuesday));
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 
-        WeeklyAdherence logs = new WeeklyAdherence();
-        logs.setAdherenceLogs(asList(logForMonday, logForTuesday));
-
-        adherenceService.recordAdherence(PATIENT_ID, logs);
+        adherenceService.recordAdherence(PATIENT_ID, adherence);
         assertArrayEquals(
-                new AdherenceLog[]{logForMonday, logForTuesday},
+                adherence.getAdherenceLogs().toArray(),
                 adherenceService.currentWeekAdherence(PATIENT_ID).getAdherenceLogs().toArray()
         );
     }
 
     @Test
     public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
-        adherenceIsRecordedForTheFirstTime();
+        WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime();
         assertEquals(
-                today,
+                adherence.firstDoseTakenOn(),
                 allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
         );
     }
 
     @Test
     public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceNotForTheFirstTime() {
-        adherenceIsRecordedForTheFirstTime();
+        WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime();
         mockCurrentDate(today.plusDays(1));
         adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherence());
         assertEquals(
-                today,
+                adherence.firstDoseTakenOn(),
                 allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
         );
     }
@@ -111,9 +106,9 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         patientService.createPatient(withDosesOnMonWedFri);
 
         WeeklyAdherence expectedAdherence = new WeeklyAdherenceBuilder()
-                .withLog(Monday, treatmentWeek.dateOf(Monday), true)
-                .withLog(Wednesday, treatmentWeek.dateOf(Wednesday), true)
-                .withLog(Friday, treatmentWeek.dateOf(Friday), true).build();
+                .withLog(Monday, PillStatus.Taken)
+                .withLog(Wednesday, PillStatus.Taken)
+                .withLog(Friday, PillStatus.Taken).build();
         adherenceService.recordAdherence(withDosesOnMonWedFri.getCase_id(), expectedAdherence);
 
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(withDosesOnMonWedFri.getCase_id());
@@ -145,14 +140,17 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         return couchDbConnector;
     }
 
-    private void adherenceIsRecordedForTheFirstTime() {
+    private WeeklyAdherence adherenceIsRecordedForTheFirstTime() {
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withCaseId(PATIENT_ID)
                 .withPatientType(PatientType.New)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
+
         patientService.createPatient(patientRequest);
-        adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherenceBuilder().withDefaultLogs().build());
+        adherenceService.recordAdherence(PATIENT_ID, adherence);
+        return adherence;
     }
 
     private void deleteAdherenceLogs() {
