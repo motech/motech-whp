@@ -15,7 +15,7 @@ public class AdherenceLogMapper {
         this.record = record;
     }
 
-    public AdherenceLog adherenceLog() {
+    public AdherenceLog map() {
         LocalDate recordDate = record.recordDate();
         AdherenceLog log = new AdherenceLog();
         log.status(PillStatus.get(record.status()));

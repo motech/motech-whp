@@ -15,25 +15,25 @@ public class AdherenceLogMapperTest {
     @Test
     public void shouldSetIsTaken() {
         AdherenceRecord record = new AdherenceRecord(today, 1, null);
-        assertTrue(new AdherenceLogMapper(record).adherenceLog().getIsTaken());
+        assertTrue(new AdherenceLogMapper(record).map().getIsTaken());
     }
 
     @Test
     public void shouldNotSetIsTaken() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertFalse(new AdherenceLogMapper(record).adherenceLog().getIsTaken());
+        assertFalse(new AdherenceLogMapper(record).map().getIsTaken());
     }
 
     @Test
     public void shouldSetPillDate() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertEquals(today, new AdherenceLogMapper(record).adherenceLog().getPillDate());
+        assertEquals(today, new AdherenceLogMapper(record).map().getPillDate());
     }
 
     @Test
     public void shouldSetPillDay() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertEquals(DayOfWeek.getDayOfWeek(today), new AdherenceLogMapper(record).adherenceLog().getPillDay());
+        assertEquals(DayOfWeek.getDayOfWeek(today), new AdherenceLogMapper(record).map().getPillDay());
     }
 
 }

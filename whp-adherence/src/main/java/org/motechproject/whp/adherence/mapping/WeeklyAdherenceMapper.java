@@ -22,7 +22,7 @@ public class WeeklyAdherenceMapper {
 
         for (AdherenceRecord adherenceRecord : adherenceRecords.adherenceRecords()) {
             AdherenceLogMapper adherenceLogMapper = new AdherenceLogMapper(adherenceRecord);
-            AdherenceLog log = adherenceLogMapper.adherenceLog();
+            AdherenceLog log = adherenceLogMapper.map();
             weeklyAdherence.addAdherenceLog(log.getPillDay(), log.getPillStatus());
         }
         return weeklyAdherence;

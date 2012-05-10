@@ -1,7 +1,7 @@
 package org.motechproject.whp.adherence.service;
 
+import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.adherence.contract.AdherenceRecords;
-import org.motechproject.adherence.contract.RecordAdherenceRequest;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -39,13 +39,13 @@ public class WHPAdherenceService {
         this.patientService = patientService;
     }
 
-    public void recordAdherence(String patientId, WeeklyAdherence adherence) {
+    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence) {
         Patient patient = allPatients.findByPatientId(patientId);
-        for (RecordAdherenceRequest request : recordAdherenceRequests(patient, adherence)) {
+        for (AdherenceData request : requests(patient, weeklyAdherence)) {
             adherenceService.recordAdherence(request);
         }
-        if (treatmentStartCriteria.shouldStartTreatment(patientId, adherence)) {
-            patientService.startOnTreatment(patientId, adherence.firstDoseTakenOn());
+        if (treatmentStartCriteria.shouldStartTreatment(patientId, weeklyAdherence)) {
+            patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
         }
     }
 
@@ -64,8 +64,8 @@ public class WHPAdherenceService {
         return patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays();
     }
 
-    private List<RecordAdherenceRequest> recordAdherenceRequests(Patient patient, WeeklyAdherence adherence) {
-        List<RecordAdherenceRequest> requests = new ArrayList<RecordAdherenceRequest>();
+    private List<AdherenceData> requests(Patient patient, WeeklyAdherence adherence) {
+        List<AdherenceData> requests = new ArrayList<AdherenceData>();
         for (AdherenceLog adherenceLog : adherence.getAdherenceLogs()) {
             requests.add(new AdherenceRequestMapper(patient, adherenceLog).request());
         }
