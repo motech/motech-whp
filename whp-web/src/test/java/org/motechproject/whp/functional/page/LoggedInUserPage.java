@@ -13,7 +13,7 @@ public class LoggedInUserPage extends Page {
 
     private static final String CURRENT_PASSWORD_ID = "currentPassword";
 
-    @FindBy(how = How.ID, using = "links")
+    @FindBy(how = How.ID, using = "welcome-message")
     private WebElement welcomeDiv;
 
     @FindBy(how = How.ID, using = "logout")

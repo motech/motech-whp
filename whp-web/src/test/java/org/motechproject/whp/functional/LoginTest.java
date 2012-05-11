@@ -32,7 +32,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void testLoginSuccessForAdministrator() {
         AdminPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
-        assertTrue(StringUtils.contains(adminPage.getWelcomeText(), "admin"));
+        assertTrue(StringUtils.containsIgnoreCase(adminPage.getWelcomeText(), "admin"));
         adminPage.logout();
     }
 
@@ -41,7 +41,7 @@ public class LoginTest extends BaseTest {
         TestProvider provider = providerDataService.createProvider();
         LoginPage loginPage = MyPageFactory.initElements(webDriver, LoginPage.class);
         ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
-        assertTrue(StringUtils.contains(providerPage.getWelcomeText(), provider.getProviderId()));
+        assertTrue(StringUtils.containsIgnoreCase(providerPage.getWelcomeText(), provider.getProviderId()));
         providerPage.logout();
     }
 }

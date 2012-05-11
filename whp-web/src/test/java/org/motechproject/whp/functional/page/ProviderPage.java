@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -29,7 +30,7 @@ public class ProviderPage extends LoggedInUserPage {
 
     public boolean hasPatient(String patientName) {
         for (WebElement patientNameElement : patientNames) {
-            if (patientNameElement.getText().equals(patientName)) {
+            if (StringUtils.containsIgnoreCase(patientNameElement.getText(), patientName)) {
                 return true;
             }
         }

@@ -5,7 +5,7 @@
             <div class="nav-collapse collapse">
             <#if Session.loggedInUser?exists>
                 <ul class="nav pull-left">
-                    <li><a href="#">Welcome ${Session.loggedInUser.username?cap_first}</a></li>
+                    <li><a href="#" id="welcome-message">Welcome ${Session.loggedInUser.username?cap_first}</a></li>
                 </ul>
                 <ul class="nav pull-right">
                     <li><a id="home"  href="/whp">Home</a></li>
