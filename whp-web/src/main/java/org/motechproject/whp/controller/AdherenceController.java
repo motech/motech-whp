@@ -47,8 +47,8 @@ public class AdherenceController extends BaseController {
 
     private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence);
-        uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
+        uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("readOnly", !(adherenceCriteria.canUpdate(patientId)));
     }
 
