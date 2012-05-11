@@ -67,6 +67,14 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.closeTreatment})
     private String treatment_outcome;
 
+    @NotNull
+    @Scope(scope = {ValidationScope.pauseTreatment})
+    private String reason_for_pause;
+
+    @NotNull
+    @Scope(scope = {ValidationScope.restartTreatment})
+    private String reason_for_restart;
+
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
 

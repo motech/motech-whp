@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 
 public enum TreatmentUpdateScenario {
 
-    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn");
+    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn"), Pause("pauseTreatment"), Restart("restartTreatment");
 
     private String scope;
 
