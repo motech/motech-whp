@@ -3,6 +3,8 @@
 <@layout.defaultLayout "Update Adherence">
 <div class="row">
 
+    <#if readOnly > <div class="alert alert-error"> Please contact the CMF admin to update adherence. </div> </#if>
+
     <h4 class="page-header form-header">Update last week's adherence</h4>
 
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
