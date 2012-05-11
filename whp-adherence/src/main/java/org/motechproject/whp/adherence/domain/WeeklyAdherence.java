@@ -3,12 +3,13 @@ package org.motechproject.whp.adherence.domain;
 import lombok.Getter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 
 public class WeeklyAdherence {
 
@@ -20,14 +21,13 @@ public class WeeklyAdherence {
     private String tbId;
     @Getter
     private String providerId;
-
-    private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
-
     @Getter
     private TreatmentWeek week;
 
+    private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
+
     public WeeklyAdherence() {
-        this.week = new TreatmentWeek(DateUtil.today()).minusWeeks(1);
+        this.week = currentWeekInstance();
     }
 
     public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week) {

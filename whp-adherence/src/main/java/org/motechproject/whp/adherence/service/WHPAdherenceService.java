@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+
 @Service
 public class WHPAdherenceService {
 
@@ -51,17 +53,17 @@ public class WHPAdherenceService {
 
     public WeeklyAdherence currentWeekAdherence(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
-        TreatmentWeek treatmentWeek = new TreatmentWeek(DateUtil.today().minusWeeks(1));
+        TreatmentWeek treatmentWeek = currentWeekInstance();
         AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, patient.currentTreatmentId(), treatmentWeek.startDate(), treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
             return new WeeklyAdherenceMapper(treatmentWeek, adherenceRecords).map();
         } else {
-            return currentWeekAdherece(patient, treatmentWeek);
+            return currentWeekAdherence(patient, treatmentWeek);
         }
     }
 
-    private WeeklyAdherence currentWeekAdherece(Patient patient, TreatmentWeek treatmentWeek) {
+    private WeeklyAdherence currentWeekAdherence(Patient patient, TreatmentWeek treatmentWeek) {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient));
         weeklyAdherence.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
         weeklyAdherence.setTbId(patient.getCurrentProvidedTreatment().getTbId());

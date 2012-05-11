@@ -102,7 +102,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         when(adherenceService.currentWeekAdherence(PATIENT_ID)).thenReturn(adherence);
         adherenceController.update(PATIENT_ID, uiModel);
 
-        verify(uiModel).addAttribute(eq("referenceDate"), eq("03-05-2012"));
+        verify(uiModel).addAttribute(eq("referenceDate"), eq("04-05-2012"));
     }
 
     @Test

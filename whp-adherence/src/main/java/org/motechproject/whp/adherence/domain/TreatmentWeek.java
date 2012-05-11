@@ -7,7 +7,7 @@ import org.motechproject.model.DayOfWeek;
 public class TreatmentWeek {
 
     @Getter
-    private LocalDate reference;
+    private LocalDate reference; //can be any "date" as such. used to define what week you are in currently.
 
     public TreatmentWeek(LocalDate dayInWeek) {
         reference = dayInWeek;
@@ -24,9 +24,4 @@ public class TreatmentWeek {
     public LocalDate dateOf(DayOfWeek dayOfWeek){
         return reference.withDayOfWeek(dayOfWeek.getValue());
     }
-
-    public TreatmentWeek minusWeeks(int weeks) {
-        return new TreatmentWeek(reference.minusWeeks(weeks));
-    }
-
 }

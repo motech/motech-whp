@@ -36,7 +36,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public static final String PATIENT_ID = "patientId";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
-    TreatmentWeek treatmentWeek = new TreatmentWeek(today).minusWeeks(1);
+    TreatmentWeek treatmentWeek = new TreatmentWeek(today.minusDays(6));
 
     @Autowired
     @Qualifier(value = "whpDbConnector")

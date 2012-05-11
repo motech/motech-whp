@@ -3,6 +3,7 @@ package org.motechproject.whp.adherence.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.domain.CurrentTreatmentWeek;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
@@ -10,11 +11,11 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 
 import static org.motechproject.model.DayOfWeek.*;
+import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 
 public class WeeklyAdherenceBuilder {
 
-    private LocalDate today = DateUtil.today();
-    private WeeklyAdherence adherence = new WeeklyAdherence("patientId", "treatmentId", new TreatmentWeek(today).minusWeeks(1));
+    private WeeklyAdherence adherence = new WeeklyAdherence("patientId", "treatmentId", currentWeekInstance());
 
     public WeeklyAdherenceBuilder withDefaultLogs() {
         adherence.addAdherenceLog(Monday, PillStatus.Taken);
