@@ -24,6 +24,15 @@ public class WeeklyAdherenceBuilder {
         return this;
     }
 
+    public WeeklyAdherenceBuilder withDefaultLogsForWeek(LocalDate dayInWeek) {
+        adherence = new WeeklyAdherence("patientId", "treatmentId", new TreatmentWeek(dayInWeek));
+        adherence.addAdherenceLog(Monday, PillStatus.Taken);
+        adherence.addAdherenceLog(Wednesday, PillStatus.Taken);
+        adherence.addAdherenceLog(Friday, PillStatus.Taken);
+        return this;
+    }
+
+
     public WeeklyAdherenceBuilder withLog(DayOfWeek dayOfWeek, PillStatus pillStatus) {
         adherence.addAdherenceLog(dayOfWeek, pillStatus);
         return this;

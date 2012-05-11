@@ -6,30 +6,32 @@ import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 public class TreatmentStartCriteria {
 
-    AllPatients allPatients;
+    public static boolean shouldStartTreatment(Patient patient, WeeklyAdherence adherence) {
 
-    @Autowired
-    public TreatmentStartCriteria(AllPatients allPatients) {
-        this.allPatients = allPatients;
+        return (isNewPatient(patient)
+                && isAnyDoseTaken(adherence))
+                && isFirstEverDoseBeingTaken(patient, adherence);
     }
 
-    public boolean shouldStartTreatment(String patientId, WeeklyAdherence adherence) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        return isNotOnTreatment(patient.getCurrentProvidedTreatment()) && isNewPatient(patient) && isAnyDoseTaken(adherence);
+    private static boolean isFirstEverDoseBeingTaken(Patient patient, WeeklyAdherence adherence) {
+        return isNotOnTreatment(patient.getCurrentProvidedTreatment()) ||isAdherenceBeingCapturedForEarlierDate(patient, adherence);
     }
 
-    private boolean isNotOnTreatment(ProvidedTreatment providedTreatment) {
+    private static boolean isAdherenceBeingCapturedForEarlierDate(Patient patient, WeeklyAdherence adherence) {
+        return patient.getCurrentProvidedTreatment().getTreatment().getDoseStartDate().isAfter(adherence.firstDoseTakenOn());
+    }
+
+    private static boolean isNotOnTreatment(ProvidedTreatment providedTreatment) {
         return providedTreatment.getTreatment().getDoseStartDate() == null;
     }
 
-    private boolean isNewPatient(Patient patient) {
+    private static boolean isNewPatient(Patient patient) {
         return patient.getPatientType().equals(PatientType.New);
     }
 
-    private boolean isAnyDoseTaken(WeeklyAdherence adherence) {
+    private static boolean isAnyDoseTaken(WeeklyAdherence adherence) {
         return adherence.isAnyDoseTaken();
     }
 

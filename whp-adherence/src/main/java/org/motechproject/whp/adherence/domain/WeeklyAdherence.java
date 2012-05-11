@@ -62,6 +62,7 @@ public class WeeklyAdherence {
         return false;
     }
 
+    //Assume implicitly that list is ordered.
     public LocalDate firstDoseTakenOn() {
         for (Adherence adherence : adherenceList) {
             if (PillStatus.Taken == adherence.getPillStatus())

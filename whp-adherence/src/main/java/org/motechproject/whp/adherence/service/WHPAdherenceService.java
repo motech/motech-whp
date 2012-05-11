@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartTreatment;
 
 @Service
 public class WHPAdherenceService {
@@ -34,7 +35,6 @@ public class WHPAdherenceService {
     @Autowired
     public WHPAdherenceService(AdherenceService adherenceService,
                                AllPatients allPatients,
-                               TreatmentStartCriteria treatmentStartCriteria,
                                PatientService patientService) {
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
@@ -46,7 +46,7 @@ public class WHPAdherenceService {
         for (AdherenceData request : requests(weeklyAdherence)) {
             adherenceService.recordAdherence(user, source.name(), request);
         }
-        if (treatmentStartCriteria.shouldStartTreatment(patientId, weeklyAdherence)) {
+        if (shouldStartTreatment(allPatients.findByPatientId(patientId), weeklyAdherence)) {
             patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
         }
     }
