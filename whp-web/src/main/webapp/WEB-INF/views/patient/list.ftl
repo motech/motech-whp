@@ -3,7 +3,7 @@
     <@layout.defaultLayout "Patient List">
     <div class="row">
         <div>
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>
                         <th>Patient ID</th>
@@ -26,7 +26,7 @@
                     <#else>
                         <#list patientList as patient>
                             <tr id="patientList_${patient.patientId}">
-                                <td class="patientId">${patient.patientId}</td>
+                                <td class="patientId"><b>${patient.patientId}</b></td>
                                 <td class="tbId">${patient.currentProvidedTreatment.tbId}</td>
                                 <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
                                 <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>

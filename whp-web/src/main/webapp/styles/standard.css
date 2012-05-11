@@ -57,3 +57,7 @@ body {
     color: #555555;
     font-size: 0.8em;
 }
+
+.page-header.form-header {
+    padding-bottom: 0px;
+}

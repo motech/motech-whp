@@ -3,7 +3,7 @@
 <@layout.defaultLayout "Update Adherence">
 <div class="row">
 
-    <h4 class="well small-well page-header">Update last week's adherence</h4>
+    <h4 class="page-header form-header">Update last week's adherence</h4>
 
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
         <input type="hidden" name="patientId"
