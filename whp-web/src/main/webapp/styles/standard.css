@@ -6,16 +6,39 @@ body {
     margin-top: 20px;
 }
 
-#logo {
-    padding-right: 0px;
-    padding-bottom: 15px;
+#footer {
+    padding-right: 20px;
+    padding-top: 15px;
+    padding-left: 60px;
+
+    border-top: 1px ridge;
+    background: #FAFADE;
+}
+
+#whp-logo{
+    height: 35px;
+}
+
+#motech-logo {
+    height: 38px
+}
+
+#navibar{
+    padding-top: 5px;
+}
+
+.well.small-well{
+    padding: 0px;
     margin-bottom: 5px;
-    padding-left: 0px;
-    border-bottom: 1px inset;
+    color: #54555a;
 }
 
 #whp-logo {
     margin-right: 0px;
+}
+
+#footer-left-section {
+    padding-bottom: 5px;
 }
 
 .login-btn {
@@ -28,4 +51,9 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+#version {
+    color: #555555;
+    font-size: 0.8em;
 }

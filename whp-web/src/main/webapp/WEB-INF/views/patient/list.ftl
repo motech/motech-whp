@@ -2,15 +2,13 @@
 <#import "../layout/default.ftl" as layout>
     <@layout.defaultLayout "Patient List">
     <div class="row">
-        <h3 class="well">Patients</h3>
         <div>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Patient ID</th>
                         <th>TB-ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
+                        <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
                         <th>District</th>
@@ -23,15 +21,14 @@
                 <tbody>
                     <#if patientList?size == 0>
                         <tr>
-                            <td style="text-align: center" colspan="11">No patients to show</td>
+                            <td style="text-align: center" colspan="10">No patients to show</td>
                         </tr>
                     <#else>
                         <#list patientList as patient>
                             <tr id="patientList_${patient.patientId}">
                                 <td class="patientId">${patient.patientId}</td>
                                 <td class="tbId">${patient.currentProvidedTreatment.tbId}</td>
-                                <td class="name">${patient.firstName}</td>
-                                <td>${patient.lastName}</td>
+                                <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
                                 <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>
                                 <td>${patient.gender}</td>
                                 <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
