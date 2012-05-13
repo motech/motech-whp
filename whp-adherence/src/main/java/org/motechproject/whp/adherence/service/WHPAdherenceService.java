@@ -10,6 +10,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.mapping.AdherenceDataMapper;
+import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentStartCriteria;
@@ -63,6 +64,11 @@ public class WHPAdherenceService {
         }
     }
 
+    public List<Adherence> allAdherenceValues() {
+        List<AdherenceData> adherenceData = adherenceService.adherenceLogs(DateUtil.today());
+        return new AdherenceMapper().map(adherenceData);
+    }
+
     private WeeklyAdherence currentWeekAdherence(Patient patient, TreatmentWeek treatmentWeek) {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient));
         weeklyAdherence.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
@@ -81,5 +87,4 @@ public class WHPAdherenceService {
         }
         return requests;
     }
-
 }

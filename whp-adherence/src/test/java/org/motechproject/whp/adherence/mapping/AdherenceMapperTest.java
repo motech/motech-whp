@@ -16,25 +16,25 @@ public class AdherenceMapperTest {
     @Test
     public void shouldSetIsTaken() {
         AdherenceRecord record = new AdherenceRecord(today, 1, null);
-        assertTrue(new AdherenceMapper(record).map().getPillStatus() == PillStatus.Taken);
+        assertTrue(new AdherenceMapper().map(record).getPillStatus() == PillStatus.Taken);
     }
 
     @Test
     public void shouldNotSetIsTaken() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertFalse(new AdherenceMapper(record).map().getPillStatus() == PillStatus.Taken);
+        assertFalse(new AdherenceMapper().map(record).getPillStatus() == PillStatus.Taken);
     }
 
     @Test
     public void shouldSetPillDate() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertEquals(today, new AdherenceMapper(record).map().getPillDate());
+        assertEquals(today, new AdherenceMapper().map(record).getPillDate());
     }
 
     @Test
     public void shouldSetPillDay() {
         AdherenceRecord record = new AdherenceRecord(today, 0, null);
-        assertEquals(DayOfWeek.getDayOfWeek(today), new AdherenceMapper(record).map().getPillDay());
+        assertEquals(DayOfWeek.getDayOfWeek(today), new AdherenceMapper().map(record).getPillDay());
     }
 
 }
