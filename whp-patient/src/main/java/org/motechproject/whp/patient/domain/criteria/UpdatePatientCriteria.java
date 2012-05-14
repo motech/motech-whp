@@ -52,32 +52,36 @@ public class UpdatePatientCriteria {
         return true;
     }
 
-    public static boolean canPauseTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
+    public static boolean canPauseCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
         if (sanityCheckFails(patient, criteriaErrors)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        boolean tbIdMatches = true;
         if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
             criteriaErrors.add("No such tb id for current treatment");
-            return false;
+            tbIdMatches = false;
         }
+        boolean treatmentIsNotPaused = true;
         if (currentProvidedTreatment.isPaused()) {
             criteriaErrors.add("Current treatment is already paused");
-            return false;
+            treatmentIsNotPaused = false;
         }
-        return true;
+        return tbIdMatches && treatmentIsNotPaused;
     }
 
-    public static boolean canRestartTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
+    public static boolean canRestartCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
         if (sanityCheckFails(patient, criteriaErrors)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        boolean tbIdMatches = true;
         if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
             criteriaErrors.add("No such tb id for current treatment");
-            return false;
+            tbIdMatches = false;
         }
+        boolean treatmentIsPaused = true;
         if (!currentProvidedTreatment.isPaused()) {
             criteriaErrors.add("Current treatment is already in progress");
-            return false;
+            treatmentIsPaused = false;
         }
-        return true;
+        return tbIdMatches && treatmentIsPaused;
     }
 
     private static boolean sanityCheckFails(Patient patient, CriteriaErrors criteriaErrors) {

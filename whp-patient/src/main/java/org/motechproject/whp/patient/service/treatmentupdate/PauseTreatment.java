@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPauseTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPauseCurrentTreatment;
 
 public class PauseTreatment implements TreatmentUpdate {
 
@@ -18,14 +18,14 @@ public class PauseTreatment implements TreatmentUpdate {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 
-        if (!canPauseTreatment(patient, treatmentUpdateRequest, criteriaErrors)) {
+        if (!canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors)) {
             throw new WHPDomainException(CANNOT_PAUSE_TREATMENT + criteriaErrors);
         }
         pauseTreatment(patient, treatmentUpdateRequest, allPatients);
     }
 
     private void pauseTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients) {
-        patient.pauseTreatment(treatmentUpdateRequest.getReason_for_pause(), treatmentUpdateRequest.getDate_modified());
+        patient.pauseCurrentTreatment(treatmentUpdateRequest.getReason_for_pause(), treatmentUpdateRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

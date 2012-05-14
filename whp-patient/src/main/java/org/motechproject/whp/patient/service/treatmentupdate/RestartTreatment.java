@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canRestartTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canRestartCurrentTreatment;
 
 public class RestartTreatment implements TreatmentUpdate {
 
@@ -18,14 +18,14 @@ public class RestartTreatment implements TreatmentUpdate {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 
-        if (!canRestartTreatment(patient, treatmentUpdateRequest, criteriaErrors)) {
+        if (!canRestartCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors)) {
             throw new WHPDomainException(CANNOT_RESTART_TREATMENT + criteriaErrors);
         }
         restartTreatment(patient, treatmentUpdateRequest, allPatients);
     }
 
     private void restartTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients) {
-        patient.restartTreatment(treatmentUpdateRequest.getReason_for_restart(), treatmentUpdateRequest.getDate_modified());
+        patient.restartCurrentTreatment(treatmentUpdateRequest.getReason_for_restart(), treatmentUpdateRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

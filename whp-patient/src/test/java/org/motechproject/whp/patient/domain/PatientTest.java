@@ -59,4 +59,28 @@ public class PatientTest {
         assertEquals(now, patient.getLastModifiedDate());
         verify(providedTreatment, times(1)).close("Cured", now);
     }
+
+    @Test
+    public void shouldPauseCurrentProvidedTreatment() {
+        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+
+        DateTime now = now();
+        patient.addProvidedTreatment(providedTreatment, now);
+
+        patient.pauseCurrentTreatment("paws", now);
+        assertEquals(now, patient.getLastModifiedDate());
+        verify(providedTreatment, times(1)).pause("paws", now);
+    }
+
+    @Test
+    public void shouldRestartCurrentProvidedTreatment() {
+        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+
+        DateTime now = now();
+        patient.addProvidedTreatment(providedTreatment, now);
+
+        patient.restartCurrentTreatment("swap", now);
+        assertEquals(now, patient.getLastModifiedDate());
+        verify(providedTreatment, times(1)).resume("swap", now);
+    }
 }
