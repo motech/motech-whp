@@ -3,8 +3,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            var providerUrl = $(location).attr('origin') + "/whp/provider/process";
-            var patientUrl = $(location).attr('origin') + "/whp/patient/process";
+            var providerUrl = "http://" + window.location.host + "/whp/provider/process";
+            var patientUrl = "http://" + window.location.host + "/whp/patient/process";
             $('#urls').append("<option value='" + providerUrl + "'>" + providerUrl + "</option>");
             $('#urls').append("<option value='" + patientUrl + "'>" + patientUrl + "</option>");
 
