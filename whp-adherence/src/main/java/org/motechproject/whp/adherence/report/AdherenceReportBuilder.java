@@ -11,13 +11,11 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-@Component
 public class AdherenceReportBuilder extends PagedReportBuilder<Adherence> {
 
     WHPAdherenceService adherenceService;
     public static final int PAGE_SIZE = 10000;
 
-    @Autowired
     public AdherenceReportBuilder(WHPAdherenceService adherenceService) {
         super("Adherence Report", asList("Patient ID", "TB Id", "Date of Adherence", "Adherence Value"));
         this.adherenceService = adherenceService;

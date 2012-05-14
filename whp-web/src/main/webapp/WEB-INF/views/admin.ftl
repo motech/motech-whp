@@ -1,9 +1,6 @@
 <#import "layout/default.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-TB">
-<div class="row" id="welcomeMessage">
-    Welcome Administrator
-</div>
-<div class="row" id="welcomeMessage">
-    <a href="/whp/adherence/reports/adherenceReport.xls">Excel report</a>
-</div>
+<h4 class="page-header form-header">Adherence reports</h4>
+
+<a href="/whp/adherence/reports/adherenceReport.xls"><b>Download all adherence data to excel</b></a>
 </@layout.defaultLayout>

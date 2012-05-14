@@ -30,20 +30,17 @@ public class AdherenceController extends BaseController {
     AllPatients allPatients;
     WHPAdherenceService adherenceService;
     UpdateAdherenceCriteria adherenceCriteria;
-    private AdherenceReportBuilder adherenceReportBuilder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public AdherenceController(
             AllPatients allPatients,
             WHPAdherenceService adherenceService,
-            UpdateAdherenceCriteria adherenceCriteria,
-            AdherenceReportBuilder adherenceReportBuilder
+            UpdateAdherenceCriteria adherenceCriteria
     ) {
         this.allPatients = allPatients;
         this.adherenceService = adherenceService;
         this.adherenceCriteria = adherenceCriteria;
-        this.adherenceReportBuilder = adherenceReportBuilder;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
@@ -62,7 +59,7 @@ public class AdherenceController extends BaseController {
 
     @RequestMapping(value = "/reports/adherenceReport.xls", method = RequestMethod.GET)
     public void buildAdherenceExcelReport(HttpServletResponse response) {
-        writeExcelToResponse(response, createExcelReport(), "OutboxReport.xls");
+        writeExcelToResponse(response, createExcelReport(), "AdherenceReport.xls");
     }
 
     private void writeExcelToResponse(HttpServletResponse response, HSSFWorkbook excelWorkbook, String fileName) {
@@ -84,8 +81,7 @@ public class AdherenceController extends BaseController {
 
     private HSSFWorkbook createExcelReport() {
         try {
-            HSSFWorkbook workbook = adherenceReportBuilder.build();
-            return workbook;
+            return new AdherenceReportBuilder(adherenceService).build();
         } catch (Exception e) {
             logger.error("Error while generating excel report: " + e.getMessage());
             return null;
