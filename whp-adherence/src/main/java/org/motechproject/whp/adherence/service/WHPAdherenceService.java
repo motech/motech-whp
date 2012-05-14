@@ -64,8 +64,8 @@ public class WHPAdherenceService {
         }
     }
 
-    public List<Adherence> allAdherenceValues() {
-        List<AdherenceData> adherenceData = adherenceService.adherenceLogs(DateUtil.today());
+    public List<Adherence> allAdherenceData(int pageNumber, int pageSize) {
+        List<AdherenceData> adherenceData = adherenceService.adherenceLogs(DateUtil.today(), pageNumber, pageSize);
         return new AdherenceMapper().map(adherenceData);
     }
 
