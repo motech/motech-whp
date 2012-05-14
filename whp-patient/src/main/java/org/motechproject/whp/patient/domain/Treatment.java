@@ -15,8 +15,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.util.DateUtil.today;
-
 @Data
 @TypeDiscriminator("doc.type == 'Treatment'")
 public class Treatment extends MotechBaseDataObject {
@@ -32,6 +30,7 @@ public class Treatment extends MotechBaseDataObject {
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
+    private List<TreatmentInterruption> interruptions = new ArrayList<TreatmentInterruption>();
 
     // Required for ektorp
     public Treatment() {
@@ -59,9 +58,9 @@ public class Treatment extends MotechBaseDataObject {
         return weightStatisticsList.get(weightStatisticsList.size() - 1);
     }
 
-    public void close(String treatmentOutcome) {
+    public void close(String treatmentOutcome, DateTime dateModified) {
         status = TreatmentStatus.Closed;
-        endDate = today();
+        endDate = dateModified.toLocalDate();
         this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
     }
 
@@ -81,5 +80,18 @@ public class Treatment extends MotechBaseDataObject {
     @JsonIgnore
     public boolean isClosed() {
         return status == TreatmentStatus.Closed;
+    }
+
+    @JsonIgnore
+    public boolean isPaused() {
+        return !CollectionUtils.isEmpty(interruptions) && latestInterruption().isPaused();
+    }
+
+    public void pause(String reasonForPause, DateTime dateModified) {
+        interruptions.add(new TreatmentInterruption(reasonForPause, dateModified.toLocalDate()));
+    }
+
+    private TreatmentInterruption latestInterruption() {
+        return interruptions.get(interruptions.size() - 1);
     }
 }

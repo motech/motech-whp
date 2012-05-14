@@ -54,6 +54,17 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+    public PatientWebRequestBuilder withDefaultsForPauseTreatment() {
+        patientWebRequest = new PatientWebRequest()
+                .setTreatmentUpdateData(TreatmentUpdateScenario.Pause.name(), null, null)
+                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
+        patientWebRequest.setCase_id("12345");
+        patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setReason_for_pause("Chillaxing");
+        return this;
+    }
+
     public PatientWebRequest build() {
         return patientWebRequest;
     }

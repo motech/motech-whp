@@ -16,5 +16,7 @@ public class TreatmentUpdateRequest {
     private TreatmentUpdateScenario treatment_update;
     private String treatment_outcome;
     private TreatmentCategory treatment_category;
+    private String reason_for_pause;
+    private String reason_for_restart;
 
 }

@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.service;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -240,8 +241,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldCloseCurrentTreatmentForPatient() {
         String caseId = "caseId";
+        DateTime lastModifiedDate = DateUtil.newDateTime(1990, 3, 17, 4, 55, 50);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate(lastModifiedDate)
                 .withCaseId(caseId)
                 .withTbId("tbId")
                 .build();
@@ -249,13 +251,13 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
         TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
                 .withMandatoryFieldsForCloseTreatment()
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withDateModified(lastModifiedDate)
                 .build();
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(caseId);
 
-        assertCurrentTreatmentClosed(updatedPatient);
+        assertCurrentTreatmentClosed(updatedPatient, lastModifiedDate);
     }
 
     @Test
@@ -294,10 +296,10 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
-    private void assertCurrentTreatmentClosed(Patient updatedPatient) {
+    private void assertCurrentTreatmentClosed(Patient updatedPatient, DateTime lastModifiedDate) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
-        assertEquals(today(), currentProvidedTreatment.getTreatment().getEndDate());
-        assertEquals(today(), currentProvidedTreatment.getEndDate());
+        assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getTreatment().getEndDate());
+        assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, currentProvidedTreatment.getTreatment().getTreatmentOutcome());
         assertEquals(TreatmentStatus.Closed, currentProvidedTreatment.getTreatment().getStatus());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());

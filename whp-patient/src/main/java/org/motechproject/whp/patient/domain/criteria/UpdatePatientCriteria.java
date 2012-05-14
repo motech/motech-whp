@@ -52,6 +52,20 @@ public class UpdatePatientCriteria {
         return true;
     }
 
+    public static boolean canPauseTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
+        if (sanityCheckFails(patient, criteriaErrors)) return false;
+        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
+            criteriaErrors.add("No such tb id for current treatment");
+            return false;
+        }
+        if (currentProvidedTreatment.isPaused()) {
+            criteriaErrors.add("Current treatment is already paused");
+            return false;
+        }
+        return true;
+    }
+
     private static boolean sanityCheckFails(Patient patient, CriteriaErrors criteriaErrors) {
         if (patient == null) {
             criteriaErrors.add("Invalid case-id. No such patient.");
@@ -64,4 +78,5 @@ public class UpdatePatientCriteria {
         return false;
     }
 }
+
 

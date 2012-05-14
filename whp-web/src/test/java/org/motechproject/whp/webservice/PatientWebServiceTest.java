@@ -1,6 +1,5 @@
 package org.motechproject.whp.webservice;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.dozer.DozerBeanMapper;
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -22,9 +21,7 @@ import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
 public class PatientWebServiceTest extends SpringIntegrationTest {
@@ -152,6 +149,33 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
         assertNotSame(patient.getCurrentProvidedTreatment().getEndDate(), updatedPatient.getCurrentProvidedTreatment().getEndDate());
         assertNotSame(patient.getCurrentProvidedTreatment().getTreatment(), updatedPatient.getCurrentProvidedTreatment().getTreatment());
+    }
+
+    @Test
+    public void shouldPausePatientTreatment() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTBId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+
+        PatientWebRequest pauseTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForPauseTreatment()
+                .withTBId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
+
+        patientWebService.updateCase(pauseTreatmentRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
+
+        assertTrue(updatedPatient.getCurrentProvidedTreatment().isPaused());
+    }
+
+    @Test
+    public void shouldRestartPatientTreatment() {
+
     }
 
     @After

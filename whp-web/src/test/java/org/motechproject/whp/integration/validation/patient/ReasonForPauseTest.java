@@ -9,7 +9,7 @@ public class ReasonForPauseTest extends BasePatientTest {
     @Test
     public void shouldBeValidReasonForPauseIsSpecified() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
-        webRequest.setReason_for_pause("please pause");
+        webRequest.setReason_for_pause("Pause");
         validator.validate(webRequest, ValidationScope.pauseTreatment);
     }
 

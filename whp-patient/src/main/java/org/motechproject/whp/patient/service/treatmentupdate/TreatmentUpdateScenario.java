@@ -22,6 +22,10 @@ public enum TreatmentUpdateScenario {
                 return new CloseCurrentTreatment();
             case TransferIn:
                 return new TransferInPatient();
+            case Pause:
+                return new PauseTreatment();
+            case Restart:
+                return new RestartTreatment();
             default:
                 return null;
         }

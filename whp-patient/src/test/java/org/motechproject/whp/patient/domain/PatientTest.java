@@ -57,6 +57,6 @@ public class PatientTest {
 
         patient.closeCurrentTreatment("Cured", now);
         assertEquals(now, patient.getLastModifiedDate());
-        verify(providedTreatment, times(1)).close("Cured");
+        verify(providedTreatment, times(1)).close("Cured", now);
     }
 }

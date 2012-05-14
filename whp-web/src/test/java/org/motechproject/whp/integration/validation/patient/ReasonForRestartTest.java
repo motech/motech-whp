@@ -9,7 +9,7 @@ public class ReasonForRestartTest extends BasePatientTest {
     @Test
     public void shouldBeValidReasonForRestartIsSpecified() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
-        webRequest.setReason_for_restart("please restart");
+        webRequest.setReason_for_restart("Restart");
         validator.validate(webRequest, ValidationScope.restartTreatment);
     }
 

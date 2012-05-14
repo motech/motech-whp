@@ -25,6 +25,13 @@ public class TBIdTest extends BasePatientTest {
     }
 
     @Test
+    public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InPauseTreatmentScope() {
+        expectWHPException("field:tb_id:size must be between 11 and 11");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
+        validator.validate(webRequest, ValidationScope.pauseTreatment);
+    }
+
+    @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
