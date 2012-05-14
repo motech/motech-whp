@@ -90,4 +90,8 @@ public class ProvidedTreatment {
     public void pause(String reasonForPause, DateTime dateModified) {
         treatment.pause(reasonForPause, dateModified);
     }
+
+    public void resume(String reasonForResumption, DateTime dateModified) {
+        treatment.resume(reasonForResumption, dateModified);
+    }
 }

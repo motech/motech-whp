@@ -82,13 +82,17 @@ public class Treatment extends MotechBaseDataObject {
         return status == TreatmentStatus.Closed;
     }
 
+    public void pause(String reasonForPause, DateTime dateModified) {
+        interruptions.add(new TreatmentInterruption(reasonForPause, dateModified.toLocalDate()));
+    }
+
+    public void resume(String reasonForResumption, DateTime dateModified) {
+        latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
+    }
+
     @JsonIgnore
     public boolean isPaused() {
         return !CollectionUtils.isEmpty(interruptions) && latestInterruption().isPaused();
-    }
-
-    public void pause(String reasonForPause, DateTime dateModified) {
-        interruptions.add(new TreatmentInterruption(reasonForPause, dateModified.toLocalDate()));
     }
 
     private TreatmentInterruption latestInterruption() {

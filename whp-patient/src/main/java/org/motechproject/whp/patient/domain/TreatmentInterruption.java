@@ -11,26 +11,26 @@ public class TreatmentInterruption {
     @JsonProperty
     private String reasonForPause;
     @JsonProperty
-    private LocalDate restartDate;
+    private LocalDate resumptionDate;
     @JsonProperty
-    private String reasonForRestart;
+    private String reasonForResumption;
 
     //required for ektorp
     private TreatmentInterruption() {
     }
 
     public TreatmentInterruption(String reasonForPause, LocalDate pauseDate) {
-        this.pauseDate = pauseDate;
         this.reasonForPause = reasonForPause;
+        this.pauseDate = pauseDate;
     }
 
-    public void resumeTreatment(String reasonForRestart, LocalDate restartDate) {
-        this.restartDate = restartDate;
-        this.reasonForRestart = reasonForRestart;
+    public void resumeTreatment(String reasonForResumption, LocalDate resumptionDate) {
+        this.reasonForResumption = reasonForResumption;
+        this.resumptionDate = resumptionDate;
     }
 
     @JsonIgnore
     public boolean isPaused() {
-        return (pauseDate != null && restartDate == null);
+        return (pauseDate != null && resumptionDate == null);
     }
 }

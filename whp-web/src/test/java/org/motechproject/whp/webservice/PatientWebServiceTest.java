@@ -152,13 +152,16 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldPausePatientTreatment() {
+    public void shouldPauseAndRestartPatientTreatment() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
                 .withTBId("elevenDigit")
                 .withCaseId("12341234")
                 .build();
 
         patientWebService.createCase(patientWebRequest);
+
+        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+        assertFalse(patient.getCurrentProvidedTreatment().isPaused());
 
         PatientWebRequest pauseTreatmentRequest = new PatientWebRequestBuilder()
                 .withDefaultsForPauseTreatment()
@@ -171,11 +174,18 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
 
         assertTrue(updatedPatient.getCurrentProvidedTreatment().isPaused());
-    }
 
-    @Test
-    public void shouldRestartPatientTreatment() {
+        PatientWebRequest restartTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForRestartTreatment()
+                .withTBId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
 
+        patientWebService.updateCase(restartTreatmentRequest);
+
+        updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
+
+        assertFalse(updatedPatient.getCurrentProvidedTreatment().isPaused());
     }
 
     @After

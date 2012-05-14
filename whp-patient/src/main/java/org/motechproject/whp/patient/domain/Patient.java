@@ -99,4 +99,9 @@ public class Patient extends MotechBaseDataObject {
         lastModifiedDate = dateModified;
         currentProvidedTreatment.pause(reasonForPause, dateModified);
     }
+
+    public void restartTreatment(String reasonForResumption, DateTime dateModified) {
+        lastModifiedDate = dateModified;
+        currentProvidedTreatment.resume(reasonForResumption, dateModified);
+    }
 }
