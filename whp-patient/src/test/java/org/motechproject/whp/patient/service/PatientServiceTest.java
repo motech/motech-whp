@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.today;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -288,6 +290,38 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertCurrentTreatmentIsNew(updatedPatient, openNewTreatmentUpdateRequest);
     }
 
+    @Test
+    public void shouldPauseAndRestartForPatient() {
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("tbId")
+                .build();
+        patientService.createPatient(patientRequest);
+
+        TreatmentUpdateRequest pauseTreatmentRequest = TreatmentUpdateRequestBuilder.startRecording()
+                .withMandatoryFieldsForPauseTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        patientService.performTreatmentUpdate(pauseTreatmentRequest);
+
+        Patient pausedPatient = allPatients.findByPatientId(caseId);
+
+        assertCurrentTreatmentPaused(pausedPatient, pauseTreatmentRequest);
+        assertTrue(pausedPatient.isCurrentTreatmentPaused());
+
+        TreatmentUpdateRequest restartTreatmentRequest = TreatmentUpdateRequestBuilder.startRecording()
+                .withMandatoryFieldsForRestartTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        patientService.performTreatmentUpdate(restartTreatmentRequest);
+
+        Patient restartedPatient = allPatients.findByPatientId(caseId);
+
+        assertCurrentTreatmentNotPaused(restartedPatient, restartTreatmentRequest);
+    }
+
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, TreatmentUpdateRequest treatmentUpdateRequest) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
         assertEquals(treatmentUpdateRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
@@ -303,6 +337,16 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(TreatmentOutcome.Cured, currentProvidedTreatment.getTreatment().getTreatmentOutcome());
         assertEquals(TreatmentStatus.Closed, currentProvidedTreatment.getTreatment().getStatus());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
+    }
+
+    private void assertCurrentTreatmentPaused(Patient pausedPatient, TreatmentUpdateRequest pauseTreatmentRequest) {
+        assertTrue(pausedPatient.isCurrentTreatmentPaused());
+        assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
+    }
+
+    private void assertCurrentTreatmentNotPaused(Patient pausedPatient, TreatmentUpdateRequest pauseTreatmentRequest) {
+        assertFalse(pausedPatient.isCurrentTreatmentPaused());
+        assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }
 
     private void expectWHPDomainException(String message) {

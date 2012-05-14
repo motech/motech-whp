@@ -59,37 +59,6 @@ public class Patient extends MotechBaseDataObject {
         return DateUtil.setTimeZone(lastModifiedDate);
     }
 
-    @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
-        return currentProvidedTreatment.isValid(validationErrors);
-    }
-
-    @JsonIgnore
-    public boolean hasCurrentTreatment() {
-        return currentProvidedTreatment != null;
-    }
-
-    @JsonIgnore
-    public boolean isCurrentTreatmentClosed() {
-        return currentProvidedTreatment.getTreatment().isClosed();
-    }
-
-    @JsonIgnore
-    public TreatmentOutcome getTreatmentOutcome() {
-        return currentProvidedTreatment.getTreatment().getTreatmentOutcome();
-    }
-
-    @JsonIgnore
-    public String tbId() {
-        return currentProvidedTreatment.getTbId();
-    }
-
-    @JsonIgnore
-    public String currentTreatmentId() {
-        if (getCurrentProvidedTreatment() == null) return null;
-        return this.getCurrentProvidedTreatment().getTreatment().getId();
-    }
-
     public void closeCurrentTreatment(String treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
         currentProvidedTreatment.close(treatmentOutcome, dateModified);
@@ -103,5 +72,41 @@ public class Patient extends MotechBaseDataObject {
     public void restartCurrentTreatment(String reasonForResumption, DateTime dateModified) {
         lastModifiedDate = dateModified;
         currentProvidedTreatment.resume(reasonForResumption, dateModified);
+    }
+
+    @JsonIgnore
+    public String tbId() {
+        return currentProvidedTreatment.getTbId();
+    }
+
+    @JsonIgnore
+    public String currentTreatmentId() {
+        if (getCurrentProvidedTreatment() == null) return null;
+        return this.getCurrentProvidedTreatment().getTreatment().getId();
+    }
+
+    @JsonIgnore
+    public boolean isValid(ValidationErrors validationErrors) {
+        return currentProvidedTreatment.isValid(validationErrors);
+    }
+
+    @JsonIgnore
+    public boolean hasCurrentTreatment() {
+        return currentProvidedTreatment != null;
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentClosed() {
+        return currentProvidedTreatment.isClosed();
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentPaused() {
+        return currentProvidedTreatment.isPaused();
+    }
+
+    @JsonIgnore
+    public TreatmentOutcome getTreatmentOutcome() {
+        return currentProvidedTreatment.getTreatment().getTreatmentOutcome();
     }
 }

@@ -72,19 +72,9 @@ public class ProvidedTreatment {
         return treatment;
     }
 
-    @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
-        return treatment.isValid(validationErrors) && patientAddress.isValid(validationErrors);
-    }
-
     public void close(String treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
         treatment.close(treatmentOutcome, dateModified);
-    }
-
-    @JsonIgnore
-    public boolean isPaused() {
-        return treatment.isPaused();
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
@@ -93,5 +83,20 @@ public class ProvidedTreatment {
 
     public void resume(String reasonForResumption, DateTime dateModified) {
         treatment.resume(reasonForResumption, dateModified);
+    }
+
+    @JsonIgnore
+    public boolean isValid(ValidationErrors validationErrors) {
+        return treatment.isValid(validationErrors) && patientAddress.isValid(validationErrors);
+    }
+
+    @JsonIgnore
+    public boolean isClosed() {
+        return treatment.isClosed();
+    }
+
+    @JsonIgnore
+    public boolean isPaused() {
+        return treatment.isPaused();
     }
 }

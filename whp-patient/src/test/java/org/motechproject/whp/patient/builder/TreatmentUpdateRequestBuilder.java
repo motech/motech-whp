@@ -48,6 +48,24 @@ public class TreatmentUpdateRequestBuilder {
         return this;
     }
 
+    public TreatmentUpdateRequestBuilder withMandatoryFieldsForPauseTreatment() {
+        treatmentUpdateRequest.setCase_id("caseId");
+        treatmentUpdateRequest.setDate_modified(now());
+        treatmentUpdateRequest.setTb_id("tbId");
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdateScenario.Pause);
+        treatmentUpdateRequest.setReason_for_pause("paws");
+        return this;
+    }
+
+    public TreatmentUpdateRequestBuilder withMandatoryFieldsForRestartTreatment() {
+        treatmentUpdateRequest.setCase_id("caseId");
+        treatmentUpdateRequest.setDate_modified(now());
+        treatmentUpdateRequest.setTb_id("tbId");
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdateScenario.Restart);
+        treatmentUpdateRequest.setReason_for_pause("swap");
+        return this;
+    }
+
     public TreatmentUpdateRequestBuilder withMandatoryFieldsForOpenNewTreatment() {
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
         treatmentUpdateRequest.setCase_id("caseId");
