@@ -3,20 +3,16 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartTreatment;
+import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartOrRestartTreatment;
 
 public class TreatmentStartCriteriaTest {
 
@@ -32,7 +28,7 @@ public class TreatmentStartCriteriaTest {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
-        assertTrue(shouldStartTreatment(patient, adherence));
+        assertTrue(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
@@ -40,7 +36,7 @@ public class TreatmentStartCriteriaTest {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
-        assertTrue(shouldStartTreatment(patient, adherence));
+        assertTrue(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
@@ -48,7 +44,7 @@ public class TreatmentStartCriteriaTest {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.PHSTransfer).build();
-        assertFalse(shouldStartTreatment(patient, adherence));
+        assertFalse(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
@@ -56,15 +52,17 @@ public class TreatmentStartCriteriaTest {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(today().plusWeeks(2)).build();
 
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).onTreatmentFrom(today()).withType(PatientType.New).build();
-        assertFalse(shouldStartTreatment(patient, adherence));
+        assertFalse(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
-    public void shouldBeTrueWhenPatientOnTreatmentButAdherenceIsBeingCapturedForEarlierDate() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(new LocalDate(1983, 1, 30)).build(); //demonic
+    public void shouldBeTrueWhenPatientAlreadyOnTreatmentAndAdherenceIsBeingCapturedForSameWeek() {
+        LocalDate monday = new LocalDate(2012, 4, 30);
+        LocalDate sunday = new LocalDate(2012, 5, 6);
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(sunday).build(); //not demonic any more :(
 
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).onTreatmentFrom(today()).withType(PatientType.New).build();
-        assertTrue(shouldStartTreatment(patient, adherence));
+        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).onTreatmentFrom(monday).withType(PatientType.New).build();
+        assertTrue(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
@@ -72,15 +70,15 @@ public class TreatmentStartCriteriaTest {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
 
-        assertTrue(shouldStartTreatment(patient, adherence));
+        assertTrue(shouldStartOrRestartTreatment(patient, adherence));
     }
 
     @Test
-    public void shouldBeFalseIfNoneOfTheDosesAreTaken() {
+    public void shouldBeTrueEvenIfNoneOfTheDosesAreTaken() {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().zeroDosesTaken().build();
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).build();
 
-        assertFalse(shouldStartTreatment(patient, adherence));
+        assertTrue(shouldStartOrRestartTreatment(patient, adherence));
     }
 
 }

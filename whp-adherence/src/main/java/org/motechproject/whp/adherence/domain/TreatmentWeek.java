@@ -24,4 +24,14 @@ public class TreatmentWeek {
     public LocalDate dateOf(DayOfWeek dayOfWeek){
         return reference.withDayOfWeek(dayOfWeek.getValue());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TreatmentWeek that = (TreatmentWeek) o;
+
+        return !(startDate() != null ? !startDate().equals(that.startDate()) : that.startDate() != null);
+    }
 }

@@ -26,6 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 
@@ -36,7 +37,6 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public static final String PATIENT_ID = "patientId";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
-    TreatmentWeek treatmentWeek = new TreatmentWeek(today.minusDays(6));
 
     @Autowired
     @Qualifier(value = "whpDbConnector")
@@ -94,14 +94,22 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceNotForTheFirstTime() {
-        WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime();
-        mockCurrentDate(today.plusDays(1));
+    public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceForAnyWeekSubsequentToFirstEverAdherenceCapturedWeek() {
+        WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime(); //capturing adherence for last week -> this is the first ever adherence captured week
+        mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
         adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherence(), user, source);
         assertEquals(
                 adherence.firstDoseTakenOn(),
                 allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate()
         );
+    }
+
+    @Test
+    public void shouldResetDoseStartDateWhenNoAdherenceIsPostedForSameWeek() {
+        adherenceIsRecordedForTheFirstTime();
+        mockCurrentDate(today.plusDays(1));
+        adherenceService.recordAdherence(PATIENT_ID, new WeeklyAdherence(), user, source);
+        assertNull(allPatients.findByPatientId(PATIENT_ID).getCurrentProvidedTreatment().getTreatment().getDoseStartDate());
     }
 
     @Test

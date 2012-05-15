@@ -23,14 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
-import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartTreatment;
+import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartOrRestartTreatment;
 
 @Service
 public class WHPAdherenceService {
 
     AllPatients allPatients;
     AdherenceService adherenceService;
-    TreatmentStartCriteria treatmentStartCriteria;
     PatientService patientService;
 
     @Autowired
@@ -39,7 +38,6 @@ public class WHPAdherenceService {
                                PatientService patientService) {
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
-        this.treatmentStartCriteria = treatmentStartCriteria;
         this.patientService = patientService;
     }
 
@@ -47,8 +45,8 @@ public class WHPAdherenceService {
         for (AdherenceData request : requests(weeklyAdherence)) {
             adherenceService.recordAdherence(user, source.name(), request);
         }
-        if (shouldStartTreatment(allPatients.findByPatientId(patientId), weeklyAdherence)) {
-            patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
+        if (shouldStartOrRestartTreatment(allPatients.findByPatientId(patientId), weeklyAdherence)) {
+            patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
     }
 
