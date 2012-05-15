@@ -12,10 +12,6 @@
                value="${adherence.patientId}"/>
         <input type="hidden" name="treatmentId"
                value="${adherence.treatmentId}"/>
-        <input type="hidden" name="providerId"
-               value="${adherence.providerId}"/>
-        <input type="hidden" name="tbId"
-               value="${adherence.tbId}"/>
 
         <table class="table table-bordered">
             <thead>
