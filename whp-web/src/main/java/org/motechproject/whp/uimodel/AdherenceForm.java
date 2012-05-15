@@ -20,15 +20,18 @@ public class AdherenceForm {
 
     private LocalDate pillDate;
 
+    private boolean isTreatmentInterrupted;
+
     private PillStatus pillStatus =  PillStatus.Unknown;
 
     public AdherenceForm() {
     }
 
-    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus) {
+    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, boolean isTreatmentInterrupted) {
         this.pillDay = pillDay;
         this.pillDate = pillDate;
         this.pillStatus = pillStatus;
+        this.isTreatmentInterrupted = isTreatmentInterrupted;
     }
 
     public String getPillDateString() {

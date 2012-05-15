@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 
 public class TreatmentInterruption {
 
@@ -39,7 +40,15 @@ public class TreatmentInterruption {
     }
 
     @JsonIgnore
-    public boolean isPaused() {
+    public boolean isCurrentlyPaused() {
         return (pauseDate != null && resumptionDate == null);
+    }
+
+    @JsonIgnore
+    public boolean isTreatmentInterrupted(LocalDate pillDate) {
+        boolean pauseDateOnOrBeforePillDay = DateUtil.isOnOrBefore(DateUtil.newDateTime(pauseDate), DateUtil.newDateTime(pillDate));
+        if (isCurrentlyPaused()) return pauseDateOnOrBeforePillDay;
+        boolean pillDayBeforeResumptionDate = DateUtil.newDateTime(pillDate).isBefore(DateUtil.newDateTime(resumptionDate));
+        return pauseDateOnOrBeforePillDay && pillDayBeforeResumptionDate;
     }
 }

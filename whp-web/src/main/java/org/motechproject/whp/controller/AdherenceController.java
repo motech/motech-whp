@@ -7,7 +7,7 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.slf4j.Logger;
@@ -22,28 +22,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
+
 @Controller
 @RequestMapping(value = "/adherence")
 @Report(name = "adherenceReport")
 public class AdherenceController extends BaseController {
 
-    WHPAdherenceService adherenceService;
-    UpdateAdherenceCriteria adherenceCriteria;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private AllPatients allPatients;
+    private WHPAdherenceService adherenceService;
 
     @Autowired
-    public AdherenceController(
-            WHPAdherenceService adherenceService,
-            UpdateAdherenceCriteria adherenceCriteria
-    ) {
+    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService) {
+        this.allPatients = allPatients;
         this.adherenceService = adherenceService;
-        this.adherenceCriteria = adherenceCriteria;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patientId);
-        prepareModel(patientId, uiModel, adherence);
+        Patient patient = allPatients.findByPatientId(patientId);
+        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
+        prepareModel(patient, uiModel, adherence);
         return "adherence/update";
     }
 
@@ -59,11 +58,11 @@ public class AdherenceController extends BaseController {
         return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }
 
-    private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {
-        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence);
+    private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient.getTreatmentInterruptions());
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
-        uiModel.addAttribute("readOnly", !(adherenceCriteria.canUpdate(patientId)));
+        uiModel.addAttribute("readOnly", !(canUpdate(patient)));
     }
 
 }

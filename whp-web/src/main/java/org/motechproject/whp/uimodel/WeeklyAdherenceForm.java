@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.patient.domain.TreatmentInterruptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,14 @@ public class WeeklyAdherenceForm {
     public WeeklyAdherenceForm() {
     }
 
-    public WeeklyAdherenceForm(WeeklyAdherence weeklyAdherence) {
+    public WeeklyAdherenceForm(WeeklyAdherence weeklyAdherence, TreatmentInterruptions treatmentInterruptions) {
         referenceDate = weeklyAdherence.getWeek().getReference();
         patientId = weeklyAdherence.getPatientId();
         treatmentId = weeklyAdherence.getTreatmentId();
 
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
-            AdherenceForm adherenceForm = new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus());
+            boolean isTreatmentInterrupted = treatmentInterruptions.isTreatmentInterrupted(adherence.getPillDate());
+            AdherenceForm adherenceForm = new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus(), isTreatmentInterrupted);
             adherenceList.add(adherenceForm);
         }
     }

@@ -57,6 +57,10 @@ public class ProviderPage extends LoggedInUserPage {
         return webDriver.findElement(By.id(String.format("patient_%s_TreatmentOutcome", patientId))).getText();
     }
 
+    public boolean isPatientPaused(String patientId) {
+        return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").equals("rgb(255, 182, 193)");
+    }
+
     public boolean hasTbId(String tbId) {
         for (WebElement tbIdElement : tbIds) {
             if (tbIdElement.getText().equals(tbId)) {

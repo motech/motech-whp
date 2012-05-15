@@ -9,29 +9,20 @@ import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 public class UpdateAdherenceCriteria {
 
-    private AllPatients allPatients;
-
-    @Autowired
-    public UpdateAdherenceCriteria(AllPatients allPatients) {
-        this.allPatients = allPatients;
+    public static boolean canUpdate(Patient patient) {
+        return isCorrectDayOfWeek() && isPatientOpen(patient);
     }
 
-    public boolean canUpdate(String patientId) {
-        return isCorrectDayOfWeek() && isPatientOpen(patientId);
-    }
-
-    private boolean isCorrectDayOfWeek() {
+    private static boolean isCorrectDayOfWeek() {
         LocalDate today = DateUtil.today();
         boolean isLaterThanTuesday = today.getDayOfWeek() > 2;
         boolean isEarlierThanSunday = today.getDayOfWeek() < 7;
         return !(isLaterThanTuesday && isEarlierThanSunday);
     }
 
-    private boolean isPatientOpen(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    private static boolean isPatientOpen(Patient patient) {
         return patient.getStatus() == PatientStatus.Open;
     }
 }

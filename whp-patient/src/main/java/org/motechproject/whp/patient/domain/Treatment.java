@@ -30,7 +30,7 @@ public class Treatment extends MotechBaseDataObject {
     private DiseaseClass diseaseClass;
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
     private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
-    private List<TreatmentInterruption> interruptions = new ArrayList<TreatmentInterruption>();
+    private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
     // Required for ektorp
     public Treatment() {
@@ -87,15 +87,12 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     public void resume(String reasonForResumption, DateTime dateModified) {
-        latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
+        interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
     }
 
     @JsonIgnore
     public boolean isPaused() {
-        return !CollectionUtils.isEmpty(interruptions) && latestInterruption().isPaused();
+        return !CollectionUtils.isEmpty(interruptions) && interruptions.latestInterruption().isCurrentlyPaused();
     }
 
-    private TreatmentInterruption latestInterruption() {
-        return interruptions.get(interruptions.size() - 1);
-    }
 }

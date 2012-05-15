@@ -13,7 +13,7 @@ public class TreatmentInterruptionTest {
     @Test
     public void pauseTreatmentSetsReasonAndDate() {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        assertTrue(interruption.isPaused());
+        assertTrue(interruption.isCurrentlyPaused());
         assertEquals("paws", interruption.getReasonForPause());
         assertEquals(today(), interruption.getPauseDate());
     }
@@ -25,7 +25,7 @@ public class TreatmentInterruptionTest {
 
         interruption.resumeTreatment("swap", tomorrow);
 
-        assertFalse(interruption.isPaused());
+        assertFalse(interruption.isCurrentlyPaused());
         assertEquals("swap", interruption.getReasonForResumption());
         assertEquals(tomorrow, interruption.getResumptionDate());
     }

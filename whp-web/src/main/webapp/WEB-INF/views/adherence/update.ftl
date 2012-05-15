@@ -33,7 +33,7 @@
             <tbody>
             <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
                 <#list adherence.adherenceList as adherenceLog>
-                <tr class="adherenceRow">
+                <tr id="adherenceLogFor_${adherenceLog.pillDay}" class="adherenceRow <#if adherenceLog.treatmentInterrupted>paused</#if>">
                     <td>
                     ${adherenceLog.pillDay}
                         <input type="hidden" name="adherenceList[${adherenceLog_index}].pillDay" class="pillDay"
@@ -56,7 +56,7 @@
                                disabled </#if>/>
                     </td>
                 </tr>
-                </#list >
+                </#list>
             </tbody>
         </table>
         <div class="control-group">

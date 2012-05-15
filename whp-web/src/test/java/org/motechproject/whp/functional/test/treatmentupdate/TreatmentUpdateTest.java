@@ -37,15 +37,15 @@ import static org.junit.Assert.assertTrue;
 public abstract class TreatmentUpdateTest extends BaseTest {
 
     @Autowired
-    PatientService patientService;
+    protected PatientService patientService;
 
     @Autowired
-    PatientWebService patientWebService;
+    protected PatientWebService patientWebService;
 
-    ProviderDataService providerDataService;
+    protected ProviderDataService providerDataService;
 
-    PatientRequest patientRequest;
-    TestProvider provider;
+    protected PatientRequest patientRequest;
+    protected TestProvider provider;
 
     @Override
     public void setUp() {
@@ -71,7 +71,7 @@ public abstract class TreatmentUpdateTest extends BaseTest {
         patientService.createPatient(patientRequest);
     }
 
-    ProviderPage loginAsProvider(TestProvider provider) {
+    protected ProviderPage loginAsProvider(TestProvider provider) {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
     }
 }

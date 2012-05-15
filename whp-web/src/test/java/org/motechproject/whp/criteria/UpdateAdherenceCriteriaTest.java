@@ -18,27 +18,21 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
+import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 
 public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
 
     public static final String PATIENT_ID = "patientId";
-
-    @Mock
-    AllPatients allPatients;
-
-    UpdateAdherenceCriteria updateAdherenceCriteria;
+    private Patient patient;
 
     @Before
     public void setup() {
         initMocks(this);
         setupPatient(PatientStatus.Open);
-        updateAdherenceCriteria = new UpdateAdherenceCriteria(allPatients);
     }
 
     private void setupPatient(PatientStatus status) {
-        reset(allPatients);
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withStatus(status).build();
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withStatus(status).build();
     }
 
     @Test
@@ -52,14 +46,14 @@ public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
                         today.withDayOfWeek(Saturday.getValue())
                 )) {
             mockCurrentDate(date);
-            assertFalse(updateAdherenceCriteria.canUpdate(PATIENT_ID));
+            assertFalse(canUpdate(patient));
         }
     }
 
     @Test
     public void shouldNotBeAbleToUpdateAdherenceWhenPatientIsClosed() {
         setupPatient(PatientStatus.Closed);
-        assertFalse(updateAdherenceCriteria.canUpdate(PATIENT_ID));
+        assertFalse(canUpdate(patient));
     }
 
     @Test
@@ -72,7 +66,7 @@ public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
                         today.withDayOfWeek(Tuesday.getValue())
                 )) {
             mockCurrentDate(date);
-            assertTrue(updateAdherenceCriteria.canUpdate(PATIENT_ID));
+            assertTrue(canUpdate(patient));
         }
     }
 }

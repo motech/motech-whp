@@ -14,6 +14,9 @@ public class UpdateAdherencePage extends Page {
     @FindBy(how = How.ID, using = "weeklyAdherenceForm")
     private WebElement adherenceForm;
 
+    @FindBy(how = How.ID, using = "adherenceLogFor_Monday")
+    private WebElement adherenceRowForMonday;
+
     @FindBy(how = How.CLASS_NAME, using = "adherenceRow")
     private List<WebElement> adherenceRows;
 
@@ -49,6 +52,10 @@ public class UpdateAdherencePage extends Page {
 
     public boolean isReadOnly() {
         return !adherenceRows.get(0).findElement(By.className("pillStatusTaken")).isEnabled();
+    }
+
+    public boolean isAdherenceLogForMondayIndicateAsPaused() {
+        return adherenceRowForMonday.getCssValue("background-color").equals("rgb(255, 182, 193)");
     }
 
     public ProviderPage submit() {

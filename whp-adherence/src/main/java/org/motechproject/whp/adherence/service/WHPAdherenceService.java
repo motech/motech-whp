@@ -54,10 +54,9 @@ public class WHPAdherenceService {
         }
     }
 
-    public WeeklyAdherence currentWeekAdherence(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public WeeklyAdherence currentWeekAdherence(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
-        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patientId, patient.currentTreatmentId(), treatmentWeek.startDate(), treatmentWeek.endDate());
+        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek.startDate(), treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
             return new WeeklyAdherenceMapper(treatmentWeek, adherenceRecords).map();
