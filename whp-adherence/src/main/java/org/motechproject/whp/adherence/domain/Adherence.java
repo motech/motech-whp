@@ -3,8 +3,7 @@ package org.motechproject.whp.adherence.domain;
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-
-import static org.joda.time.format.DateTimeFormat.forPattern;
+import org.motechproject.reports.annotation.ReportValue;
 
 @Data
 public class Adherence {
@@ -38,7 +37,23 @@ public class Adherence {
         this.pillStatus = pillStatus;
     }
 
+    @ReportValue
     public String getPatientId() {
         return patientId;
+    }
+
+    @ReportValue
+    public String getTbId() {
+        return tbId;
+    }
+
+    @ReportValue
+    public String pillDate() {
+        return pillDate.toString("dd/MM/yyyy");
+    }
+
+    @ReportValue
+    public String pillStatus() {
+        return pillStatus.name();
     }
 }

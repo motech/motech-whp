@@ -1,10 +1,11 @@
 package org.motechproject.whp.controller;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.motechproject.reports.annotation.Report;
+import org.motechproject.reports.annotation.ReportData;
 import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.motechproject.whp.adherence.report.AdherenceReportBuilder;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -18,13 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/adherence")
+@Report(name = "adherenceReport")
 public class AdherenceController extends BaseController {
 
     AllPatients allPatients;
@@ -57,35 +57,9 @@ public class AdherenceController extends BaseController {
         return "forward:/";
     }
 
-    @RequestMapping(value = "/reports/adherenceReport.xls", method = RequestMethod.GET)
-    public void buildAdherenceExcelReport(HttpServletResponse response) {
-        writeExcelToResponse(response, createExcelReport(), "AdherenceReport.xls");
-    }
-
-    private void writeExcelToResponse(HttpServletResponse response, HSSFWorkbook excelWorkbook, String fileName) {
-        try {
-            initializeExcelResponse(response, fileName);
-            ServletOutputStream outputStream = response.getOutputStream();
-            if (null != excelWorkbook)
-                excelWorkbook.write(outputStream);
-            outputStream.flush();
-        } catch (IOException e) {
-            logger.error("Error while writing excel report to response: " + e.getMessage());
-        }
-    }
-
-    private void initializeExcelResponse(HttpServletResponse response, String fileName) {
-        response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-        response.setContentType("application/vnd.ms-excel");
-    }
-
-    private HSSFWorkbook createExcelReport() {
-        try {
-            return new AdherenceReportBuilder(adherenceService).build();
-        } catch (Exception e) {
-            logger.error("Error while generating excel report: " + e.getMessage());
-            return null;
-        }
+    @ReportData
+    public List<Adherence> adherenceReportData(int pageNumber) {
+        return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }
 
     private void prepareModel(String patientId, Model uiModel, WeeklyAdherence adherence) {

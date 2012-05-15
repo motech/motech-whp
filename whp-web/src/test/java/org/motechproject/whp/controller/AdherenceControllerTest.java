@@ -13,7 +13,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.motechproject.whp.adherence.report.AdherenceReportBuilder;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.criteria.UpdateAdherenceCriteria;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -50,8 +49,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
     Model uiModel;
     @Mock
     HttpServletRequest request;
-    @Mock
-    AdherenceReportBuilder adherenceReportBuilder;
 
     private String loggedInUserName;
     private Patient patient;
@@ -159,13 +156,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
             verify(uiModel).addAttribute(eq("readOnly"), eq(true));
             reset(uiModel);
         }
-    }
-
-    @Test
-    public void shouldInterceptAdherenceReportRequest() throws NoSuchMethodException {
-        Method buildAdherenceExcelReport = AdherenceController.class.getMethod("buildAdherenceExcelReport", HttpServletResponse.class);
-        RequestMapping annotation = buildAdherenceExcelReport.getAnnotation(RequestMapping.class);
-        assertEquals("/reports/adherenceReport.xls", annotation.value()[0]);
     }
 
     @Test
