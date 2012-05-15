@@ -26,15 +26,14 @@ public class Adherence {
         this.pillDate = logDate;
     }
 
-    public Adherence(String patientId, String treatmentId, DayOfWeek pillDay, LocalDate pillDate) {
+    public Adherence(String patientId, String treatmentId, DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, String tbId, String providerId) {
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.pillDay = pillDay;
         this.pillDate = pillDate;
-    }
-
-    public void status(PillStatus pillStatus) {
         this.pillStatus = pillStatus;
+        this.tbId = tbId;
+        this.providerId = providerId;
     }
 
     @ReportValue

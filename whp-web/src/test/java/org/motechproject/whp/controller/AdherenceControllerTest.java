@@ -59,7 +59,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     public void setUp() {
         setUpMocks();
         setUpPatient();
-        adherenceController = new AdherenceController(allPatients, adherenceService, new UpdateAdherenceCriteria(allPatients));
+        adherenceController = new AdherenceController(adherenceService, new UpdateAdherenceCriteria(allPatients));
         loggedInUserName = "someProviderUserName";
         setupLoggedInUser(loggedInUserName);
     }

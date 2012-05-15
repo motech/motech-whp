@@ -18,8 +18,6 @@ public class WeeklyAdherenceForm {
 
     private String patientId;
     private String treatmentId;
-    private String tbId;
-    private String providerId;
 
     List<AdherenceForm> adherenceList = new ArrayList<AdherenceForm>();
 
@@ -30,20 +28,17 @@ public class WeeklyAdherenceForm {
         referenceDate = weeklyAdherence.getWeek().getReference();
         patientId = weeklyAdherence.getPatientId();
         treatmentId = weeklyAdherence.getTreatmentId();
-        tbId = weeklyAdherence.getTbId();
-        providerId = weeklyAdherence.getProviderId();
 
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
-            adherenceList.add(new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus()));
+            AdherenceForm adherenceForm = new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus());
+            adherenceList.add(adherenceForm);
         }
     }
 
     public WeeklyAdherence weeklyAdherence() {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
-        weeklyAdherence.setProviderId(providerId);
-        weeklyAdherence.setTbId(tbId);
         for (AdherenceForm form : adherenceList) {
-            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus());
+            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), null, null);
         }
         return weeklyAdherence;
     }

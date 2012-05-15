@@ -18,10 +18,6 @@ public class WeeklyAdherence {
     @Getter
     private String treatmentId;
     @Getter
-    private String tbId;
-    @Getter
-    private String providerId;
-    @Getter
     private TreatmentWeek week;
 
     private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
@@ -36,20 +32,17 @@ public class WeeklyAdherence {
         this.week = week;
     }
 
-    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays) {
+    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays, String tbId, String providerId) {
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.week = week;
         for (DayOfWeek pillDay : pillDays) {
-            addAdherenceLog(pillDay, PillStatus.Unknown);
+            addAdherenceLog(pillDay, PillStatus.Unknown, tbId, providerId);
         }
     }
 
-    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus) {
-        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay));
-        adherence.setPillStatus(pillStatus);
-        adherence.setProviderId(providerId);
-        adherence.setTbId(tbId);
+    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus, String tbId, String providerId) {
+        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay), pillStatus, tbId, providerId);
         adherenceList.add(adherence);
         return this;
     }
@@ -82,14 +75,12 @@ public class WeeklyAdherence {
     }
 
     public void setProviderId(String providerId) {
-        this.providerId = providerId;
         for (Adherence adherence : adherenceList) {
             adherence.setProviderId(providerId);
         }
     }
 
     public void setTbId(String tbId) {
-        this.tbId = tbId;
         for (Adherence adherence : adherenceList) {
             adherence.setTbId(tbId);
         }

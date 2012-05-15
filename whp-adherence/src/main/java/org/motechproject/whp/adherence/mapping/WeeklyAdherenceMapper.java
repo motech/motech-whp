@@ -1,10 +1,9 @@
 package org.motechproject.whp.adherence.mapping;
 
+import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecords;
-import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.adherence.domain.*;
 
 import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
 
@@ -23,25 +22,15 @@ public class WeeklyAdherenceMapper {
             return null;
 
         WeeklyAdherence weeklyAdherence = createAdherence();
-        AdherenceRecord record = adherenceRecords.adherenceRecords().get(0);
-        mapTbId(record, weeklyAdherence);
-        mapProviderId(record, weeklyAdherence);
 
         for (AdherenceRecord adherenceRecord : adherenceRecords.adherenceRecords()) {
-            Adherence day = new AdherenceMapper().map(adherenceRecord);
-            weeklyAdherence.addAdherenceLog(day.getPillDay(), day.getPillStatus());
+            LocalDate recordDate = adherenceRecord.recordDate();
+            DayOfWeek pillDay = DayOfWeek.getDayOfWeek(recordDate.getDayOfWeek());
+            PillStatus pillStatus = PillStatus.get(adherenceRecord.status());
+            weeklyAdherence.addAdherenceLog(pillDay, pillStatus, (String) adherenceRecord.meta(AdherenceConstants.TB_ID),
+                    (String) adherenceRecord.meta(AdherenceConstants.PROVIDER_ID));
         }
         return weeklyAdherence;
-    }
-
-    private void mapProviderId(AdherenceRecord record, WeeklyAdherence weeklyAdherence) {
-        String providerId = (String) record.meta().get(AdherenceConstants.PROVIDER_ID);
-        weeklyAdherence.setProviderId(providerId);
-    }
-
-    private void mapTbId(AdherenceRecord record, WeeklyAdherence weeklyAdherence) {
-        String tbId = (String) record.meta().get(AdherenceConstants.TB_ID);
-        weeklyAdherence.setTbId(tbId);
     }
 
     private WeeklyAdherence createAdherence() {

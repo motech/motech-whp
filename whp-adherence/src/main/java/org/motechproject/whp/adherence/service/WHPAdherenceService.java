@@ -42,10 +42,14 @@ public class WHPAdherenceService {
     }
 
     public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
-        for (AdherenceData request : requests(weeklyAdherence)) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        weeklyAdherence.setTbId(patient.tbId());
+        weeklyAdherence.setProviderId(patient.providerId());
+        List<AdherenceData> requests = requests(weeklyAdherence);
+        for (AdherenceData request : requests) {
             adherenceService.recordAdherence(user, source.name(), request);
         }
-        if (shouldStartOrRestartTreatment(allPatients.findByPatientId(patientId), weeklyAdherence)) {
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
             patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
     }
@@ -68,10 +72,9 @@ public class WHPAdherenceService {
     }
 
     private WeeklyAdherence currentWeekAdherence(Patient patient, TreatmentWeek treatmentWeek) {
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient));
-        weeklyAdherence.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
-        weeklyAdherence.setTbId(patient.getCurrentProvidedTreatment().getTbId());
-        return weeklyAdherence;
+        String providerId = patient.getCurrentProvidedTreatment().getProviderId();
+        String tbId = patient.getCurrentProvidedTreatment().getTbId();
+        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), tbId, providerId);
     }
 
     private List<DayOfWeek> pillDays(Patient patient) {

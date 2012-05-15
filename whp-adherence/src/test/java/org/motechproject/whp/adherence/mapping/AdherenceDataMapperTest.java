@@ -34,8 +34,7 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldSetExternalIdOnRequest() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today());
-        day.setTbId(patient.tbId());
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, patient.tbId(), null);
 
         AdherenceDataMapper mapper = new AdherenceDataMapper(day);
         assertEquals(patient.getPatientId(), mapper.request().externalId());
@@ -43,8 +42,7 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldSetProviderIdOnRequest(){
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today());
-        day.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, null, patient.getCurrentProvidedTreatment().getProviderId());
 
         AdherenceDataMapper mapper = new AdherenceDataMapper(day);
         assertEquals(PROVIDER_ID, mapper.request().meta().get(AdherenceConstants.PROVIDER_ID));
@@ -52,8 +50,7 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldSetTbIdAsMetaDataOnRequest() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today());
-        day.setTbId(patient.tbId());
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.Unknown, patient.tbId(), null);
 
         AdherenceDataMapper mapper = new AdherenceDataMapper(day);
         assertNotNull(patient.tbId());
@@ -62,9 +59,7 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldMarkDosesTaken() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today());
-        day.status(PillStatus.Taken);
-        day.setTbId(patient.tbId());
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.Taken, patient.tbId(), null);
 
         AdherenceDataMapper mapper = new AdherenceDataMapper(day);
         assertEquals(1, mapper.request().status());
@@ -72,9 +67,7 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldMarkDosesMissed() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today());
-        day.status(PillStatus.NotTaken);
-        day.setTbId(patient.tbId());
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, patient.tbId(), null);
 
         AdherenceDataMapper mapper = new AdherenceDataMapper(day);
         assertEquals(2, mapper.request().status());

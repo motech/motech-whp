@@ -14,15 +14,6 @@ import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRec
 
 public class AdherenceMapper {
 
-    public Adherence map(AdherenceRecord record) {
-        LocalDate recordDate = record.recordDate();
-        Adherence day = new Adherence();
-        day.status(PillStatus.get(record.status()));
-        day.setPillDate(recordDate);
-        day.setPillDay(dayOfWeekOfRecord(recordDate));
-        return day;
-    }
-
     public List<Adherence> map(List<AdherenceData> adherenceData) {
         List<Adherence> adherences = new ArrayList<Adherence>();
         for (AdherenceData adherenceDatum : adherenceData) {
@@ -31,6 +22,7 @@ public class AdherenceMapper {
             adherence.setTreatmentId(adherenceDatum.treatmentId());
             adherence.setTbId(adherenceDatum.meta().get(AdherenceConstants.TB_ID).toString());
             adherence.setPillStatus(PillStatus.get(adherenceDatum.status()));
+            adherence.setPillDay(dayOfWeekOfRecord(adherenceDatum.doseDate()));
             adherences.add(adherence);
         }
         return adherences;

@@ -80,6 +80,11 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public String providerId() {
+        return currentProvidedTreatment.getProviderId();
+    }
+
+    @JsonIgnore
     public String currentTreatmentId() {
         if (getCurrentProvidedTreatment() == null) return null;
         return this.getCurrentProvidedTreatment().getTreatment().getId();

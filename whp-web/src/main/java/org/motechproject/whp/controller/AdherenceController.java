@@ -27,18 +27,15 @@ import java.util.List;
 @Report(name = "adherenceReport")
 public class AdherenceController extends BaseController {
 
-    AllPatients allPatients;
     WHPAdherenceService adherenceService;
     UpdateAdherenceCriteria adherenceCriteria;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public AdherenceController(
-            AllPatients allPatients,
             WHPAdherenceService adherenceService,
             UpdateAdherenceCriteria adherenceCriteria
     ) {
-        this.allPatients = allPatients;
         this.adherenceService = adherenceService;
         this.adherenceCriteria = adherenceCriteria;
     }
