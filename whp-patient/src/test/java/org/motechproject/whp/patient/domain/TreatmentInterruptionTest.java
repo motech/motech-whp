@@ -30,4 +30,31 @@ public class TreatmentInterruptionTest {
         assertEquals(tomorrow, interruption.getResumptionDate());
     }
 
+    @Test
+    public void isTreatmentInterruptedReturnsFalse_IfPillDateIsBeforePauseDate_AndCurrentTreatmentIsPaused() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
+        assertFalse(interruption.isTreatmentInterrupted(today().minusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsTrue_IfPillDateIsAfterPauseDate_AndCurrentTreatmentIsPaused() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
+        assertTrue(interruption.isTreatmentInterrupted(today()));
+        assertTrue(interruption.isTreatmentInterrupted(today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsFalse_IfPillDateIsAfterResumptionDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(1));
+        interruption.resumeTreatment("swap", today());
+        assertFalse(interruption.isTreatmentInterrupted(today()));
+        assertFalse(interruption.isTreatmentInterrupted(today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsTrue_IfPillDateIsBeforeResumptionDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(1));
+        interruption.resumeTreatment("swap", today());
+        assertTrue(interruption.isTreatmentInterrupted(today().minusDays(1)));
+    }
 }

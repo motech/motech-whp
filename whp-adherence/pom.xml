@@ -12,11 +12,9 @@
     <artifactId>whp-adherence</artifactId>
     <groupId>org.motechproject.whp</groupId>
     <version>0.1-SNAPSHOT</version>
-
     <properties>
         <build.dir>../build</build.dir>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -42,5 +40,21 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jar-test-classes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

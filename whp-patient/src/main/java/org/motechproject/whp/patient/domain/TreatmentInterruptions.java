@@ -5,8 +5,16 @@ import org.joda.time.LocalDate;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
+
+    public TreatmentInterruptions() {
+    }
+
+    public TreatmentInterruptions(Collection<? extends TreatmentInterruption> treatmentInterruptions) {
+        super(treatmentInterruptions);
+    }
 
     @JsonIgnore
     public boolean isTreatmentInterrupted(LocalDate pillDate) {
