@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
-public class TreatmentUpdateTest extends BaseTest {
+public abstract class TreatmentUpdateTest extends BaseTest {
 
     @Autowired
     PatientService patientService;
