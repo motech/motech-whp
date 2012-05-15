@@ -36,6 +36,7 @@ public class PatientBuilder {
 
     private ProvidedTreatment defaultProvidedTreatment() {
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
+        providedTreatment.setTbId("tbId");
         providedTreatment.setTreatment(defaultTreatment());
         providedTreatment.setPatientAddress(defaultAddress());
         return providedTreatment;
@@ -71,11 +72,6 @@ public class PatientBuilder {
 
     public PatientBuilder withTbId(String tbId) {
         patient.getCurrentProvidedTreatment().setTbId(tbId);
-        return this;
-    }
-
-    public PatientBuilder withTreatmentEndDate(LocalDate endDate) {
-        patient.getCurrentProvidedTreatment().getTreatment().setEndDate(endDate);
         return this;
     }
 
