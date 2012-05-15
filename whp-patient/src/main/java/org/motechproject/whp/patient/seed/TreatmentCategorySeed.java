@@ -17,7 +17,7 @@ public class TreatmentCategorySeed {
     @Autowired
     private AllTreatmentCategories allTreatmentCategories;
 
-    @Seed(priority = 0)
+    @Seed(priority = 0, version = "1.0")
     public void load() {
 
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);

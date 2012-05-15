@@ -14,7 +14,7 @@ public class AdministratorSeed {
     @Autowired
     private MotechAuthenticationService authenticationService;
 
-    @Seed(priority = 0)
+    @Seed(priority = 0, version = "1.0")
     public void load() {
         authenticationService.register("admin", "password", null, Arrays.asList(WHPRole.ADMIN.name()));
     }

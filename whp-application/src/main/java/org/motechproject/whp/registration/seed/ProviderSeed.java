@@ -15,7 +15,7 @@ public class ProviderSeed {
     private RegistrationService registrationService;
 
     // Need not have this, till we create logins for acutal providers
-    @Seed(priority = 1)
+    @Seed(priority = 1, version = "1.0")
     public void load() {
         registrationService.registerProvider(new ProviderRequest("raj", "district", "1234567890", DateUtil.now()));
     }
