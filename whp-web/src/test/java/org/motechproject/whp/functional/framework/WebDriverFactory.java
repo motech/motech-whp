@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.framework;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,7 +21,9 @@ public class WebDriverFactory {
         FIREFOX("firefox") {
             @Override
             WebDriver give() {
-                return new FirefoxDriver();
+                FirefoxDriver firefoxDriver = new FirefoxDriver();
+                firefoxDriver.manage().window().maximize();
+                return firefoxDriver;
             }
         },
 
