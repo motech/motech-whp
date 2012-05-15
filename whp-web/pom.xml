@@ -324,7 +324,7 @@
                                     </systemProperties>
                                     <runOrder>reversealphabetical</runOrder>
                                     <includes>
-                                        <include>**/functional/serial/**/*.java</include>
+                                        <include>**/functional/test/serial/**/*.java</include>
                                     </includes>
                                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                                 </configuration>
@@ -355,7 +355,7 @@
                                         <include>**/functional/**/*.java</include>
                                     </includes>
                                     <excludes>
-                                        <exclude>**/functional/serial/**/*.java</exclude>
+                                        <exclude>**/functional/test/serial/**/*.java</exclude>
                                     </excludes>
                                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                                 </configuration>

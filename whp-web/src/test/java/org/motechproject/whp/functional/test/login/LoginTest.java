@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional;
+package org.motechproject.whp.functional.test.login;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;

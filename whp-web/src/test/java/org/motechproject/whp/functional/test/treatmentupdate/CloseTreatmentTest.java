@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional;
+package org.motechproject.whp.functional.test.treatmentupdate;
 
 import org.junit.After;
 import org.junit.Test;
@@ -32,44 +32,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
-public class TreatmentUpdateTest extends BaseTest {
-
-    @Autowired
-    PatientService patientService;
-
-    @Autowired
-    PatientWebService patientWebService;
-
-    ProviderDataService providerDataService;
-
-    PatientRequest patientRequest;
-    TestProvider provider;
-
-    @Override
-    public void setUp() {
-        super.setUp();
-        setupProvider();
-        setupPatientForProvider();
-    }
-
-    public void setupProvider() {
-        providerDataService = new ProviderDataService(webDriver);
-        provider = providerDataService.createProvider();
-    }
-
-    public void setupPatientForProvider() {
-        TreatmentCategory oldCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
-        patientRequest = new PatientRequestBuilder()
-                .withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withTreatmentCategory(oldCategory)
-                .withCaseId(UUID.randomUUID().toString())
-                .withProviderId(provider.getProviderId())
-                .build();
-        patientService.createPatient(patientRequest);
-    }
+public class CloseTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldUpdateTreatmentCategoryForPatientOnCloseOfCurrentTreatmentAndOpenOfNewTreatment() {
@@ -104,56 +67,5 @@ public class TreatmentUpdateTest extends BaseTest {
 
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
         assertEquals(openNewTreatmentUpdateRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patientRequest.getCase_id()));
-    }
-
-    ProviderPage loginAsProvider(TestProvider provider) {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
-    }
-
-    @Test
-    public void shouldTransferInPatientOnTransferInTreatmentUpdateRequest() {
-        TestProvider provider1 = providerDataService.createProvider();
-        TestProvider provider2 = providerDataService.createProvider();
-
-        TreatmentCategory patientTreatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
-        patientRequest = new PatientRequestBuilder()
-                .withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withTreatmentCategory(patientTreatmentCategory)
-                .withCaseId(UUID.randomUUID().toString())
-                .withProviderId(provider1.getProviderId())
-                .build();
-        patientService.createPatient(patientRequest);
-
-        ProviderPage providerPage = loginAsProvider(provider1);
-
-        assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertTrue(providerPage.hasTbId(patientRequest.getTb_id()));
-
-        PatientWebRequest transferInPatientRequest = new PatientWebRequestBuilder()
-                .withDefaultsForTransferIn()
-                .withProviderId(provider2.getProviderId())
-                .withOldTb_Id(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
-                .build();
-        patientWebService.updateCase(transferInPatientRequest);
-
-        providerPage.logout();
-        providerPage = loginAsProvider(provider1);
-
-        assertFalse(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertFalse(providerPage.hasTbId(patientRequest.getTb_id()));
-        assertFalse(providerPage.hasTbId(transferInPatientRequest.getTb_id()));
-
-        providerPage.logout();
-        providerPage = loginAsProvider(provider2);
-
-        assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertTrue(providerPage.hasTbId(transferInPatientRequest.getTb_id()));
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
     }
 }
