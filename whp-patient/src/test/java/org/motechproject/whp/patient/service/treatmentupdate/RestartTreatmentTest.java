@@ -38,6 +38,7 @@ public class RestartTreatmentTest {
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
         restartTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        verify(allPatients, never()).update(patient);
     }
 
     @Test

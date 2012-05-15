@@ -11,13 +11,16 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.mockito.Mockito.*;
+import static org.motechproject.util.DateUtil.now;
 
-public class PauseTreatmentTest {
+public class CloseCurrentTreatmentTest {
 
     private AllPatients allPatients;
-    private PauseTreatment pauseTreatment;
+    private AllTreatments allTreatments;
+    private CloseCurrentTreatment closeCurrentTreatment;
     private Patient patient;
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
@@ -25,26 +28,27 @@ public class PauseTreatmentTest {
     @Before
     public void setUp() {
         allPatients = mock(AllPatients.class);
+        allTreatments = mock(AllTreatments.class);
         patient = new PatientBuilder().withDefaults().build();
-        pauseTreatment = new PauseTreatment();
+        closeCurrentTreatment = new CloseCurrentTreatment();
     }
 
     @Test
-    public void shouldNotPauseCurrentTreatment_OnAnyErrors() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().withTbId("wrongTbId").build();
-        expectWHPDomainException("Cannot pause treatment for this case: [No such tb id for current treatment]");
+    public void shouldNotCloseCurrentTreatment_OnAnyErrors() {
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+        expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment]");
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        pauseTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        closeCurrentTreatment.apply(allPatients, allTreatments, treatmentUpdateRequest);
         verify(allPatients, never()).update(patient);
     }
 
     @Test
-    public void shouldPauseAndUpdatePatientCurrentTreatment_IfNoErrorsFound() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().build();
+    public void shouldCloseCurrentTreatmentAndUpdatePatient_IfNoErrorsFound() {
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        pauseTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        closeCurrentTreatment.apply(allPatients, allTreatments, treatmentUpdateRequest);
         verify(allPatients).update(patient);
     }
 

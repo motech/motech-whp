@@ -36,7 +36,7 @@ public class Treatment extends MotechBaseDataObject {
     public Treatment() {
     }
 
-    public Treatment(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, int patientAge) {
+    public Treatment(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, Integer patientAge) {
         this.treatmentCategory = treatmentCategory;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;

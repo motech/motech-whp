@@ -11,13 +11,16 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.mockito.Mockito.*;
+import static org.motechproject.util.DateUtil.now;
 
-public class PauseTreatmentTest {
+public class TransferInPatientTest {
 
     private AllPatients allPatients;
-    private PauseTreatment pauseTreatment;
+    private AllTreatments allTreatments;
+    private TransferInPatient transferInPatient;
     private Patient patient;
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
@@ -25,26 +28,28 @@ public class PauseTreatmentTest {
     @Before
     public void setUp() {
         allPatients = mock(AllPatients.class);
+        allTreatments = mock(AllTreatments.class);
         patient = new PatientBuilder().withDefaults().build();
-        pauseTreatment = new PauseTreatment();
+        transferInPatient = new TransferInPatient();
     }
 
     @Test
-    public void shouldNotPauseCurrentTreatment_OnAnyErrors() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().withTbId("wrongTbId").build();
-        expectWHPDomainException("Cannot pause treatment for this case: [No such tb id for current treatment]");
+    public void shouldNotTransferInPatientTreatment_OnAnyErrors() {
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().withOldTbId("wrongTbId").build();
+        expectWHPDomainException("Cannot TransferIn patient: [No such tb id for current treatment]");
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        pauseTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        transferInPatient.apply(allPatients, allTreatments, treatmentUpdateRequest);
         verify(allPatients, never()).update(patient);
     }
 
     @Test
-    public void shouldPauseAndUpdatePatientCurrentTreatment_IfNoErrorsFound() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().build();
+    public void shouldTransferInPatientTreatmentAndUpdatePatient_IfNoErrorsFound() {
+        patient.closeCurrentTreatment("Defaulted", now());
+        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().build();
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        pauseTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        transferInPatient.apply(allPatients, allTreatments, treatmentUpdateRequest);
         verify(allPatients).update(patient);
     }
 

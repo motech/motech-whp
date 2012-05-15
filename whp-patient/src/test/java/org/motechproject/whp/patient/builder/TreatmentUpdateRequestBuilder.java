@@ -76,6 +76,17 @@ public class TreatmentUpdateRequestBuilder {
         return this;
     }
 
+    public TreatmentUpdateRequestBuilder withMandatoryFieldsForTransferInTreatment() {
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        treatmentUpdateRequest.setCase_id("caseId");
+        treatmentUpdateRequest.setDate_modified(now());
+        treatmentUpdateRequest.setTb_id("newTbId");
+        treatmentUpdateRequest.setOld_tb_id("tbId");
+        treatmentUpdateRequest.setTreatment_update(TreatmentUpdateScenario.TransferIn);
+        treatmentUpdateRequest.setTreatment_category(category);
+        return this;
+    }
+
     public TreatmentUpdateRequestBuilder withDateModified(DateTime dateModified) {
         treatmentUpdateRequest.setDate_modified(dateModified);
         return this;
@@ -83,6 +94,11 @@ public class TreatmentUpdateRequestBuilder {
 
     public TreatmentUpdateRequestBuilder withTbId(String tbId) {
         treatmentUpdateRequest.setTb_id(tbId);
+        return this;
+    }
+
+    public TreatmentUpdateRequestBuilder withOldTbId(String oldTbId) {
+        treatmentUpdateRequest.setOld_tb_id(oldTbId);
         return this;
     }
 

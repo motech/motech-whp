@@ -110,7 +110,7 @@ public class PatientMapper {
         Treatment currentTreatment = patient.getCurrentProvidedTreatment().getTreatment();
         TreatmentCategory treatmentCategory = treatmentUpdateRequest.getTreatment_category();
         DiseaseClass diseaseClass = currentTreatment.getDiseaseClass();
-        int patientAge = currentTreatment.getPatientAge();
+        Integer patientAge = currentTreatment.getPatientAge();
 
         return new Treatment(treatmentCategory, diseaseClass, patientAge);
     }
