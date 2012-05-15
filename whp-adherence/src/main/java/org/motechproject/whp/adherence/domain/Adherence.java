@@ -36,22 +36,22 @@ public class Adherence {
         this.providerId = providerId;
     }
 
-    @ReportValue
+    @ReportValue(index = 0)
     public String getPatientId() {
         return patientId;
     }
 
-    @ReportValue
+    @ReportValue(index = 1)
     public String getTbId() {
         return tbId;
     }
 
-    @ReportValue
+    @ReportValue(index = 2, column = "Adherence date")
     public String pillDate() {
         return pillDate.toString("dd/MM/yyyy");
     }
 
-    @ReportValue
+    @ReportValue(index = 3, column = "Adherence value")
     public String pillStatus() {
         return pillStatus.name();
     }
