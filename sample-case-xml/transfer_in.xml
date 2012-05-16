@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<case xmlns="http://openrosa.org/javarosa" case_id="12345" date_modified="03/04/2012 11:23:40"
+      api_key="3F2504E04F8911D39A0C0305E82C3301" user_id="system">
+    <update>
+        <treatment_update>TransferIn</treatment_update>
+        <tb_id>12345678811</tb_id>
+        <old_tb_id>12345678891</old_tb_id>
+        <provider_id>shitij</provider_id>
+    </update>
+</case>

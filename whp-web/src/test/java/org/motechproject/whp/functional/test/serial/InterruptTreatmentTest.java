@@ -1,6 +1,5 @@
 package org.motechproject.whp.functional.test.serial;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.page.ProviderPage;
