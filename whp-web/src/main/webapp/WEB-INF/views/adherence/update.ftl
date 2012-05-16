@@ -1,34 +1,27 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout>
+<#include "../layout/legend.ftl">
 <@layout.defaultLayout "Update Adherence">
+
 <div class="row">
-
     <#if readOnly > <div class="alert alert-error"> Please contact the CMF admin to update adherence. </div> </#if>
-
     <h4 class="page-header form-header">Update last week's adherence</h4>
+</div>
 
+<@legend key1="paused" value1="Treatment Paused On Date" span="span3"/>
+
+<div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
-        <input type="hidden" name="patientId"
-               value="${adherence.patientId}"/>
-        <input type="hidden" name="treatmentId"
-               value="${adherence.treatmentId}"/>
-
+        <input type="hidden" name="patientId" value="${adherence.patientId}"/>
+        <input type="hidden" name="treatmentId" value="${adherence.treatmentId}"/>
         <table class="table table-bordered">
             <thead>
-            <tr>
-                <th>
-                    Day of week
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Taken
-                </th>
-                <th>
-                    Not taken
-                </th>
-            </tr>
+                <tr>
+                    <th>Day of week</th>
+                    <th>Date</th>
+                    <th>Taken</th>
+                    <th>Not taken</th>
+                </tr>
             </thead>
             <tbody>
             <input type="hidden" name="referenceDateString" value="${referenceDate}"/>

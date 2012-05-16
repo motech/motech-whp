@@ -66,3 +66,8 @@ body {
     background-color: #FFB6C1;
     color: black;
 }
+
+.label-legend {
+    background-color: #3A87AD;
+    vertical-align: center;
+}

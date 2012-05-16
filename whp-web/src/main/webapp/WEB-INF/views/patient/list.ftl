@@ -1,6 +1,8 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout>
+<#include "../layout/legend.ftl">
     <@layout.defaultLayout "Patient List">
+    <@legend key1="paused" value1="Current Treatment Paused" span="span3"/>
     <div class="row">
         <div>
             <table class="table table-bordered table-condensed">
