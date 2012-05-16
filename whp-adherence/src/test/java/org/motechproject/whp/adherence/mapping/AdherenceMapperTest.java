@@ -8,11 +8,9 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.PillStatus;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
-import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
 
 public class AdherenceMapperTest {
 

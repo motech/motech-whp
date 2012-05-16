@@ -34,7 +34,7 @@ public class TreatmentMapper {
 
     private static void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        treatment.setStartDate(patientRequest.getTreatmentStartDate());
+        treatment.setCreationDate(patientRequest.getTreatmentStartDate());
     }
 
     static void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {

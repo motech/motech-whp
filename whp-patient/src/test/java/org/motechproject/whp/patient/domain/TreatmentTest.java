@@ -19,7 +19,7 @@ public class TreatmentTest {
         treatment.close("Cured", now());
         assertEquals(TreatmentOutcome.Cured, treatment.getTreatmentOutcome());
         assertEquals(TreatmentStatus.Closed, treatment.getStatus());
-        assertEquals(today(), treatment.getEndDate());
+        assertEquals(today(), treatment.getCloseDate());
     }
 
     @Test

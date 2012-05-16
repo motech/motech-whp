@@ -65,7 +65,7 @@ public class PatientService {
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {
         Patient patient = allPatients.findByPatientId(patientId);
-        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(firstDoseTakenDate);
+        patient.getCurrentProvidedTreatment().getTreatment().setStartDate(firstDoseTakenDate);
         allPatients.update(patient);
     }
 

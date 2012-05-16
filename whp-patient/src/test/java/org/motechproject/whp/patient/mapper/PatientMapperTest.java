@@ -113,10 +113,10 @@ public class PatientMapperTest {
         Treatment treatment = patient.latestProvidedTreatment().getTreatment();
         assertEquals(patientRequest.getAge(), treatment.getPatientAge());
         assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
-        assertNull(treatment.getDoseStartDate());
+        assertNull(treatment.getStartDate());
 
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals(patientRequest.getTreatmentStartDate(), treatment.getStartDate());
+        assertEquals(patientRequest.getTreatmentStartDate(), treatment.getCreationDate());
 
         assertSmearTests(patientRequest, treatment);
         assertWeightStatistics(patientRequest, treatment);

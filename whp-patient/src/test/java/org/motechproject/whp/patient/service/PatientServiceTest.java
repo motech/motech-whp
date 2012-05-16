@@ -332,7 +332,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     private void assertCurrentTreatmentClosed(Patient updatedPatient, DateTime lastModifiedDate) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
-        assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getTreatment().getEndDate());
+        assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getTreatment().getCloseDate());
         assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, currentProvidedTreatment.getTreatment().getTreatmentOutcome());
         assertEquals(TreatmentStatus.Closed, currentProvidedTreatment.getTreatment().getStatus());

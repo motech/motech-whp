@@ -21,9 +21,9 @@ public class Treatment extends MotechBaseDataObject {
 
     private Integer patientAge;
     private TreatmentCategory treatmentCategory;
-    private LocalDate doseStartDate;
-    private DateTime startDate;
-    private LocalDate endDate;
+    private LocalDate startDate;
+    private DateTime creationDate;
+    private LocalDate closeDate;
     private String tbRegistrationNumber;
     private TreatmentOutcome treatmentOutcome;
     private TreatmentStatus status = TreatmentStatus.Ongoing;
@@ -60,7 +60,7 @@ public class Treatment extends MotechBaseDataObject {
 
     public void close(String treatmentOutcome, DateTime dateModified) {
         status = TreatmentStatus.Closed;
-        endDate = dateModified.toLocalDate();
+        closeDate = dateModified.toLocalDate();
         this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
     }
 

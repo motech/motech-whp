@@ -20,11 +20,11 @@ public class TreatmentStartCriteria {
     }
 
     private static boolean isNotOnTreatment(ProvidedTreatment providedTreatment) {
-        return providedTreatment.getTreatment().getDoseStartDate() == null;
+        return providedTreatment.getTreatment().getStartDate() == null;
     }
 
     private static boolean isAdherenceBeingRecapturedForTheSameWeekAsTheWeekTreatmentStartedOn(Patient patient, WeeklyAdherence adherence) {
-        LocalDate currentlySetDoseStartDate = patient.getCurrentProvidedTreatment().getTreatment().getDoseStartDate();
+        LocalDate currentlySetDoseStartDate = patient.getCurrentProvidedTreatment().getTreatment().getStartDate();
         return adherence.getWeek().equals(new TreatmentWeek(currentlySetDoseStartDate));
     }
 }
