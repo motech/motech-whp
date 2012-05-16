@@ -64,6 +64,64 @@ public class PauseTreatmentCriteriaTest {
     }
 
     @Test
+    public void shouldReturnFalseForCanPauseCurrentTreatmentIfCurrentTreatmentIsClosed() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+        patient.closeCurrentTreatment("Cured", now());
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+        treatmentUpdateRequest.setTb_id(tbId);
+
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+    }
+
+    @Test
+    public void shouldReturnFalseForCanPauseCurrentTreatmentIfRequestTbIdDoesNotMatchPatientTbId_AndPatientTreatmentIsClosed() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+        patient.closeCurrentTreatment("Cured", now());
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+        treatmentUpdateRequest.setTb_id("wrongTbId");
+
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+    }
+
+    @Test
+    public void shouldReturnFalseForCanPauseCurrentTreatmentIfRequestTbIdDoesNotMatchPatientTbId_AndPatientTreatmentIsClosed_AndPatientTreatmentIsPaused() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+        patient.pauseCurrentTreatment("paws", now());
+        patient.closeCurrentTreatment("Cured", now());
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+        treatmentUpdateRequest.setTb_id("wrongTbId");
+
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+    }
+
+    @Test
+    public void shouldReturnFalseForCanPauseCurrentTreatmentIfPatientTreatmentIsPaused_AndPatientTreatmentIsClosed() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+        patient.pauseCurrentTreatment("paws", now());
+        patient.closeCurrentTreatment("Cured", now());
+
+        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
+        treatmentUpdateRequest.setCase_id(patient.getPatientId());
+        treatmentUpdateRequest.setTb_id(tbId);
+
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
+        assertArrayEquals(new String[]{"Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+    }
+
+    @Test
     public void shouldReturnTrueForCanPauseCurrentTreatmentIfPatientTreatmentCanBePaused() {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();

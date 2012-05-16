@@ -60,12 +60,15 @@ public class UpdatePatientCriteria {
             criteriaErrors.add("No such tb id for current treatment");
             tbIdMatches = false;
         }
-        boolean treatmentIsNotPaused = true;
+        if (patient.isCurrentTreatmentClosed()) {
+            criteriaErrors.add("Current treatment is closed. Cannot pause a closed treatment.");
+            return false;
+        }
         if (currentProvidedTreatment.isPaused()) {
             criteriaErrors.add("Current treatment is already paused");
-            treatmentIsNotPaused = false;
+            return false;
         }
-        return tbIdMatches && treatmentIsNotPaused;
+        return tbIdMatches;
     }
 
     public static boolean canRestartCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, CriteriaErrors criteriaErrors) {
