@@ -5,16 +5,25 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
 
-public class CloseCurrentTreatment implements TreatmentUpdate {
+@Component
+public class CloseCurrentTreatment extends TreatmentUpdate {
 
     private final String CANNOT_CLOSE_CURRENT_TREATMENT = "Cannot close current treatment for case: ";
 
+    @Autowired
+    public CloseCurrentTreatment(AllPatients allPatients, AllTreatments allTreatments) {
+        super(allPatients, allTreatments);
+    }
+
     @Override
-    public void apply(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateRequest treatmentUpdateRequest){
+    public void apply(TreatmentUpdateRequest treatmentUpdateRequest){
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
         CriteriaErrors criteriaErrors = new CriteriaErrors();
 

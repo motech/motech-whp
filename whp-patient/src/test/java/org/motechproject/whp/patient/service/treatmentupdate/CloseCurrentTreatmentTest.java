@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
@@ -11,26 +12,30 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.mockito.Mockito.*;
-import static org.motechproject.util.DateUtil.now;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CloseCurrentTreatmentTest {
 
+    @Mock
     private AllPatients allPatients;
+    @Mock
     private AllTreatments allTreatments;
+
     private CloseCurrentTreatment closeCurrentTreatment;
     private Patient patient;
+
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Before
     public void setUp() {
-        allPatients = mock(AllPatients.class);
-        allTreatments = mock(AllTreatments.class);
+        initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        closeCurrentTreatment = new CloseCurrentTreatment();
+        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, allTreatments);
     }
 
     @Test
@@ -39,7 +44,7 @@ public class CloseCurrentTreatmentTest {
         expectWHPDomainException("Cannot close current treatment for case: [No such tb id for current treatment]");
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        closeCurrentTreatment.apply(allPatients, allTreatments, treatmentUpdateRequest);
+        closeCurrentTreatment.apply(treatmentUpdateRequest);
         verify(allPatients, never()).update(patient);
     }
 
@@ -48,7 +53,7 @@ public class CloseCurrentTreatmentTest {
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        closeCurrentTreatment.apply(allPatients, allTreatments, treatmentUpdateRequest);
+        closeCurrentTreatment.apply(treatmentUpdateRequest);
         verify(allPatients).update(patient);
     }
 

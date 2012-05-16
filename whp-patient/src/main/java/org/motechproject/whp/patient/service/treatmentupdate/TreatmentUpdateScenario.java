@@ -13,21 +13,4 @@ public enum TreatmentUpdateScenario {
     public String getScope() {
         return scope;
     }
-
-    public TreatmentUpdate getUpdateScenario() {
-        switch (this) {
-            case New:
-                return new OpenNewTreatment();
-            case Close:
-                return new CloseCurrentTreatment();
-            case TransferIn:
-                return new TransferInPatient();
-            case Pause:
-                return new PauseTreatment();
-            case Restart:
-                return new RestartTreatment();
-            default:
-                return null;
-        }
-    }
 }

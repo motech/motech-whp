@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
@@ -11,15 +12,23 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.service.ProviderService;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 
 public class TransferInPatientTest {
 
+    @Mock
     private AllPatients allPatients;
+    @Mock
     private AllTreatments allTreatments;
+    @Mock
+    private ProviderService providerService;
+
     private TransferInPatient transferInPatient;
     private Patient patient;
     @Rule
@@ -27,10 +36,9 @@ public class TransferInPatientTest {
 
     @Before
     public void setUp() {
-        allPatients = mock(AllPatients.class);
-        allTreatments = mock(AllTreatments.class);
+        initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        transferInPatient = new TransferInPatient();
+        transferInPatient = new TransferInPatient(allPatients, allTreatments, providerService);
     }
 
     @Test
@@ -39,7 +47,7 @@ public class TransferInPatientTest {
         expectWHPDomainException("Cannot TransferIn patient: [No such tb id for current treatment]");
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        transferInPatient.apply(allPatients, allTreatments, treatmentUpdateRequest);
+        transferInPatient.apply(treatmentUpdateRequest);
         verify(allPatients, never()).update(patient);
     }
 
@@ -49,8 +57,8 @@ public class TransferInPatientTest {
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().build();
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        transferInPatient.apply(allPatients, allTreatments, treatmentUpdateRequest);
-        verify(allPatients).update(patient);
+        transferInPatient.apply(treatmentUpdateRequest);
+        verify(providerService).transferIn(treatmentUpdateRequest.getProvider_id(), patient, treatmentUpdateRequest.getTb_id(), treatmentUpdateRequest.getDate_modified());
     }
 
     protected void expectWHPDomainException(String message) {

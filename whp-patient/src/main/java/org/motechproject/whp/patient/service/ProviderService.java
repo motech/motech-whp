@@ -1,7 +1,12 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +15,15 @@ import org.springframework.stereotype.Service;
 public class ProviderService {
 
     AllProviders allProviders;
+    AllPatients allPatients;
 
     @Autowired
-    public ProviderService(AllProviders allProviders) {
+    public ProviderService(AllProviders allProviders, AllPatients allPatients) {
         this.allProviders = allProviders;
+        this.allPatients = allPatients;
     }
 
-    public String add(String providerId, String primaryMobile, String secondaryMobile, String tertiaryMobile, String district, DateTime lastModifiedDate) {
+    public String createProvider(String providerId, String primaryMobile, String secondaryMobile, String tertiaryMobile, String district, DateTime lastModifiedDate) {
         Provider provider = new Provider(providerId, primaryMobile, district, lastModifiedDate);
         provider.setSecondaryMobile(secondaryMobile);
         provider.setTertiaryMobile(tertiaryMobile);
@@ -24,4 +31,15 @@ public class ProviderService {
         return provider.getId();
     }
 
+    public void transferIn(String newProviderId, Patient patient, String tbId, DateTime dateModified) {
+        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(currentProvidedTreatment)
+                .updateForTransferIn(
+                        tbId,
+                        newProviderId,
+                        dateModified.toLocalDate()
+                );
+        patient.addProvidedTreatment(newProvidedTreatment, dateModified);
+        allPatients.update(patient);
+    }
 }

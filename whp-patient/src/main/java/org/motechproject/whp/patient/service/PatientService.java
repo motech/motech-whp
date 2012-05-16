@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class PatientService {
 
     private AllTreatments allTreatments;
     private AllPatients allPatients;
+    private TreatmentUpdateFactory factory;
 
     private final String CANNOT_SIMPLE_UPDATE = "Cannot update details for this case: ";
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTreatments allTreatments) {
+    public PatientService(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateFactory factory) {
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
+        this.factory = factory;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -55,9 +58,9 @@ public class PatientService {
     }
 
     public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
-        TreatmentUpdate treatmentUpdate = treatmentUpdateRequest.getTreatment_update().getUpdateScenario();
+        TreatmentUpdate treatmentUpdate = factory.updateFor(treatmentUpdateRequest.getTreatment_update());
         try{
-            treatmentUpdate.apply(allPatients, allTreatments, treatmentUpdateRequest);
+            treatmentUpdate.apply(treatmentUpdateRequest);
         } catch (WHPDomainException e) {
             throw new WHPDomainException(e.getMessage());
         }

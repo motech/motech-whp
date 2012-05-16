@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.mockito.internal.matchers.Contains;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
@@ -11,13 +12,20 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 
 public class RestartTreatmentTest {
 
+    @Mock
     private AllPatients allPatients;
+    @Mock
+    private AllTreatments allTreatments;
+
     private RestartTreatment restartTreatment;
     private TreatmentUpdateRequest treatmentUpdateRequest;
 
@@ -26,9 +34,9 @@ public class RestartTreatmentTest {
 
     @Before
     public void setUp() {
-        allPatients = mock(AllPatients.class);
+        initMocks(this);
         treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().build();
-        restartTreatment = new RestartTreatment();
+        restartTreatment = new RestartTreatment(allPatients, allTreatments);
     }
 
     @Test
@@ -37,7 +45,7 @@ public class RestartTreatmentTest {
         expectWHPDomainException("Cannot restart treatment for this case: [Current treatment is already in progress]");
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        restartTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        restartTreatment.apply(treatmentUpdateRequest);
         verify(allPatients, never()).update(patient);
     }
 
@@ -47,7 +55,7 @@ public class RestartTreatmentTest {
         patient.pauseCurrentTreatment("paws", now());
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
-        restartTreatment.apply(allPatients, null, treatmentUpdateRequest);
+        restartTreatment.apply(treatmentUpdateRequest);
         verify(allPatients).update(patient);
     }
 

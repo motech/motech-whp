@@ -32,7 +32,7 @@ public class RegistrationService {
     }
 
     public void registerProvider(ProviderRequest providerRequest) {
-        String providerDocId = providerService.add(providerRequest.getProviderId(),
+        String providerDocId = providerService.createProvider(providerRequest.getProviderId(),
                 providerRequest.getPrimaryMobile(),
                 providerRequest.getSecondaryMobile(),
                 providerRequest.getTertiaryMobile(),
