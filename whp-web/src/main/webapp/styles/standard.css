@@ -71,3 +71,9 @@ body {
     background-color: #3A87AD;
     vertical-align: center;
 }
+
+.table tbody tr:hover td {
+    background-color: #E3F5FA;
+    color: black;
+}
+

@@ -5,7 +5,7 @@
     <@legend key1="paused" value1="Current Treatment Paused" span="span3"/>
     <div class="row">
         <div>
-            <table class="table table-bordered table-condensed">
+            <table id="patientList" class="table table-bordered table-condensed">
                 <thead>
                     <tr>
                         <th>Patient ID</th>
