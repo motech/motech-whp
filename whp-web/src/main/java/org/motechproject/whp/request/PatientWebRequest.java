@@ -1,6 +1,7 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
@@ -67,11 +68,11 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.closeTreatment})
     private String treatment_outcome;
 
-    @NotNull
+    @NotEmpty
     @Scope(scope = {ValidationScope.pauseTreatment})
     private String reason_for_pause;
 
-    @NotNull
+    @NotEmpty
     @Scope(scope = {ValidationScope.restartTreatment})
     private String reason_for_restart;
 

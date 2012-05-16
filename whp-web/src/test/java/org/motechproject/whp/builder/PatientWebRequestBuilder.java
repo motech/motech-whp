@@ -169,4 +169,14 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setDate_modified(date_modified.toString("dd/MM/YYYY HH:mm:ss"));
         return this;
     }
+
+    public PatientWebRequestBuilder withReasonForPause(String reasonForPause) {
+        patientWebRequest.setReason_for_pause(reasonForPause);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withReasonForRestart(String reasonForRestart) {
+        patientWebRequest.setReason_for_restart(reasonForRestart);
+        return this;
+    }
 }
