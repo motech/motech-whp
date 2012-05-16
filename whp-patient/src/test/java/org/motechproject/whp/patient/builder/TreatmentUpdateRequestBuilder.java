@@ -5,10 +5,15 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 
 import java.util.Arrays;
 
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.util.DateUtil.today;
 
 public class TreatmentUpdateRequestBuilder {
 
@@ -73,6 +78,19 @@ public class TreatmentUpdateRequestBuilder {
         treatmentUpdateRequest.setTb_id("tbId");
         treatmentUpdateRequest.setTreatment_update(TreatmentUpdateScenario.New);
         treatmentUpdateRequest.setTreatment_category(category);
+
+        treatmentUpdateRequest.setProvider_id("newProviderId");
+
+        treatmentUpdateRequest.setDisease_class(DiseaseClass.E);
+
+        treatmentUpdateRequest.setSmear_sample_instance(SmearTestSampleInstance.EndIP);
+        treatmentUpdateRequest.setSmear_test_date_1(today());
+        treatmentUpdateRequest.setSmear_test_result_1(SmearTestResult.Negative);
+        treatmentUpdateRequest.setSmear_test_date_2(today());
+        treatmentUpdateRequest.setSmear_test_result_2(SmearTestResult.Negative);
+
+        treatmentUpdateRequest.setWeight_instance(WeightInstance.EndIP);
+        treatmentUpdateRequest.setWeight(67.56);
         return this;
     }
 
@@ -109,6 +127,11 @@ public class TreatmentUpdateRequestBuilder {
 
     public TreatmentUpdateRequestBuilder withTreatmentCategory(TreatmentCategory treatmentCategory) {
         treatmentUpdateRequest.setTreatment_category(treatmentCategory);
+        return this;
+    }
+
+    public TreatmentUpdateRequestBuilder withProviderId(String providerId) {
+        treatmentUpdateRequest.setProvider_id(providerId);
         return this;
     }
 }

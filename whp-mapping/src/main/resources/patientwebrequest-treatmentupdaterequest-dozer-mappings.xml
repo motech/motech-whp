@@ -11,6 +11,13 @@
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
+            <a>smear_test_date_1</a>
+            <b>smear_test_date_1</b>
+        </field><field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
+            <a>smear_test_date_2</a>
+            <b>smear_test_date_2</b>
+        </field>
         <field custom-converter-id="stringToTreatmentCategory">
             <a>treatment_category</a>
             <b>treatment_category</b>
@@ -18,6 +25,26 @@
         <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>treatment_update</a>
             <b>treatment_update</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>smear_test_result_1</a>
+            <b>smear_test_result_1</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>smear_test_result_2</a>
+            <b>smear_test_result_2</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>disease_class</a>
+            <b>disease_class</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>smear_sample_instance</a>
+            <b>smear_sample_instance</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>weight_instance</a>
+            <b>weight_instance</b>
         </field>
     </mapping>
 </mappings>

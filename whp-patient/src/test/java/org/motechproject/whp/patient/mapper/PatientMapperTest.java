@@ -6,10 +6,7 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 
 import static org.junit.Assert.*;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
@@ -19,8 +16,8 @@ public class PatientMapperTest {
     @Test
     public void shouldMapPatientRequestToPatientDomain() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         Patient patient = mapPatient(patientRequest);
         assertBasicPatientInfo(patient, patientRequest);
         assertProvidedTreatment(patient, patientRequest);
@@ -29,9 +26,9 @@ public class PatientMapperTest {
     @Test
     public void shouldMapWeightStatisticsAsEmpty_WhenMissing() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .withWeightStatistics(null, null, DateUtil.today())
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withWeightStatistics(null, null, DateUtil.today())
+                .build();
         Patient patient = mapPatient(patientRequest);
 
         assertBasicPatientInfo(patient, patientRequest);
@@ -43,9 +40,9 @@ public class PatientMapperTest {
     @Test
     public void mapProvidedTreatmentSetsStartDateOnProvidedTreatment() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withCaseId("caseId")
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
+                .withCaseId("caseId")
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         Treatment treatment = TreatmentMapper.map(patientRequest);
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
 
@@ -56,17 +53,17 @@ public class PatientMapperTest {
     @Test
     public void newProviderTreatmentForCategoryChange_RetainsOldProviderIdAndAddress_SetsNewTbId_SetsNewTreatment_SetsStartDate() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
         Patient patient = mapPatient(patientRequest);
 
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
 
         TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                                                                                            .withMandatoryFieldsForOpenNewTreatment()
-                                                                                            .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                                            .withTbId("newTbId")
-                                                                                            .build();
+                .withMandatoryFieldsForOpenNewTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withTbId("newTbId")
+                .build();
 
         Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
 
@@ -74,11 +71,9 @@ public class PatientMapperTest {
 
         assertNotSame(currentProvidedTreatment.getTbId(), newProvidedTreatment.getTbId());
         assertNotSame(currentProvidedTreatment.getTreatment(), newProvidedTreatment.getTreatment());
-        assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newProvidedTreatment.getTreatment().getTreatmentCategory());
         assertEquals(openNewTreatmentUpdateRequest.getTb_id(), newProvidedTreatment.getTbId());
         assertEquals(currentProvidedTreatment.getPatientAddress(), newProvidedTreatment.getPatientAddress());
-        assertEquals(currentProvidedTreatment.getProviderId(), newProvidedTreatment.getProviderId());
-        assertEquals(openNewTreatmentUpdateRequest.getDate_modified().toLocalDate(), newProvidedTreatment.getStartDate());
+        assertEquals(openNewTreatmentUpdateRequest.getProvider_id(), newProvidedTreatment.getProviderId());
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {

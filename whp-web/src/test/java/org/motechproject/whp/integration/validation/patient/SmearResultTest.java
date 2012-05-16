@@ -10,14 +10,14 @@ public class SmearResultTest extends BasePatientTest {
     public void shouldThrowException_WhenSmearTest1DateFormatIsIncorrect() {
         expectWHPException("field:smear_test_date_1:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1("03/04/2012  11:23:40").build();
-        validator.validate(webRequest, ValidationScope.create);
+        validator.validate(webRequest, ValidationScope.openTreatment);
     }
 
     @Test
     public void shouldThrowException_WhenSmearTest2DateFormatIsIncorrect() {
         expectWHPException("field:smear_test_date_2:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate2("03/04/2012  11:23:40").build();
-        validator.validate(webRequest, ValidationScope.create);
+        validator.validate(webRequest, ValidationScope.openTreatment);
     }
 
     @Test

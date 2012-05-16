@@ -16,12 +16,23 @@ public class TreatmentMapper {
     }
 
     public static Treatment createNewTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest) {
-        Treatment currentTreatment = patient.getCurrentProvidedTreatment().getTreatment();
         TreatmentCategory treatmentCategory = treatmentUpdateRequest.getTreatment_category();
-        DiseaseClass diseaseClass = currentTreatment.getDiseaseClass();
-        Integer patientAge = currentTreatment.getPatientAge();
+        DiseaseClass diseaseClass = treatmentUpdateRequest.getDisease_class();
 
-        return new Treatment(treatmentCategory, diseaseClass, patientAge);
+        Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge());
+        SmearTestResults smearTestResults = new SmearTestResults(treatmentUpdateRequest.getSmear_sample_instance(),
+                treatmentUpdateRequest.getSmear_test_date_1(),
+                treatmentUpdateRequest.getSmear_test_result_1(),
+                treatmentUpdateRequest.getSmear_test_date_2(),
+                treatmentUpdateRequest.getSmear_test_result_2());
+        newTreatment.addSmearTestResult(smearTestResults);
+
+        WeightStatistics weightStatistics = new WeightStatistics(treatmentUpdateRequest.getWeight_instance(),
+                treatmentUpdateRequest.getWeight(),
+                treatmentUpdateRequest.getDate_modified().toLocalDate());
+
+        newTreatment.addWeightStatistics(weightStatistics);
+        return newTreatment;
     }
 
     private static Treatment createFirstTreatment(PatientRequest patientRequest) {

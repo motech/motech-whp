@@ -330,6 +330,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(treatmentUpdateRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
         assertEquals(treatmentUpdateRequest.getTb_id(), currentProvidedTreatment.getTbId());
         assertEquals(treatmentUpdateRequest.getTreatment_category(), currentProvidedTreatment.getTreatment().getTreatmentCategory());
+        assertEquals(treatmentUpdateRequest.getDisease_class(), currentProvidedTreatment.getTreatment().getDiseaseClass());
+        assertEquals(treatmentUpdateRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 

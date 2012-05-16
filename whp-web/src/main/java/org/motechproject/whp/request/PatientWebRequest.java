@@ -81,7 +81,7 @@ public class PatientWebRequest {
 
     @NotNull
     @Enumeration(type = DiseaseClass.class)
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String disease_class;
 
     @NotNull
@@ -105,24 +105,32 @@ public class PatientWebRequest {
     private String address_state;
 
     @Enumeration(type = SmearTestSampleInstance.class)
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_sample_instance;
 
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_date_1;
 
     @Enumeration(type = SmearTestResult.class)
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_result_1;
 
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_date_2;
 
     @Enumeration(type = SmearTestResult.class)
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_result_2;
 
     @Enumeration(type = WeightInstance.class)
+    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String weight_instance;
 
-    @NotNull(scope = {ValidationScope.create})
+    @NotNull(scope = {ValidationScope.create, ValidationScope.openTreatment})
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
     private String weight;
 
@@ -143,7 +151,7 @@ public class PatientWebRequest {
     private String old_tb_id;
 
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Scope(scope = {ValidationScope.create, ValidationScope.transferIn})
+    @Scope(scope = {ValidationScope.create, ValidationScope.transferIn, ValidationScope.openTreatment})
     private String provider_id;
 
     @NotNull

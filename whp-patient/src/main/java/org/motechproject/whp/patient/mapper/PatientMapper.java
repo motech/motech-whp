@@ -38,7 +38,7 @@ public class PatientMapper {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         String tbId = treatmentUpdateRequest.getTb_id();
 
-        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(currentProvidedTreatment.getProviderId(), tbId);
+        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(treatmentUpdateRequest.getProvider_id(), tbId);
 
         newProvidedTreatment.setTreatment(treatment);
         newProvidedTreatment.setStartDate(treatmentUpdateRequest.getDate_modified().toLocalDate()); //Not being set so far?

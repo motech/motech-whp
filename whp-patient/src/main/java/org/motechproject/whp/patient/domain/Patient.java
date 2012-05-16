@@ -119,4 +119,9 @@ public class Patient extends MotechBaseDataObject {
     public TreatmentInterruptions getTreatmentInterruptions() {
         return currentProvidedTreatment.getTreatment().getInterruptions();
     }
+
+    @JsonIgnore
+    public Integer getAge(){
+        return currentProvidedTreatment.getTreatment().getPatientAge();
+    }
 }

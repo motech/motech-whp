@@ -57,6 +57,7 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
                                                                                             .withMandatoryFieldsForOpenNewTreatment()
                                                                                             .withCaseId(patientRequest.getCase_id())
                                                                                             .withTreatmentCategory(newCategory)
+                                                                                            .withProviderId(patientRequest.getProvider_id())
                                                                                             .withDateModified(DateUtil.newDateTime(2012, 3, 17, 4, 55, 50))
                                                                                             .withTbId("elevenDigit")
                                                                                             .build();

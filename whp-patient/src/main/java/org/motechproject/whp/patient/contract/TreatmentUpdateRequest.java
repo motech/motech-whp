@@ -2,8 +2,13 @@ package org.motechproject.whp.patient.contract;
 
 import lombok.Data;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 
 @Data
 public class TreatmentUpdateRequest {
@@ -18,5 +23,16 @@ public class TreatmentUpdateRequest {
     private TreatmentCategory treatment_category;
     private String reason_for_pause;
     private String reason_for_restart;
+
+    private SmearTestSampleInstance smear_sample_instance;
+    private LocalDate smear_test_date_1;
+    private SmearTestResult smear_test_result_1;
+    private LocalDate smear_test_date_2;
+    private SmearTestResult smear_test_result_2;
+
+    private WeightInstance weight_instance;
+    private Double weight;
+
+    private DiseaseClass disease_class;
 
 }
