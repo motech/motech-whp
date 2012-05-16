@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
+import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
@@ -33,7 +34,9 @@ public class PatientService {
 
     public void createPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
-        Treatment treatment = createTreatment(patientRequest);
+
+        Treatment treatment = TreatmentMapper.map(patientRequest);
+        allTreatments.add(treatment);
 
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
         patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
@@ -51,12 +54,6 @@ public class PatientService {
         }
     }
 
-    public void startOnTreatment(String patientId, LocalDate firstDoseTakenDate) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(firstDoseTakenDate);
-        allPatients.update(patient);
-    }
-
     public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
         TreatmentUpdate treatmentUpdate = treatmentUpdateRequest.getTreatment_update().getUpdateScenario();
         try{
@@ -66,9 +63,10 @@ public class PatientService {
         }
     }
 
-    private Treatment createTreatment(PatientRequest patientRequest) {
-        Treatment treatment = mapTreatmentInfo(patientRequest);
-        allTreatments.add(treatment);
-        return treatment;
+    public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.getCurrentProvidedTreatment().getTreatment().setDoseStartDate(firstDoseTakenDate);
+        allPatients.update(patient);
     }
+
 }

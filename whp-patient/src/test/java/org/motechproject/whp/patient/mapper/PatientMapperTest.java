@@ -46,34 +46,12 @@ public class PatientMapperTest {
                                                                    .withCaseId("caseId")
                                                                    .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                                                                    .build();
-        Treatment treatment = createTreatment(patientRequest);
+        Treatment treatment = TreatmentMapper.map(patientRequest);
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
 
         assertNotNull(providedTreatment.getStartDate());
     }
 
-    @Test
-    public void createNewTreatmentFromTreatmentUpdateRequest_RetainsDiseaseClassAndPatientAge_SetsTreatmentCategory() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                                                                   .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                   .build();
-        Patient patient = mapPatient(patientRequest);
-
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-
-        TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
-                                                                                            .withMandatoryFieldsForOpenNewTreatment()
-                                                                                            .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                                                                                            .withTbId("newTbId")
-                                                                                            .build();
-
-        Treatment newTreatment = createNewTreatmentFrom(patient, openNewTreatmentUpdateRequest);
-
-        assertEquals(currentProvidedTreatment.getTreatment().getDiseaseClass(), newTreatment.getDiseaseClass());
-        assertEquals(currentProvidedTreatment.getTreatment().getPatientAge(), newTreatment.getPatientAge());
-        assertNotSame(currentProvidedTreatment.getTreatment().getTreatmentCategory(), newTreatment.getTreatmentCategory());
-        assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newTreatment.getTreatmentCategory());
-    }
 
     @Test
     public void newProviderTreatmentForCategoryChange_RetainsOldProviderIdAndAddress_SetsNewTbId_SetsNewTreatment_SetsStartDate() {
@@ -90,7 +68,7 @@ public class PatientMapperTest {
                                                                                             .withTbId("newTbId")
                                                                                             .build();
 
-        Treatment newTreatment = createNewTreatmentFrom(patient, openNewTreatmentUpdateRequest);
+        Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
 
         ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTreatment);
 
@@ -105,7 +83,7 @@ public class PatientMapperTest {
 
     private Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
-        Treatment treatment = mapTreatmentInfo(patientRequest);
+        Treatment treatment = TreatmentMapper.map(patientRequest);
         ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
         patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
         return patient;

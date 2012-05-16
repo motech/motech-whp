@@ -13,7 +13,6 @@ import org.motechproject.whp.adherence.mapping.AdherenceDataMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.TreatmentStartCriteria;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class WHPAdherenceService {
             adherenceService.recordAdherence(user, source.name(), request);
         }
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
-            patientService.startOnTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
+            patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
     }
 

@@ -6,12 +6,12 @@ import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
+import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
 import static org.motechproject.whp.patient.mapper.PatientMapper.createNewProvidedTreatmentForTreatmentCategoryChange;
-import static org.motechproject.whp.patient.mapper.PatientMapper.createNewTreatmentFrom;
 
 public class OpenNewTreatment implements TreatmentUpdate {
 
@@ -29,7 +29,7 @@ public class OpenNewTreatment implements TreatmentUpdate {
     }
 
     private void addNewTreatmentForCategoryChange(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
-        Treatment newTreatment = createNewTreatmentFrom(patient, treatmentUpdateRequest);
+        Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, treatmentUpdateRequest);
         allTreatments.add(newTreatment);
         ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, treatmentUpdateRequest, newTreatment);
         patient.addProvidedTreatment(newProvidedTreatment, treatmentUpdateRequest.getDate_modified());
