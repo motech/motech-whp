@@ -16,7 +16,7 @@
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
     <import resource="classpath*:placeholderPluginContext.xml"/>
     <import resource="classpath*:applicationDateTimeSimulatorContext.xml"/>
-    <import resource="classpath*:applicationReportsContext.xml"/>
+    <import resource="classpath*:applicationBulkExportImportContext.xml"/>
 
     <util:properties id="whpAPIValidationProperty" location="classpath:/whpAPIValidationProperty.properties"/>
 

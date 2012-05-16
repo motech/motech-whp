@@ -2,8 +2,8 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
+import org.motechproject.export.annotation.ReportValue;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.reports.annotation.ReportValue;
 
 @Data
 public class Adherence {

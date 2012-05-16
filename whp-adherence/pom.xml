@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-reports</artifactId>
+            <artifactId>motech-bulk-export-import</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
