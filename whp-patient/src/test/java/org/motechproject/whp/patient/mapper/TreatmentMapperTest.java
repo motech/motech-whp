@@ -9,7 +9,6 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapProvidedTreatment;
 
@@ -47,8 +46,8 @@ public class TreatmentMapperTest {
                 openNewTreatmentUpdateRequest.getDate_modified().toLocalDate());
 
 
-        assertEquals(smearTestResults, newTreatment.latestSmearTestResult());
-        assertEquals(weightStatistics, newTreatment.latestWeightStatistics());
+        assertEquals(smearTestResults, newTreatment.getSmearTestInstances().latestResult());
+        assertEquals(weightStatistics, newTreatment.getWeightInstances().latestResult());
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {

@@ -36,4 +36,8 @@ public class WeightStatistics {
         return weight_instance == null && weight == null;
     }
 
+    @JsonIgnore
+    public boolean isOfInstance(WeightInstance weightInstance) {
+        return this.weight_instance.equals(weightInstance);
+    }
 }

@@ -14,7 +14,6 @@ import java.util.Arrays;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -38,7 +37,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertEquals(Gender.M, savedPatient.getGender());
         assertEquals(PatientType.PHSTransfer, savedPatient.getPatientType());
 
-        SmearTestResults smearTestResults = treatment.latestSmearTestResult();
+        SmearTestResults smearTestResults = treatment.getSmearTestInstances().latestResult();
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestResults.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestResults.getSmear_test_date_1());

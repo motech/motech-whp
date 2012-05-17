@@ -34,7 +34,7 @@ public class PatientMapperTest {
         assertBasicPatientInfo(patient, patientRequest);
 
         ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
-        assertEquals(0, providedTreatment.getTreatment().getWeightStatisticsList().size());
+        assertEquals(0, providedTreatment.getTreatment().getWeightInstances().size());
     }
 
     @Test
@@ -120,14 +120,14 @@ public class PatientMapperTest {
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
         SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
-        assertEquals(smearTestResults.getSmear_sample_instance(), treatment.getSmearTestResults().get(0).getSmear_sample_instance());
-        assertEquals(smearTestResults.getSmear_test_result_1(), treatment.getSmearTestResults().get(0).getSmear_test_result_1());
-        assertEquals(smearTestResults.getSmear_test_date_1(), treatment.getSmearTestResults().get(0).getSmear_test_date_1());
-        assertEquals(smearTestResults.getSmear_test_result_2(), treatment.getSmearTestResults().get(0).getSmear_test_result_2());
-        assertEquals(smearTestResults.getSmear_test_date_2(), treatment.getSmearTestResults().get(0).getSmear_test_date_2());
+        assertEquals(smearTestResults.getSmear_sample_instance(), treatment.getSmearTestInstances().get(0).getSmear_sample_instance());
+        assertEquals(smearTestResults.getSmear_test_result_1(), treatment.getSmearTestInstances().get(0).getSmear_test_result_1());
+        assertEquals(smearTestResults.getSmear_test_date_1(), treatment.getSmearTestInstances().get(0).getSmear_test_date_1());
+        assertEquals(smearTestResults.getSmear_test_result_2(), treatment.getSmearTestInstances().get(0).getSmear_test_result_2());
+        assertEquals(smearTestResults.getSmear_test_date_2(), treatment.getSmearTestInstances().get(0).getSmear_test_date_2());
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
-        assertEquals(patientRequest.getWeightStatistics(), treatment.getWeightStatisticsList().get(0));
+        assertEquals(patientRequest.getWeightStatistics(), treatment.getWeightInstances().get(0));
     }
 }

@@ -17,17 +17,16 @@ import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.exception.WHPDomainException;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateFactory;
-import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -81,8 +80,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
         assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals(updatePatientRequest.getSmearTestResults(), treatment.latestSmearTestResult());
-        assertEquals(updatePatientRequest.getWeightStatistics(), treatment.latestWeightStatistics());
+        assertEquals(updatePatientRequest.getSmearTestResults(), treatment.getSmearTestInstances().latestResult());
+        assertEquals(updatePatientRequest.getWeightStatistics(), treatment.getWeightInstances().latestResult());
         assertEquals((Integer) 66, treatment.getPatientAge());
     }
 
@@ -109,8 +108,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().latestSmearTestResult(), treatment.latestSmearTestResult());
-        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().latestWeightStatistics(), treatment.latestWeightStatistics());
+        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().getSmearTestInstances().latestResult(), treatment.getSmearTestInstances().latestResult());
+        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().getWeightInstances().latestResult(), treatment.getWeightInstances().latestResult());
     }
 
     @Test

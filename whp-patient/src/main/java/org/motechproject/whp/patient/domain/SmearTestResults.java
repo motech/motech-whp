@@ -21,8 +21,8 @@ public class SmearTestResults {
     public SmearTestResults() {
     }
 
-    public SmearTestResults(SmearTestSampleInstance sampleInstance1, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2) {
-        this.smear_sample_instance = sampleInstance1;
+    public SmearTestResults(SmearTestSampleInstance smearTestSampleInstance, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2) {
+        this.smear_sample_instance = smearTestSampleInstance;
         this.smear_test_date_1 = testDate1;
         this.smear_test_result_1 = result1;
         this.smear_test_date_2 = testDate2;
@@ -43,4 +43,8 @@ public class SmearTestResults {
         return smear_sample_instance == null && smear_test_date_1 == null && smear_test_result_1 == null && smear_test_date_2 == null && smear_test_result_2 == null;
     }
 
+    @JsonIgnore
+    public boolean isOfInstance(SmearTestSampleInstance smearTestSampleInstance) {
+        return this.smear_sample_instance.equals(smearTestSampleInstance);
+    }
 }

@@ -12,9 +12,6 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @TypeDiscriminator("doc.type == 'Treatment'")
 public class Treatment extends MotechBaseDataObject {
@@ -28,8 +25,8 @@ public class Treatment extends MotechBaseDataObject {
     private TreatmentOutcome treatmentOutcome;
     private TreatmentStatus status = TreatmentStatus.Ongoing;
     private DiseaseClass diseaseClass;
-    private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
-    private List<WeightStatistics> weightStatisticsList = new ArrayList<WeightStatistics>();
+    private SmearTestInstances smearTestInstances = new SmearTestInstances();
+    private WeightInstances weightInstances = new WeightInstances();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
     // Required for ektorp
@@ -43,19 +40,11 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     public void addSmearTestResult(SmearTestResults smearTestResults) {
-        this.smearTestResults.add(smearTestResults);
+        smearTestInstances.add(smearTestResults);
     }
 
     public void addWeightStatistics(WeightStatistics weightStatistics) {
-        weightStatisticsList.add(weightStatistics);
-    }
-
-    public SmearTestResults latestSmearTestResult() {
-        return smearTestResults.get(smearTestResults.size() - 1);
-    }
-
-    public WeightStatistics latestWeightStatistics() {
-        return weightStatisticsList.get(weightStatisticsList.size() - 1);
+        weightInstances.add(weightStatistics);
     }
 
     public void close(String treatmentOutcome, DateTime dateModified) {
@@ -68,11 +57,11 @@ public class Treatment extends MotechBaseDataObject {
     public boolean isValid(ValidationErrors validationErrors) {
         boolean isLatestSmearResultValid = true;
         boolean isLatestWeightStatisticValid = true;
-        if(!CollectionUtils.isEmpty(smearTestResults)) {
-            isLatestSmearResultValid = latestSmearTestResult().isValid(validationErrors);
+        if(!CollectionUtils.isEmpty(smearTestInstances)) {
+            isLatestSmearResultValid = smearTestInstances.latestResult().isValid(validationErrors);
         }
-        if(!CollectionUtils.isEmpty(weightStatisticsList)) {
-            isLatestWeightStatisticValid = latestWeightStatistics().isValid(validationErrors);
+        if(!CollectionUtils.isEmpty(weightInstances)) {
+            isLatestWeightStatisticValid = weightInstances.latestResult().isValid(validationErrors);
         }
         return isLatestSmearResultValid && isLatestWeightStatisticValid;
     }
