@@ -32,7 +32,7 @@ public class WeeklyAdherenceForm {
 
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
             boolean isTreatmentInterrupted = treatmentInterruptions.isTreatmentInterrupted(adherence.getPillDate());
-            AdherenceForm adherenceForm = new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus(), isTreatmentInterrupted);
+            AdherenceForm adherenceForm = new AdherenceForm(adherence.getPillDay(), adherence.getPillDate(), adherence.getPillStatus(), isTreatmentInterrupted, adherence.getMeta());
             adherenceList.add(adherenceForm);
         }
     }
@@ -40,7 +40,7 @@ public class WeeklyAdherenceForm {
     public WeeklyAdherence weeklyAdherence() {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
         for (AdherenceForm form : adherenceList) {
-            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), null, null);
+            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), form.getMeta());
         }
         return weeklyAdherence;
     }

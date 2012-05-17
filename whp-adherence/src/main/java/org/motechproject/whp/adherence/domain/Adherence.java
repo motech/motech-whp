@@ -5,19 +5,21 @@ import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.ReportValue;
 import org.motechproject.model.DayOfWeek;
 
+import java.util.Map;
+
 @Data
 public class Adherence {
 
     private String patientId;
     private String treatmentId;
-    private String tbId;
-    private String providerId;
 
     private DayOfWeek pillDay;
 
     private LocalDate pillDate;
 
     private PillStatus pillStatus = PillStatus.Unknown;
+
+    private Map<String, Object> meta;
 
     public Adherence() {
     }
@@ -26,14 +28,13 @@ public class Adherence {
         this.pillDate = logDate;
     }
 
-    public Adherence(String patientId, String treatmentId, DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, String tbId, String providerId) {
+    public Adherence(String patientId, String treatmentId, DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, Map<String, Object> meta) {
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.pillDay = pillDay;
         this.pillDate = pillDate;
         this.pillStatus = pillStatus;
-        this.tbId = tbId;
-        this.providerId = providerId;
+        this.meta = meta;
     }
 
     @ReportValue(index = 0)
@@ -43,7 +44,7 @@ public class Adherence {
 
     @ReportValue(index = 1)
     public String getTbId() {
-        return tbId;
+        return (String) meta.get(AdherenceConstants.TB_ID);
     }
 
     @ReportValue(index = 2, column = "Adherence date")

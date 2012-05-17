@@ -6,17 +6,11 @@ import org.motechproject.whp.adherence.domain.AdherenceConstants;
 
 public class AdherenceDataMapper {
 
-    Adherence adherence;
 
-    public AdherenceDataMapper(Adherence adherence) {
-        this.adherence = adherence;
-    }
-
-    public AdherenceData request() {
+    public static AdherenceData request(Adherence adherence) {
         AdherenceData request = new AdherenceData(adherence.getPatientId(), adherence.getTreatmentId(), adherence.getPillDate());
         request.status(adherence.getPillStatus().getStatus());
-        request.addMeta(AdherenceConstants.PROVIDER_ID, adherence.getProviderId());
-        request.addMeta(AdherenceConstants.TB_ID, adherence.getTbId());
+        request.meta(adherence.getMeta());
         return request;
     }
 

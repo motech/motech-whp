@@ -5,10 +5,7 @@ import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceDataMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
@@ -19,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartOrRestartTreatment;
@@ -42,15 +41,19 @@ public class WHPAdherenceService {
 
     public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
         Patient patient = allPatients.findByPatientId(patientId);
-        weeklyAdherence.setTbId(patient.tbId());
-        weeklyAdherence.setProviderId(patient.providerId());
+        updateMetaData(weeklyAdherence, patient);
         List<AdherenceData> requests = requests(weeklyAdherence);
-        for (AdherenceData request : requests) {
-            adherenceService.recordAdherence(user, source.name(), request);
-        }
+        adherenceService.saveOrUpdateAdherence(user, source.name(), requests.toArray(new AdherenceData[requests.size()]));
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
             patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
+    }
+
+    private void updateMetaData(WeeklyAdherence weeklyAdherence, Patient patient) {
+        Map<String, Object> meta = new HashMap<String, Object>();
+        meta.put(AdherenceConstants.TB_ID, patient.tbId());
+        meta.put(AdherenceConstants.PROVIDER_ID, patient.providerId());
+        weeklyAdherence.setMetaData(meta);
     }
 
     public WeeklyAdherence currentWeekAdherence(Patient patient) {
@@ -70,9 +73,10 @@ public class WHPAdherenceService {
     }
 
     private WeeklyAdherence currentWeekAdherence(Patient patient, TreatmentWeek treatmentWeek) {
-        String providerId = patient.getCurrentProvidedTreatment().getProviderId();
-        String tbId = patient.getCurrentProvidedTreatment().getTbId();
-        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), tbId, providerId);
+        Map<String, Object> meta = new HashMap<String, Object>();
+        meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
+        meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());
+        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), meta);
     }
 
     private List<DayOfWeek> pillDays(Patient patient) {
@@ -82,7 +86,7 @@ public class WHPAdherenceService {
     private List<AdherenceData> requests(WeeklyAdherence weeklyAdherence) {
         List<AdherenceData> requests = new ArrayList<AdherenceData>();
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
-            requests.add(new AdherenceDataMapper(adherence).request());
+            requests.add(AdherenceDataMapper.request(adherence));
         }
         return requests;
     }

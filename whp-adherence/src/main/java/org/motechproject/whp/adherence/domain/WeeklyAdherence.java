@@ -4,10 +4,7 @@ import lombok.Getter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 
@@ -32,17 +29,17 @@ public class WeeklyAdherence {
         this.week = week;
     }
 
-    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays, String tbId, String providerId) {
+    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays, Map<String, Object> map) {
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.week = week;
         for (DayOfWeek pillDay : pillDays) {
-            addAdherenceLog(pillDay, PillStatus.Unknown, tbId, providerId);
+            addAdherenceLog(pillDay, PillStatus.Unknown, map);
         }
     }
 
-    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus, String tbId, String providerId) {
-        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay), pillStatus, tbId, providerId);
+    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus, Map<String, Object> meta) {
+        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay), pillStatus, meta);
         adherenceList.add(adherence);
         return this;
     }
@@ -74,15 +71,9 @@ public class WeeklyAdherence {
         }
     }
 
-    public void setProviderId(String providerId) {
+    public void setMetaData(Map<String, Object> meta) {
         for (Adherence adherence : adherenceList) {
-            adherence.setProviderId(providerId);
-        }
-    }
-
-    public void setTbId(String tbId) {
-        for (Adherence adherence : adherenceList) {
-            adherence.setTbId(tbId);
+            adherence.setMeta(meta);
         }
     }
 

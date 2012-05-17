@@ -9,7 +9,9 @@ import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
 
@@ -24,14 +26,19 @@ public class AdherenceForm {
 
     private PillStatus pillStatus =  PillStatus.Unknown;
 
+    private PillStatus updatedPillStatus =  PillStatus.Unknown;
+
+    private Map<String, Object> meta = new HashMap<String, Object>();
+
     public AdherenceForm() {
     }
 
-    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, boolean isTreatmentInterrupted) {
+    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, boolean isTreatmentInterrupted, Map<String, Object> meta) {
         this.pillDay = pillDay;
         this.pillDate = pillDate;
         this.pillStatus = pillStatus;
         this.isTreatmentInterrupted = isTreatmentInterrupted;
+        this.meta = meta;
     }
 
     public String getPillDateString() {

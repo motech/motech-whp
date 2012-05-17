@@ -27,8 +27,7 @@ public class WeeklyAdherenceMapper {
             LocalDate recordDate = adherenceRecord.recordDate();
             DayOfWeek pillDay = DayOfWeek.getDayOfWeek(recordDate.getDayOfWeek());
             PillStatus pillStatus = PillStatus.get(adherenceRecord.status());
-            weeklyAdherence.addAdherenceLog(pillDay, pillStatus, (String) adherenceRecord.meta(AdherenceConstants.TB_ID),
-                    (String) adherenceRecord.meta(AdherenceConstants.PROVIDER_ID));
+            weeklyAdherence.addAdherenceLog(pillDay, pillStatus, adherenceRecord.meta());
         }
         return weeklyAdherence;
     }

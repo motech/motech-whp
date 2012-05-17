@@ -20,7 +20,7 @@ public class AdherenceMapper {
             Adherence adherence = new Adherence(adherenceDatum.doseDate());
             adherence.setPatientId(adherenceDatum.externalId());
             adherence.setTreatmentId(adherenceDatum.treatmentId());
-            adherence.setTbId(adherenceDatum.meta().get(AdherenceConstants.TB_ID).toString());
+            adherence.setMeta(adherenceDatum.meta());
             adherence.setPillStatus(PillStatus.get(adherenceDatum.status()));
             adherence.setPillDay(dayOfWeekOfRecord(adherenceDatum.doseDate()));
             adherences.add(adherence);
