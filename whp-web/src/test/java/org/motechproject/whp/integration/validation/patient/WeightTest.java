@@ -63,7 +63,7 @@ public class WeightTest extends BasePatientTest {
     }
 
     @Test
-    public void shouldThrowSingleExceptionWhenWeightIsNull() {
+    public void shouldThrowSingleExceptionWhenWeightIsNull_InCreateScope() {
         String errorMessage = "";
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
@@ -75,5 +75,50 @@ public class WeightTest extends BasePatientTest {
             errorMessage = e.getMessage();
         }
         assertTrue(errorMessage.contains("field:weight:value should not be null"));
+    }
+
+    @Test
+    public void shouldThrowSingleExceptionWhenWeightIsNull_InOpenTreatmentScope() {
+        String errorMessage = "";
+        try {
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
+            validator.validate(webRequest, ValidationScope.openTreatment);
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:weight:Weight cannot be null")) {
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            errorMessage = e.getMessage();
+        }
+        assertTrue(errorMessage.contains("field:weight:value should not be null"));
+    }
+
+    @Test
+    public void shouldThrowSingleExceptionWhenWeightInstanceIsNull_InCreateScope() {
+        String errorMessage = "";
+        try {
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
+            validator.validate(webRequest, ValidationScope.create);
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:weight_instance:Weight cannot be null")) {
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            errorMessage = e.getMessage();
+        }
+        assertTrue(errorMessage.contains("field:weight_instance:value should not be null"));
+    }
+
+    @Test
+    public void shouldThrowSingleExceptionWhenWeightInstanceIsNull_InOpenTreatmentScope() {
+        String errorMessage = "";
+        try {
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
+            validator.validate(webRequest, ValidationScope.openTreatment);
+        } catch (WHPException e) {
+            if (e.getMessage().contains("field:weight_instance:Weight cannot be null")) {
+                fail("Not Null validation is not required. Validator implements null validation.");
+            }
+            errorMessage = e.getMessage();
+        }
+        assertTrue(errorMessage.contains("field:weight_instance:value should not be null"));
     }
 }

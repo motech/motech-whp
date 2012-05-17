@@ -25,4 +25,26 @@ public class SmearResultTest extends BasePatientTest {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withSmearTestResults(null, null, null, null, null).build();
         validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
+
+    @Test
+    public void shouldThrowException_WhenSmearTestResultsIsNull_InCreateScope() {
+        expectWHPException("field:smear_test_date_1:value should not be null");
+        expectWHPException("field:smear_test_result_1:value should not be null");
+        expectWHPException("field:smear_test_date_2:value should not be null");
+        expectWHPException("field:smear_test_result_2:value should not be null");
+        expectWHPException("field:smear_sample_instance:value should not be null");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withSmearTestResults(null, null, null, null, null).build();
+        validator.validate(webRequest, ValidationScope.create);
+    }
+
+    @Test
+    public void shouldThrowException_WhenSmearTestResultsIsNull_InOpenTreatmentScope() {
+        expectWHPException("field:smear_test_date_1:value should not be null");
+        expectWHPException("field:smear_test_result_1:value should not be null");
+        expectWHPException("field:smear_test_date_2:value should not be null");
+        expectWHPException("field:smear_test_result_2:value should not be null");
+        expectWHPException("field:smear_sample_instance:value should not be null");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withSmearTestResults(null, null, null, null, null).build();
+        validator.validate(webRequest, ValidationScope.openTreatment);
+    }
 }

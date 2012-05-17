@@ -104,6 +104,7 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String address_state;
 
+    @NotNull
     @Enumeration(type = SmearTestSampleInstance.class)
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_sample_instance;
@@ -113,6 +114,7 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_date_1;
 
+    @NotNull
     @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_result_1;
@@ -122,10 +124,12 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_date_2;
 
+    @NotNull
     @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String smear_test_result_2;
 
+    @NotNull
     @Enumeration(type = WeightInstance.class)
     @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
     private String weight_instance;
