@@ -1,7 +1,7 @@
 <#include "../user/changePassword.ftl">
 <div id="links" class="navbar">
     <div id="navibar" class="navbar-inner navbar-fixed-top">
-        <a href="/whp" class="brand pull-left">MoTeCH-TB</a>
+        <a href="/whp" class="brand pull-left">MoTeCH-WHP</a>
         <div class="container">
             <div class="nav-collapse collapse">
             <#if Session.loggedInUser?exists>

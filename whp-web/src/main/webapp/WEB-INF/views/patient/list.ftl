@@ -2,7 +2,7 @@
 <#import "../layout/default.ftl" as layout>
 <#include "../layout/legend.ftl">
     <@layout.defaultLayout "Patient List">
-    <@legend key1="paused" value1="Current Treatment Paused" span="span3"/>
+    <@legend key1="paused" value1="Current Treatment Paused" />
     <div class="row">
         <div>
             <table id="patientList" class="table table-bordered table-condensed">

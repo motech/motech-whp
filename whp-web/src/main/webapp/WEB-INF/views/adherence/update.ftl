@@ -8,7 +8,7 @@
     <h4 class="page-header form-header">Update last week's adherence</h4>
 </div>
 
-<@legend key1="paused" value1="Treatment Paused On Date" span="span3"/>
+<@legend key1="paused" value1="Treatment Paused on Date" />
 
 <div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
