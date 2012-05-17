@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,7 +49,10 @@ public class TransferInPatientTest {
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(treatmentUpdateRequest);
-        verify(allPatients, never()).update(patient);
+        verify(providerService, never()).transferIn(treatmentUpdateRequest.getProvider_id(),
+                patient,
+                treatmentUpdateRequest.getTb_id(),
+                treatmentUpdateRequest.getDate_modified());
     }
 
     @Test

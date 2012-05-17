@@ -71,4 +71,9 @@ public class PatientRequest {
         return this;
     }
 
+    public PatientRequest setDateModified(DateTime dateModified) {
+        this.date_modified = dateModified;
+        return this;
+    }
+
 }

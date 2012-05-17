@@ -4,6 +4,7 @@ import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.util.DateUtil;
 
 @Data
 @TypeDiscriminator("doc.type == 'Provider'")
@@ -30,5 +31,9 @@ public class Provider extends MotechBaseDataObject {
         this.primaryMobile = primaryMobile;
         this.district = district;
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public DateTime getLastModifiedDate(){
+        return DateUtil.setTimeZone(lastModifiedDate);
     }
 }
