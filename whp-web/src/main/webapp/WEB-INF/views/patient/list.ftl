@@ -36,8 +36,8 @@
                                 <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
                                 <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                                 <td>
-                                    <#if patient.currentProvidedTreatment.treatment.doseStartDate?? >
-                                        ${patient.currentProvidedTreatment.treatment.doseStartDate?date?string("dd/mm/yyyy") }
+                                    <#if patient.currentProvidedTreatment.treatment.startDate?? >
+                                        ${patient.currentProvidedTreatment.treatment.startDate?date?string("dd/mm/yyyy") }
                                     </#if>
                                 </td>
                                 <td class="updateAdherenceLink">
