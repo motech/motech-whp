@@ -4,11 +4,12 @@
 <@layout.defaultLayout "Update Adherence">
 
 <div class="row">
-    <#if readOnly > <div class="alert alert-error"> Please contact the CMF admin to update adherence. </div> </#if>
-    <h4 class="page-header form-header">Update last week's adherence</h4>
+    <#if readOnly >
+        <div class="alert alert-error"> Please contact the CMF admin to update adherence.</div> </#if>
+    <h4 class="page-header form-header">Update last week's adherence for ${adherence.patientId}</h4>
 </div>
 
-<@legend key1="paused" value1="Treatment Paused on Date" />
+    <@legend key1="paused" value1="Treatment Paused on Date" />
 
 <div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
@@ -16,17 +17,18 @@
         <input type="hidden" name="treatmentId" value="${adherence.treatmentId}"/>
         <table class="table table-bordered">
             <thead>
-                <tr>
-                    <th>Day of week</th>
-                    <th>Date</th>
-                    <th>Taken</th>
-                    <th>Not taken</th>
-                </tr>
+            <tr>
+                <th>Day of week</th>
+                <th>Date</th>
+                <th>Taken</th>
+                <th>Not taken</th>
+            </tr>
             </thead>
             <tbody>
             <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
                 <#list adherence.adherenceList as adherenceLog>
-                <tr id="adherenceLogFor_${adherenceLog.pillDay}" class="adherenceRow <#if adherenceLog.treatmentInterrupted>paused</#if>">
+                <tr id="adherenceLogFor_${adherenceLog.pillDay}"
+                    class="adherenceRow <#if adherenceLog.treatmentInterrupted>paused</#if>">
                     <td>
                     ${adherenceLog.pillDay}
                         <input type="hidden" name="adherenceList[${adherenceLog_index}].pillDay" class="pillDay"
@@ -54,6 +56,7 @@
         </table>
         <div class="control-group">
             <div class="controls pull-right">
+                <a href="/whp" class="btn btn-primary login-btn">Back</a>
                 <#if !readOnly>
                     <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>
