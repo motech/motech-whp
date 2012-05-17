@@ -43,7 +43,7 @@ public class TreatmentStartCriteriaTest {
     public void shouldBeFalseWhenPatientTypeIsNotNew() {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.PHSTransfer).build();
+        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.PHCTransfer).build();
         assertFalse(shouldStartOrRestartTreatment(patient, adherence));
     }
 

@@ -35,7 +35,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         assertEquals("Raju", savedPatient.getFirstName());
         assertEquals("Singh", savedPatient.getLastName());
         assertEquals(Gender.M, savedPatient.getGender());
-        assertEquals(PatientType.PHSTransfer, savedPatient.getPatientType());
+        assertEquals(PatientType.PHCTransfer, savedPatient.getPatientType());
 
         SmearTestResults smearTestResults = treatment.getSmearTestInstances().latestResult();
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
@@ -66,7 +66,7 @@ public class AllPatientsTest extends SpringIntegrationTest {
         treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);
 
-        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, PatientType.PHSTransfer, "1234567890");
+        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, PatientType.PHCTransfer, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId");
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);

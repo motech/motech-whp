@@ -53,7 +53,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         assertEquals("Foo", patientRequest.getFirst_name());
         assertEquals("Bar", patientRequest.getLast_name());
         assertEquals(Gender.M, patientRequest.getGender());
-        assertEquals(PatientType.PHSTransfer, patientRequest.getPatient_type());
+        assertEquals(PatientType.PHCTransfer, patientRequest.getPatient_type());
         assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobile_number());
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
     }
