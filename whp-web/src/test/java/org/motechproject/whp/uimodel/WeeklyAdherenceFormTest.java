@@ -76,7 +76,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     public void warningMessageShows_That_ProviderCannotUpdateAdherence_AndReasonForPause() {
         mockCurrentDate(new LocalDate(2012, 5, 9));    // interruptions and Wednesday
 
-        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws\n" +
+        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws<br/>" +
                 "Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
     }
 

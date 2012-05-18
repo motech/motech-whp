@@ -74,7 +74,7 @@ public class WeeklyAdherenceForm {
             warningMessages.add(String.format("The patient's treatment has been paused for one or more days in the last week. Reason: %s", getTreatmentPauseReason()));
         if (!isAdherenceUpdatable())
             warningMessages.add("Please contact the CMF admin to update adherence.");
-        return StringUtils.join(warningMessages.toArray(), "\n");
+        return StringUtils.join(warningMessages.toArray(), "<br/>");
     }
 
     private void populatePauseReason(Adherence adherence) {
