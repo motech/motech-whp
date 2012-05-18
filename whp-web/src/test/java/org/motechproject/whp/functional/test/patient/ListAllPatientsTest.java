@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,6 +61,7 @@ public class ListAllPatientsTest extends BaseTest {
     public void shouldLoginAsProviderAndListAllPatientsForProvider() {
         ProviderPage providerPage = loginAsProvider();
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
+        assertEquals("Male", providerPage.getGenderText(patientRequest.getCase_id()));
     }
 
     ProviderPage loginAsProvider() {

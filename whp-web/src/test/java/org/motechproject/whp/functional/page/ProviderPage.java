@@ -49,6 +49,10 @@ public class ProviderPage extends LoggedInUserPage {
         return MyPageFactory.initElements(webDriver, UpdateAdherencePage.class);
     }
 
+    public String getGenderText(String patientId) {
+        return webDriver.findElement(By.id(String.format("patient_%s_Gender", patientId))).getText();
+    }
+
     public String getTreatmentCategoryText(String patientId) {
         return webDriver.findElement(By.id(String.format("patient_%s_TreatmentCategory", patientId))).getText();
     }

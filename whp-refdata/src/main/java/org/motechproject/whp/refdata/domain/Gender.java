@@ -2,7 +2,7 @@ package org.motechproject.whp.refdata.domain;
 
 public enum Gender {
 
-    M("M"), F("F"), O("O");
+    M("Male"), F("Female"), O("Other");
 
     private String value;
 
@@ -10,15 +10,8 @@ public enum Gender {
         this.value = value;
     }
 
-    public static Gender get(String gender) {
-        if (M.getValue().equals(gender.toUpperCase())) return M;
-        if (F.getValue().equals(gender.toUpperCase())) return F;
-        if (O.getValue().equals(gender.toUpperCase())) return O;
-        return null;
-    }
-
-    public String getValue() {
+    @Override
+    public String toString() {
         return value;
     }
-
 }

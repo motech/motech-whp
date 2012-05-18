@@ -31,7 +31,7 @@
                                 <td class="tbId">${patient.currentProvidedTreatment.tbId}</td>
                                 <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
                                 <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>
-                                <td>${patient.gender}</td>
+                                <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                                 <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
                                 <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                                 <td>

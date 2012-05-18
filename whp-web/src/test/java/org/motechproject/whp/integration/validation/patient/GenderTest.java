@@ -19,21 +19,21 @@ public class GenderTest extends BasePatientTest {
     @Test
     public void shouldNotThrowExceptionWhenGenderIsMale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.M.getValue()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.M.name()).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenGenderIsFemale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.F.getValue()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.F.name()).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenGenderIsOther() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.O.getValue()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.O.name()).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
