@@ -168,6 +168,29 @@ public class AdherenceControllerTest extends BaseUnitTest {
         assertEquals("forward:/", form);
     }
 
+    @Test
+    public void shouldSaveOnlyUpdatedAdherence_IfAdherenceIsAlreadyPresentForWeek() {
+        WeeklyAdherence adherence = new WeeklyAdherence();
+        when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
+        WeeklyAdherenceForm weeklyAdherenceForm = mock(WeeklyAdherenceForm.class);
+        adherenceController.update(PATIENT_ID, weeklyAdherenceForm, request);
+
+        verify(weeklyAdherenceForm).updatedWeeklyAdherence();
+
+    }
+
+    @Test
+    public void shouldSaveFullWeeksAdherence_IfAdherenceIsNotPresentForWeek() {
+        when(adherenceService.currentWeekAdherence(patient)).thenReturn(null);
+
+        WeeklyAdherenceForm weeklyAdherenceForm = mock(WeeklyAdherenceForm.class);
+        adherenceController.update(PATIENT_ID, weeklyAdherenceForm, request);
+
+        verify(weeklyAdherenceForm).weeklyAdherence();
+
+    }
+
     private class ArgumentCaptors {
         private ArgumentCaptor<WeeklyAdherenceForm> adherenceForm = forClass(WeeklyAdherenceForm.class);
     }
