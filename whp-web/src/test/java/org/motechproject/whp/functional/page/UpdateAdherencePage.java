@@ -14,9 +14,9 @@ public class UpdateAdherencePage extends Page {
     @FindBy(how = How.ID, using = "weeklyAdherenceForm")
     private WebElement adherenceForm;
 
-    private final String PAUSE_REASON_ID = "pauseReason";
-    @FindBy(how = How.ID, using = PAUSE_REASON_ID)
-    private WebElement pauseReason;
+    private final String ADHERENCE_WARNING_ID = "adherenceWarning";
+    @FindBy(how = How.ID, using = ADHERENCE_WARNING_ID)
+    private WebElement adherenceWarning;
 
     @FindBy(how = How.CLASS_NAME, using = "adherenceRow")
     private List<WebElement> adherenceRows;
@@ -55,12 +55,8 @@ public class UpdateAdherencePage extends Page {
         return !adherenceRows.get(0).findElement(By.className("pillStatusTaken")).isEnabled();
     }
 
-    public boolean isTreatmentNotPausedDuringCurrentWeek() {
-        return safeFindElement(By.id(PAUSE_REASON_ID)) == null;
-    }
-
-    public String getPauseReasonText() {
-        return pauseReason.getText();
+    public String getAdherenceWarningText() {
+        return adherenceWarning.getText();
     }
 
     public ProviderPage submit() {

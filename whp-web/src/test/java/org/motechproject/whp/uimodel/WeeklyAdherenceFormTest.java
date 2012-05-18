@@ -1,25 +1,23 @@
 package org.motechproject.whp.uimodel;
 
 import org.joda.time.LocalDate;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentInterruption;
 import org.motechproject.whp.patient.domain.TreatmentInterruptions;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertNull;
-import static org.motechproject.util.DateUtil.today;
 
-public class WeeklyAdherenceFormTest {
+public class WeeklyAdherenceFormTest extends BaseUnitTest {
 
     WeeklyAdherenceForm weeklyAdherenceForm;
 
@@ -42,9 +40,44 @@ public class WeeklyAdherenceFormTest {
     }
 
     @Test
-    public void shouldGet_ReasonsForPause() {
+    public void shouldGet_ReasonForPause() {
         assertTrue(weeklyAdherenceForm.isTreatmentPaused());
         assertEquals("paws", weeklyAdherenceForm.getTreatmentPauseReason());
+    }
+
+    @Test
+    public void showsNoWarningMessage() {
+        mockCurrentDate(new LocalDate(2012, 5, 13));  //Sunday
+
+        LocalDate monday = new LocalDate(2012, 5, 7);      // no interruptions
+        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
+        assertEquals("", weeklyAdherenceForm.getWarningMessage());
+    }
+
+    @Test
+    public void warningMessageShows_ThePauseReason() {
+        mockCurrentDate(new LocalDate(2012, 5, 13));    //  interruptions and Sunday
+
+        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws", weeklyAdherenceForm.getWarningMessage());
+    }
+
+    @Test
+    public void warningMessageShows_That_ProviderCannotUpdateAdherence() {
+        mockCurrentDate(new LocalDate(2012, 5, 9));     // Wednesday
+
+        LocalDate monday = new LocalDate(2012, 5, 7);   // no interruptions
+        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
+        assertEquals("Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
+    }
+
+    @Test
+    public void warningMessageShows_That_ProviderCannotUpdateAdherence_AndReasonForPause() {
+        mockCurrentDate(new LocalDate(2012, 5, 9));    // interruptions and Wednesday
+
+        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws\n" +
+                "Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
     }
 
     @Test
@@ -58,7 +91,7 @@ public class WeeklyAdherenceFormTest {
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
 
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, treatmentInterruptions);
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
 
         assertTrue(weeklyAdherenceForm.isTreatmentPaused());
         assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReason());
@@ -71,7 +104,13 @@ public class WeeklyAdherenceFormTest {
         interruption.resumeTreatment("swap", monday.plusDays(1));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption));
 
-        return new WeeklyAdherenceForm(weeklyAdherence, treatmentInterruptions);
+        return new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
+    }
+
+    private Patient getPatientWith(TreatmentInterruptions treatmentInterruptions) {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentProvidedTreatment().getTreatment().setInterruptions(treatmentInterruptions);
+        return patient;
     }
 
 }

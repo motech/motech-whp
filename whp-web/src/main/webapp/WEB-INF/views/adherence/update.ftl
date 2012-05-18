@@ -4,11 +4,10 @@
 <@layout.defaultLayout "Update Adherence">
 
 <div class="row">
-    <#if readOnly >
-        <div class="alert alert-error">Please contact the CMF admin to update adherence.</div>
-    </#if>
-    <#if adherence.treatmentPaused >
-        <div id="pauseReason" class="alert alert-error">The patient's treatment has been paused for one or more days in the last week. Reason: ${adherence.treatmentPauseReason}</div>
+    <#if adherence.warningMessage != ''>
+        <div id="adherenceWarning" class="alert alert-error">
+            ${adherence.warningMessage}
+        </div>
     </#if>
     <h4 class="page-header form-header">Update last week's adherence for ${adherence.patientId}</h4>
 </div>
@@ -43,12 +42,12 @@
                     <td>
                         <input type="radio" name="adherenceList[${adherenceLog_index}].pillStatus"
                                class="pillStatusTaken"
-                               value="Taken" <#if adherenceLog.isTaken> checked </#if> <#if readOnly > disabled </#if>/>
+                               value="Taken" <#if adherenceLog.isTaken> checked </#if> <#if !adherence.adherenceUpdatable > disabled </#if>/>
                     </td>
                     <td>
                         <input type="radio" name="adherenceList[${adherenceLog_index}].pillStatus"
                                class="pillStatusNotTaken"
-                               value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if> <#if readOnly >
+                               value="NotTaken" <#if adherenceLog.isNotTaken> checked </#if> <#if !adherence.adherenceUpdatable >
                                disabled </#if>/>
                     </td>
                 </tr>
@@ -58,7 +57,7 @@
         <div class="control-group">
             <div class="controls pull-right">
                 <a href="/whp" class="btn btn-primary login-btn">Back</a>
-                <#if !readOnly>
+                <#if adherence.adherenceUpdatable>
                     <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>
             </div>

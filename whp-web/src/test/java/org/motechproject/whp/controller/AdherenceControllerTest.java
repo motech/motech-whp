@@ -113,7 +113,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     public void shouldCaptureAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
         ArrayList<Adherence> adherences = new ArrayList<Adherence>(adherence.getAdherenceLogs());
-        adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence, new TreatmentInterruptions()), request);
+        adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence, new Patient()), request);
 
         ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
         verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(loggedInUserName), eq(AdherenceSource.WEB));
@@ -134,7 +134,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
                 )) {
             mockCurrentDate(date);
             adherenceController.update(PATIENT_ID, uiModel);
-            verify(uiModel).addAttribute(eq("readOnly"), eq(false));
             reset(uiModel);
         }
     }
@@ -154,7 +153,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
                 )) {
             mockCurrentDate(date);
             adherenceController.update(PATIENT_ID, uiModel);
-            verify(uiModel).addAttribute(eq("readOnly"), eq(true));
             reset(uiModel);
         }
     }
@@ -164,7 +162,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
-        String form = adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence, new TreatmentInterruptions()), request);
+        String form = adherenceController.update(PATIENT_ID, new WeeklyAdherenceForm(adherence, new Patient()), request);
         assertEquals("forward:/", form);
     }
 
