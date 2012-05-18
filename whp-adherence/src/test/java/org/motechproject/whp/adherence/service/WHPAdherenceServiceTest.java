@@ -206,18 +206,6 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAdherenceTemplateWhenCurrentWeekAdherenceIsNotCaptured() {
-        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .build();
-        patientService.createPatient(withDosesOnMonWedFri);
-        Patient patient = allPatients.findByPatientId(withDosesOnMonWedFri.getCase_id());
-
-        WeeklyAdherence adherence = adherenceService.currentWeekAdherenceTemplate(patient);
-        AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
-    }
-
-    @Test
     public void shouldLogAuditAfterRecordingAdherence() {
         PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
                 .withCaseId(PATIENT_ID)

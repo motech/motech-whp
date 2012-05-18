@@ -41,7 +41,7 @@ public class AdherenceController extends BaseController {
         Patient patient = allPatients.findByPatientId(patientId);
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
         if (adherence == null) {
-            adherence = adherenceService.currentWeekAdherenceTemplate(patient);
+            adherence = WeeklyAdherence.createAdherenceFor(patient);
         }
         prepareModel(patient, uiModel, adherence);
         return "adherence/update";
@@ -71,12 +71,8 @@ public class AdherenceController extends BaseController {
     }
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
-<<<<<<< HEAD
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
-=======
-        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient.getTreatmentInterruptions());
 
->>>>>>> Sri, BalajiN | #0 | Creating service to audit adherence changes
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
     }

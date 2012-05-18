@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.patient.domain.Patient;
 
 import java.util.*;
 
@@ -94,5 +95,17 @@ public class WeeklyAdherence {
             return new HashMap<String, Object>();
         else
             return new ArrayList<Adherence>(adherenceList).get(0).getMeta();
+    }
+
+    public static WeeklyAdherence createAdherenceFor(Patient patient) {
+        TreatmentWeek treatmentWeek = currentWeekInstance();
+        Map<String, Object> meta = new HashMap<String, Object>();
+        meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
+        meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());
+        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), meta);
+    }
+
+    private static List<DayOfWeek> pillDays(Patient patient) {
+        return patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays();
     }
 }

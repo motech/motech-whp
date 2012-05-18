@@ -81,20 +81,6 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
-    public WeeklyAdherence currentWeekAdherenceTemplate(Patient patient) {
-        TreatmentWeek treatmentWeek = currentWeekInstance();
-
-        Map<String, Object> meta = new HashMap<String, Object>();
-        meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
-        meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());
-
-        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), meta);
-    }
-
-    private List<DayOfWeek> pillDays(Patient patient) {
-        return patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getPillDays();
-    }
-
     private List<AdherenceData> requests(WeeklyAdherence weeklyAdherence) {
         List<AdherenceData> requests = new ArrayList<AdherenceData>();
 

@@ -3,10 +3,22 @@ package org.motechproject.whp.adherence.domain;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherence.util.AssertAdherence;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.model.DayOfWeek.*;
 
 public class WeeklyAdherenceTest extends BaseUnitTest {
+
+    @Test
+    public void shouldReturnAdherenceTemplate() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        WeeklyAdherence adherence = WeeklyAdherence.createAdherenceFor(patient);
+        AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
+    }
+
 
     @Test
     public void shouldSetCurrentWeekAs_CurrentTreatmentWeek_GivenTodayIsSunday() {
