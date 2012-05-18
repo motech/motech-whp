@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,8 +67,8 @@ public class UpdateAdherenceTest extends BaseTest {
     public void shouldAllowUpdateAdherenceOnSunday() {
         adjustDateTime(DateTime.now().withDayOfWeek(7));
 
-        UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id()).markAsTaken("Monday");
-        boolean isTaken = updateAdherencePage.submit().clickEditAdherenceLink(patientRequest.getCase_id()).isTaken("Monday");
+        UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id()).setNumberOfDosesTaken(1);
+        boolean isTaken = updateAdherencePage.submit().clickEditAdherenceLink(patientRequest.getCase_id()).isDosesTaken(1);
         assertTrue(isTaken);
     }
 

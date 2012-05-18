@@ -8,7 +8,9 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,11 +31,13 @@ public class AdherenceController extends BaseController {
 
     private AllPatients allPatients;
     private WHPAdherenceService adherenceService;
+    private AllTreatmentCategories allTreatmentCategories;
 
     @Autowired
-    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService) {
+    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService, AllTreatmentCategories allTreatmentCategories) {
         this.allPatients = allPatients;
         this.adherenceService = adherenceService;
+        this.allTreatmentCategories = allTreatmentCategories;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
@@ -48,21 +52,11 @@ public class AdherenceController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
+    public String update(@PathVariable("patientId") String patientId, String categoryCode, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
-        Patient patient = allPatients.findByPatientId(patientId);
-
-        WeeklyAdherence weeklyAdherence = getAdherenceToSave(weeklyAdherenceForm, patient);
-        adherenceService.recordAdherence(patientId, weeklyAdherence, authenticatedUser.getUsername(), AdherenceSource.WEB);
+        TreatmentCategory category = allTreatmentCategories.findByCode(categoryCode);
+        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(category), authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
-    }
-
-    private WeeklyAdherence getAdherenceToSave(WeeklyAdherenceForm weeklyAdherenceForm, Patient patient) {
-        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
-        if (adherence == null) {
-            return weeklyAdherenceForm.weeklyAdherence();
-        }
-        return weeklyAdherenceForm.updatedWeeklyAdherence();
     }
 
     @Report
@@ -71,10 +65,12 @@ public class AdherenceController extends BaseController {
     }
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
-        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
+        TreatmentCategory category = allTreatmentCategories.findByCode(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getCode());
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient, category.getDosesPerWeek());
 
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
+        uiModel.addAttribute("categoryCode", category.getCode());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
+        uiModel.addAttribute("readOnly", !(canUpdate(patient)));
     }
-
 }

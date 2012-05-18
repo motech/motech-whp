@@ -1,13 +1,12 @@
 package org.motechproject.whp.functional.page;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.openqa.selenium.By;
+import org.motechproject.whp.functional.framework.WHPWebElement;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-
-import java.util.List;
 
 public class UpdateAdherencePage extends Page {
 
@@ -18,8 +17,8 @@ public class UpdateAdherencePage extends Page {
     @FindBy(how = How.ID, using = ADHERENCE_WARNING_ID)
     private WebElement adherenceWarning;
 
-    @FindBy(how = How.CLASS_NAME, using = "adherenceRow")
-    private List<WebElement> adherenceRows;
+    @FindBy(how = How.ID, using = "dosesTaken")
+    private WebElement numberOfDosesTaken;
 
     public UpdateAdherencePage(WebDriver webDriver) {
         super(webDriver);
@@ -30,33 +29,13 @@ public class UpdateAdherencePage extends Page {
         waitForElementWithIdToLoad("weeklyAdherenceForm");
     }
 
-    public boolean isTaken(String dayOfWeek) {
-        for (WebElement adherenceRow : adherenceRows) {
-            String pillDay = adherenceRow.findElement(By.className("pillDay")).getAttribute("value");
-            if (pillDay.equals(dayOfWeek)) {
-                return adherenceRow.findElement(By.className("pillStatusTaken")).isSelected();
-            }
-        }
-        return false;
-    }
-
-    public UpdateAdherencePage markAsTaken(String dayOfWeek) {
-        for (WebElement adherenceRow : adherenceRows) {
-            String pillDay = adherenceRow.findElement(By.className("pillDay")).getAttribute("value");
-            if (pillDay.equals(dayOfWeek)) {
-                adherenceRow.findElement(By.className("pillStatusTaken")).click();
-                break;
-            }
-        }
-        return this;
-    }
-
     public boolean isReadOnly() {
-        return !adherenceRows.get(0).findElement(By.className("pillStatusTaken")).isEnabled();
+        return !numberOfDosesTaken.isEnabled();
     }
 
-    public String getAdherenceWarningText() {
-        return adherenceWarning.getText();
+    public UpdateAdherencePage setNumberOfDosesTaken(int i) {
+        numberOfDosesTaken.sendKeys(i + "");
+        return this;
     }
 
     public ProviderPage submit() {
@@ -64,4 +43,11 @@ public class UpdateAdherencePage extends Page {
         return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
 
+    public String getAdherenceWarningText() {
+        return adherenceWarning.getText();
+    }
+
+    public boolean isDosesTaken(int i) {
+        return numberOfDosesTaken.getAttribute("value").equals(i + "");
+    }
 }

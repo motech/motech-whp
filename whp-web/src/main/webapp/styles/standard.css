@@ -77,7 +77,6 @@ body {
     color: black;
 }
 
-#legend {
-    float: right;
+#numberSelect {
+    text-align:center;
 }
-
