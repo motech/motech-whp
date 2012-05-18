@@ -47,7 +47,7 @@ public class AdherenceController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
-        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
+        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.updatedWeeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
     }
 

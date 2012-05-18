@@ -59,14 +59,17 @@ public class AdherenceForm {
 
     public void setIsTaken(boolean taken) {
         if (taken) {
-            pillStatus = PillStatus.Taken;
+            updatedPillStatus = PillStatus.Taken;
         }
     }
 
     public void setIsNotTaken(boolean notTaken) {
         if (notTaken) {
-            pillStatus = PillStatus.NotTaken;
+            updatedPillStatus = PillStatus.NotTaken;
         }
     }
 
+    public boolean updated() {
+        return updatedPillStatus != pillStatus;
+    }
 }

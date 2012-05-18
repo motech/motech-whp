@@ -37,10 +37,10 @@ public class WeeklyAdherenceForm {
         }
     }
 
-    public WeeklyAdherence weeklyAdherence() {
+    public WeeklyAdherence updatedWeeklyAdherence() {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
         for (AdherenceForm form : adherenceList) {
-            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), form.getMeta());
+            if(form.updated()) weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), form.getMeta());
         }
         return weeklyAdherence;
     }

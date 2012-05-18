@@ -55,6 +55,11 @@ public class WeeklyAdherenceBuilder {
         return this;
     }
 
+    public WeeklyAdherenceBuilder withLog(DayOfWeek dayOfWeek, PillStatus pillStatus) {
+        adherence.addAdherenceLog(dayOfWeek, pillStatus, meta);
+        return this;
+    }
+
     public WeeklyAdherenceBuilder forPatient(Patient patient){
         HashMap<String, Object> meta = new HashMap<String, Object>();
         meta.put(AdherenceConstants.TB_ID, patient.tbId());
