@@ -23,7 +23,7 @@ public class AdherenceAuditService {
                 .remark(weeklyAdherence.getRemark())
                 .sourceOfChange(sourceOfChange)
                 .patientId(weeklyAdherence.getPatientId())
-                .tbId(weeklyAdherence.getMetaData().get(AdherenceConstants.TB_ID).toString());
+                .tbId((String) weeklyAdherence.getMetaData().get(AdherenceConstants.TB_ID));
 
         allAuditLogs.add(auditLog);
     }

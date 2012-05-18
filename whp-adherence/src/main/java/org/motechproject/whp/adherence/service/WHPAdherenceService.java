@@ -5,6 +5,7 @@ import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceDataMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
@@ -29,14 +30,18 @@ public class WHPAdherenceService {
     AllPatients allPatients;
     AdherenceService adherenceService;
     PatientService patientService;
+    AdherenceAuditService adherenceAuditService;
 
     @Autowired
     public WHPAdherenceService(AdherenceService adherenceService,
                                AllPatients allPatients,
-                               PatientService patientService) {
+                               PatientService patientService,
+                               AdherenceAuditService adherenceAuditService
+    ) {
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
         this.patientService = patientService;
+        this.adherenceAuditService = adherenceAuditService;
     }
 
     public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
@@ -49,6 +54,8 @@ public class WHPAdherenceService {
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
             patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
+
+        adherenceAuditService.log(user, weeklyAdherence);
     }
 
     private void updateMetaData(WeeklyAdherence weeklyAdherence, Patient patient) {

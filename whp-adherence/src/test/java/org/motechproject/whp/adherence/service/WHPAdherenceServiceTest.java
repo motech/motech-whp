@@ -10,6 +10,7 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -66,10 +67,13 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     private AllPatients allPatients;
     @Autowired
     private AllTreatments allTreatments;
+    @Autowired
+    private AllAuditLogs allAuditLogs;
 
     private String user;
     private String newUser;
     private AdherenceSource source;
+
 
     @Before
     public void setup() {
@@ -130,7 +134,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         adherenceService.recordAdherence(PATIENT_ID, adherence, user, source);
     }
 
-    public TreatmentUpdateRequest createChangeProviderRequest(String newProviderId, String oldTbId, String newTbId) {
+    private TreatmentUpdateRequest createChangeProviderRequest(String newProviderId, String oldTbId, String newTbId) {
         TreatmentUpdateRequest changeProviderRequest = TreatmentUpdateRequestBuilder.startRecording()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withCaseId(PATIENT_ID)
@@ -213,11 +217,29 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         AssertAdherence.forWeek(adherence, Monday, Wednesday, Friday);
     }
 
+    @Test
+    public void shouldLogAuditAfterRecordingAdherence() {
+        PatientRequest withDosesOnMonWedFri = new PatientRequestBuilder().withDefaults()
+                .withCaseId(PATIENT_ID)
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withProviderId("providerId")
+                .withTbId("tbId")
+                .build();
+
+        patientService.createPatient(withDosesOnMonWedFri);
+        Patient patient = allPatients.findByPatientId(withDosesOnMonWedFri.getCase_id());
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withLog(DayOfWeek.Monday, PillStatus.Taken).forPatient(patient).build();
+
+        adherenceService.recordAdherence(PATIENT_ID, adherence, user, source);
+        assertEquals(1, allAuditLogs.getAll().size());
+    }
+
     @After
     public void tearDown() {
         super.tearDown();
         deleteAdherenceLogs();
         markForDeletion(allPatients.getAll().toArray());
+        markForDeletion(allAuditLogs.getAll().toArray());
         markForDeletion(allTreatments.getAll().toArray());
     }
 

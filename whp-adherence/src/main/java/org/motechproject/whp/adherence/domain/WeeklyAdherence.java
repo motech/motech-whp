@@ -90,6 +90,9 @@ public class WeeklyAdherence {
     }
 
     public Map<String, Object> getMetaData() {
-        return new ArrayList<Adherence>(adherenceList).get(0).getMeta();
+        if (adherenceList.isEmpty())
+            return new HashMap<String, Object>();
+        else
+            return new ArrayList<Adherence>(adherenceList).get(0).getMeta();
     }
 }
