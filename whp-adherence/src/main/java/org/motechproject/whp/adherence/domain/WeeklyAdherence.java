@@ -1,6 +1,7 @@
 package org.motechproject.whp.adherence.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 
@@ -16,6 +17,9 @@ public class WeeklyAdherence {
     private String treatmentId;
     @Getter
     private TreatmentWeek week;
+    @Getter
+    @Setter
+    private String remark;
 
     private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
 
@@ -53,6 +57,14 @@ public class WeeklyAdherence {
         return null;
     }
 
+    public int numberOfDosesTaken() {
+        int total = 0;
+        for (Adherence adherence : adherenceList) {
+            total = (PillStatus.Taken == adherence.getPillStatus()) ? total + 1 : total;
+        }
+        return total;
+    }
+
     public List<Adherence> getAdherenceLogs() {
         return new ArrayList<Adherence>(adherenceList);
     }
@@ -77,4 +89,7 @@ public class WeeklyAdherence {
         }
     }
 
+    public Map<String, Object> getMetaData() {
+        return new ArrayList<Adherence>(adherenceList).get(0).getMeta();
+    }
 }

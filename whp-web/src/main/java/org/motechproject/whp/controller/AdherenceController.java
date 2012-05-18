@@ -40,7 +40,9 @@ public class AdherenceController extends BaseController {
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
-        if(adherence == null) adherence = adherenceService.currentWeekAdherenceTemplate(patient);
+        if (adherence == null) {
+            adherence = adherenceService.currentWeekAdherenceTemplate(patient);
+        }
         prepareModel(patient, uiModel, adherence);
         return "adherence/update";
     }
@@ -49,6 +51,7 @@ public class AdherenceController extends BaseController {
     public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
         Patient patient = allPatients.findByPatientId(patientId);
+
         WeeklyAdherence weeklyAdherence = getAdherenceToSave(weeklyAdherenceForm, patient);
         adherenceService.recordAdherence(patientId, weeklyAdherence, authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
@@ -56,7 +59,9 @@ public class AdherenceController extends BaseController {
 
     private WeeklyAdherence getAdherenceToSave(WeeklyAdherenceForm weeklyAdherenceForm, Patient patient) {
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
-        if(adherence == null)  return weeklyAdherenceForm.weeklyAdherence();
+        if (adherence == null) {
+            return weeklyAdherenceForm.weeklyAdherence();
+        }
         return weeklyAdherenceForm.updatedWeeklyAdherence();
     }
 
@@ -66,7 +71,12 @@ public class AdherenceController extends BaseController {
     }
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
+<<<<<<< HEAD
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
+=======
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient.getTreatmentInterruptions());
+
+>>>>>>> Sri, BalajiN | #0 | Creating service to audit adherence changes
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
     }

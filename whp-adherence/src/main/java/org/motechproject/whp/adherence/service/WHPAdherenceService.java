@@ -42,8 +42,10 @@ public class WHPAdherenceService {
     public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
         Patient patient = allPatients.findByPatientId(patientId);
         updateMetaData(weeklyAdherence, patient);
+
         List<AdherenceData> requests = requests(weeklyAdherence);
         adherenceService.saveOrUpdateAdherence(user, source.name(), requests.toArray(new AdherenceData[requests.size()]));
+
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
             patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
         }
@@ -74,9 +76,11 @@ public class WHPAdherenceService {
 
     public WeeklyAdherence currentWeekAdherenceTemplate(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
+
         Map<String, Object> meta = new HashMap<String, Object>();
         meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
         meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());
+
         return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), meta);
     }
 
@@ -86,6 +90,7 @@ public class WHPAdherenceService {
 
     private List<AdherenceData> requests(WeeklyAdherence weeklyAdherence) {
         List<AdherenceData> requests = new ArrayList<AdherenceData>();
+
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
             requests.add(AdherenceDataMapper.request(adherence));
         }

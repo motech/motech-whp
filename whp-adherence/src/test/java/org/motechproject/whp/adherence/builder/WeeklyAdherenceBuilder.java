@@ -19,15 +19,16 @@ public class WeeklyAdherenceBuilder {
 
     private static final Map<String, Object> meta = new HashMap<String, Object>();
 
+    private WeeklyAdherence adherence = new WeeklyAdherence("patientId", "treatmentId", currentWeekInstance());
+
     public WeeklyAdherenceBuilder() {
         meta.put(AdherenceConstants.TB_ID, "tbId");
         meta.put(AdherenceConstants.PROVIDER_ID, "providerId");
     }
 
-    private WeeklyAdherence adherence = new WeeklyAdherence("patientId", "treatmentId", currentWeekInstance());
-
     public WeeklyAdherenceBuilder withDefaultLogs() {
         buildWeeklyAdherenceLogs(PillStatus.Taken);
+        adherence.setRemark("remark");
         return this;
     }
 

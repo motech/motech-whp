@@ -11,6 +11,7 @@ import java.util.Map;
 public class Adherence {
 
     private String patientId;
+
     private String treatmentId;
 
     private DayOfWeek pillDay;
