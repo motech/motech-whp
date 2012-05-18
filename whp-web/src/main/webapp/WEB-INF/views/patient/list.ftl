@@ -17,13 +17,12 @@
                         <th>Treatment Category</th>
                         <th>Treatment Start Date</th>
                         <th>Adherence</th>
-                        <th>Treatment Outcome</th>
                     </tr>
                 </thead>
                 <tbody>
                     <#if patientList?size == 0>
                         <tr>
-                            <td style="text-align: center" colspan="10">No patients to show</td>
+                            <td style="text-align: center" colspan="9">No patients to show</td>
                         </tr>
                     <#else>
                         <#list patientList as patient>
@@ -43,11 +42,6 @@
                                 <td class="updateAdherenceLink">
                                     <#if !patient.currentTreatmentClosed>
                                         <a href="<@spring.url '/adherence/update/${patient.patientId}' />">Edit</a>
-                                    </#if>
-                                </td>
-                                <td>
-                                    <#if patient.currentTreatmentClosed>
-                                        <div id="patient_${patient.patientId}_TreatmentOutcome" class="label label-info text-center">${patient.treatmentOutcome.outcome}</div>
                                     </#if>
                                 </td>
                             </tr>

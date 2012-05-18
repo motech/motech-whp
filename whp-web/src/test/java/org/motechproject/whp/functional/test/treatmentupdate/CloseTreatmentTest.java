@@ -49,7 +49,6 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider);
-        assertEquals("Cured", providerPage.getTreatmentOutcomeText(patientRequest.getCase_id()));
 
         TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
 
