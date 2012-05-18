@@ -13,7 +13,7 @@
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
-                        <th>District</th>
+                        <th>Village</th>
                         <th>Treatment Category</th>
                         <th>Treatment Start Date</th>
                         <th>Adherence</th>
@@ -32,7 +32,7 @@
                                 <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
                                 <td>${patient.currentProvidedTreatment.treatment.patientAge!}</td>
                                 <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
-                                <td>${patient.currentProvidedTreatment.patientAddress.address_district}</td>
+                                <td id="patient_${patient.patientId}_Village">${patient.currentProvidedTreatment.patientAddress.address_village}</td>
                                 <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
                                 <td>
                                     <#if patient.currentProvidedTreatment.treatment.startDate?? >

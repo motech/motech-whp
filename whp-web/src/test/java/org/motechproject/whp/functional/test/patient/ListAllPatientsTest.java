@@ -62,6 +62,7 @@ public class ListAllPatientsTest extends BaseTest {
         ProviderPage providerPage = loginAsProvider();
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
         assertEquals("Male", providerPage.getGenderText(patientRequest.getCase_id()));
+        assertEquals("village", providerPage.getVillageText(patientRequest.getCase_id()));
     }
 
     ProviderPage loginAsProvider() {
