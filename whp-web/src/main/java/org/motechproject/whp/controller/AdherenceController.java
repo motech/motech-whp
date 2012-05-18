@@ -40,6 +40,7 @@ public class AdherenceController extends BaseController {
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
+        if(adherence == null) adherence = adherenceService.currentWeekAdherenceTemplate(patient);
         prepareModel(patient, uiModel, adherence);
         return "adherence/update";
     }
@@ -47,8 +48,16 @@ public class AdherenceController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
-        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.updatedWeeklyAdherence(), authenticatedUser.getUsername(), AdherenceSource.WEB);
+        Patient patient = allPatients.findByPatientId(patientId);
+        WeeklyAdherence weeklyAdherence = getAdherenceToSave(weeklyAdherenceForm, patient);
+        adherenceService.recordAdherence(patientId, weeklyAdherence, authenticatedUser.getUsername(), AdherenceSource.WEB);
         return "forward:/";
+    }
+
+    private WeeklyAdherence getAdherenceToSave(WeeklyAdherenceForm weeklyAdherenceForm, Patient patient) {
+        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
+        if(adherence == null)  return weeklyAdherenceForm.weeklyAdherence();
+        return weeklyAdherenceForm.updatedWeeklyAdherence();
     }
 
     @Report

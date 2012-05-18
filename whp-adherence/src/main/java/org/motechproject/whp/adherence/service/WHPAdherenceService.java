@@ -63,7 +63,7 @@ public class WHPAdherenceService {
         if (adherenceRecords.size() > 0) {
             return new WeeklyAdherenceMapper(treatmentWeek, adherenceRecords).map();
         } else {
-            return currentWeekAdherence(patient, treatmentWeek);
+            return null;
         }
     }
 
@@ -72,7 +72,8 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
-    private WeeklyAdherence currentWeekAdherence(Patient patient, TreatmentWeek treatmentWeek) {
+    public WeeklyAdherence currentWeekAdherenceTemplate(Patient patient) {
+        TreatmentWeek treatmentWeek = currentWeekInstance();
         Map<String, Object> meta = new HashMap<String, Object>();
         meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
         meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());

@@ -3,6 +3,7 @@ package org.motechproject.whp.uimodel;
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.domain.TreatmentInterruptions;
@@ -41,6 +42,14 @@ public class WeeklyAdherenceForm {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
         for (AdherenceForm form : adherenceList) {
             if(form.updated()) weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), form.getMeta());
+        }
+        return weeklyAdherence;
+    }
+
+    public WeeklyAdherence weeklyAdherence() {
+        WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
+        for (AdherenceForm form : adherenceList) {
+            weeklyAdherence.addAdherenceLog(form.getPillDay(), form.getPillStatus(), form.getMeta());
         }
         return weeklyAdherence;
     }
