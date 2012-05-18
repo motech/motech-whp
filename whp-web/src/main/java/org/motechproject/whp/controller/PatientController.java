@@ -26,7 +26,7 @@ public class PatientController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam("provider") String providerId, Model uiModel) {
-        List<Patient> patientsForProvider = allPatients.findByCurrentProviderId(providerId);
+        List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatment(providerId);
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
         return "patient/list";
     }

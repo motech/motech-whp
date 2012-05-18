@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -82,4 +83,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
+    public List<Patient> getAllWithActiveTreatment(String providerId) {
+        ArrayList<Patient> patientsWithActiveTreatment = new ArrayList<Patient>();
+        for (Patient patient : findByCurrentProviderId(providerId)) {
+            if(patient.isCurrentTreatmentClosed()) continue;
+            patientsWithActiveTreatment.add(patient);
+        }
+        return patientsWithActiveTreatment;
+    }
 }
