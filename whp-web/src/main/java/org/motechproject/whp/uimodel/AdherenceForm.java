@@ -22,8 +22,6 @@ public class AdherenceForm {
 
     private LocalDate pillDate;
 
-    private boolean isTreatmentInterrupted;
-
     private PillStatus pillStatus =  PillStatus.Unknown;
 
     private PillStatus updatedPillStatus =  PillStatus.Unknown;
@@ -33,11 +31,10 @@ public class AdherenceForm {
     public AdherenceForm() {
     }
 
-    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, boolean isTreatmentInterrupted, Map<String, Object> meta) {
+    public AdherenceForm(DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, Map<String, Object> meta) {
         this.pillDay = pillDay;
         this.pillDate = pillDate;
         this.pillStatus = pillStatus;
-        this.isTreatmentInterrupted = isTreatmentInterrupted;
         this.meta = meta;
     }
 

@@ -17,12 +17,12 @@ public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
     }
 
     @JsonIgnore
-    public boolean isTreatmentInterrupted(LocalDate pillDate) {
+    public String getPauseReason(LocalDate asOnPillDate) {
         for (TreatmentInterruption treatmentInterruption : this) {
-            if (treatmentInterruption.isTreatmentInterrupted(pillDate))
-                return true;
+            if (treatmentInterruption.isTreatmentInterrupted(asOnPillDate))
+                return treatmentInterruption.getReasonForPause();
         }
-        return false;
+        return null;
     }
 
     public TreatmentInterruption latestInterruption() {

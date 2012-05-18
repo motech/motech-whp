@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.test.treatmentupdate;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.model.DayOfWeek;
@@ -49,6 +50,8 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider);
+
+        assertFalse(providerPage.hasPatient(patientRequest.getFirst_name()));
 
         TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
 

@@ -1,10 +1,7 @@
 package org.motechproject.whp.functional.page;
 
 import org.motechproject.whp.functional.framework.WebDriverFactory;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -94,6 +91,14 @@ public abstract class Page {
                     throw e;
             }
             webDriver.get(webDriver.getCurrentUrl());
+        }
+    }
+
+    protected WebElement safeFindElement(By by) {
+        try {
+            return webDriver.findElement(by);
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 

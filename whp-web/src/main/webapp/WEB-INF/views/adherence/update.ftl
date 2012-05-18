@@ -5,11 +5,13 @@
 
 <div class="row">
     <#if readOnly >
-        <div class="alert alert-error"> Please contact the CMF admin to update adherence.</div> </#if>
+        <div class="alert alert-error">Please contact the CMF admin to update adherence.</div>
+    </#if>
+    <#if adherence.treatmentPaused >
+        <div id="pauseReason" class="alert alert-error">The patient's treatment has been paused for one or more days in the last week. Reason: ${adherence.treatmentPauseReason}</div>
+    </#if>
     <h4 class="page-header form-header">Update last week's adherence for ${adherence.patientId}</h4>
 </div>
-
-    <@legend key1="paused" value1="Treatment Paused on Date" />
 
 <div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
@@ -27,8 +29,7 @@
             <tbody>
             <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
                 <#list adherence.adherenceList as adherenceLog>
-                <tr id="adherenceLogFor_${adherenceLog.pillDay}"
-                    class="adherenceRow <#if adherenceLog.treatmentInterrupted>paused</#if>">
+                <tr id="adherenceLogFor_${adherenceLog.pillDay}" class="adherenceRow">
                     <td>
                     ${adherenceLog.pillDay}
                         <input type="hidden" name="adherenceList[${adherenceLog_index}].pillDay" class="pillDay"

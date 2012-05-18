@@ -33,7 +33,7 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
-        assertTrue(providerPage.isPatientPaused(patientRequest.getCase_id()));
+        assertTrue(providerPage.isPatientTreatmentPaused(patientRequest.getCase_id()));
 
         TreatmentUpdateRequest resumeTreatmentRequest = TreatmentUpdateRequestBuilder.startRecording()
                 .withMandatoryFieldsForRestartTreatment()
@@ -49,9 +49,9 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
-        assertFalse(providerPage.isPatientPaused(patientRequest.getCase_id()));
+        assertFalse(providerPage.isPatientTreatmentPaused(patientRequest.getCase_id()));
 
         UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(patientRequest.getCase_id());
-        assertTrue(updateAdherencePage.isAdherenceLogForMondayIndicateAsPaused());
+        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws", updateAdherencePage.getPauseReasonText());
     }
 }
