@@ -60,7 +60,7 @@ public class WeeklyAdherenceForm {
         List<DayOfWeek> takenDays = takenDays(treatmentCategory, numberOfDosesTaken);
         for (DayOfWeek pillDay : treatmentCategory.getPillDays()) {
             PillStatus pillStatus = (takenDays.contains(pillDay)) ? Taken : NotTaken;
-            weeklyAdherence.addAdherenceLog(pillDay, pillStatus, null);
+            weeklyAdherence.addAdherenceLog(pillDay, pillStatus);
         }
         return weeklyAdherence;
     }

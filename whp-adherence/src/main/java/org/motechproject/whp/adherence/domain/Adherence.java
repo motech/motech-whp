@@ -20,7 +20,9 @@ public class Adherence {
 
     private PillStatus pillStatus = PillStatus.Unknown;
 
-    private Map<String, Object> meta;
+    private String tbId;
+
+    private String providerId;
 
     public Adherence() {
     }
@@ -29,13 +31,21 @@ public class Adherence {
         this.pillDate = logDate;
     }
 
-    public Adherence(String patientId, String treatmentId, DayOfWeek pillDay, LocalDate pillDate, PillStatus pillStatus, Map<String, Object> meta) {
+    public Adherence(String patientId,
+                     String treatmentId,
+                     DayOfWeek pillDay,
+                     LocalDate pillDate,
+                     PillStatus pillStatus,
+                     String tbId,
+                     String providerId) {
+
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.pillDay = pillDay;
         this.pillDate = pillDate;
         this.pillStatus = pillStatus;
-        this.meta = meta;
+        this.tbId = tbId;
+        this.providerId = providerId;
     }
 
     @ReportValue(index = 0)
@@ -45,7 +55,7 @@ public class Adherence {
 
     @ReportValue(index = 1)
     public String getTbId() {
-        return (String) meta.get(AdherenceConstants.TB_ID);
+        return tbId;
     }
 
     @ReportValue(index = 2, column = "Adherence date")

@@ -1,6 +1,5 @@
 package org.motechproject.whp.adherence.audit;
 
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class AdherenceAuditService {
                 .remark(weeklyAdherence.getRemark())
                 .sourceOfChange(sourceOfChange)
                 .patientId(weeklyAdherence.getPatientId())
-                .tbId((String) weeklyAdherence.getMetaData().get(AdherenceConstants.TB_ID));
+                .tbId(weeklyAdherence.getTbId());
 
         allAuditLogs.add(auditLog);
     }

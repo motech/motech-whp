@@ -10,19 +10,22 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
-
 public class AdherenceMapper {
 
     public List<Adherence> map(List<AdherenceData> adherenceData) {
         List<Adherence> adherences = new ArrayList<Adherence>();
         for (AdherenceData adherenceDatum : adherenceData) {
             Adherence adherence = new Adherence(adherenceDatum.doseDate());
+
             adherence.setPatientId(adherenceDatum.externalId());
             adherence.setTreatmentId(adherenceDatum.treatmentId());
-            adherence.setMeta(adherenceDatum.meta());
+
+            adherence.setTbId(adherenceDatum.meta().get(AdherenceConstants.TB_ID).toString());
+            adherence.setProviderId(adherenceDatum.meta().get(AdherenceConstants.PROVIDER_ID).toString());
+
             adherence.setPillStatus(PillStatus.get(adherenceDatum.status()));
             adherence.setPillDay(dayOfWeekOfRecord(adherenceDatum.doseDate()));
+
             adherences.add(adherence);
         }
         return adherences;

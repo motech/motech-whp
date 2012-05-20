@@ -12,11 +12,9 @@ import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.motechproject.whp.adherence.util.AssertAdherence;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -32,7 +30,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.*;
-import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 
 
@@ -103,22 +100,21 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSetLatestTbIdAndProviderIdOnAdherenceUpdate() {
-
         createPatientAndRecordAdherence();
-        assertMetaData(OLD_TB_ID, OLD_PROVIDER_ID);
+        assertTbAndProviderId(OLD_TB_ID, OLD_PROVIDER_ID);
 
         patientService.performTreatmentUpdate(createChangeProviderRequest(NEW_PROVIDER_ID, OLD_TB_ID, NEW_TB_ID));
 
         WeeklyAdherence updatedAdherence = new WeeklyAdherenceBuilder().withLog(DayOfWeek.Monday, PillStatus.NotTaken).forPatient(allPatients.findByPatientId(PATIENT_ID)).build();
 
         adherenceService.recordAdherence(PATIENT_ID, updatedAdherence, user, source);
-        assertMetaData(NEW_TB_ID, NEW_PROVIDER_ID);
+        assertTbAndProviderId(NEW_TB_ID, NEW_PROVIDER_ID);
 
     }
 
-    private void assertMetaData(String expectedTbId, String expectedProviderId) {
-        assertEquals(expectedTbId, adherenceService.currentWeekAdherence(allPatients.findByPatientId(PATIENT_ID)).getAdherenceLogs().get(0).getMeta().get(AdherenceConstants.TB_ID));
-        assertEquals(expectedProviderId, adherenceService.currentWeekAdherence(allPatients.findByPatientId(PATIENT_ID)).getAdherenceLogs().get(0).getMeta().get(AdherenceConstants.PROVIDER_ID));
+    private void assertTbAndProviderId(String expectedTbId, String expectedProviderId) {
+        assertEquals(expectedTbId, adherenceService.currentWeekAdherence(allPatients.findByPatientId(PATIENT_ID)).getAdherenceLogs().get(0).getTbId());
+        assertEquals(expectedProviderId, adherenceService.currentWeekAdherence(allPatients.findByPatientId(PATIENT_ID)).getAdherenceLogs().get(0).getProviderId());
     }
 
     private void createPatientAndRecordAdherence() {

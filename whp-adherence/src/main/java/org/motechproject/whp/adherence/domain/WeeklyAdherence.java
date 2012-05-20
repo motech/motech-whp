@@ -6,7 +6,10 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Patient;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 
@@ -16,6 +19,10 @@ public class WeeklyAdherence {
     private String patientId;
     @Getter
     private String treatmentId;
+    @Getter
+    private String tbId;
+    @Getter
+    private String providerId;
     @Getter
     private TreatmentWeek week;
     @Getter
@@ -34,23 +41,24 @@ public class WeeklyAdherence {
         this.week = week;
     }
 
-    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays, Map<String, Object> map) {
+    public WeeklyAdherence(String patientId, String treatmentId, TreatmentWeek week, List<DayOfWeek> pillDays) {
         this.patientId = patientId;
         this.treatmentId = treatmentId;
         this.week = week;
+
         for (DayOfWeek pillDay : pillDays) {
-            addAdherenceLog(pillDay, PillStatus.Unknown, map);
+            addAdherenceLog(pillDay, PillStatus.Unknown);
         }
     }
 
-    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus, Map<String, Object> meta) {
-        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay), pillStatus, meta);
+    public WeeklyAdherence addAdherenceLog(DayOfWeek pillDay, PillStatus pillStatus) {
+        Adherence adherence = new Adherence(patientId, treatmentId, pillDay, week.dateOf(pillDay), pillStatus, tbId, providerId);
         adherenceList.add(adherence);
         return this;
     }
 
-    //Assume implicitly that list is ordered.
     public LocalDate firstDoseTakenOn() {
+        /*Assume that the set is ordered by date*/
         for (Adherence adherence : adherenceList) {
             if (PillStatus.Taken == adherence.getPillStatus())
                 return adherence.getPillDate();
@@ -84,25 +92,31 @@ public class WeeklyAdherence {
         }
     }
 
-    public void setMetaData(Map<String, Object> meta) {
+    public void setTbId(String tbId) {
+        this.tbId = tbId;
         for (Adherence adherence : adherenceList) {
-            adherence.setMeta(meta);
+            adherence.setTbId(tbId);
         }
     }
 
-    public Map<String, Object> getMetaData() {
-        if (adherenceList.isEmpty())
-            return new HashMap<String, Object>();
-        else
-            return new ArrayList<Adherence>(adherenceList).get(0).getMeta();
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+        for (Adherence adherence : adherenceList) {
+            adherence.setProviderId(providerId);
+        }
     }
 
     public static WeeklyAdherence createAdherenceFor(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
-        Map<String, Object> meta = new HashMap<String, Object>();
-        meta.put(AdherenceConstants.TB_ID, patient.getCurrentProvidedTreatment().getTbId());
-        meta.put(AdherenceConstants.PROVIDER_ID, patient.getCurrentProvidedTreatment().getProviderId());
-        return new WeeklyAdherence(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek, pillDays(patient), meta);
+        WeeklyAdherence adherence = new WeeklyAdherence(
+                patient.getPatientId(),
+                patient.currentTreatmentId(),
+                treatmentWeek,
+                pillDays(patient)
+        );
+        adherence.setTbId(patient.getCurrentProvidedTreatment().getTbId());
+        adherence.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
+        return adherence;
     }
 
     private static List<DayOfWeek> pillDays(Patient patient) {
