@@ -18,12 +18,16 @@
         <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
         <input type="hidden" name="categoryCode" value="${categoryCode}"/>
         <div id="numberSelect" class="well control-group">
-            <label>How many doses did the patient take in the last week?</label><br/>
+            <label class="pull-left span7 offset1"><b>How many doses did the patient take in the last week?</b></label>
             <select id="dosesTaken" name="numberOfDosesTaken" <#if readOnly> disabled </#if>>
-                <#list 0..adherence.totalDoses as number>
+                <#list 0..totalDoses as number>
                     <option <#if adherence.numberOfDosesTaken == number> selected </#if> value="${number}">${number}</option>
                 </#list>
             </select>
+            <div>
+                <label class="pull-left span7 offset1"><b>Remarks:</b></label>
+                <textarea id="remarks" name="remarks"></textarea>
+            </div>
         </div>
         <div class="control-group">
             <div class="controls pull-right">

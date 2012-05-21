@@ -18,6 +18,10 @@ public class AuditLog extends MotechBaseDataObject {
     private String patientId;
     @JsonProperty
     private String tbId;
+    @JsonProperty
+    private String providerId;
+    @JsonProperty
+    private String user;
 
     public int numberOfDosesTaken() {
         return numberOfDosesTaken;
@@ -62,5 +66,23 @@ public class AuditLog extends MotechBaseDataObject {
     public AuditLog tbId(String tbId) {
         this.tbId = tbId;
         return this;
+    }
+
+    public AuditLog providerId(String providerId) {
+        this.providerId = providerId;
+        return this;
+    }
+
+    public String providerId() {
+        return providerId;
+    }
+
+    public AuditLog user(String user) {
+        this.user = user;
+        return this;
+    }
+
+    public String user() {
+        return user;
     }
 }

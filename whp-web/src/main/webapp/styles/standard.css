@@ -80,3 +80,12 @@ body {
 #numberSelect {
     text-align:center;
 }
+
+#remarks {
+    height: 100px;
+}
+
+#weeklyAdherenceForm label{
+    text-align: left;
+    margin-left: 20px;
+}

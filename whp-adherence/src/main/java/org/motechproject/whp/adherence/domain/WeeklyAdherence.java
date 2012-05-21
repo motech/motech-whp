@@ -25,9 +25,6 @@ public class WeeklyAdherence {
     private String providerId;
     @Getter
     private TreatmentWeek week;
-    @Getter
-    @Setter
-    private String remark;
 
     private Set<Adherence> adherenceList = new LinkedHashSet<Adherence>();
 

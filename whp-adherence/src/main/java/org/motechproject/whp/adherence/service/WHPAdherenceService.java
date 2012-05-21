@@ -5,8 +5,8 @@ import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AdherenceAuditService;
+import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.mapping.AdherenceDataMapper;
@@ -44,22 +44,26 @@ public class WHPAdherenceService {
         this.adherenceAuditService = adherenceAuditService;
     }
 
-    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, String user, AdherenceSource source) {
+    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, AuditParams auditParams) {
         Patient patient = allPatients.findByPatientId(patientId);
         weeklyAdherence.setTbId(patient.tbId());
         weeklyAdherence.setProviderId(patient.providerId());
 
         List<AdherenceData> requests = requests(weeklyAdherence);
-        adherenceService.saveOrUpdateAdherence(user, source.name(), requests.toArray(new AdherenceData[requests.size()]));
+        adherenceService.saveOrUpdateAdherence(requests);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
-            patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn()); //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
+            //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
+            patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
         }
-        adherenceAuditService.log(user, weeklyAdherence);
+        adherenceAuditService.log(weeklyAdherence, auditParams);
     }
 
     public WeeklyAdherence currentWeekAdherence(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
-        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patient.getPatientId(), patient.currentTreatmentId(), treatmentWeek.startDate(), treatmentWeek.endDate());
+        AdherenceRecords adherenceRecords = adherenceService.adherenceRecords(patient.getPatientId(),
+                patient.currentTreatmentId(),
+                treatmentWeek.startDate(),
+                treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
             return new WeeklyAdherenceMapper(treatmentWeek, adherenceRecords).map();

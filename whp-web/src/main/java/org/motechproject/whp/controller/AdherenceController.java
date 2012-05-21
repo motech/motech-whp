@@ -3,6 +3,7 @@ package org.motechproject.whp.controller;
 import org.motechproject.export.annotation.Report;
 import org.motechproject.export.annotation.ReportGroup;
 import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
@@ -52,10 +53,17 @@ public class AdherenceController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
-    public String update(@PathVariable("patientId") String patientId, String categoryCode, WeeklyAdherenceForm weeklyAdherenceForm, HttpServletRequest httpServletRequest) {
+    public String update(@PathVariable("patientId") String patientId,
+                         String categoryCode,
+                         String remarks,
+                         WeeklyAdherenceForm weeklyAdherenceForm,
+                         HttpServletRequest httpServletRequest) {
+
         AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
         TreatmentCategory category = allTreatmentCategories.findByCode(categoryCode);
-        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(category), authenticatedUser.getUsername(), AdherenceSource.WEB);
+
+        AuditParams auditParams = new AuditParams(authenticatedUser.getUsername(), AdherenceSource.WEB, remarks);
+        adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(category), auditParams);
         return "forward:/";
     }
 
@@ -66,11 +74,12 @@ public class AdherenceController extends BaseController {
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
         TreatmentCategory category = allTreatmentCategories.findByCode(patient.getCurrentProvidedTreatment().getTreatment().getTreatmentCategory().getCode());
-        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient, category.getDosesPerWeek());
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
 
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("categoryCode", category.getCode());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
+        uiModel.addAttribute("totalDoses", category.getDosesPerWeek());
         uiModel.addAttribute("readOnly", !(canUpdate(patient)));
     }
 }

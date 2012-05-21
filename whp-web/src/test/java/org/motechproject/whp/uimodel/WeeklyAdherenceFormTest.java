@@ -3,7 +3,6 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
@@ -37,7 +36,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         mockCurrentDate(new LocalDate(2012, 5, 13));  //Sunday
         LocalDate monday = new LocalDate(2012, 5, 7);      // no interruptions
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()), 1);
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
         assertEquals("", weeklyAdherenceForm.getWarningMessage());
     }
 
@@ -52,7 +51,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         mockCurrentDate(new LocalDate(2012, 5, 9));     // Wednesday
         LocalDate monday = new LocalDate(2012, 5, 7);   // no interruptions
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()), 1);
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
         assertEquals("Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
     }
 
@@ -73,7 +72,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         TreatmentInterruption interruption3 = new TreatmentInterruption("pawsAgain", monday.plusDays(3));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions), 1);
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
         assertTrue(weeklyAdherenceForm.isTreatmentPaused());
         assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReason());
     }
@@ -84,7 +83,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", monday);
         interruption.resumeTreatment("swap", monday.plusDays(1));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption));
-        return new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions), 1);
+        return new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
     }
 
     private Patient getPatientWith(TreatmentInterruptions treatmentInterruptions) {

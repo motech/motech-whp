@@ -28,9 +28,7 @@ public class WeeklyAdherenceForm {
     LocalDate referenceDate;
     private String patientId;
     private String treatmentId;
-
     private int numberOfDosesTaken;
-    private int totalDoses;
 
     private Patient patient;
     private Set<String> pauseReasons = new LinkedHashSet<String>();
@@ -38,15 +36,12 @@ public class WeeklyAdherenceForm {
     public WeeklyAdherenceForm() {
     }
 
-    public WeeklyAdherenceForm(WeeklyAdherence weeklyAdherence, Patient patient, int totalNumberOfDoses) {
+    public WeeklyAdherenceForm(WeeklyAdherence weeklyAdherence, Patient patient) {
         referenceDate = weeklyAdherence.getWeek().getReference();
         patientId = weeklyAdherence.getPatientId();
         treatmentId = weeklyAdherence.getTreatmentId();
 
-        totalDoses = totalNumberOfDoses;
         this.patient = patient;
-
-
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
             if (Taken.equals(adherence.getPillStatus())) {
                 numberOfDosesTaken++;

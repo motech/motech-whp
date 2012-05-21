@@ -21,7 +21,6 @@ public class WeeklyAdherenceBuilder {
 
     public WeeklyAdherenceBuilder withDefaultLogs() {
         buildWeeklyAdherenceLogs(PillStatus.Taken);
-        adherence.setRemark("remark");
         return this;
     }
 

@@ -10,6 +10,7 @@ import org.motechproject.security.LoginSuccessHandler;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -58,13 +59,16 @@ public class AdherenceControllerTest extends BaseUnitTest {
     private ArgumentCaptors captors;
 
     private AdherenceController adherenceController;
+    private final String remarks = "remarks";
+    private final String providerUserName = "someProviderUserName";
+    private final AuditParams auditParams = new AuditParams(providerUserName, AdherenceSource.WEB, remarks);
 
     @Before
     public void setUp() {
         setUpMocks();
         setUpPatient();
         adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories);
-        loggedInUserName = "someProviderUserName";
+        loggedInUserName = providerUserName;
         setupLoggedInUser(loggedInUserName);
     }
 
@@ -119,10 +123,10 @@ public class AdherenceControllerTest extends BaseUnitTest {
     @Test
     public void shouldCaptureAdherence() {
         WeeklyAdherence adherence = new WeeklyAdherence();
-        adherenceController.update(PATIENT_ID, category.getCode(), new WeeklyAdherenceForm(adherence, patient, category.getDosesPerWeek()), request);
+        adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherence, patient), request);
 
         ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
-        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(loggedInUserName), eq(AdherenceSource.WEB));
+        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getAdherenceLogs().size());
     }
 
@@ -170,7 +174,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         WeeklyAdherence adherence = new WeeklyAdherence();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
-        String form = adherenceController.update(PATIENT_ID, category.getCode(), new WeeklyAdherenceForm(adherence, patient, category.getDosesPerWeek()), request);
+        String form = adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherence, patient), request);
         assertEquals("forward:/", form);
     }
 

@@ -16,11 +16,13 @@ public class AdherenceAuditService {
         this.allAuditLogs = allAuditLogs;
     }
 
-    public void log(String sourceOfChange, WeeklyAdherence weeklyAdherence) {
+    public void log(WeeklyAdherence weeklyAdherence, AuditParams auditParams) {
         AuditLog auditLog = new AuditLog()
                 .numberOfDosesTaken(weeklyAdherence.numberOfDosesTaken())
-                .remark(weeklyAdherence.getRemark())
-                .sourceOfChange(sourceOfChange)
+                .providerId(weeklyAdherence.getProviderId())
+                .remark(auditParams.getRemarks())
+                .user(auditParams.getUser())
+                .sourceOfChange(auditParams.getSourceOfChange().name())
                 .patientId(weeklyAdherence.getPatientId())
                 .tbId(weeklyAdherence.getTbId());
 
