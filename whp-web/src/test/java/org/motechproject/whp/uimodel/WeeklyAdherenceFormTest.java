@@ -28,7 +28,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     @Test
     public void shouldGet_ReasonForPause() {
         assertTrue(weeklyAdherenceForm.isTreatmentPaused());
-        assertEquals("paws", weeklyAdherenceForm.getTreatmentPauseReason());
+        assertEquals("paws", weeklyAdherenceForm.getTreatmentPauseReasons());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
         weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
         assertTrue(weeklyAdherenceForm.isTreatmentPaused());
-        assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReason());
+        assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReasons());
     }
 
     private WeeklyAdherenceForm createTestWeeklyAdherenceForm() {
@@ -83,6 +83,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", monday);
         interruption.resumeTreatment("swap", monday.plusDays(1));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption));
+        mockCurrentDate(new LocalDate(2012, 5, 10)); // Any day in the week of pause
         return new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
     }
 

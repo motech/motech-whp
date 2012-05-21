@@ -1,6 +1,8 @@
 package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -31,30 +33,61 @@ public class TreatmentInterruptionTest {
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsFalse_IfPillDateIsBeforePauseDate_AndCurrentTreatmentIsPaused() {
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndAsOfDateIsAfterPauseDate() {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        assertFalse(interruption.isTreatmentInterrupted(today().minusDays(1)));
+        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfPillDateIsAfterPauseDate_AndCurrentTreatmentIsPaused() {
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndAsOfDateIsOnPauseDate() {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        assertTrue(interruption.isTreatmentInterrupted(today()));
-        assertTrue(interruption.isTreatmentInterrupted(today().plusDays(1)));
+        assertTrue(interruption.isTreatmentInterrupted(today(), today()));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsFalse_IfPillDateIsAfterResumptionDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(1));
-        interruption.resumeTreatment("swap", today());
-        assertFalse(interruption.isTreatmentInterrupted(today()));
-        assertFalse(interruption.isTreatmentInterrupted(today().plusDays(1)));
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndPauseDateIsBeforeStartDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
+        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfPillDateIsBeforeResumptionDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(1));
+    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsPaused_AndAsOfDateIsBeforePauseDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(1));
+        assertFalse(interruption.isTreatmentInterrupted(today(), today()));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsOnStartDate_AndAsOfDateIsOnPauseDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
         interruption.resumeTreatment("swap", today());
-        assertTrue(interruption.isTreatmentInterrupted(today().minusDays(1)));
+        assertTrue(interruption.isTreatmentInterrupted(today(), today()));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsAfterStartDate_AndAsOfDateIsOnPauseDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(1));
+        interruption.resumeTreatment("swap", today().plusDays(1));
+        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsOnStartDate_AndAsOfDateIsAfterPauseDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
+        interruption.resumeTreatment("swap", today());
+        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsAfterAsOfDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(2));
+        interruption.resumeTreatment("swap", today().plusDays(3)); //does not matter
+        assertFalse(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
+        interruption.resumeTreatment("swap", today()); //does not matter
+        assertFalse(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
     }
 }

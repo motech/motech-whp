@@ -6,6 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
 
@@ -17,12 +18,13 @@ public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
     }
 
     @JsonIgnore
-    public String getPauseReason(LocalDate asOnPillDate) {
+    public List<String> getPauseReasons(LocalDate startingOn, LocalDate asOf) {
+        List<String> pauseReasons = new ArrayList<String>();
         for (TreatmentInterruption treatmentInterruption : this) {
-            if (treatmentInterruption.isTreatmentInterrupted(asOnPillDate))
-                return treatmentInterruption.getReasonForPause();
+            if (treatmentInterruption.isTreatmentInterrupted(startingOn, asOf))
+                pauseReasons.add(treatmentInterruption.getReasonForPause());
         }
-        return null;
+        return pauseReasons;
     }
 
     public TreatmentInterruption latestInterruption() {

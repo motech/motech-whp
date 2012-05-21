@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
 import static org.motechproject.whp.adherence.domain.PillStatus.NotTaken;
 import static org.motechproject.whp.adherence.domain.PillStatus.Taken;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
@@ -46,8 +48,8 @@ public class WeeklyAdherenceForm {
             if (Taken.equals(adherence.getPillStatus())) {
                 numberOfDosesTaken++;
             }
-            populatePauseReason(adherence);
         }
+        populatePauseReasons(currentWeekInstance());
     }
 
     public WeeklyAdherence weeklyAdherence(TreatmentCategory treatmentCategory) {
@@ -60,10 +62,10 @@ public class WeeklyAdherenceForm {
         return weeklyAdherence;
     }
 
-    private void populatePauseReason(Adherence adherence) {
-        String pauseReason = patient.getTreatmentInterruptions().getPauseReason(adherence.getPillDate());
-        if (pauseReason != null) {
-            pauseReasons.add(pauseReason);
+    private void populatePauseReasons(TreatmentWeek treatmentWeekOfDate) {
+        List<String> pauseReasons = patient.getTreatmentInterruptions().getPauseReasons(treatmentWeekOfDate.startDate(), today());
+        if (!pauseReasons.isEmpty()) {
+            this.pauseReasons.addAll(pauseReasons);
         }
     }
 
@@ -71,7 +73,7 @@ public class WeeklyAdherenceForm {
         return !pauseReasons.isEmpty();
     }
 
-    String getTreatmentPauseReason() {
+    String getTreatmentPauseReasons() {
         return StringUtils.join(pauseReasons.toArray(), ", ");
     }
 
@@ -86,7 +88,7 @@ public class WeeklyAdherenceForm {
     public String getWarningMessage() {
         List<String> warningMessages = new ArrayList<String>();
         if (isTreatmentPaused())
-            warningMessages.add(String.format("The patient's treatment has been paused for one or more days in the last week. Reason: %s", getTreatmentPauseReason()));
+            warningMessages.add(String.format("The patient's treatment has been paused for one or more days in the last week. Reason: %s", getTreatmentPauseReasons()));
         if (!isAdherenceUpdatable())
             warningMessages.add("Please contact the CMF admin to update adherence.");
         return StringUtils.join(warningMessages.toArray(), "<br/>");
