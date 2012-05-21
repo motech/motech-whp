@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
 
-import static org.motechproject.util.DateUtil.today;
+import java.util.List;
 
 public class ProvidedTreatment {
 
@@ -86,8 +86,8 @@ public class ProvidedTreatment {
     }
 
     @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
-        return treatment.isValid(validationErrors) && patientAddress.isValid(validationErrors);
+    public boolean isValid(List<WHPDomainErrorCode> errorCodes) {
+        return treatment.isValid(errorCodes) && patientAddress.isValid(errorCodes);
     }
 
     @JsonIgnore

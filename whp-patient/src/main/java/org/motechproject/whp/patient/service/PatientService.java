@@ -6,8 +6,8 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.criteria.CriteriaErrors;
 import org.motechproject.whp.patient.exception.WHPDomainException;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
 import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -15,6 +15,8 @@ import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPerformSimpleUpdate;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
@@ -25,8 +27,6 @@ public class PatientService {
     private AllTreatments allTreatments;
     private AllPatients allPatients;
     private TreatmentUpdateFactory factory;
-
-    private final String CANNOT_SIMPLE_UPDATE = "Cannot update details for this case: ";
 
     @Autowired
     public PatientService(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateFactory factory) {
@@ -48,22 +48,18 @@ public class PatientService {
 
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        CriteriaErrors criteriaErrors = new CriteriaErrors();
-        if(canPerformSimpleUpdate(patient, patientRequest, criteriaErrors)){
+        ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+        if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
             Patient updatedPatient = mapUpdates(patientRequest, patient);
             allPatients.update(updatedPatient);
         } else {
-            throw new WHPDomainException(CANNOT_SIMPLE_UPDATE + criteriaErrors);
+            throw new WHPDomainException(errorCodes);
         }
     }
 
     public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
         TreatmentUpdate treatmentUpdate = factory.updateFor(treatmentUpdateRequest.getTreatment_update());
-        try{
-            treatmentUpdate.apply(treatmentUpdateRequest);
-        } catch (WHPDomainException e) {
-            throw new WHPDomainException(e.getMessage());
-        }
+        treatmentUpdate.apply(treatmentUpdateRequest);
     }
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {

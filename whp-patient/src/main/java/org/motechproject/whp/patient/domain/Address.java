@@ -2,7 +2,9 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+
+import java.util.List;
 
 @Data
 public class Address {
@@ -27,14 +29,14 @@ public class Address {
     }
 
     @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
+    public boolean isValid(List<WHPDomainErrorCode> validationErrors) {
         boolean isFilled = address_location != null
                 && address_block != null
                 && address_village != null
                 && address_district != null
                 && address_state != null;
         if (!isFilled) {
-            validationErrors.add("Invalid address : null value");
+            validationErrors.add(WHPDomainErrorCode.NULL_VALUE_IN_ADDRESS);
         }
         return isFilled;
     }

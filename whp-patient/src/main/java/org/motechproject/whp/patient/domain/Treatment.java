@@ -6,11 +6,13 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Data
 @TypeDiscriminator("doc.type == 'Treatment'")
@@ -54,14 +56,14 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
+    public boolean isValid(List<WHPDomainErrorCode> errorCodes) {
         boolean isLatestSmearResultValid = true;
         boolean isLatestWeightStatisticValid = true;
         if(!CollectionUtils.isEmpty(smearTestInstances)) {
-            isLatestSmearResultValid = smearTestInstances.latestResult().isValid(validationErrors);
+            isLatestSmearResultValid = smearTestInstances.latestResult().isValid(errorCodes);
         }
         if(!CollectionUtils.isEmpty(weightInstances)) {
-            isLatestWeightStatisticValid = weightInstances.latestResult().isValid(validationErrors);
+            isLatestWeightStatisticValid = weightInstances.latestResult().isValid(errorCodes);
         }
         return isLatestSmearResultValid && isLatestWeightStatisticValid;
     }

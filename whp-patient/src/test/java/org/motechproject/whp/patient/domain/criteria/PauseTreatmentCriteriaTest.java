@@ -1,10 +1,13 @@
 package org.motechproject.whp.patient.domain.criteria;
 
-import junit.framework.Assert;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
@@ -15,11 +18,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class PauseTreatmentCriteriaTest {
 
-    CriteriaErrors criteriaErrors;
+    List<WHPDomainErrorCode> errorCodes;
 
     public PauseTreatmentCriteriaTest() {
         initMocks(this);
-        criteriaErrors = new CriteriaErrors();
+        errorCodes = new ArrayList<WHPDomainErrorCode>();
     }
 
     @Test
@@ -32,8 +35,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"Current treatment is already paused"}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_PAUSED));
     }
 
     @Test
@@ -45,8 +48,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment"}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -59,8 +62,9 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is already paused"}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_PAUSED));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -73,8 +77,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -87,8 +91,9 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -102,8 +107,9 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -117,8 +123,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"Current treatment is closed. Cannot pause a closed treatment."}, criteriaErrors.toArray());
+        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -130,7 +136,7 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertTrue(canPauseCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{}, criteriaErrors.toArray());
+        assertTrue(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }

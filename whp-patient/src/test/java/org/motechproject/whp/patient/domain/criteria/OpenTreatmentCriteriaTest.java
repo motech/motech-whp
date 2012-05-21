@@ -2,9 +2,11 @@ package org.motechproject.whp.patient.domain.criteria;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
@@ -15,11 +17,12 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class OpenTreatmentCriteriaTest {
 
-    CriteriaErrors criteriaErrors;
+
+    private ArrayList<WHPDomainErrorCode> errorCodes;
 
     public OpenTreatmentCriteriaTest() {
         initMocks(this);
-        criteriaErrors = new CriteriaErrors();
+        errorCodes = new ArrayList<WHPDomainErrorCode>();
     }
 
     @Test
@@ -29,8 +32,8 @@ public class OpenTreatmentCriteriaTest {
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
 
-        assertFalse(canOpenNewTreatment(patient, criteriaErrors));
-        assertArrayEquals(new String[]{"Current treatment is not closed"}, criteriaErrors.toArray());
+        assertFalse(canOpenNewTreatment(patient, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_NOT_CLOSED));
     }
 
     @Test
@@ -40,8 +43,8 @@ public class OpenTreatmentCriteriaTest {
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
 
-        assertFalse(canOpenNewTreatment(patient, criteriaErrors));
-        assertArrayEquals(new String[]{"Case does not have any current treatment"}, criteriaErrors.toArray());
+        assertFalse(canOpenNewTreatment(patient, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
     }
 
     @Test
@@ -50,8 +53,8 @@ public class OpenTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id("caseId"); //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
         treatmentUpdateRequest.setTb_id("tbId");
 
-        assertFalse(canCloseCurrentTreatment(null, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"Invalid case-id. No such patient."}, criteriaErrors.toArray());
+        assertFalse(canCloseCurrentTreatment(null, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.CASE_ID_DOES_NOT_EXIST));
     }
 
     @Test
@@ -62,7 +65,7 @@ public class OpenTreatmentCriteriaTest {
         TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
 
-        assertTrue(canOpenNewTreatment(patient, criteriaErrors));
-        assertArrayEquals(new String[]{}, criteriaErrors.toArray());
+        assertTrue(canOpenNewTreatment(patient, errorCodes));
+        assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }

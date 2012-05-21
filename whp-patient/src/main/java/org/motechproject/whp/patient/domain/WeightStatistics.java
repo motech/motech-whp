@@ -3,8 +3,11 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.repository.ValidationErrors;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
 import org.motechproject.whp.refdata.domain.WeightInstance;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class WeightStatistics {
@@ -23,10 +26,10 @@ public class WeightStatistics {
     }
 
     @JsonIgnore
-    public boolean isValid(ValidationErrors validationErrors) {
+    public boolean isValid(List<WHPDomainErrorCode> validationErrors) {
         boolean isFilled = weight_instance != null && weight != null && measuringDate != null;
         if (!isFilled) {
-            validationErrors.add("Invalid weight statistics : null value");
+            validationErrors.add(WHPDomainErrorCode.NULL_VALUE_IN_WEIGHT_STATISTICS);
         }
         return isFilled;
     }

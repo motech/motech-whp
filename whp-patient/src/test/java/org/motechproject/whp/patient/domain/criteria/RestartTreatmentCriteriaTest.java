@@ -4,6 +4,9 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
@@ -14,11 +17,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class RestartTreatmentCriteriaTest {
 
-    CriteriaErrors criteriaErrors;
+     ArrayList<WHPDomainErrorCode> errorCodes;
 
     public RestartTreatmentCriteriaTest() {
         initMocks(this);
-        criteriaErrors = new CriteriaErrors();
+         errorCodes = new ArrayList<WHPDomainErrorCode>();
     }
 
     @Test
@@ -30,8 +33,8 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"Current treatment is already in progress"}, criteriaErrors.toArray());
+        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
 
     @Test
@@ -44,8 +47,8 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment"}, criteriaErrors.toArray());
+        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -57,8 +60,9 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{"No such tb id for current treatment", "Current treatment is already in progress"}, criteriaErrors.toArray());
+        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
 
     @Test
@@ -71,7 +75,7 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
         treatmentUpdateRequest.setTb_id(tbId);
 
-        assertTrue(canRestartCurrentTreatment(patient, treatmentUpdateRequest, criteriaErrors));
-        assertArrayEquals(new String[]{}, criteriaErrors.toArray());
+        assertTrue(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }

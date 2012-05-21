@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.exception.WHPDomainException;
+import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -32,11 +33,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public void add(Patient patient) {
         Patient savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient != null) {
-            throw new WHPDomainException("patient with the same case-id is already registered.");
+            throw new WHPDomainException(WHPDomainErrorCode.DUPLICATE_CASE_ID);
         }
-        ValidationErrors validationErrors = new ValidationErrors();
-        if (!patient.isValid(validationErrors)) {
-            throw new WHPDomainException("invalid patient data:" + validationErrors);
+
+        ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+        if (!patient.isValid(errorCodes)) {
+            throw new WHPDomainException(errorCodes);
         }
         super.add(patient);
     }
@@ -44,9 +46,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     @Override
     public void update(Patient patient) {
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
-        ValidationErrors validationErrors = new ValidationErrors();
-        if (!patient.isValid(validationErrors)) {
-            throw new WHPDomainException("invalid patient data." + validationErrors);
+         ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+        if (!patient.isValid(errorCodes)) {
+            throw new WHPDomainException(errorCodes);
         }
         super.update(patient);
     }

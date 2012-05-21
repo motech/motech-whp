@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public abstract class SpringIntegrationTest {
+public abstract class SpringIntegrationTest extends BaseUnitTest {
 
     @Qualifier("whpDbConnector")
     @Autowired
