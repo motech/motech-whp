@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class PatientControllerTest {
     @Mock
     Model uiModel;
     @Mock
+    HttpServletRequest request;
+    @Mock
     private AllPatients allPatients;
 
     @Before
@@ -39,7 +42,7 @@ public class PatientControllerTest {
 
         when(allPatients.getAllWithActiveTreatment("providerId")).thenReturn(patientsForProvider);
 
-        providerController.list("providerId", uiModel);
+        providerController.list("providerId", uiModel, request);
         verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), same(patientsForProvider));
     }
 }

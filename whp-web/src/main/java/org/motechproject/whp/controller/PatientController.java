@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static org.motechproject.flash.FlashAttributeName.in;
 
 @Controller
 @RequestMapping(value = "/patients")
 public class PatientController {
 
     public static final String PATIENT_LIST = "patientList";
+    public static final String MESSAGE = "message";
 
     AllPatients allPatients;
 
@@ -25,9 +29,14 @@ public class PatientController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list(@RequestParam("provider") String providerId, Model uiModel) {
+    public String list(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatment(providerId);
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
+
+        Object message = request.getAttribute(in("message"));
+        if (null != message) {
+            uiModel.addAttribute("message", message.toString());
+        }
         return "patient/list";
     }
 }

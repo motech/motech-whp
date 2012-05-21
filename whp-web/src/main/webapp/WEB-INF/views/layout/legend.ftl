@@ -1,6 +1,6 @@
-<#macro legend key1 value1>
-    <div class="row">
-        <table id="legend" class="table span3 table-bordered table-condensed">
+<#macro legend key1 value1 span="span3">
+    <div class="row pull-right">
+        <table id="legend" class="table ${span} table-bordered table-condensed">
             <thead>
             <tr>
                 <th>Legend</th>

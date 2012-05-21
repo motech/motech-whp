@@ -175,7 +175,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
         String form = adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherence, patient), request);
-        assertEquals("forward:/", form);
+        assertEquals("redirect:/", form);
     }
 
     @After
