@@ -3,7 +3,7 @@
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
     <#if message?exists && (message?length>0)>
-        <div class="adherence-message-alert text-center alert alert-info fade in">
+        <div class="adherence-message-alert row text-center alert alert-info fade in">
             <button class="close" data-dismiss="alert">&times;</button>
         ${message}
         <#assign message=""/>
