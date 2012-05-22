@@ -36,7 +36,7 @@ public class PatientBuilder {
 
     private ProvidedTreatment defaultProvidedTreatment() {
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
-        providedTreatment.setTbId("tbId");
+        providedTreatment.setTbId("elevenDigit");
         providedTreatment.setTreatment(defaultTreatment());
         providedTreatment.setPatientAddress(defaultAddress());
         return providedTreatment;

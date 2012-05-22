@@ -26,7 +26,7 @@ public class PatientRequestBuilder {
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
-                .setTreatmentData(category, "tbId", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .setSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
@@ -65,7 +65,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForCloseTreatment() {
         patientRequest.setCase_id("caseId");
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbId");
+        patientRequest.setTb_id("elevenDigit");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.Close);
         patientRequest.setTreatment_outcome("Cured");
         return this;
@@ -94,7 +94,7 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id("caseId");
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("newTbId");
-        patientRequest.setOld_tb_id("tbId");
+        patientRequest.setOld_tb_id("elevenDigit");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferIn);
         patientRequest.setTreatment_category(category);
         return this;

@@ -37,7 +37,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public static final String PATIENT_ID = "patientId";
     public static final String NEW_PROVIDER_ID = "newProviderId";
     public static final String NEW_TB_ID = "newTbId";
-    public static final String OLD_TB_ID = "tbId";
+    public static final String OLD_TB_ID = "elevenDigit";
     public static final String OLD_PROVIDER_ID = "123456";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
