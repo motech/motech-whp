@@ -29,6 +29,20 @@
             </classpath>
         </java>
     </target>
+    <property name="importerLog" value="importer.log"/>
+    <target name="load.patient.data.from.csv">
+        <fail unless="file" message="Usage : ant load.patient.data.from.csv -Dfile=path -DimporterLog=path" />
+        <echo message="Loading Patient Data.."/>
+        <java fork="false" classname="org.motechproject.whp.importer.csv.CsvImporter" output="${importerLog}">
+            <arg value="patient"/>
+            <arg value="${file}"/>
+            <classpath>
+                <path location="../whp-web/target/whp-web-0.1-SNAPSHOT/WEB-INF/classes"/>
+                <path refid="lib.path"/>
+            </classpath>
+        </java>
+        <echo message="Output log is stored in ${importerLog}"/>
+    </target>
 
     <target name="drop.all.dbs">
         <for list="motech-whp,motech-web-security,motech-tb-adherence"
