@@ -38,6 +38,11 @@ public class RegistrationService {
                 providerRequest.getTertiaryMobile(),
                 providerRequest.getDistrict(),
                 providerRequest.getLastModifiedDate());
-        motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()));
+        motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+    }
+
+    public void changePasswordAndActivateUser(String userName, String newPassword) {
+        motechAuthenticationService.changePassword(userName, newPassword);
+        motechAuthenticationService.activateUser(userName);
     }
 }

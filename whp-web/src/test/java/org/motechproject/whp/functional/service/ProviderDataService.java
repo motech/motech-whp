@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.service;
 
 import org.motechproject.whp.functional.data.TestProvider;
+import org.motechproject.whp.functional.page.ProviderActivatePage;
 import org.motechproject.whp.functional.page.ProviderCreatePage;
 import org.openqa.selenium.WebDriver;
 
@@ -19,6 +20,9 @@ public class ProviderDataService {
         TestProvider testProvider = new TestProvider(generateId(), "password");
         ProviderCreatePage providerCreatePage = ProviderCreatePage.fetch(webDriver);
         providerCreatePage.createProviderWithLogin(testProvider.getProviderId(), testProvider.getPassword());
+
+        ProviderActivatePage providerActivatePage = ProviderActivatePage.fetch(webDriver);
+        providerActivatePage.activateProvider(testProvider.getProviderId());
         return testProvider;
     }
 

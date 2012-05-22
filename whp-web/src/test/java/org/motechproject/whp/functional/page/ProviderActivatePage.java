@@ -7,16 +7,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
-public class ProviderCreatePage extends Page {
+public class ProviderActivatePage extends Page {
 
     @FindBy(how = How.ID, using = "provider_id")
     WebElement providerId;
-    @FindBy(how = How.ID, using = "password")
-    WebElement password;
     @FindBy(how = How.ID, using = "post-button")
     WebElement submit;
 
-    public ProviderCreatePage(WebDriver webDriver) {
+    public ProviderActivatePage(WebDriver webDriver) {
         super(webDriver);
     }
 
@@ -25,16 +23,16 @@ public class ProviderCreatePage extends Page {
         waitForElementWithIdToLoad("provider_id");
     }
 
-    public static ProviderCreatePage fetch(WebDriver webDriver) {
-        webDriver.get(WHPUrl.baseFor("emulator/provider.jsp"));
-        return MyPageFactory.initElements(webDriver, ProviderCreatePage.class);
+    public static ProviderActivatePage fetch(WebDriver webDriver) {
+        webDriver.get(WHPUrl.baseFor("emulator/cmfAdmin.jsp"));
+        return MyPageFactory.initElements(webDriver, ProviderActivatePage.class);
     }
 
     //Uses providerId as username
-    public void createProviderWithLogin(String providerId, String password) {
+    public LoginPage activateProvider(String providerId) {
         setProviderId(providerId);
-        setPassword(password);
         submit.click();
+        return transitionToNextPage();
     }
 
     private void setProviderId(String providerId) {
@@ -42,8 +40,8 @@ public class ProviderCreatePage extends Page {
         this.providerId.sendKeys(providerId);
     }
 
-    private void setPassword(String password) {
-        this.password.clear();
-        this.password.sendKeys(password);
+    private LoginPage transitionToNextPage() {
+        webDriver.get(LoginPage.LOGIN_URL);
+        return MyPageFactory.initElements(webDriver, LoginPage.class);
     }
 }

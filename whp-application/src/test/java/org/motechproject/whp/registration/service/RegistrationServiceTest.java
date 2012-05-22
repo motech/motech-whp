@@ -35,13 +35,12 @@ public class RegistrationServiceTest {
     }
 
     @Test
-    public void shouldRegisterUser() {
+    public void shouldRegisterUserAsInactiveByDefault() {
         ProviderRequest providerRequest = new ProviderRequest("providerId", "district", "1111111111", DateUtil.now());
         String externalId = "externalId";
         when(providerService.createProvider(Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<DateTime>any())).thenReturn(externalId);
         registrationService.registerProvider(providerRequest);
 
-        verify(motechAuthenticationService).register(providerRequest.getProviderId(), "password", externalId, Arrays.asList("PROVIDER"));
+        verify(motechAuthenticationService).register(providerRequest.getProviderId(), "password", externalId, Arrays.asList("PROVIDER"), false);
     }
-
 }
