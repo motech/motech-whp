@@ -18,5 +18,6 @@
             </tbody>
         </table>
     </div>
+    <!-- FIXES FIREFOX DISPLAY ISSUE. DO.NOT.REMOVE..-->
     <div class="row"></div>
 </#macro>
