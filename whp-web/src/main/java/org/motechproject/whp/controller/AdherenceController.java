@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.export.annotation.Report;
 import org.motechproject.export.annotation.ReportGroup;
+import org.motechproject.flash.Flash;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static org.motechproject.flash.FlashAttributeName.out;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 
 @Controller
@@ -65,7 +65,7 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUsername(), AdherenceSource.WEB, remarks);
         adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(category), auditParams);
-        httpServletRequest.setAttribute(out("message"), "Adherence Saved For Patient : " + patientId);
+        Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }
 

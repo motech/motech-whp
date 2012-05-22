@@ -1,5 +1,7 @@
 package org.motechproject.whp.controller;
 
+import org.apache.commons.lang.StringUtils;
+import org.motechproject.flash.Flash;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
-import static org.motechproject.flash.FlashAttributeName.in;
 
 @Controller
 @RequestMapping(value = "/patients")
@@ -33,9 +33,9 @@ public class PatientController {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatment(providerId);
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
 
-        Object message = request.getAttribute(in("message"));
-        if (null != message) {
-            uiModel.addAttribute("message", message.toString());
+        String message = Flash.in("message", request);
+        if (StringUtils.isNotEmpty(message)) {
+            uiModel.addAttribute("message", message);
         }
         return "patient/list";
     }

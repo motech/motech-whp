@@ -1,5 +1,7 @@
 package org.motechproject.whp.controller;
 
+import org.apache.commons.lang.StringUtils;
+import org.motechproject.flash.Flash;
 import org.motechproject.security.domain.AuthenticatedUser;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPRole;
@@ -7,12 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static org.motechproject.flash.FlashAttributeName.in;
-import static org.motechproject.flash.FlashAttributeName.out;
 
 @Controller
 public class HomeController extends BaseController {
@@ -30,9 +27,9 @@ public class HomeController extends BaseController {
         if (user.getRoles().hasRole(WHPRole.ADMIN.name())) {
             return "admin";
         } else {
-            Object message = request.getAttribute(in("message"));
-            if (null != message) {
-                request.setAttribute(out("message"), message.toString());
+            String message = Flash.in("message", request);
+            if (StringUtils.isNotEmpty(message)) {
+                Flash.out("message", message, request);
             }
             return "redirect:/patients?provider=" + allProviders.get(user.getExternalId()).getProviderId();
         }
