@@ -1,7 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 
@@ -15,23 +14,14 @@ public class TreatmentMapper {
         return treatment;
     }
 
-    public static Treatment createNewTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest) {
-        TreatmentCategory treatmentCategory = treatmentUpdateRequest.getTreatment_category();
-        DiseaseClass diseaseClass = treatmentUpdateRequest.getDisease_class();
+    public static Treatment createNewTreatment(Patient patient, PatientRequest patientRequest) {
+        TreatmentCategory treatmentCategory = patientRequest.getTreatment_category();
+        DiseaseClass diseaseClass = patientRequest.getDisease_class();
 
         Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge());
-        SmearTestResults smearTestResults = new SmearTestResults(treatmentUpdateRequest.getSmear_sample_instance(),
-                treatmentUpdateRequest.getSmear_test_date_1(),
-                treatmentUpdateRequest.getSmear_test_result_1(),
-                treatmentUpdateRequest.getSmear_test_date_2(),
-                treatmentUpdateRequest.getSmear_test_result_2());
-        newTreatment.addSmearTestResult(smearTestResults);
+        newTreatment.addSmearTestResult(patientRequest.getSmearTestResults());
+        newTreatment.addWeightStatistics(patientRequest.getWeightStatistics());
 
-        WeightStatistics weightStatistics = new WeightStatistics(treatmentUpdateRequest.getWeight_instance(),
-                treatmentUpdateRequest.getWeight(),
-                treatmentUpdateRequest.getDate_modified().toLocalDate());
-
-        newTreatment.addWeightStatistics(weightStatistics);
         return newTreatment;
     }
 

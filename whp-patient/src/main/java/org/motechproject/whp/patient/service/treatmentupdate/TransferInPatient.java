@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -25,16 +25,16 @@ public class TransferInPatient extends TreatmentUpdate {
         this.providerService = providerService;
     }
 
-    public void apply(TreatmentUpdateRequest treatmentUpdateRequest) {
-        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+    public void apply(PatientRequest patientRequest) {
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
          ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
-        if (!canTransferInPatient(patient, treatmentUpdateRequest, errorCodes)) {
+        if (!canTransferInPatient(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        transferInPatient(patient, treatmentUpdateRequest);
+        transferInPatient(patient, patientRequest);
     }
 
-    private void transferInPatient(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest) {
-        providerService.transferIn(treatmentUpdateRequest.getProvider_id(), patient, treatmentUpdateRequest.getTb_id(), treatmentUpdateRequest.getDate_modified());
+    private void transferInPatient(Patient patient, PatientRequest patientRequest) {
+        providerService.transferIn(patientRequest.getProvider_id(), patient, patientRequest.getTb_id(), patientRequest.getDate_modified());
     }
 }

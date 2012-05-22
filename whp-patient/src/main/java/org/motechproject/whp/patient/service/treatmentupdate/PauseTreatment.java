@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -23,18 +23,18 @@ public class PauseTreatment extends TreatmentUpdate {
     }
 
     @Override
-    public void apply(TreatmentUpdateRequest treatmentUpdateRequest) {
-        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+    public void apply(PatientRequest patientRequest) {
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-        if (!canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes)) {
+        if (!canPauseCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        pauseTreatment(patient, treatmentUpdateRequest, allPatients);
+        pauseTreatment(patient, patientRequest, allPatients);
     }
 
-    private void pauseTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients) {
-        patient.pauseCurrentTreatment(treatmentUpdateRequest.getReason_for_pause(), treatmentUpdateRequest.getDate_modified());
+    private void pauseTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
+        patient.pauseCurrentTreatment(patientRequest.getReason_for_pause(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

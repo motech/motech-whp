@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -22,19 +22,19 @@ public class CloseCurrentTreatment extends TreatmentUpdate {
     }
 
     @Override
-    public void apply(TreatmentUpdateRequest treatmentUpdateRequest){
-        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+    public void apply(PatientRequest patientRequest){
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
          ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-        if (!canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes)){
+        if (!canCloseCurrentTreatment(patient, patientRequest, errorCodes)){
             throw new WHPRuntimeException(errorCodes);
         }
-        closeCurrentTreatment(patient, treatmentUpdateRequest, allPatients, allTreatments);
+        closeCurrentTreatment(patient, patientRequest, allPatients, allTreatments);
     }
 
-    private void closeCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
-        patient.closeCurrentTreatment(treatmentUpdateRequest.getTreatment_outcome(), treatmentUpdateRequest.getDate_modified());
+    private void closeCurrentTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients, AllTreatments allTreatments) {
+        patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
         allPatients.update(patient);
     }

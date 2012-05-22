@@ -1,30 +1,15 @@
 package org.motechproject.whp.functional.test.treatmentupdate;
 
-import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.framework.BaseTest;
-import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.ProviderPage;
-import org.motechproject.whp.functional.service.ProviderDataService;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
-import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.request.PatientWebRequest;
-import org.motechproject.whp.webservice.PatientWebService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 

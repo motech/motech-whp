@@ -40,8 +40,6 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     PatientService patientService;
     @Autowired
     DozerBeanMapper patientRequestMapper;
-    @Autowired
-    DozerBeanMapper treatmentUpdateRequestMapper;
 
     PatientWebService patientWebService;
 
@@ -56,7 +54,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, patientRequestMapper, treatmentUpdateRequestMapper);
+        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, patientRequestMapper);
     }
 
     @Test
@@ -107,21 +105,21 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         DateTime dateModified = DateUtil.now();
-        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder()
+        patientWebRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
                 .withDate_Modified(dateModified)
                 .withCaseId(patientWebRequest.getCase_id())
                 .withOldTb_Id(patient.getCurrentProvidedTreatment().getTbId())
                 .build();
-        Provider newProvider = new Provider(treatmentUpdateRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
+        Provider newProvider = new Provider(patientWebRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
         allProviders.add(newProvider);
 
-        patientWebService.updateCase(treatmentUpdateRequest);
+        patientWebService.updateCase(patientWebRequest);
 
-        Patient updatedPatient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+        Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        assertEquals(treatmentUpdateRequest.getProvider_id(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertEquals(treatmentUpdateRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(patientWebRequest.getProvider_id(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals(patientWebRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
 
         assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
@@ -138,13 +136,13 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
-        PatientWebRequest treatmentUpdateRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields()
+        patientWebRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields()
                                                                                  .withTBId("elevenDigit")
                                                                                  .withCaseId("12341234")
                                                                                  .build();
-        patientWebService.updateCase(treatmentUpdateRequest);
+        patientWebService.updateCase(patientWebRequest);
 
-        Patient updatedPatient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+        Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
         assertNotSame(patient.getCurrentProvidedTreatment().getEndDate(), updatedPatient.getCurrentProvidedTreatment().getEndDate());

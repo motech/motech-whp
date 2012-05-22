@@ -5,7 +5,7 @@
         <case_name>Raju Singh</case_name>
     </create>
     <update>
-        <tb_id>12345678901</tb_id>
+        <tb_id>tbId</tb_id>
         <!--<tb_registration_number>xxxxxxxxxxx</tb_registration_number>-->
         <provider_id>123456</provider_id>
         <patient_type>New</patient_type>

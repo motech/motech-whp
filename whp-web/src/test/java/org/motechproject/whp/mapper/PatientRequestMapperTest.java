@@ -48,6 +48,21 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         assertTreatment(patientRequest, patientWebRequest);
     }
 
+    @Test
+    public void shouldCreateTreatmentUpdateRequest() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().build();
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+
+        assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
+        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals(patientWebRequest.getOld_tb_id(), patientRequest.getOld_tb_id());
+        assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
+        assertEquals(patientWebRequest.getTreatment_outcome(), patientRequest.getTreatment_outcome());
+        assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
+        assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
+        assertEquals(patientWebRequest.getTreatment_update(), patientRequest.getTreatment_update().name());
+    }
+
     private void assertBasicPatientInfo(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
         assertEquals("Foo", patientRequest.getFirst_name());

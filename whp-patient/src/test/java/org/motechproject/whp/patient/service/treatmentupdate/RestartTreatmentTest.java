@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -23,12 +23,12 @@ public class RestartTreatmentTest extends BaseUnitTest {
     private AllTreatments allTreatments;
 
     private RestartTreatment restartTreatment;
-    private TreatmentUpdateRequest treatmentUpdateRequest;
+    private PatientRequest patientRequest;
 
     @Before
     public void setUp() {
         initMocks(this);
-        treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withDefaults().build();
+        patientRequest = new PatientRequestBuilder().withDefaults().build();
         restartTreatment = new RestartTreatment(allPatients, allTreatments);
     }
 
@@ -36,9 +36,9 @@ public class RestartTreatmentTest extends BaseUnitTest {
     public void shouldNotRestartCurrentTreatment_OnAnyErrors() {
         Patient patient = new PatientBuilder().withDefaults().build();
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        restartTreatment.apply(treatmentUpdateRequest);
+        restartTreatment.apply(patientRequest);
         verify(allPatients, never()).update(patient);
     }
 
@@ -46,9 +46,9 @@ public class RestartTreatmentTest extends BaseUnitTest {
     public void shouldRestartAndUpdatePatientCurrentTreatment_IfNoErrorsFound() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.pauseCurrentTreatment("paws", now());
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        restartTreatment.apply(treatmentUpdateRequest);
+        restartTreatment.apply(patientRequest);
         verify(allPatients).update(patient);
     }
 

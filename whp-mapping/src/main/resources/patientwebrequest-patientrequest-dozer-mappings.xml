@@ -90,6 +90,10 @@
             <a>date_modified</a>
             <b>weightStatistics.measuringDate</b>
         </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>treatment_update</a>
+            <b>treatment_update</b>
+        </field>
     </mapping>
 
 </mappings>

@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain.criteria;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
@@ -29,11 +29,11 @@ public class RestartTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canRestartCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
 
@@ -43,11 +43,11 @@ public class RestartTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canRestartCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
@@ -56,11 +56,11 @@ public class RestartTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canRestartCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
@@ -71,11 +71,11 @@ public class RestartTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertTrue(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(canRestartCurrentTreatment(patient, patientRequest, errorCodes));
         assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }

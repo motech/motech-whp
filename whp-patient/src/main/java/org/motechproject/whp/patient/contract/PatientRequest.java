@@ -7,28 +7,38 @@ import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.WeightStatistics;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 
 @Data
 public class PatientRequest {
 
     private String case_id;
-    private DateTime treatmentStartDate;
-    private String phi;
     private String first_name;
     private String last_name;
     private Gender gender;
+    private Integer age;
     private PatientType patient_type;
-    private String mobile_number;
-    private DiseaseClass disease_class;
+    private String phi;
+
+    private String provider_id;
     private Address address = new Address();
+    private String mobile_number;
+
+    private String tb_id;
+    private String old_tb_id;
+    private TreatmentCategory treatment_category;
+    private DateTime treatmentStartDate;
+    private DiseaseClass disease_class;
+    private String tb_registration_number;
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
-    private String tb_id;
-    private String provider_id;
-    private TreatmentCategory treatment_category;
-    private String tb_registration_number;
-    private Integer age;
+
+    private TreatmentUpdateScenario treatment_update;
+    private String treatment_outcome;
+    private String reason_for_pause;
+    private String reason_for_restart;
+
     private DateTime date_modified;
 
     public PatientRequest() {

@@ -1,11 +1,8 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.*;
 
 import static org.junit.Assert.assertEquals;
@@ -16,16 +13,11 @@ public class TreatmentMapperTest {
 
     @Test
     public void createNewTreatmentFromTreatmentUpdateRequest_SetsTreatmentCategory_DiseaseClass_WeightStatistics_LabResults_AndProviderId() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .build();
-        Patient patient = mapPatient(patientRequest);
-
+        Patient patient = mapPatient(new PatientRequestBuilder().withDefaults().build());
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
 
-        TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
                 .build();
 
@@ -35,16 +27,8 @@ public class TreatmentMapperTest {
         assertEquals(currentProvidedTreatment.getTreatment().getPatientAge(), newTreatment.getPatientAge());
         assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newTreatment.getTreatmentCategory());
 
-        SmearTestResults smearTestResults = new SmearTestResults(openNewTreatmentUpdateRequest.getSmear_sample_instance(),
-                openNewTreatmentUpdateRequest.getSmear_test_date_1(),
-                openNewTreatmentUpdateRequest.getSmear_test_result_1(),
-                openNewTreatmentUpdateRequest.getSmear_test_date_2(),
-                openNewTreatmentUpdateRequest.getSmear_test_result_2());
-
-        WeightStatistics weightStatistics = new WeightStatistics(openNewTreatmentUpdateRequest.getWeight_instance(),
-                openNewTreatmentUpdateRequest.getWeight(),
-                openNewTreatmentUpdateRequest.getDate_modified().toLocalDate());
-
+        SmearTestResults smearTestResults = openNewTreatmentUpdateRequest.getSmearTestResults();
+        WeightStatistics weightStatistics = openNewTreatmentUpdateRequest.getWeightStatistics();
 
         assertEquals(smearTestResults, newTreatment.getSmearTestInstances().latestResult());
         assertEquals(weightStatistics, newTreatment.getWeightInstances().latestResult());

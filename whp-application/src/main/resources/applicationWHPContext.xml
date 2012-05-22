@@ -10,31 +10,4 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.registration"/>
 
-    <bean id="patientRequestMapper" class="org.dozer.DozerBeanMapper">
-        <property name="mappingFiles">
-            <list>
-                <value>dozer-global-configuration.xml</value>
-                <value>patientwebrequest-patientrequest-dozer-mappings.xml</value>
-            </list>
-        </property>
-        <property name="customConvertersWithId">
-            <map>
-                <entry key="stringToTreatmentCategory" value-ref="stringToTreatmentCategory"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="treatmentUpdateRequestMapper" class="org.dozer.DozerBeanMapper">
-        <property name="mappingFiles">
-            <list>
-                <value>dozer-global-configuration.xml</value>
-                <value>patientwebrequest-treatmentupdaterequest-dozer-mappings.xml</value>
-            </list>
-        </property>
-        <property name="customConvertersWithId">
-            <map>
-                <entry key="stringToTreatmentCategory" value-ref="stringToTreatmentCategory"/>
-            </map>
-        </property>
-    </bean>
 </beans>

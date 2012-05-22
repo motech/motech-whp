@@ -17,14 +17,11 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.service.ProviderService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +37,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public static final String PATIENT_ID = "patientId";
     public static final String NEW_PROVIDER_ID = "newProviderId";
     public static final String NEW_TB_ID = "newTbId";
-    public static final String OLD_TB_ID = "12345678901";
+    public static final String OLD_TB_ID = "tbId";
     public static final String OLD_PROVIDER_ID = "123456";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
@@ -58,8 +55,6 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     @Autowired
     private PatientService patientService;
     @Autowired
-    private ProviderService providerService;
-    @Autowired
     private AllAdherenceLogs allAdherenceLogs;
     @Autowired
     private AllPatients allPatients;
@@ -68,18 +63,12 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     @Autowired
     private AllAuditLogs allAuditLogs;
 
-    private String user;
-    private String newUser;
-    private AdherenceSource source;
     private final AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
 
 
     @Before
     public void setup() {
         mockCurrentDate(today);
-        user = "providerId";
-        newUser = "newProviderId";
-        source = AdherenceSource.WEB;
     }
 
     @Test
@@ -132,8 +121,8 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         adherenceService.recordAdherence(PATIENT_ID, adherence, auditParams);
     }
 
-    private TreatmentUpdateRequest createChangeProviderRequest(String newProviderId, String oldTbId, String newTbId) {
-        TreatmentUpdateRequest changeProviderRequest = TreatmentUpdateRequestBuilder.startRecording()
+    private PatientRequest createChangeProviderRequest(String newProviderId, String oldTbId, String newTbId) {
+        return new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withCaseId(PATIENT_ID)
                 .withProviderId(newProviderId)
@@ -141,7 +130,6 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
                 .withOldTbId(oldTbId)
                 .withTbId(newTbId)
                 .build();
-        return changeProviderRequest;
     }
 
     @Test

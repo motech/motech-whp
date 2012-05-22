@@ -12,10 +12,11 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 public class ProviderIdTest extends BasePatientTest {
+
     @Test
     public void shouldThrowExceptionWhenProviderIdIsNotFound() {
-        expectFieldValidationRuntimeException("No provider is found with id:providerId");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
+        expectFieldValidationRuntimeException("No provider is found with id:nonExistantProviderId");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("nonExistantProviderId").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
@@ -41,4 +42,5 @@ public class ProviderIdTest extends BasePatientTest {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
         validator.validate(webRequest, ValidationScope.create);
     }
+
 }

@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -37,25 +37,25 @@ public class TransferInPatientTest extends BaseUnitTest {
 
     @Test
     public void shouldNotTransferInPatientTreatment_OnAnyErrors() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().withOldTbId("wrongTbId").build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withOldTbId("wrongTbId").build();
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        transferInPatient.apply(treatmentUpdateRequest);
-        verify(providerService, never()).transferIn(treatmentUpdateRequest.getProvider_id(),
+        transferInPatient.apply(patientRequest);
+        verify(providerService, never()).transferIn(patientRequest.getProvider_id(),
                 patient,
-                treatmentUpdateRequest.getTb_id(),
-                treatmentUpdateRequest.getDate_modified());
+                patientRequest.getTb_id(),
+                patientRequest.getDate_modified());
     }
 
     @Test
     public void shouldTransferInPatientTreatmentAndUpdatePatient_IfNoErrorsFound() {
         patient.closeCurrentTreatment("Defaulted", now());
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().build();
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().build();
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        transferInPatient.apply(treatmentUpdateRequest);
-        verify(providerService).transferIn(treatmentUpdateRequest.getProvider_id(), patient, treatmentUpdateRequest.getTb_id(), treatmentUpdateRequest.getDate_modified());
+        transferInPatient.apply(patientRequest);
+        verify(providerService).transferIn(patientRequest.getProvider_id(), patient, patientRequest.getTb_id(), patientRequest.getDate_modified());
     }
 
 }

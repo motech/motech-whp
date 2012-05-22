@@ -6,9 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -164,7 +162,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldThrowExceptionForTreatmentUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
         expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
-        patientService.performTreatmentUpdate(TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withCaseId("invalidCaseId").build());
+        patientService.performTreatmentUpdate(new PatientRequestBuilder().withMandatoryFieldsForOpenNewTreatment().withCaseId("invalidCaseId").build());
     }
 
     @Test
@@ -178,8 +176,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
-        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+        patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+        patientService.performTreatmentUpdate(patientRequest);
     }
 
     @Test
@@ -194,12 +192,12 @@ public class PatientServiceTest extends SpringIntegrationTest {
         patientService.createPatient(patientRequest);
 
         //first properly closing treatment
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
-        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+        patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build();
+        patientService.performTreatmentUpdate(patientRequest);
 
-        TreatmentUpdateRequest wrongTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
+        PatientRequest wrongPatientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build();
         //now trying to close a closed treatment
-        patientService.performTreatmentUpdate(wrongTreatmentUpdateRequest);
+        patientService.performTreatmentUpdate(wrongPatientRequest);
     }
 
     @Test
@@ -214,13 +212,13 @@ public class PatientServiceTest extends SpringIntegrationTest {
         patientService.createPatient(patientRequest);
 
         //first properly closing treatment
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
-        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+        patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build();
+        patientService.performTreatmentUpdate(patientRequest);
 
-        TreatmentUpdateRequest wrongTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+        PatientRequest wrongPatientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
 
         //now trying to close a closed treatment, that too with wrong tbId
-        patientService.performTreatmentUpdate(wrongTreatmentUpdateRequest);
+        patientService.performTreatmentUpdate(wrongPatientRequest);
     }
 
     @Test
@@ -234,8 +232,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withTbId("tbId").build();
-        patientService.performTreatmentUpdate(treatmentUpdateRequest);
+        patientRequest = new PatientRequestBuilder().withMandatoryFieldsForOpenNewTreatment().withTbId("tbId").build();
+        patientService.performTreatmentUpdate(patientRequest);
     }
 
     @Test
@@ -249,7 +247,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
                 .withDateModified(lastModifiedDate)
                 .build();
@@ -270,13 +268,13 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        TreatmentUpdateRequest closeTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
 
-        TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
@@ -298,7 +296,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
 
-        TreatmentUpdateRequest pauseTreatmentRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
@@ -309,7 +307,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertCurrentTreatmentPaused(pausedPatient, pauseTreatmentRequest);
         assertTrue(pausedPatient.isCurrentTreatmentPaused());
 
-        TreatmentUpdateRequest restartTreatmentRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest restartTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
@@ -320,13 +318,13 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertCurrentTreatmentNotPaused(restartedPatient, restartTreatmentRequest);
     }
 
-    private void assertCurrentTreatmentIsNew(Patient updatedPatient, TreatmentUpdateRequest treatmentUpdateRequest) {
+    private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest patientRequest) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
-        assertEquals(treatmentUpdateRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
-        assertEquals(treatmentUpdateRequest.getTb_id(), currentProvidedTreatment.getTbId());
-        assertEquals(treatmentUpdateRequest.getTreatment_category(), currentProvidedTreatment.getTreatment().getTreatmentCategory());
-        assertEquals(treatmentUpdateRequest.getDisease_class(), currentProvidedTreatment.getTreatment().getDiseaseClass());
-        assertEquals(treatmentUpdateRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
+        assertEquals(patientRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
+        assertEquals(patientRequest.getTb_id(), currentProvidedTreatment.getTbId());
+        assertEquals(patientRequest.getTreatment_category(), currentProvidedTreatment.getTreatment().getTreatmentCategory());
+        assertEquals(patientRequest.getDisease_class(), currentProvidedTreatment.getTreatment().getDiseaseClass());
+        assertEquals(patientRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
@@ -339,12 +337,12 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
-    private void assertCurrentTreatmentPaused(Patient pausedPatient, TreatmentUpdateRequest pauseTreatmentRequest) {
+    private void assertCurrentTreatmentPaused(Patient pausedPatient, PatientRequest pauseTreatmentRequest) {
         assertTrue(pausedPatient.isCurrentTreatmentPaused());
         assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }
 
-    private void assertCurrentTreatmentNotPaused(Patient pausedPatient, TreatmentUpdateRequest pauseTreatmentRequest) {
+    private void assertCurrentTreatmentNotPaused(Patient pausedPatient, PatientRequest pauseTreatmentRequest) {
         assertFalse(pausedPatient.isCurrentTreatmentPaused());
         assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }

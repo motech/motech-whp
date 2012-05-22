@@ -3,10 +3,11 @@ package org.motechproject.whp.patient.mapper;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.patient.domain.Treatment;
 
 import static org.junit.Assert.*;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
@@ -59,7 +60,7 @@ public class PatientMapperTest {
 
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
 
-        TreatmentUpdateRequest openNewTreatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording()
+        PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")

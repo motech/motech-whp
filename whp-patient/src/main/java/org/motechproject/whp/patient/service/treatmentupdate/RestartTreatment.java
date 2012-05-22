@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -22,18 +22,18 @@ public class RestartTreatment extends TreatmentUpdate {
     }
 
     @Override
-    public void apply(TreatmentUpdateRequest treatmentUpdateRequest) {
-        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+    public void apply(PatientRequest patientRequest) {
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
          ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-        if (!canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes)) {
+        if (!canRestartCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        restartTreatment(patient, treatmentUpdateRequest, allPatients);
+        restartTreatment(patient, patientRequest, allPatients);
     }
 
-    private void restartTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients) {
-        patient.restartCurrentTreatment(treatmentUpdateRequest.getReason_for_restart(), treatmentUpdateRequest.getDate_modified());
+    private void restartTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
+        patient.restartCurrentTreatment(patientRequest.getReason_for_restart(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

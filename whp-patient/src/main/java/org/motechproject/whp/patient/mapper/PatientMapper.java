@@ -1,7 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
@@ -34,14 +33,14 @@ public class PatientMapper {
         return providedTreatment;
     }
 
-    public static ProvidedTreatment createNewProvidedTreatmentForTreatmentCategoryChange(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, Treatment treatment) {
+    public static ProvidedTreatment createNewProvidedTreatmentForTreatmentCategoryChange(Patient patient, PatientRequest patientRequest, Treatment treatment) {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        String tbId = treatmentUpdateRequest.getTb_id();
+        String tbId = patientRequest.getTb_id();
 
-        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(treatmentUpdateRequest.getProvider_id(), tbId);
+        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(patientRequest.getProvider_id(), tbId);
 
         newProvidedTreatment.setTreatment(treatment);
-        newProvidedTreatment.setStartDate(treatmentUpdateRequest.getDate_modified().toLocalDate()); //Not being set so far?
+        newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
         newProvidedTreatment.setPatientAddress(currentProvidedTreatment.getPatientAddress());
 
         return newProvidedTreatment;

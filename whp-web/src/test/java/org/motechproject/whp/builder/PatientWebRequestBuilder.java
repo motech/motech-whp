@@ -16,7 +16,7 @@ public class PatientWebRequestBuilder {
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
+                .setTreatmentData("01", "elevenDigit", "providerId", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
@@ -37,7 +37,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
-                .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
+                .setTreatmentData("01", "tbtbtbtbtbt", "elevenDigit", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured", "oldTbID");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");

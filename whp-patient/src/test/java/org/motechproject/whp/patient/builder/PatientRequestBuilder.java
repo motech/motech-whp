@@ -6,9 +6,13 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 
 import java.util.Arrays;
+
+import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.util.DateUtil.today;
 
 public class PatientRequestBuilder {
 
@@ -22,7 +26,7 @@ public class PatientRequestBuilder {
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
-                .setTreatmentData(category, "12345678901", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category, "tbId", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .setSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
@@ -37,6 +41,62 @@ public class PatientRequestBuilder {
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
                 .setWeightStatistics(WeightInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .setTreatmentData(null, "elevenDigit", null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
+        return this;
+    }
+
+    public PatientRequestBuilder withMandatoryFieldsForOpenNewTreatment() {
+        patientRequest.setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50));
+
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        patientRequest.setCase_id("caseId");
+        patientRequest.setDate_modified(now());
+        patientRequest.setTb_id("tbId");
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.New);
+        patientRequest.setTreatment_category(category);
+        patientRequest.setProvider_id("newProviderId");
+        patientRequest.setDisease_class(DiseaseClass.E);
+
+        patientRequest.setSmearTestResults(SmearTestSampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative);
+        patientRequest.setWeightStatistics(WeightInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
+
+        return this;
+    }
+
+    public PatientRequestBuilder withMandatoryFieldsForCloseTreatment() {
+        patientRequest.setCase_id("caseId");
+        patientRequest.setDate_modified(now());
+        patientRequest.setTb_id("tbId");
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.Close);
+        patientRequest.setTreatment_outcome("Cured");
+        return this;
+    }
+
+    public PatientRequestBuilder withMandatoryFieldsForPauseTreatment() {
+        patientRequest.setCase_id("caseId");
+        patientRequest.setDate_modified(now());
+        patientRequest.setTb_id("tbId");
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.Pause);
+        patientRequest.setReason_for_pause("paws");
+        return this;
+    }
+
+    public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
+        patientRequest.setCase_id("caseId");
+        patientRequest.setDate_modified(now());
+        patientRequest.setTb_id("tbId");
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.Restart);
+        patientRequest.setReason_for_pause("swap");
+        return this;
+    }
+
+    public PatientRequestBuilder withMandatoryFieldsForTransferInTreatment() {
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        patientRequest.setCase_id("caseId");
+        patientRequest.setDate_modified(now());
+        patientRequest.setTb_id("newTbId");
+        patientRequest.setOld_tb_id("tbId");
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferIn);
+        patientRequest.setTreatment_category(category);
         return this;
     }
 
@@ -104,4 +164,15 @@ public class PatientRequestBuilder {
         patientRequest.setTreatment_category(treatmentCategory);
         return this;
     }
+
+    public PatientRequestBuilder withDateModified(DateTime dateModified) {
+        patientRequest.setDateModified(dateModified);
+        return this;
+    }
+
+    public PatientRequestBuilder withOldTbId(String oldTbId) {
+        patientRequest.setOld_tb_id(oldTbId);
+        return this;
+    }
+
 }

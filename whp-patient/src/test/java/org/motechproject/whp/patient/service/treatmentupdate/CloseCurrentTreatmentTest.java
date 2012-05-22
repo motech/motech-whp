@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -33,20 +33,21 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
 
     @Test
     public void shouldNotCloseCurrentTreatment_OnAnyErrors() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTbId("wrongTbId").build();
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        closeCurrentTreatment.apply(treatmentUpdateRequest);
+        closeCurrentTreatment.apply(patientRequest);
         verify(allPatients, never()).update(patient);
     }
 
     @Test
     public void shouldCloseCurrentTreatmentAndUpdatePatient_IfNoErrorsFound() {
-        TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForCloseTreatment().build();
-        when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build();
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        closeCurrentTreatment.apply(treatmentUpdateRequest);
+        closeCurrentTreatment.apply(patientRequest);
         verify(allPatients).update(patient);
     }
+
 }

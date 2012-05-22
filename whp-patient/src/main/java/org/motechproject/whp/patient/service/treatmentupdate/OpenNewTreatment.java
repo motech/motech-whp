@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -26,20 +26,20 @@ public class OpenNewTreatment extends TreatmentUpdate {
     }
 
     @Override
-    public void apply(TreatmentUpdateRequest treatmentUpdateRequest) {
-        Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
+    public void apply(PatientRequest patientRequest) {
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!canOpenNewTreatment(patient, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        addNewTreatmentForCategoryChange(patient, treatmentUpdateRequest, allPatients, allTreatments);
+        addNewTreatmentForCategoryChange(patient, patientRequest, allPatients, allTreatments);
     }
 
-    private void addNewTreatmentForCategoryChange(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, AllPatients allPatients, AllTreatments allTreatments) {
-        Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, treatmentUpdateRequest);
+    private void addNewTreatmentForCategoryChange(Patient patient, PatientRequest patientRequest, AllPatients allPatients, AllTreatments allTreatments) {
+        Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, patientRequest);
         allTreatments.add(newTreatment);
-        ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, treatmentUpdateRequest, newTreatment);
-        patient.addProvidedTreatment(newProvidedTreatment, treatmentUpdateRequest.getDate_modified());
+        ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, patientRequest, newTreatment);
+        patient.addProvidedTreatment(newProvidedTreatment, patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

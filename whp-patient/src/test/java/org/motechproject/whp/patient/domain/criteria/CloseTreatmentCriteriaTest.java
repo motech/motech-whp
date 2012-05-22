@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain.criteria;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
@@ -30,11 +30,12 @@ public class CloseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
 
-        assertFalse(canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
+
+        assertFalse(canCloseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
@@ -44,11 +45,11 @@ public class CloseTreatmentCriteriaTest {
         String someOtherTbId = "someOtherTbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(someOtherTbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(someOtherTbId);
 
-        assertFalse(canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canCloseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
@@ -59,11 +60,11 @@ public class CloseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(someOtherTbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(someOtherTbId);
 
-        assertFalse(canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canCloseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
@@ -73,21 +74,21 @@ public class CloseTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withCurrentProvidedTreatment(null).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertFalse(canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canCloseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
     }
 
     @Test
     public void shouldReturnFalseForCanCloseCurrentTreatmentIfPatientIsNull() {
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id("caseId"); //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
-        treatmentUpdateRequest.setTb_id("tbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id("caseId"); //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
+        patientRequest.setTb_id("tbId");
 
-        assertFalse(canCloseCurrentTreatment(null, treatmentUpdateRequest, errorCodes));
+        assertFalse(canCloseCurrentTreatment(null, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.CASE_ID_DOES_NOT_EXIST));
     }
 
@@ -96,11 +97,11 @@ public class CloseTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertTrue(canCloseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(canCloseCurrentTreatment(patient, patientRequest, errorCodes));
         assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }

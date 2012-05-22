@@ -2,7 +2,6 @@ package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -57,9 +56,9 @@ public class PatientService {
         }
     }
 
-    public void performTreatmentUpdate(TreatmentUpdateRequest treatmentUpdateRequest) {
-        TreatmentUpdate treatmentUpdate = factory.updateFor(treatmentUpdateRequest.getTreatment_update());
-        treatmentUpdate.apply(treatmentUpdateRequest);
+    public void performTreatmentUpdate(PatientRequest patientRequest) {
+        TreatmentUpdate treatmentUpdate = factory.updateFor(patientRequest.getTreatment_update());
+        treatmentUpdate.apply(patientRequest);
     }
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {

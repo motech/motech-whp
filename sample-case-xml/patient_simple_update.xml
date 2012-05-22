@@ -3,7 +3,7 @@
       api_key="3F2504E04F8911D39A0C0305E82C3301">
     <update>
         <age>35</age>
-        <tb_id>12345678901</tb_id>
+        <tb_id>tbId</tb_id>
         <tb_registration_number>xxxxxxxxxxx</tb_registration_number>
         <smear_sample_instance>PreTreatment</smear_sample_instance>
         <smear_test_date_1>01/03/2012</smear_test_date_1>

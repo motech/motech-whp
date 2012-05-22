@@ -1,7 +1,6 @@
 package org.motechproject.whp.patient.domain.criteria;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
@@ -19,11 +18,11 @@ public class UpdatePatientCriteria {
         return true;
     }
 
-    public static boolean canCloseCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, List<WHPErrorCode> errorCodes) {
+    public static boolean canCloseCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
+        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             tbIdMatches = false;
         }
@@ -45,21 +44,21 @@ public class UpdatePatientCriteria {
         return true;
     }
 
-    public static boolean canTransferInPatient(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, List<WHPErrorCode> errorCodes) {
+    public static boolean canTransferInPatient(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getOld_tb_id())) {
+        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getOld_tb_id())) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             return false;
         }
         return true;
     }
 
-    public static boolean canPauseCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, List<WHPErrorCode> errorCodes) {
+    public static boolean canPauseCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
+        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             tbIdMatches = false;
         }
@@ -74,11 +73,11 @@ public class UpdatePatientCriteria {
         return tbIdMatches;
     }
 
-    public static boolean canRestartCurrentTreatment(Patient patient, TreatmentUpdateRequest treatmentUpdateRequest, List<WHPErrorCode> errorCodes) {
+    public static boolean canRestartCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(treatmentUpdateRequest.getTb_id())) {
+        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             tbIdMatches = false;
         }

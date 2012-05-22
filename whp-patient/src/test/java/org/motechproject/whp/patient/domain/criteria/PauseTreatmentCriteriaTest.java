@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain.criteria;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.*;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPauseCurrentTreatment;
 
 public class PauseTreatmentCriteriaTest {
 
@@ -31,11 +31,11 @@ public class PauseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_PAUSED));
     }
 
@@ -44,11 +44,11 @@ public class PauseTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
@@ -58,11 +58,11 @@ public class PauseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_PAUSED));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
@@ -73,11 +73,11 @@ public class PauseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
@@ -87,11 +87,11 @@ public class PauseTreatmentCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
@@ -103,11 +103,11 @@ public class PauseTreatmentCriteriaTest {
         patient.pauseCurrentTreatment("paws", now());
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id("wrongTbId");
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
@@ -119,11 +119,11 @@ public class PauseTreatmentCriteriaTest {
         patient.pauseCurrentTreatment("paws", now());
         patient.closeCurrentTreatment("Cured", now());
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertFalse(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
@@ -132,11 +132,11 @@ public class PauseTreatmentCriteriaTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
-        TreatmentUpdateRequest treatmentUpdateRequest = new TreatmentUpdateRequest();
-        treatmentUpdateRequest.setCase_id(patient.getPatientId());
-        treatmentUpdateRequest.setTb_id(tbId);
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
 
-        assertTrue(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
+        assertTrue(canPauseCurrentTreatment(patient, patientRequest, errorCodes));
         assertArrayEquals(new String[]{}, errorCodes.toArray());
     }
 }
