@@ -44,12 +44,11 @@ public class TreatmentInterruption {
         return (pauseDate != null && resumptionDate == null);
     }
 
-
     @JsonIgnore
     public boolean isTreatmentInterrupted(LocalDate startingOn, LocalDate asOfDate) {
         boolean pauseDateOnOrBeforeAsOfDate = DateUtil.isOnOrBefore(DateUtil.newDateTime(pauseDate), DateUtil.newDateTime(asOfDate));
-        boolean pauseDateAfterStartingDate = DateUtil.isOnOrAfter(DateUtil.newDateTime(pauseDate), DateUtil.newDateTime(startingOn));
         if(isCurrentlyPaused()) return pauseDateOnOrBeforeAsOfDate;
-        return pauseDateAfterStartingDate && pauseDateOnOrBeforeAsOfDate;
+        boolean resumptionDateOnOrAfterStartingDate = DateUtil.isOnOrAfter(DateUtil.newDateTime(resumptionDate), DateUtil.newDateTime(startingOn));
+        return pauseDateOnOrBeforeAsOfDate && resumptionDateOnOrAfterStartingDate;
     }
 }

@@ -85,9 +85,16 @@ public class TreatmentInterruptionTest {
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate() {
+    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate_AndActivationDateIsBetweenStartAndAsOfDates() {
         TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
-        interruption.resumeTreatment("swap", today()); //does not matter
+        interruption.resumeTreatment("swap", today());
+        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    }
+
+    @Test
+    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate_AndActivationDateIsBeforeStartDate() {
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
+        interruption.resumeTreatment("swap", today().minusDays(3));
         assertFalse(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
     }
 }
