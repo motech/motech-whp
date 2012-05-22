@@ -16,6 +16,10 @@ public class WHPRuntimeException extends RuntimeException {
         this.errors.add(new WHPError(errorCode));
     }
 
+    public WHPRuntimeException(WHPErrorCode errorCode, String message) {
+        this.errors.add(new WHPError(errorCode, message));
+    }
+
     public WHPRuntimeException(List<WHPErrorCode> errors) {
         for (WHPErrorCode errorCode : errors) {
             this.errors.add(new WHPError(errorCode));

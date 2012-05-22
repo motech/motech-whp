@@ -5,8 +5,8 @@ import org.dozer.MappingException;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.exception.WHPCaseException;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.registration.service.RegistrationService;
@@ -14,7 +14,6 @@ import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -63,9 +62,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
                 patientService.simpleUpdate(patientRequest);
             }
         } catch (WHPRuntimeException e) {
-            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e);
         } catch (MappingException e) {
-            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e);
         }
     }
 
@@ -82,9 +81,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             registrationService.registerPatient(patientRequest);
         } catch (WHPRuntimeException e) {
-            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e);
         } catch (MappingException e) {
-            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e);
         }
     }
 }

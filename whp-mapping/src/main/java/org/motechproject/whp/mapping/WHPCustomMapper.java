@@ -1,7 +1,8 @@
 package org.motechproject.whp.mapping;
 
 import org.dozer.CustomConverter;
-import org.dozer.MappingException;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 
 public abstract class WHPCustomMapper implements CustomConverter {
 
@@ -13,7 +14,7 @@ public abstract class WHPCustomMapper implements CustomConverter {
         if (canConvert(src, srcClass)) {
             return convert(src, destClass);
         }
-        throw new MappingException("Incompatible type conversion");
+        throw new WHPRuntimeException(WHPErrorCode.FIELD_VALIDATION_FAILED, "Incompatible type conversion");
     }
 
     private boolean canConvert(Object src, Class<?> srcClass) {

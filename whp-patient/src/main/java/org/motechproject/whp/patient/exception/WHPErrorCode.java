@@ -21,6 +21,7 @@ public enum WHPErrorCode {
 
     private String message;
 
+
     WHPErrorCode(String message) {
         this.message = message;
     }
