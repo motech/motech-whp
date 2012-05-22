@@ -8,7 +8,6 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
@@ -51,9 +50,8 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
-            if (requestHasValidTreatmentUpdate(patientWebRequest)) {
-                TreatmentUpdateScenario treatmentUpdateScenario = TreatmentUpdateScenario.valueOf(patientWebRequest.getTreatment_update());
-                validator.validate(patientWebRequest, treatmentUpdateScenario.getScope());
+            if (patientWebRequest.isTreatmentUpdateRequest()) {
+                validator.validate(patientWebRequest, patientWebRequest.updateScenario().getScope());
                 TreatmentUpdateRequest treatmentUpdateRequest = treatmentUpdateRequestMapper.map(patientWebRequest, TreatmentUpdateRequest.class);
                 patientService.performTreatmentUpdate(treatmentUpdateRequest);
             } else {
@@ -68,16 +66,10 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
         }
     }
 
-    private boolean requestHasValidTreatmentUpdate(PatientWebRequest patientWebRequest) {
-        if (patientWebRequest.getTreatment_update() == null) return false;
-        validator.validate(patientWebRequest, ValidationScope.treatmentUpdate);
-        return true;
-    }
-
     @Override
     public void createCase(PatientWebRequest patientWebRequest) {
-        validator.validate(patientWebRequest, ValidationScope.create);
         try {
+            validator.validate(patientWebRequest, ValidationScope.create);
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             registrationService.registerPatient(patientRequest);
         } catch (WHPRuntimeException e) {

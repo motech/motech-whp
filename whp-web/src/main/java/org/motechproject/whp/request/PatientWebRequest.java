@@ -1,6 +1,7 @@
 package org.motechproject.whp.request;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
@@ -58,9 +59,7 @@ public class PatientWebRequest {
     @Scope(scope = {ValidationScope.create})
     private String patient_type;
 
-    @NotNull
     @Enumeration(type = TreatmentUpdateScenario.class)
-    @Scope(scope = {ValidationScope.treatmentUpdate})
     private String treatment_update;
 
     @NotNull
@@ -227,4 +226,13 @@ public class PatientWebRequest {
     public void setApi_key(String apiKey) {
         this.api_key = apiKey;
     }
+
+    public boolean isTreatmentUpdateRequest() {
+        return updateScenario() != null;
+    }
+
+    public TreatmentUpdateScenario updateScenario() {
+        return StringUtils.isNotBlank(treatment_update) ? TreatmentUpdateScenario.valueOf(treatment_update) : null;
+    }
+
 }

@@ -26,7 +26,7 @@ public class ProviderWebService extends ProviderRegistrationService<ProviderWebR
     }
 
     @Override
-    public void createOrUpdate(ProviderWebRequest providerWebRequest){
+    public void createOrUpdate(ProviderWebRequest providerWebRequest) {
         providerValidator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
         ProviderRequest providerRequest = new ProviderRequestMapper().map(providerWebRequest);
         registrationService.registerProvider(providerRequest);
