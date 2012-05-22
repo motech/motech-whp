@@ -3,8 +3,6 @@ package org.motechproject.whp.patient.service;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;

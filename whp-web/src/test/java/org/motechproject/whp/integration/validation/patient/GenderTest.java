@@ -8,9 +8,10 @@ import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.ValidationScope;
 
 public class GenderTest extends BasePatientTest {
+
     @Test
     public void shouldThrowExceptionWhenGenderNotEnumerated() {
-        expectWHPException("field:gender:The value should be one of : [M, F, O]");
+        expectFieldValidationRuntimeException("field:gender:The value should be one of : [M, F, O]");
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender("H").build();
         validator.validate(webRequest, ValidationScope.create);
@@ -40,8 +41,9 @@ public class GenderTest extends BasePatientTest {
     //Any enum field
     @Test
     public void shouldThrowExceptionWhenGenderIsNull() {
-        expectWHPException("field:gender:value should not be null");
+        expectFieldValidationRuntimeException("field:gender:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withGender(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
+
 }

@@ -14,7 +14,7 @@ public class APIKeyTest extends BasePatientTest {
 
     @Test
     public void shouldBeInvalidWhenAPIKeyIsInvalid() {
-        expectWHPException("field:api_key:api_key:is invalid.");
+        expectFieldValidationRuntimeException("field:api_key:api_key:is invalid.");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("20").withAPIKey("invalid_api_key").build();
         validator.validate(webRequest, ValidationScope.create);
     }

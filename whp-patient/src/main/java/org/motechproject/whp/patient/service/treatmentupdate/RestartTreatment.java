@@ -2,8 +2,8 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ public class RestartTreatment extends TreatmentUpdate {
     @Override
     public void apply(TreatmentUpdateRequest treatmentUpdateRequest) {
         Patient patient = allPatients.findByPatientId(treatmentUpdateRequest.getCase_id());
-         ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
         if (!canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes)) {
-            throw new WHPDomainException(errorCodes);
+            throw new WHPRuntimeException(errorCodes);
         }
         restartTreatment(patient, treatmentUpdateRequest, allPatients);
     }

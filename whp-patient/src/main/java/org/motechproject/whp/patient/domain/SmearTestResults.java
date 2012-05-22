@@ -3,11 +3,10 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,10 +32,10 @@ public class SmearTestResults {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPDomainErrorCode> validationErrors) {
+    public boolean isValid(List<WHPErrorCode> validationErrors) {
         boolean isFilled = smear_sample_instance != null && smear_test_date_1 != null && smear_test_result_1 != null && smear_test_date_2 != null && smear_test_result_2 != null;
         if (!isFilled) {
-            validationErrors.add(WHPDomainErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
+            validationErrors.add(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
         }
         return isFilled;
     }

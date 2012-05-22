@@ -19,21 +19,21 @@ public class MobileNumberTest extends BasePatientTest {
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsLessThan10Digits() {
-        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("123456789").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsMoreThan10Digits() {
-        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("12345678901").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenMobileNumberIsNotNumeric() {
-        expectWHPException("field:mobile_number:Mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:mobile_number:Mobile number should be empty or should have 10 digits");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("123456789a").build();
         validator.validate(webRequest, ValidationScope.create);
     }

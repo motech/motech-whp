@@ -6,7 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -91,7 +91,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPDomainErrorCode> errorCodes) {
+    public boolean isValid(List<WHPErrorCode> errorCodes) {
         return currentProvidedTreatment.isValid(errorCodes);
     }
 

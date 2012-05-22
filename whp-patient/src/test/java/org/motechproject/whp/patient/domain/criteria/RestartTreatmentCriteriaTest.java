@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 
@@ -17,11 +17,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class RestartTreatmentCriteriaTest {
 
-     ArrayList<WHPDomainErrorCode> errorCodes;
+     ArrayList<WHPErrorCode> errorCodes;
 
     public RestartTreatmentCriteriaTest() {
         initMocks(this);
-         errorCodes = new ArrayList<WHPDomainErrorCode>();
+         errorCodes = new ArrayList<WHPErrorCode>();
     }
 
     @Test
@@ -34,7 +34,7 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id(tbId);
 
         assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -61,8 +61,8 @@ public class RestartTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canRestartCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS));
     }
 
     @Test

@@ -6,12 +6,14 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
+@ContextConfiguration(locations = "classpath*:applicationPatientContext.xml")
 public class AllTreatmentCategoriesTest extends SpringIntegrationTest {
 
     public static final String CODE = "99";

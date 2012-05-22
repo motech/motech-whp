@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.ProviderService;
@@ -38,7 +38,7 @@ public class TransferInPatientTest extends BaseUnitTest {
     @Test
     public void shouldNotTransferInPatientTreatment_OnAnyErrors() {
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForTransferInTreatment().withOldTbId("wrongTbId").build();
-        expectWHPDomainException(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(treatmentUpdateRequest);

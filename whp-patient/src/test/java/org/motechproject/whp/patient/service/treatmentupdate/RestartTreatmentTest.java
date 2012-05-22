@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
@@ -35,7 +35,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
     @Test
     public void shouldNotRestartCurrentTreatment_OnAnyErrors() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        expectWHPDomainException(WHPDomainErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
         restartTreatment.apply(treatmentUpdateRequest);

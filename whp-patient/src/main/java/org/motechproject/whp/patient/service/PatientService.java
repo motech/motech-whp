@@ -6,8 +6,8 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -48,12 +48,12 @@ public class PatientService {
 
     public void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
             Patient updatedPatient = mapUpdates(patientRequest, patient);
             allPatients.update(updatedPatient);
         } else {
-            throw new WHPDomainException(errorCodes);
+            throw new WHPRuntimeException(errorCodes);
         }
     }
 

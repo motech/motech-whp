@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.List;
 
@@ -29,14 +29,14 @@ public class Address {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPDomainErrorCode> validationErrors) {
+    public boolean isValid(List<WHPErrorCode> validationErrors) {
         boolean isFilled = address_location != null
                 && address_block != null
                 && address_village != null
                 && address_district != null
                 && address_state != null;
         if (!isFilled) {
-            validationErrors.add(WHPDomainErrorCode.NULL_VALUE_IN_ADDRESS);
+            validationErrors.add(WHPErrorCode.NULL_VALUE_IN_ADDRESS);
         }
         return isFilled;
     }

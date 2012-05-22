@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentUpdateRequestBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 
@@ -36,7 +36,7 @@ public class OpenNewTreatmentTest extends BaseUnitTest {
     @Test
     public void shouldNotOpenNewTreatment_OnAnyErrors() {
         TreatmentUpdateRequest treatmentUpdateRequest = TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().build();
-        expectWHPDomainException(WHPDomainErrorCode.TREATMENT_NOT_CLOSED);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_NOT_CLOSED);
         when(allPatients.findByPatientId(treatmentUpdateRequest.getCase_id())).thenReturn(patient);
 
         openNewTreatment.apply(treatmentUpdateRequest);

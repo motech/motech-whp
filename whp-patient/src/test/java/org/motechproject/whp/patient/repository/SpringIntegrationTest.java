@@ -2,22 +2,29 @@ package org.motechproject.whp.patient.repository;
 
 import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
+import org.motechproject.whp.patient.exception.WHPError;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public abstract class SpringIntegrationTest extends BaseUnitTest {
+public abstract class SpringIntegrationTest {
+
+    @Rule
+    public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Qualifier("whpDbConnector")
     @Autowired
@@ -56,5 +63,32 @@ public abstract class SpringIntegrationTest extends BaseUnitTest {
 
     protected String unique(String name) {
         return name + DateUtil.now().toInstant().getMillis();
+    }
+
+    protected void expectWHPRuntimeException(final WHPErrorCode errorCode) {
+        expectWHPRuntimeException(errorCode, errorCode.getMessage());
+    }
+
+    protected void expectFieldValidationRuntimeException(final String message) {
+        expectWHPRuntimeException(WHPErrorCode.FIELD_VALIDATION_FAILED, message);
+    }
+
+    private void expectWHPRuntimeException(final WHPErrorCode errorCode, final String message) {
+        exceptionThrown.expect(WHPRuntimeException.class);
+        exceptionThrown.expect(new TypeSafeMatcher<WHPRuntimeException>() {
+            @Override
+            public boolean matchesSafely(WHPRuntimeException e) {
+                for (WHPError whpError : e.getErrors()) {
+                    if (whpError.getErrorCode().equals(errorCode) && whpError.getMessage().contains(message)) {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+            @Override
+            public void describeTo(Description description) {
+            }
+        });
     }
 }

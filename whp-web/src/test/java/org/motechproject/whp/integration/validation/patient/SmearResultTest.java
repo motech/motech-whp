@@ -6,16 +6,17 @@ import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.ValidationScope;
 
 public class SmearResultTest extends BasePatientTest {
+
     @Test
     public void shouldThrowException_WhenSmearTest1DateFormatIsIncorrect() {
-        expectWHPException("field:smear_test_date_1:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
+        expectFieldValidationRuntimeException("field:smear_test_date_1:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1("03/04/2012  11:23:40").build();
         validator.validate(webRequest, ValidationScope.openTreatment);
     }
 
     @Test
     public void shouldThrowException_WhenSmearTest2DateFormatIsIncorrect() {
-        expectWHPException("field:smear_test_date_2:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
+        expectFieldValidationRuntimeException("field:smear_test_date_2:Invalid format: \"03/04/2012  11:23:40\" is malformed at \"  11:23:40\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate2("03/04/2012  11:23:40").build();
         validator.validate(webRequest, ValidationScope.openTreatment);
     }
@@ -28,23 +29,24 @@ public class SmearResultTest extends BasePatientTest {
 
     @Test
     public void shouldThrowException_WhenSmearTestResultsIsNull_InCreateScope() {
-        expectWHPException("field:smear_test_date_1:value should not be null");
-        expectWHPException("field:smear_test_result_1:value should not be null");
-        expectWHPException("field:smear_test_date_2:value should not be null");
-        expectWHPException("field:smear_test_result_2:value should not be null");
-        expectWHPException("field:smear_sample_instance:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_date_1:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_result_1:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_date_2:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_result_2:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_sample_instance:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withSmearTestResults(null, null, null, null, null).build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenSmearTestResultsIsNull_InOpenTreatmentScope() {
-        expectWHPException("field:smear_test_date_1:value should not be null");
-        expectWHPException("field:smear_test_result_1:value should not be null");
-        expectWHPException("field:smear_test_date_2:value should not be null");
-        expectWHPException("field:smear_test_result_2:value should not be null");
-        expectWHPException("field:smear_sample_instance:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_date_1:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_result_1:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_date_2:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_test_result_2:value should not be null");
+        expectFieldValidationRuntimeException("field:smear_sample_instance:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withSmearTestResults(null, null, null, null, null).build();
         validator.validate(webRequest, ValidationScope.openTreatment);
     }
+
 }

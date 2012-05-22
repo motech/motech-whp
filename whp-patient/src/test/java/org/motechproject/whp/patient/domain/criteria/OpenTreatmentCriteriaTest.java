@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 public class OpenTreatmentCriteriaTest {
 
 
-    private ArrayList<WHPDomainErrorCode> errorCodes;
+    private ArrayList<WHPErrorCode> errorCodes;
 
     public OpenTreatmentCriteriaTest() {
         initMocks(this);
-        errorCodes = new ArrayList<WHPDomainErrorCode>();
+        errorCodes = new ArrayList<WHPErrorCode>();
     }
 
     @Test
@@ -33,7 +33,7 @@ public class OpenTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
 
         assertFalse(canOpenNewTreatment(patient, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_NOT_CLOSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_NOT_CLOSED));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class OpenTreatmentCriteriaTest {
         treatmentUpdateRequest.setCase_id(patient.getPatientId());
 
         assertFalse(canOpenNewTreatment(patient, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
+        assertTrue(errorCodes.contains(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class OpenTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("tbId");
 
         assertFalse(canCloseCurrentTreatment(null, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.CASE_ID_DOES_NOT_EXIST));
+        assertTrue(errorCodes.contains(WHPErrorCode.CASE_ID_DOES_NOT_EXIST));
     }
 
     @Test

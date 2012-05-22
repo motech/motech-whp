@@ -5,8 +5,8 @@ import org.dozer.MappingException;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
-import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.exception.WHPException;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.registration.service.RegistrationService;
@@ -62,10 +62,10 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
                 PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
                 patientService.simpleUpdate(patientRequest);
             }
-        } catch (WHPDomainException e) {
-            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (WHPRuntimeException e) {
+            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (MappingException e) {
-            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -81,10 +81,10 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
         try {
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             registrationService.registerPatient(patientRequest);
-        } catch (WHPDomainException e) {
-            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (WHPRuntimeException e) {
+            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (MappingException e) {
-            throw new WHPException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new WHPCaseException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -2,7 +2,7 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.exception.WHPException;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.ValidationScope;
 
@@ -36,28 +36,28 @@ public class WeightTest extends BasePatientTest {
 
     @Test
     public void shouldThrowExceptionWhenWeightStartWithANumberWithAndHasAnAlphabet() {
-        expectWHPException("field:weight:Weight must be a real number");
+        expectFieldValidationRuntimeException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("1A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightIsNotNumeric() {
-        expectWHPException("field:weight:Weight must be a real number");
+        expectFieldValidationRuntimeException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightStringIsJustSpaces_ForCreateScope() {
-        expectWHPException("field:weight:Weight must be a real number");
+        expectFieldValidationRuntimeException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(" ").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenWeightStringIsNotValid_ForCreateScope() {
-        expectWHPException("field:weight:Weight must be a real number");
+        expectFieldValidationRuntimeException("field:weight:Weight must be a real number");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight("3 5").build();
         validator.validate(webRequest, ValidationScope.create);
     }
@@ -68,7 +68,7 @@ public class WeightTest extends BasePatientTest {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e) {
+        } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:weight:Weight cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
@@ -83,7 +83,7 @@ public class WeightTest extends BasePatientTest {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeight(null).build();
             validator.validate(webRequest, ValidationScope.openTreatment);
-        } catch (WHPException e) {
+        } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:weight:Weight cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
@@ -98,7 +98,7 @@ public class WeightTest extends BasePatientTest {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e) {
+        } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:weight_instance:Weight cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }
@@ -113,7 +113,7 @@ public class WeightTest extends BasePatientTest {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withWeightStatistics(null, null).build();
             validator.validate(webRequest, ValidationScope.openTreatment);
-        } catch (WHPException e) {
+        } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:weight_instance:Weight cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }

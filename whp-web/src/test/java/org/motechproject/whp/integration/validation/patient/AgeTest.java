@@ -2,7 +2,7 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.exception.WHPException;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.ValidationScope;
 
@@ -12,21 +12,21 @@ import static junit.framework.Assert.fail;
 public class AgeTest extends BasePatientTest {
     @Test
     public void shouldThrowExceptionWhenAgeIsNotNumeric() {
-        expectWHPException("field:age:Age must be numeric and not fractional");
+        expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("A").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFractionInCreateScope() {
-        expectWHPException("field:age:Age must be numeric and not fractional");
+        expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFractionInSimpleUpdateScope() {
-        expectWHPException("field:age:Age must be numeric and not fractional");
+        expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
         validator.validate(webRequest, ValidationScope.simpleUpdate);
     }
@@ -49,7 +49,7 @@ public class AgeTest extends BasePatientTest {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
             validator.validate(webRequest, ValidationScope.create);
-        } catch (WHPException e) {
+        } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:age:Age cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");
             }

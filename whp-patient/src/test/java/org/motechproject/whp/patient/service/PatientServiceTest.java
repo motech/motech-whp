@@ -12,7 +12,7 @@ import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
@@ -28,7 +28,6 @@ import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceTest extends SpringIntegrationTest {
-
     public static final String CASE_ID = "123456";
 
     @Autowired
@@ -42,6 +41,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
+        super.before();
         patientService = new PatientService(allPatients, allTreatments, factory);
     }
 
@@ -49,6 +49,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
     public void tearDown() {
         markForDeletion(allTreatments.getAll().toArray());
         markForDeletion(allPatients.getAll().toArray());
+        super.after();
     }
 
     @Test
@@ -109,7 +110,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenSimpleUpdateOnPatientIsTriedWithWrongTbId() {
-        expectWHPDomainException(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("tbId")
@@ -123,7 +124,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
-        expectWHPDomainException(WHPDomainErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
+        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("elevenDigit")
@@ -139,7 +140,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
-        expectWHPDomainException(WHPDomainErrorCode.NULL_VALUE_IN_WEIGHT_STATISTICS);
+        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_WEIGHT_STATISTICS);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("elevenDigit")
@@ -155,20 +156,20 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPDomainException(WHPDomainErrorCode.CASE_ID_DOES_NOT_EXIST);
+        expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
         patientService.simpleUpdate(updatePatientRequest);
     }
 
     @Test
     public void shouldThrowExceptionForTreatmentUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPDomainException(WHPDomainErrorCode.CASE_ID_DOES_NOT_EXIST);
+        expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
         patientService.performTreatmentUpdate(TreatmentUpdateRequestBuilder.startRecording().withMandatoryFieldsForOpenNewTreatment().withCaseId("invalidCaseId").build());
     }
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrong() {
-        expectWHPDomainException(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -183,7 +184,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseItIsAlreadyClosed() {
-        expectWHPDomainException(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -203,7 +204,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
-        expectWHPDomainException(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -224,7 +225,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfNewTreatmentCannotBeOpenedBecauseCurrentTreatmentIsNotClosed() {
-        expectWHPDomainException(WHPDomainErrorCode.TREATMENT_NOT_CLOSED);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_NOT_CLOSED);
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -347,5 +348,4 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertFalse(pausedPatient.isCurrentTreatmentPaused());
         assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }
-
 }

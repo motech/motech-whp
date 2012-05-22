@@ -20,21 +20,21 @@ public class SecondaryMobileNumberTest extends BaseProviderTest {
 
     @Test
     public void shouldThrowExceptionWhenSecondaryMobileNumberIsLessThan10Digits() {
-        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("1234").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowExceptionWhenSecondaryMobileNumberIsMoreThan10Digits() {
-        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("12345678901").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowExceptionWhenSecondaryMobileNumberIsNotNumeric() {
-        expectWHPException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
+        expectFieldValidationRuntimeException("field:secondary_mobile:Secondary mobile number should be empty or should have 10 digits");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("123456789a").build();
         validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
     }

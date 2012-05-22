@@ -14,7 +14,6 @@ import java.util.Arrays;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")

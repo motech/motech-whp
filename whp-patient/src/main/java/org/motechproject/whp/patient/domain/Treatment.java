@@ -6,7 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
@@ -56,7 +56,7 @@ public class Treatment extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPDomainErrorCode> errorCodes) {
+    public boolean isValid(List<WHPErrorCode> errorCodes) {
         boolean isLatestSmearResultValid = true;
         boolean isLatestWeightStatisticValid = true;
         if(!CollectionUtils.isEmpty(smearTestInstances)) {

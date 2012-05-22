@@ -14,28 +14,28 @@ public class LastModifiedDateTest extends BasePatientTest {
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatIsNotTheCorrectDateTimeFormat() {
-        expectWHPException("03-04-2012\" is malformed at \"-04-2012");
+        expectFieldValidationRuntimeException("03-04-2012\" is malformed at \"-04-2012");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03-04-2012").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowException_WhenLastModifiedDateFormatDoesNotHaveTimeComponent() {
-        expectWHPException("field:date_modified:Invalid format: \"03/04/2012\" is too short");
+        expectFieldValidationRuntimeException("field:date_modified:Invalid format: \"03/04/2012\" is too short");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowAnExceptionIfLastModifiedDateIsEmpty() {
-        expectWHPException("field:date_modified:Invalid format: \"\"");
+        expectFieldValidationRuntimeException("field:date_modified:Invalid format: \"\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("").build();
         validator.validate(webRequest, ValidationScope.create);
     }
 
     @Test
     public void shouldThrowExceptionWhenLastModifiedDateFormatIsNull() {
-        expectWHPException("field:date_modified:value should not be null");
+        expectFieldValidationRuntimeException("field:date_modified:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate(null).build();
         validator.validate(webRequest, ValidationScope.create);
     }

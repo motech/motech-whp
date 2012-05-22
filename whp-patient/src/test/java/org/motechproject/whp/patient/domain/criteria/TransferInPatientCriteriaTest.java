@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 
@@ -16,11 +16,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class TransferInPatientCriteriaTest {
 
-     ArrayList<WHPDomainErrorCode> errorCodes;
+     ArrayList<WHPErrorCode> errorCodes;
 
     public TransferInPatientCriteriaTest() {
         initMocks(this);
-         errorCodes = new ArrayList<WHPDomainErrorCode>();
+         errorCodes = new ArrayList<WHPErrorCode>();
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TransferInPatientCriteriaTest {
         treatmentUpdateRequest.setOld_tb_id("wrongTbId");
 
         assertFalse(canTransferInPatient(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test

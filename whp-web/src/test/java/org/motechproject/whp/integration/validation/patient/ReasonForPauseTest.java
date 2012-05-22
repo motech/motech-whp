@@ -8,14 +8,14 @@ import org.motechproject.whp.validation.ValidationScope;
 public class ReasonForPauseTest extends BasePatientTest {
     @Test
     public void shouldBeValidReasonForPauseIsNotSpecified() {
-        expectWHPException("field:reason_for_pause:may not be empty");
+        expectFieldValidationRuntimeException("field:reason_for_pause:may not be empty");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
         validator.validate(webRequest, ValidationScope.pauseTreatment);
     }
 
     @Test
     public void shouldBeValidReasonForPauseIsBlank() {
-        expectWHPException("field:reason_for_pause:may not be empty");
+        expectFieldValidationRuntimeException("field:reason_for_pause:may not be empty");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("").build();
         validator.validate(webRequest, ValidationScope.pauseTreatment);
     }

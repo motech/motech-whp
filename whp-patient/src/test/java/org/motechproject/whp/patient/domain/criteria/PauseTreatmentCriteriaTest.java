@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.TreatmentUpdateRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class PauseTreatmentCriteriaTest {
 
-    List<WHPDomainErrorCode> errorCodes;
+    List<WHPErrorCode> errorCodes;
 
     public PauseTreatmentCriteriaTest() {
         initMocks(this);
-        errorCodes = new ArrayList<WHPDomainErrorCode>();
+        errorCodes = new ArrayList<WHPErrorCode>();
     }
 
     @Test
@@ -36,7 +36,7 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id(tbId);
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_PAUSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_PAUSED));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -63,8 +63,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_PAUSED));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_PAUSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id(tbId);
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -92,8 +92,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -108,8 +108,8 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id("wrongTbId");
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class PauseTreatmentCriteriaTest {
         treatmentUpdateRequest.setTb_id(tbId);
 
         assertFalse(canPauseCurrentTreatment(patient, treatmentUpdateRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TREATMENT_ALREADY_CLOSED));
+        assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_ALREADY_CLOSED));
     }
 
     @Test

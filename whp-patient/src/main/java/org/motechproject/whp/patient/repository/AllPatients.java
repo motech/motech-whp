@@ -9,8 +9,8 @@ import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.exception.WHPDomainException;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -33,12 +33,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public void add(Patient patient) {
         Patient savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient != null) {
-            throw new WHPDomainException(WHPDomainErrorCode.DUPLICATE_CASE_ID);
+            throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_CASE_ID);
         }
 
-        ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
-            throw new WHPDomainException(errorCodes);
+            throw new WHPRuntimeException(errorCodes);
         }
         super.add(patient);
     }
@@ -46,9 +46,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     @Override
     public void update(Patient patient) {
         allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
-         ArrayList<WHPDomainErrorCode> errorCodes = new ArrayList<WHPDomainErrorCode>();
+         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
-            throw new WHPDomainException(errorCodes);
+            throw new WHPRuntimeException(errorCodes);
         }
         super.update(patient);
     }

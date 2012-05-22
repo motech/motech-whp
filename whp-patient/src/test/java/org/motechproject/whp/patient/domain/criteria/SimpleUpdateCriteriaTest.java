@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.errorcode.WHPDomainErrorCode;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 
@@ -16,11 +16,11 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 
 public class SimpleUpdateCriteriaTest {
 
-     ArrayList<WHPDomainErrorCode> errorCodes;
+     ArrayList<WHPErrorCode> errorCodes;
 
     public SimpleUpdateCriteriaTest() {
         initMocks(this);
-         errorCodes = new ArrayList<WHPDomainErrorCode>();
+         errorCodes = new ArrayList<WHPErrorCode>();
     }
 
     @Test
@@ -35,7 +35,7 @@ public class SimpleUpdateCriteriaTest {
         patientRequest.setTb_id("elevenDigit");
 
         assertFalse(canPerformSimpleUpdate(patient, patientRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
+        assertTrue(errorCodes.contains(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class SimpleUpdateCriteriaTest {
         patientRequest.setTb_id("wrongTbId");
 
         assertFalse(canPerformSimpleUpdate(patient, patientRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.TB_ID_DOES_NOT_MATCH));
+        assertTrue(errorCodes.contains(WHPErrorCode.TB_ID_DOES_NOT_MATCH));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class SimpleUpdateCriteriaTest {
         patientRequest.setCase_id("wrongCaseId"); //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
 
         assertFalse(canPerformSimpleUpdate(null, patientRequest, errorCodes));
-        assertTrue(errorCodes.contains(WHPDomainErrorCode.CASE_ID_DOES_NOT_EXIST));
+        assertTrue(errorCodes.contains(WHPErrorCode.CASE_ID_DOES_NOT_EXIST));
     }
 
     @Test
