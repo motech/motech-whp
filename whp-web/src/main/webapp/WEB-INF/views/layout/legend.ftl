@@ -1,5 +1,5 @@
 <#macro legend key1 value1 span="span3">
-    <div class="row pull-right">
+    <div id="legend-container" class="row pull-right">
         <table id="legend" class="table ${span} table-bordered table-condensed">
             <thead>
             <tr>
@@ -18,4 +18,5 @@
             </tbody>
         </table>
     </div>
+    <div class="row"></div>
 </#macro>

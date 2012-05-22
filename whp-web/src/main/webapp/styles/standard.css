@@ -15,7 +15,7 @@ body {
     background: #FAFADE;
 }
 
-#whp-logo{
+#whp-logo {
     height: 35px;
 }
 
@@ -23,11 +23,11 @@ body {
     height: 38px
 }
 
-#navibar{
+#navibar {
     padding-top: 5px;
 }
 
-.well.small-well{
+.well.small-well {
     padding: 0px;
     margin-bottom: 5px;
     color: #54555a;
@@ -78,14 +78,19 @@ body {
 }
 
 #numberSelect {
-    text-align:center;
+    text-align: center;
 }
 
 #remarks {
     height: 100px;
 }
 
-#weeklyAdherenceForm label{
+#weeklyAdherenceForm label {
     text-align: left;
     margin-left: 20px;
+}
+
+#legend-container{
+    display: inline-block;
+    overflow: auto;
 }
