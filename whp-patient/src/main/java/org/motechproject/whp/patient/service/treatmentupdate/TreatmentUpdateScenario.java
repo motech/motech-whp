@@ -13,4 +13,5 @@ public enum TreatmentUpdateScenario {
     public String getScope() {
         return scope;
     }
+
 }

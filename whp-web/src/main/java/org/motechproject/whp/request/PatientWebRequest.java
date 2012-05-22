@@ -235,4 +235,9 @@ public class PatientWebRequest {
         return StringUtils.isNotBlank(treatment_update) ? TreatmentUpdateScenario.valueOf(treatment_update) : null;
     }
 
+    public String updateScope() {
+        TreatmentUpdateScenario updateScenario = updateScenario();
+        return updateScenario == null ? ValidationScope.simpleUpdate : updateScenario.getScope();
+    }
+
 }

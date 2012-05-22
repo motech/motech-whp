@@ -46,13 +46,12 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
+            validator.validate(patientWebRequest, patientWebRequest.updateScope());
+            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+
             if (patientWebRequest.isTreatmentUpdateRequest()) {
-                validator.validate(patientWebRequest, patientWebRequest.updateScenario().getScope());
-                PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
                 patientService.performTreatmentUpdate(patientRequest);
             } else {
-                validator.validate(patientWebRequest, ValidationScope.simpleUpdate);
-                PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
                 patientService.simpleUpdate(patientRequest);
             }
         } catch (WHPRuntimeException e) {
