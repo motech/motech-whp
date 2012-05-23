@@ -6,7 +6,7 @@ import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
@@ -39,7 +39,7 @@ public class PatientRecordImporter {
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
-                validator.validate(request, AllCommands.create);
+                validator.validate(request, UpdateScope.createScope);
                 if(StringUtils.isBlank(request.getWeight_date())   )
                     request.setWeight_date(request.getDate_modified());
             } catch (Exception e) {

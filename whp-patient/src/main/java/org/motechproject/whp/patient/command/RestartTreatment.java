@@ -19,7 +19,7 @@ public class RestartTreatment extends TreatmentUpdate {
 
     @Autowired
     public RestartTreatment(AllPatients allPatients, AllTreatments allTreatments) {
-        super(allPatients, allTreatments, AllCommands.restartTreatment);
+        super(allPatients, allTreatments, UpdateScope.restartTreatment);
     }
 
     @Override

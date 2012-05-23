@@ -2,16 +2,15 @@ package org.motechproject.whp.patient.command;
 
 public enum TreatmentUpdateScenario {
 
-    New("openTreatment"), Close("closeTreatment"), TransferIn("transferIn"), Pause("pauseTreatment"), Restart("restartTreatment");
+    New(UpdateScope.openTreatment), Close(UpdateScope.closeTreatment), TransferIn(UpdateScope.transferIn), Pause(UpdateScope.pauseTreatment), Restart(UpdateScope.restartTreatment);
 
-    private String scope;
+    private UpdateScope scope;
 
-    private TreatmentUpdateScenario(String scope) {
+    TreatmentUpdateScenario(UpdateScope scope) {
         this.scope = scope;
     }
 
-    public String getScope() {
+    public UpdateScope getScope() {
         return scope;
     }
-
 }

@@ -22,7 +22,7 @@ public class TransferInPatient extends TreatmentUpdate {
 
     @Autowired
     public TransferInPatient(AllPatients allPatients, AllTreatments allTreatments, ProviderService providerService) {
-        super(allPatients, allTreatments, AllCommands.transferIn);
+        super(allPatients, allTreatments, UpdateScope.transferIn);
         this.providerService = providerService;
     }
 

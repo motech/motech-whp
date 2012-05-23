@@ -2,7 +2,7 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.request.PatientWebRequest;
 
@@ -14,28 +14,28 @@ public class TBIdTest extends BasePatientTest {
     public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InCreateScope() {
         expectFieldValidationRuntimeException("field:tb_id:size must be between 11 and 11");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
-        validator.validate(webRequest, AllCommands.create);
+        validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InSimpleUpdateScope() {
         expectFieldValidationRuntimeException("field:tb_id:size must be between 11 and 11");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
-        validator.validate(webRequest, AllCommands.simpleUpdate);
+        validator.validate(webRequest, UpdateScope.simpleUpdateScope);
     }
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNotElevenDigits_InPauseTreatmentScope() {
         expectFieldValidationRuntimeException("field:tb_id:size must be between 11 and 11");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId("").build();
-        validator.validate(webRequest, AllCommands.pauseTreatment);
+        validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
-            validator.validate(webRequest, AllCommands.create);
+            validator.validate(webRequest, UpdateScope.createScope);
         } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:tb_id:TB ID cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");

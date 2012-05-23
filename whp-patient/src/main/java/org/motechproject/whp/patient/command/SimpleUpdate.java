@@ -18,7 +18,7 @@ public class SimpleUpdate extends UpdateCommand {
 
     @Autowired
     public SimpleUpdate(AllPatients allPatients) {
-        super(allPatients, AllCommands.simpleUpdate);
+        super(allPatients, UpdateScope.simpleUpdate);
     }
 
     @Override

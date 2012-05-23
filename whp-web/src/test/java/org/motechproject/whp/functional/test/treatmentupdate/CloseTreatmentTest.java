@@ -5,6 +5,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 
@@ -28,8 +29,7 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
                 .withCaseId(patientRequest.getCase_id())
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        String commandName1 = closeTreatmentUpdateRequest.getTreatment_update().getScope();
-        factory.updateFor(commandName1).apply(closeTreatmentUpdateRequest);
+        factory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
@@ -45,8 +45,7 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
                 .withDateModified(DateUtil.newDateTime(2012, 3, 17, 4, 55, 50))
                 .withTbId("elevenDigit")
                 .build();
-        String commandName = openNewTreatmentUpdateRequest.getTreatment_update().getScope();
-        factory.updateFor(commandName).apply(openNewTreatmentUpdateRequest);
+        factory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);
 
         providerPage.logout();
         providerPage = loginAsProvider(provider);

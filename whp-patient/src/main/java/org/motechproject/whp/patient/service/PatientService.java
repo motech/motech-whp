@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
@@ -20,13 +21,13 @@ public class PatientService {
 
     private AllTreatments allTreatments;
     private AllPatients allPatients;
-    private UpdateCommandFactory factory;
+    private UpdateCommandFactory updateCommandFactory;
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateCommandFactory factory) {
+    public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateCommandFactory updateCommandFactory) {
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
-        this.factory = factory;
+        this.updateCommandFactory = updateCommandFactory;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -40,8 +41,8 @@ public class PatientService {
         allPatients.add(patient);
     }
 
-    public void update(String updateCommand, PatientRequest patientRequest) {
-        factory.updateFor(updateCommand).apply(patientRequest);
+    public void update(UpdateScope updateCommand, PatientRequest patientRequest) {
+        updateCommandFactory.updateFor(updateCommand).apply(patientRequest);
     }
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {

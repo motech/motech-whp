@@ -19,7 +19,7 @@ public class PauseTreatment extends TreatmentUpdate {
 
     @Autowired
     public PauseTreatment(AllPatients allPatients, AllTreatments allTreatments) {
-        super(allPatients, allTreatments, AllCommands.pauseTreatment);
+        super(allPatients, allTreatments, UpdateScope.pauseTreatment);
     }
 
     @Override

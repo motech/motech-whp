@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice;
 import org.dozer.DozerBeanMapper;
 import org.dozer.MappingException;
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -46,7 +46,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
-            validator.validate(patientWebRequest, patientWebRequest.updateScope());
+            validator.validate(patientWebRequest, patientWebRequest.updateScope().name());
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             patientService.update(patientWebRequest.updateScope(), patientRequest);
         } catch (WHPRuntimeException e) {
@@ -59,7 +59,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void createCase(PatientWebRequest patientWebRequest) {
         try {
-            validator.validate(patientWebRequest, AllCommands.create);
+            validator.validate(patientWebRequest, UpdateScope.createScope);
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             registrationService.registerPatient(patientRequest);
         } catch (WHPRuntimeException e) {

@@ -6,16 +6,16 @@ import org.motechproject.whp.patient.repository.AllPatients;
 public abstract class UpdateCommand {
 
     protected AllPatients allPatients;
-    protected final String command;
+    protected final UpdateScope command;
 
-    public UpdateCommand(AllPatients allPatients, String command) {
+    public UpdateCommand(AllPatients allPatients, UpdateScope command) {
         this.allPatients = allPatients;
         this.command = command;
     }
 
     public abstract void apply(PatientRequest patientRequest);
 
-    public String getCommand() {
+    public UpdateScope getCommand() {
         return command;
     }
 }

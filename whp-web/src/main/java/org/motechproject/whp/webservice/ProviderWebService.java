@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.mapper.ProviderRequestMapper;
 import org.motechproject.whp.patient.contract.ProviderRequest;
@@ -27,7 +27,7 @@ public class ProviderWebService extends ProviderRegistrationService<ProviderWebR
 
     @Override
     public void createOrUpdate(ProviderWebRequest providerWebRequest) {
-        providerValidator.validate(providerWebRequest, AllCommands.create); //Can be any scope. None of the validation is scope dependent.
+        providerValidator.validate(providerWebRequest, UpdateScope.createScope); //Can be any scope. None of the validation is scope dependent.
         ProviderRequest providerRequest = new ProviderRequestMapper().map(providerWebRequest);
         registrationService.registerProvider(providerRequest);
     }

@@ -2,7 +2,7 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.request.PatientWebRequest;
 
@@ -14,33 +14,33 @@ public class AgeTest extends BasePatientTest {
     public void shouldThrowExceptionWhenAgeIsNotNumeric() {
         expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("A").build();
-        validator.validate(webRequest, AllCommands.create);
+        validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFractionInCreateScope() {
         expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
-        validator.validate(webRequest, AllCommands.create);
+        validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldThrowExceptionWhenAgeIsAFractionInSimpleUpdateScope() {
         expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
-        validator.validate(webRequest, AllCommands.simpleUpdate);
+        validator.validate(webRequest, UpdateScope.simpleUpdateScope);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenAgeIsNumericInCreateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10").build();
-        validator.validate(webRequest, AllCommands.create);
+        validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenAgeIsNumericInSimpleUpdateScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10").build();
-        validator.validate(webRequest, AllCommands.simpleUpdate);
+        validator.validate(webRequest, UpdateScope.simpleUpdateScope);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AgeTest extends BasePatientTest {
         String errorMessage = "";
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
-            validator.validate(webRequest, AllCommands.create);
+            validator.validate(webRequest, UpdateScope.createScope);
         } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:age:Age cannot be null")) {
                 fail("Not Null validation is not required. Validator implements null validation.");

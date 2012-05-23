@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
@@ -32,7 +32,7 @@ public abstract class BasePatientTest extends SpringIntegrationTest {
     }
 
     protected void validate(PatientWebRequest patientWebRequest) {
-        validator.validate(patientWebRequest, AllCommands.create);
+        validator.validate(patientWebRequest, UpdateScope.createScope);
     }
 
     @After

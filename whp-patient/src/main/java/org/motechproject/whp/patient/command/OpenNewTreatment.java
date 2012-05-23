@@ -23,7 +23,7 @@ public class OpenNewTreatment extends TreatmentUpdate {
 
     @Autowired
     public OpenNewTreatment(AllPatients allPatients, AllTreatments allTreatments) {
-        super(allPatients, allTreatments, AllCommands.openTreatment);
+        super(allPatients, allTreatments, UpdateScope.openTreatment);
     }
 
     @Override

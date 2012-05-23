@@ -10,7 +10,7 @@ import java.util.Map;
 @Component
 public class UpdateCommandFactory {
 
-    private Map<String, UpdateCommand> updateCommands = new HashMap<String, UpdateCommand>();
+    private Map<UpdateScope, UpdateCommand> updateCommands = new HashMap<UpdateScope, UpdateCommand>();
 
     @Autowired
     public UpdateCommandFactory(List<UpdateCommand> updateCommands) {
@@ -19,8 +19,8 @@ public class UpdateCommandFactory {
         }
     }
 
-    public UpdateCommand updateFor(String commandName) {
-        return updateCommands.get(commandName);
+    public UpdateCommand updateFor(UpdateScope scope) {
+        return updateCommands.get(scope);
     }
 
 }

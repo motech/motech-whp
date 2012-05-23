@@ -2,7 +2,7 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.exception.WHPError;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -24,21 +24,21 @@ public class TreatmentCategoryTest extends BasePatientTest {
     @Test
     public void shouldNotValidateTreatmentCategoryOnSimpleUpdate() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).withLastModifiedDate("03/04/2012 02:20:30").build();
-        validator.validate(webRequest, AllCommands.simpleUpdate);
+        validator.validate(webRequest, UpdateScope.simpleUpdateScope);
     }
 
     @Test
     public void shouldThrowException_WhenTreatmentCategoryIsNotValid() {
         expectFieldValidationRuntimeException("field:treatment_category:must match \"[0|1][1|2]\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory("99").build();
-        validator.validate(webRequest, AllCommands.create);
+        validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldThrowSingleException_WhenTreatmentCategoryIsNull() {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).build();
-            validator.validate(webRequest, AllCommands.create);
+            validator.validate(webRequest, UpdateScope.createScope);
         } catch (WHPRuntimeException e) {
             WHPError error = e.error(WHPErrorCode.FIELD_VALIDATION_FAILED);
             if (error != null && error.getMessage().contains("field:treatment_category:Treatment Category cannot be null"))

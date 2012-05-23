@@ -5,7 +5,7 @@ import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
-import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -40,7 +40,7 @@ public class ProviderRecordImporter {
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
-                validator.validate(request, AllCommands.create);
+                validator.validate(request, UpdateScope.createScope);
                 if(allProviders.findByProviderId(request.getProviderId())!=null){
                     throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_PROVIDER_ID);
                 }
