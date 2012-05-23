@@ -59,7 +59,9 @@ public class ProviderRecordImporter {
         System.out.println("Number of provider records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
-                registerProvider((ImportProviderRequest) object);
+                ImportProviderRequest importProviderRequest = (ImportProviderRequest) object;
+                System.out.println("Storing provider with provider id :" + importProviderRequest.getProviderId());
+                registerProvider(importProviderRequest);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

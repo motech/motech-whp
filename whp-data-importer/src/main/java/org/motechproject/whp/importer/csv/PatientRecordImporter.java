@@ -57,7 +57,9 @@ public class PatientRecordImporter {
         System.out.println("Number of patient records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
-                registerPatient((ImportPatientRequest) object);
+                ImportPatientRequest importPatientRequest = (ImportPatientRequest) object;
+                System.out.println("Storing patient with patient id :" + importPatientRequest.getCase_id());
+                registerPatient(importPatientRequest);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
