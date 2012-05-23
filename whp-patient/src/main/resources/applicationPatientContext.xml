@@ -8,7 +8,7 @@
 
     <import resource="classpath*:applicationPlatformCommon.xml"/>
     <import resource="classpath*:applicationPlatformServerAPI.xml"/>
-    <import resource="classpath*:applicationValidationContext.xml"/>
+
 
     <context:property-placeholder location="classpath*:*.properties"/>
     <context:annotation-config/>

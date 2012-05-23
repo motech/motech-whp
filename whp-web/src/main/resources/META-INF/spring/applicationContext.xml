@@ -11,15 +11,14 @@
     <import resource="classpath*:applicationWHPContext.xml"/>
     <import resource="classpath*:applicationMappingContext.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
-    <import resource="classpath*:applicationValidationContext.xml"/>
-    <import resource="classpath*:applicationWebSecurityContext.xml"/>
+    <import resource="classpath*:applicationWHPValidationContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
     <import resource="classpath*:placeholderPluginContext.xml"/>
     <import resource="classpath*:applicationDateTimeSimulatorContext.xml"/>
     <import resource="classpath*:applicationBulkExportContext.xml"/>
     <import resource="classpath*:applicationBulkImportContext.xml"/>
 
-    <util:properties id="whpAPIValidationProperty" location="classpath:/whpAPIValidationProperty.properties"/>
+
 
     <context:annotation-config/>
     <context:spring-configured/>

@@ -37,7 +37,7 @@
             <arg value="patient"/>
             <arg value="${file}"/>
             <classpath>
-                <path location="../whp-web/target/whp-web-0.1-SNAPSHOT/WEB-INF/classes"/>
+                <path location="../whp-data-importer/target/whp-data-importer-0.1-SNAPSHOT.jar"/>
                 <path refid="lib.path"/>
             </classpath>
         </java>
