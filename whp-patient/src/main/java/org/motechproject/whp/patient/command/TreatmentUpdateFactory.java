@@ -3,42 +3,24 @@ package org.motechproject.whp.patient.command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Component
 public class TreatmentUpdateFactory {
 
-    private OpenNewTreatment openNewTreatment;
-    private CloseCurrentTreatment closeCurrentTreatment;
-    private TransferInPatient transferInPatient;
-    private PauseTreatment pauseTreatment;
-    private RestartTreatment restartTreatment;
+    private Map<String, TreatmentUpdate> updateCommands = new HashMap<String, TreatmentUpdate>();
 
     @Autowired
-    public TreatmentUpdateFactory(OpenNewTreatment openNewTreatment,
-                                  CloseCurrentTreatment closeCurrentTreatment,
-                                  TransferInPatient transferInPatient,
-                                  PauseTreatment pauseTreatment,
-                                  RestartTreatment restartTreatment) {
-        this.openNewTreatment = openNewTreatment;
-        this.closeCurrentTreatment = closeCurrentTreatment;
-        this.transferInPatient = transferInPatient;
-        this.pauseTreatment = pauseTreatment;
-        this.restartTreatment = restartTreatment;
+    public TreatmentUpdateFactory(List<TreatmentUpdate> updateCommands) {
+        for (TreatmentUpdate updateCommand : updateCommands) {
+            this.updateCommands.put(updateCommand.getCommand(), updateCommand);
+        }
     }
 
     public TreatmentUpdate updateFor(TreatmentUpdateScenario scenario) {
-        switch (scenario) {
-            case New:
-                return openNewTreatment;
-            case Close:
-                return closeCurrentTreatment;
-            case TransferIn:
-                return transferInPatient;
-            case Pause:
-                return pauseTreatment;
-            case Restart:
-                return restartTreatment;
-            default:
-                return null;
-        }
+        return updateCommands.get(scenario.getScope());
     }
+
 }

@@ -19,7 +19,7 @@ public class CloseCurrentTreatment extends TreatmentUpdate {
 
     @Autowired
     public CloseCurrentTreatment(AllPatients allPatients, AllTreatments allTreatments) {
-        super(allPatients, allTreatments);
+        super(allPatients, allTreatments, AllCommands.closeTreatment);
     }
 
     @Override

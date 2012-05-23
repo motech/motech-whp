@@ -8,12 +8,17 @@ public abstract class TreatmentUpdate {
 
     protected AllPatients allPatients;
     protected AllTreatments allTreatments;
+    protected final String command;
 
-    protected TreatmentUpdate(AllPatients allPatients, AllTreatments allTreatments) {
+    protected TreatmentUpdate(AllPatients allPatients, AllTreatments allTreatments, String command) {
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
+        this.command = command;
     }
 
     public abstract void apply(PatientRequest patientRequest);
 
+    public String getCommand() {
+        return command;
+    }
 }
