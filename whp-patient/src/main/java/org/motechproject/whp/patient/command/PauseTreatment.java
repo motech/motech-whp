@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -10,30 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canRestartCurrentTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPauseCurrentTreatment;
 
 @Component
-public class RestartTreatment extends TreatmentUpdate {
+public class PauseTreatment extends TreatmentUpdate {
 
     @Autowired
-    public RestartTreatment(AllPatients allPatients, AllTreatments allTreatments) {
+    public PauseTreatment(AllPatients allPatients, AllTreatments allTreatments) {
         super(allPatients, allTreatments);
     }
 
     @Override
     public void apply(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-        if (!canRestartCurrentTreatment(patient, patientRequest, errorCodes)) {
+        if (!canPauseCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        restartTreatment(patient, patientRequest, allPatients);
+        pauseTreatment(patient, patientRequest, allPatients);
     }
 
-    private void restartTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
-        patient.restartCurrentTreatment(patientRequest.getReason_for_restart(), patientRequest.getDate_modified());
+    private void pauseTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
+        patient.pauseCurrentTreatment(patientRequest.getReason_for_pause(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

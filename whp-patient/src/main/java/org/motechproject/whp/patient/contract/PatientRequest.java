@@ -3,11 +3,11 @@ package org.motechproject.whp.patient.contract;
 import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 
 @Data

@@ -3,8 +3,8 @@ package org.motechproject.whp.integration.validation.patient;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.patient.command.AllCommands;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.PatientWebRequest;
 
 public class GenderTest extends BasePatientTest {

@@ -1,6 +1,9 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.junit.Test;
+import org.motechproject.whp.patient.command.OpenNewTreatment;
+import org.motechproject.whp.patient.command.TreatmentUpdateFactory;
+import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

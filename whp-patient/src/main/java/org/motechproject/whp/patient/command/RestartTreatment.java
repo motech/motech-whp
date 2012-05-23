@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPauseCurrentTreatment;
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canRestartCurrentTreatment;
 
 @Component
-public class PauseTreatment extends TreatmentUpdate {
+public class RestartTreatment extends TreatmentUpdate {
 
     @Autowired
-    public PauseTreatment(AllPatients allPatients, AllTreatments allTreatments) {
+    public RestartTreatment(AllPatients allPatients, AllTreatments allTreatments) {
         super(allPatients, allTreatments);
     }
 
@@ -27,14 +27,14 @@ public class PauseTreatment extends TreatmentUpdate {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-        if (!canPauseCurrentTreatment(patient, patientRequest, errorCodes)) {
+        if (!canRestartCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
-        pauseTreatment(patient, patientRequest, allPatients);
+        restartTreatment(patient, patientRequest, allPatients);
     }
 
-    private void pauseTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
-        patient.pauseCurrentTreatment(patientRequest.getReason_for_pause(), patientRequest.getDate_modified());
+    private void restartTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
+        patient.restartCurrentTreatment(patientRequest.getReason_for_restart(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

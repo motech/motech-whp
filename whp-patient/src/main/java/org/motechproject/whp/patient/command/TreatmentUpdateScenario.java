@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 public enum TreatmentUpdateScenario {
 

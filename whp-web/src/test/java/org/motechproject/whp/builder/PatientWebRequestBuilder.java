@@ -1,7 +1,7 @@
 package org.motechproject.whp.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
+import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.request.PatientWebRequest;
 

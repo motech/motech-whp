@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canCloseCurrentTreatment;
 
@@ -22,12 +23,11 @@ public class CloseCurrentTreatment extends TreatmentUpdate {
     }
 
     @Override
-    public void apply(PatientRequest patientRequest){
+    public void apply(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+        List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
 
-         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
-
-        if (!canCloseCurrentTreatment(patient, patientRequest, errorCodes)){
+        if (!canCloseCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
         closeCurrentTreatment(patient, patientRequest, allPatients, allTreatments);

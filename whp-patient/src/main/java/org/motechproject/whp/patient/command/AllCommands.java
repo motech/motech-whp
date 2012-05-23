@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service;
+package org.motechproject.whp.patient.command;
 
 public class AllCommands {
 

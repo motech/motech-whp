@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
 import static org.motechproject.whp.patient.mapper.PatientMapper.createNewProvidedTreatmentForTreatmentCategoryChange;
@@ -28,7 +29,8 @@ public class OpenNewTreatment extends TreatmentUpdate {
     @Override
     public void apply(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+
         if (!canOpenNewTreatment(patient, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }

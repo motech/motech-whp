@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
-import org.motechproject.whp.patient.service.AllCommands;
+import org.motechproject.whp.patient.command.AllCommands;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.mapper.ProviderRequestMapper;
 import org.motechproject.whp.patient.contract.ProviderRequest;

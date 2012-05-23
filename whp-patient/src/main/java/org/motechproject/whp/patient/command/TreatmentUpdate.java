@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service.treatmentupdate;
+package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.repository.AllPatients;

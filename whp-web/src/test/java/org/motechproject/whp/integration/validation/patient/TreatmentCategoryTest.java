@@ -2,10 +2,10 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.patient.command.AllCommands;
 import org.motechproject.whp.patient.exception.WHPError;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
-import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.PatientWebRequest;
 
 import static junit.framework.Assert.assertTrue;

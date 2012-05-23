@@ -1,6 +1,9 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
+import org.motechproject.whp.patient.command.AllCommands;
+import org.motechproject.whp.patient.command.TreatmentUpdate;
+import org.motechproject.whp.patient.command.TreatmentUpdateFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
@@ -10,8 +13,6 @@ import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdate;
-import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
