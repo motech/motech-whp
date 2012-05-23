@@ -7,6 +7,8 @@ import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.contract.ProviderRequest;
+import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 
@@ -26,11 +28,14 @@ public class ProviderRecordImporterUnitTest {
 
     private ProviderRequestMapper providerRequestMapper;
 
+    @Mock
+    private AllProviders allProviders;
+
     @Before
     public void setup() {
         initMocks(this);
         providerRequestMapper = new ProviderRequestMapper();
-        providerRecordImporter = new ProviderRecordImporter(registrationService, validator, providerRequestMapper);
+        providerRecordImporter = new ProviderRecordImporter(allProviders,registrationService, validator, providerRequestMapper);
     }
 
     @Test
@@ -53,6 +58,15 @@ public class ProviderRecordImporterUnitTest {
     public void shouldReturnFalseIfInvalid() {
         ImportProviderRequest importProviderRequest = new ImportProviderRequest();
         doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(any(), anyString());
+
+        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest)));
+    }
+
+    @Test
+    public void shouldReturnFalseIfProviderAlreadyExists() {
+        ImportProviderRequest importProviderRequest = new ImportProviderRequest();
+        importProviderRequest.setProviderId("1");
+        when(allProviders.findByProviderId("1")).thenReturn(new Provider());
 
         assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest)));
     }
