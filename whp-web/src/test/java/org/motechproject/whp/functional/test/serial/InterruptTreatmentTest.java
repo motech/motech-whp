@@ -26,7 +26,8 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
                 .withCaseId(patientRequest.getCase_id())
                 .withDateModified(DateUtil.newDateTime(2012, 5, 7, 0, 0, 0))
                 .build();
-        patientService.performTreatmentUpdate(pauseTreatmentRequest);
+        String commandName1 = pauseTreatmentRequest.getTreatment_update().getScope();
+        factory.updateFor(commandName1).apply(pauseTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
 
@@ -42,7 +43,8 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
                 .withDateModified(DateUtil.newDateTime(2012, 5, 9, 0, 0, 0))
                 .build();
 
-        patientService.performTreatmentUpdate(resumeTreatmentRequest);
+        String commandName = resumeTreatmentRequest.getTreatment_update().getScope();
+        factory.updateFor(commandName).apply(resumeTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(2012, 5, 15, 0, 0, 0));
 

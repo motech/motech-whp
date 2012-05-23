@@ -17,6 +17,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -62,6 +63,8 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     private AllTreatments allTreatments;
     @Autowired
     private AllAuditLogs allAuditLogs;
+    @Autowired
+    private UpdateCommandFactory factory;
 
     private final AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
 
@@ -94,7 +97,9 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         createPatientAndRecordAdherence();
         assertTbAndProviderId(OLD_TB_ID, OLD_PROVIDER_ID);
 
-        patientService.performTreatmentUpdate(createChangeProviderRequest(NEW_PROVIDER_ID, OLD_TB_ID, NEW_TB_ID));
+        PatientRequest patientRequest = createChangeProviderRequest(NEW_PROVIDER_ID, OLD_TB_ID, NEW_TB_ID);
+        String commandName = patientRequest.getTreatment_update().getScope();
+        factory.updateFor(commandName).apply(patientRequest);
 
         WeeklyAdherence updatedAdherence = new WeeklyAdherenceBuilder().withLog(DayOfWeek.Monday, PillStatus.NotTaken).forPatient(allPatients.findByPatientId(PATIENT_ID)).build();
 

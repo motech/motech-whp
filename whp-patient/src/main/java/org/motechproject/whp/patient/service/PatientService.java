@@ -1,35 +1,29 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.command.AllCommands;
-import org.motechproject.whp.patient.command.TreatmentUpdate;
-import org.motechproject.whp.patient.command.TreatmentUpdateFactory;
+import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canPerformSimpleUpdate;
-import static org.motechproject.whp.patient.mapper.PatientMapper.*;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapProvidedTreatment;
 
 @Service
 public class PatientService {
 
     private AllTreatments allTreatments;
     private AllPatients allPatients;
-    private TreatmentUpdateFactory factory;
+    private UpdateCommandFactory factory;
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTreatments allTreatments, TreatmentUpdateFactory factory) {
+    public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateCommandFactory factory) {
         this.allPatients = allPatients;
         this.allTreatments = allTreatments;
         this.factory = factory;
@@ -47,27 +41,7 @@ public class PatientService {
     }
 
     public void update(String updateCommand, PatientRequest patientRequest) {
-        if (updateCommand.equals(AllCommands.simpleUpdate)) {
-            simpleUpdate(patientRequest);
-        } else {
-            performTreatmentUpdate(patientRequest);
-        }
-    }
-
-    void simpleUpdate(PatientRequest patientRequest) {
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
-        if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
-            Patient updatedPatient = mapUpdates(patientRequest, patient);
-            allPatients.update(updatedPatient);
-        } else {
-            throw new WHPRuntimeException(errorCodes);
-        }
-    }
-
-    public void performTreatmentUpdate(PatientRequest patientRequest) {
-        TreatmentUpdate treatmentUpdate = factory.updateFor(patientRequest.getTreatment_update());
-        treatmentUpdate.apply(patientRequest);
+        factory.updateFor(updateCommand).apply(patientRequest);
     }
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {
@@ -75,4 +49,5 @@ public class PatientService {
         patient.getCurrentProvidedTreatment().getTreatment().setStartDate(firstDoseTakenDate);
         allPatients.update(patient);
     }
+
 }

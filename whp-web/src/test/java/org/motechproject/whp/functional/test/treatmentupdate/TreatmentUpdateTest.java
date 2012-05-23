@@ -10,6 +10,7 @@ import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.service.PatientService;
@@ -21,22 +22,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
 public abstract class TreatmentUpdateTest extends BaseTest {
 
     @Autowired
     protected PatientService patientService;
-
     @Autowired
     protected PatientWebService patientWebService;
+    @Autowired
+    protected UpdateCommandFactory factory;
 
     protected ProviderDataService providerDataService;
-
     protected PatientRequest patientRequest;
     protected TestProvider provider;
 

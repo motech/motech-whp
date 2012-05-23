@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.command.OpenNewTreatment;
-import org.motechproject.whp.patient.command.TreatmentUpdateFactory;
+import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +14,17 @@ import static junit.framework.Assert.*;
 public class TreatmentUpdateFactoryTest extends SpringIntegrationTest {
 
     @Autowired
-    private TreatmentUpdateFactory treatmentUpdateFactory;
+    private UpdateCommandFactory treatmentUpdateFactory;
     @Autowired
     private OpenNewTreatment openNewTreatment;
 
     @Test
     public void shouldReturnTreatmentUpdate() {
-        assertEquals(openNewTreatment, treatmentUpdateFactory.updateFor(TreatmentUpdateScenario.New));
+        assertEquals(openNewTreatment, treatmentUpdateFactory.updateFor(TreatmentUpdateScenario.New.getScope()));
     }
 
     @Test
     public void shouldNotReturnNonRelevantTreatmentUpdate() {
-        assertFalse(treatmentUpdateFactory.updateFor(TreatmentUpdateScenario.Pause).equals(openNewTreatment));
+        assertFalse(treatmentUpdateFactory.updateFor(TreatmentUpdateScenario.Pause.getScope()).equals(openNewTreatment));
     }
 }

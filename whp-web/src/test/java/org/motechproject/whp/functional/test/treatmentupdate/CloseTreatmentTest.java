@@ -28,7 +28,8 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
                 .withCaseId(patientRequest.getCase_id())
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        patientService.performTreatmentUpdate(closeTreatmentUpdateRequest);
+        String commandName1 = closeTreatmentUpdateRequest.getTreatment_update().getScope();
+        factory.updateFor(commandName1).apply(closeTreatmentUpdateRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
@@ -44,7 +45,8 @@ public class CloseTreatmentTest extends TreatmentUpdateTest {
                 .withDateModified(DateUtil.newDateTime(2012, 3, 17, 4, 55, 50))
                 .withTbId("elevenDigit")
                 .build();
-        patientService.performTreatmentUpdate(openNewTreatmentUpdateRequest);
+        String commandName = openNewTreatmentUpdateRequest.getTreatment_update().getScope();
+        factory.updateFor(commandName).apply(openNewTreatmentUpdateRequest);
 
         providerPage.logout();
         providerPage = loginAsProvider(provider);
