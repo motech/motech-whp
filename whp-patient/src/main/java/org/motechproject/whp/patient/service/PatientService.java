@@ -45,7 +45,15 @@ public class PatientService {
         allPatients.add(patient);
     }
 
-    public void simpleUpdate(PatientRequest patientRequest) {
+    public void update(String updateCommand, PatientRequest patientRequest) {
+        if (updateCommand.equals(AllCommands.simpleUpdate)) {
+            simpleUpdate(patientRequest);
+        } else {
+            performTreatmentUpdate(patientRequest);
+        }
+    }
+
+    void simpleUpdate(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
@@ -66,5 +74,4 @@ public class PatientService {
         patient.getCurrentProvidedTreatment().getTreatment().setStartDate(firstDoseTakenDate);
         allPatients.update(patient);
     }
-
 }

@@ -5,8 +5,8 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.PatientWebRequest;
-import org.motechproject.whp.validation.ValidationScope;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -17,7 +17,7 @@ public class ProviderIdTest extends BasePatientTest {
     public void shouldThrowExceptionWhenProviderIdIsNotFound() {
         expectFieldValidationRuntimeException("No provider is found with id:nonExistantProviderId");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("nonExistantProviderId").build();
-        validator.validate(webRequest, ValidationScope.create);
+        validator.validate(webRequest, AllCommands.create);
     }
 
     @Test
@@ -25,7 +25,7 @@ public class ProviderIdTest extends BasePatientTest {
         String errorMessage = "";
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId(null).build();
-            validator.validate(webRequest, ValidationScope.create);
+            validator.validate(webRequest, AllCommands.create);
         } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:provider_id:may not be null")) {
                 fail("Not Null validation is not required.");
@@ -40,7 +40,7 @@ public class ProviderIdTest extends BasePatientTest {
         Provider defaultProvider = new Provider("providerId", "1231231231", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("providerId").build();
-        validator.validate(webRequest, ValidationScope.create);
+        validator.validate(webRequest, AllCommands.create);
     }
 
 }

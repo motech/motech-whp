@@ -7,10 +7,10 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
-import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,12 +48,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
         try {
             validator.validate(patientWebRequest, patientWebRequest.updateScope());
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
-
-            if (patientWebRequest.isTreatmentUpdateRequest()) {
-                patientService.performTreatmentUpdate(patientRequest);
-            } else {
-                patientService.simpleUpdate(patientRequest);
-            }
+            patientService.update(patientWebRequest.updateScope(), patientRequest);
         } catch (WHPRuntimeException e) {
             throw new WHPCaseException(e);
         } catch (MappingException e) {
@@ -64,7 +59,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void createCase(PatientWebRequest patientWebRequest) {
         try {
-            validator.validate(patientWebRequest, ValidationScope.create);
+            validator.validate(patientWebRequest, AllCommands.create);
             PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
             registrationService.registerPatient(patientRequest);
         } catch (WHPRuntimeException e) {

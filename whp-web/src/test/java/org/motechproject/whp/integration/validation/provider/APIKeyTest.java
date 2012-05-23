@@ -2,8 +2,8 @@ package org.motechproject.whp.integration.validation.provider;
 
 import org.junit.Test;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.ProviderWebRequest;
-import org.motechproject.whp.validation.ValidationScope;
 
 public class APIKeyTest extends BaseProviderTest {
     @Test
@@ -11,7 +11,7 @@ public class APIKeyTest extends BaseProviderTest {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()
                 .withDefaults()
                 .build();
-        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+        validator.validate(providerWebRequest, AllCommands.create); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
@@ -24,6 +24,6 @@ public class APIKeyTest extends BaseProviderTest {
                 .withPrimaryMobile("9880000000")
                 .withAPIKey("invalid_api_key")
                 .build();
-        validator.validate(providerWebRequest, ValidationScope.create); //Can be any scope. None of the validation is scope dependent.
+        validator.validate(providerWebRequest, AllCommands.create); //Can be any scope. None of the validation is scope dependent.
     }
 }

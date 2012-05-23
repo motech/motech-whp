@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.validation.constraints.NamedConstraint;
-import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,7 +38,7 @@ public class APIKeyValidatorTest extends SpringIntegrationTest {
         TestClass testObject = new TestClass();
         testObject.setApi_key("remediAPIKey");
 
-        requestValidator.validate(testObject, ValidationScope.create);
+        requestValidator.validate(testObject, AllCommands.create);
     }
 
     @Test(expected = WHPRuntimeException.class)
@@ -49,7 +49,7 @@ public class APIKeyValidatorTest extends SpringIntegrationTest {
         TestClass testObject = new TestClass();
         testObject.setApi_key("invalidAPIKey");
 
-        requestValidator.validate(testObject, ValidationScope.create);
+        requestValidator.validate(testObject, AllCommands.create);
     }
 
     @Override

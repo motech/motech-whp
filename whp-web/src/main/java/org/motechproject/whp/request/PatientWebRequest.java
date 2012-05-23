@@ -7,12 +7,11 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.patient.service.treatmentupdate.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
-import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Digits;
@@ -42,21 +41,21 @@ public class PatientWebRequest {
     private String address_landmark;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String first_name;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String last_name;
 
     @NotNull
     @Enumeration(type = Gender.class)
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String gender;
 
     @NotNull
     @Enumeration(type = PatientType.class)
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String patient_type;
 
     @Enumeration(type = TreatmentUpdateScenario.class)
@@ -64,15 +63,15 @@ public class PatientWebRequest {
 
     @NotNull
     @Enumeration(type = TreatmentOutcome.class)
-    @Scope(scope = {ValidationScope.closeTreatment})
+    @Scope(scope = {AllCommands.closeTreatment})
     private String treatment_outcome;
 
     @NotEmpty
-    @Scope(scope = {ValidationScope.pauseTreatment})
+    @Scope(scope = {AllCommands.pauseTreatment})
     private String reason_for_pause;
 
     @NotEmpty
-    @Scope(scope = {ValidationScope.restartTreatment})
+    @Scope(scope = {AllCommands.restartTreatment})
     private String reason_for_restart;
 
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
@@ -80,91 +79,91 @@ public class PatientWebRequest {
 
     @NotNull
     @Enumeration(type = DiseaseClass.class)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String disease_class;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String address_location;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String address_village;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String address_block;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String address_district;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create})
+    @Scope(scope = {AllCommands.create})
     private String address_state;
 
     @NotNull
     @Enumeration(type = SmearTestSampleInstance.class)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String smear_sample_instance;
 
     @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY")
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String smear_test_date_1;
 
     @NotNull
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String smear_test_result_1;
 
     @NotNull
     @DateTimeFormat(pattern = "dd/MM/YYYY")
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String smear_test_date_2;
 
     @NotNull
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String smear_test_result_2;
 
     @NotNull
     @Enumeration(type = WeightInstance.class)
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     private String weight_instance;
 
-    @NotNull(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @NotNull(scope = {AllCommands.create, AllCommands.openTreatment})
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
     private String weight;
 
     @NotNull
     @Size(min = 11, max = 11)
-    @Scope(scope = {ValidationScope.create,
-            ValidationScope.simpleUpdate,
-            ValidationScope.openTreatment,
-            ValidationScope.closeTreatment,
-            ValidationScope.transferIn,
-            ValidationScope.pauseTreatment,
-            ValidationScope.restartTreatment})
+    @Scope(scope = {AllCommands.create,
+            AllCommands.simpleUpdate,
+            AllCommands.openTreatment,
+            AllCommands.closeTreatment,
+            AllCommands.transferIn,
+            AllCommands.pauseTreatment,
+            AllCommands.restartTreatment})
     private String tb_id;
 
     @NotNull
     @Size(min = 11, max = 11)
-    @Scope(scope = {ValidationScope.transferIn})
+    @Scope(scope = {AllCommands.transferIn})
     private String old_tb_id;
 
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Scope(scope = {ValidationScope.create, ValidationScope.transferIn, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.transferIn, AllCommands.openTreatment})
     private String provider_id;
 
     @NotNull
-    @Scope(scope = {ValidationScope.create, ValidationScope.openTreatment})
+    @Scope(scope = {AllCommands.create, AllCommands.openTreatment})
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
 
     @NotNull
     @Digits(integer = 3, fraction = 0, message = "Age must be numeric and not fractional")
-    @Scope(scope = {ValidationScope.create, ValidationScope.simpleUpdate})
+    @Scope(scope = {AllCommands.create, AllCommands.simpleUpdate})
     private String age;
 
     public PatientWebRequest() {
@@ -237,7 +236,7 @@ public class PatientWebRequest {
 
     public String updateScope() {
         TreatmentUpdateScenario updateScenario = updateScenario();
-        return updateScenario == null ? ValidationScope.simpleUpdate : updateScenario.getScope();
+        return updateScenario == null ? AllCommands.simpleUpdate : updateScenario.getScope();
     }
 
 }

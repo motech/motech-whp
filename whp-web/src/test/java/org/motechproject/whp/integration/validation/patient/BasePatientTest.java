@@ -7,9 +7,9 @@ import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
-import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -32,7 +32,7 @@ public abstract class BasePatientTest extends SpringIntegrationTest {
     }
 
     protected void validate(PatientWebRequest patientWebRequest) {
-        validator.validate(patientWebRequest, ValidationScope.create);
+        validator.validate(patientWebRequest, AllCommands.create);
     }
 
     @After

@@ -5,8 +5,8 @@ import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.exception.WHPError;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.service.AllCommands;
 import org.motechproject.whp.request.PatientWebRequest;
-import org.motechproject.whp.validation.ValidationScope;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -24,21 +24,21 @@ public class TreatmentCategoryTest extends BasePatientTest {
     @Test
     public void shouldNotValidateTreatmentCategoryOnSimpleUpdate() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).withLastModifiedDate("03/04/2012 02:20:30").build();
-        validator.validate(webRequest, ValidationScope.simpleUpdate);
+        validator.validate(webRequest, AllCommands.simpleUpdate);
     }
 
     @Test
     public void shouldThrowException_WhenTreatmentCategoryIsNotValid() {
         expectFieldValidationRuntimeException("field:treatment_category:must match \"[0|1][1|2]\"");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory("99").build();
-        validator.validate(webRequest, ValidationScope.create);
+        validator.validate(webRequest, AllCommands.create);
     }
 
     @Test
     public void shouldThrowSingleException_WhenTreatmentCategoryIsNull() {
         try {
             PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTreatmentCategory(null).build();
-            validator.validate(webRequest, ValidationScope.create);
+            validator.validate(webRequest, AllCommands.create);
         } catch (WHPRuntimeException e) {
             WHPError error = e.error(WHPErrorCode.FIELD_VALIDATION_FAILED);
             if (error != null && error.getMessage().contains("field:treatment_category:Treatment Category cannot be null"))
