@@ -34,7 +34,7 @@ public class PatientRecordImporterUnitTest {
     }
 
     @Test
-    public void shouldSavePatientData() {
+    public void shouldSaveAllPatientDataEvenIfErrorOccurs() {
         ImportPatientRequest importPatientRequest1 = new ImportPatientRequest();
         importPatientRequest1.setCase_id("1");
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequest();
@@ -46,6 +46,7 @@ public class PatientRecordImporterUnitTest {
 
         when(patientImportRequestMapper.map(importPatientRequest1, PatientRequest.class)).thenReturn(patientRequest1);
         when(patientImportRequestMapper.map(importPatientRequest2, PatientRequest.class)).thenReturn(patientRequest2);
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(registrationService).registerPatient(patientRequest1);
 
         patientRecordImporter.post(asList((Object) importPatientRequest1, importPatientRequest2));
 
@@ -56,7 +57,7 @@ public class PatientRecordImporterUnitTest {
     @Test
     public void shouldReturnFalseIfInvalid() {
         ImportPatientRequest importPatientRequest = new ImportPatientRequest();
-        doThrow(new RuntimeException()).when(validator).validate(any(), anyString());
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(any(), anyString());
 
         assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest)));
     }

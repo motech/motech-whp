@@ -11,7 +11,14 @@ public class CsvImporter {
         CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
         if (argvs[0].toLowerCase().contains("patient")) {
             System.out.println("Importing patient records from file :" + argvs[1]);
-            csvDataImporter.importData("importPatientRequest", argvs[1]);
+            csvDataImporter.importData("patientRecordImporter", argvs[1]);
+        }
+        else if(argvs[0].toLowerCase().contains("provider")){
+            System.out.println("Importing provider records from file : "+ argvs[1]);
+            csvDataImporter.importData("providerRecordImporter",argvs[1]);
+        }
+        else {
+            System.out.println("Invalid request! Arguments to be passed - \"{provider/patient},filename\"");
         }
     }
 }

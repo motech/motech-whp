@@ -6,16 +6,16 @@ import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
+import org.motechproject.whp.patient.command.AllCommands;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
-import org.motechproject.whp.validation.ValidationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@CSVImporter(entity = "importPatientRequest", bean = ImportPatientRequest.class)
+@CSVImporter(entity = "patientRecordImporter", bean = ImportPatientRequest.class)
 @Component
 public class PatientRecordImporter {
 
@@ -39,7 +39,7 @@ public class PatientRecordImporter {
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
-                validator.validate(request, ValidationScope.create);
+                validator.validate(request, AllCommands.create);
                 if(StringUtils.isBlank(request.getWeight_date())   )
                     request.setWeight_date(request.getDate_modified());
             } catch (Exception e) {
@@ -54,6 +54,7 @@ public class PatientRecordImporter {
 
     @Post
     public void post(List<Object> objects) {
+        System.out.println("Number of patient records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
                 registerPatient((ImportPatientRequest) object);
@@ -64,7 +65,6 @@ public class PatientRecordImporter {
     }
 
     public void registerPatient(ImportPatientRequest importPatientRequest) {
-        validator.validate(importPatientRequest, ValidationScope.create);
         PatientRequest patientRequest = importPatientRequestMapper.map(importPatientRequest, PatientRequest.class);
         registrationService.registerPatient(patientRequest);
     }

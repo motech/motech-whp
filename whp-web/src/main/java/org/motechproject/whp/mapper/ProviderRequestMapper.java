@@ -4,7 +4,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.request.ProviderWebRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProviderRequestMapper {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");

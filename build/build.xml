@@ -29,20 +29,34 @@
             </classpath>
         </java>
     </target>
-    <property name="importerLog" value="importer.log"/>
     <target name="load.patient.data.from.csv">
-        <fail unless="file" message="Usage : ant load.patient.data.from.csv -Dfile=path -DimporterLog=path" />
-        <echo message="Loading Patient Data.."/>
-        <java fork="false" classname="org.motechproject.whp.importer.csv.CsvImporter" output="${importerLog}">
-            <arg value="patient"/>
-            <arg value="${file}"/>
-            <classpath>
-                <path location="../whp-data-importer/target/whp-data-importer-0.1-SNAPSHOT.jar"/>
-                <path refid="lib.path"/>
-            </classpath>
-        </java>
-        <echo message="Output log is stored in ${importerLog}"/>
+        <dataImporter importerType="patient"/>
     </target>
+    <target name="load.provider.data.from.csv">
+       <dataImporter importerType="provider"/>
+    </target>
+
+    <macrodef name="dataImporter">
+        <attribute name="importerType"/>
+       <sequential>
+           <fail unless="@{importerType}file" message="Usage : ant load.patient.data.from.csv -D@{importerType}file=path -DimporterLog=path" />
+           <echo message="Loading @{importerType} Data..."/>
+           <condition property="importerLog" value="dataImporter.log">
+               <not>
+                   <isset property="importerLog"/>
+               </not>
+           </condition>
+           <java fork="false" classname="org.motechproject.whp.importer.csv.CsvImporter" output="${importerLog}" append="true">
+               <arg value="@{importerType}"/>
+               <arg value="${@{importerType}file}"/>
+               <classpath>
+                   <path location="../whp-data-importer/target/whp-data-importer-0.1-SNAPSHOT.jar"/>
+                   <path refid="lib.path"/>
+               </classpath>
+           </java>
+           <echo message="Output log is stored in ${importerLog}"/>
+       </sequential>
+    </macrodef>
 
     <target name="drop.all.dbs">
         <for list="motech-whp,motech-web-security,motech-tb-adherence"
