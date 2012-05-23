@@ -2,13 +2,15 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
 
 public class TreatmentInterruptionTest {
 
@@ -32,69 +34,73 @@ public class TreatmentInterruptionTest {
         assertEquals(tomorrow, interruption.getResumptionDate());
     }
 
+    /*Note: Week extends from Monday till the NEXT saturday. NOT the following/subsequent saturday, NEXT saturday*/
+
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndAsOfDateIsAfterPauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    public void shouldReturnTrueIfTreatmentWasPausedAndRestartedInLastWeek() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 21);
+        LocalDate resumptionDate = new LocalDate(2012, 5, 29);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+        interruption.resumeTreatment("swap", resumptionDate);
+
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 30));
+
+        assertTrue(interruption.isTreatmentInterrupted(datesInWeek));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndAsOfDateIsOnPauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        assertTrue(interruption.isTreatmentInterrupted(today(), today()));
+    public void shouldReturnTrueIfTreatmentWasPausedInLastWeek() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 21);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
+
+        assertTrue(interruption.isTreatmentInterrupted(datesInWeek));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsPaused_AndPauseDateIsBeforeStartDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
-        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+    public void shouldReturnTrueIfTreatmentWasPausedInWeekBeforeLast() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 20);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
+
+        assertTrue(interruption.isTreatmentInterrupted(datesInWeek));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsPaused_AndAsOfDateIsBeforePauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(1));
-        assertFalse(interruption.isTreatmentInterrupted(today(), today()));
+    public void shouldReturnTrueIfTreatmentWasPausedInWeekBeforeLastAndResumedInLastWeek() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 20);
+        LocalDate resumptionDate = new LocalDate(2012, 5, 21);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+        interruption.resumeTreatment("swap", resumptionDate);
+
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
+
+        assertTrue(interruption.isTreatmentInterrupted(datesInWeek));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsOnStartDate_AndAsOfDateIsOnPauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        interruption.resumeTreatment("swap", today());
-        assertTrue(interruption.isTreatmentInterrupted(today(), today()));
+    public void shouldReturnTrueIfTreatmentWasPausedInWeekBeforeLastAndResumedInLastWeek_() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 20);
+        LocalDate resumptionDate = new LocalDate(2012, 5, 21);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+        interruption.resumeTreatment("swap", resumptionDate);
+
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
+
+        assertTrue(interruption.isTreatmentInterrupted(datesInWeek));
     }
 
     @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsAfterStartDate_AndAsOfDateIsOnPauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(1));
-        interruption.resumeTreatment("swap", today().plusDays(1));
-        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
-    }
+    public void shouldReturnFalseIfTreatmentWasPausedInWeekBeforeLastAndResumedInWeekBeforeLast() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 20);
+        LocalDate resumptionDate = new LocalDate(2012, 5, 20);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+        interruption.resumeTreatment("swap", resumptionDate);
 
-    @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsOnStartDate_AndAsOfDateIsAfterPauseDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today());
-        interruption.resumeTreatment("swap", today());
-        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
-    }
+        List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
 
-    @Test
-    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsAfterAsOfDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().plusDays(2));
-        interruption.resumeTreatment("swap", today().plusDays(3)); //does not matter
-        assertFalse(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
-    }
-
-    @Test
-    public void isTreatmentInterruptedReturnsTrue_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate_AndActivationDateIsBetweenStartAndAsOfDates() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
-        interruption.resumeTreatment("swap", today());
-        assertTrue(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
-    }
-
-    @Test
-    public void isTreatmentInterruptedReturnsFalse_IfCurrentTreatmentIsNotPaused_AndPauseDateIsBeforeStartDate_AndActivationDateIsBeforeStartDate() {
-        TreatmentInterruption interruption = new TreatmentInterruption("paws", today().minusDays(4));
-        interruption.resumeTreatment("swap", today().minusDays(3));
-        assertFalse(interruption.isTreatmentInterrupted(today(), today().plusDays(1)));
+        Assert.assertFalse(interruption.isTreatmentInterrupted(datesInWeek));
     }
 }

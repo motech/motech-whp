@@ -1,20 +1,22 @@
 package org.motechproject.whp.patient.domain;
 
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertArrayEquals;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.util.DateUtil.tomorrow;
 
 public class TreatmentInterruptionsTest {
 
     @Test
     public void isTreatmentInterruptedReturnsFalse_IfNoInterruptionsExist() {
-        assertTrue(new TreatmentInterruptions().getPauseReasons(today(), today()).isEmpty());
-        assertTrue(new TreatmentInterruptions().getPauseReasons(today().minusDays(6), today()).isEmpty());
+        assertTrue(new TreatmentInterruptions().getPauseReasons(asList(today())).isEmpty());
+        assertTrue(new TreatmentInterruptions().getPauseReasons(asList(today().minusDays(6))).isEmpty());
     }
 
     @Test
@@ -26,10 +28,15 @@ public class TreatmentInterruptionsTest {
         TreatmentInterruption interruption3 = new TreatmentInterruption("pawsAgain", today().plusDays(3));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
 
-        assertEquals("paws", treatmentInterruptions.getPauseReasons(today(), today()).get(0));
-        assertEquals(asList("paws"), treatmentInterruptions.getPauseReasons(today(), today().plusDays(1)));
-        assertEquals(asList("paws", "paws"), treatmentInterruptions.getPauseReasons(today(), today().plusDays(2)));
-        assertEquals(asList("paws", "paws", "pawsAgain"), treatmentInterruptions.getPauseReasons(today(), today().plusDays(3)));
+        List<LocalDate> justToday = asList(today());
+        List<LocalDate> fromTodayToTomorrow = asList(today(), tomorrow());
+        List<LocalDate> fromTodayToDayAfterTomorrow = asList(today(), tomorrow(), tomorrow().plusDays(1));
+        List<LocalDate> fromTodayToThreeDaysAhead = asList(today(), tomorrow(), tomorrow().plusDays(1), tomorrow().plusDays(2));
+
+        assertEquals(asList("paws"), treatmentInterruptions.getPauseReasons(justToday));
+        assertEquals(asList("paws"), treatmentInterruptions.getPauseReasons(fromTodayToTomorrow));
+        assertEquals(asList("paws", "paws"), treatmentInterruptions.getPauseReasons(fromTodayToDayAfterTomorrow));
+        assertEquals(asList("paws", "paws", "pawsAgain"), treatmentInterruptions.getPauseReasons(fromTodayToThreeDaysAhead));
     }
 
     @Test

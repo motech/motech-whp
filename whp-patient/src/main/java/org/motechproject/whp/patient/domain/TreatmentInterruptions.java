@@ -18,10 +18,10 @@ public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
     }
 
     @JsonIgnore
-    public List<String> getPauseReasons(LocalDate startingOn, LocalDate asOf) {
+    public List<String> getPauseReasons(List<LocalDate> treatmentWeekDates) {
         List<String> pauseReasons = new ArrayList<String>();
         for (TreatmentInterruption treatmentInterruption : this) {
-            if (treatmentInterruption.isTreatmentInterrupted(startingOn, asOf))
+            if (treatmentInterruption.isTreatmentInterrupted(treatmentWeekDates))
                 pauseReasons.add(treatmentInterruption.getReasonForPause());
         }
         return pauseReasons;

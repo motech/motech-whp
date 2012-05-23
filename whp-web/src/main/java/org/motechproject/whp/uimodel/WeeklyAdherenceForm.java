@@ -10,12 +10,14 @@ import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentInterruption;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
@@ -23,6 +25,7 @@ import static org.motechproject.whp.adherence.domain.PillStatus.NotTaken;
 import static org.motechproject.whp.adherence.domain.PillStatus.Taken;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 import static org.motechproject.whp.uimodel.PillDays.takenDays;
+import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
 
 @Data
 public class WeeklyAdherenceForm {
@@ -34,6 +37,8 @@ public class WeeklyAdherenceForm {
 
     private Patient patient;
     private Set<String> pauseReasons = new LinkedHashSet<String>();
+    private String latestPauseDate;
+    private String latestResumptionDate;
 
     public WeeklyAdherenceForm() {
     }
@@ -49,7 +54,7 @@ public class WeeklyAdherenceForm {
                 numberOfDosesTaken++;
             }
         }
-        populatePauseReasons(currentWeekInstance());
+        populatePauseRestartData(currentWeekInstance().startDate());
     }
 
     public WeeklyAdherence weeklyAdherence(TreatmentCategory treatmentCategory) {
@@ -62,15 +67,25 @@ public class WeeklyAdherenceForm {
         return weeklyAdherence;
     }
 
-    private void populatePauseReasons(TreatmentWeek treatmentWeekOfDate) {
-        List<String> pauseReasons = patient.getTreatmentInterruptions().getPauseReasons(treatmentWeekOfDate.startDate(), today());
+    private void populatePauseRestartData(LocalDate weekStartDate) {
+        List<LocalDate> datesInRange = getDatesInRange(weekStartDate, today());
+        List<String> pauseReasons = patient.getTreatmentInterruptions().getPauseReasons(datesInRange);
         if (!pauseReasons.isEmpty()) {
             this.pauseReasons.addAll(pauseReasons);
         }
+        TreatmentInterruption latestInterruption = patient.latestProvidedTreatment().getTreatment().getInterruptions().latestInterruption();
+        if (latestInterruption != null && latestInterruption.isTreatmentInterrupted(datesInRange)){
+            latestPauseDate = latestInterruption.getPauseDate().toString("dd-MM-YYYY");
+            latestResumptionDate = latestInterruption.isCurrentlyPaused() ? null : latestInterruption.getResumptionDate().toString("dd-MM-YYYY");
+        }
     }
 
-    boolean isTreatmentPaused() {
-        return !pauseReasons.isEmpty();
+    boolean isTreatmentCurrentlyPaused() {
+        return !isEmpty(latestPauseDate) && isEmpty(latestResumptionDate);
+    }
+
+    boolean wasTreatmentInPauseStateLastWeekAndIsNowRestarted() {
+        return !isEmpty(latestPauseDate) && !isEmpty(latestResumptionDate);
     }
 
     String getTreatmentPauseReasons() {
@@ -87,8 +102,15 @@ public class WeeklyAdherenceForm {
 
     public String getWarningMessage() {
         List<String> warningMessages = new ArrayList<String>();
-        if (isTreatmentPaused())
-            warningMessages.add(String.format("The patient's treatment has been paused for one or more days in the last week. Reason: %s", getTreatmentPauseReasons()));
+
+        if (isTreatmentCurrentlyPaused()) {
+            warningMessages.add(String.format("Patient has been paused on medication since %s. Please contact CMF Admin for further details. Reasons for pause: %s",
+                    latestPauseDate, getTreatmentPauseReasons()));
+        }else if (wasTreatmentInPauseStateLastWeekAndIsNowRestarted()) {
+            warningMessages.add(String.format("This patient has been restarted on medicines on %s after being paused on %s. Reasons for pause: %s",
+                    latestResumptionDate, latestPauseDate, getTreatmentPauseReasons()));
+        }
+
         if (!isAdherenceUpdatable())
             warningMessages.add("Please contact the CMF admin to update adherence.");
         return StringUtils.join(warningMessages.toArray(), "<br/>");
@@ -97,4 +119,5 @@ public class WeeklyAdherenceForm {
     public boolean isAdherenceUpdatable() {
         return canUpdate(patient);
     }
+
 }

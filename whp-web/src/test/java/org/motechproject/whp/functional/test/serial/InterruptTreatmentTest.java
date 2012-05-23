@@ -54,6 +54,7 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         assertFalse(providerPage.isPatientTreatmentPaused(patientRequest.getCase_id()));
 
         UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(patientRequest.getCase_id());
-        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws", updateAdherencePage.getAdherenceWarningText());
+        assertEquals("This patient has been restarted on medicines on 09-05-2012 after being paused on 07-05-2012. Reasons for pause: paws",
+                updateAdherencePage.getAdherenceWarningText());
     }
 }

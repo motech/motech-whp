@@ -7,10 +7,16 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 
+import java.util.List;
+
+import static org.motechproject.util.DateUtil.isOnOrAfter;
+import static org.motechproject.util.DateUtil.isOnOrBefore;
+import static org.motechproject.util.DateUtil.newDateTime;
+
 public class TreatmentInterruption {
 
     @JsonProperty
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
     private LocalDate pauseDate;
 
     @JsonProperty
@@ -18,7 +24,7 @@ public class TreatmentInterruption {
     private String reasonForPause;
 
     @JsonProperty
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
     private LocalDate resumptionDate;
 
     @JsonProperty
@@ -45,10 +51,20 @@ public class TreatmentInterruption {
     }
 
     @JsonIgnore
-    public boolean isTreatmentInterrupted(LocalDate startingOn, LocalDate asOfDate) {
-        boolean pauseDateOnOrBeforeAsOfDate = DateUtil.isOnOrBefore(DateUtil.newDateTime(pauseDate), DateUtil.newDateTime(asOfDate));
-        if(isCurrentlyPaused()) return pauseDateOnOrBeforeAsOfDate;
-        boolean resumptionDateOnOrAfterStartingDate = DateUtil.isOnOrAfter(DateUtil.newDateTime(resumptionDate), DateUtil.newDateTime(startingOn));
-        return pauseDateOnOrBeforeAsOfDate && resumptionDateOnOrAfterStartingDate;
+    public boolean isTreatmentInterrupted(List<LocalDate> treatmentWeekDates) {
+        if (isCurrentlyPaused()) {
+            for (LocalDate treatmentWeekDate : treatmentWeekDates) {
+                if (isOnOrAfter(newDateTime(treatmentWeekDate), newDateTime(pauseDate))) {
+                    return true;
+                }
+            }
+        } else {
+            for (LocalDate treatmentWeekDate : treatmentWeekDates) {
+                if(isOnOrAfter(newDateTime(treatmentWeekDate), newDateTime(pauseDate)) && isOnOrBefore(newDateTime(treatmentWeekDate), newDateTime(resumptionDate))){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

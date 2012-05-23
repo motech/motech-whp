@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class WeeklyAdherenceFormTest extends BaseUnitTest {
 
@@ -27,7 +28,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
 
     @Test
     public void shouldGet_ReasonForPause() {
-        assertTrue(weeklyAdherenceForm.isTreatmentPaused());
+        assertFalse(weeklyAdherenceForm.isTreatmentCurrentlyPaused());
         assertEquals("paws", weeklyAdherenceForm.getTreatmentPauseReasons());
     }
 
@@ -43,7 +44,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     @Test
     public void warningMessageShows_ThePauseReason() {
         mockCurrentDate(new LocalDate(2012, 5, 13));    //  interruptions and Sunday
-        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws", weeklyAdherenceForm.getWarningMessage());
+        assertEquals("This patient has been restarted on medicines on 08-05-2012 after being paused on 07-05-2012. Reasons for pause: paws", weeklyAdherenceForm.getWarningMessage());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     @Test
     public void warningMessageShows_That_ProviderCannotUpdateAdherence_AndReasonForPause() {
         mockCurrentDate(new LocalDate(2012, 5, 9));    // interruptions and Wednesday
-        assertEquals("The patient's treatment has been paused for one or more days in the last week. Reason: paws<br/>" +
+        assertEquals("This patient has been restarted on medicines on 08-05-2012 after being paused on 07-05-2012. Reasons for pause: paws<br/>" +
                 "Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
     }
 
@@ -73,7 +74,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
         WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
         weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
-        assertTrue(weeklyAdherenceForm.isTreatmentPaused());
+        assertTrue(weeklyAdherenceForm.isTreatmentCurrentlyPaused());
         assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReasons());
     }
 

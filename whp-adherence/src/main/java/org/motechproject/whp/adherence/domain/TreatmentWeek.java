@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreatmentWeek {
 
     @Getter
