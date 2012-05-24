@@ -69,7 +69,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
+        Treatment treatment = updatedPatient.latestTreatment();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
@@ -96,15 +96,15 @@ public class PatientServiceTest extends SpringIntegrationTest {
 
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Treatment treatment = updatedPatient.getCurrentProvidedTreatment().getTreatment();
+        Treatment treatment = updatedPatient.latestTreatment();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().getSmearTestInstances().latestResult(), treatment.getSmearTestInstances().latestResult());
-        assertEquals(patient.getCurrentProvidedTreatment().getTreatment().getWeightInstances().latestResult(), treatment.getWeightInstances().latestResult());
+        assertEquals(patient.latestTreatment().getSmearTestInstances().latestResult(), treatment.getSmearTestInstances().latestResult());
+        assertEquals(patient.latestTreatment().getWeightInstances().latestResult(), treatment.getWeightInstances().latestResult());
     }
 
     @Test
@@ -324,18 +324,18 @@ public class PatientServiceTest extends SpringIntegrationTest {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
         assertEquals(patientRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
         assertEquals(patientRequest.getTb_id(), currentProvidedTreatment.getTbId());
-        assertEquals(patientRequest.getTreatment_category(), currentProvidedTreatment.getTreatment().getTreatmentCategory());
-        assertEquals(patientRequest.getDisease_class(), currentProvidedTreatment.getTreatment().getDiseaseClass());
+        assertEquals(patientRequest.getTreatment_category(), updatedPatient.latestTreatment().getTreatmentCategory());
+        assertEquals(patientRequest.getDisease_class(), updatedPatient.latestTreatment().getDiseaseClass());
         assertEquals(patientRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
     private void assertCurrentTreatmentClosed(Patient updatedPatient, DateTime lastModifiedDate) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
-        assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getTreatment().getCloseDate());
+        assertEquals(lastModifiedDate.toLocalDate(), updatedPatient.latestTreatment().getCloseDate());
         assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getEndDate());
-        assertEquals(TreatmentOutcome.Cured, currentProvidedTreatment.getTreatment().getTreatmentOutcome());
-        assertEquals(TreatmentStatus.Closed, currentProvidedTreatment.getTreatment().getStatus());
+        assertEquals(TreatmentOutcome.Cured, updatedPatient.latestTreatment().getTreatmentOutcome());
+        assertEquals(TreatmentStatus.Closed, updatedPatient.latestTreatment().getStatus());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 

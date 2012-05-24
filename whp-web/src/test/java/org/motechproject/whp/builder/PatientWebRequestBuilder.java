@@ -179,4 +179,9 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setReason_for_restart(reasonForRestart);
         return this;
     }
+
+    public PatientWebRequestBuilder withPatientType(String patientType) {
+        patientWebRequest.setPatient_type(patientType);
+        return this;
+    }
 }

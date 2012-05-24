@@ -24,7 +24,7 @@ public class TreatmentMapperTest {
         Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
 
         assertEquals(openNewTreatmentUpdateRequest.getDisease_class(), newTreatment.getDiseaseClass());
-        assertEquals(currentProvidedTreatment.getTreatment().getPatientAge(), newTreatment.getPatientAge());
+        assertEquals(patient.latestTreatment().getPatientAge(), newTreatment.getPatientAge());
         assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newTreatment.getTreatmentCategory());
 
         SmearTestResults smearTestResults = openNewTreatmentUpdateRequest.getSmearTestResults();

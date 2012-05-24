@@ -29,13 +29,12 @@ public class AllPatientsIT extends SpringIntegrationTest {
         createPatient("cha01100001", "providerId");
 
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
-        Treatment treatment = savedPatient.getCurrentProvidedTreatment().getTreatment();
+        Treatment treatment = savedPatient.latestTreatment();
 
         assertNotNull(savedPatient);
         assertEquals("Raju", savedPatient.getFirstName());
         assertEquals("Singh", savedPatient.getLastName());
         assertEquals(Gender.M, savedPatient.getGender());
-        assertEquals(PatientType.PHCTransfer, savedPatient.getPatientType());
 
         SmearTestResults smearTestResults = treatment.getSmearTestInstances().latestResult();
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
@@ -61,12 +60,12 @@ public class AllPatientsIT extends SpringIntegrationTest {
 
     private Patient createPatient(String patientId, String providerId) {
         TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
-        Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200);
+        Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200, PatientType.New);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);
 
-        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, PatientType.PHCTransfer, "1234567890");
+        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId");
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);

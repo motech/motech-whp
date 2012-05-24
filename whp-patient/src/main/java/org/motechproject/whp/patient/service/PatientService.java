@@ -41,13 +41,13 @@ public class PatientService {
         allPatients.add(patient);
     }
 
-    public void update(UpdateScope updateCommand, PatientRequest patientRequest) {
-        updateCommandFactory.updateFor(updateCommand).apply(patientRequest);
+    public void update(UpdateScope updateScope, PatientRequest patientRequest) {
+        updateCommandFactory.updateFor(updateScope).apply(patientRequest);
     }
 
     public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {
         Patient patient = allPatients.findByPatientId(patientId);
-        patient.getCurrentProvidedTreatment().getTreatment().setStartDate(firstDoseTakenDate);
+        patient.latestTreatment().setStartDate(firstDoseTakenDate);
         allPatients.update(patient);
     }
 

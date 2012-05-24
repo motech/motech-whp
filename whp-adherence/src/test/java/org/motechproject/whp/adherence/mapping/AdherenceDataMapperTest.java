@@ -12,9 +12,7 @@ import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,7 +27,7 @@ public class AdherenceDataMapperTest {
 
     @Before
     public void setup() {
-        Treatment treatment = new Treatment(new TreatmentCategory(), DiseaseClass.E, 10);
+        Treatment treatment = new Treatment(new TreatmentCategory(), DiseaseClass.E, 10, PatientType.New);
 
         ProvidedTreatment currentProvidedTreatment = new ProvidedTreatment(PROVIDER_ID, TB_ID);
         currentProvidedTreatment.setTreatment(treatment);

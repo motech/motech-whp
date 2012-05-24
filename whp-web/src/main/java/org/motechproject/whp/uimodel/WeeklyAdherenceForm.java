@@ -73,7 +73,7 @@ public class WeeklyAdherenceForm {
         if (!pauseReasons.isEmpty()) {
             this.pauseReasons.addAll(pauseReasons);
         }
-        TreatmentInterruption latestInterruption = patient.latestProvidedTreatment().getTreatment().getInterruptions().latestInterruption();
+        TreatmentInterruption latestInterruption = patient.latestTreatment().getInterruptions().latestInterruption();
         if (latestInterruption != null && latestInterruption.isTreatmentInterrupted(datesInRange)){
             latestPauseDate = latestInterruption.getPauseDate().toString("dd-MM-YYYY");
             latestResumptionDate = latestInterruption.isCurrentlyPaused() ? null : latestInterruption.getResumptionDate().toString("dd-MM-YYYY");

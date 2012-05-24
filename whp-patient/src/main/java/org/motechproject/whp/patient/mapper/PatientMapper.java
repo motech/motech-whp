@@ -14,7 +14,6 @@ public class PatientMapper {
                 patientRequest.getFirst_name(),
                 patientRequest.getLast_name(),
                 patientRequest.getGender(),
-                patientRequest.getPatient_type(),
                 patientRequest.getMobile_number());
         patient.setPhi(patientRequest.getPhi());
         patient.setLastModifiedDate(patientRequest.getDate_modified());
@@ -47,15 +46,14 @@ public class PatientMapper {
     }
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        Treatment currentTreatment = currentProvidedTreatment.getTreatment();
+        Treatment currentTreatment = patient.latestTreatment();
 
         if (patientRequest.getAge() != null)
             currentTreatment.setPatientAge(patientRequest.getAge());
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
 
-        mapPatientAddress(patientRequest, currentProvidedTreatment);
+        mapPatientAddress(patientRequest, patient.getCurrentProvidedTreatment());
         TreatmentMapper.mapSmearTestResults(patientRequest, currentTreatment);
         TreatmentMapper.mapWeightStatistics(patientRequest, currentTreatment);
 

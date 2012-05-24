@@ -24,7 +24,6 @@ public class PatientBuilder {
         patient.setFirstName("firstName");
         patient.setLastName("lastName");
         patient.setGender(Gender.O);
-        patient.setPatientType(PatientType.New);
         patient.setPhoneNumber("1234567890");
         patient.setCurrentProvidedTreatment(defaultProvidedTreatment());
         return this;
@@ -46,6 +45,7 @@ public class PatientBuilder {
         Treatment treatment = new Treatment();
         LocalDate today = DateUtil.today();
         treatment.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
+        treatment.setPatientType(PatientType.New);
         treatment.addSmearTestResult(new SmearTestResults(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
         treatment.addWeightStatistics(new WeightStatistics(WeightInstance.PreTreatment, 100.0, today));
         return treatment;
@@ -56,7 +56,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withType(PatientType type) {
-        patient.setPatientType(type);
+        patient.latestTreatment().setPatientType(type);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder onTreatmentFrom(LocalDate date) {
-        patient.getCurrentProvidedTreatment().getTreatment().setStartDate(date);
+        patient.latestTreatment().setStartDate(date);
         return this;
     }
 

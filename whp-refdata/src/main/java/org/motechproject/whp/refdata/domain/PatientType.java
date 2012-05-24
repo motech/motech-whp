@@ -1,5 +1,5 @@
 package org.motechproject.whp.refdata.domain;
 
 public enum PatientType {
-    New, PHCTransfer
+    New, Relapse, PHCTransfer, TreatmentAfterDefault, TreatmentFailure, Chronic, Others
 }

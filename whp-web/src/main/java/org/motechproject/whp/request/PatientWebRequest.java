@@ -55,7 +55,7 @@ public class PatientWebRequest {
 
     @NotNull
     @Enumeration(type = PatientType.class)
-    @Scope(scope = {UpdateScope.createScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String patient_type;
 
     @Enumeration(type = TreatmentUpdateScenario.class)

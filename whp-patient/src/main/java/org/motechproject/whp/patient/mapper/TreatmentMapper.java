@@ -18,7 +18,7 @@ public class TreatmentMapper {
         TreatmentCategory treatmentCategory = patientRequest.getTreatment_category();
         DiseaseClass diseaseClass = patientRequest.getDisease_class();
 
-        Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge());
+        Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge(), patientRequest.getPatient_type());
         newTreatment.addSmearTestResult(patientRequest.getSmearTestResults());
         newTreatment.addWeightStatistics(patientRequest.getWeightStatistics());
 
@@ -30,7 +30,7 @@ public class TreatmentMapper {
         DiseaseClass diseaseClass = patientRequest.getDisease_class();
         int patientAge = patientRequest.getAge();
 
-        return new Treatment(treatmentCategory, diseaseClass, patientAge);
+        return new Treatment(treatmentCategory, diseaseClass, patientAge, patientRequest.getPatient_type());
     }
 
     private static void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {

@@ -24,7 +24,6 @@ public class Patient extends MotechBaseDataObject {
     private String lastName;
     private Gender gender;
     private String phoneNumber;
-    private PatientType patientType;
     private String phi;
     private PatientStatus status = PatientStatus.Open;
     private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
@@ -34,12 +33,11 @@ public class Patient extends MotechBaseDataObject {
     public Patient() {
     }
 
-    public Patient(String patientId, String firstName, String lastName, Gender gender, PatientType patientType, String phoneNumber) {
+    public Patient(String patientId, String firstName, String lastName, Gender gender, String phoneNumber) {
         this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.patientType = patientType;
         this.phoneNumber = phoneNumber;
     }
 
@@ -51,8 +49,12 @@ public class Patient extends MotechBaseDataObject {
         lastModifiedDate = dateModified;
     }
 
-    public ProvidedTreatment latestProvidedTreatment() {
-        return currentProvidedTreatment;
+    public Treatment latestTreatment() {
+        return currentProvidedTreatment.getTreatment();
+    }
+
+    public PatientType currentTreatmentType() {
+        return latestTreatment().getPatientType();
     }
 
     public DateTime getLastModifiedDate() {
@@ -112,16 +114,16 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public TreatmentOutcome getTreatmentOutcome() {
-        return currentProvidedTreatment.getTreatment().getTreatmentOutcome();
+        return latestTreatment().getTreatmentOutcome();
     }
 
     @JsonIgnore
     public TreatmentInterruptions getTreatmentInterruptions() {
-        return currentProvidedTreatment.getTreatment().getInterruptions();
+        return latestTreatment().getInterruptions();
     }
 
     @JsonIgnore
     public Integer getAge(){
-        return currentProvidedTreatment.getTreatment().getPatientAge();
+        return latestTreatment().getPatientAge();
     }
 }

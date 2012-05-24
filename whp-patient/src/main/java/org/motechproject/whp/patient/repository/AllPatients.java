@@ -45,7 +45,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @Override
     public void update(Patient patient) {
-        allTreatments.update(patient.getCurrentProvidedTreatment().getTreatment());
+        allTreatments.update(patient.latestTreatment());
          ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
@@ -63,7 +63,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     private void loadPatientDependencies(Patient patient) {
-        ProvidedTreatment latestProvidedTreatment = patient.latestProvidedTreatment();
+        ProvidedTreatment latestProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment latestTreatment = allTreatments.get(latestProvidedTreatment.getTreatmentDocId());
         latestProvidedTreatment.setTreatment(latestTreatment);
 

@@ -34,7 +34,7 @@ public class PatientMapperTest {
 
         assertBasicPatientInfo(patient, patientRequest);
 
-        ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
+        ProvidedTreatment providedTreatment = patient.getCurrentProvidedTreatment();
         assertEquals(0, providedTreatment.getTreatment().getWeightInstances().size());
     }
 
@@ -71,7 +71,7 @@ public class PatientMapperTest {
         ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTreatment);
 
         assertNotSame(currentProvidedTreatment.getTbId(), newProvidedTreatment.getTbId());
-        assertNotSame(currentProvidedTreatment.getTreatment(), newProvidedTreatment.getTreatment());
+        assertNotSame(patient.latestTreatment(), newProvidedTreatment.getTreatment());
         assertEquals(openNewTreatmentUpdateRequest.getTb_id(), newProvidedTreatment.getTbId());
         assertEquals(currentProvidedTreatment.getPatientAddress(), newProvidedTreatment.getPatientAddress());
         assertEquals(openNewTreatmentUpdateRequest.getProvider_id(), newProvidedTreatment.getProviderId());
@@ -90,13 +90,12 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getFirst_name(), patient.getFirstName());
         assertEquals(patientRequest.getLast_name(), patient.getLastName());
         assertEquals(patientRequest.getGender(), patient.getGender());
-        assertEquals(patientRequest.getPatient_type(), patient.getPatientType());
         assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(patientRequest.getPhi(), patient.getPhi());
     }
 
     private void assertProvidedTreatment(Patient patient, PatientRequest patientRequest) {
-        ProvidedTreatment providedTreatment = patient.latestProvidedTreatment();
+        ProvidedTreatment providedTreatment = patient.getCurrentProvidedTreatment();
         assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
 
@@ -106,7 +105,7 @@ public class PatientMapperTest {
     }
 
     private void assertTreatment(Patient patient, PatientRequest patientRequest) {
-        Treatment treatment = patient.latestProvidedTreatment().getTreatment();
+        Treatment treatment = patient.latestTreatment();
         assertEquals(patientRequest.getAge(), treatment.getPatientAge());
         assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
         assertNull(treatment.getStartDate());

@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -15,7 +14,7 @@ import static org.motechproject.util.DateUtil.now;
 
 public class PatientTest {
 
-    Patient patient = new Patient("patientId", "patientFirstName", "patientLastName", Gender.F, PatientType.New, "1111111111");
+    Patient patient = new Patient("patientId", "patientFirstName", "patientLastName", Gender.F, "1111111111");
     ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tbId");
     ProvidedTreatment newProviderTreatment = new ProvidedTreatment("newProviderId", "newTbId");
 
@@ -26,7 +25,7 @@ public class PatientTest {
 
     @Test
     public void shouldUpdateCurrentProviderTreatmentWhenNewTreatmentIsAdded() {
-        assertEquals(newProviderTreatment, patient.latestProvidedTreatment());
+        assertEquals(newProviderTreatment, patient.getCurrentProvidedTreatment());
     }
 
     @Test
@@ -36,7 +35,7 @@ public class PatientTest {
 
     @Test
     public void shouldNotHaveAnyHistoryWhenProvidedTreatmentHasNeverBeenUpdated() {
-        Patient patientWithoutProvidedTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, PatientType.New, "1111111111");
+        Patient patientWithoutProvidedTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, "1111111111");
         assertTrue(patientWithoutProvidedTreatment.getProvidedTreatments().isEmpty());
     }
 
