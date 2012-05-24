@@ -18,12 +18,24 @@
     <import resource="classpath*:applicationBulkExportContext.xml"/>
     <import resource="classpath*:applicationBulkImportContext.xml"/>
 
-
-
     <context:annotation-config/>
     <context:spring-configured/>
     <context:component-scan base-package="org.motechproject.whp"/>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <bean id="dozerPatientRequestMapper" class="org.dozer.DozerBeanMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>dozer-global-configuration.xml</value>
+                <value>patientwebrequest-patientrequest-dozer-mappings.xml</value>
+            </list>
+        </property>
+        <property name="customConvertersWithId">
+            <map>
+                <entry key="stringToTreatmentCategory" value-ref="stringToTreatmentCategory"/>
+            </map>
+        </property>
+    </bean>
 
 </beans>

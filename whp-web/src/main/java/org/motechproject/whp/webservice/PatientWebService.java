@@ -1,8 +1,7 @@
 package org.motechproject.whp.webservice;
 
-import org.dozer.DozerBeanMapper;
-import org.dozer.MappingException;
 import org.motechproject.casexml.service.CaseService;
+import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPCaseException;
@@ -23,14 +22,14 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     PatientService patientService;
 
     RequestValidator validator;
-    DozerBeanMapper patientRequestMapper;
+    PatientRequestMapper patientRequestMapper;
 
     @Autowired
     public PatientWebService(
             RegistrationService registrationService,
             PatientService patientService,
             RequestValidator validator,
-            DozerBeanMapper patientRequestMapper) {
+            PatientRequestMapper patientRequestMapper) {
 
         super(PatientWebRequest.class);
         this.registrationService = registrationService;
@@ -47,11 +46,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
             validator.validate(patientWebRequest, patientWebRequest.updateScope().name());
-            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
             patientService.update(patientWebRequest.updateScope(), patientRequest);
         } catch (WHPRuntimeException e) {
-            throw new WHPCaseException(e);
-        } catch (MappingException e) {
             throw new WHPCaseException(e);
         }
     }
@@ -60,11 +57,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     public void createCase(PatientWebRequest patientWebRequest) {
         try {
             validator.validate(patientWebRequest, UpdateScope.createScope);
-            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
             registrationService.registerPatient(patientRequest);
         } catch (WHPRuntimeException e) {
-            throw new WHPCaseException(e);
-        } catch (MappingException e) {
             throw new WHPCaseException(e);
         }
     }

@@ -1,13 +1,12 @@
 package org.motechproject.whp.webservice;
 
-import org.dozer.DozerBeanMapper;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
@@ -16,6 +15,7 @@ import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Autowired
     PatientService patientService;
     @Autowired
-    DozerBeanMapper patientRequestMapper;
+    PatientRequestMapper patientRequestMapper;
 
     PatientWebService patientWebService;
 

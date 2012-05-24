@@ -1,13 +1,13 @@
 package org.motechproject.whp.mapper;
 
-import org.dozer.DozerBeanMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Address;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -30,7 +30,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     AllTreatmentCategories allTreatmentCategories;
 
     @Autowired
-    DozerBeanMapper patientRequestMapper;
+    PatientRequestMapper patientRequestMapper;
 
     @Before
     public void setUp() {
@@ -42,7 +42,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     @Test
     public void shouldCreatePatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertBasicPatientInfo(patientRequest, patientWebRequest);
         assertProvidedTreatment(patientRequest, patientWebRequest);
         assertTreatment(patientRequest, patientWebRequest);
@@ -51,7 +51,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     @Test
     public void shouldCreateTreatmentUpdateRequest() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().build();
-        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest, PatientRequest.class);
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
 
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
         assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString("dd/MM/YYYY HH:mm:ss"));
