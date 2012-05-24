@@ -8,15 +8,14 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
-import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Data
 public class PatientWebRequest {
@@ -78,8 +77,6 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String disease_class;
 
-    @NotNull
-    @Scope(scope = {UpdateScope.createScope})
     private String address_location;
 
     @NotNull
@@ -133,7 +130,6 @@ public class PatientWebRequest {
     private String weight;
 
     @NotNull
-    @Size(min = 11, max = 11)
     @Scope(scope = {UpdateScope.createScope,
             UpdateScope.simpleUpdateScope,
             UpdateScope.openTreatmentScope,
@@ -144,7 +140,6 @@ public class PatientWebRequest {
     private String tb_id;
 
     @NotNull
-    @Size(min = 11, max = 11)
     @Scope(scope = {UpdateScope.transferInScope})
     private String old_tb_id;
 
@@ -157,7 +152,7 @@ public class PatientWebRequest {
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
 
-    @NotNull
+    @NotNull(scope = UpdateScope.createScope)
     @Digits(integer = 3, fraction = 0, message = "Age must be numeric and not fractional")
     @Scope(scope = {UpdateScope.createScope, UpdateScope.simpleUpdateScope})
     private String age;
@@ -224,7 +219,7 @@ public class PatientWebRequest {
 
     public UpdateScope updateScope() {
         TreatmentUpdateScenario updateScenario = updateScenario();
-        return updateScenario == null ? UpdateScope.simpleUpdate: updateScenario.getScope();
+        return updateScenario == null ? UpdateScope.simpleUpdate : updateScenario.getScope();
     }
 
     private TreatmentUpdateScenario updateScenario() {

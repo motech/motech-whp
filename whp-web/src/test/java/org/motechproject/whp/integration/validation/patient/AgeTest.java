@@ -25,6 +25,12 @@ public class AgeTest extends BasePatientTest {
     }
 
     @Test
+    public void shouldNotThrowExceptionWhenAgeIsNotSetInSimpleUpdate(){
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge(null).build();
+        validator.validate(webRequest, UpdateScope.simpleUpdateScope);
+    }
+
+    @Test
     public void shouldThrowExceptionWhenAgeIsAFractionInSimpleUpdateScope() {
         expectFieldValidationRuntimeException("field:age:Age must be numeric and not fractional");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withAge("10.1").build();
