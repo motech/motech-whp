@@ -71,6 +71,7 @@ public class PatientRecordImporter {
             try {
                 ImportPatientRequest importPatientRequest = (ImportPatientRequest) object;
                 System.out.println("Storing patient with patient id :" + importPatientRequest.getCase_id());
+                importPatientRequest.setMigrated(true);
                 registerPatient(importPatientRequest);
             } catch (Exception exception) {
                 exception.printStackTrace();

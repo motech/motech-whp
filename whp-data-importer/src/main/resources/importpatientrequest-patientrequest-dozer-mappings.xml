@@ -98,6 +98,10 @@
             <b>weightStatistics.measuringDate</b>
         </field>
         <field>
+            <a>migrated</a>
+            <b>migrated</b>
+        </field>
+        <field>
             <a>age</a>
             <b>age</b>
         </field>

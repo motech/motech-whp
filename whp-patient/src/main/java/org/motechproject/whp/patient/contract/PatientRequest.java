@@ -40,6 +40,8 @@ public class PatientRequest {
 
     private DateTime date_modified;
 
+    private boolean migrated;
+
     public PatientRequest() {
     }
 
@@ -84,5 +86,7 @@ public class PatientRequest {
         this.date_modified = dateModified;
         return this;
     }
+
+
 
 }

@@ -17,6 +17,7 @@ public class PatientMapper {
                 patientRequest.getMobile_number());
         patient.setPhi(patientRequest.getPhi());
         patient.setLastModifiedDate(patientRequest.getDate_modified());
+        patient.setMigrated(patientRequest.isMigrated());
         return patient;
     }
 

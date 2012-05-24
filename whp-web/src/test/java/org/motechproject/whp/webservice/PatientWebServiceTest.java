@@ -65,6 +65,13 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     }
 
     @Test
+    public void migratedValueShouldBeFalseOnCreate() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        patientWebService.createCase(patientWebRequest);
+        assertFalse(allPatients.findByPatientId(patientWebRequest.getCase_id()).isMigrated());
+    }
+
+    @Test
     public void shouldRecordProvidedTreatmentsWhenCreatingPatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
 
@@ -96,6 +103,19 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
         assertNotSame(patient.latestTreatment(), updatedPatient.latestTreatment());
+    }
+
+    @Test
+    public void shouldNotSetMigratedOnUpdate() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTBId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
+        patientWebService.createCase(patientWebRequest);
+        patientWebService.updateCase(patientWebRequest);
+        Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+        assertFalse(updatedPatient.isMigrated());
+
     }
 
     @Test

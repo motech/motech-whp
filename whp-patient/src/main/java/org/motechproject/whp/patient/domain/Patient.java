@@ -30,6 +30,8 @@ public class Patient extends MotechBaseDataObject {
     private DateTime lastModifiedDate;
     private ProvidedTreatment currentProvidedTreatment;
 
+    private boolean migrated;
+
     public Patient() {
     }
 

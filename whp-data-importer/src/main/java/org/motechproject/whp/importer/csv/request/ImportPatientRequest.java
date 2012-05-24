@@ -133,6 +133,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Age*")
     private String age;
 
+    private boolean migrated;
     public ImportPatientRequest() {
     }
 

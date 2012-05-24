@@ -50,6 +50,18 @@ public class PatientMapperTest {
         assertNotNull(providedTreatment.getStartDate());
     }
 
+    @Test
+    public void mapIsMigratedDetail() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientRequest.setMigrated(true);
+        Patient patient = PatientMapper.mapBasicInfo(patientRequest);
+        assertTrue(patient.isMigrated());
+
+        patientRequest.setMigrated(false);
+        patient = PatientMapper.mapBasicInfo(patientRequest);
+        assertFalse(patient.isMigrated());
+    }
+
 
     @Test
     public void newProviderTreatmentForCategoryChange_RetainsOldProviderIdAndAddress_SetsNewTbId_SetsNewTreatment_SetsStartDate() {
