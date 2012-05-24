@@ -94,7 +94,7 @@
             <b>weightStatistics.weight</b>
         </field>
         <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
-            <a>date_modified</a>
+            <a>weight_date</a>
             <b>weightStatistics.measuringDate</b>
         </field>
         <field>

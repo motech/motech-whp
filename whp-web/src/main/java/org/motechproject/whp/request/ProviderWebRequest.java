@@ -2,9 +2,9 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.whp.validation.APIKeyValidator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

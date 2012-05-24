@@ -14,7 +14,7 @@ public class ImportPatientRequestBuilder {
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
+                .setWeightStatistics("22/09/2000",WeightInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
         importPatientRequest.setDate_modified("10/10/2010 10:10:10");
         return this;
@@ -25,7 +25,7 @@ public class ImportPatientRequestBuilder {
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
-                .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
+                .setWeightStatistics("20/07/2010",WeightInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, "elevenDigit", null, null, "50", null);
         importPatientRequest.setDate_modified("15/10/2010 10:10:10");
         return this;
@@ -127,9 +127,13 @@ public class ImportPatientRequestBuilder {
         importPatientRequest.setWeight(weight);
         return this;
     }
+    public ImportPatientRequestBuilder withWeightMeasuredDate(String date) {
+        importPatientRequest.setWeight_date(date);
+        return this;
+    }
 
-    public ImportPatientRequestBuilder withWeightStatistics(String weightInstance, String weight) {
-        importPatientRequest.setWeightStatistics(weightInstance, weight);
+    public ImportPatientRequestBuilder withWeightStatistics(String weightDate,String weightInstance, String weight) {
+        importPatientRequest.setWeightStatistics(weightDate,weightInstance, weight);
         return this;
     }
 
@@ -143,4 +147,8 @@ public class ImportPatientRequestBuilder {
         return this;
     }
 
+    public ImportPatientRequestBuilder withPatientType(String patientType) {
+        importPatientRequest.setPatient_type(patientType);
+        return this;
+    }
 }

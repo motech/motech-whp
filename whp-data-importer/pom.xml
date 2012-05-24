@@ -28,6 +28,14 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-application</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>

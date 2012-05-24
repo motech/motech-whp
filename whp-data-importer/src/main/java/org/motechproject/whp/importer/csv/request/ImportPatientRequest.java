@@ -7,7 +7,7 @@ import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.motechproject.validation.constraints.DateTimeFormat;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
@@ -23,7 +23,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient ID *")
     private String case_id;
 
-    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss", validateEmptyString=false)
     @ColumnName(name = "Registration date")
     private String date_modified;
 
@@ -49,8 +49,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Gender:(F/M/O)*")
     private String gender;
 
-    @NotNull
-    @Enumeration(type = PatientType.class)
+    @Enumeration(type = PatientType.class,validateEmptyString = false)
     @ColumnName(name = "Type of Patient:(New, PHSTransfer)*")
     private String patient_type;
 
@@ -107,7 +106,7 @@ public class ImportPatientRequest {
 
     private String weight_instance = WeightInstance.PreTreatment.name();
 
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = "dd/MM/YYYY", validateEmptyString=false)
     @ColumnName(name = "PreTreatmentDate on which Weight was measured:")
     private String weight_date;
 
@@ -177,9 +176,10 @@ public class ImportPatientRequest {
         return this;
     }
 
-    public ImportPatientRequest setWeightStatistics(String weightInstance, String weight) {
+    public ImportPatientRequest setWeightStatistics(String weightDate, String weightInstance, String weight) {
         this.weight_instance = weightInstance;
         this.weight = weight;
+        this.weight_date = weightDate;
         return this;
     }
 

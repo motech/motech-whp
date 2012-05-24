@@ -1,25 +1,24 @@
 package org.motechproject.whp.importer.csv;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
-public class ProviderRecordImporterTest{
+public class ProviderRecordImporterTest extends SpringIntegrationTest{
     @Autowired
     AllProviders allProviders;
 
@@ -29,10 +28,13 @@ public class ProviderRecordImporterTest{
     @Autowired
     ProviderRequestMapper providerRequestMapper;
 
-    @Before
     @After
     public void clearDb() {
-       allProviders.removeAll();
+        if(allProviders.findByProviderId("12")!=null)
+            markForDeletion(allProviders.findByProviderId("12"));
+        if(allProviders.findByProviderId("13")!=null)
+            markForDeletion(allProviders.findByProviderId("13"));
+
     }
 
     @Test
@@ -44,7 +46,6 @@ public class ProviderRecordImporterTest{
 
         providerRecordImporter.post(Arrays.asList((Object) importProviderRequest1, importProviderRequest2));
 
-        assertEquals(2,allProviders.getAll().size());
         assertNotNull(allProviders.findByProviderId("12"));
         assertNotNull(allProviders.findByProviderId("13"));
     }

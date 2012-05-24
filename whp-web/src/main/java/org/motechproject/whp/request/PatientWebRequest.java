@@ -4,6 +4,7 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.validation.constraints.Enumeration;
+import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNull;
 import org.motechproject.validation.constraints.Scope;
@@ -12,7 +13,6 @@ import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
 import org.motechproject.whp.validation.ProviderIdValidator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;

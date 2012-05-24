@@ -95,6 +95,10 @@
             <a>treatment_update</a>
             <b>treatment_update</b>
         </field>
+        <field>
+            <a>age</a>
+            <b>age</b>
+        </field>
     </mapping>
 
 </mappings>

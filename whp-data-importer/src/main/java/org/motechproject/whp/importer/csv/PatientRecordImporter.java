@@ -2,12 +2,15 @@ package org.motechproject.whp.importer.csv;
 
 import org.apache.commons.lang.StringUtils;
 import org.dozer.DozerBeanMapper;
+import org.joda.time.LocalDate;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
+import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ public class PatientRecordImporter {
 
     private DozerBeanMapper importPatientRequestMapper;
 
+    private StringToDateTime stringToDateTime = new StringToDateTime();
 
     @Autowired
     public PatientRecordImporter(RegistrationService registrationService, RequestValidator validator, DozerBeanMapper importPatientRequestMapper) {
@@ -34,14 +38,11 @@ public class PatientRecordImporter {
 
     @Validate
     public boolean validate(List<Object> objects) {
-        // TODO case_id should be unique across the org.motechproject.whp.importer.csv
-
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
                 validator.validate(request, UpdateScope.createScope);
-                if(StringUtils.isBlank(request.getWeight_date())   )
-                    request.setWeight_date(request.getDate_modified());
+                setDefaultValuesIfEmpty(request);
             } catch (Exception e) {
                 System.out.println(String.format("Exception thrown for object in row %d, with case id - %s", i + 1, ((ImportPatientRequest) objects.get(i)).getCase_id()));
                 System.out.println(e.getMessage());
@@ -50,6 +51,17 @@ public class PatientRecordImporter {
             }
         }
         return true;
+    }
+
+
+    private void setDefaultValuesIfEmpty(ImportPatientRequest request) {
+        if(StringUtils.isBlank(request.getWeight_date()))
+        {
+            LocalDate registrationDate = (LocalDate) stringToDateTime.convert(request.getDate_modified(), LocalDate.class);
+            request.setWeight_date(registrationDate.toString("dd/MM/YYYY"));
+        }
+        if(StringUtils.isBlank(request.getPatient_type()))
+            request.setPatient_type(PatientType.New.name());
     }
 
     @Post
