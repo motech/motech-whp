@@ -36,8 +36,7 @@ public class PatientRequest {
 
     private TreatmentUpdateScenario treatment_update;
     private String treatment_outcome;
-    private String reason_for_pause;
-    private String reason_for_restart;
+    private String reason;
 
     private DateTime date_modified;
 

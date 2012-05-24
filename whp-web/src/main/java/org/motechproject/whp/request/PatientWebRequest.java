@@ -67,12 +67,8 @@ public class PatientWebRequest {
     private String treatment_outcome;
 
     @NotEmpty
-    @Scope(scope = {UpdateScope.pauseTreatmentScope})
-    private String reason_for_pause;
-
-    @NotEmpty
-    @Scope(scope = {UpdateScope.restartTreatmentScope})
-    private String reason_for_restart;
+    @Scope(scope = {UpdateScope.pauseTreatmentScope, UpdateScope.restartTreatmentScope})
+    private String reason;
 
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;

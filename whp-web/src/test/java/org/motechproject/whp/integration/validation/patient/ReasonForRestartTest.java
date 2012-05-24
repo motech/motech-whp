@@ -6,23 +6,25 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.request.PatientWebRequest;
 
 public class ReasonForRestartTest extends BasePatientTest {
+
     @Test
-    public void shouldBeValidReasonForRestartIsNotSpecified() {
-        expectFieldValidationRuntimeException("field:reason_for_restart:may not be empty");
+    public void shouldThrowExceptionIfReasonNotSpecifiedInRestartTreatmentScope() {
+        expectFieldValidationRuntimeException("field:reason:may not be empty");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
         validator.validate(webRequest, UpdateScope.restartTreatmentScope);
     }
 
     @Test
-    public void shouldBeValidReasonForRestartIsBlank() {
-        expectFieldValidationRuntimeException("field:reason_for_restart:may not be empty");
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForRestart("").build();
-        validator.validate(webRequest, UpdateScope.restartTreatmentScope);
+    public void shouldThrowExceptionIfReasonIsBlankInRestartTreatmentScope() {
+        expectFieldValidationRuntimeException("field:reason:may not be empty");
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("").build();
+        validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
 
     @Test
-    public void shouldBeValidReasonForRestartIsSpecified() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForRestart("Restart").build();
-        validator.validate(webRequest, UpdateScope.restartTreatmentScope);
+    public void shouldNotThrowExceptionIfReasonIsSpecifiedInRestartTreatmentScope() {
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("Restart").build();
+        validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
+
 }

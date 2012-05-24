@@ -34,7 +34,7 @@ public class RestartTreatment extends TreatmentUpdate {
     }
 
     private void restartTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
-        patient.restartCurrentTreatment(patientRequest.getReason_for_restart(), patientRequest.getDate_modified());
+        patient.restartCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

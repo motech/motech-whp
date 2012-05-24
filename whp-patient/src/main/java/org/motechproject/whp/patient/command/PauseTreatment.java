@@ -34,7 +34,7 @@ public class PauseTreatment extends TreatmentUpdate {
     }
 
     private void pauseTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients) {
-        patient.pauseCurrentTreatment(patientRequest.getReason_for_pause(), patientRequest.getDate_modified());
+        patient.pauseCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

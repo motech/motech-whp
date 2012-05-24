@@ -6,23 +6,25 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.request.PatientWebRequest;
 
 public class ReasonForPauseTest extends BasePatientTest {
+
     @Test
-    public void shouldBeValidReasonForPauseIsNotSpecified() {
-        expectFieldValidationRuntimeException("field:reason_for_pause:may not be empty");
+    public void shouldThrowExceptionIfReasonNotSpecifiedInPauseTreatmentScope() {
+        expectFieldValidationRuntimeException("field:reason:may not be empty");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
 
     @Test
-    public void shouldBeValidReasonForPauseIsBlank() {
-        expectFieldValidationRuntimeException("field:reason_for_pause:may not be empty");
+    public void shouldThrowExceptionIfReasonIsBlankInPauseTreatmentScope() {
+        expectFieldValidationRuntimeException("field:reason:may not be empty");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("").build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
 
     @Test
-    public void shouldBeValidReasonForPauseIsSpecified() {
+    public void shouldNotThrowExceptionIfReasonIsSpecifiedInPauseTreatmentScope() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("Pause").build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
+
 }

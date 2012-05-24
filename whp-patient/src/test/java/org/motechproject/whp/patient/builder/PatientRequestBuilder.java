@@ -76,7 +76,7 @@ public class PatientRequestBuilder {
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.Pause);
-        patientRequest.setReason_for_pause("paws");
+        patientRequest.setReason("paws");
         return this;
     }
 
@@ -85,7 +85,7 @@ public class PatientRequestBuilder {
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.Restart);
-        patientRequest.setReason_for_pause("swap");
+        patientRequest.setReason("swap");
         return this;
     }
 

@@ -61,7 +61,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
-        patientWebRequest.setReason_for_pause("Chillaxing");
+        patientWebRequest.setReason("Chillaxing");
         return this;
     }
 
@@ -72,7 +72,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
-        patientWebRequest.setReason_for_restart("Coz he shouldn die");
+        patientWebRequest.setReason("Coz he shouldn die");
         return this;
     }
 
@@ -171,12 +171,12 @@ public class PatientWebRequestBuilder {
     }
 
     public PatientWebRequestBuilder withReasonForPause(String reasonForPause) {
-        patientWebRequest.setReason_for_pause(reasonForPause);
+        patientWebRequest.setReason(reasonForPause);
         return this;
     }
 
     public PatientWebRequestBuilder withReasonForRestart(String reasonForRestart) {
-        patientWebRequest.setReason_for_restart(reasonForRestart);
+        patientWebRequest.setReason(reasonForRestart);
         return this;
     }
 
