@@ -1,10 +1,10 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.casexml.service.CaseService;
+import org.motechproject.whp.exception.WHPCaseException;
 import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.exception.WHPCaseException;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.registration.service.RegistrationService;

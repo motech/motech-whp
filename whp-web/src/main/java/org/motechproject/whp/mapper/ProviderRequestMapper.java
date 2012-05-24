@@ -11,7 +11,6 @@ public class ProviderRequestMapper {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss");
 
-
     public ProviderRequest map(ProviderWebRequest providerWebRequest) {
         ProviderRequest providerRequest = new ProviderRequest(
                 providerWebRequest.getProvider_id(),

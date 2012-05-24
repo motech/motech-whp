@@ -1,6 +1,8 @@
-package org.motechproject.whp.patient.exception;
+package org.motechproject.whp.exception;
 
 import org.motechproject.casexml.service.exception.CaseException;
+import org.motechproject.whp.patient.exception.WHPError;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;

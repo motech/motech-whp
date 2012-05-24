@@ -1,10 +1,12 @@
 package org.motechproject.whp.webservice;
 
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
-import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.registration.service.RegistrationService;
+import org.motechproject.whp.exception.WHPProviderException;
 import org.motechproject.whp.mapper.ProviderRequestMapper;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.ProviderWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,12 @@ public class ProviderWebService extends ProviderRegistrationService<ProviderWebR
 
     @Override
     public void createOrUpdate(ProviderWebRequest providerWebRequest) {
-        providerValidator.validate(providerWebRequest, UpdateScope.createScope); //Can be any scope. None of the validation is scope dependent.
-        ProviderRequest providerRequest = new ProviderRequestMapper().map(providerWebRequest);
-        registrationService.registerProvider(providerRequest);
+        try {
+            providerValidator.validate(providerWebRequest, UpdateScope.createScope);
+            ProviderRequest providerRequest = new ProviderRequestMapper().map(providerWebRequest);
+            registrationService.registerProvider(providerRequest);
+        } catch (WHPRuntimeException e) {
+            throw new WHPProviderException(e);
+        }
     }
 }

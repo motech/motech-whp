@@ -2,6 +2,7 @@ package org.motechproject.whp.webservice;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.domain.Provider;
@@ -25,22 +26,34 @@ public class ProviderWebServiceTest extends SpringIntegrationTest {
     @Autowired
     private RegistrationService registrationService;
 
-    ProviderWebService whpProviderWebService;
+    ProviderWebService providerWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        whpProviderWebService = new ProviderWebService(validator, registrationService);
+        providerWebService = new ProviderWebService(validator, registrationService);
     }
 
     @Test
-    public void shouldCreateProvider(){
+    public void shouldCreateProvider() {
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().build();
-        whpProviderWebService.createOrUpdate(whpProviderWeb);
+        providerWebService.createOrUpdate(whpProviderWeb);
 
         Provider provider = allProviders.findByProviderId("providerId");
         assertNotNull(provider);
 
         markForDeletion(provider);
     }
+
+    @Test
+    public void shouldThrowExceptionWhenProviderDataIsInvalid() {
+        exceptionThrown.expect(OpenRosaRegistrationValidationException.class);
+        ProviderWebRequest invalidProviderRequest = new ProviderRequestBuilder()
+                .withDefaults()
+                .withProviderId(null)
+                .build();
+
+        providerWebService.createOrUpdate(invalidProviderRequest);
+    }
+
 }
