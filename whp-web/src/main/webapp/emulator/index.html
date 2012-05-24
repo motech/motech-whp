@@ -12,17 +12,18 @@
     </script>
 </head>
 <body>
-<span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
+
 <br/>
 <br/>
 
-<form name="testSubmit">
-    <span style="vertical-align:top;margin-right:50px">Select url:</span>
+<form name="testSubmit" style="width:100%; text-align: center;">
+    <div style="vertical-align:top;margin-right:50px">Select url:</div>
     <select id="urls"></select>
     <br/>
     <br/>
-    <span style="vertical-align:top">Enter caseXML:</span>
-    <textarea id="data" rows="30" cols="80" style="vertical-align:top" name="data"><?xml version="1.0"?>
+
+    <div style="vertical-align:top">Enter caseXML:</div>
+    <textarea id="data" rows="30" cols="200" style="vertical-align:top" name="data"><?xml version="1.0"?>
         <Registration api_key="3F2504E04F8911D39A0C0305E82C3301" xmlns="http://openrosa.org/user/registration">
             <username/>
             <password/>
@@ -38,7 +39,12 @@
         </Registration>
     </textarea>
     <br/>
-    <input type="button" id="submit" value="Submit"/>
+    <br/>
+    <input type="button" id="submit" value="Submit"/><br/>
+    <br/>
+    <div style="vertical-align:top">Response:</div>
+
+    <textarea id="statusMessage" rows="30" cols="200" readonly></textarea>
     <script type="text/javascript">
         $('#submit').click(function () {
             var xml = $('#data').val();
@@ -52,7 +58,7 @@
                     $('#statusMessage').html("Status of request: SUCCESS");
                 },
                 error: function(xhr, status, error) {
-                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error + "</br>" + xhr.responseText);
+                    $('#statusMessage').text(xhr.responseText);
                 }
             })
         });
