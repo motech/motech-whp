@@ -8,11 +8,11 @@ import org.motechproject.whp.refdata.domain.PatientType;
 public class TreatmentStartCriteria {
 
     public static boolean shouldStartOrRestartTreatment(Patient patient, WeeklyAdherence adherence) {
-        return isNewTreatmentType(patient) && isAdherenceBeingCapturedForFirstEverWeek(patient, adherence);
+        return isNotPHCTransferIn(patient) && isAdherenceBeingCapturedForFirstEverWeek(patient, adherence);
     }
 
-    private static boolean isNewTreatmentType(Patient patient) {
-        return PatientType.New.compareTo(patient.currentTreatmentType()) == 0;
+    private static boolean isNotPHCTransferIn(Patient patient) {
+        return PatientType.PHCTransfer.compareTo(patient.currentTreatmentType()) != 0;
     }
 
     private static boolean isAdherenceBeingCapturedForFirstEverWeek(Patient patient, WeeklyAdherence adherence) {

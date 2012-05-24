@@ -85,6 +85,10 @@ body {
     height: 100px;
 }
 
+.disable-remarks {
+    resize: none;
+}
+
 #weeklyAdherenceForm label {
     text-align: left;
     margin-left: 20px;

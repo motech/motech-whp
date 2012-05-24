@@ -26,7 +26,7 @@
             </select>
             <div>
                 <label class="pull-left span7 offset1"><b>Remarks:</b></label>
-                <textarea id="remarks" name="remarks"></textarea>
+                <textarea id="remarks" name="remarks" <#if readOnly> disabled class="disable-remarks"</#if>></textarea>
             </div>
         </div>
         <div class="control-group">
