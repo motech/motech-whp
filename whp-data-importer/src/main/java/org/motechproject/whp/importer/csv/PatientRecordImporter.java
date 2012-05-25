@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
+import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -46,9 +47,9 @@ public class PatientRecordImporter {
                 validator.validate(request, UpdateScope.createScope);
                 setDefaultValuesIfEmpty(request);
             } catch (Exception e) {
-                System.out.println(String.format("Exception thrown for object in row %d, with case id - %s", i + 1, ((ImportPatientRequest) objects.get(i)).getCase_id()));
-                System.out.println(e.getMessage());
-                System.out.println();
+                String errorMessage = String.format("Exception thrown for object in row %d, with case id - %s", i + 1, ((ImportPatientRequest) objects.get(i)).getCase_id()) +
+                        "\n" + e.getMessage() +"\n";
+                ImporterLogger.error(errorMessage);
                 isValid = false;
             }
         }
@@ -68,15 +69,15 @@ public class PatientRecordImporter {
 
     @Post
     public void post(List<Object> objects) {
-        System.out.println("Number of patient records to be stored in db :" + objects.size());
+        ImporterLogger.info("Number of patient records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
                 ImportPatientRequest importPatientRequest = (ImportPatientRequest) object;
-                System.out.println("Storing patient with patient id :" + importPatientRequest.getCase_id());
+                ImporterLogger.info("Storing patient with patient id :" + importPatientRequest.getCase_id());
                 importPatientRequest.setMigrated(true);
                 registerPatient(importPatientRequest);
             } catch (Exception exception) {
-                exception.printStackTrace();
+                ImporterLogger.error(exception);
             }
         }
     }

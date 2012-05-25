@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -41,10 +44,11 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldStoreproviderData() {
-        String[] arguments = new String[2];
+    public void shouldStoreproviderData() throws Exception {
+        String[] arguments = new String[3];
         arguments[0] = "provider";
-        arguments[1] = "providerRecords.csv";
+        arguments[1] = getProviderCsv();
+        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         Provider provider1 = allProviders.findByProviderId("john");
@@ -57,14 +61,16 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldStorePatientDataWithDefaultValues() {
-        String[] arguments = new String[2];
+    public void shouldStorePatientDataWithDefaultValues() throws Exception {
+        String[] arguments = new String[3];
         arguments[0] = "provider";
-        arguments[1] = "providerRecords.csv";
+        arguments[1] = getProviderCsv();
+        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         arguments[0] = "patient";
-        arguments[1] = "patientRecords.csv";
+        arguments[1] = getPatientCsv();
+        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
         assertEquals(2, allPatients.getAll().size());
         assertEquals(2, allTreatments.getAll().size());
@@ -74,4 +80,70 @@ public class CsvImporterTest extends SpringIntegrationTest {
 
     }
 
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionForInvalidLogFile() throws Exception {
+        String[] arguments = new String[3];
+        arguments[0] = "provider";
+        arguments[1] = getProviderCsv();
+        arguments[2] = getLogDir() + "/impor*\\ter5.log";
+        CsvImporter.main(arguments);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionForInvalidImportFile() throws Exception {
+        String[] arguments = new String[3];
+        arguments[0] = "provider";
+        arguments[1] = getLogDir() + "invalidFile.csv";
+        arguments[2] = getLogFilePath();
+        CsvImporter.main(arguments);
+    }
+
+    @Test
+    public void shouldLogInGivenPath() throws Exception {
+        File logFile = new File(getLogDir() + "logCheck.log");
+        logFile.delete();
+        assertFalse(logFile.exists());
+
+        String[] arguments = new String[3];
+        arguments[0] = "provider";
+        arguments[1] = getProviderCsv();
+        arguments[2] = logFile.getAbsolutePath();
+        CsvImporter.main(arguments);
+        assertTrue(logFile.exists());
+        FileReader reader = new FileReader(logFile.getAbsoluteFile());
+        assertNotSame(-1, reader.read());
+    }
+    @Test
+    public void shouldLogInSpecifiedLogPathEvenIfExceptionOccurs() throws IOException {
+        File logFile = new File(getLogDir() + "logCheck1.log");
+        logFile.delete();
+        assertFalse(logFile.exists());
+
+        String[] arguments = new String[3];
+        arguments[0] = "provider";
+        arguments[1] = getLogDir() + "invalidFile.csv";
+        arguments[2] = logFile.getAbsolutePath();
+
+        try{
+            CsvImporter.main(arguments);
+        }
+        catch (Exception e){}
+
+        assertTrue(logFile.exists());
+        FileReader reader = new FileReader(logFile.getAbsoluteFile());
+        assertNotSame(-1, reader.read());
+    }
+
+    private String getPatientCsv(){
+        return CsvImporterTest.class.getClassLoader().getResource("patientRecords.csv").getPath();
+    }
+    private String getProviderCsv(){
+        return CsvImporterTest.class.getClassLoader().getResource("providerRecords.csv").getPath();
+    }
+    private String getLogFilePath(){
+        return  getLogDir() + "importer.log";
+    }
+    private String getLogDir(){
+        return System.getProperty("user.dir") +"/logs/";
+    }
 }

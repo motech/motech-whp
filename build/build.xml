@@ -41,14 +41,16 @@
        <sequential>
            <fail unless="@{importerType}File" message="Usage : ant load.@{importerType}.data.from.csv -D@{importerType}File=path -DimporterLog=path" />
            <echo message="Loading @{importerType} Data..."/>
-           <condition property="importerLog" value="dataImporter.log">
+           <condition property="importerLog" value="logs/dataImporter.log">
                <not>
                    <isset property="importerLog"/>
                </not>
            </condition>
-           <java fork="false" classname="org.motechproject.whp.importer.csv.CsvImporter" output="${importerLog}" append="true">
+           <java fork="false" classname="org.motechproject.whp.importer.csv.CsvImporter" append="true">
                <arg value="@{importerType}"/>
                <arg value="${@{importerType}File}"/>
+               <arg value="${importerLog}"/>
+
                <classpath>
                    <path location="../whp-data-importer/target/whp-data-importer-0.1-SNAPSHOT.jar"/>
                    <path refid="lib.path"/>
