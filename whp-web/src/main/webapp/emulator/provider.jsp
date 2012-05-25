@@ -42,10 +42,11 @@
             <input id="district" class="span2" type="text" value="Chambal"/>
         </div>
         <input type="button" id="post-button" value="Submit"/>
+        <br/>
+        <br/>
+        <textarea id="statusMessage" rows="30" cols="100" style="min-width: 100%"  readonly></textarea>
     </form>
-    <br/>
-    <br/>
-    <textarea id="statusMessage" rows="30" cols="200" readonly></textarea>
+
     <textarea id="template" style="display:none"><$REGISTRATION$ api_key="3F2504E04F8911D39A0C0305E82C3301" xmlns="http://openrosa.org/user/registration">
         <username></username>
         <password></password>

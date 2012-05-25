@@ -9,14 +9,14 @@ public class ReasonForPauseTest extends BasePatientTest {
 
     @Test
     public void shouldThrowExceptionIfReasonNotSpecifiedInPauseTreatmentScope() {
-        expectFieldValidationRuntimeException("field:reason:may not be empty");
+        expectFieldValidationRuntimeException("field:reason:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
 
     @Test
     public void shouldThrowExceptionIfReasonIsBlankInPauseTreatmentScope() {
-        expectFieldValidationRuntimeException("field:reason:may not be empty");
+        expectFieldValidationRuntimeException("field:reason:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("").build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }

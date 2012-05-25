@@ -9,14 +9,14 @@ public class ReasonForRestartTest extends BasePatientTest {
 
     @Test
     public void shouldThrowExceptionIfReasonNotSpecifiedInRestartTreatmentScope() {
-        expectFieldValidationRuntimeException("field:reason:may not be empty");
+        expectFieldValidationRuntimeException("field:reason:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().build();
         validator.validate(webRequest, UpdateScope.restartTreatmentScope);
     }
 
     @Test
     public void shouldThrowExceptionIfReasonIsBlankInRestartTreatmentScope() {
-        expectFieldValidationRuntimeException("field:reason:may not be empty");
+        expectFieldValidationRuntimeException("field:reason:value should not be null");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withReasonForPause("").build();
         validator.validate(webRequest, UpdateScope.pauseTreatmentScope);
     }
