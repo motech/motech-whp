@@ -14,22 +14,17 @@ public class CsvImporter {
 
     public static void main(String argvs[]) throws Exception {
         try {
+            validateAndSetUpLogger(argvs);
+
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_XML);
             CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
 
-            setUp(argvs);
-
-            String importerMode = argvs[0].toLowerCase();
-            if (importerMode.contains(PATIENT_MODE)) {
+            if (argvs[0].toLowerCase().contains(PATIENT_MODE)) {
                 ImporterLogger.info("Importing patient records from file :" + argvs[1]);
                 csvDataImporter.importData("patientRecordImporter", argvs[1]);
             } else {
-                if (importerMode.contains(PROVIDER_MODE)) {
                     ImporterLogger.info("Importing provider records from file : " + argvs[1]);
                     csvDataImporter.importData("providerRecordImporter", argvs[1]);
-                } else {
-                    throw new InvalidCommandLineArgumentsException();
-                }
             }
         } catch (Exception exception) {
             ImporterLogger.error(exception);
@@ -37,7 +32,7 @@ public class CsvImporter {
         }
     }
 
-    private static void setUp(String[] argvs) throws Exception {
+    private static void validateAndSetUpLogger(String[] argvs) throws Exception {
         validateArgCount(argvs);
         setLogger(argvs[2]);
         validateImporterMode(argvs[0]);
