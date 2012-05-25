@@ -1,23 +1,24 @@
 package org.motechproject.whp.exception;
 
+import org.motechproject.casexml.service.exception.CaseError;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.patient.exception.WHPError;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WHPProviderException extends OpenRosaRegistrationValidationException {
 
     public WHPProviderException(WHPRuntimeException exception) {
-        super(exception.getMessage(), HttpStatus.BAD_REQUEST, buildErrorMessageMap(exception));
+        super(exception.getMessage(), HttpStatus.BAD_REQUEST, buildErrorMessages(exception));
     }
 
-    private static Map<String, String> buildErrorMessageMap(WHPRuntimeException exception) {
-        HashMap<String, String> errors = new HashMap<String, String>();
+    private static List<CaseError> buildErrorMessages(WHPRuntimeException exception) {
+        List<CaseError> errors = new ArrayList<CaseError>();
         for (WHPError whpError : exception.getErrors()) {
-            errors.put(whpError.getErrorCode().name(), whpError.getMessage());
+            errors.add(new CaseError(whpError.getErrorCode().name(), whpError.getMessage()));
         }
         return errors;
     }
