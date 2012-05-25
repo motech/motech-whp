@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
@@ -56,10 +57,11 @@ public class ProviderRecordImporterUnitTest {
 
     @Test
     public void shouldReturnFalseIfInvalid() {
-        ImportProviderRequest importProviderRequest = new ImportProviderRequest();
-        doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(any(), anyString());
+        ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withProviderId("1").build();
+        ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withProviderId("2").build();
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importProviderRequest2, UpdateScope.createScope);
 
-        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest)));
+        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest1,importProviderRequest2)));
     }
 
     @Test

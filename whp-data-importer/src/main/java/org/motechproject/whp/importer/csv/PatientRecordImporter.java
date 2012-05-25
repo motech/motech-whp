@@ -38,6 +38,8 @@ public class PatientRecordImporter {
 
     @Validate
     public boolean validate(List<Object> objects) {
+        boolean isValid=true;
+
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
@@ -47,10 +49,10 @@ public class PatientRecordImporter {
                 System.out.println(String.format("Exception thrown for object in row %d, with case id - %s", i + 1, ((ImportPatientRequest) objects.get(i)).getCase_id()));
                 System.out.println(e.getMessage());
                 System.out.println();
-                return false;
+                isValid = false;
             }
         }
-        return true;
+        return isValid;
     }
 
 

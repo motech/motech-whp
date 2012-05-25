@@ -37,6 +37,7 @@ public class ProviderRecordImporter {
 
     @Validate
     public boolean validate(List<Object> objects) {
+        boolean isValid = true;
         for (int i=0;i<objects.size();i++) {
             try {
                 ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
@@ -48,10 +49,10 @@ public class ProviderRecordImporter {
                 System.out.println(String.format("Exception thrown for object in row %d, with provider id - %s", i + 1, ((ImportProviderRequest) objects.get(i)).getProviderId()));
                 System.out.println(e.getMessage());
                 System.out.println();
-                return false;
+                isValid = false;
             }
         }
-        return true;
+        return isValid;
     }
 
     @Post

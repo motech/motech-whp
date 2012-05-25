@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.registration.service.RegistrationService;
@@ -58,10 +59,11 @@ public class PatientRecordImporterUnitTest {
 
     @Test
     public void shouldReturnFalseIfInvalid() {
-        ImportPatientRequest importPatientRequest = new ImportPatientRequest();
-        doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(any(), anyString());
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withCaseId("1").withDate_Modified(DateTime.now()).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withCaseId("2").withDate_Modified(DateTime.now()).build();
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importPatientRequest2, UpdateScope.createScope);
 
-        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest)));
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1,importPatientRequest2)));
     }
 
     @Test
