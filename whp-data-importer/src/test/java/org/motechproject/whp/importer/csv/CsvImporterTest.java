@@ -85,7 +85,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = getLogDir() + "/impor*\\ter5.log";
+        arguments[2] = getLogDir() + "/impor\\/ter5.log";
         CsvImporter.main(arguments);
     }
 
