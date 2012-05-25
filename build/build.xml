@@ -41,7 +41,7 @@
        <sequential>
            <fail unless="@{importerType}File" message="Usage : ant load.@{importerType}.data.from.csv -D@{importerType}File=path -DimporterLog=path" />
            <echo message="Loading @{importerType} Data..."/>
-           <condition property="importerLog" value="logs/dataImporter.log">
+           <condition property="importerLog" value="dataImporter.log">
                <not>
                    <isset property="importerLog"/>
                </not>
