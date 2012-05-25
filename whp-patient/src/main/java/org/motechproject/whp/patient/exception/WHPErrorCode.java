@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.exception;
 
 public enum WHPErrorCode {
 
-    // Treatment Update
     TB_ID_DOES_NOT_MATCH("No such tb id for current treatment"),
     TREATMENT_ALREADY_IN_PROGRESS("Current treatment is already in progress"),
     TREATMENT_ALREADY_PAUSED("Current treatment is already paused"),

@@ -12,9 +12,6 @@
     <link rel="stylesheet" type="text/css" href="/whp/resources/styles/standard.css"/>
 </head>
 <body>
-<span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
-<br/>
-<br/>
 
 <div class="container">
     <div class="pull-right"><a href="/whp/emulator/">home</a></div>
@@ -46,6 +43,9 @@
         </div>
         <input type="button" id="post-button" value="Submit"/>
     </form>
+    <br/>
+    <br/>
+    <textarea id="statusMessage" rows="30" cols="200" readonly></textarea>
     <textarea id="template" style="display:none"><$REGISTRATION$ api_key="3F2504E04F8911D39A0C0305E82C3301" xmlns="http://openrosa.org/user/registration">
         <username></username>
         <password></password>
@@ -80,10 +80,10 @@
                 data:providerXML,
                 contentType:"application/xml; charset=utf-8",
                 success:function (data, textStatus, jqXHR) {
-                    $('#statusMessage').html("Status of request: SUCCESS");
+                    $('#statusMessage').text("Status of request: SUCCESS");
                 },
                 error:function (xhr, status, error) {
-                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error + "</br>" + xhr.responseText);
+                    $('#statusMessage').text("Status of request: FAILURE. Reason: " + error + "</br>" + xhr.responseText);
                 }
             });
 

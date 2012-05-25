@@ -4,7 +4,7 @@ import lombok.Data;
 import org.motechproject.importer.annotation.ColumnName;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
-import org.motechproject.validation.constraints.NotNull;
+import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
 import org.motechproject.validation.constraints.DateTimeFormat;
@@ -19,7 +19,7 @@ public class ImportPatientRequest {
     //EndIP Date on which Weight was measured:,EndIP Weight Result:,ExtendedIP Date on which Weight was measured:,ExtendedIP Weight Result:,TwoMonthsIntoCPDate on which Weight was measured:,TwoMonthsIntoCP Result:,EndTreatment Date on which Weight was measured:,EndTreatment Result:,
     //Container Ids
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient ID *")
     private String case_id;
 
@@ -36,15 +36,15 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Address: Landmark")
     private String address_landmark;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient First Name*")
     private String first_name;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient Last Name*")
     private String last_name;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = Gender.class)
     @ColumnName(name = "Patient Gender:(F/M/O)*")
     private String gender;
@@ -57,49 +57,49 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Mobile Number")
     private String mobile_number;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = DiseaseClass.class)
     @ColumnName(name = "Disease Classification: (P,E) *")
     private String disease_class;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Location*")
     private String address_location;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Village*")
     private String address_village;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Block*")
     private String address_block;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name = "Patient Address: District*")
     private String address_district;
 
-    @NotNull
+    @NotNullOrEmpty
     @ColumnName(name  = "Patient Address: State*")
     private String address_state;
 
     private String smear_sample_instance = SmearTestSampleInstance.PreTreatment.name();
 
-    @NotNull
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     @ColumnName(name = "PreTreatment Sputum Date of Test 1:*")
     private String smear_test_date_1;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
     @ColumnName(name = "PreTreatment Sputum Result 1:*")
     private String smear_test_result_1;
 
-    @NotNull
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     @ColumnName(name = "PreTreatment Sputum Date of Test 2:*")
     private String smear_test_date_2;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
     @ColumnName(name = "PreTreatment Sputum Result 2:*")
     private String smear_test_result_2;
@@ -114,7 +114,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "PreTreatment Weight Result:")
     private String weight;
 
-    @NotNull
+    @NotNullOrEmpty
     @Size(min = 11, max = 11)
     @ColumnName(name = "Patient TB ID*")
     private String tb_id;
@@ -123,12 +123,12 @@ public class ImportPatientRequest {
     @ColumnName(name = "Provider ID*")
     private String provider_id;
 
-    @NotNull
+    @NotNullOrEmpty
     @Pattern(regexp = "[0|1][1|2]")
     @ColumnName(name = "Current Treatment Category: 01/ 02 /11/12*")
     private String treatment_category;
 
-    @NotNull
+    @NotNullOrEmpty
     @Digits(integer = 3, fraction = 0, message = "Age must be numeric and not fractional")
     @ColumnName(name = "Patient Age*")
     private String age;
