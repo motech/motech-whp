@@ -2,11 +2,10 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
-import org.motechproject.validation.constraints.NotNull;
+import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.Scope;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -20,14 +19,14 @@ import javax.validation.constraints.Pattern;
 @Data
 public class PatientWebRequest {
 
-    @NotNull
+    @NotNullOrEmpty
     private String case_id;
 
-    @NotNull
+    @NotNullOrEmpty
     @NamedConstraint(name = APIKeyValidator.API_KEY_VALIDATION)
     private String api_key;
 
-    @NotNull
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
     private String date_modified;
 
@@ -39,20 +38,20 @@ public class PatientWebRequest {
 
     private String address_landmark;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String first_name;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String last_name;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = Gender.class)
     @Scope(scope = {UpdateScope.createScope})
     private String gender;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = PatientType.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String patient_type;
@@ -60,76 +59,76 @@ public class PatientWebRequest {
     @Enumeration(type = TreatmentUpdateScenario.class)
     private String treatment_update;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = TreatmentOutcome.class)
     @Scope(scope = {UpdateScope.closeTreatmentScope})
     private String treatment_outcome;
 
-    @NotEmpty
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.pauseTreatmentScope, UpdateScope.restartTreatmentScope})
     private String reason;
 
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")
     private String mobile_number;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = DiseaseClass.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String disease_class;
 
     private String address_location;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String address_village;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String address_block;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String address_district;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String address_state;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = SmearTestSampleInstance.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_sample_instance;
 
-    @NotNull
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_date_1;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_result_1;
 
-    @NotNull
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_date_2;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_result_2;
 
-    @NotNull
+    @NotNullOrEmpty
     @Enumeration(type = WeightInstance.class)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String weight_instance;
 
-    @NotNull(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
+    @NotNullOrEmpty(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
     private String weight;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope,
             UpdateScope.simpleUpdateScope,
             UpdateScope.openTreatmentScope,
@@ -139,7 +138,7 @@ public class PatientWebRequest {
             UpdateScope.restartTreatmentScope})
     private String tb_id;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.transferInScope})
     private String old_tb_id;
 
@@ -147,12 +146,12 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String provider_id;
 
-    @NotNull
+    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     @Pattern(regexp = "[0|1][1|2]")
     private String treatment_category;
 
-    @NotNull(scope = UpdateScope.createScope)
+    @NotNullOrEmpty(scope = UpdateScope.createScope)
     @Digits(integer = 3, fraction = 0, message = "Age must be numeric and not fractional")
     @Scope(scope = {UpdateScope.createScope, UpdateScope.simpleUpdateScope})
     private String age;
