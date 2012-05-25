@@ -32,6 +32,14 @@ public class TreatmentStartCriteriaTest {
     }
 
     @Test
+    public void shouldBeFalseWhenPatientIsMigrated() {
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
+
+        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.New).withMigrated(true).build();
+        assertFalse(shouldStartOrRestartTreatment(patient, adherence));
+    }
+
+    @Test
     public void shouldBeTrueWhenPatientNotOnTreatment() {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
 

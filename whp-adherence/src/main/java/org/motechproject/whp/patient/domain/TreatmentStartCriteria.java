@@ -8,7 +8,7 @@ import org.motechproject.whp.refdata.domain.PatientType;
 public class TreatmentStartCriteria {
 
     public static boolean shouldStartOrRestartTreatment(Patient patient, WeeklyAdherence adherence) {
-        return isNotPHCTransferIn(patient) && isAdherenceBeingCapturedForFirstEverWeek(patient, adherence);
+        return isNotPHCTransferIn(patient) && isAdherenceBeingCapturedForFirstEverWeek(patient, adherence) && !patient.isMigrated();
     }
 
     private static boolean isNotPHCTransferIn(Patient patient) {

@@ -84,4 +84,9 @@ public class PatientBuilder {
         patient.setStatus(status);
         return this;
     }
+
+    public PatientBuilder withMigrated(boolean migrated) {
+        patient.setMigrated(migrated);
+        return this;
+    }
 }
