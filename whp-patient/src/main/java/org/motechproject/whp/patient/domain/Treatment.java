@@ -21,7 +21,6 @@ public class Treatment extends MotechBaseDataObject {
     private LocalDate startDate;
     private DateTime creationDate;
     private LocalDate closeDate;
-    private String tbRegistrationNumber;
     private DiseaseClass diseaseClass;
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 

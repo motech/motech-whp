@@ -24,6 +24,7 @@ public class ProvidedTreatment {
     private PatientType patientType;
     private SmearTestInstances smearTestInstances = new SmearTestInstances();
     private WeightInstances weightInstances = new WeightInstances();
+    private String tbRegistrationNumber;
 
     @JsonIgnore
     private Treatment treatment;

@@ -73,7 +73,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
+
+        assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
         assertEquals(updatePatientRequest.getSmearTestResults(), updatedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult());
         assertEquals(updatePatientRequest.getWeightStatistics(), updatedPatient.getCurrentProvidedTreatment().getWeightInstances().latestResult());
         assertEquals((Integer) 66, treatment.getPatientAge());
@@ -98,7 +99,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
         Treatment treatment = updatedPatient.latestTreatment();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
-        assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
+        assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());

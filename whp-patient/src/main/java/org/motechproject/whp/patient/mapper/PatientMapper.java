@@ -33,10 +33,10 @@ public class PatientMapper {
 
         providedTreatment.setTreatment(treatment);
         providedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
-
         mapSmearTestResults(patientRequest, providedTreatment);
         mapWeightStatistics(patientRequest, providedTreatment);
 
+        providedTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         mapPatientAddress(patientRequest, providedTreatment);
 
         return providedTreatment;
@@ -58,6 +58,7 @@ public class PatientMapper {
     }
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
+        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         Treatment currentTreatment = patient.latestTreatment();
 
         if (patientRequest.getAge() != null)
@@ -65,11 +66,10 @@ public class PatientMapper {
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
 
-        mapPatientAddress(patientRequest, patient.getCurrentProvidedTreatment());
-        mapSmearTestResults(patientRequest, patient.getCurrentProvidedTreatment());
-        mapWeightStatistics(patientRequest, patient.getCurrentProvidedTreatment());
+        mapPatientAddress(patientRequest, currentProvidedTreatment);
+        mapSmearTestResults(patientRequest, currentProvidedTreatment);
+        mapWeightStatistics(patientRequest, currentProvidedTreatment);
 
-        currentTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         patient.setLastModifiedDate(patientRequest.getDate_modified());
 
         return patient;

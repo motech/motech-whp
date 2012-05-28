@@ -8,7 +8,7 @@ public class TreatmentMapper {
 
     public static Treatment map(PatientRequest patientRequest) {
         Treatment treatment = createFirstTreatment(patientRequest);
-        mapRegistrationDetails(patientRequest, treatment);
+        treatment.setCreationDate(patientRequest.getTreatmentStartDate());
         return treatment;
     }
 
@@ -16,9 +16,7 @@ public class TreatmentMapper {
         TreatmentCategory treatmentCategory = patientRequest.getTreatment_category();
         DiseaseClass diseaseClass = patientRequest.getDisease_class();
 
-        Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge());
-
-        return newTreatment;
+        return new Treatment(treatmentCategory, diseaseClass, patient.getAge());
     }
 
     private static Treatment createFirstTreatment(PatientRequest patientRequest) {
@@ -29,8 +27,4 @@ public class TreatmentMapper {
         return new Treatment(treatmentCategory, diseaseClass, patientAge);
     }
 
-    private static void mapRegistrationDetails(PatientRequest patientRequest, Treatment treatment) {
-        treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        treatment.setCreationDate(patientRequest.getTreatmentStartDate());
-    }
 }

@@ -99,7 +99,7 @@ public class PatientMapperTest {
         ProvidedTreatment providedTreatment = patient.getCurrentProvidedTreatment();
         assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
-
+        assertEquals(patientRequest.getTb_registration_number(), providedTreatment.getTbRegistrationNumber());
         assertEquals(patientRequest.getAddress(), providedTreatment.getPatientAddress());
 
         assertTreatment(patient, patientRequest);
@@ -113,7 +113,6 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
         assertNull(treatment.getStartDate());
 
-        assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
         assertEquals(patientRequest.getTreatmentStartDate(), treatment.getCreationDate());
     }
 
