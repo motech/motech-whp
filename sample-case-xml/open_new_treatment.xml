@@ -14,5 +14,6 @@
         <weight>80</weight>
         <disease_class>P</disease_class>
         <provider_id>123456</provider_id>
+        <patient_type>Relapse</patient_type>
     </update>
 </case>
