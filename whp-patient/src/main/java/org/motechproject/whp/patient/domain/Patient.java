@@ -116,7 +116,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public TreatmentOutcome getTreatmentOutcome() {
-        return latestTreatment().getTreatmentOutcome();
+        return getCurrentProvidedTreatment().getTreatmentOutcome();
     }
 
     @JsonIgnore

@@ -18,7 +18,6 @@ import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -334,8 +333,7 @@ public class PatientServiceTest extends SpringIntegrationTest {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
         assertEquals(lastModifiedDate.toLocalDate(), updatedPatient.latestTreatment().getCloseDate());
         assertEquals(lastModifiedDate.toLocalDate(), currentProvidedTreatment.getEndDate());
-        assertEquals(TreatmentOutcome.Cured, updatedPatient.latestTreatment().getTreatmentOutcome());
-        assertEquals(TreatmentStatus.Closed, updatedPatient.latestTreatment().getStatus());
+        assertEquals(TreatmentOutcome.Cured, updatedPatient.getTreatmentOutcome());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 
@@ -348,4 +346,5 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertFalse(pausedPatient.isCurrentTreatmentPaused());
         assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }
+
 }

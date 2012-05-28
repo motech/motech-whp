@@ -1,40 +1,26 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.List;
 
+@Data
 public class ProvidedTreatment {
 
-    @Getter
-    @Setter
     private String providerId;
-
-    @Getter
-    @Setter
     private String tbId;
-
-    @Getter
-    @Setter
     private LocalDate startDate;
-
-    @Getter
-    @Setter
     private LocalDate endDate;
-
-    @Getter
-    @Setter
     private Address patientAddress;
-
-    @Getter
-    @Setter
     private String treatmentDocId;
+    private TreatmentOutcome treatmentOutcome;
 
+    @JsonIgnore
     private Treatment treatment;
 
     // Required for ektorp
@@ -67,14 +53,10 @@ public class ProvidedTreatment {
         return this;
     }
 
-    @JsonIgnore
-    public Treatment getTreatment() {
-        return treatment;
-    }
-
     public void close(String treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
-        treatment.close(treatmentOutcome, dateModified);
+        this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
+        treatment.close(dateModified);
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
@@ -92,7 +74,7 @@ public class ProvidedTreatment {
 
     @JsonIgnore
     public boolean isClosed() {
-        return treatment.isClosed();
+        return treatmentOutcome != null;
     }
 
     @JsonIgnore

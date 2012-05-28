@@ -9,8 +9,6 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.refdata.domain.TreatmentStatus;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -26,8 +24,6 @@ public class Treatment extends MotechBaseDataObject {
     private DateTime creationDate;
     private LocalDate closeDate;
     private String tbRegistrationNumber;
-    private TreatmentOutcome treatmentOutcome;
-    private TreatmentStatus status = TreatmentStatus.Ongoing;
     private DiseaseClass diseaseClass;
     private SmearTestInstances smearTestInstances = new SmearTestInstances();
     private WeightInstances weightInstances = new WeightInstances();
@@ -52,10 +48,8 @@ public class Treatment extends MotechBaseDataObject {
         weightInstances.add(weightStatistics);
     }
 
-    public void close(String treatmentOutcome, DateTime dateModified) {
-        status = TreatmentStatus.Closed;
+    public void close(DateTime dateModified) {
         closeDate = dateModified.toLocalDate();
-        this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
     }
 
     @JsonIgnore
@@ -69,11 +63,6 @@ public class Treatment extends MotechBaseDataObject {
             isLatestWeightStatisticValid = weightInstances.latestResult().isValid(errorCodes);
         }
         return isLatestSmearResultValid && isLatestWeightStatisticValid;
-    }
-
-    @JsonIgnore
-    public boolean isClosed() {
-        return status == TreatmentStatus.Closed;
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
