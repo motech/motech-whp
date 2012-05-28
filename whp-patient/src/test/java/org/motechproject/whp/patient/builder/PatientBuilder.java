@@ -34,20 +34,20 @@ public class PatientBuilder {
     }
 
     private ProvidedTreatment defaultProvidedTreatment() {
+        LocalDate today = DateUtil.today();
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
         providedTreatment.setTbId("elevenDigit");
         providedTreatment.setTreatment(defaultTreatment());
         providedTreatment.setPatientAddress(defaultAddress());
         providedTreatment.setPatientType(PatientType.New);
+        providedTreatment.addSmearTestResult(new SmearTestResults(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
+        providedTreatment.addWeightStatistics(new WeightStatistics(WeightInstance.PreTreatment, 100.0, today));
         return providedTreatment;
     }
 
     private Treatment defaultTreatment() {
         Treatment treatment = new Treatment();
-        LocalDate today = DateUtil.today();
         treatment.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
-        treatment.addSmearTestResult(new SmearTestResults(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
-        treatment.addWeightStatistics(new WeightStatistics(WeightInstance.PreTreatment, 100.0, today));
         return treatment;
     }
 

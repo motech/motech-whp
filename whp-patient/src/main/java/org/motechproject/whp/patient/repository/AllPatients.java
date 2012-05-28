@@ -46,7 +46,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     @Override
     public void update(Patient patient) {
         allTreatments.update(patient.latestTreatment());
-         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
@@ -88,7 +88,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public List<Patient> getAllWithActiveTreatment(String providerId) {
         ArrayList<Patient> patientsWithActiveTreatment = new ArrayList<Patient>();
         for (Patient patient : findByCurrentProviderId(providerId)) {
-            if(patient.isCurrentTreatmentClosed()) continue;
+            if (patient.isCurrentTreatmentClosed()) continue;
             patientsWithActiveTreatment.add(patient);
         }
         return patientsWithActiveTreatment;

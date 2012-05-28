@@ -9,8 +9,6 @@ public class TreatmentMapper {
     public static Treatment map(PatientRequest patientRequest) {
         Treatment treatment = createFirstTreatment(patientRequest);
         mapRegistrationDetails(patientRequest, treatment);
-        mapSmearTestResults(patientRequest, treatment);
-        mapWeightStatistics(patientRequest, treatment);
         return treatment;
     }
 
@@ -19,8 +17,6 @@ public class TreatmentMapper {
         DiseaseClass diseaseClass = patientRequest.getDisease_class();
 
         Treatment newTreatment = new Treatment(treatmentCategory, diseaseClass, patient.getAge());
-        newTreatment.addSmearTestResult(patientRequest.getSmearTestResults());
-        newTreatment.addWeightStatistics(patientRequest.getWeightStatistics());
 
         return newTreatment;
     }
@@ -37,19 +33,4 @@ public class TreatmentMapper {
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setCreationDate(patientRequest.getTreatmentStartDate());
     }
-
-    static void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
-        SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
-        if (!smearTestResults.isEmpty()) {
-            treatment.addSmearTestResult(smearTestResults);
-        }
-    }
-
-    static void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
-        WeightStatistics weightStatistics = patientRequest.getWeightStatistics();
-        if (!weightStatistics.isEmpty()) {
-            treatment.addWeightStatistics(weightStatistics);
-        }
-    }
-
 }

@@ -14,7 +14,6 @@ public class TreatmentMapperTest {
     @Test
     public void createNewTreatmentFromTreatmentUpdateRequest_SetsTreatmentCategory_DiseaseClass_WeightStatistics_LabResults_AndProviderId() {
         Patient patient = mapPatient(new PatientRequestBuilder().withDefaults().build());
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
 
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
@@ -26,12 +25,6 @@ public class TreatmentMapperTest {
         assertEquals(openNewTreatmentUpdateRequest.getDisease_class(), newTreatment.getDiseaseClass());
         assertEquals(patient.latestTreatment().getPatientAge(), newTreatment.getPatientAge());
         assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newTreatment.getTreatmentCategory());
-
-        SmearTestResults smearTestResults = openNewTreatmentUpdateRequest.getSmearTestResults();
-        WeightStatistics weightStatistics = openNewTreatmentUpdateRequest.getWeightStatistics();
-
-        assertEquals(smearTestResults, newTreatment.getSmearTestInstances().latestResult());
-        assertEquals(weightStatistics, newTreatment.getWeightInstances().latestResult());
     }
 
     private Patient mapPatient(PatientRequest patientRequest) {

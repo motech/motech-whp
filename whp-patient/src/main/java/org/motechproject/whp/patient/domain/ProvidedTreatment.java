@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class ProvidedTreatment {
     private String treatmentDocId;
     private TreatmentOutcome treatmentOutcome;
     private PatientType patientType;
+    private SmearTestInstances smearTestInstances = new SmearTestInstances();
+    private WeightInstances weightInstances = new WeightInstances();
 
     @JsonIgnore
     private Treatment treatment;
@@ -42,6 +45,8 @@ public class ProvidedTreatment {
         this.endDate = oldProvidedTreatment.endDate;
         setTreatment(oldProvidedTreatment.getTreatment());
         this.patientAddress = oldProvidedTreatment.getPatientAddress();
+        this.smearTestInstances = oldProvidedTreatment.getSmearTestInstances();
+        this.weightInstances = oldProvidedTreatment.getWeightInstances();
     }
 
     public void setTreatment(Treatment treatment) {
@@ -72,7 +77,17 @@ public class ProvidedTreatment {
 
     @JsonIgnore
     public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return treatment.isValid(errorCodes) && patientAddress.isValid(errorCodes);
+        return patientAddress.isValid(errorCodes)
+                && areSmearInstancesValid(errorCodes)
+                && areWeightInstancesValid(errorCodes);
+    }
+
+    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
+        return !CollectionUtils.isEmpty(weightInstances) && weightInstances.latestResult().isValid(errorCodes);
+    }
+
+    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
+        return !smearTestInstances.isEmpty() && smearTestInstances.latestResult().isValid(errorCodes);
     }
 
     @JsonIgnore
@@ -83,6 +98,14 @@ public class ProvidedTreatment {
     @JsonIgnore
     public boolean isPaused() {
         return treatment.isPaused();
+    }
+
+    public void addSmearTestResult(SmearTestResults smearTestResults) {
+        smearTestInstances.add(smearTestResults);
+    }
+
+    public void addWeightStatistics(WeightStatistics weightStatistics) {
+        weightInstances.add(weightStatistics);
     }
 
 }

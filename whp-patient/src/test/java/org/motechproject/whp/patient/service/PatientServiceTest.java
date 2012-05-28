@@ -74,8 +74,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
         assertEquals(updatePatientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals(updatePatientRequest.getSmearTestResults(), treatment.getSmearTestInstances().latestResult());
-        assertEquals(updatePatientRequest.getWeightStatistics(), treatment.getWeightInstances().latestResult());
+        assertEquals(updatePatientRequest.getSmearTestResults(), updatedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult());
+        assertEquals(updatePatientRequest.getWeightStatistics(), updatedPatient.getCurrentProvidedTreatment().getWeightInstances().latestResult());
         assertEquals((Integer) 66, treatment.getPatientAge());
     }
 
@@ -102,8 +102,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(patient.latestTreatment().getSmearTestInstances().latestResult(), treatment.getSmearTestInstances().latestResult());
-        assertEquals(patient.latestTreatment().getWeightInstances().latestResult(), treatment.getWeightInstances().latestResult());
+        assertEquals(patient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult(), updatedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult());
+        assertEquals(patient.getCurrentProvidedTreatment().getWeightInstances().latestResult(), updatedPatient.getCurrentProvidedTreatment().getWeightInstances().latestResult());
     }
 
     @Test

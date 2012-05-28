@@ -23,8 +23,6 @@ public class Treatment extends MotechBaseDataObject {
     private LocalDate closeDate;
     private String tbRegistrationNumber;
     private DiseaseClass diseaseClass;
-    private SmearTestInstances smearTestInstances = new SmearTestInstances();
-    private WeightInstances weightInstances = new WeightInstances();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
     // Required for ektorp
@@ -37,29 +35,8 @@ public class Treatment extends MotechBaseDataObject {
         this.patientAge = patientAge;
     }
 
-    public void addSmearTestResult(SmearTestResults smearTestResults) {
-        smearTestInstances.add(smearTestResults);
-    }
-
-    public void addWeightStatistics(WeightStatistics weightStatistics) {
-        weightInstances.add(weightStatistics);
-    }
-
     public void close(DateTime dateModified) {
         closeDate = dateModified.toLocalDate();
-    }
-
-    @JsonIgnore
-    public boolean isValid(List<WHPErrorCode> errorCodes) {
-        boolean isLatestSmearResultValid = true;
-        boolean isLatestWeightStatisticValid = true;
-        if(!smearTestInstances.isEmpty()) {
-            isLatestSmearResultValid = smearTestInstances.latestResult().isValid(errorCodes);
-        }
-        if(!CollectionUtils.isEmpty(weightInstances)) {
-            isLatestWeightStatisticValid = weightInstances.latestResult().isValid(errorCodes);
-        }
-        return isLatestSmearResultValid && isLatestWeightStatisticValid;
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {

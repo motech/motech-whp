@@ -18,22 +18,4 @@ public class AllTreatments extends MotechBaseRepository<Treatment> {
     public AllTreatments(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(Treatment.class, dbCouchDbConnector);
     }
-
-    @Override
-    public void add(Treatment treatment) {
-         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
-        if (!treatment.isValid(errorCodes)) {
-            throw new WHPRuntimeException(errorCodes);
-        }
-        super.add(treatment);
-    }
-
-    @Override
-    public void update(Treatment treatment) {
-         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
-        if (!treatment.isValid(errorCodes)) {
-            throw new WHPRuntimeException(errorCodes);
-        }
-        super.update(treatment);
-    }
 }

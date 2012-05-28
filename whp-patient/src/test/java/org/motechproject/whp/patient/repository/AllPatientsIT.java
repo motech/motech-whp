@@ -29,14 +29,13 @@ public class AllPatientsIT extends SpringIntegrationTest {
         createPatient("cha01100001", "providerId");
 
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
-        Treatment treatment = savedPatient.latestTreatment();
 
         assertNotNull(savedPatient);
         assertEquals("Raju", savedPatient.getFirstName());
         assertEquals("Singh", savedPatient.getLastName());
         assertEquals(Gender.M, savedPatient.getGender());
 
-        SmearTestResults smearTestResults = treatment.getSmearTestInstances().latestResult();
+        SmearTestResults smearTestResults = savedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult();
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestResults.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestResults.getSmear_test_date_1());
@@ -61,14 +60,14 @@ public class AllPatientsIT extends SpringIntegrationTest {
     private Patient createPatient(String patientId, String providerId) {
         TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
         Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200);
-        treatment.addSmearTestResult(smearTestResult());
-        treatment.addWeightStatistics(weightStatistics());
         allTreatments.add(treatment);
 
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId", PatientType.New);
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);
+        providedTreatment.addSmearTestResult(smearTestResult());
+        providedTreatment.addWeightStatistics(weightStatistics());
         patient.addProvidedTreatment(providedTreatment, now());
 
         allPatients.add(patient);

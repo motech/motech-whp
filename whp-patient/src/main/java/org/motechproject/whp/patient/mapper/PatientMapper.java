@@ -1,12 +1,17 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 
 public class PatientMapper {
+
+    public static Patient mapPatient(PatientRequest patientRequest) {
+        Patient patient = mapBasicInfo(patientRequest);
+        Treatment treatment = TreatmentMapper.map(patientRequest);
+        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
+        patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
+        return patient;
+    }
 
     public static Patient mapBasicInfo(PatientRequest patientRequest) {
         Patient patient = new Patient(
@@ -28,6 +33,10 @@ public class PatientMapper {
 
         providedTreatment.setTreatment(treatment);
         providedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
+
+        mapSmearTestResults(patientRequest, providedTreatment);
+        mapWeightStatistics(patientRequest, providedTreatment);
+
         mapPatientAddress(patientRequest, providedTreatment);
 
         return providedTreatment;
@@ -42,6 +51,8 @@ public class PatientMapper {
         newProvidedTreatment.setTreatment(treatment);
         newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
         newProvidedTreatment.setPatientAddress(currentProvidedTreatment.getPatientAddress());
+        mapSmearTestResults(patientRequest, newProvidedTreatment);
+        mapWeightStatistics(patientRequest, newProvidedTreatment);
 
         return newProvidedTreatment;
     }
@@ -55,8 +66,8 @@ public class PatientMapper {
             patient.setPhoneNumber(patientRequest.getMobile_number());
 
         mapPatientAddress(patientRequest, patient.getCurrentProvidedTreatment());
-        TreatmentMapper.mapSmearTestResults(patientRequest, currentTreatment);
-        TreatmentMapper.mapWeightStatistics(patientRequest, currentTreatment);
+        mapSmearTestResults(patientRequest, patient.getCurrentProvidedTreatment());
+        mapWeightStatistics(patientRequest, patient.getCurrentProvidedTreatment());
 
         currentTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         patient.setLastModifiedDate(patientRequest.getDate_modified());
@@ -68,6 +79,20 @@ public class PatientMapper {
         Address address = patientRequest.getAddress();
         if (!address.isEmpty()) {
             providedTreatment.setPatientAddress(address);
+        }
+    }
+
+    private static void mapSmearTestResults(PatientRequest patientRequest, ProvidedTreatment treatment) {
+        SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
+        if (!smearTestResults.isEmpty()) {
+            treatment.addSmearTestResult(smearTestResults);
+        }
+    }
+
+    private static void mapWeightStatistics(PatientRequest patientRequest, ProvidedTreatment treatment) {
+        WeightStatistics weightStatistics = patientRequest.getWeightStatistics();
+        if (!weightStatistics.isEmpty()) {
+            treatment.addWeightStatistics(weightStatistics);
         }
     }
 

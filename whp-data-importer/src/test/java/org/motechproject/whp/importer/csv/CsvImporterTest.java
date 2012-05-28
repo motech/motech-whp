@@ -76,7 +76,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         assertEquals(2, allTreatments.getAll().size());
         assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getPatientType());
         Patient patient2 = allPatients.findByPatientId("234324");
-        assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getTreatment().getWeightInstances().get(0).getMeasuringDate());
+        assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getWeightInstances().get(0).getMeasuringDate());
 
     }
 
