@@ -222,7 +222,11 @@ public class PatientWebRequest {
     }
 
     private TreatmentUpdateScenario updateScenario() {
-        return StringUtils.isNotBlank(treatment_update) ? TreatmentUpdateScenario.valueOf(treatment_update) : null;
+        try {
+            return StringUtils.isNotBlank(treatment_update) ? TreatmentUpdateScenario.valueOf(treatment_update) : null;
+        } catch (IllegalArgumentException ignored) {
+        }
+        return null;
     }
 
 }
