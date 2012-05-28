@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-testing-utils</artifactId>
-            <version>0.10-SNAPSHOT</version>
+            <version>${motech.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -169,7 +169,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-security.version>3.0.5.RELEASE</spring-security.version>
         <build.dir>build</build.dir>
-        <motech.version>0.10-SNAPSHOT</motech.version>
+        <motech.version>0.11-SNAPSHOT</motech.version>
         <motech.contrib.version>0.1-SNAPSHOT</motech.contrib.version>
         <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
     </properties>
