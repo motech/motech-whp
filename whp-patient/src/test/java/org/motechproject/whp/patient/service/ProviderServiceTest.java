@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -75,6 +76,7 @@ public class ProviderServiceTest extends SpringIntegrationTest {
         assertEquals(tbId, updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(now.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
         assertEquals(now, updatedPatient.getLastModifiedDate());
+        assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentProvidedTreatment().getPatientType());
     }
 
 }

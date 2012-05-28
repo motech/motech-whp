@@ -39,7 +39,7 @@ public class ProviderService {
                         dateModified.toLocalDate()
                 );
         patient.addProvidedTreatment(newProvidedTreatment, dateModified);
-        newProvidedTreatment.setPatientType(PatientType.PHCTransfer);
+        newProvidedTreatment.setPatientType(PatientType.TransferredIn);
         allPatients.update(patient);
     }
 }
