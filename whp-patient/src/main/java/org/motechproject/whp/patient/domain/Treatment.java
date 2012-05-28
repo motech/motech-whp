@@ -8,7 +8,6 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 public class Treatment extends MotechBaseDataObject {
 
     private Integer patientAge;
-    private PatientType patientType;
     private TreatmentCategory treatmentCategory;
     private LocalDate startDate;
     private DateTime creationDate;
@@ -33,11 +31,10 @@ public class Treatment extends MotechBaseDataObject {
     public Treatment() {
     }
 
-    public Treatment(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, Integer patientAge, PatientType patientType) {
+    public Treatment(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, Integer patientAge) {
         this.treatmentCategory = treatmentCategory;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;
-        this.patientType = patientType;
     }
 
     public void addSmearTestResult(SmearTestResults smearTestResults) {

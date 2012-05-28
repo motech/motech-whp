@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -15,8 +16,8 @@ import static org.motechproject.util.DateUtil.now;
 public class PatientTest {
 
     Patient patient = new Patient("patientId", "patientFirstName", "patientLastName", Gender.F, "1111111111");
-    ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tbId");
-    ProvidedTreatment newProviderTreatment = new ProvidedTreatment("newProviderId", "newTbId");
+    ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tbId", PatientType.New);
+    ProvidedTreatment newProviderTreatment = new ProvidedTreatment("newProviderId", "newTbId", PatientType.TreatmentAfterDefault);
 
     public PatientTest() {
         patient.addProvidedTreatment(providedTreatment, now());
@@ -41,7 +42,7 @@ public class PatientTest {
 
     @Test
     public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAddedForPatientWhoHasAHistory() {
-        ProvidedTreatment newerProviderTreatment = new ProvidedTreatment("newerProviderId", "newerTbId");
+        ProvidedTreatment newerProviderTreatment = new ProvidedTreatment("newerProviderId", "newerTbId", PatientType.Chronic);
         patient.addProvidedTreatment(newerProviderTreatment, now());
 
         assertArrayEquals(new Object[]{providedTreatment, newProviderTreatment}, patient.getProvidedTreatments().toArray());
@@ -82,4 +83,5 @@ public class PatientTest {
         assertEquals(now, patient.getLastModifiedDate());
         verify(providedTreatment, times(1)).resume("swap", now);
     }
+
 }

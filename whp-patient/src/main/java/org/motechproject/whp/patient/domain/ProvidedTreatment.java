@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProvidedTreatment {
     private Address patientAddress;
     private String treatmentDocId;
     private TreatmentOutcome treatmentOutcome;
+    private PatientType patientType;
 
     @JsonIgnore
     private Treatment treatment;
@@ -27,9 +29,10 @@ public class ProvidedTreatment {
     public ProvidedTreatment() {
     }
 
-    public ProvidedTreatment(String providerId, String tbId) {
+    public ProvidedTreatment(String providerId, String tbId, PatientType patientType) {
         this.providerId = providerId;
         this.tbId = tbId;
+        this.patientType = patientType;
     }
 
     public ProvidedTreatment(ProvidedTreatment oldProvidedTreatment) {
@@ -81,4 +84,5 @@ public class ProvidedTreatment {
     public boolean isPaused() {
         return treatment.isPaused();
     }
+
 }

@@ -24,7 +24,7 @@ public class PatientMapper {
     public static ProvidedTreatment mapProvidedTreatment(PatientRequest patientRequest, Treatment treatment) {
         String providerId = patientRequest.getProvider_id();
         String tbId = patientRequest.getTb_id();
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId);
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, patientRequest.getPatient_type());
 
         providedTreatment.setTreatment(treatment);
         providedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
@@ -37,7 +37,7 @@ public class PatientMapper {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         String tbId = patientRequest.getTb_id();
 
-        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(patientRequest.getProvider_id(), tbId);
+        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(patientRequest.getProvider_id(), tbId, patientRequest.getPatient_type());
 
         newProvidedTreatment.setTreatment(treatment);
         newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?

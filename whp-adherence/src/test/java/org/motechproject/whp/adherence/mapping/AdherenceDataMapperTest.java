@@ -27,9 +27,9 @@ public class AdherenceDataMapperTest {
 
     @Before
     public void setup() {
-        Treatment treatment = new Treatment(new TreatmentCategory(), DiseaseClass.E, 10, PatientType.New);
+        Treatment treatment = new Treatment(new TreatmentCategory(), DiseaseClass.E, 10);
 
-        ProvidedTreatment currentProvidedTreatment = new ProvidedTreatment(PROVIDER_ID, TB_ID);
+        ProvidedTreatment currentProvidedTreatment = new ProvidedTreatment(PROVIDER_ID, TB_ID, PatientType.New);
         currentProvidedTreatment.setTreatment(treatment);
 
         patient = new PatientBuilder().withDefaults().withCurrentProvidedTreatment(currentProvidedTreatment).build();

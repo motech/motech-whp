@@ -74,7 +74,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
         assertEquals(2, allPatients.getAll().size());
         assertEquals(2, allTreatments.getAll().size());
-        assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getTreatment().getPatientType());
+        assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getPatientType());
         Patient patient2 = allPatients.findByPatientId("234324");
         assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getTreatment().getWeightInstances().get(0).getMeasuringDate());
 
@@ -113,6 +113,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         FileReader reader = new FileReader(logFile.getAbsoluteFile());
         assertNotSame(-1, reader.read());
     }
+
     @Test
     public void shouldLogInSpecifiedLogPathEvenIfExceptionOccurs() throws IOException {
         File logFile = new File(getLogDir() + "logCheck1.log");

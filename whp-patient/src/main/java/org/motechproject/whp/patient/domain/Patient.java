@@ -56,7 +56,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public PatientType currentTreatmentType() {
-        return latestTreatment().getPatientType();
+        return getCurrentProvidedTreatment().getPatientType();
     }
 
     public DateTime getLastModifiedDate() {
