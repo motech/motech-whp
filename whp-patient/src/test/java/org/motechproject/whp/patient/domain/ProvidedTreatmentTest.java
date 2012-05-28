@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
@@ -34,7 +36,7 @@ public class ProvidedTreatmentTest {
         providedTreatment.setTreatment(treatment);
         providedTreatment.pause("paws", now);
 
-        verify(treatment, times(1)).pause("paws", now);
+        assertTrue(providedTreatment.isPaused());
     }
 
     @Test
@@ -44,8 +46,10 @@ public class ProvidedTreatmentTest {
 
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
         providedTreatment.setTreatment(treatment);
+        providedTreatment.pause("paws", now);
         providedTreatment.resume("swap", now);
 
-        verify(treatment, times(1)).resume("swap", now);
+        assertFalse(providedTreatment.isPaused());
     }
+
 }

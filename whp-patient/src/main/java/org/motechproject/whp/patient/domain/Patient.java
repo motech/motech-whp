@@ -121,7 +121,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public TreatmentInterruptions getTreatmentInterruptions() {
-        return latestTreatment().getInterruptions();
+        return currentProvidedTreatment.getInterruptions();
     }
 
     @JsonIgnore

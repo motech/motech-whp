@@ -90,7 +90,7 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
 
     private Patient getPatientWith(TreatmentInterruptions treatmentInterruptions) {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.latestTreatment().setInterruptions(treatmentInterruptions);
+        patient.getCurrentProvidedTreatment().setInterruptions(treatmentInterruptions);
         return patient;
     }
 }

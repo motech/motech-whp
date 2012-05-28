@@ -22,9 +22,11 @@ public class ProvidedTreatment {
     private String treatmentDocId;
     private TreatmentOutcome treatmentOutcome;
     private PatientType patientType;
+    private String tbRegistrationNumber;
+
     private SmearTestInstances smearTestInstances = new SmearTestInstances();
     private WeightInstances weightInstances = new WeightInstances();
-    private String tbRegistrationNumber;
+    private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
     @JsonIgnore
     private Treatment treatment;
@@ -69,11 +71,16 @@ public class ProvidedTreatment {
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
-        treatment.pause(reasonForPause, dateModified);
+        interruptions.add(new TreatmentInterruption(reasonForPause, dateModified.toLocalDate()));
     }
 
     public void resume(String reasonForResumption, DateTime dateModified) {
-        treatment.resume(reasonForResumption, dateModified);
+        interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
+    }
+
+    @JsonIgnore
+    public boolean isPaused() {
+        return !CollectionUtils.isEmpty(interruptions) && interruptions.latestInterruption().isCurrentlyPaused();
     }
 
     @JsonIgnore
@@ -94,11 +101,6 @@ public class ProvidedTreatment {
     @JsonIgnore
     public boolean isClosed() {
         return treatmentOutcome != null;
-    }
-
-    @JsonIgnore
-    public boolean isPaused() {
-        return treatment.isPaused();
     }
 
     public void addSmearTestResult(SmearTestResults smearTestResults) {
