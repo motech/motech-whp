@@ -62,7 +62,7 @@ public class Treatment extends MotechBaseDataObject {
     public boolean isValid(List<WHPErrorCode> errorCodes) {
         boolean isLatestSmearResultValid = true;
         boolean isLatestWeightStatisticValid = true;
-        if(!CollectionUtils.isEmpty(smearTestInstances)) {
+        if(!smearTestInstances.isEmpty()) {
             isLatestSmearResultValid = smearTestInstances.latestResult().isValid(errorCodes);
         }
         if(!CollectionUtils.isEmpty(weightInstances)) {
