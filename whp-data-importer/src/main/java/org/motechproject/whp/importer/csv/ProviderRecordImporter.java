@@ -1,10 +1,10 @@
 package org.motechproject.whp.importer.csv;
 
+import org.joda.time.DateTime;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
-import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
@@ -24,16 +24,14 @@ public class ProviderRecordImporter {
 
     private RegistrationService registrationService;
     private RequestValidator validator;
-    private ProviderRequestMapper providerRequestMapper;
     private AllProviders allProviders;
 
 
     @Autowired
-    public ProviderRecordImporter(AllProviders allProviders,RegistrationService registrationService, RequestValidator validator,ProviderRequestMapper providerRequestMapper) {
+    public ProviderRecordImporter(AllProviders allProviders,RegistrationService registrationService, RequestValidator validator) {
         this.allProviders = allProviders;
         this.registrationService = registrationService;
         this.validator = validator;
-        this.providerRequestMapper = providerRequestMapper;
     }
 
     @Validate
@@ -71,8 +69,14 @@ public class ProviderRecordImporter {
     }
 
     public void registerProvider(ImportProviderRequest importProviderRequest) {
-        ProviderRequest providerRequest = providerRequestMapper.map(importProviderRequest);
-        registrationService.registerProvider(providerRequest);
+        registrationService.registerProvider(mapToProviderRequest(importProviderRequest));
+    }
+
+    private ProviderRequest mapToProviderRequest(ImportProviderRequest importProviderRequest) {
+        ProviderRequest providerRequest = new ProviderRequest(importProviderRequest.getProviderId(), importProviderRequest.getDistrict(), importProviderRequest.getPrimaryMobile(), DateTime.now());
+        providerRequest.setSecondaryMobile(importProviderRequest.getSecondaryMobile());
+        providerRequest.setTertiaryMobile(importProviderRequest.getTertiaryMobile());
+        return providerRequest;
     }
 
 }

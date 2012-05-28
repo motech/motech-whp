@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
-import org.motechproject.whp.importer.csv.mapper.ProviderRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
@@ -24,9 +23,6 @@ public class ProviderRecordImporterTest extends SpringIntegrationTest{
 
     @Autowired
     ProviderRecordImporter providerRecordImporter;
-
-    @Autowired
-    ProviderRequestMapper providerRequestMapper;
 
     @After
     public void clearDb() {
