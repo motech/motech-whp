@@ -12,7 +12,9 @@ import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.ProviderService;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
@@ -38,8 +40,9 @@ public class TransferInPatientTest extends BaseUnitTest {
 
     @Test
     public void shouldNotTransferInPatientTreatment_OnAnyErrors() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withOldTbId("wrongTbId").build();
-        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.TREATMENT_NOT_CLOSED);
+
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().build();
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(patientRequest);
@@ -50,13 +53,19 @@ public class TransferInPatientTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldTransferInPatientTreatmentAndUpdatePatient_IfNoErrorsFound() {
+    public void shouldTransferInPatientTreatmentAndUpdatePatientAndReviveLastTreatment_IfNoErrorsFound() {
         patient.closeCurrentTreatment("Defaulted", now());
-        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().build();
+        PatientRequest patientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withDiseaseClass(patient.latestTreatment().getDiseaseClass())
+                .withTreatmentCategory(patient.latestTreatment().getTreatmentCategory())
+                .build();
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(patientRequest);
         verify(providerService).transferIn(patientRequest.getProvider_id(), patient, patientRequest.getTb_id(), patientRequest.getDate_modified());
+        assertNull(patient.latestTreatment().getCloseDate());
+        verify(allTreatments).update(patient.latestTreatment());
     }
 
 }

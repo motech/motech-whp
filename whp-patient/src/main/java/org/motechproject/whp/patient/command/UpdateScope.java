@@ -8,7 +8,6 @@ public enum UpdateScope {
     public static final String simpleUpdateScope = "simpleUpdate";
     public static final String openTreatmentScope = "openTreatment";
     public static final String closeTreatmentScope = "closeTreatment";
-    public static final String transferInScope = "transferIn";
     public static final String pauseTreatmentScope = "pauseTreatment";
     public static final String restartTreatmentScope = "restartTreatment";
 

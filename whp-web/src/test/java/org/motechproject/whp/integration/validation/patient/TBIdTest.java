@@ -14,7 +14,7 @@ public class TBIdTest extends BasePatientTest {
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {
         try {
-            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTBId(null).build();
+            PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withTbId(null).build();
             validator.validate(webRequest, UpdateScope.createScope);
         } catch (WHPRuntimeException e) {
             if (e.getMessage().contains("field:tb_id:TB ID cannot be null")) {

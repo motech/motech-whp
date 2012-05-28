@@ -38,25 +38,29 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo("1234567890", null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "elevenDigit", null, null, null)
-                .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured", "oldTbID");
+                .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setPatient_type("TransferredIn");
         return this;
     }
 
     public PatientWebRequestBuilder withDefaultsForTransferIn() {
         patientWebRequest = new PatientWebRequest()
-                .setTreatmentUpdateData("TransferIn", null, "oldElevenId")
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
+                .setTreatmentUpdateData("New", null)
+                .setTreatmentData("01", "elevenDigit", "newProviderId", "P", null, null)
+                .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
+                .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7");
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setPatient_type("TransferredIn");
         return this;
     }
 
     public PatientWebRequestBuilder withDefaultsForPauseTreatment() {
         patientWebRequest = new PatientWebRequest()
-                .setTreatmentUpdateData(TreatmentUpdateScenario.Pause.name(), null, null)
+                .setTreatmentUpdateData(TreatmentUpdateScenario.Pause.name(), null)
                 .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
@@ -67,12 +71,22 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDefaultsForRestartTreatment() {
         patientWebRequest = new PatientWebRequest()
-                .setTreatmentUpdateData(TreatmentUpdateScenario.Restart.name(), null, null)
+                .setTreatmentUpdateData(TreatmentUpdateScenario.Restart.name(), null)
                 .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
         patientWebRequest.setCase_id("12345");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setReason("Coz he shouldn die");
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDefaultsForCloseTreatment() {
+        patientWebRequest = new PatientWebRequest()
+                .setTreatmentUpdateData("Close", "TransferredOut");
+        patientWebRequest.setCase_id("12345");
+        patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setTb_id("elevenDigit");
         return this;
     }
 
@@ -85,8 +99,8 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withTreatmentOutcome(String treatmentOutcome){
-        patientWebRequest.setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), treatmentOutcome, "oldTbID");
+    public PatientWebRequestBuilder withTreatmentOutcome(String treatmentOutcome) {
+        patientWebRequest.setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), treatmentOutcome);
         return this;
     }
 
@@ -125,7 +139,7 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withTBId(String tbId) {
+    public PatientWebRequestBuilder withTbId(String tbId) {
         patientWebRequest.setTb_id(tbId);
         return this;
     }
@@ -160,11 +174,6 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withOldTb_Id(String oldTbId) {
-        patientWebRequest.setOld_tb_id(oldTbId);
-        return this;
-    }
-
     public PatientWebRequestBuilder withDate_Modified(DateTime date_modified) {
         patientWebRequest.setDate_modified(date_modified.toString("dd/MM/YYYY HH:mm:ss"));
         return this;
@@ -182,6 +191,11 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withPatientType(String patientType) {
         patientWebRequest.setPatient_type(patientType);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDiseaseClass(DiseaseClass diseaseClass) {
+        patientWebRequest.setDisease_class(diseaseClass.name());
         return this;
     }
 }

@@ -16,14 +16,14 @@ public class PatientTypeTest extends BasePatientTest{
 
     @Test
     public void shouldThrowExceptionIfPatientTypeIsEmptyInCreateScope() {
-        expectFieldValidationRuntimeException("The value should be one of : [New, Relapse, PHCTransfer, TreatmentAfterDefault, TreatmentFailure, Chronic, Others]");
+        expectFieldValidationRuntimeException("The value should be one of : [New, Relapse, PHCTransfer, TransferredIn, TreatmentAfterDefault, TreatmentFailure, Chronic, Others]");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withPatientType("").build();
         validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldThrowExceptionIfPatientTypeIsEmptyInOpenNewTreatmentScope() {
-        expectFieldValidationRuntimeException("The value should be one of : [New, Relapse, PHCTransfer, TreatmentAfterDefault, TreatmentFailure, Chronic, Others]");
+        expectFieldValidationRuntimeException("The value should be one of : [New, Relapse, PHCTransfer, TransferredIn, TreatmentAfterDefault, TreatmentFailure, Chronic, Others]");
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withPatientType("").build();
         validator.validate(webRequest, UpdateScope.openTreatmentScope);
     }

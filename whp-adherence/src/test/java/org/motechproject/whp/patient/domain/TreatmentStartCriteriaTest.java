@@ -48,14 +48,6 @@ public class TreatmentStartCriteriaTest {
     }
 
     @Test
-    public void shouldBeFalseWhenPatientTypeIsNotNew() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withType(PatientType.PHCTransfer).build();
-        assertFalse(shouldStartOrRestartTreatment(patient, adherence));
-    }
-
-    @Test
     public void shouldBeFalseWhenPatientOnTreatmentAndAdherenceIsBeingCapturedForLaterDate() {
         WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(today().plusWeeks(2)).build();
 

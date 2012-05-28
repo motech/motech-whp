@@ -21,6 +21,7 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.PatientService;
@@ -41,6 +42,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
     public static final String NEW_TB_ID = "newTbId";
     public static final String OLD_TB_ID = "elevenDigit";
     public static final String OLD_PROVIDER_ID = "123456";
+    public static final String TB_ID = "elevenDigit";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
 
@@ -98,7 +100,10 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         createPatientAndRecordAdherence();
         assertTbAndProviderId(OLD_TB_ID, OLD_PROVIDER_ID);
 
-        PatientRequest patientRequest = createChangeProviderRequest(NEW_PROVIDER_ID, OLD_TB_ID, NEW_TB_ID);
+        PatientRequest patientRequest = createCloseTreatmentRequest();
+        factory.updateFor(UpdateScope.closeTreatment).apply(patientRequest);
+
+        patientRequest = createChangeProviderRequest(NEW_PROVIDER_ID, NEW_TB_ID);
         factory.updateFor(UpdateScope.transferIn).apply(patientRequest);
 
         WeeklyAdherence updatedAdherence = new WeeklyAdherenceBuilder().withLog(DayOfWeek.Monday, PillStatus.NotTaken).forPatient(allPatients.findByPatientId(PATIENT_ID)).build();
@@ -114,6 +119,7 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
 
     private void createPatientAndRecordAdherence() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withTbId(TB_ID)
                 .withCaseId(PATIENT_ID)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
@@ -125,14 +131,27 @@ public class WHPAdherenceServiceTest extends SpringIntegrationTest {
         adherenceService.recordAdherence(PATIENT_ID, adherence, auditParams);
     }
 
-    private PatientRequest createChangeProviderRequest(String newProviderId, String oldTbId, String newTbId) {
+    private PatientRequest createChangeProviderRequest(String newProviderId, String newTbId) {
+        Patient patient = allPatients.findByPatientId(PATIENT_ID);
+        Treatment latestTreatment = patient.latestTreatment();
+
         return new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withCaseId(PATIENT_ID)
                 .withProviderId(newProviderId)
                 .withDateModified(DateTime.now())
-                .withOldTbId(oldTbId)
+                .withDiseaseClass(latestTreatment.getDiseaseClass())
+                .withTreatmentCategory(latestTreatment.getTreatmentCategory())
                 .withTbId(newTbId)
+                .build();
+    }
+
+    private PatientRequest createCloseTreatmentRequest() {
+        return new PatientRequestBuilder()
+                .withMandatoryFieldsForCloseTreatment()
+                .withCaseId(PATIENT_ID)
+                .withDateModified(DateTime.now())
+                .withTbId(TB_ID)
                 .build();
     }
 

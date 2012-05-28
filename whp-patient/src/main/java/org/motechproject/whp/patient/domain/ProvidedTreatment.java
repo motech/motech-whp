@@ -100,7 +100,7 @@ public class ProvidedTreatment {
 
     @JsonIgnore
     public boolean isClosed() {
-        return treatmentOutcome != null;
+        return treatment.isClosed();
     }
 
     public void addSmearTestResult(SmearTestResults smearTestResults) {

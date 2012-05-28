@@ -4,22 +4,24 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.patient.repository.AllTreatments;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.repository.*;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static junit.framework.Assert.*;
 
@@ -37,12 +39,13 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;
     @Autowired
+    AllTreatmentCategories allTreatmentCategories;
+    @Autowired
     PatientService patientService;
     @Autowired
     PatientRequestMapper patientRequestMapper;
 
     PatientWebService patientWebService;
-
 
     @Before
     public void setUpDefaultProvider() {
@@ -86,7 +89,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                                                                            .withTBId("elevenDigit")
+                                                                            .withTbId("elevenDigit")
                                                                             .withCaseId("12341234")
                                                                             .build();
         patientWebService.createCase(patientWebRequest);
@@ -95,7 +98,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields()
                                                                                  .withCaseId("12341234")
-                                                                                 .withTBId("elevenDigit")
+                                                                                 .withTbId("elevenDigit")
                                                                                  .build();
         patientWebService.updateCase(simpleUpdateWebRequest);
 
@@ -108,7 +111,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldNotSetMigratedOnUpdate() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTBId("elevenDigit")
+                .withTbId("elevenDigit")
                 .withCaseId("12341234")
                 .build();
         patientWebService.createCase(patientWebRequest);
@@ -120,16 +123,28 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsTransferIn() {
+        //For the mapping to take place [allTreatmentCategories.findByCode()]
+        List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
+        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
+
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         patientWebService.createCase(patientWebRequest);
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         DateTime dateModified = DateUtil.now();
+
+        //first closing current treatment
+        patientWebRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withCaseId(patientWebRequest.getCase_id())
+                .withTbId(patient.tbId())
+                .build();
+        patientWebService.updateCase(patientWebRequest);
+
         patientWebRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
                 .withDate_Modified(dateModified)
                 .withCaseId(patientWebRequest.getCase_id())
-                .withOldTb_Id(patient.getCurrentProvidedTreatment().getTbId())
                 .build();
         Provider newProvider = new Provider(patientWebRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
         allProviders.add(newProvider);
@@ -149,7 +164,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatientTreatment() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                                                                            .withTBId("elevenDigit")
+                                                                            .withTbId("elevenDigit")
                                                                             .withCaseId("12341234")
                                                                             .build();
         patientWebService.createCase(patientWebRequest);
@@ -157,7 +172,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         patientWebRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields()
-                                                                                 .withTBId("elevenDigit")
+                                                                                 .withTbId("elevenDigit")
                                                                                  .withCaseId("12341234")
                                                                                  .build();
         patientWebService.updateCase(patientWebRequest);
@@ -172,7 +187,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
     @Test
     public void shouldPauseAndRestartPatientTreatment() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTBId("elevenDigit")
+                .withTbId("elevenDigit")
                 .withCaseId("12341234")
                 .build();
 
@@ -183,7 +198,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         PatientWebRequest pauseTreatmentRequest = new PatientWebRequestBuilder()
                 .withDefaultsForPauseTreatment()
-                .withTBId("elevenDigit")
+                .withTbId("elevenDigit")
                 .withCaseId("12341234")
                 .build();
 
@@ -195,7 +210,7 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
 
         PatientWebRequest restartTreatmentRequest = new PatientWebRequestBuilder()
                 .withDefaultsForRestartTreatment()
-                .withTBId("elevenDigit")
+                .withTbId("elevenDigit")
                 .withCaseId("12341234")
                 .build();
 

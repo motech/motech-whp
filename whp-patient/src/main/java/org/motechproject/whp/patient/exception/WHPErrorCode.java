@@ -4,6 +4,7 @@ package org.motechproject.whp.patient.exception;
 public enum WHPErrorCode {
 
     TB_ID_DOES_NOT_MATCH("No such tb id for current treatment"),
+    TREATMENT_DETAILS_DO_NOT_MATCH("Transfer In is not supported with change in treatment category"),
     TREATMENT_ALREADY_IN_PROGRESS("Current treatment is already in progress"),
     TREATMENT_ALREADY_PAUSED("Current treatment is already paused"),
     TREATMENT_ALREADY_CLOSED("Current treatment is already closed"),

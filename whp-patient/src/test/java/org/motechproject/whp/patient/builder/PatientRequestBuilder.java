@@ -94,8 +94,8 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id("caseId");
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("newTbId");
-        patientRequest.setOld_tb_id("elevenDigit");
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferIn);
+        patientRequest.setDisease_class(DiseaseClass.P);
+        patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferredIn);
         patientRequest.setTreatment_category(category);
         patientRequest.setPatient_type(PatientType.PHCTransfer);
         return this;
@@ -171,8 +171,8 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withOldTbId(String oldTbId) {
-        patientRequest.setOld_tb_id(oldTbId);
+    public PatientRequestBuilder withDiseaseClass(DiseaseClass diseaseClass) {
+        patientRequest.setDisease_class(diseaseClass);
         return this;
     }
 

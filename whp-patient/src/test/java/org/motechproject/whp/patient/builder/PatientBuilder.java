@@ -48,6 +48,7 @@ public class PatientBuilder {
     private Treatment defaultTreatment() {
         Treatment treatment = new Treatment();
         treatment.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
+        treatment.setDiseaseClass(DiseaseClass.P);
         return treatment;
     }
 

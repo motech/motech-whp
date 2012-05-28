@@ -26,7 +26,6 @@ public class PatientRequest {
     private String mobile_number;
 
     private String tb_id;
-    private String old_tb_id;
     private TreatmentCategory treatment_category;
     private DateTime treatmentStartDate;
     private DiseaseClass disease_class;

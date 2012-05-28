@@ -15,7 +15,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class CloseTreatmentTest extends TreatmentUpdateTest {
+public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldUpdateTreatmentCategoryForPatientOnCloseOfCurrentTreatmentAndOpenOfNewTreatment() {

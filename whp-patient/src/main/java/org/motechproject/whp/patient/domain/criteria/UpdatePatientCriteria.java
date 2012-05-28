@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain.criteria;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.List;
@@ -46,9 +47,15 @@ public class UpdatePatientCriteria {
 
     public static boolean canTransferInPatient(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getOld_tb_id())) {
-            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        if (!canOpenNewTreatment(patient, errorCodes)) {
+            errorCodes.add(WHPErrorCode.TREATMENT_NOT_CLOSED);
+            return false;
+        }
+        Treatment latestTreatment = patient.latestTreatment();
+
+        if (!latestTreatment.getDiseaseClass().equals(patientRequest.getDisease_class())
+                || !latestTreatment.getTreatmentCategory().equals(patientRequest.getTreatment_category())) {
+            errorCodes.add(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH);
             return false;
         }
         return true;

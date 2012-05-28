@@ -2,11 +2,7 @@ package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.validation.constraints.Enumeration;
-import org.motechproject.validation.constraints.DateTimeFormat;
-import org.motechproject.validation.constraints.NamedConstraint;
-import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.validation.constraints.Scope;
+import org.motechproject.validation.constraints.*;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
@@ -120,17 +116,12 @@ public class PatientWebRequest {
             UpdateScope.simpleUpdateScope,
             UpdateScope.openTreatmentScope,
             UpdateScope.closeTreatmentScope,
-            UpdateScope.transferInScope,
             UpdateScope.pauseTreatmentScope,
             UpdateScope.restartTreatmentScope})
     private String tb_id;
 
-    @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope})
-    private String old_tb_id;
-
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String provider_id;
 
     @NotNullOrEmpty
@@ -177,10 +168,9 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setTreatmentUpdateData(String treatment_update, String treatment_outcome, String old_tb_id) {
+    public PatientWebRequest setTreatmentUpdateData(String treatment_update, String treatment_outcome) {
         this.treatment_update = treatment_update;
         this.treatment_outcome = treatment_outcome;
-        this.old_tb_id = old_tb_id;
         return this;
     }
 
@@ -208,9 +198,17 @@ public class PatientWebRequest {
         return updateScenario == null ? UpdateScope.simpleUpdate : updateScenario.getScope();
     }
 
+    // :/
     private TreatmentUpdateScenario updateScenario() {
         try {
-            return StringUtils.isNotBlank(treatment_update) ? TreatmentUpdateScenario.valueOf(treatment_update) : null;
+            if (StringUtils.isNotBlank(treatment_update)) {
+                if (TreatmentUpdateScenario.valueOf(treatment_update) == TreatmentUpdateScenario.New) {
+                    if (StringUtils.isNotBlank(patient_type) && PatientType.TransferredIn.name().equals(patient_type)) {
+                        return TreatmentUpdateScenario.TransferredIn;
+                    }
+                }
+                return TreatmentUpdateScenario.valueOf(treatment_update);
+            }
         } catch (IllegalArgumentException ignored) {
         }
         return null;
