@@ -35,18 +35,14 @@ public class SmearTestInstancesTest {
     }
 
     @Test
-    public void shouldUpdateCurrentSmearTestResults_ForPreTreatment() {
+    public void shouldMaintainHistoryOfExistingTestResults_UponAddingLatestTestResult() {
+        SmearTestInstances smearTestInstances = new SmearTestInstances();
         SmearTestResults oldPreTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, new LocalDate(2010, 10, 10), null, null, null);
         SmearTestResults newPreTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, new LocalDate(2012, 12, 12), null, null, null);
-
-        SmearTestInstances smearTestInstances = new SmearTestInstances();
-
         smearTestInstances.add(oldPreTreatmentResults);
-        assertEquals(1, smearTestInstances.size());
-        assertEquals(oldPreTreatmentResults, smearTestInstances.get(0));
-
         smearTestInstances.add(newPreTreatmentResults);
-        assertEquals(1, smearTestInstances.size());
-        assertEquals(newPreTreatmentResults, smearTestInstances.get(0));
+
+        assertEquals(oldPreTreatmentResults, smearTestInstances.get(0));
+        assertEquals(newPreTreatmentResults, smearTestInstances.get(1));
     }
 }

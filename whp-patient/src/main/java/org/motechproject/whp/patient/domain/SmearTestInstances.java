@@ -13,10 +13,6 @@ public class SmearTestInstances {
     private List<SmearTestResults> smearTestResults = new ArrayList<SmearTestResults>();
 
     public boolean add(SmearTestResults smearTestResults) {
-        SmearTestResults existingResult = resultForInstance(smearTestResults.getSmear_sample_instance());
-        if (existingResult != null) {
-            this.smearTestResults.remove(existingResult);
-        }
         return this.smearTestResults.add(smearTestResults);
     }
 
@@ -35,13 +31,5 @@ public class SmearTestInstances {
     @JsonIgnore
     public boolean isEmpty() {
         return this.smearTestResults.isEmpty();
-    }
-
-    private SmearTestResults resultForInstance(SmearTestSampleInstance smearTestSampleInstance) {
-        for (SmearTestResults smearTestResults : this.smearTestResults) {
-            if (smearTestResults.isOfInstance(smearTestSampleInstance))
-                return smearTestResults;
-        }
-        return null;
     }
 }
