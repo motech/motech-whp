@@ -1,13 +1,12 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +39,7 @@ public class ProviderService {
                         dateModified.toLocalDate()
                 );
         patient.addProvidedTreatment(newProvidedTreatment, dateModified);
+        newProvidedTreatment.setPatientType(PatientType.PHCTransfer);
         allPatients.update(patient);
     }
 }

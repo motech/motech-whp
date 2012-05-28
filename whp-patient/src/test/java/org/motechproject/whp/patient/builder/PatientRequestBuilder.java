@@ -97,6 +97,7 @@ public class PatientRequestBuilder {
         patientRequest.setOld_tb_id("elevenDigit");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferIn);
         patientRequest.setTreatment_category(category);
+        patientRequest.setPatient_type(PatientType.PHCTransfer);
         return this;
     }
 
