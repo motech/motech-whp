@@ -94,37 +94,24 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope})
     private String address_state;
 
-    @NotNullOrEmpty
     @Enumeration(type = SmearTestSampleInstance.class)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_sample_instance;
 
-    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_date_1;
 
-    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_result_1;
 
-    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY")
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_date_2;
 
-    @NotNullOrEmpty
     @Enumeration(type = SmearTestResult.class)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String smear_test_result_2;
 
-    @NotNullOrEmpty
     @Enumeration(type = WeightInstance.class)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String weight_instance;
 
-    @NotNullOrEmpty(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
     private String weight;
 
