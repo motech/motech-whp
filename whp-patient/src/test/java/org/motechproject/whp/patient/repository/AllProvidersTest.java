@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -21,7 +22,7 @@ public class AllProvidersTest extends SpringIntegrationTest {
     @Before
     public void setUp() {
         provider = new Provider("P00001", "984567876", "district",
-                DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss").parseDateTime("12/01/2012 10:10:10"));
+                DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
     }
 
     @Test

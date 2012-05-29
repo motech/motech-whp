@@ -11,42 +11,42 @@ public class SmearTestInstancesTest {
 
     @Test
     public void shouldAddANewSmearTestResults_ForPreTreatment() {
-        SmearTestResults preTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null);
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.PreTreatment, null, null, null, null);
 
-        SmearTestInstances smearTestInstances = new SmearTestInstances();
-        smearTestInstances.add(preTreatmentResults);
+        SmearTestResults smearTestResults = new SmearTestResults();
+        smearTestResults.add(preTreatmentRecord);
 
-        assertEquals(1, smearTestInstances.size());
-        assertTrue(smearTestInstances.get(0).isOfInstance(SmearTestSampleInstance.PreTreatment));
+        assertEquals(1, smearTestResults.size());
+        assertTrue(smearTestResults.get(0).isOfInstance(SmearTestSampleInstance.PreTreatment));
     }
 
     @Test
     public void shouldAddSmearTestResults_ForBothPreTreatment_AndEndTreatment() {
-        SmearTestResults preTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null);
-        SmearTestResults endTreatmentResults = new SmearTestResults(SmearTestSampleInstance.EndTreatment, null, null, null, null);
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.PreTreatment, null, null, null, null);
+        SmearTestRecord endTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.EndTreatment, null, null, null, null);
 
-        SmearTestInstances smearTestInstances = new SmearTestInstances();
-        smearTestInstances.add(preTreatmentResults);
-        smearTestInstances.add(endTreatmentResults);
+        SmearTestResults smearTestResults = new SmearTestResults();
+        smearTestResults.add(preTreatmentRecord);
+        smearTestResults.add(endTreatmentRecord);
 
-        assertEquals(2, smearTestInstances.size());
-        assertTrue(smearTestInstances.get(0).isOfInstance(SmearTestSampleInstance.PreTreatment));
-        assertTrue(smearTestInstances.get(1).isOfInstance(SmearTestSampleInstance.EndTreatment));
+        assertEquals(2, smearTestResults.size());
+        assertTrue(smearTestResults.get(0).isOfInstance(SmearTestSampleInstance.PreTreatment));
+        assertTrue(smearTestResults.get(1).isOfInstance(SmearTestSampleInstance.EndTreatment));
     }
 
     @Test
     public void shouldUpdateCurrentSmearTestResults_ForPreTreatment() {
-        SmearTestResults oldPreTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, new LocalDate(2010, 10, 10), null, null, null);
-        SmearTestResults newPreTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, new LocalDate(2012, 12, 12), null, null, null);
+        SmearTestRecord oldPreTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.PreTreatment, new LocalDate(2010, 10, 10), null, null, null);
+        SmearTestRecord newPreTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.PreTreatment, new LocalDate(2012, 12, 12), null, null, null);
 
-        SmearTestInstances smearTestInstances = new SmearTestInstances();
+        SmearTestResults smearTestResults = new SmearTestResults();
 
-        smearTestInstances.add(oldPreTreatmentResults);
-        assertEquals(1, smearTestInstances.size());
-        assertEquals(oldPreTreatmentResults, smearTestInstances.get(0));
+        smearTestResults.add(oldPreTreatmentRecord);
+        assertEquals(1, smearTestResults.size());
+        assertEquals(oldPreTreatmentRecord, smearTestResults.get(0));
 
-        smearTestInstances.add(newPreTreatmentResults);
-        assertEquals(1, smearTestInstances.size());
-        assertEquals(newPreTreatmentResults, smearTestInstances.get(0));
+        smearTestResults.add(newPreTreatmentRecord);
+        assertEquals(1, smearTestResults.size());
+        assertEquals(newPreTreatmentRecord, smearTestResults.get(0));
     }
 }

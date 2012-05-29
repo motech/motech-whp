@@ -40,8 +40,8 @@ public class PatientBuilder {
         providedTreatment.setTreatment(defaultTreatment());
         providedTreatment.setPatientAddress(defaultAddress());
         providedTreatment.setPatientType(PatientType.New);
-        providedTreatment.addSmearTestResult(new SmearTestResults(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
-        providedTreatment.addWeightStatistics(new WeightStatistics(WeightInstance.PreTreatment, 100.0, today));
+        providedTreatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
+        providedTreatment.addWeightStatistics(new WeightStatisticsRecord(WeightInstance.PreTreatment, 100.0, today));
         return providedTreatment;
     }
 

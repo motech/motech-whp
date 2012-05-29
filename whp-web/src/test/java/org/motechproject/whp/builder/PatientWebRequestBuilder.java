@@ -175,7 +175,7 @@ public class PatientWebRequestBuilder {
     }
 
     public PatientWebRequestBuilder withDate_Modified(DateTime date_modified) {
-        patientWebRequest.setDate_modified(date_modified.toString("dd/MM/YYYY HH:mm:ss"));
+        patientWebRequest.setDate_modified(date_modified.toString(WHPConstants.DATE_TIME_FORMAT));
         return this;
     }
 

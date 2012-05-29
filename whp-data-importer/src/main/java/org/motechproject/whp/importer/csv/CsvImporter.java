@@ -10,16 +10,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.File;
 
 public class CsvImporter {
+
     private static final String APPLICATION_CONTEXT_XML = "applicationDataImporterContext.xml";
 
     public static void main(String argvs[]) throws Exception {
         try {
             validateAndSetUpLogger(argvs);
             ImportType importType = validateAndSetImportType(argvs[0]);
-
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_XML);
             CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
-
             importType.performAction(argvs[1], csvDataImporter);
         } catch (Exception exception) {
             ImporterLogger.error(exception);
@@ -35,14 +34,13 @@ public class CsvImporter {
 
     private static ImportType validateAndSetImportType(String mode) throws WHPImportException {
         ImportType importType = (ImportType) new StringToEnumeration().convert(mode, ImportType.class);
-        if(importType == null) {
+        if (importType == null) {
             throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
         return importType;
     }
 
     private static void validateImportFile(String importFile) throws WHPImportException {
-
         try {
             if (!new File(importFile).canRead()) {
                 throw new WHPImportException("invalid file");
@@ -65,7 +63,6 @@ public class CsvImporter {
         if (args.length < 3) {
             throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
-
     }
 }
 

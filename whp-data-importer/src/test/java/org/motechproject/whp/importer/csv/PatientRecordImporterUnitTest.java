@@ -1,17 +1,19 @@
 package org.motechproject.whp.importer.csv;
 
-import org.dozer.DozerBeanMapper;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
+import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 
@@ -24,13 +26,14 @@ public class PatientRecordImporterUnitTest {
 
     @Mock
     RequestValidator validator;
+
     PatientRecordImporter patientRecordImporter;
 
     @Mock
     private RegistrationService registrationService;
 
     @Mock
-    private DozerBeanMapper patientImportRequestMapper;
+    private ImportPatientRequestMapper importPatientRequestMapper;
 
     @Mock
     AllPatients allPatients;
@@ -38,7 +41,7 @@ public class PatientRecordImporterUnitTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientRecordImporter = new PatientRecordImporter(registrationService, validator, patientImportRequestMapper, allPatients);
+        patientRecordImporter = new PatientRecordImporter(registrationService, validator, importPatientRequestMapper, allPatients);
     }
 
     @Test
@@ -52,8 +55,8 @@ public class PatientRecordImporterUnitTest {
         PatientRequest patientRequest2 = new PatientRequest();
         patientRequest2.setCase_id("2");
 
-        when(patientImportRequestMapper.map(importPatientRequest1, PatientRequest.class)).thenReturn(patientRequest1);
-        when(patientImportRequestMapper.map(importPatientRequest2, PatientRequest.class)).thenReturn(patientRequest2);
+        when(importPatientRequestMapper.map(importPatientRequest1)).thenReturn(patientRequest1);
+        when(importPatientRequestMapper.map(importPatientRequest2)).thenReturn(patientRequest2);
         doThrow(new RuntimeException("Exception to be thrown for test")).when(registrationService).registerPatient(patientRequest1);
 
         patientRecordImporter.post(asList((Object) importPatientRequest1, importPatientRequest2));
@@ -64,8 +67,8 @@ public class PatientRecordImporterUnitTest {
 
     @Test
     public void shouldReturnFalseIfInvalid() {
-        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withCaseId("1").withDate_Modified(DateTime.now()).build();
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withCaseId("2").withDate_Modified(DateTime.now()).build();
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withCaseId("1").withLastModifiedDate(DateTime.now()).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withCaseId("2").withLastModifiedDate(DateTime.now()).build();
         doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importPatientRequest2, UpdateScope.createScope);
 
         assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
@@ -98,17 +101,17 @@ public class PatientRecordImporterUnitTest {
     @Test
     public void shouldSetDefaultValuesOnValidation() {
         DateTime patient1RegDate = DateTime.now().plusDays(-2);
-        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withPhi(null).withDate_Modified(patient1RegDate).withWeightMeasuredDate("").withPatientType("").build();
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withPhi(null).withDate_Modified(patient1RegDate).withWeightDate("").withPatientType("").build();
         DateTime patient2WtMeasuredDate = DateTime.now().plusDays(-5);
         String dateFormat = "dd/MM/YYYY";
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withPhi("").withCaseId("1").withWeightMeasuredDate(patient2WtMeasuredDate.toString(dateFormat)).build();
-        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withPhi("yy").withDate_Modified(patient1RegDate).withWeightMeasuredDate(null).withPatientType(null).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withPhi("").withCaseId("1").withWeightDate(patient2WtMeasuredDate.toString(dateFormat)).build();
+        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withPhi("yy").withDate_Modified(patient1RegDate).withWeightDate(null).withPatientType(null).build();
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)));
 
-        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest1.getWeight_date());
-        assertEquals(patient2WtMeasuredDate.toString(dateFormat), importPatientRequest2.getWeight_date());
-        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest3.getWeight_date());
+        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patient2WtMeasuredDate.toString(dateFormat), importPatientRequest2.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest3.getWeightDate(WeightInstance.PreTreatment));
 
         assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
         assertEquals(PatientType.PHCTransfer.name(), importPatientRequest2.getPatient_type());
@@ -117,7 +120,5 @@ public class PatientRecordImporterUnitTest {
         assertEquals("WHP", importPatientRequest1.getPhi());
         assertEquals("WHP", importPatientRequest2.getPhi());
         assertEquals("yy", importPatientRequest3.getPhi());
-
-
     }
 }

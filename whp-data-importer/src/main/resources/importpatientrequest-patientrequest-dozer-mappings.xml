@@ -57,46 +57,6 @@
             <a>address_state</a>
             <b>address.address_state</b>
         </field>
-        <!--Nested smear Test result Fields-->
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
-            <a>smear_sample_instance</a>
-            <b>smearTestResults.smear_sample_instance</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
-            <a>smear_test_date_1</a>
-            <b>smearTestResults.smear_test_date_1</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
-            <a>smear_test_result_1</a>
-            <b>smearTestResults.smear_test_result_1</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
-            <a>smear_test_date_2</a>
-            <b>smearTestResults.smear_test_date_2</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
-            <a>smear_test_result_2</a>
-            <b>smearTestResults.smear_test_result_2</b>
-        </field>
-        <!--Nested weight statistics Fields-->
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
-            <a>weight_instance</a>
-            <b>weightStatistics.weight_instance</b>
-        </field>
-
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
-            <a>weight_date</a>
-            <b>weightStatistics.measuringDate</b>
-        </field>
-
-        <field>
-            <a>weight</a>
-            <b>weightStatistics.weight</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
-            <a>weight_date</a>
-            <b>weightStatistics.measuringDate</b>
-        </field>
         <field>
             <a>migrated</a>
             <b>migrated</b>

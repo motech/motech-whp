@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.contract.ProviderRequest;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.request.ProviderWebRequest;
 
 import static junit.framework.Assert.assertEquals;
@@ -34,7 +35,7 @@ public class ProviderRequestMapperTest {
         assertEquals("9880123457", provider.getSecondaryMobile());
         assertEquals("9880123458", provider.getTertiaryMobile());
         assertEquals("Patna", provider.getDistrict());
-        assertEquals("12/01/2012 10:10:10", provider.getLastModifiedDate().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals("12/01/2012 10:10:10", provider.getLastModifiedDate().toString(WHPConstants.DATE_TIME_FORMAT));
     }
 
     @Test

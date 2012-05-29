@@ -4,10 +4,7 @@ import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.domain.WeightStatistics;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 
 @Data
@@ -30,21 +27,26 @@ public class PatientRequest {
     private DateTime treatmentStartDate;
     private DiseaseClass disease_class;
     private String tb_registration_number;
+
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
 
     private TreatmentUpdateScenario treatment_update;
     private TreatmentOutcome treatment_outcome;
     private String reason;
-
     private DateTime date_modified;
-
     private boolean migrated;
 
     public PatientRequest() {
     }
 
-    public PatientRequest setPatientInfo(String caseId, String firstName, String lastName, Gender gender, PatientType patientType, String patientMobileNumber, String phi) {
+    public PatientRequest setPatientInfo(String caseId,
+                                         String firstName,
+                                         String lastName,
+                                         Gender gender,
+                                         PatientType patientType,
+                                         String patientMobileNumber,
+                                         String phi) {
         this.case_id = caseId;
         this.first_name = firstName;
         this.last_name = lastName;
@@ -55,12 +57,23 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+    public PatientRequest setPatientAddress(String houseNumber,
+                                            String landmark,
+                                            String block,
+                                            String village,
+                                            String district,
+                                            String state) {
         this.address = new Address(houseNumber, landmark, block, village, district, state);
         return this;
     }
 
-    public PatientRequest setTreatmentData(TreatmentCategory category, String tbId, String providerId, DiseaseClass diseaseClass, int patientAge, String registrationNumber, DateTime treatmentStartDate) {
+    public PatientRequest setTreatmentData(TreatmentCategory category,
+                                           String tbId,
+                                           String providerId,
+                                           DiseaseClass diseaseClass,
+                                           int patientAge,
+                                           String registrationNumber,
+                                           DateTime treatmentStartDate) {
         this.treatment_category = category;
         this.tb_id = tbId;
         this.provider_id = providerId;
@@ -71,13 +84,19 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
-        this.smearTestResults = new SmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
+    public PatientRequest addSmearTestResults(SmearTestSampleInstance smearSampleInstance,
+                                              LocalDate smearTestDate1,
+                                              SmearTestResult smear_result_1,
+                                              LocalDate smearTestDate2,
+                                              SmearTestResult smearResult2) {
+        this.smearTestResults.add(new SmearTestRecord(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2));
         return this;
     }
 
     public PatientRequest setWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
-        weightStatistics = new WeightStatistics(weightInstance, weight, measuringDate);
+        if (weightInstance != null) {
+            weightStatistics.add(new WeightStatisticsRecord(weightInstance, weight, measuringDate));
+        }
         return this;
     }
 
@@ -86,6 +105,7 @@ public class PatientRequest {
         return this;
     }
 
-
-
+    public void setWeightStatistics(WeightStatistics statistics) {
+        this.weightStatistics = statistics;
+    }
 }

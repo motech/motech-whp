@@ -10,10 +10,10 @@ public class SmearTestResultsTest {
 
     @Test
     public void checkResultForSmearTestInstance() {
-        SmearTestResults preTreatmentResults = new SmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null);
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SmearTestSampleInstance.PreTreatment, null, null, null, null);
 
-        assertFalse(preTreatmentResults.isOfInstance(SmearTestSampleInstance.EndTreatment));
-        assertFalse(preTreatmentResults.isOfInstance(SmearTestSampleInstance.ExtendedIP));
-        assertTrue(preTreatmentResults.isOfInstance(SmearTestSampleInstance.PreTreatment));
+        assertFalse(preTreatmentRecord.isOfInstance(SmearTestSampleInstance.EndTreatment));
+        assertFalse(preTreatmentRecord.isOfInstance(SmearTestSampleInstance.ExtendedIP));
+        assertTrue(preTreatmentRecord.isOfInstance(SmearTestSampleInstance.PreTreatment));
     }
 }

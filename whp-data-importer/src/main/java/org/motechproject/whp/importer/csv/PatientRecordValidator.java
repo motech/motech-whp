@@ -17,6 +17,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -127,11 +128,11 @@ public class PatientRecordValidator {
     private void checkIfDatesAreEqual(String requestDate, Object patientDate, String fieldName, ArrayList<String> errors, Class dateClass) {
         try {
             if (dateClass == DateTime.class) {
-                String expectedDate = ((DateTime) new StringToDateTime().convert(requestDate, dateClass)).toString(ImportPatientRequest.DATE_TIME_FORMAT);
-                checkIfEqual(expectedDate, ((DateTime) patientDate).toString(ImportPatientRequest.DATE_TIME_FORMAT), fieldName, errors);
+                String expectedDate = ((DateTime) new StringToDateTime().convert(requestDate, dateClass)).toString(WHPConstants.DATE_TIME_FORMAT);
+                checkIfEqual(expectedDate, ((DateTime) patientDate).toString(WHPConstants.DATE_TIME_FORMAT), fieldName, errors);
             } else {
-                String expectedDate = ((LocalDate) new StringToDateTime().convert(requestDate, dateClass)).toString(ImportPatientRequest.DATE_FORMAT);
-                checkIfEqual(expectedDate, ((LocalDate) patientDate).toString(ImportPatientRequest.DATE_FORMAT), fieldName, errors);
+                String expectedDate = ((LocalDate) new StringToDateTime().convert(requestDate, dateClass)).toString(WHPConstants.DATE_FORMAT);
+                checkIfEqual(expectedDate, ((LocalDate) patientDate).toString(WHPConstants.DATE_FORMAT), fieldName, errors);
             }
         } catch (Exception e) {
             printInvalidDataError(fieldName, errors, requestDate);

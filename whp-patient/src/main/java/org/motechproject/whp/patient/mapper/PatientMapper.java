@@ -1,7 +1,10 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Address;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 
 public class PatientMapper {
 
@@ -20,9 +23,11 @@ public class PatientMapper {
                 patientRequest.getLast_name(),
                 patientRequest.getGender(),
                 patientRequest.getMobile_number());
+
         patient.setPhi(patientRequest.getPhi());
         patient.setLastModifiedDate(patientRequest.getDate_modified());
         patient.setMigrated(patientRequest.isMigrated());
+
         return patient;
     }
 
@@ -83,16 +88,14 @@ public class PatientMapper {
     }
 
     private static void mapSmearTestResults(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
-        if (!smearTestResults.isEmpty()) {
-            treatment.addSmearTestResult(smearTestResults);
+        if (!patientRequest.getSmearTestResults().isEmpty()) {
+            treatment.setSmearTestResults(patientRequest.getSmearTestResults());
         }
     }
 
     private static void mapWeightStatistics(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        WeightStatistics weightStatistics = patientRequest.getWeightStatistics();
-        if (!weightStatistics.isEmpty()) {
-            treatment.addWeightStatistics(weightStatistics);
+        if (!patientRequest.getWeightStatistics().isEmpty()) {
+            treatment.setWeightStatistics(patientRequest.getWeightStatistics());
         }
     }
 

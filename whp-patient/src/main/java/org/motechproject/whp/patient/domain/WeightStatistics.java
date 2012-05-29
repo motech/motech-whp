@@ -1,45 +1,76 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
 public class WeightStatistics {
 
-    private WeightInstance weight_instance;
-    private Double weight;
-    private LocalDate measuringDate;
+    @JsonProperty
+    private List<WeightStatisticsRecord> weightStatisticsRecords = new ArrayList<WeightStatisticsRecord>();
 
-    public WeightStatistics() {
-    }
-
-    public WeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
-        this.weight_instance = weightInstance;
-        this.weight = weight;
-        this.measuringDate = measuringDate;
-    }
-
-    @JsonIgnore
-    public boolean isValid(List<WHPErrorCode> validationErrors) {
-        boolean isFilled = weight_instance != null && weight != null && measuringDate != null;
-        if (!isFilled) {
-            validationErrors.add(WHPErrorCode.NULL_VALUE_IN_WEIGHT_STATISTICS);
+    public boolean add(WeightStatisticsRecord weightStatisticsRecord) {
+        if (weightStatisticsRecord.getMeasuringDate() != null) {
+            WeightStatisticsRecord existingResult = resultForInstance(weightStatisticsRecord.getWeight_instance());
+            if (existingResult != null) {
+                weightStatisticsRecords.remove(existingResult);
+            }
+            return weightStatisticsRecords.add(weightStatisticsRecord);
         }
-        return isFilled;
+        return false;
+    }
+
+    private WeightStatisticsRecord resultForInstance(WeightInstance weightInstance) {
+        for (WeightStatisticsRecord weightStatisticsRecord : weightStatisticsRecords) {
+            if (weightStatisticsRecord.isOfInstance(weightInstance))
+                return weightStatisticsRecord;
+        }
+        return null;
+    }
+
+    public WeightStatisticsRecord latestResult() {
+        return weightStatisticsRecords.get(weightStatisticsRecords.size() - 1);
+    }
+
+    public WeightStatistics add(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
+        if (weightInstance != null) {
+            this.add(new WeightStatisticsRecord(weightInstance, weight, measuringDate));
+        }
+        return this;
+    }
+
+    public WeightStatisticsRecord get(int index) {
+        return weightStatisticsRecords.get(index);
+    }
+
+    public int size() {
+        return weightStatisticsRecords.size();
     }
 
     @JsonIgnore
     public boolean isEmpty() {
-        return weight_instance == null && weight == null;
+        return weightStatisticsRecords.isEmpty();
     }
 
-    @JsonIgnore
-    public boolean isOfInstance(WeightInstance weightInstance) {
-        return this.weight_instance.equals(weightInstance);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WeightStatistics that = (WeightStatistics) o;
+
+        if (weightStatisticsRecords != null ? !weightStatisticsRecords.equals(that.weightStatisticsRecords) : that.weightStatisticsRecords != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return weightStatisticsRecords != null ? weightStatisticsRecords.hashCode() : 0;
     }
 }

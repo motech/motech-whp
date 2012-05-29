@@ -194,10 +194,11 @@
                     <argLine>-XX:MaxPermSize=1024M -ea -Dfile.encoding=UTF-8</argLine>
                     <printSummary>true</printSummary>
                     <includes>
-                        <include>**/*Test*.java</include>
+                        <include>**/*Test.java</include>
                         <include>**/*IT.java</include>
                     </includes>
                     <excludes>
+                        <exclude>**/*TestPart.java</exclude>
                         <exclude>**/functional/**/*Test.java</exclude>
                     </excludes>
                 </configuration>

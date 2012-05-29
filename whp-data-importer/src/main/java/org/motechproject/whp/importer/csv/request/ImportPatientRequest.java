@@ -2,28 +2,28 @@ package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
 import org.motechproject.importer.annotation.ColumnName;
+import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.ProviderIdValidator;
-import org.motechproject.validation.constraints.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class ImportPatientRequest {
-    public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
-    public static final String DATE_FORMAT = "dd/MM/YYYY";
 
     @NotNullOrEmpty
     @ColumnName(name = "Patient ID *")
     private String case_id;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = DATE_TIME_FORMAT, validateEmptyString=false)
+    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT, validateEmptyString = false)
     @ColumnName(name = "Registration date")
     private String date_modified;
 
@@ -49,7 +49,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Gender:(F/M/O)*")
     private String gender;
 
-    @Enumeration(type = PatientType.class,validateEmptyString = false)
+    @Enumeration(type = PatientType.class, validateEmptyString = false)
     @ColumnName(name = "Type of Patient:(New, PHSTransfer)*")
     private String patient_type;
 
@@ -62,6 +62,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Disease Classification: (P,E) *")
     private String disease_class;
 
+    // Address
     @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Location*")
     private String address_location;
@@ -79,40 +80,9 @@ public class ImportPatientRequest {
     private String address_district;
 
     @NotNullOrEmpty
-    @ColumnName(name  = "Patient Address: State*")
+    @ColumnName(name = "Patient Address: State*")
     private String address_state;
-
-    private String smear_sample_instance = SmearTestSampleInstance.PreTreatment.name();
-
-    @NotNullOrEmpty
-    @DateTimeFormat(pattern = DATE_FORMAT)
-    @ColumnName(name = "PreTreatment Sputum Date of Test 1:*")
-    private String smear_test_date_1;
-
-    @NotNullOrEmpty
-    @Enumeration(type = SmearTestResult.class)
-    @ColumnName(name = "PreTreatment Sputum Result 1:*")
-    private String smear_test_result_1;
-
-    @NotNullOrEmpty
-    @DateTimeFormat(pattern = DATE_FORMAT)
-    @ColumnName(name = "PreTreatment Sputum Date of Test 2:*")
-    private String smear_test_date_2;
-
-    @NotNullOrEmpty
-    @Enumeration(type = SmearTestResult.class)
-    @ColumnName(name = "PreTreatment Sputum Result 2:*")
-    private String smear_test_result_2;
-
-    private String weight_instance = WeightInstance.PreTreatment.name();
-
-    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString=false)
-    @ColumnName(name = "PreTreatmentDate on which Weight was measured:")
-    private String weight_date;
-
-    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
-    @ColumnName(name = "PreTreatment Weight Result:")
-    private String weight;
+    // End of address
 
     @NotNullOrEmpty
     @Size(min = 11, max = 11)
@@ -134,55 +104,201 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient Age*")
     private String age;
 
+    @Valid
+    private SmearTestResultRequests smearTestResultRequest = new SmearTestResultRequests();
+    @Valid
+    private WeightStatisticsRequests weightStatisticsRequest = new WeightStatisticsRequests();
+
     private boolean migrated;
-    public ImportPatientRequest() {
+
+    @ColumnName(name = "PreTreatment Sputum Date of Test 1:*")
+    public void setPreTreatmentSmearTestDate1(String date) {
+        smearTestResultRequest.setDate1(SmearTestSampleInstance.PreTreatment, date);
     }
 
-    public ImportPatientRequest setPatientInfo(String caseId, String firstName, String lastName, String gender, String patientType, String patientMobileNumber, String phi) {
-        this.case_id = caseId;
-        this.first_name = firstName;
-        this.last_name = lastName;
-        this.gender = gender;
-        this.patient_type = patientType;
-        this.mobile_number = patientMobileNumber;
-        this.phi = phi;
-        return this;
+    @ColumnName(name = "PreTreatment Sputum Result 1:*")
+    public void setPreTreatmentSmearTestResult1(String result) {
+        smearTestResultRequest.setResult1(SmearTestSampleInstance.PreTreatment, result);
     }
 
-    public ImportPatientRequest setPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
-        this.address_location = houseNumber;
-        this.address_landmark = landmark;
-        this.address_block = block;
-        this.address_village = village;
-        this.address_district = district;
-        this.address_state = state;
-        return this;
+    @ColumnName(name = "PreTreatment Sputum Date of Test 2:*")
+    public void setPreTreatmentSmearTestDate2(String date) {
+        smearTestResultRequest.setDate2(SmearTestSampleInstance.PreTreatment, date);
     }
 
-    public ImportPatientRequest setTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge, String registrationNumber) {
-        this.treatment_category = category;
-        this.tb_id = tbId;
-        this.provider_id = providerId;
-        this.disease_class = diseaseClass;
-        this.age = patientAge;
-        this.tb_registration_number = registrationNumber;
-        return this;
+    @ColumnName(name = "PreTreatment Sputum Result 2:*")
+    public void setPreTreatmentSmearTestResult2(String result) {
+        smearTestResultRequest.setResult2(SmearTestSampleInstance.PreTreatment, result);
     }
 
-    public ImportPatientRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2) {
-        this.smear_sample_instance = smear_sample_instance_1;
-        this.smear_test_date_1 = smear_test_date_1;
-        this.smear_test_result_1 = smear_result_1;
-        this.smear_test_date_2 = smear_test_date_2;
-        this.smear_test_result_2 = smear_result_2;
-        return this;
+    @ColumnName(name = "EndIP Date of Test 1:")
+    public void setEndIpSmearTestDate1(String date) {
+        smearTestResultRequest.setDate1(SmearTestSampleInstance.EndIP, date);
     }
 
-    public ImportPatientRequest setWeightStatistics(String weightDate, String weightInstance, String weight) {
-        this.weight_instance = weightInstance;
-        this.weight = weight;
-        this.weight_date = weightDate;
-        return this;
+    @ColumnName(name = "EndIP Result 1:")
+    public void setEndIpSmearTestResult1(String result) {
+        smearTestResultRequest.setResult1(SmearTestSampleInstance.EndIP, result);
     }
 
+    @ColumnName(name = "EndIP Date of Test 2:")
+    public void setEndIpSmearTestDate2(String date) {
+        smearTestResultRequest.setDate2(SmearTestSampleInstance.EndIP, date);
+    }
+
+    @ColumnName(name = "EndIP Result 2:")
+    public void setEndIpSmearTestResult2(String result) {
+        smearTestResultRequest.setResult2(SmearTestSampleInstance.EndIP, result);
+    }
+
+    @ColumnName(name = "ExtendedIP Date of Test 1:")
+    public void setExtendedIpSmearTestDate1(String date) {
+        smearTestResultRequest.setDate1(SmearTestSampleInstance.ExtendedIP, date);
+    }
+
+    @ColumnName(name = "ExtendedIP Result 1:")
+    public void setExtendedIpSmearTestResult1(String result) {
+        smearTestResultRequest.setResult1(SmearTestSampleInstance.ExtendedIP, result);
+    }
+
+    @ColumnName(name = "ExtendedIP Date of Test 2:")
+    public void setExtendedIpSmearTestDate2(String date) {
+        smearTestResultRequest.setDate2(SmearTestSampleInstance.ExtendedIP, date);
+    }
+
+    @ColumnName(name = "ExtendedIP Result 2:")
+    public void setExtendedIpSmearTestResult2(String result) {
+        smearTestResultRequest.setResult2(SmearTestSampleInstance.ExtendedIP, result);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCP Date of Test 1:")
+    public void setTwoMonthsIntoCpSmearTestDate1(String date) {
+        smearTestResultRequest.setDate1(SmearTestSampleInstance.TwoMonthsIntoCP, date);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCP Result 1:")
+    public void setTwoMonthsIntoCpSmearTestResult1(String result) {
+        smearTestResultRequest.setResult1(SmearTestSampleInstance.TwoMonthsIntoCP, result);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCP Date of Test 2:")
+    public void setTwoMonthsIntoCpSmearTestDate2(String date) {
+        smearTestResultRequest.setDate2(SmearTestSampleInstance.TwoMonthsIntoCP, date);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCP Result 2:")
+    public void setTwoMonthsIntoCpSmearTestResult2(String result) {
+        smearTestResultRequest.setResult2(SmearTestSampleInstance.TwoMonthsIntoCP, result);
+    }
+
+    @ColumnName(name = "EndTreatment Date of Test 1:")
+    public void setEndTreatmentSmearTestDate1(String date) {
+        smearTestResultRequest.setDate1(SmearTestSampleInstance.EndTreatment, date);
+    }
+
+    @ColumnName(name = "EndTreatment Result 1:")
+    public void setEndTreatmentSmearTestResult1(String result) {
+        smearTestResultRequest.setResult1(SmearTestSampleInstance.EndTreatment, result);
+    }
+
+    @ColumnName(name = "EndTreatment Date of Test 2:")
+    public void setEndTreatmentSmearTestDate2(String date) {
+        smearTestResultRequest.setDate2(SmearTestSampleInstance.EndTreatment, date);
+    }
+
+    @ColumnName(name = "EndTreatment Result 2:")
+    public void setEndTreatmentSmearTestResult2(String result) {
+        smearTestResultRequest.setResult2(SmearTestSampleInstance.EndTreatment, result);
+    }
+
+    @ColumnName(name = "PreTreatmentDate on which Weight was measured:")
+    public void setPreTreatmentWeightDate(String date) {
+        weightStatisticsRequest.setWeightDate(WeightInstance.PreTreatment, date);
+    }
+
+    @ColumnName(name = "PreTreatment Weight Result:")
+    public void setPreTreatmentWeight(String weight) {
+        weightStatisticsRequest.setWeight(WeightInstance.PreTreatment, weight);
+    }
+
+    @ColumnName(name = "EndIP Date on which Weight was measured:")
+    public void setEndIpWeightDate(String date) {
+        weightStatisticsRequest.setWeightDate(WeightInstance.EndIP, date);
+    }
+
+    @ColumnName(name = "EndIP Weight Result:")
+    public void setEndIpWeight(String weight) {
+        weightStatisticsRequest.setWeight(WeightInstance.EndIP, weight);
+    }
+
+    @ColumnName(name = "ExtendedIP Date on which Weight was measured:")
+    public void setExtendedIpWeightDate(String date) {
+        weightStatisticsRequest.setWeightDate(WeightInstance.ExtendedIP, date);
+    }
+
+    @ColumnName(name = "ExtendedIP Weight Result:")
+    public void setExtendedIpWeight(String weight) {
+        weightStatisticsRequest.setWeight(WeightInstance.ExtendedIP, weight);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCPDate on which Weight was measured:")
+    public void setTwoMonthsIntoCpWeightDate(String date) {
+        weightStatisticsRequest.setWeightDate(WeightInstance.TwoMonthsIntoCP, date);
+    }
+
+    @ColumnName(name = "TwoMonthsIntoCP Result:")
+    public void setTwoMonthsIntoCpWeight(String weight) {
+        weightStatisticsRequest.setWeight(WeightInstance.TwoMonthsIntoCP, weight);
+    }
+
+    @ColumnName(name = "EndTreatment Date on which Weight was measured:")
+    public void setEndTreatmentWeightDate(String date) {
+        weightStatisticsRequest.setWeightDate(WeightInstance.EndTreatment, date);
+    }
+
+    @ColumnName(name = "EndTreatment Result:")
+    public void setEndTreatmentWeight(String weight) {
+        weightStatisticsRequest.setWeight(WeightInstance.EndTreatment, weight);
+    }
+
+    public String getTestDate1(SmearTestSampleInstance type) {
+        return smearTestResultRequest.getTestDate1(type);
+    }
+
+    public String getTestResult1(SmearTestSampleInstance type) {
+        return smearTestResultRequest.getTestResult1(type);
+    }
+
+    public String getTestDate2(SmearTestSampleInstance type) {
+        return smearTestResultRequest.getTestDate2(type);
+    }
+
+    public String getTestResult2(SmearTestSampleInstance type) {
+        return smearTestResultRequest.getTestResult2(type);
+    }
+
+    public String getWeightDate(WeightInstance type) {
+        return weightStatisticsRequest.getWeightDate(type);
+    }
+
+    public String getWeight(WeightInstance type) {
+        return weightStatisticsRequest.getWeight(type);
+    }
+
+
+    public boolean hasSmearTestInstanceRecord(SmearTestSampleInstance type) {
+        return smearTestResultRequest.hasSmearTestInstanceRecord(type);
+    }
+
+    public boolean hasWeightInstanceRecord(WeightInstance type) {
+        return weightStatisticsRequest.hasWeightInstanceRecord(type);
+    }
+
+    public List<SmearTestResultRequests.SmearTestResultRequest> getAllSmearTestResults() {
+        return smearTestResultRequest.getAll();
+    }
+
+    public List<WeightStatisticsRequests.WeightStatisticsRequest> getAllWeightStatisticsRequests() {
+        return weightStatisticsRequest.getAll();
+    }
 }

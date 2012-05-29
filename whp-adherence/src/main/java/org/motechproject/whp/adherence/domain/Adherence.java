@@ -4,6 +4,7 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.ReportValue;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class Adherence {
 
     @ReportValue(index = 2, column = "Adherence date")
     public String pillDate() {
-        return pillDate.toString("dd/MM/yyyy");
+        return pillDate.toString(WHPConstants.DATE_FORMAT);
     }
 
     @ReportValue(index = 3, column = "Adherence value")

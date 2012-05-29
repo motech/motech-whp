@@ -6,7 +6,8 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.Treatment;
 
 import static org.junit.Assert.*;
@@ -27,12 +28,12 @@ public class PatientMapperTest {
     @Test
     public void shouldMapWeightStatisticsAsEmpty_WhenMissing() {
         PatientRequest patientRequest = new PatientRequestBuilder()
-                .withDefaults()
+                .withMandatoryFieldsForImportPatient()
                 .withWeightStatistics(null, null, DateUtil.today())
                 .build();
         Patient patient = mapPatient(patientRequest);
         ProvidedTreatment providedTreatment = patient.getCurrentProvidedTreatment();
-        assertEquals(0, providedTreatment.getWeightInstances().size());
+        assertEquals(0, providedTreatment.getWeightStatistics().size());
     }
 
     @Test
@@ -117,15 +118,15 @@ public class PatientMapperTest {
     }
 
     private void assertSmearTests(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        SmearTestResults smearTestResults = patientRequest.getSmearTestResults();
-        assertEquals(smearTestResults.getSmear_sample_instance(), treatment.getSmearTestInstances().get(0).getSmear_sample_instance());
-        assertEquals(smearTestResults.getSmear_test_result_1(), treatment.getSmearTestInstances().get(0).getSmear_test_result_1());
-        assertEquals(smearTestResults.getSmear_test_date_1(), treatment.getSmearTestInstances().get(0).getSmear_test_date_1());
-        assertEquals(smearTestResults.getSmear_test_result_2(), treatment.getSmearTestInstances().get(0).getSmear_test_result_2());
-        assertEquals(smearTestResults.getSmear_test_date_2(), treatment.getSmearTestInstances().get(0).getSmear_test_date_2());
+        SmearTestRecord smearTestRecord = patientRequest.getSmearTestResults().get(0);
+        assertEquals(smearTestRecord.getSmear_sample_instance(), treatment.getSmearTestResults().get(0).getSmear_sample_instance());
+        assertEquals(smearTestRecord.getSmear_test_result_1(), treatment.getSmearTestResults().get(0).getSmear_test_result_1());
+        assertEquals(smearTestRecord.getSmear_test_date_1(), treatment.getSmearTestResults().get(0).getSmear_test_date_1());
+        assertEquals(smearTestRecord.getSmear_test_result_2(), treatment.getSmearTestResults().get(0).getSmear_test_result_2());
+        assertEquals(smearTestRecord.getSmear_test_date_2(), treatment.getSmearTestResults().get(0).getSmear_test_date_2());
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        assertEquals(patientRequest.getWeightStatistics(), treatment.getWeightInstances().get(0));
+        assertEquals(patientRequest.getWeightStatistics(), treatment.getWeightStatistics());
     }
 }

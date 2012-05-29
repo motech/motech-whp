@@ -16,7 +16,7 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.importer"/>
 
-    <bean id="importPatientRequestMapper" class="org.dozer.DozerBeanMapper">
+    <bean id="importPatientRequestDozerMapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
             <list>
                 <value>dozer-global-configuration.xml</value>

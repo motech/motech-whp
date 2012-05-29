@@ -23,9 +23,8 @@ public class ProvidedTreatment {
     private TreatmentOutcome treatmentOutcome;
     private PatientType patientType;
     private String tbRegistrationNumber;
-
-    private SmearTestInstances smearTestInstances = new SmearTestInstances();
-    private WeightInstances weightInstances = new WeightInstances();
+    private SmearTestResults smearTestResults = new SmearTestResults();
+    private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
     private Treatment treatment;
@@ -47,8 +46,8 @@ public class ProvidedTreatment {
         this.endDate = oldProvidedTreatment.endDate;
         setTreatment(oldProvidedTreatment.getTreatment());
         this.patientAddress = oldProvidedTreatment.getPatientAddress();
-        this.smearTestInstances = oldProvidedTreatment.getSmearTestInstances();
-        this.weightInstances = oldProvidedTreatment.getWeightInstances();
+        this.smearTestResults = oldProvidedTreatment.getSmearTestResults();
+        this.weightStatistics = oldProvidedTreatment.getWeightStatistics();
     }
 
     public ProvidedTreatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
@@ -72,16 +71,8 @@ public class ProvidedTreatment {
         interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
     }
 
-    public void addWeightStatistics(WeightStatistics weightStatistics) {
-        weightInstances.add(weightStatistics);
-    }
-
-    public void addSmearTestResult(SmearTestResults smearTestResults) {
-        smearTestInstances.add(smearTestResults);
-    }
-
     @JsonIgnore
-    public Treatment getTreatment(){
+    public Treatment getTreatment() {
         return treatment;
     }
 
@@ -103,17 +94,24 @@ public class ProvidedTreatment {
                 && areWeightInstancesValid(errorCodes);
     }
 
+    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
+        return !weightStatistics.isEmpty() && weightStatistics.latestResult().isValid(errorCodes);
+    }
+
+    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
+        return !smearTestResults.isEmpty() && smearTestResults.latestResult().isValid(errorCodes);
+    }
+
     @JsonIgnore
     public boolean isClosed() {
         return treatment.isClosed();
     }
 
-    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
-        return !CollectionUtils.isEmpty(weightInstances) && weightInstances.latestResult().isValid(errorCodes);
+    public void addSmearTestResult(SmearTestRecord smearTestRecord) {
+        smearTestResults.add(smearTestRecord);
     }
 
-    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
-        return !smearTestInstances.isEmpty() && smearTestInstances.latestResult().isValid(errorCodes);
+    public void addWeightStatistics(WeightStatisticsRecord weightStatisticsRecord) {
+        weightStatistics.add(weightStatisticsRecord);
     }
-
 }

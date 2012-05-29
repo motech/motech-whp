@@ -35,10 +35,10 @@ public class AllPatientsIT extends SpringIntegrationTest {
         assertEquals("Singh", savedPatient.getLastName());
         assertEquals(Gender.M, savedPatient.getGender());
 
-        SmearTestResults smearTestResults = savedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult();
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestResults.getSmear_sample_instance());
-        assertEquals(SmearTestResult.Positive, smearTestResults.getSmear_test_result_1());
-        assertEquals(DateUtil.today(), smearTestResults.getSmear_test_date_1());
+        SmearTestRecord smearTestRecord = savedPatient.getCurrentProvidedTreatment().getSmearTestResults().latestResult();
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
+        assertEquals(DateUtil.today(), smearTestRecord.getSmear_test_date_1());
     }
 
     @Test
@@ -74,18 +74,18 @@ public class AllPatientsIT extends SpringIntegrationTest {
         return patient;
     }
 
-    private SmearTestResults smearTestResult() {
-        SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.setSmear_sample_instance(SmearTestSampleInstance.PreTreatment);
-        smearTestResults.setSmear_test_date_1(DateUtil.today());
-        smearTestResults.setSmear_test_result_1(SmearTestResult.Positive);
-        smearTestResults.setSmear_test_date_2(DateUtil.today());
-        smearTestResults.setSmear_test_result_2(SmearTestResult.Positive);
-        return smearTestResults;
+    private SmearTestRecord smearTestResult() {
+        SmearTestRecord smearTestRecord = new SmearTestRecord();
+        smearTestRecord.setSmear_sample_instance(SmearTestSampleInstance.PreTreatment);
+        smearTestRecord.setSmear_test_date_1(DateUtil.today());
+        smearTestRecord.setSmear_test_result_1(SmearTestResult.Positive);
+        smearTestRecord.setSmear_test_date_2(DateUtil.today());
+        smearTestRecord.setSmear_test_result_2(SmearTestResult.Positive);
+        return smearTestRecord;
     }
 
-    private WeightStatistics weightStatistics() {
-        return new WeightStatistics(WeightInstance.PreTreatment, 88.0, DateUtil.today());
+    private WeightStatisticsRecord weightStatistics() {
+        return new WeightStatisticsRecord(WeightInstance.PreTreatment, 88.0, DateUtil.today());
     }
 
     @After

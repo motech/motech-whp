@@ -1,13 +1,13 @@
 package org.motechproject.whp.importer.csv;
 
 import org.apache.commons.lang.StringUtils;
-import org.dozer.DozerBeanMapper;
 import org.joda.time.LocalDate;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
+import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -15,6 +15,8 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +31,16 @@ public class PatientRecordImporter {
 
     private RegistrationService registrationService;
     private RequestValidator validator;
-
-    private DozerBeanMapper importPatientRequestMapper;
-
+    private ImportPatientRequestMapper importPatientRequestMapper;
     private StringToDateTime stringToDateTime = new StringToDateTime();
 
     private AllPatients allPatients;
 
     @Autowired
-    public PatientRecordImporter(RegistrationService registrationService, RequestValidator validator, DozerBeanMapper importPatientRequestMapper, AllPatients allPatients) {
+    public PatientRecordImporter(RegistrationService registrationService,
+                                 RequestValidator validator,
+                                 ImportPatientRequestMapper importPatientRequestMapper,
+                                 AllPatients allPatients) {
         this.registrationService = registrationService;
         this.importPatientRequestMapper = importPatientRequestMapper;
         this.validator = validator;
@@ -48,7 +51,6 @@ public class PatientRecordImporter {
     public boolean validate(List<Object> objects) {
         boolean isValid = true;
         ArrayList<String> patientIds = new ArrayList<String>();
-
         for (int i = 0; i < objects.size(); i++) {
             ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
             try {
@@ -79,11 +81,10 @@ public class PatientRecordImporter {
         }
     }
 
-
     private void setDefaultValuesIfEmpty(ImportPatientRequest request) {
-        if (StringUtils.isBlank(request.getWeight_date())) {
+        if (StringUtils.isBlank(request.getWeightDate(WeightInstance.PreTreatment))) {
             LocalDate registrationDate = (LocalDate) stringToDateTime.convert(request.getDate_modified(), LocalDate.class);
-            request.setWeight_date(registrationDate.toString("dd/MM/YYYY"));
+            request.setPreTreatmentWeightDate(registrationDate.toString(WHPConstants.DATE_FORMAT));
         }
         if (StringUtils.isBlank(request.getPatient_type()))
             request.setPatient_type(PatientType.New.name());
@@ -107,9 +108,8 @@ public class PatientRecordImporter {
     }
 
     public void registerPatient(ImportPatientRequest importPatientRequest) {
-        PatientRequest patientRequest = importPatientRequestMapper.map(importPatientRequest, PatientRequest.class);
+        PatientRequest patientRequest = importPatientRequestMapper.map(importPatientRequest);
         registrationService.registerPatient(patientRequest);
     }
-
 }
 

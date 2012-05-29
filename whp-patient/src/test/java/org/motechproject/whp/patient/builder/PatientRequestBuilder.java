@@ -27,7 +27,7 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
                 .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
-                .setSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
+                .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
                 .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
@@ -38,7 +38,7 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .setSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
+                .addSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
                 .setWeightStatistics(WeightInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .setTreatmentData(null, "elevenDigit", null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
         return this;
@@ -56,7 +56,7 @@ public class PatientRequestBuilder {
         patientRequest.setProvider_id("newProviderId");
         patientRequest.setDisease_class(DiseaseClass.E);
 
-        patientRequest.setSmearTestResults(SmearTestSampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative);
+        patientRequest.addSmearTestResults(SmearTestSampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative);
         patientRequest.setWeightStatistics(WeightInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
 
         return this;
@@ -101,6 +101,17 @@ public class PatientRequestBuilder {
         return this;
     }
 
+    public PatientRequestBuilder withMandatoryFieldsForImportPatient(){
+        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+        patientRequest = new PatientRequest()
+                .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
+                .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
+                .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
+                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
+        return this;
+    }
+
     public PatientRequestBuilder withProviderId(String providerId) {
         patientRequest.setProvider_id(providerId);
         return this;
@@ -137,7 +148,7 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withSmearTestResults(SmearTestSampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
-        patientRequest.setSmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
+        patientRequest.addSmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2);
         return this;
     }
 

@@ -10,9 +10,8 @@ import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +40,23 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldCreatePatient() {
+    public void shouldMapBasicInformationWhenMappingPatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertBasicPatientInfo(patientRequest, patientWebRequest);
+    }
+
+    @Test
+    public void shouldMapProvidedTreatmentWhenMappingPatient() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertProvidedTreatment(patientRequest, patientWebRequest);
+    }
+
+    @Test
+    public void shouldMapTreatmentWhenMappingPatient() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertTreatment(patientRequest, patientWebRequest);
     }
 
@@ -55,7 +66,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
 
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
-        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString("dd/MM/YYYY HH:mm:ss"));
+        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString(WHPConstants.DATE_TIME_FORMAT));
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
         assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
@@ -66,10 +77,10 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
 
     private void assertBasicPatientInfo(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
-        assertEquals("Foo", patientRequest.getFirst_name());
-        assertEquals("Bar", patientRequest.getLast_name());
-        assertEquals(Gender.M, patientRequest.getGender());
-        assertEquals(PatientType.PHCTransfer, patientRequest.getPatient_type());
+        assertEquals(patientWebRequest.getFirst_name(), patientRequest.getFirst_name());
+        assertEquals(patientWebRequest.getLast_name(), patientRequest.getLast_name());
+        assertEquals(patientWebRequest.getGender(), patientRequest.getGender().name());
+        assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobile_number());
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
     }
@@ -77,40 +88,46 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     private void assertProvidedTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
-
-        assertPatientAddress(patientRequest.getAddress());
+        assertPatientAddress(patientRequest.getAddress(), patientWebRequest);
     }
 
-    private void assertPatientAddress(Address address) {
-        assertEquals(new Address("house number", "landmark", "block", "village", "district", "state"), address);
+    private void assertPatientAddress(Address address, PatientWebRequest patientWebRequest) {
+        assertEquals(
+                new Address(
+                        patientWebRequest.getAddress_location(),
+                        patientWebRequest.getAddress_landmark(),
+                        patientWebRequest.getAddress_block(),
+                        patientWebRequest.getAddress_village(),
+                        patientWebRequest.getAddress_district(),
+                        patientWebRequest.getAddress_state()
+                ), address
+        );
     }
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals((Integer) Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
-
         assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTb_registration_number());
-
         assertSmearTests(patientRequest, patientWebRequest);
         assertWeightStatistics(patientRequest, patientWebRequest);
     }
 
     private void assertSmearTests(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(patientWebRequest.getSmear_sample_instance(), patientRequest.getSmearTestResults().getSmear_sample_instance().name());
-        assertEquals(patientWebRequest.getSmear_test_result_1(), patientRequest.getSmearTestResults().getSmear_test_result_1().name());
-        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().getSmear_test_date_1().toString("dd/MM/YYYY"));
-        assertEquals(patientWebRequest.getSmear_test_result_2(), patientRequest.getSmearTestResults().getSmear_test_result_2().name());
-        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().getSmear_test_date_2().toString("dd/MM/YYYY"));
+        assertEquals(patientWebRequest.getSmear_sample_instance(), patientRequest.getSmearTestResults().get(0).getSmear_sample_instance().name());
+        assertEquals(patientWebRequest.getSmear_test_result_1(), patientRequest.getSmearTestResults().get(0).getSmear_test_result_1().name());
+        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(patientWebRequest.getSmear_test_result_2(), patientRequest.getSmearTestResults().get(0).getSmear_test_result_2().name());
+        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(WeightInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().getWeight_instance());
-        assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().getWeight(), 0.0);
-        assertEquals("10/10/2010", patientRequest.getWeightStatistics().getMeasuringDate().toString("dd/MM/YYYY"));
+        assertEquals(WeightInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
+        assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().get(0).getWeight(), 0.0);
+        assertEquals("10/10/2010", patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         allTreatmentCategories.removeAll();
     }
 }

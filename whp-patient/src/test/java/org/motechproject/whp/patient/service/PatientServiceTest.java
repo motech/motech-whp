@@ -26,8 +26,8 @@ import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceTest extends SpringIntegrationTest {
-    public static final String CASE_ID = "123456";
 
+    public static final String CASE_ID = "123456";
     @Autowired
     private AllTreatments allTreatments;
     @Autowired
@@ -73,10 +73,9 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
-        assertEquals(updatePatientRequest.getSmearTestResults(), updatedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult());
-        assertEquals(updatePatientRequest.getWeightStatistics(), updatedPatient.getCurrentProvidedTreatment().getWeightInstances().latestResult());
+        assertEquals(updatePatientRequest.getSmearTestResults(), updatedPatient.getCurrentProvidedTreatment().getSmearTestResults());
+        assertEquals(updatePatientRequest.getWeightStatistics(), updatedPatient.getCurrentProvidedTreatment().getWeightStatistics());
         assertEquals((Integer) 66, treatment.getPatientAge());
     }
 
@@ -103,8 +102,8 @@ public class PatientServiceTest extends SpringIntegrationTest {
         assertNotSame("newFirstName", updatedPatient.getFirstName());
         assertNotSame("newLastName", updatedPatient.getLastName());
         assertEquals(patient.getCurrentProvidedTreatment().getPatientAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
-        assertEquals(patient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult(), updatedPatient.getCurrentProvidedTreatment().getSmearTestInstances().latestResult());
-        assertEquals(patient.getCurrentProvidedTreatment().getWeightInstances().latestResult(), updatedPatient.getCurrentProvidedTreatment().getWeightInstances().latestResult());
+        assertEquals(patient.getCurrentProvidedTreatment().getSmearTestResults().latestResult(), updatedPatient.getCurrentProvidedTreatment().getSmearTestResults().latestResult());
+        assertEquals(patient.getCurrentProvidedTreatment().getWeightStatistics().latestResult(), updatedPatient.getCurrentProvidedTreatment().getWeightStatistics().latestResult());
     }
 
     @Test
@@ -132,22 +131,6 @@ public class PatientServiceTest extends SpringIntegrationTest {
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID)
                 .withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null)
-                .withTbId("elevenDigit")
-                .build();
-        commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidWeightStatistics() {
-        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_WEIGHT_STATISTICS);
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withTbId("elevenDigit")
-                .withCaseId(CASE_ID)
-                .build();
-        patientService.createPatient(patientRequest);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(CASE_ID)
-                .withWeightStatistics(null, 100.0, DateUtil.tomorrow())
                 .withTbId("elevenDigit")
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);

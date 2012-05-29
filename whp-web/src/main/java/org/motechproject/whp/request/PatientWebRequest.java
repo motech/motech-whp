@@ -24,7 +24,7 @@ public class PatientWebRequest {
     private String api_key;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT)
     private String date_modified;
 
     private String case_type;
@@ -94,13 +94,13 @@ public class PatientWebRequest {
     @Enumeration(type = SmearTestSampleInstance.class)
     private String smear_sample_instance;
 
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
     private String smear_test_date_1;
 
     @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_1;
 
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
     private String smear_test_date_2;
 
     @Enumeration(type = SmearTestResult.class)

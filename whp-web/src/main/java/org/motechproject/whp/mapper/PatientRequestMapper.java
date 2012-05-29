@@ -12,19 +12,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientRequestMapper {
 
-    DozerBeanMapper dozerPatientRequestMapper;
+    private DozerBeanMapper dozerPatientRequestMapper;
+    private WeightStatisticsMapper weightStatisticsMapper;
+    private SmearTestResultsMapper smearTestResultsMapper;
 
     @Autowired
-    public PatientRequestMapper(DozerBeanMapper dozerPatientRequestMapper) {
+    public PatientRequestMapper(DozerBeanMapper dozerPatientRequestMapper,
+                                WeightStatisticsMapper weightStatisticsMapper,
+                                SmearTestResultsMapper smearTestResultsMapper) {
+
         this.dozerPatientRequestMapper = dozerPatientRequestMapper;
+        this.weightStatisticsMapper = weightStatisticsMapper;
+        this.smearTestResultsMapper = smearTestResultsMapper;
     }
 
     public PatientRequest map(PatientWebRequest patientWebRequest) {
         try {
-            return dozerPatientRequestMapper.map(patientWebRequest, PatientRequest.class);
+            PatientRequest request = dozerPatientRequestMapper.map(patientWebRequest, PatientRequest.class);
+            request.setSmearTestResults(smearTestResultsMapper.map(patientWebRequest));
+            request.setWeightStatistics(weightStatisticsMapper.map(patientWebRequest));
+            return request;
         } catch (MappingException exception) {
             throw new WHPRuntimeException(WHPErrorCode.FIELD_VALIDATION_FAILED, exception.getMessage());
         }
     }
-
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.validation.APIKeyValidator;
 
 import javax.validation.constraints.NotNull;
@@ -37,6 +38,6 @@ public class ProviderWebRequest {
     private String uuid;
 
     @NotNull
-    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT)
     private String date;
 }

@@ -9,72 +9,107 @@ public class ImportPatientRequestBuilder {
     private ImportPatientRequest importPatientRequest = new ImportPatientRequest();
 
     public ImportPatientRequestBuilder withDefaults() {
-
-        importPatientRequest = new ImportPatientRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
-                .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .setWeightStatistics("22/09/2000",WeightInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber");
-        importPatientRequest.setDate_modified("10/10/2010 10:10:10");
-        return this;
+        return withPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
+                .withPatientAddress("house number", "landmark", "block", "village", "district", "state")
+                .withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withWeightStatistics("22/09/2000", "99.7")
+                .withTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber")
+                .withLastModifiedDate("10/10/2010 10:10:10");
     }
 
     public ImportPatientRequestBuilder withSimpleUpdateFields() {
-        importPatientRequest = new ImportPatientRequest()
-                .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
-                .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
-                .setWeightStatistics("20/07/2010",WeightInstance.EndTreatment.name(), "99.7")
-                .setTreatmentData(null, "elevenDigit", null, null, "50", null);
-        importPatientRequest.setDate_modified("15/10/2010 10:10:10");
-        return this;
+        return withPatientInfo("1234567890", null, null, null, null, "9087654321", null)
+                .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
+                .withSmearTestResults("19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
+                .withWeightStatistics("20/07/2010", "99.7")
+                .withTreatmentData(null, "elevenDigit", null, null, "50", null)
+                .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
     public ImportPatientRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
-        importPatientRequest = new ImportPatientRequest()
-                .setPatientInfo("1234567890", null, null, null, null, null, null)
-                .setTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null);
-        importPatientRequest.setDate_modified("15/10/2010 10:10:10");
-        return this;
+        return withPatientInfo("1234567890", null, null, null, null, null, null)
+                .withTreatmentData("01", "tbtbtbtbtbt", "providerId", null, null, null)
+                .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
     public ImportPatientRequestBuilder withDefaultsForTransferIn() {
-        importPatientRequest = new ImportPatientRequest()
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
-        importPatientRequest.setCase_id("12345");
-        importPatientRequest.setDate_modified("15/10/2010 10:10:10");
-        return this;
+        return withTreatmentData(null, "elevenDigit", "newProviderId", null, null, null)
+                .withCaseId("12345")
+                .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
     public ImportPatientRequestBuilder withDefaultsForPauseTreatment() {
-        importPatientRequest = new ImportPatientRequest()
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
-        importPatientRequest.setCase_id("12345");
-        importPatientRequest.setDate_modified("15/10/2010 10:10:10");
-        return this;
+        return withTreatmentData(null, "elevenDigit", "newProviderId", null, null, null)
+                .withCaseId("12345")
+                .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
     public ImportPatientRequestBuilder withDefaultsForRestartTreatment() {
-        importPatientRequest = new ImportPatientRequest()
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
-        importPatientRequest.setCase_id("12345");
-        importPatientRequest.setDate_modified("15/10/2010 10:10:10");
-        return this;
+        return withTreatmentData(null, "elevenDigit", "newProviderId", null, null, null)
+                .withCaseId("12345")
+                .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
-    public ImportPatientRequest build() {
-        return importPatientRequest;
+    public ImportPatientRequestBuilder withSmearTestResults(String testResultDate1,
+                                                            String testResult1,
+                                                            String testResultDate2,
+                                                            String testResult2) {
+        return withSmearTestDate1(testResultDate1)
+                .withSmearTestDate2(testResultDate2)
+                .withSmearTestResult1(testResult1)
+                .withSmearTestResult2(testResult2);
+    }
+
+    public ImportPatientRequestBuilder withTreatmentData(String category,
+                                                         String tbId,
+                                                         String providerId,
+                                                         String diseaseClass,
+                                                         String patientAge,
+                                                         String registrationNumber) {
+        return withTreatmentCategory(category)
+                .withTBId(tbId)
+                .withProviderId(providerId)
+                .withDiseaseClass(diseaseClass)
+                .withAge(patientAge)
+                .withTbRegistrationNumber(registrationNumber);
+    }
+
+    public ImportPatientRequestBuilder withPatientAddress(String houseNumber,
+                                                          String landmark,
+                                                          String block,
+                                                          String village,
+                                                          String district,
+                                                          String state) {
+        return withAddressLocation(houseNumber)
+                .withLandmark(landmark)
+                .withBlock(block)
+                .withVillage(village)
+                .withDistrict(district)
+                .withState(state);
+    }
+
+    public ImportPatientRequestBuilder withPatientInfo(String caseId,
+                                                       String firstName,
+                                                       String lastName,
+                                                       String gender,
+                                                       String patientType,
+                                                       String patientMobileNumber,
+                                                       String phi) {
+        return withCaseId(caseId)
+                .withFirstName(firstName)
+                .withLastName(lastName)
+                .withGender(gender)
+                .withPatientType(patientType)
+                .withMobileNumber(patientMobileNumber)
+                .withPhi(phi);
+    }
+
+    public ImportPatientRequestBuilder withWeightStatistics(String weightDate, String weight) {
+        return withWeight(weight).withWeightDate(weightDate);
     }
 
     public ImportPatientRequestBuilder withCaseId(String caseId) {
         importPatientRequest.setCase_id(caseId);
-        return this;
-    }
-
-
-    public ImportPatientRequestBuilder withLastModifiedDate(String lastModifiedDate) {
-        importPatientRequest.setDate_modified(lastModifiedDate);
         return this;
     }
 
@@ -89,12 +124,12 @@ public class ImportPatientRequestBuilder {
     }
 
     public ImportPatientRequestBuilder withSmearTestDate1(String smearTestDate1) {
-        importPatientRequest.setSmear_test_date_1(smearTestDate1);
+        importPatientRequest.setPreTreatmentSmearTestDate1(smearTestDate1);
         return this;
     }
 
     public ImportPatientRequestBuilder withSmearTestDate2(String smearTestDate2) {
-        importPatientRequest.setSmear_test_date_2(smearTestDate2);
+        importPatientRequest.setPreTreatmentSmearTestDate2(smearTestDate2);
         return this;
     }
 
@@ -104,7 +139,7 @@ public class ImportPatientRequestBuilder {
     }
 
     public ImportPatientRequestBuilder withSmearTestResult1(String smearTestResult) {
-        importPatientRequest.setSmear_test_result_1(smearTestResult);
+        importPatientRequest.setPreTreatmentSmearTestResult1(smearTestResult);
         return this;
     }
 
@@ -124,26 +159,82 @@ public class ImportPatientRequestBuilder {
     }
 
     public ImportPatientRequestBuilder withWeight(String weight) {
-        importPatientRequest.setWeight(weight);
-        return this;
-    }
-    public ImportPatientRequestBuilder withWeightMeasuredDate(String date) {
-        importPatientRequest.setWeight_date(date);
+        importPatientRequest.setPreTreatmentWeight(weight);
         return this;
     }
 
-    public ImportPatientRequestBuilder withWeightStatistics(String weightDate,String weightInstance, String weight) {
-        importPatientRequest.setWeightStatistics(weightDate,weightInstance, weight);
+    public ImportPatientRequestBuilder withWeightDate(String date) {
+        importPatientRequest.setPreTreatmentWeightDate(date);
         return this;
     }
 
-    public ImportPatientRequestBuilder withSmearTestResults(String smearSampleInstance, String testResultDate1, String testResult1, String testResultDate2, String testResult2) {
-        importPatientRequest.setSmearTestResults(smearSampleInstance, testResultDate1, testResult1, testResultDate2, testResult2);
+    private ImportPatientRequestBuilder withSmearTestResult2(String testResult2) {
+        importPatientRequest.setPreTreatmentSmearTestResult2(testResult2);
         return this;
     }
 
-    public ImportPatientRequestBuilder withDate_Modified(DateTime date_modified) {
-        importPatientRequest.setDate_modified(date_modified.toString("dd/MM/YYYY HH:mm:ss"));
+    private ImportPatientRequestBuilder withTbRegistrationNumber(String registrationNumber) {
+        importPatientRequest.setTb_registration_number(registrationNumber);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withDiseaseClass(String diseaseClass) {
+        importPatientRequest.setDisease_class(diseaseClass);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withDistrict(String district) {
+        importPatientRequest.setAddress_district(district);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withLandmark(String landmark) {
+        importPatientRequest.setAddress_landmark(landmark);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withState(String state) {
+        importPatientRequest.setAddress_state(state);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withBlock(String block) {
+        importPatientRequest.setAddress_block(block);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withVillage(String village) {
+        importPatientRequest.setAddress_village(village);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withAddressLocation(String addressLocation) {
+        importPatientRequest.setAddress_location(addressLocation);
+        return this;
+    }
+
+    public ImportPatientRequestBuilder withPhi(String phi) {
+        importPatientRequest.setPhi(phi);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withLastName(String lastName) {
+        importPatientRequest.setLast_name(lastName);
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withFirstName(String firstName) {
+        importPatientRequest.setFirst_name(firstName);
+        return this;
+    }
+
+    public ImportPatientRequestBuilder withLastModifiedDate(DateTime date_modified) {
+        importPatientRequest.setDate_modified(date_modified.toString(WHPConstants.DATE_TIME_FORMAT));
+        return this;
+    }
+
+    private ImportPatientRequestBuilder withLastModifiedDate(String modifiedDate) {
+        importPatientRequest.setDate_modified(modifiedDate);
         return this;
     }
 
@@ -152,8 +243,12 @@ public class ImportPatientRequestBuilder {
         return this;
     }
 
-    public ImportPatientRequestBuilder withPhi(String phi) {
-        importPatientRequest.setPhi(phi);
+    public ImportPatientRequestBuilder withDate_Modified(DateTime date) {
+        importPatientRequest.setDate_modified(date.toString("dd/MM/YYYY HH:mm:ss"));
         return this;
+    }
+
+    public ImportPatientRequest build() {
+        return importPatientRequest;
     }
 }
