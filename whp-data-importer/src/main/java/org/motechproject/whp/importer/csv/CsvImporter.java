@@ -1,6 +1,8 @@
 package org.motechproject.whp.importer.csv;
 
 import org.motechproject.importer.CSVDataImporter;
+import org.motechproject.whp.importer.csv.exceptions.ExceptionMessages;
+import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -39,36 +41,36 @@ public class CsvImporter {
         validateImportFile(argvs[1]);
     }
 
-    private static void validateImporterMode(String mode) throws InvalidCommandLineArgumentsException{
+    private static void validateImporterMode(String mode) throws WHPImportException {
         String importerMode = mode.toLowerCase();
         if (!(importerMode.contains(PATIENT_MODE) || importerMode.contains(PROVIDER_MODE))) {
-            throw new InvalidCommandLineArgumentsException();
+            throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
     }
 
-    private static void validateImportFile(String importFile) {
+    private static void validateImportFile(String importFile) throws WHPImportException {
 
         try {
             if (!new File(importFile).canRead()) {
-                throw new RuntimeException("invalid file");
+                throw new WHPImportException("invalid file");
             }
         } catch (Exception exception) {
-            throw new RuntimeException("Unable to read file - " + importFile + " Either file does not exist or the file does not have read permission");
+            throw new WHPImportException("Unable to read file - " + importFile + " Either file does not exist or the file does not have read permission");
         }
     }
 
-    private static void setLogger(String logFile) {
+    private static void setLogger(String logFile) throws WHPImportException {
         try {
             new File(logFile).createNewFile();
+            ImporterLogger.loadAppender(logFile);
         } catch (Exception exception) {
-               throw new RuntimeException("Unable to create/access the log file -" + logFile);
+            throw new WHPImportException("Unable to create/access the log file -" + logFile);
         }
-        ImporterLogger.loadAppender(logFile);
     }
 
     public static void validateArgCount(String args[]) throws Exception {
         if (args.length < 3) {
-            throw new InvalidCommandLineArgumentsException();
+            throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
 
     }

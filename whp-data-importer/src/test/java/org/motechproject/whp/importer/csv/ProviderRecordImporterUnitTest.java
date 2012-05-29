@@ -1,12 +1,10 @@
 package org.motechproject.whp.importer.csv;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -19,6 +17,7 @@ import org.motechproject.whp.validation.RequestValidator;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -89,9 +88,19 @@ public class ProviderRecordImporterUnitTest {
 
     @Test
     public void shouldReturnTrueIfValid() {
-        ImportProviderRequest importProviderRequest1 = new ImportProviderRequest();
-        ImportProviderRequest importProviderRequest2 = new ImportProviderRequest();
+        ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
+        ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("2").build();
 
         assertEquals(true, providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)));
+    }
+    
+    @Test
+    public void shouldFailValidationIfDuplicateProviderIdsPresent() {
+
+        ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
+        ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("1").build();
+
+        assertFalse(providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)));
+
     }
 }

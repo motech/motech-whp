@@ -9,6 +9,8 @@ import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
@@ -30,10 +32,13 @@ public class PatientRecordImporterUnitTest {
     @Mock
     private DozerBeanMapper patientImportRequestMapper;
 
+    @Mock
+    AllPatients allPatients;
+
     @Before
     public void setup() {
         initMocks(this);
-        patientRecordImporter = new PatientRecordImporter(registrationService, validator, patientImportRequestMapper);
+        patientRecordImporter = new PatientRecordImporter(registrationService, validator, patientImportRequestMapper,allPatients);
     }
 
     @Test
@@ -68,11 +73,28 @@ public class PatientRecordImporterUnitTest {
 
     @Test
     public void shouldReturnTrueIfValid() {
-        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().build();
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().build();
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("2").build();
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
     }
+
+    @Test
+    public void shouldFailValidationIfDuplicateCaseIdPresentInGivenData() {
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
+
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
+    }
+
+    @Test
+    public void shouldFailValidationIfDuplicateCaseIdPresentInDb() {
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
+        when(allPatients.findByPatientId("1")).thenReturn(new Patient());
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1)));
+    }
+
+
 
     @Test
     public void shouldSetDefaultValuesOnValidation() {
@@ -80,8 +102,8 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDate_Modified(patient1RegDate).withWeightMeasuredDate("").withPatientType("").build();
         DateTime patient2WtMeasuredDate = DateTime.now().plusDays(-5);
         String dateFormat = "dd/MM/YYYY";
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withWeightMeasuredDate(patient2WtMeasuredDate.toString(dateFormat)).build();
-        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withDate_Modified(patient1RegDate).withWeightMeasuredDate(null).withPatientType(null).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").withWeightMeasuredDate(patient2WtMeasuredDate.toString(dateFormat)).build();
+        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withDate_Modified(patient1RegDate).withWeightMeasuredDate(null).withPatientType(null).build();
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2,importPatientRequest3)));
         assertEquals(patient1RegDate.toString(dateFormat),importPatientRequest1.getWeight_date());

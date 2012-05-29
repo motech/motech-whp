@@ -4,18 +4,19 @@ import org.joda.time.DateTime;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
+import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CSVImporter(entity = "providerRecordImporter", bean = ImportProviderRequest.class)
@@ -28,7 +29,7 @@ public class ProviderRecordImporter {
 
 
     @Autowired
-    public ProviderRecordImporter(AllProviders allProviders,RegistrationService registrationService, RequestValidator validator) {
+    public ProviderRecordImporter(AllProviders allProviders, RegistrationService registrationService, RequestValidator validator) {
         this.allProviders = allProviders;
         this.registrationService = registrationService;
         this.validator = validator;
@@ -37,21 +38,36 @@ public class ProviderRecordImporter {
     @Validate
     public boolean validate(List<Object> objects) {
         boolean isValid = true;
-        for (int i=0;i<objects.size();i++) {
+        ArrayList<String> providerIdList = new ArrayList<String>();
+        for (int i = 0; i < objects.size(); i++) {
+            ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
+
             try {
-                ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
                 validator.validate(request, UpdateScope.createScope);
-                if(allProviders.findByProviderId(request.getProviderId())!=null){
-                    throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_PROVIDER_ID);
-                }
+                validateProviderIdIsUnique(providerIdList, request.getProviderId());
+                validateIfProviderWithIdExistsInDb(request.getProviderId());
             } catch (Exception e) {
-                String errorMessage =  String.format("Exception thrown for object in row %d, with provider id - %s", i + 1, ((ImportProviderRequest) objects.get(i)).getProviderId()) +
-                        "\n"+ e.getMessage() +"\n";
+                String errorMessage = String.format("Exception thrown for object in row %d, with provider id - %s", i + 1, ((ImportProviderRequest) objects.get(i)).getProviderId()) +
+                        "\n" + e.getMessage() + "\n";
                 ImporterLogger.error(errorMessage);
                 isValid = false;
             }
+            providerIdList.add(request.getProviderId());
+
         }
         return isValid;
+    }
+
+    private void validateProviderIdIsUnique(ArrayList<String> providerIdList, String providerId) throws WHPImportException {
+        if (providerIdList.contains(providerId)) {
+            throw new WHPImportException("A provider with the same provider id already exists in the given data.");
+        }
+    }
+
+    private void validateIfProviderWithIdExistsInDb(String providerId) throws WHPImportException {
+        if (allProviders.findByProviderId(providerId) != null) {
+            throw new WHPImportException(WHPErrorCode.DUPLICATE_PROVIDER_ID.getMessage());
+        }
     }
 
     @Post

@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -80,7 +81,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
 
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = WHPImportException.class)
     public void shouldThrowExceptionForInvalidLogFile() throws Exception {
         String[] arguments = new String[3];
         arguments[0] = "provider";
@@ -89,7 +90,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = WHPImportException.class)
     public void shouldThrowExceptionForInvalidImportFile() throws Exception {
         String[] arguments = new String[3];
         arguments[0] = "provider";

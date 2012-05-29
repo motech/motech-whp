@@ -23,6 +23,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient ID *")
     private String case_id;
 
+    @NotNullOrEmpty
     @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss", validateEmptyString=false)
     @ColumnName(name = "Registration date")
     private String date_modified;
@@ -119,6 +120,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient TB ID*")
     private String tb_id;
 
+    @NotNullOrEmpty
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
     @ColumnName(name = "Provider ID*")
     private String provider_id;

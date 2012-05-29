@@ -1,26 +1,30 @@
 package org.motechproject.whp.importer.csv.request;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.importer.annotation.ColumnName;
+import org.motechproject.validation.constraints.NotNullOrEmpty;
+
+import javax.validation.constraints.Pattern;
 
 public class ImportProviderRequest {
-    @NotEmpty
+    @NotNullOrEmpty
     @ColumnName(name = "Provider ID*")
     private String providerId;
 
-    @NotEmpty
+    @NotNullOrEmpty
     @ColumnName(name = "District*")
     private String district;
 
-
-    @NotEmpty
+    @NotNullOrEmpty
     @ColumnName(name = "Primary Mobile Number*")
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should have 10 digits")
     private String primaryMobile;
 
     @ColumnName(name = "Secondary Mobile Number")
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should have 10 digits")
     private String secondaryMobile;
 
     @ColumnName(name = "Tertiary Mobile Number")
+    @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should have 10 digits")
     private String tertiaryMobile;
 
     public String getProviderId() {
