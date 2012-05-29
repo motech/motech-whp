@@ -87,6 +87,8 @@ public class PatientRecordImporter {
         }
         if (StringUtils.isBlank(request.getPatient_type()))
             request.setPatient_type(PatientType.New.name());
+        if (StringUtils.isBlank(request.getPhi()))
+            request.setPhi("WHP");
     }
 
     @Post

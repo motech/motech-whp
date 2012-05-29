@@ -38,7 +38,7 @@ public class PatientRecordImporterUnitTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientRecordImporter = new PatientRecordImporter(registrationService, validator, patientImportRequestMapper,allPatients);
+        patientRecordImporter = new PatientRecordImporter(registrationService, validator, patientImportRequestMapper, allPatients);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withCaseId("2").withDate_Modified(DateTime.now()).build();
         doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importPatientRequest2, UpdateScope.createScope);
 
-        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1,importPatientRequest2)));
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
     }
 
     @Test
@@ -95,23 +95,28 @@ public class PatientRecordImporterUnitTest {
     }
 
 
-
     @Test
     public void shouldSetDefaultValuesOnValidation() {
         DateTime patient1RegDate = DateTime.now().plusDays(-2);
-        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDate_Modified(patient1RegDate).withWeightMeasuredDate("").withPatientType("").build();
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withPhi(null).withDate_Modified(patient1RegDate).withWeightMeasuredDate("").withPatientType("").build();
         DateTime patient2WtMeasuredDate = DateTime.now().plusDays(-5);
         String dateFormat = "dd/MM/YYYY";
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").withWeightMeasuredDate(patient2WtMeasuredDate.toString(dateFormat)).build();
-        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withDate_Modified(patient1RegDate).withWeightMeasuredDate(null).withPatientType(null).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withPhi("").withCaseId("1").withWeightMeasuredDate(patient2WtMeasuredDate.toString(dateFormat)).build();
+        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withPhi("yy").withDate_Modified(patient1RegDate).withWeightMeasuredDate(null).withPatientType(null).build();
 
-        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2,importPatientRequest3)));
-        assertEquals(patient1RegDate.toString(dateFormat),importPatientRequest1.getWeight_date());
-        assertEquals(patient2WtMeasuredDate.toString(dateFormat),importPatientRequest2.getWeight_date());
-        assertEquals(PatientType.New.name(),importPatientRequest1.getPatient_type());
-        assertEquals(PatientType.PHCTransfer.name(),importPatientRequest2.getPatient_type());
-        assertEquals(PatientType.New.name(),importPatientRequest3.getPatient_type());
-        assertEquals(patient1RegDate.toString(dateFormat),importPatientRequest3.getWeight_date());
+        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)));
+
+        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest1.getWeight_date());
+        assertEquals(patient2WtMeasuredDate.toString(dateFormat), importPatientRequest2.getWeight_date());
+        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest3.getWeight_date());
+
+        assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
+        assertEquals(PatientType.PHCTransfer.name(), importPatientRequest2.getPatient_type());
+        assertEquals(PatientType.New.name(), importPatientRequest3.getPatient_type());
+
+        assertEquals("WHP", importPatientRequest1.getPhi());
+        assertEquals("WHP", importPatientRequest2.getPhi());
+        assertEquals("yy", importPatientRequest3.getPhi());
 
 
     }

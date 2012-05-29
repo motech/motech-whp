@@ -4,6 +4,7 @@ import org.motechproject.importer.CSVDataImporter;
 import org.motechproject.whp.importer.csv.exceptions.ExceptionMessages;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
+import org.motechproject.whp.mapping.StringToEnumeration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
@@ -11,23 +12,15 @@ import java.io.File;
 public class CsvImporter {
     private static final String APPLICATION_CONTEXT_XML = "applicationDataImporterContext.xml";
 
-    private static final String PROVIDER_MODE = "provider";
-    private static final String PATIENT_MODE = "patient";
-
     public static void main(String argvs[]) throws Exception {
         try {
             validateAndSetUpLogger(argvs);
+            ImportType importType = validateAndSetImportType(argvs[0]);
 
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_XML);
             CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
 
-            if (argvs[0].toLowerCase().contains(PATIENT_MODE)) {
-                ImporterLogger.info("Importing patient records from file :" + argvs[1]);
-                csvDataImporter.importData("patientRecordImporter", argvs[1]);
-            } else {
-                    ImporterLogger.info("Importing provider records from file : " + argvs[1]);
-                    csvDataImporter.importData("providerRecordImporter", argvs[1]);
-            }
+            importType.performAction(argvs[1], csvDataImporter);
         } catch (Exception exception) {
             ImporterLogger.error(exception);
             throw exception;
@@ -37,15 +30,15 @@ public class CsvImporter {
     private static void validateAndSetUpLogger(String[] argvs) throws Exception {
         validateArgCount(argvs);
         setLogger(argvs[2]);
-        validateImporterMode(argvs[0]);
         validateImportFile(argvs[1]);
     }
 
-    private static void validateImporterMode(String mode) throws WHPImportException {
-        String importerMode = mode.toLowerCase();
-        if (!(importerMode.contains(PATIENT_MODE) || importerMode.contains(PROVIDER_MODE))) {
+    private static ImportType validateAndSetImportType(String mode) throws WHPImportException {
+        ImportType importType = (ImportType) new StringToEnumeration().convert(mode, ImportType.class);
+        if(importType == null) {
             throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
+        return importType;
     }
 
     private static void validateImportFile(String importFile) throws WHPImportException {
@@ -75,4 +68,34 @@ public class CsvImporter {
 
     }
 }
+
+enum ImportType {
+    Provider() {
+        @Override
+        void performAction(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger.info("Importing provider records from file : " + importFile);
+            csvDataImporter.importData("providerRecordImporter", importFile);
+        }
+    }, Patient {
+        @Override
+        void performAction(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger.info("Importing patient records from file : " + importFile);
+            csvDataImporter.importData("patientRecordImporter", importFile);
+        }
+    }, ProviderTest {
+        @Override
+        void performAction(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger.info("Testing import of provider records from file : " + importFile);
+            csvDataImporter.importData("providerRecordValidator", importFile);
+        }
+    }, PatientTest {
+        @Override
+        void performAction(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger.info("Testing import of patient records from file : " + importFile);
+            csvDataImporter.importData("patientRecordValidator", importFile);
+        }
+    };
+
+    abstract void performAction(String importFile, CSVDataImporter csvDataImporter);
+};
 

@@ -15,16 +15,15 @@ import javax.validation.constraints.Size;
 
 @Data
 public class ImportPatientRequest {
-    //EndIP Date of Test 1:,EndIP Result 1:,EndIP Date of Test 2:,EndIP Result 2:,ExtendedIP Date of Test 1:,ExtendedIP Result 1:,ExtendedIP Date of Test 2:,ExtendedIP Result 2:,TwoMonthsIntoCP Date of Test 1:,TwoMonthsIntoCP Result 1:,TwoMonthsIntoCP Date of Test 2:,TwoMonthsIntoCP Result 2:,EndTreatment Date of Test 1:,EndTreatment Result 1:,EndTreatment Date of Test 2:,EndTreatment Result 2:
-    //EndIP Date on which Weight was measured:,EndIP Weight Result:,ExtendedIP Date on which Weight was measured:,ExtendedIP Weight Result:,TwoMonthsIntoCPDate on which Weight was measured:,TwoMonthsIntoCP Result:,EndTreatment Date on which Weight was measured:,EndTreatment Result:,
-    //Container Ids
+    public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
+    public static final String DATE_FORMAT = "dd/MM/YYYY";
 
     @NotNullOrEmpty
     @ColumnName(name = "Patient ID *")
     private String case_id;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss", validateEmptyString=false)
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT, validateEmptyString=false)
     @ColumnName(name = "Registration date")
     private String date_modified;
 
@@ -86,7 +85,7 @@ public class ImportPatientRequest {
     private String smear_sample_instance = SmearTestSampleInstance.PreTreatment.name();
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = DATE_FORMAT)
     @ColumnName(name = "PreTreatment Sputum Date of Test 1:*")
     private String smear_test_date_1;
 
@@ -96,7 +95,7 @@ public class ImportPatientRequest {
     private String smear_test_result_1;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = DATE_FORMAT)
     @ColumnName(name = "PreTreatment Sputum Date of Test 2:*")
     private String smear_test_date_2;
 
@@ -107,7 +106,7 @@ public class ImportPatientRequest {
 
     private String weight_instance = WeightInstance.PreTreatment.name();
 
-    @DateTimeFormat(pattern = "dd/MM/YYYY", validateEmptyString=false)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString=false)
     @ColumnName(name = "PreTreatmentDate on which Weight was measured:")
     private String weight_date;
 

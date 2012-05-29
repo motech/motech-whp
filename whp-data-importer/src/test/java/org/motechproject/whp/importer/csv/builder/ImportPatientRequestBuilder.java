@@ -151,4 +151,9 @@ public class ImportPatientRequestBuilder {
         importPatientRequest.setPatient_type(patientType);
         return this;
     }
+
+    public ImportPatientRequestBuilder withPhi(String phi) {
+        importPatientRequest.setPhi(phi);
+        return this;
+    }
 }
