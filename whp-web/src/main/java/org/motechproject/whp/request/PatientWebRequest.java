@@ -3,6 +3,7 @@ package org.motechproject.whp.request;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.*;
+import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
@@ -198,16 +199,18 @@ public class PatientWebRequest {
         return updateScenario == null ? UpdateScope.simpleUpdate : updateScenario.getScope();
     }
 
-    // :/
+    // :/ :/
     private TreatmentUpdateScenario updateScenario() {
         try {
             if (StringUtils.isNotBlank(treatment_update)) {
-                if (TreatmentUpdateScenario.valueOf(treatment_update) == TreatmentUpdateScenario.New) {
+                StringToEnumeration stringToEnumerationConverter = new StringToEnumeration();
+                TreatmentUpdateScenario updateScenario = (TreatmentUpdateScenario) stringToEnumerationConverter.convert(treatment_update, TreatmentUpdateScenario.class);
+                if (updateScenario.equals(TreatmentUpdateScenario.New)) {
                     if (StringUtils.isNotBlank(patient_type) && PatientType.TransferredIn.name().equals(patient_type)) {
                         return TreatmentUpdateScenario.TransferredIn;
                     }
                 }
-                return TreatmentUpdateScenario.valueOf(treatment_update);
+                return updateScenario;
             }
         } catch (IllegalArgumentException ignored) {
         }

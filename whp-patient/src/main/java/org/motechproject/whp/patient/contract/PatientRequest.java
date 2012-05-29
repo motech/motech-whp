@@ -34,7 +34,7 @@ public class PatientRequest {
     private WeightStatistics weightStatistics = new WeightStatistics();
 
     private TreatmentUpdateScenario treatment_update;
-    private String treatment_outcome;
+    private TreatmentOutcome treatment_outcome;
     private String reason;
 
     private DateTime date_modified;

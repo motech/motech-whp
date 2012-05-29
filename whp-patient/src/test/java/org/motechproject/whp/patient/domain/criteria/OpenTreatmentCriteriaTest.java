@@ -5,6 +5,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,7 @@ public class OpenTreatmentCriteriaTest {
     @Test
     public void shouldReturnTrueForCanOpenNewTreatmentIfNewTreatmentCanBeOpenedForPatient() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.closeCurrentTreatment("Cured", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());

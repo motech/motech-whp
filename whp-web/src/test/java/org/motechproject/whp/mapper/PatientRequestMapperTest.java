@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString("dd/MM/YYYY HH:mm:ss"));
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
-        assertEquals(patientWebRequest.getTreatment_outcome(), patientRequest.getTreatment_outcome());
+        assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
         assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
         assertEquals(patientWebRequest.getTreatment_update(), patientRequest.getTreatment_update().name());

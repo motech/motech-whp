@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public class TransferInPatientCriteriaTest {
         patientRequest.setDisease_class(DiseaseClass.E);
         patientRequest.setTreatment_category(patient.latestTreatment().getTreatmentCategory());
 
-        patient.closeCurrentTreatment("Cured", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 
         assertFalse(canTransferInPatient(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH));
@@ -64,7 +65,7 @@ public class TransferInPatientCriteriaTest {
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
         patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, threeDaysAWeek));
 
-        patient.closeCurrentTreatment("Cured", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 
         assertFalse(canTransferInPatient(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH));
@@ -79,7 +80,7 @@ public class TransferInPatientCriteriaTest {
         patientRequest.setDisease_class(patient.latestTreatment().getDiseaseClass());
         patientRequest.setTreatment_category(patient.latestTreatment().getTreatmentCategory());
 
-        patient.closeCurrentTreatment("Cured", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 
         assertTrue(canTransferInPatient(patient, patientRequest, errorCodes));
         assertArrayEquals(new String[]{}, errorCodes.toArray());

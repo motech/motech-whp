@@ -95,6 +95,10 @@
             <a>treatment_update</a>
             <b>treatment_update</b>
         </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>treatment_outcome</a>
+            <b>treatment_outcome</b>
+        </field>
         <field>
             <a>age</a>
             <b>age</b>

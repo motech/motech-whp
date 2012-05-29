@@ -63,7 +63,7 @@ public class Patient extends MotechBaseDataObject {
         return DateUtil.setTimeZone(lastModifiedDate);
     }
 
-    public void closeCurrentTreatment(String treatmentOutcome, DateTime dateModified) {
+    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
         currentProvidedTreatment.close(treatmentOutcome, dateModified);
     }

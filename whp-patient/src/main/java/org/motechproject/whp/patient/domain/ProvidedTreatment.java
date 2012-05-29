@@ -28,7 +28,6 @@ public class ProvidedTreatment {
     private WeightInstances weightInstances = new WeightInstances();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
-    @JsonIgnore
     private Treatment treatment;
 
     // Required for ektorp
@@ -52,11 +51,6 @@ public class ProvidedTreatment {
         this.weightInstances = oldProvidedTreatment.getWeightInstances();
     }
 
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
-        this.treatmentDocId = treatment.getId();
-    }
-
     public ProvidedTreatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
         this.tbId = tbId;
         this.providerId = providerId;
@@ -64,9 +58,9 @@ public class ProvidedTreatment {
         return this;
     }
 
-    public void close(String treatmentOutcome, DateTime dateModified) {
+    public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
-        this.treatmentOutcome = TreatmentOutcome.valueOf(treatmentOutcome);
+        this.treatmentOutcome = treatmentOutcome;
         treatment.close(dateModified);
     }
 
@@ -76,6 +70,25 @@ public class ProvidedTreatment {
 
     public void resume(String reasonForResumption, DateTime dateModified) {
         interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
+    }
+
+    public void addWeightStatistics(WeightStatistics weightStatistics) {
+        weightInstances.add(weightStatistics);
+    }
+
+    public void addSmearTestResult(SmearTestResults smearTestResults) {
+        smearTestInstances.add(smearTestResults);
+    }
+
+    @JsonIgnore
+    public Treatment getTreatment(){
+        return treatment;
+    }
+
+    @JsonIgnore
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
+        this.treatmentDocId = treatment.getId();
     }
 
     @JsonIgnore
@@ -90,25 +103,17 @@ public class ProvidedTreatment {
                 && areWeightInstancesValid(errorCodes);
     }
 
+    @JsonIgnore
+    public boolean isClosed() {
+        return treatment.isClosed();
+    }
+
     private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
         return !CollectionUtils.isEmpty(weightInstances) && weightInstances.latestResult().isValid(errorCodes);
     }
 
     private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
         return !smearTestInstances.isEmpty() && smearTestInstances.latestResult().isValid(errorCodes);
-    }
-
-    @JsonIgnore
-    public boolean isClosed() {
-        return treatment.isClosed();
-    }
-
-    public void addSmearTestResult(SmearTestResults smearTestResults) {
-        smearTestInstances.add(smearTestResults);
-    }
-
-    public void addWeightStatistics(WeightStatistics weightStatistics) {
-        weightInstances.add(weightStatistics);
     }
 
 }

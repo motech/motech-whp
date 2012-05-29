@@ -38,4 +38,12 @@ public class PatientWebRequestTest {
         assertEquals(UpdateScope.closeTreatment, patientWebRequest.updateScope());
     }
 
+    @Test
+    public void shouldDoCaseInsensitiveMatchingForTreatmentUpdateScenario() {
+        patientWebRequest.setTreatmentUpdateData("pause", null);
+        patientWebRequest.setPatient_type("New");
+
+        assertEquals(UpdateScope.pauseTreatment, patientWebRequest.updateScope());
+    }
+
 }

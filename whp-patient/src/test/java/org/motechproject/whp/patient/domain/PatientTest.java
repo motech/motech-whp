@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -55,9 +56,9 @@ public class PatientTest {
         DateTime now = now();
         patient.addProvidedTreatment(providedTreatment, now);
 
-        patient.closeCurrentTreatment("Cured", now);
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now);
         assertEquals(now, patient.getLastModifiedDate());
-        verify(providedTreatment, times(1)).close("Cured", now);
+        verify(providedTreatment, times(1)).close(TreatmentOutcome.Cured, now);
     }
 
     @Test

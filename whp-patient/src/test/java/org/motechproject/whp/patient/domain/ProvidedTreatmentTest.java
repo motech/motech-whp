@@ -20,7 +20,7 @@ public class ProvidedTreatmentTest {
 
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
         providedTreatment.setTreatment(treatment);
-        providedTreatment.close("Cured", now);
+        providedTreatment.close(TreatmentOutcome.Cured, now);
 
         assertEquals(today(), providedTreatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, providedTreatment.getTreatmentOutcome());

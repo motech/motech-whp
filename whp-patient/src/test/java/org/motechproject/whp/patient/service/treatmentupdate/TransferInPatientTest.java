@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.ProviderService;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
@@ -54,7 +55,7 @@ public class TransferInPatientTest extends BaseUnitTest {
 
     @Test
     public void shouldTransferInPatientTreatmentAndUpdatePatientAndReviveLastTreatment_IfNoErrorsFound() {
-        patient.closeCurrentTreatment("Defaulted", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, now());
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withDiseaseClass(patient.latestTreatment().getDiseaseClass())

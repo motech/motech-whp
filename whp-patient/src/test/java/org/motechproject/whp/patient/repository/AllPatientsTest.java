@@ -44,7 +44,7 @@ public class AllPatientsTest {
     @Test
     public void shouldFetchPatientsWithActiveTreatment() {
         Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
-        patient1.closeCurrentTreatment("Cured", now());
+        patient1.closeCurrentTreatment(TreatmentOutcome.Cured, now());
         Patient patient2 = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
 
         doReturn(Arrays.asList(patient1, patient2)).when(allPatients).findByCurrentProviderId("providerId1");

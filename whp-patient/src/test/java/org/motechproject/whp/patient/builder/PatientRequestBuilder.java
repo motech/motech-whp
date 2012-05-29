@@ -67,7 +67,7 @@ public class PatientRequestBuilder {
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("elevenDigit");
         patientRequest.setTreatment_update(TreatmentUpdateScenario.Close);
-        patientRequest.setTreatment_outcome("Cured");
+        patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
         return this;
     }
 

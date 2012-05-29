@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -46,7 +47,7 @@ public class OpenNewTreatmentTest extends BaseUnitTest {
 
     @Test
     public void shouldOpenNewTreatmentAndUpdatePatient_IfNoErrorsFound() {
-        patient.closeCurrentTreatment("Defaulted", now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, now());
         PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForOpenNewTreatment().build();
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
