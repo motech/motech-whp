@@ -4,6 +4,7 @@ import lombok.Data;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.motechproject.validation.constraints.ValidateIfNotEmpty;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.WHPConstants;
@@ -13,15 +14,20 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.springframework.util.StringUtils.hasText;
 
 @Data
 public class SmearTestResultRequests {
 
     @Valid
     private SmearTestResultRequest preTreatmentSmearTestResult = new SmearTestResultRequest();
+    @Valid
     private SmearTestResultRequest endIpSmearTestResult = new SmearTestResultRequest();
+    @Valid
     private SmearTestResultRequest extendedIpSmearTestResult = new SmearTestResultRequest();
+    @Valid
     private SmearTestResultRequest twoMonthsIntoCpSmearTestResult = new SmearTestResultRequest();
+    @Valid
     private SmearTestResultRequest endTreatmentSmearTestResult = new SmearTestResultRequest();
 
     public void setDate1(SmearTestSampleInstance smearTestSampleInstance, String date1) {
@@ -87,6 +93,7 @@ public class SmearTestResultRequests {
     }
 
     @Data
+    @ValidateIfNotEmpty
     public static class SmearTestResultRequest {
 
         @NotNullOrEmpty
@@ -104,5 +111,9 @@ public class SmearTestResultRequests {
         @NotNullOrEmpty
         @Enumeration(type = SmearTestResult.class)
         private String result2;
+
+        public boolean isNotEmpty() {
+            return hasText(date1);
+        }
     }
 }

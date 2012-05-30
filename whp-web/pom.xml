@@ -176,7 +176,7 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-flash-scope</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>

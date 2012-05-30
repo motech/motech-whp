@@ -22,17 +22,12 @@ public class ImportWeightStatisticsMapper {
         WeightStatistics weightStatistics = new WeightStatistics();
         for (WeightInstance instance : WeightInstance.values()) {
             WeightStatisticsRequest request = importPatientRequest.getWeightStatisticsRequestByType(instance);
-            if (isValid(request)) {
+            if (request != null && request.isNotEmpty()) {
                 LocalDate date = resolveMeasuringDate(importPatientRequest, request);
                 weightStatistics.add(instance, parseDouble(request.getWeight()), date);
             }
         }
         return weightStatistics;
-    }
-
-    //TODO: Business Rule in mapper - To be fixed by moving to Domain Object(s)
-    private boolean isValid(WeightStatisticsRequest request) {
-        return request != null && hasText(request.getWeight());
     }
 
     //TODO: Business logic in mapper - To be fixed by moving to Domain Object(s)

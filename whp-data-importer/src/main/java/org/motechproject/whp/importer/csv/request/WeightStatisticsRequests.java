@@ -2,6 +2,7 @@ package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.DateTimeFormat;
+import org.motechproject.validation.constraints.ValidateIfNotEmpty;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.util.StringUtils;
@@ -11,15 +12,20 @@ import javax.validation.constraints.Digits;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.springframework.util.StringUtils.hasText;
 
 @Data
 public class WeightStatisticsRequests {
 
     @Valid
     private WeightStatisticsRequest preTreatmentWeightStatistics = new WeightStatisticsRequest();
+    @Valid
     private WeightStatisticsRequest endIpWeightStatistics = new WeightStatisticsRequest();
+    @Valid
     private WeightStatisticsRequest extendedIpWeightStatistics = new WeightStatisticsRequest();
+    @Valid
     private WeightStatisticsRequest twoMonthsIntoCpWeightStatistics = new WeightStatisticsRequest();
+    @Valid
     private WeightStatisticsRequest endTreatmentWeightStatistics = new WeightStatisticsRequest();
 
     public boolean hasWeightStatistics(WeightInstance weightInstance) {
@@ -73,6 +79,7 @@ public class WeightStatisticsRequests {
     }
 
     @Data
+    @ValidateIfNotEmpty
     public static class WeightStatisticsRequest {
 
         @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
@@ -80,5 +87,9 @@ public class WeightStatisticsRequests {
 
         @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT, validateEmptyString = false)
         private String weightDate;
+
+        public boolean isNotEmpty() {
+            return hasText(weight);
+        }
     }
 }
