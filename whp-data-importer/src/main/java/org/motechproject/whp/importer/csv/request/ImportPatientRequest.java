@@ -12,7 +12,6 @@ import org.motechproject.whp.validation.ProviderIdValidator;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
 @Data
 public class ImportPatientRequest {
@@ -49,7 +48,7 @@ public class ImportPatientRequest {
     private String gender;
 
     @Enumeration(type = PatientType.class, validateEmptyString = false)
-    @ColumnName(name = "Type of Patient:(New, PHSTransfer)*")
+    @ColumnName(name = "Type of Patient:(New/Relapse/TransferredIn/TreatmentAfterDefault/TreatmentFailure/Chronic/Others)*")
     private String patient_type;
 
     @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile number should be empty or should have 10 digits")

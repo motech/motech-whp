@@ -41,10 +41,22 @@ public class PatientRecordValidator {
     }
 
     @Post
-    public void post(List<Object> objects) {
+    public void post(List<Object> objects) throws Exception {
+        try{
+        int objectsInDbCount = 0;
         for (int i = 0; i < objects.size(); i++) {
             ImportPatientRequest request = (ImportPatientRequest) objects.get(i);
-            List<String> errors = validatePatient(request);
+            ArrayList<String> errors = new ArrayList<String>();
+
+            Patient patient = allPatients.findByPatientId(request.getCase_id());
+            if (patient == null) {
+                errors.add("No patient found with case_id " + request.getCase_id());
+                continue;
+            }
+
+            objectsInDbCount++;
+            validatePatient(patient,request,errors);
+
             if (errors.size() > 0) {
                 String errorMessage = String.format("Row %d: Patient with case_id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getCase_id());
                 for (String error : errors)
@@ -54,25 +66,24 @@ public class PatientRecordValidator {
                 ImporterLogger.info(String.format("Row %d: Patient with case_id \"%s\" has been imported properly", i + 1, request.getCase_id()));
             }
         }
-    }
-
-    private List<String> validatePatient(ImportPatientRequest request) {
-        ArrayList<String> errors = new ArrayList<String>();
-        Patient patient = allPatients.findByPatientId(request.getCase_id());
-        if (patient == null) {
-            errors.add("No patient found with case_id " + request.getCase_id());
-        } else {
-            validatePatientFields(patient, request, errors);
-            validateProvidedTreatmentFields(patient, request, errors);
+        ImporterLogger.info("Number of Objects found in the data file : "+objects.size());
+        ImporterLogger.info("Number of Objects found in the db : "+objectsInDbCount);
+        } catch (Exception exception) {
+            ImporterLogger.error("Exception occured while testing...");
+            ImporterLogger.error(exception);
         }
-        return errors;
     }
 
-    private void addNotSetError(String fieldName, String expectedValue, ArrayList<String> errors) {
+    private void validatePatient(Patient patient,ImportPatientRequest request,List<String> errors) {
+        validatePatientFields(patient, request, errors);
+            validateProvidedTreatmentFields(patient, request, errors);
+    }
+
+    private void addNotSetError(String fieldName, String expectedValue, List<String> errors) {
         errors.add(fieldName + " is not set. To be set as \"" + expectedValue + "\"");
     }
 
-    private void validateProvidedTreatmentFields(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
+    private void validateProvidedTreatmentFields(Patient patient, ImportPatientRequest request, List<String> errors) {
         if (patient.getProvidedTreatments().size() != 0) {
             errors.add("Should have no history of provided treatments, but has count as " + patient.getProvidedTreatments().size());
         }
@@ -90,7 +101,7 @@ public class PatientRecordValidator {
         checkIfEqual(request.getTb_id(), treatment.getTbId(), "TbID", errors);
         checkIfEqual(request.getTb_registration_number(), treatment.getTbRegistrationNumber(), "TbRegistrationNumber", errors);
 
-        if (request.getPatient_type().isEmpty()) {
+        if (StringUtils.isBlank(request.getPatient_type())) {
             checkIfEqual(PatientType.New, treatment.getPatientType(), "Patient Type", errors);
         } else {
             checkIfEnumsAreEqual(request.getPatient_type(), treatment.getPatientType(), "Patient Type", errors, PatientType.class);
@@ -100,7 +111,7 @@ public class PatientRecordValidator {
 
     }
 
-    private void validateTreatment(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
+    private void validateTreatment(Patient patient, ImportPatientRequest request, List<String> errors) {
         Treatment treatment = patient.getCurrentProvidedTreatment().getTreatment();
         if (treatment != null) {
             TreatmentCategory treatmentCategory = treatment.getTreatmentCategory();
@@ -119,7 +130,7 @@ public class PatientRecordValidator {
         }
     }
 
-    private void validatePatientFields(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
+    private void validatePatientFields(Patient patient, ImportPatientRequest request, List<String> errors) {
         if (!patient.isMigrated()) errors.add("Patient not set as migrated");
 
         checkIfEqual(request.getProvider_id(), patient.providerId(), "ProviderId", errors);
@@ -140,13 +151,13 @@ public class PatientRecordValidator {
         checkIfEnumsAreEqual(request.getGender(), patient.getGender(), "Gender", errors, Gender.class);
     }
 
-    private void checkIfEnumsAreEqual(String requestEnum, Object patientEnum, String fieldName, ArrayList<String> errors, Class enumClass) {
+    private void checkIfEnumsAreEqual(String requestEnum, Object patientEnum, String fieldName, List<String> errors, Class enumClass) {
 
         Object expectedEnum = new StringToEnumeration().convert(requestEnum, enumClass);
         checkIfEqual(expectedEnum, patientEnum, fieldName, errors);
     }
 
-    private void checkIfDatesAreEqual(String requestDate, Object patientDate, String fieldName, ArrayList<String> errors, Class dateClass) {
+    private void checkIfDatesAreEqual(String requestDate, Object patientDate, String fieldName, List<String> errors, Class dateClass) {
         try {
             if (dateClass == DateTime.class) {
                 String expectedDate = ((DateTime) new StringToDateTime().convert(requestDate, dateClass)).toString(WHPConstants.DATE_TIME_FORMAT);
@@ -160,7 +171,7 @@ public class PatientRecordValidator {
         }
     }
 
-    private void printInvalidDataError(String fieldName, ArrayList<String> errors, String data) {
+    private void printInvalidDataError(String fieldName, List<String> errors, String data) {
         errors.add("Invalid data provided for \"" + fieldName + "\": " + data + "\"");
     }
 

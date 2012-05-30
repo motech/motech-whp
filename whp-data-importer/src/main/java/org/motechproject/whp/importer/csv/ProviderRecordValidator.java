@@ -31,32 +31,43 @@ public class ProviderRecordValidator {
 
     @Post
     public void post(List<Object> objects) {
-        for (int i = 0; i < objects.size(); i++) {
-            ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
-            List<String> errors = validateProvider(request);
-            if (errors.size() > 0) {
-                String errorMessage = String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId());
-                for (String error : errors)
-                    errorMessage += error + "\n";
-                ImporterLogger.error(errorMessage);
-            } else {
-                ImporterLogger.info(String.format("Row %d: Provider with provider id \"%s\" has been imported properly", i + 1, request.getProviderId()));
+        try {
+            int objectsInDbCount = 0;
+            for (int i = 0; i < objects.size(); i++) {
+                ImportProviderRequest request = (ImportProviderRequest) objects.get(i);
+                Provider provider = allProviders.findByProviderId(request.getProviderId());
+                List<String> errors = new ArrayList<String>();
+
+                if (provider == null) {
+                    errors.add("No provider found with provider id \"" + request.getProviderId() + "\"");
+                }
+
+                objectsInDbCount++;
+                validateProvider(request, provider, errors);
+
+                if (errors.size() > 0) {
+                    String errorMessage = String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId());
+                    for (String error : errors)
+                        errorMessage += error + "\n";
+                    ImporterLogger.error(errorMessage);
+                } else {
+                    ImporterLogger.info(String.format("Row %d: Provider with provider id \"%s\" has been imported properly", i + 1, request.getProviderId()));
+                }
             }
+            ImporterLogger.info("Number of Objects found in the data file : " + objects.size());
+            ImporterLogger.info("Number of Objects found in the db : " + objectsInDbCount);
+        } catch (Exception exception) {
+            ImporterLogger.error("Exception occured while testing...");
+            ImporterLogger.error(exception);
         }
     }
 
-    private List<String> validateProvider(ImportProviderRequest request) {
-        ArrayList<String> errors = new ArrayList<String>();
-        Provider provider = allProviders.findByProviderId(request.getProviderId());
-        if (provider == null) {
-            errors.add("No provider found with provider id \"" + request.getProviderId() + "\"");
-        } else {
-            validateProviderFields(provider, request, errors);
-        }
+    private List<String> validateProvider(ImportProviderRequest request, Provider provider, List<String> errors) {
+        validateProviderFields(provider, request, errors);
         return errors;
     }
 
-    private void validateProviderFields(Provider provider, ImportProviderRequest request, ArrayList<String> errors) {
+    private void validateProviderFields(Provider provider, ImportProviderRequest request, List<String> errors) {
         checkIfEqual(request.getProviderId(), provider.getProviderId(), "ProviderId", errors);
 
         checkIfEqual(request.getDistrict(), provider.getDistrict(), "District", errors);
