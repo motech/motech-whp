@@ -12,7 +12,6 @@ import org.motechproject.whp.validation.ProviderIdValidator;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -85,7 +84,6 @@ public class ImportPatientRequest {
     // End of address
 
     @NotNullOrEmpty
-    @Size(min = 11, max = 11)
     @ColumnName(name = "Patient TB ID*")
     private String tb_id;
 
