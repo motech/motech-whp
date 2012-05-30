@@ -13,7 +13,7 @@
         </field>
         <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
             <a>date_modified</a>
-            <b>treatmentStartDate</b>
+            <b>treatmentCreationDate</b>
         </field>
 
         <field custom-converter-id="stringToTreatmentCategory">

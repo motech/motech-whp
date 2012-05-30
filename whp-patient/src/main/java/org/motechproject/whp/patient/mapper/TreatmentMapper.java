@@ -8,7 +8,7 @@ public class TreatmentMapper {
 
     public static Treatment map(PatientRequest patientRequest) {
         Treatment treatment = createFirstTreatment(patientRequest);
-        treatment.setCreationDate(patientRequest.getTreatmentStartDate());
+        treatment.setCreationDate(patientRequest.getTreatmentCreationDate());
         return treatment;
     }
 

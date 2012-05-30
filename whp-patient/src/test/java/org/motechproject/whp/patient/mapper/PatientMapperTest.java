@@ -116,7 +116,7 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
         assertNull(treatment.getStartDate());
 
-        assertEquals(patientRequest.getTreatmentStartDate(), treatment.getCreationDate());
+        assertEquals(patientRequest.getTreatmentCreationDate(), treatment.getCreationDate());
     }
 
     private void assertSmearTests(PatientRequest patientRequest, ProvidedTreatment treatment) {

@@ -23,7 +23,7 @@ public class PatientRequest {
 
     private String tb_id;
     private TreatmentCategory treatment_category;
-    private DateTime treatmentStartDate;
+    private DateTime treatmentCreationDate;
     private DiseaseClass disease_class;
     private String tb_registration_number;
 
@@ -78,7 +78,7 @@ public class PatientRequest {
         this.disease_class = diseaseClass;
         this.age = patientAge;
         this.tb_registration_number = registrationNumber;
-        this.treatmentStartDate = treatmentStartDate;
+        this.treatmentCreationDate = treatmentStartDate;
         return this;
     }
 
