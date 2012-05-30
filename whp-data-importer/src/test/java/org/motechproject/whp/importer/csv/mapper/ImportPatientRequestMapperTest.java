@@ -54,14 +54,8 @@ public class ImportPatientRequestMapperTest {
         assertEquals(importPatientRequest.getPhi(), patientRequest.getPhi());
         assertEquals(importPatientRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(importPatientRequest.getTb_registration_number(), patientRequest.getTb_registration_number());
-        assertEquals(importPatientRequest.getWeight(WeightInstance.PreTreatment), patientRequest.getWeightStatistics().get(0).getWeight().toString());
-        assertEquals(importPatientRequest.getWeightDate(WeightInstance.PreTreatment), patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
         assertEquals(importPatientRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
         assertEquals(importPatientRequest.getProvider_id(), patientRequest.getProvider_id());
-        assertEquals(importPatientRequest.getTestDate1(SmearTestSampleInstance.PreTreatment), patientRequest.getSmearTestResults().get(0).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
-        assertEquals(importPatientRequest.getTestDate2(SmearTestSampleInstance.PreTreatment), patientRequest.getSmearTestResults().get(0).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
-        assertEquals(importPatientRequest.getTestResult1(SmearTestSampleInstance.PreTreatment), patientRequest.getSmearTestResults().get(0).getSmear_test_result_1().name());
-        assertEquals(importPatientRequest.getTestResult2(SmearTestSampleInstance.PreTreatment), patientRequest.getSmearTestResults().get(0).getSmear_test_result_2().name());
     }
 
     @Before

@@ -6,8 +6,6 @@ import org.motechproject.export.annotation.ReportValue;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 
-import java.util.Map;
-
 @Data
 public class Adherence {
 

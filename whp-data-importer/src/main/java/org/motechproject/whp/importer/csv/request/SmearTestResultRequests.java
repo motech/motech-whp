@@ -86,7 +86,6 @@ public class SmearTestResultRequests {
         );
     }
 
-
     @Data
     public static class SmearTestResultRequest {
 

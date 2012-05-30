@@ -294,11 +294,11 @@ public class ImportPatientRequest {
         return weightStatisticsRequest.hasWeightInstanceRecord(type);
     }
 
-    public List<SmearTestResultRequests.SmearTestResultRequest> getAllSmearTestResults() {
-        return smearTestResultRequest.getAll();
+    public SmearTestResultRequests.SmearTestResultRequest getSmearTestResultRequestByType(SmearTestSampleInstance instance) {
+        return smearTestResultRequest.getSmearTestInstanceRecord(instance);
     }
 
-    public List<WeightStatisticsRequests.WeightStatisticsRequest> getAllWeightStatisticsRequests() {
-        return weightStatisticsRequest.getAll();
+    public WeightStatisticsRequests.WeightStatisticsRequest getWeightStatisticsRequestByType(WeightInstance instance) {
+        return weightStatisticsRequest.getWeightStatisticsRecord(instance);
     }
 }
