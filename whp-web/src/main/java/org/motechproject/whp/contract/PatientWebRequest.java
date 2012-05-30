@@ -121,7 +121,7 @@ public class PatientWebRequest {
     private String tb_id;
 
     @NamedConstraint(name = ProviderIdValidator.PROVIDER_ID_CONSTRAINT)
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope, UpdateScope.transferInScope})
     private String provider_id;
 
     @NotNullOrEmpty
