@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
+import org.motechproject.importer.domain.ValidationResponse;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
@@ -48,7 +49,7 @@ public class PatientRecordImporter {
     }
 
     @Validate
-    public boolean validate(List<Object> objects) {
+    public ValidationResponse validate(List<Object> objects) {
         boolean isValid = true;
         ArrayList<String> patientIds = new ArrayList<String>();
         for (int i = 0; i < objects.size(); i++) {
@@ -66,7 +67,7 @@ public class PatientRecordImporter {
             }
             patientIds.add(request.getCase_id());
         }
-        return isValid;
+        return new ValidationResponse(isValid);
     }
 
     private void validateCaseIdIsUnique(ArrayList<String> patientIds, String case_id) throws WHPImportException {

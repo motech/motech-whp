@@ -12,7 +12,6 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
@@ -71,7 +70,7 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withCaseId("2").withLastModifiedDate(DateTime.now()).build();
         doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importPatientRequest2, UpdateScope.createScope);
 
-        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)).isValid());
     }
 
     @Test
@@ -79,7 +78,7 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("2").build();
 
-        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
+        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)).isValid());
     }
 
     @Test
@@ -87,14 +86,14 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
 
-        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)));
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2)).isValid());
     }
 
     @Test
     public void shouldFailValidationIfDuplicateCaseIdPresentInDb() {
         ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withDefaults().withCaseId("1").build();
         when(allPatients.findByPatientId("1")).thenReturn(new Patient());
-        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1)));
+        assertEquals(false, patientRecordImporter.validate(asList((Object) importPatientRequest1)).isValid());
     }
 
 
@@ -107,7 +106,7 @@ public class PatientRecordImporterUnitTest {
         ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withPhi("").withCaseId("1").withWeightDate(patient2WtMeasuredDate.toString(dateFormat)).build();
         ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withPhi("yy").withDate_Modified(patient1RegDate).withWeightDate(null).withPatientType(null).build();
 
-        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)));
+        assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)).isValid());
 
         assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
         assertEquals(patient2WtMeasuredDate.toString(dateFormat), importPatientRequest2.getWeightDate(WeightInstance.PreTreatment));

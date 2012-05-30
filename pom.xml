@@ -170,7 +170,7 @@
         <spring-security.version>3.0.5.RELEASE</spring-security.version>
         <build.dir>build</build.dir>
         <motech.version>0.11-SNAPSHOT</motech.version>
-        <motech.contrib.version>0.1-SNAPSHOT</motech.contrib.version>
+        <motech.contrib.version>0.10-SNAPSHOT</motech.contrib.version>
         <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
     </properties>
 

@@ -74,7 +74,7 @@ public class ProviderRecordImporterUnitTest {
         ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withProviderId("2").build();
         doThrow(new RuntimeException("Exception to be thrown for test")).when(validator).validate(importProviderRequest2, UpdateScope.createScope);
 
-        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest1,importProviderRequest2)));
+        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest1,importProviderRequest2)).isValid());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ProviderRecordImporterUnitTest {
         importProviderRequest.setProviderId("1");
         when(allProviders.findByProviderId("1")).thenReturn(new Provider());
 
-        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest)));
+        assertEquals(false, providerRecordImporter.validate(asList((Object) importProviderRequest)).isValid());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class ProviderRecordImporterUnitTest {
         ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
         ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("2").build();
 
-        assertEquals(true, providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)));
+        assertEquals(true, providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)).isValid());
     }
     
     @Test
@@ -100,7 +100,7 @@ public class ProviderRecordImporterUnitTest {
         ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
         ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("1").build();
 
-        assertFalse(providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)));
+        assertFalse(providerRecordImporter.validate(asList((Object) importProviderRequest1, importProviderRequest2)).isValid());
 
     }
 }

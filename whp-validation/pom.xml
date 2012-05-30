@@ -16,7 +16,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-validation</artifactId>

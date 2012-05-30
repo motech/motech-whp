@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-bulk-export-import</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -44,7 +44,6 @@
             <artifactId>whp-mapping</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-validation</artifactId>
