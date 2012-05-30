@@ -36,7 +36,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllTreatments allTreatments;
 
     @Before
-    @After
     public void cleanDb() {
         allPatients.removeAll();
         allTreatments.removeAll();
@@ -76,8 +75,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
         arguments[1] = getPatientCsv();
         arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
-        assertEquals(2, allPatients.getAll().size());
-        assertEquals(2, allTreatments.getAll().size());
+        assertEquals(4, allPatients.getAll().size());
+        assertEquals(4, allTreatments.getAll().size());
         assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getPatientType());
         Patient patient2 = allPatients.findByPatientId("234324");
         assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getWeightStatistics().get(0).getMeasuringDate());
