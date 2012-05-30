@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 
 import static junit.framework.Assert.assertTrue;
 
-public class ValidationsTest {
+public class ValidationsTestPart {
     @Test
     public void shouldHaveNotNullOrEmptyAnnotationForMandatoryFields() throws NoSuchFieldException {
         assertNotNullAnnotationPresentForField("case_id");
