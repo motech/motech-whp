@@ -1,5 +1,6 @@
 package org.motechproject.whp.importer.csv;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -9,10 +10,8 @@ import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.patient.repository.AllTreatments;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.repository.*;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +34,20 @@ public class CsvImporterTest extends SpringIntegrationTest {
     @Autowired
     AllTreatments allTreatments;
 
-    @Before
+    @Autowired
+    AllTreatmentCategories allTreatmentCategories;
+
+    @After
     public void cleanDb() {
         allPatients.removeAll();
         allTreatments.removeAll();
-
-        if (allProviders.findByProviderId("john") != null)
-            markForDeletion(allProviders.findByProviderId("john"));
-        if (allProviders.findByProviderId("raj") != null)
-            markForDeletion(allProviders.findByProviderId("raj"));
+        allTreatmentCategories.removeAll();
+        allProviders.removeAll();
+    }
+    @Before
+    public void setUp(){
+        allTreatmentCategories.add(new TreatmentCategory("test1","01",3,3,3,null));
+        allTreatmentCategories.add(new TreatmentCategory("test2","02",3,3,3,null));
     }
 
     @Test
@@ -195,6 +199,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
         treatment.setStartDate(treatment.getStartDate().plusDays(1));
         treatment.setTbId("modified_tb_id");
         treatment.setTbRegistrationNumber("mod_tb_reg_no");
+        treatment.getTreatment().setStartDate(DateTime.now().toLocalDate());
+        treatment.getTreatment().setCreationDate(DateTime.now());
         allPatients.update(patient2);
 
         CsvImporter.main(arguments);

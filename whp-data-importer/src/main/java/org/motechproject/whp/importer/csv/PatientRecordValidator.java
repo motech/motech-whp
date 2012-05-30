@@ -10,9 +10,7 @@ import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.mapping.StringToEnumeration;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -70,13 +68,17 @@ public class PatientRecordValidator {
         return errors;
     }
 
+    private void addNotSetError(String fieldName, String expectedValue, ArrayList<String> errors) {
+        errors.add(fieldName + " is not set. To be set as \"" + expectedValue + "\"");
+    }
+
     private void validateProvidedTreatmentFields(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
         if (patient.getProvidedTreatments().size() != 0) {
             errors.add("Should have no history of provided treatments, but has count as " + patient.getProvidedTreatments().size());
         }
 
         ProvidedTreatment treatment = patient.getCurrentProvidedTreatment();
-        checkIfDatesAreEqual(request.getDate_modified(), treatment.getStartDate(), "ProvidedTreatment's start date", errors, LocalDate.class);
+        checkIfDatesAreEqual(request.getDate_modified(), treatment.getStartDate(), "ProvidedTreatmentStartDate", errors, LocalDate.class);
         Address patientAddress = treatment.getPatientAddress();
         checkIfEqual(request.getAddress_district(), patientAddress.getAddress_district(), "District", errors);
         checkIfEqual(request.getAddress_block(), patientAddress.getAddress_block(), "Address Block", errors);
@@ -94,6 +96,27 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(request.getPatient_type(), treatment.getPatientType(), "Patient Type", errors, PatientType.class);
         }
 
+        validateTreatment(patient, request, errors);
+
+    }
+
+    private void validateTreatment(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
+        Treatment treatment = patient.getCurrentProvidedTreatment().getTreatment();
+        if (treatment != null) {
+            TreatmentCategory treatmentCategory = treatment.getTreatmentCategory();
+            if (treatmentCategory != null)
+                checkIfEqual(request.getTreatment_category(), treatmentCategory.getCode(), "Treatement Category", errors);
+            else
+                addNotSetError("Treatment Category", request.getTreatment_category(), errors);
+            checkIfDatesAreEqual(request.getDate_modified(), treatment.getCreationDate(), "TreatmentCreationDate", errors, DateTime.class);
+            if (treatment.getStartDate() != null)
+                errors.add("TreatmentStartDate should be set as null for migrated patients. But is set to \"" + treatment.getStartDate() + "\"");
+
+        } else {
+            addNotSetError("Treatment Category", request.getTreatment_category(), errors);
+            addNotSetError("Disease Class", request.getDisease_class(), errors);
+            addNotSetError("Patient Age", request.getAge(), errors);
+        }
     }
 
     private void validatePatientFields(Patient patient, ImportPatientRequest request, ArrayList<String> errors) {
@@ -120,8 +143,6 @@ public class PatientRecordValidator {
     private void checkIfEnumsAreEqual(String requestEnum, Object patientEnum, String fieldName, ArrayList<String> errors, Class enumClass) {
 
         Object expectedEnum = new StringToEnumeration().convert(requestEnum, enumClass);
-        if (expectedEnum == null)
-            printInvalidDataError(fieldName, errors, requestEnum);
         checkIfEqual(expectedEnum, patientEnum, fieldName, errors);
     }
 
@@ -140,12 +161,14 @@ public class PatientRecordValidator {
     }
 
     private void printInvalidDataError(String fieldName, ArrayList<String> errors, String data) {
-        errors.add("Invalid data provided for \"" + fieldName + "\": " + data);
+        errors.add("Invalid data provided for \"" + fieldName + "\": " + data + "\"");
     }
 
     private void checkIfEqual(Object expected, Object actual, String fieldName, List<String> errors) {
         if (expected != null && !expected.equals(actual))
             errors.add(fieldName + " should be set as \"" + expected + "\" but is set as \"" + actual + "\"");
+        else if (expected == null && actual != null)
+            errors.add(fieldName + " should be set as NULL but is set as \"" + actual + "\"");
     }
 
 }

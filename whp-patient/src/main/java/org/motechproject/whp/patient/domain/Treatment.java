@@ -6,6 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TreatmentStatus;
 
@@ -46,5 +47,8 @@ public class Treatment extends MotechBaseDataObject {
     @JsonIgnore
     public boolean isClosed() {
         return TreatmentStatus.Closed == status;
+    }
+    public DateTime getCreationDate(){
+        return DateUtil.setTimeZone(creationDate);
     }
 }
