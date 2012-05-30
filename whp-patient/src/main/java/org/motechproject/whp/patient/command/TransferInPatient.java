@@ -37,7 +37,10 @@ public class TransferInPatient extends TreatmentUpdate {
     }
 
     private void transferInPatient(Patient patient, PatientRequest patientRequest) {
-        providerService.transferIn(patientRequest.getProvider_id(), patient, patientRequest.getTb_id(), patientRequest.getDate_modified());
+        providerService.transferIn(patientRequest.getProvider_id(),
+                patient, patientRequest.getTb_id(),
+                patientRequest.getTb_registration_number(),
+                patientRequest.getDate_modified());
         patient.reviveLastClosedTreatment();
         allTreatments.update(patient.latestTreatment());
     }

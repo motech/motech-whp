@@ -12,7 +12,6 @@ import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
 import org.motechproject.whp.patient.service.ProviderService;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static org.junit.Assert.assertNull;
@@ -50,6 +49,7 @@ public class TransferInPatientTest extends BaseUnitTest {
         verify(providerService, never()).transferIn(patientRequest.getProvider_id(),
                 patient,
                 patientRequest.getTb_id(),
+                patientRequest.getTb_registration_number(),
                 patientRequest.getDate_modified());
     }
 
@@ -64,7 +64,11 @@ public class TransferInPatientTest extends BaseUnitTest {
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(patientRequest);
-        verify(providerService).transferIn(patientRequest.getProvider_id(), patient, patientRequest.getTb_id(), patientRequest.getDate_modified());
+        verify(providerService).transferIn(patientRequest.getProvider_id(),
+                patient,
+                patientRequest.getTb_id(),
+                patientRequest.getTb_registration_number(),
+                patientRequest.getDate_modified());
         assertNull(patient.latestTreatment().getCloseDate());
         verify(allTreatments).update(patient.latestTreatment());
     }

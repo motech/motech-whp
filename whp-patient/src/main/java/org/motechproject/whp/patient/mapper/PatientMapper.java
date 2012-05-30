@@ -55,6 +55,7 @@ public class PatientMapper {
 
         newProvidedTreatment.setTreatment(treatment);
         newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
+        newProvidedTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         newProvidedTreatment.setPatientAddress(currentProvidedTreatment.getPatientAddress());
         mapSmearTestResults(patientRequest, newProvidedTreatment);
         mapWeightStatistics(patientRequest, newProvidedTreatment);

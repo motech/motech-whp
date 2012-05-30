@@ -323,13 +323,14 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertFalse(patientService.canBeTransferred(createPatientRequest.getCase_id()));
     }
 
-    private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest patientRequest) {
+    private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {
         ProvidedTreatment currentProvidedTreatment = updatedPatient.getCurrentProvidedTreatment();
-        assertEquals(patientRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
-        assertEquals(patientRequest.getTb_id(), currentProvidedTreatment.getTbId());
-        assertEquals(patientRequest.getTreatment_category(), updatedPatient.latestTreatment().getTreatmentCategory());
-        assertEquals(patientRequest.getDisease_class(), updatedPatient.latestTreatment().getDiseaseClass());
-        assertEquals(patientRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
+        assertEquals(openNewPatientRequest.getDate_modified().toLocalDate(), currentProvidedTreatment.getStartDate());
+        assertEquals(openNewPatientRequest.getTb_id(), currentProvidedTreatment.getTbId());
+        assertEquals(openNewPatientRequest.getTreatment_category(), updatedPatient.latestTreatment().getTreatmentCategory());
+        assertEquals(openNewPatientRequest.getDisease_class(), updatedPatient.latestTreatment().getDiseaseClass());
+        assertEquals(openNewPatientRequest.getProvider_id(), currentProvidedTreatment.getProviderId());
+        assertEquals(openNewPatientRequest.getTb_registration_number(), currentProvidedTreatment.getTbRegistrationNumber());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
     }
 

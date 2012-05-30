@@ -30,7 +30,7 @@ public class ProviderService {
         return provider.getId();
     }
 
-    public void transferIn(String newProviderId, Patient patient, String tbId, DateTime dateModified) {
+    public void transferIn(String newProviderId, Patient patient, String tbId, String tbRegistrationNumber, DateTime dateModified) {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(currentProvidedTreatment)
                 .updateForTransferIn(
@@ -38,6 +38,7 @@ public class ProviderService {
                         newProviderId,
                         dateModified.toLocalDate()
                 );
+        newProvidedTreatment.setTbRegistrationNumber(tbRegistrationNumber);
         patient.addProvidedTreatment(newProvidedTreatment, dateModified);
         newProvidedTreatment.setPatientType(PatientType.TransferredIn);
         allPatients.update(patient);

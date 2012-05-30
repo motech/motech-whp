@@ -66,14 +66,16 @@ public class ProviderServiceTest extends SpringIntegrationTest {
 
         String newProviderId = "newProviderId";
         String tbId = "newTbId";
+        String newTbRegistrationNumber = "newTbRegistrationNumber";
         DateTime now = now();
 
-        providerService.transferIn(newProviderId, patient, tbId, now);
+        providerService.transferIn(newProviderId, patient, tbId, newTbRegistrationNumber, now);
 
         Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
 
         assertEquals(newProviderId, updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertEquals(tbId, updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(newTbRegistrationNumber, updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
         assertEquals(now.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
         assertEquals(now, updatedPatient.getLastModifiedDate());
         assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentProvidedTreatment().getPatientType());

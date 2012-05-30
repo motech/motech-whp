@@ -62,7 +62,7 @@ public class PatientMapperTest {
 
 
     @Test
-    public void newProviderTreatmentForCategoryChange_RetainsOldProviderIdAndAddress_SetsNewTbId_SetsNewTreatment_SetsStartDate() {
+    public void newProviderTreatmentForCategoryChange_RetainsOldProviderIdAndAddress_SetsNewTbId_SetsNewTbRegistrationNumber_SetsNewTreatment_SetsStartDate() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
@@ -85,6 +85,8 @@ public class PatientMapperTest {
         assertEquals(openNewTreatmentUpdateRequest.getTb_id(), newProvidedTreatment.getTbId());
         assertEquals(currentProvidedTreatment.getPatientAddress(), newProvidedTreatment.getPatientAddress());
         assertEquals(openNewTreatmentUpdateRequest.getProvider_id(), newProvidedTreatment.getProviderId());
+        //will set null if request does not have the field.
+        assertEquals(openNewTreatmentUpdateRequest.getTb_registration_number(), newProvidedTreatment.getTbRegistrationNumber());
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
