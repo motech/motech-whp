@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;

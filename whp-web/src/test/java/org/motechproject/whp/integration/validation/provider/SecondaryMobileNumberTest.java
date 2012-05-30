@@ -3,7 +3,7 @@ package org.motechproject.whp.integration.validation.provider;
 import org.junit.Test;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 
 public class SecondaryMobileNumberTest extends BaseProviderTest {
     @Test

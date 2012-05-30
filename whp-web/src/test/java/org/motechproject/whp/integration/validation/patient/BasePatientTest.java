@@ -8,7 +8,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

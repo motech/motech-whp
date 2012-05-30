@@ -24,6 +24,9 @@ public class ProviderPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "tbId")
     private List<WebElement> tbIds;
 
+    @FindBy(how = How.CLASS_NAME, using = "category")
+    private List<WebElement> categories;
+
     public ProviderPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -51,6 +54,10 @@ public class ProviderPage extends LoggedInUserPage {
 
     public String getTreatmentCategoryText(String patientId) {
         return webDriver.findElement(By.id(String.format("patient_%s_TreatmentCategory", patientId))).getText();
+    }
+
+    public String getTreatmentStartDateText(String patientId) {
+        return webDriver.findElement(By.id(String.format("patient_%s_TreatmentStartDate", patientId))).getText();
     }
 
     public String getGenderText(String patientId) {

@@ -6,7 +6,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.exception.WHPError;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;

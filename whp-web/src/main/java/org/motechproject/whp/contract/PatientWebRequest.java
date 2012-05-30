@@ -1,10 +1,9 @@
-package org.motechproject.whp.request;
+package org.motechproject.whp.contract;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.*;
 import org.motechproject.whp.mapping.StringToEnumeration;
-import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.validation.APIKeyValidator;
@@ -194,25 +193,23 @@ public class PatientWebRequest {
         this.api_key = apiKey;
     }
 
-    public UpdateScope updateScope() {
-        TreatmentUpdateScenario updateScenario = updateScenario();
-        return updateScenario == null ? UpdateScope.simpleUpdate : updateScenario.getScope();
+    public PatientType patientType() {
+        return (PatientType) StringToEnumeration.get(getPatient_type(), PatientType.class);
     }
 
-    // :/ :/
-    private TreatmentUpdateScenario updateScenario() {
-        try {
-            if (StringUtils.isNotBlank(treatment_update)) {
-                StringToEnumeration stringToEnumerationConverter = new StringToEnumeration();
-                TreatmentUpdateScenario updateScenario = (TreatmentUpdateScenario) stringToEnumerationConverter.convert(treatment_update, TreatmentUpdateScenario.class);
-                if (updateScenario.equals(TreatmentUpdateScenario.New)) {
-                    if (StringUtils.isNotBlank(patient_type) && PatientType.TransferredIn.name().equals(patient_type)) {
-                        return TreatmentUpdateScenario.TransferredIn;
-                    }
-                }
-                return updateScenario;
-            }
-        } catch (IllegalArgumentException ignored) {
+    public UpdateScope updateScope(boolean canBeTransferred) {
+        TreatmentUpdateScenario updateScenario = updateScenario();
+        if (updateScenario == null) {
+            return UpdateScope.simpleUpdate;
+        } else if (TreatmentUpdateScenario.New == updateScenario && PatientType.TransferredIn == patientType() && canBeTransferred) {
+            return UpdateScope.transferIn;
+        }
+        return updateScenario.getScope();
+    }
+
+    public TreatmentUpdateScenario updateScenario() {
+        if (StringUtils.isNotBlank(treatment_update)) {
+            return (TreatmentUpdateScenario) StringToEnumeration.get(treatment_update, TreatmentUpdateScenario.class);
         }
         return null;
     }

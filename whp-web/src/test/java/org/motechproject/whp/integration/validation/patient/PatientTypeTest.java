@@ -3,7 +3,7 @@ package org.motechproject.whp.integration.validation.patient;
 import org.junit.Test;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 
 public class PatientTypeTest extends BasePatientTest{
 

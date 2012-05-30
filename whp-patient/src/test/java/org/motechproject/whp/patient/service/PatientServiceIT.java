@@ -25,7 +25,7 @@ import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class PatientServiceTest extends SpringIntegrationTest {
+public class PatientServiceIT extends SpringIntegrationTest {
 
     public static final String CASE_ID = "123456";
     @Autowired
@@ -301,6 +301,26 @@ public class PatientServiceTest extends SpringIntegrationTest {
         Patient restartedPatient = allPatients.findByPatientId(caseId);
 
         assertCurrentTreatmentNotPaused(restartedPatient, restartTreatmentRequest);
+    }
+
+    @Test
+    public void patientCanBeTransferredToAnotherProvider_WhenHeWasTransferredOutForPreviousTreatment() {
+        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(createPatientRequest);
+        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.TransferredOut).build();
+        patientService.update(UpdateScope.closeTreatment, closeRequest);
+
+        assertTrue(patientService.canBeTransferred(createPatientRequest.getCase_id()));
+    }
+
+    @Test
+    public void patientCannotBeTransferredToAnotherProvider_WhenHeWasNotTransferredOutForPreviousTreatment() {
+        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(createPatientRequest);
+        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.Died).build();
+        patientService.update(UpdateScope.closeTreatment, closeRequest);
+
+        assertFalse(patientService.canBeTransferred(createPatientRequest.getCase_id()));
     }
 
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest patientRequest) {

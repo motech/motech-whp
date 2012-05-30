@@ -5,7 +5,7 @@ import org.dozer.MappingException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

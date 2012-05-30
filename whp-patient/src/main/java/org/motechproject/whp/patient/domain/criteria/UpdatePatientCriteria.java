@@ -96,7 +96,7 @@ public class UpdatePatientCriteria {
         return tbIdMatches && treatmentIsPaused;
     }
 
-    private static boolean sanityCheckFails(Patient patient, List<WHPErrorCode> errorCodes) {
+    public static boolean sanityCheckFails(Patient patient, List<WHPErrorCode> errorCodes) {
         if (patient == null) {
             errorCodes.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
             return true;

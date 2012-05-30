@@ -14,8 +14,9 @@ import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.*;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.registration.service.RegistrationService;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,7 +27,7 @@ import java.util.List;
 import static junit.framework.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class PatientWebServiceTest extends SpringIntegrationTest {
+public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     RegistrationService patientRegistrationService;
@@ -127,35 +128,34 @@ public class PatientWebServiceTest extends SpringIntegrationTest {
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
         allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
 
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebService.createCase(patientWebRequest);
-        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+        PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        patientWebService.createCase(createPatientWebRequest);
+        Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
         DateTime dateModified = DateUtil.now();
 
         //first closing current treatment
-        patientWebRequest = new PatientWebRequestBuilder()
+        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
                 .withDefaultsForCloseTreatment()
-                .withCaseId(patientWebRequest.getCase_id())
-                .withTbId(patient.tbId())
+                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
                 .build();
-        patientWebService.updateCase(patientWebRequest);
+        patientWebService.updateCase(closeRequest);
 
-        patientWebRequest = new PatientWebRequestBuilder()
+        PatientWebRequest transferInRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
                 .withDate_Modified(dateModified)
-                .withCaseId(patientWebRequest.getCase_id())
                 .build();
-        Provider newProvider = new Provider(patientWebRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
+        Provider newProvider = new Provider(transferInRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
         allProviders.add(newProvider);
 
-        patientWebService.updateCase(patientWebRequest);
+        patientWebService.updateCase(transferInRequest);
 
-        Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
+        Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
-        assertEquals(patientWebRequest.getProvider_id(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertEquals(patientWebRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(newProvider.getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals(transferInRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
+        assertEquals(patient.getCurrentProvidedTreatment().getTreatmentDocId(), updatedPatient.getCurrentProvidedTreatment().getTreatmentDocId());
 
         assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertNotSame(patient.getCurrentProvidedTreatment().getTbId(), updatedPatient.getCurrentProvidedTreatment().getTbId());

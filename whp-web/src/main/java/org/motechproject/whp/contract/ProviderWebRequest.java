@@ -1,4 +1,4 @@
-package org.motechproject.whp.request;
+package org.motechproject.whp.contract;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;

@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.contract;
 import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 
@@ -31,7 +30,6 @@ public class PatientRequest {
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
 
-    private TreatmentUpdateScenario treatment_update;
     private TreatmentOutcome treatment_outcome;
     private String reason;
     private DateTime date_modified;

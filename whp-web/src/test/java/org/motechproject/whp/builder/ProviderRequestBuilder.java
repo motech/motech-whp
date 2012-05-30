@@ -1,6 +1,6 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 
 public class ProviderRequestBuilder {
 

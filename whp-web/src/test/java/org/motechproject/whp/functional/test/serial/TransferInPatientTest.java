@@ -1,5 +1,6 @@
-package org.motechproject.whp.functional.test.treatmentupdate;
+package org.motechproject.whp.functional.test.serial;
 
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +9,12 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.ProviderPage;
+import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -43,6 +44,8 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         TestProvider provider1 = providerDataService.createProvider();
         TestProvider provider2 = providerDataService.createProvider();
 
+        adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
+
         patientRequest = new PatientRequestBuilder()
                 .withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -57,8 +60,12 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
         assertTrue(providerPage.hasTbId(patientRequest.getTb_id()));
 
+        //record some adherence so that we can verify the same start date on transfer in - to distinguish between transfer in and provider change
+        providerPage.clickEditAdherenceLink(patientRequest.getCase_id()).setNumberOfDosesTaken(2).submit();
+
         PatientWebRequest closeTreatmentUpdateRequest = new PatientWebRequestBuilder()
                 .withDefaultsForCloseTreatment()
+                .withTreatmentOutcome("TransferredOut")
                 .withTbId(patientRequest.getTb_id())
                 .withCaseId(patientRequest.getCase_id())
                 .withLastModifiedDate("17/03/1990 04:55:50")
@@ -91,6 +98,8 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
 
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
         assertTrue(providerPage.hasTbId(transferInPatientRequest.getTb_id()));
+        assertEquals(patientRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patientRequest.getCase_id()));
+        assertEquals(new LocalDate(2012, 5, 2).toString(WHPConstants.DATE_FORMAT), providerPage.getTreatmentStartDateText(patientRequest.getCase_id()));
     }
 
     @After

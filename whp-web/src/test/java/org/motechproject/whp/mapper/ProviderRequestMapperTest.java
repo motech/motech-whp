@@ -7,7 +7,7 @@ import org.junit.rules.ExpectedException;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 
 import static junit.framework.Assert.assertEquals;
 

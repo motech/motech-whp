@@ -41,10 +41,10 @@
                         <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                         <td id="patient_${patient.patientId}_Village">${patient.currentProvidedTreatment.patientAddress.address_village}</td>
                         <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentProvidedTreatment.treatment.treatmentCategory.name}</td>
-                        <td>
+                        <td id="patient_${patient.patientId}_TreatmentStartDate">
                             <#if patient.currentProvidedTreatment.treatment.startDate?? >
-                                        ${patient.currentProvidedTreatment.treatment.startDate?date?string("dd/mm/yyyy") }
-                                    </#if>
+                                ${patient.currentProvidedTreatment.treatment.startDate?date?string("dd/mm/yyyy") }
+                            </#if>
                         </td>
                         <td class="updateAdherenceLink">
                             <#if !patient.currentTreatmentClosed>

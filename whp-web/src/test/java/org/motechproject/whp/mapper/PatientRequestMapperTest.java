@@ -13,7 +13,7 @@ import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -72,7 +72,6 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
         assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
-        assertEquals(patientWebRequest.getTreatment_update(), patientRequest.getTreatment_update().name());
     }
 
     private void assertBasicPatientInfo(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {

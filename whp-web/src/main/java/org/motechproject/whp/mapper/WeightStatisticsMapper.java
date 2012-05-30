@@ -4,7 +4,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang.StringUtils.isNotEmpty;

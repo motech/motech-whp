@@ -1,18 +1,19 @@
 package org.motechproject.whp.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
+import org.motechproject.whp.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 
 public class PatientWebRequestBuilder {
 
+    public static final String CASE_ID = "caseId";
     private PatientWebRequest patientWebRequest = new PatientWebRequest();
 
     public PatientWebRequestBuilder withDefaults() {
 
         patientWebRequest = new PatientWebRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
@@ -24,7 +25,7 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withSimpleUpdateFields() {
         patientWebRequest = new PatientWebRequest()
-                .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
+                .setPatientInfo(CASE_ID, null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
@@ -36,7 +37,7 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withOnlyRequiredTreatmentUpdateFields() {
         patientWebRequest = new PatientWebRequest()
-                .setPatientInfo("1234567890", null, null, null, null, null, null)
+                .setPatientInfo(CASE_ID, null, null, null, null, null, null)
                 .setTreatmentData("01", "tbtbtbtbtbt", "elevenDigit", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
@@ -51,7 +52,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentData("01", "elevenDigit", "newProviderId", "P", null, null)
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7");
-        patientWebRequest.setCase_id("12345");
+        patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setPatient_type("TransferredIn");
@@ -62,7 +63,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Pause.name(), null)
                 .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
-        patientWebRequest.setCase_id("12345");
+        patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setReason("Chillaxing");
@@ -73,7 +74,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Restart.name(), null)
                 .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
-        patientWebRequest.setCase_id("12345");
+        patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setReason("Coz he shouldn die");
@@ -82,8 +83,8 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDefaultsForCloseTreatment() {
         patientWebRequest = new PatientWebRequest()
-                .setTreatmentUpdateData("Close", "TransferredOut");
-        patientWebRequest.setCase_id("12345");
+                .setTreatmentUpdateData("Close", "Died");
+        patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setTb_id("elevenDigit");

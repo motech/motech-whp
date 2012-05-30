@@ -8,7 +8,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.registration.service.RegistrationService;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,9 +45,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
-            validator.validate(patientWebRequest, patientWebRequest.updateScope().name());
-            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
-            patientService.update(patientWebRequest.updateScope(), patientRequest);
+            UpdateScope updateScope = patientWebRequest.updateScope(patientService.canBeTransferred(patientWebRequest.getCase_id()));
+            validator.validate(patientWebRequest, updateScope.name());
+            patientService.update(updateScope, patientRequestMapper.map(patientWebRequest));
         } catch (WHPRuntimeException e) {
             throw new WHPCaseException(e);
         }

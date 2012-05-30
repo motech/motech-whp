@@ -6,7 +6,7 @@ import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.request.PatientWebRequest;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang.StringUtils.isNotEmpty;

@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.command.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.domain.*;
@@ -16,6 +15,7 @@ import static org.motechproject.util.DateUtil.today;
 
 public class PatientRequestBuilder {
 
+    public static final String CASE_ID = "caseId";
     private PatientRequest patientRequest = new PatientRequest();
 
     public PatientRequest build() {
@@ -25,7 +25,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withDefaults() {
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
                 .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
@@ -36,7 +36,7 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withSimpleUpdateFields() {
         patientRequest = new PatientRequest()
-                .setPatientInfo("1234567890", null, null, null, null, "9087654321", null)
+                .setPatientInfo(CASE_ID, null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .addSmearTestResults(SmearTestSampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative)
                 .setWeightStatistics(WeightInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
@@ -51,7 +51,6 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id("caseId");
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.New);
         patientRequest.setTreatment_category(category);
         patientRequest.setProvider_id("newProviderId");
         patientRequest.setDisease_class(DiseaseClass.E);
@@ -63,39 +62,35 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withMandatoryFieldsForCloseTreatment() {
-        patientRequest.setCase_id("caseId");
+        patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("elevenDigit");
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.Close);
         patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForPauseTreatment() {
-        patientRequest.setCase_id("caseId");
+        patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.Pause);
         patientRequest.setReason("paws");
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
-        patientRequest.setCase_id("caseId");
+        patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.Restart);
         patientRequest.setReason("swap");
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForTransferInTreatment() {
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
-        patientRequest.setCase_id("caseId");
+        patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("newTbId");
         patientRequest.setDisease_class(DiseaseClass.P);
-        patientRequest.setTreatment_update(TreatmentUpdateScenario.TransferredIn);
         patientRequest.setTreatment_category(category);
         patientRequest.setPatient_type(PatientType.PHCTransfer);
         return this;
@@ -104,7 +99,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForImportPatient(){
         TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
-                .setPatientInfo("1234567890", "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
                 .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
@@ -174,6 +169,11 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withTreatmentCategory(TreatmentCategory treatmentCategory) {
         patientRequest.setTreatment_category(treatmentCategory);
+        return this;
+    }
+
+    public PatientRequestBuilder withTreatmentOutcome(TreatmentOutcome treatmentOutcome) {
+        patientRequest.setTreatment_outcome(treatmentOutcome);
         return this;
     }
 

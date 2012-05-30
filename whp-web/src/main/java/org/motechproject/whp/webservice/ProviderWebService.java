@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.registration.service.RegistrationService;
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

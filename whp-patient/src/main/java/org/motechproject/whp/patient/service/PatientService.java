@@ -7,12 +7,17 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.mapper.TreatmentMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
+import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.sanityCheckFails;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapProvidedTreatment;
 
@@ -49,6 +54,14 @@ public class PatientService {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.latestTreatment().setStartDate(firstDoseTakenDate);
         allPatients.update(patient);
+    }
+
+    public boolean canBeTransferred(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        if (!sanityCheckFails(patient, new ArrayList<WHPErrorCode>())) {
+            return TreatmentOutcome.TransferredOut.equals(patient.getCurrentProvidedTreatment().getTreatmentOutcome());
+        }
+        return false;
     }
 
 }

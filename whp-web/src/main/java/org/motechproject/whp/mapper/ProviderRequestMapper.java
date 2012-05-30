@@ -4,7 +4,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.request.ProviderWebRequest;
+import org.motechproject.whp.contract.ProviderWebRequest;
 import org.springframework.stereotype.Component;
 
 @Component
