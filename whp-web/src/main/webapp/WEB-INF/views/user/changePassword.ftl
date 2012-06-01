@@ -35,5 +35,5 @@
         <button type="submit" class="btn btn-group btn-primary" id="changePassword">Save</button>
     </div>
 </form>
-<script type="text/javascript" src="<@spring.url '/resources/js/changePassword.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/changePassword.js'/>"></script>
 </#macro>

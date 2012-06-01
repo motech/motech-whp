@@ -3,15 +3,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <#global applicationVersion="1.0"/>
+
     <title> ${title} </title>
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources/styles/bootstrap.css'/>"/>
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources/styles/standard.css'/>"/>
-    <link rel="SHORTCUT ICON" href="<@spring.url '/resources/images/favicon.ico'/>"/>
-    <script type="text/javascript" src="<@spring.url '/resources/js/jquery/jquery-1.7.2.js'/>"></script>
-    <script type="text/javascript" src="<@spring.url '/resources/js/jquery/jquery.validate.js'/>"></script>
-    <script type="text/javascript" src="<@spring.url '/resources/js/bootstrap/bootstrap-modal.js'/>"></script>
-    <script type="text/javascript" src="<@spring.url '/resources/js/bootstrap/bootstrap-alerts.js'/>"></script>
-    <script type="text/javascript" src="<@spring.url '/resources/js/util.js'/>"></script>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/standard.css'/>"/>
+    <link rel="SHORTCUT ICON" href="<@spring.url '/resources-${applicationVersion}/images/favicon.ico'/>"/>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-1.7.2.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery.validate.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-modal.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-alerts.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
 <body>
 <div class="container">

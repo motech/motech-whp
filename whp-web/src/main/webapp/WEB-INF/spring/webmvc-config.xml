@@ -18,7 +18,7 @@
 
     <mvc:annotation-driven/>
 
-    <mvc:resources location="/" mapping="/resources/**"/>
+    <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/" />
 
     <mvc:default-servlet-handler/>
 
@@ -26,6 +26,18 @@
     <mvc:interceptors>
         <!-- This bit of XML will intercept all URLs - which is what you want in a web app -->
         <bean class="org.motechproject.flash.FlashScopeFilter" />
+
+        <bean id="staticContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+            <property name="cacheMappings">
+                <props>
+                    <prop key="/resources-#{whpProperties['application.version']}/**">31556926</prop>
+                </props>
+            </property>
+        </bean>
     </mvc:interceptors>
 
     <!-- selects a static view for rendering without the need for an explicit controller -->

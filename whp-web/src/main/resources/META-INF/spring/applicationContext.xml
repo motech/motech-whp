@@ -38,4 +38,6 @@
         </property>
     </bean>
 
+    <util:properties id="whpProperties" location="classpath:/whp.properties"/>
+
 </beans>
