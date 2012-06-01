@@ -4,9 +4,22 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.motechproject.whp</groupId>
     <artifactId>motech-whp</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>${whp.version}</version>
     <packaging>pom</packaging>
     <name>motech-whp</name>
+
+    <properties>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <slf4j.version>1.6.1</slf4j.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-security.version>3.0.5.RELEASE</spring-security.version>
+        <build.dir>build</build.dir>
+        <whp.version>0.1-SNAPSHOT</whp.version>
+        <motech.version>0.10</motech.version>
+        <motech.contrib.version>0.10-SNAPSHOT</motech.contrib.version>
+        <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
+    </properties>
 
     <modules>
         <module>whp-refdata</module>
@@ -161,18 +174,6 @@
             <version>0.10.8</version>
         </dependency>
     </dependencies>
-
-    <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
-        <slf4j.version>1.6.1</slf4j.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-security.version>3.0.5.RELEASE</spring-security.version>
-        <build.dir>build</build.dir>
-        <motech.version>0.10</motech.version>
-        <motech.contrib.version>0.10-SNAPSHOT</motech.contrib.version>
-        <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
-    </properties>
 
     <build>
         <plugins>
