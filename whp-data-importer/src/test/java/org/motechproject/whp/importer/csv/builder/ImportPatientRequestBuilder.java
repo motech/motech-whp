@@ -50,6 +50,51 @@ public class ImportPatientRequestBuilder {
                 .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
+    public ImportPatientRequestBuilder withSmearTestResults(SmearTestSampleInstance type,
+                                                            String testResultDate1,
+                                                            String testResult1,
+                                                            String testResultDate2,
+                                                            String testResult2) {
+        switch (type) {
+            case PreTreatment: {
+                importPatientRequest.setPreTreatmentSmearTestDate1(testResultDate1);
+                importPatientRequest.setPreTreatmentSmearTestResult1(testResult1);
+                importPatientRequest.setPreTreatmentSmearTestDate2(testResultDate2);
+                importPatientRequest.setPreTreatmentSmearTestResult2(testResult2);
+                break;
+            }
+            case EndIP: {
+                importPatientRequest.setEndIpSmearTestDate1(testResultDate1);
+                importPatientRequest.setEndIpSmearTestResult1(testResult1);
+                importPatientRequest.setEndIpSmearTestDate2(testResultDate2);
+                importPatientRequest.setEndIpSmearTestResult2(testResult2);
+                break;
+            }
+            case ExtendedIP: {
+                importPatientRequest.setExtendedIpSmearTestDate1(testResultDate1);
+                importPatientRequest.setExtendedIpSmearTestResult1(testResult1);
+                importPatientRequest.setExtendedIpSmearTestDate2(testResultDate2);
+                importPatientRequest.setExtendedIpSmearTestResult2(testResult2);
+                break;
+            }
+            case TwoMonthsIntoCP: {
+                importPatientRequest.setTwoMonthsIntoCpSmearTestDate1(testResultDate1);
+                importPatientRequest.setTwoMonthsIntoCpSmearTestResult1(testResult1);
+                importPatientRequest.setTwoMonthsIntoCpSmearTestDate2(testResultDate2);
+                importPatientRequest.setTwoMonthsIntoCpSmearTestResult2(testResult2);
+                break;
+            }
+            case EndTreatment: {
+                importPatientRequest.setEndTreatmentSmearTestDate1(testResultDate1);
+                importPatientRequest.setEndTreatmentSmearTestResult1(testResult1);
+                importPatientRequest.setEndTreatmentSmearTestDate2(testResultDate2);
+                importPatientRequest.setEndTreatmentSmearTestResult2(testResult2);
+                break;
+            }
+        }
+        return this;
+    }
+
     public ImportPatientRequestBuilder withSmearTestResults(String testResultDate1,
                                                             String testResult1,
                                                             String testResultDate2,

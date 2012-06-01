@@ -23,13 +23,26 @@ public class ImportSmearTestResultsMapperTest {
 
     @Test
     public void shouldMapImportSmearTestResultsToSmearTestResults() {
-        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder().
-                withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Negative.name()).build();
+        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder()
+                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SmearTestSampleInstance.EndIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SmearTestSampleInstance.ExtendedIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SmearTestSampleInstance.TwoMonthsIntoCP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SmearTestSampleInstance.EndTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .build();
         SmearTestResults smearTestResults = importSmearTestResultMapper.map(importPatientRequest);
 
-        assertEquals(importPatientRequest.getTestDate1(SmearTestSampleInstance.PreTreatment), smearTestResults.get(0).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
-        assertEquals(importPatientRequest.getTestDate2(SmearTestSampleInstance.PreTreatment), smearTestResults.get(0).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
-        assertEquals(importPatientRequest.getTestResult1(SmearTestSampleInstance.PreTreatment), smearTestResults.get(0).getSmear_test_result_1().name());
-        assertEquals(importPatientRequest.getTestResult2(SmearTestSampleInstance.PreTreatment), smearTestResults.get(0).getSmear_test_result_2().name());
+        verifyMapping(importPatientRequest, smearTestResults, 0, SmearTestSampleInstance.PreTreatment);
+        verifyMapping(importPatientRequest, smearTestResults, 1, SmearTestSampleInstance.EndIP);
+        verifyMapping(importPatientRequest, smearTestResults, 2, SmearTestSampleInstance.ExtendedIP);
+        verifyMapping(importPatientRequest, smearTestResults, 3, SmearTestSampleInstance.TwoMonthsIntoCP);
+        verifyMapping(importPatientRequest, smearTestResults, 4, SmearTestSampleInstance.EndTreatment);
+    }
+
+    private void verifyMapping(ImportPatientRequest importPatientRequest, SmearTestResults smearTestResults, int smearTestResultIndex, SmearTestSampleInstance type) {
+        assertEquals(importPatientRequest.getTestDate1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(importPatientRequest.getTestDate2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(importPatientRequest.getTestResult1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_result_1().name());
+        assertEquals(importPatientRequest.getTestResult2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_result_2().name());
     }
 }
