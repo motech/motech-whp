@@ -35,7 +35,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
     @Before
     public void setUp(){
         super.setUp();
-        treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+        treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         allTreatmentCategories.add(treatmentCategory);
     }
 

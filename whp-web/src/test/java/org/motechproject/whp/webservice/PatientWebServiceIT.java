@@ -126,7 +126,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsTransferIn() {
         //For the mapping to take place [allTreatmentCategories.findByCode()]
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
-        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, threeDaysAWeek));
+        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, threeDaysAWeek));
 
         PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         patientWebService.createCase(createPatientWebRequest);

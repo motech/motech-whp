@@ -63,7 +63,7 @@ public class TransferInPatientCriteriaTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setDisease_class(patient.latestTreatment().getDiseaseClass());
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
-        patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, threeDaysAWeek));
+        patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, 24, 54, threeDaysAWeek));
 
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 

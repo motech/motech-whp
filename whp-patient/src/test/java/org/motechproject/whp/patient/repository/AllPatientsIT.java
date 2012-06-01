@@ -58,7 +58,7 @@ public class AllPatientsIT extends SpringIntegrationTest {
     }
 
     private Patient createPatient(String patientId, String providerId) {
-        TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
         Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200);
         allTreatments.add(treatment);
 

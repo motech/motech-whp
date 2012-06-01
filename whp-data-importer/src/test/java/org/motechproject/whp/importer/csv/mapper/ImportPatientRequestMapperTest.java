@@ -1,6 +1,5 @@
 package org.motechproject.whp.importer.csv.mapper;
 
-import org.dozer.DozerBeanMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +10,7 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -60,7 +57,7 @@ public class ImportPatientRequestMapperTest {
 
     @Before
     public void setup() {
-        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, Arrays.asList(DayOfWeek.Monday));
+        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, 36, 66, Arrays.asList(DayOfWeek.Monday));
         allTreatmentCategories.add(treatmentCategory);
     }
 

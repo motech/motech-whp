@@ -35,7 +35,7 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
 
         assertFalse(providerPage.hasPatient(patientRequest.getFirst_name()));
 
-        TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+        TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
 
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
