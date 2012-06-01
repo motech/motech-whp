@@ -41,6 +41,11 @@ public class AllProvidersTest extends SpringIntegrationTest {
         allProviders.addOrReplace(provider);
     }
 
+    @Test
+    public void findByProviderIdShouldReturnNullIfKeywordIsNull() {
+        assertEquals(null, allProviders.findByProviderId(null));
+    }
+
     @Override
     public void after() {
         markForDeletion(provider);

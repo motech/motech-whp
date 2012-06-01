@@ -27,13 +27,20 @@ public class Provider extends MotechBaseDataObject {
     }
 
     public Provider(String providerId, String primaryMobile, String district, DateTime lastModifiedDate) {
-        this.providerId = providerId;
+        setProviderId(providerId);
         this.primaryMobile = primaryMobile;
         this.district = district;
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public DateTime getLastModifiedDate(){
+    public DateTime getLastModifiedDate() {
         return DateUtil.setTimeZone(lastModifiedDate);
+    }
+
+    public void setProviderId(String providerId) {
+        if (providerId == null)
+            this.providerId = null;
+        else
+            this.providerId = providerId.toLowerCase();
     }
 }

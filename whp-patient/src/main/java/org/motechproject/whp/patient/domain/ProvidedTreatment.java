@@ -34,8 +34,8 @@ public class ProvidedTreatment {
     }
 
     public ProvidedTreatment(String providerId, String tbId, PatientType patientType) {
-        this.providerId = providerId;
-        this.tbId = tbId;
+        setProviderId(providerId);
+        setTbId(tbId);
         this.patientType = patientType;
     }
 
@@ -113,5 +113,19 @@ public class ProvidedTreatment {
 
     public void addWeightStatistics(WeightStatisticsRecord weightStatisticsRecord) {
         weightStatistics.add(weightStatisticsRecord);
+    }
+
+    public void setProviderId(String providerId) {
+        if (providerId == null)
+            this.providerId = null;
+        else
+            this.providerId = providerId.toLowerCase();
+    }
+
+    public void setTbId(String tbId) {
+        if (tbId == null)
+            this.tbId = null;
+        else
+            this.tbId = tbId.toLowerCase();
     }
 }

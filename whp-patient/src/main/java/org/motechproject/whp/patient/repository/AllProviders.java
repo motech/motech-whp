@@ -22,7 +22,9 @@ public class AllProviders extends MotechBaseRepository<Provider> {
 
     @GenerateView
     public Provider findByProviderId(String providerId) {
-        ViewQuery find_by_providerId = createQuery("by_providerId").key(providerId).includeDocs(true);
+        if(providerId==null)
+            return null;
+        ViewQuery find_by_providerId = createQuery("by_providerId").key(providerId.toLowerCase()).includeDocs(true);
         return singleResult(db.queryView(find_by_providerId, Provider.class));
     }
 

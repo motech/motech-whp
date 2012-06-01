@@ -55,7 +55,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @GenerateView
     public Patient findByPatientId(String patientId) {
-        ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId).includeDocs(true);
+        if(patientId == null)
+            return null;
+        ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         Patient patient = singleResult(db.queryView(find_by_patientId, Patient.class));
         if (patient != null)
             loadPatientDependencies(patient);
@@ -75,8 +77,11 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentProvidedTreatment) {emit([doc.currentProvidedTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> findByCurrentProviderId(String providerId) {
-        ComplexKey startKey = ComplexKey.of(providerId, null);
-        ComplexKey endKey = ComplexKey.of(providerId, ComplexKey.emptyObject());
+        if(providerId == null)
+            return new ArrayList<Patient>();
+        String keyword = providerId.toLowerCase();
+        ComplexKey startKey = ComplexKey.of(keyword, null);
+        ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
         ViewQuery q = createQuery("find_by_providerId").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         for (Patient patient : patients) {

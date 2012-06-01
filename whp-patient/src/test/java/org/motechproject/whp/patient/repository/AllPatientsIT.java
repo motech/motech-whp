@@ -9,6 +9,7 @@ import org.motechproject.whp.refdata.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
@@ -42,11 +43,38 @@ public class AllPatientsIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void PatientIdShouldBeCaseInsensitive() {
+        createPatient("Cha01100002", "providerId");
+
+        Patient savedPatient = allPatients.findByPatientId("chA01100002");
+        assertNotNull(savedPatient);
+    }
+
+    @Test
+    public void shouldSaveIdsInLowerCase() {
+        createPatient("Cha01100002", "providerId");
+        Patient savedPatient = allPatients.findByPatientId("chA01100002");
+        assertEquals("tbid",savedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals("providerid",savedPatient.getCurrentProvidedTreatment().getProviderId());
+
+    }
+
+    @Test
+    public void findByPatientIdShouldReturnNullIfKeywordIsNull() {
+       assertEquals(null,allPatients.findByPatientId(null));
+    }
+
+    @Test
     public void shouldFetchPatientsByCurrentProviderId() {
         Patient requiredPatient = createPatient("patientId1", "providerId1");
         createPatient("patientId2", "providerId2");
 
         assertPatientEquals(new Patient[]{requiredPatient}, allPatients.findByCurrentProviderId("providerId1").toArray());
+    }
+
+    @Test
+    public void fetchByCurrentProviderIdShouldReturnEmptyListIfKeywordIsNull() {
+       assertEquals(new ArrayList<Patient>(),allPatients.findByCurrentProviderId(null));
     }
 
     @Test

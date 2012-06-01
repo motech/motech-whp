@@ -36,7 +36,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public Patient(String patientId, String firstName, String lastName, Gender gender, String phoneNumber) {
-        this.patientId = patientId;
+        setPatientId(patientId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -125,11 +125,18 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public Integer getAge(){
+    public Integer getAge() {
         return latestTreatment().getPatientAge();
     }
 
     public void reviveLastClosedTreatment() {
         latestTreatment().revive();
+    }
+
+    public void setPatientId(String patientId) {
+        if (patientId == null)
+            this.patientId = null;
+        else
+            this.patientId = patientId.toLowerCase();
     }
 }

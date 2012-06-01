@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.assertEquals;
@@ -51,5 +52,32 @@ public class ProvidedTreatmentTest {
 
         assertFalse(providedTreatment.isPaused());
     }
+
+    @Test
+    public void shouldStoreIdsInLowerCase() {
+        ProvidedTreatment providedTreatment = new ProvidedTreatment();
+        providedTreatment.setProviderId("QWER");
+        providedTreatment.setTbId("ASD");
+        assertEquals("qwer", providedTreatment.getProviderId());
+        assertEquals("asd", providedTreatment.getTbId());
+
+        providedTreatment = new ProvidedTreatment("QWER","asd", PatientType.New);
+        assertEquals("qwer", providedTreatment.getProviderId());
+        assertEquals("asd", providedTreatment.getTbId());
+    }
+
+    @Test
+    public void shouldHandleNullValuesForId() {
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(null,null, PatientType.New);
+        assertEquals(null,providedTreatment.getProviderId());
+        assertEquals(null,providedTreatment.getTbId());
+
+        providedTreatment = new ProvidedTreatment("","",PatientType.New);
+        providedTreatment.setProviderId(null);
+        providedTreatment.setTbId(null);
+        assertEquals(null, providedTreatment.getProviderId());
+        assertEquals(null,providedTreatment.getTbId());
+    }
+
 
 }

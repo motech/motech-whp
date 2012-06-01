@@ -85,4 +85,28 @@ public class PatientTest {
         verify(providedTreatment, times(1)).resume("swap", now);
     }
 
+    @Test
+    public void shouldStoreIdsInLowerCase() {
+        Patient patient = new Patient();
+        patient.setPatientId("QWER");
+        assertEquals("qwer",patient.getPatientId());
+
+        patient = new Patient("QWER","","",Gender.M,"");
+        assertEquals("qwer",patient.getPatientId());
+
+        patient.setPatientId(null);
+        assertEquals(null,patient.getPatientId());
+    }
+
+    @Test
+    public void settingIdsShouldHandleNullValues() {
+        Patient patient = new Patient("","","",Gender.F,"");
+        patient.setPatientId(null);
+        assertEquals(null,patient.getPatientId());
+
+        patient = new Patient(null,"","",Gender.F,"");
+        assertEquals(null,patient.getPatientId());
+
+    }
+
 }
