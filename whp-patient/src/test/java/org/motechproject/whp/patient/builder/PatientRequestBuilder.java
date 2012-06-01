@@ -16,6 +16,11 @@ import static org.motechproject.util.DateUtil.today;
 public class PatientRequestBuilder {
 
     public static final String CASE_ID = "caseId";
+    public static final String NEW_TB_ID = "newTbId";
+    public static final String NEW_PROVIDER_ID = "newProviderId";
+    protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+    protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+
     private PatientRequest patientRequest = new PatientRequest();
 
     public PatientRequest build() {
@@ -23,10 +28,9 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withDefaults() {
-        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
         patientRequest = new PatientRequest()
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
-                .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category01, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(WeightInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
@@ -46,12 +50,10 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withMandatoryFieldsForOpenNewTreatment() {
         patientRequest.setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50));
-
-        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
         patientRequest.setCase_id("caseId");
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id("tbId");
-        patientRequest.setTreatment_category(category);
+        patientRequest.setTreatment_category(category10);
         patientRequest.setProvider_id("newProviderId");
         patientRequest.setDisease_class(DiseaseClass.E);
 
@@ -86,18 +88,18 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withMandatoryFieldsForTransferInTreatment() {
-        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, Arrays.asList(DayOfWeek.Monday));
+        patientRequest.setProvider_id(NEW_PROVIDER_ID);
         patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("newTbId");
+        patientRequest.setTb_id(NEW_TB_ID);
         patientRequest.setDisease_class(DiseaseClass.P);
-        patientRequest.setTreatment_category(category);
+        patientRequest.setTreatment_category(category01);
         patientRequest.setPatient_type(PatientType.PHCTransfer);
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForImportPatient(){
-        TreatmentCategory category = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+        TreatmentCategory category = category01;
         patientRequest = new PatientRequest()
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
                 .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
