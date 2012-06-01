@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 public class WeightStatisticsRecordTest {
 
     @Test
-    public void checkResultForWeightInstance() {
+    public void verifyDefaultWeightStatisticsInstance() {
         WeightStatisticsRecord endTreatmentResult = new WeightStatisticsRecord(WeightInstance.EndTreatment, null, null);
         assertFalse(endTreatmentResult.isOfInstance(WeightInstance.PreTreatment));
         assertFalse(endTreatmentResult.isOfInstance(WeightInstance.ExtendedIP));
