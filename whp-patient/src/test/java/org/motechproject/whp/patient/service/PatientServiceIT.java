@@ -9,9 +9,7 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatments;
@@ -74,9 +72,21 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentProvidedTreatment().getPatientAddress());
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
-        assertEquals(updatePatientRequest.getSmearTestResults(), updatedPatient.getCurrentProvidedTreatment().getSmearTestResults());
-        assertEquals(updatePatientRequest.getWeightStatistics(), updatedPatient.getCurrentProvidedTreatment().getWeightStatistics());
+        verifySmearTestResultsUpdate(updatePatientRequest, updatedPatient);
+        verifyWeightStatisticsUpdate(updatePatientRequest, updatedPatient);
         assertEquals((Integer) 66, treatment.getPatientAge());
+    }
+
+    private void verifyWeightStatisticsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
+        WeightStatistics updateRequests = updatePatientRequest.getWeightStatistics();
+        WeightStatistics weightStatistics = updatedPatient.getCurrentProvidedTreatment().getWeightStatistics();
+        assertTrue(weightStatistics.getAll().containsAll(updateRequests.getAll()));
+    }
+
+    private void verifySmearTestResultsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
+        SmearTestResults updateRequests = updatePatientRequest.getSmearTestResults();
+        SmearTestResults smearTestResults = updatedPatient.getCurrentProvidedTreatment().getSmearTestResults();
+        assertTrue(smearTestResults.getAll().containsAll(updateRequests.getAll()));
     }
 
     @Test

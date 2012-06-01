@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WeightStatistics {
@@ -72,5 +73,10 @@ public class WeightStatistics {
     @Override
     public int hashCode() {
         return weightStatisticsRecords != null ? weightStatisticsRecords.hashCode() : 0;
+    }
+
+    @JsonIgnore
+    public List<WeightStatisticsRecord> getAll() {
+        return Collections.unmodifiableList(weightStatisticsRecords);
     }
 }

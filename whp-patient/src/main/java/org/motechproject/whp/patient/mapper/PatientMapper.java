@@ -1,10 +1,7 @@
 package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 
 public class PatientMapper {
 
@@ -89,15 +86,14 @@ public class PatientMapper {
     }
 
     private static void mapSmearTestResults(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        if (!patientRequest.getSmearTestResults().isEmpty()) {
-            treatment.setSmearTestResults(patientRequest.getSmearTestResults());
+        for(SmearTestRecord smearTestRecord : patientRequest.getSmearTestResults().getAll()) {
+            treatment.getSmearTestResults().add(smearTestRecord);
         }
     }
 
     private static void mapWeightStatistics(PatientRequest patientRequest, ProvidedTreatment treatment) {
-        if (!patientRequest.getWeightStatistics().isEmpty()) {
-            treatment.setWeightStatistics(patientRequest.getWeightStatistics());
+        for(WeightStatisticsRecord weightStatisticsRecord : patientRequest.getWeightStatistics().getAll()) {
+            treatment.getWeightStatistics().add(weightStatisticsRecord);
         }
     }
-
 }

@@ -7,6 +7,7 @@ import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SmearTestResults {
@@ -72,5 +73,10 @@ public class SmearTestResults {
     @Override
     public int hashCode() {
         return smearTestResults != null ? smearTestResults.hashCode() : 0;
+    }
+
+    @JsonIgnore
+    public List<SmearTestRecord> getAll() {
+        return Collections.unmodifiableList(smearTestResults);
     }
 }
