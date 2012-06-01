@@ -149,6 +149,39 @@ public class ImportPatientRequestBuilder {
                 .withPhi(phi);
     }
 
+    public ImportPatientRequestBuilder withWeightStatistics(WeightInstance type,
+                                                            String measuringDate,
+                                                            String weight) {
+        switch (type) {
+            case PreTreatment: {
+                importPatientRequest.setPreTreatmentWeightDate(measuringDate);
+                importPatientRequest.setPreTreatmentWeight(weight);
+                break;
+            }
+            case EndIP: {
+                importPatientRequest.setEndIpWeightDate(measuringDate);
+                importPatientRequest.setEndIpWeight(weight);
+                break;
+            }
+            case ExtendedIP: {
+                importPatientRequest.setExtendedIpWeightDate(measuringDate);
+                importPatientRequest.setExtendedIpWeight(weight);
+                break;
+            }
+            case TwoMonthsIntoCP: {
+                importPatientRequest.setTwoMonthsIntoCpWeightDate(measuringDate);
+                importPatientRequest.setTwoMonthsIntoCpWeight(weight);
+                break;
+            }
+            case EndTreatment: {
+                importPatientRequest.setEndTreatmentWeightDate(measuringDate);
+                importPatientRequest.setEndTreatmentWeight(weight);
+                break;
+            }
+        }
+        return this;
+    }
+
     public ImportPatientRequestBuilder withWeightStatistics(String weightDate, String weight) {
         return withWeight(weight).withWeightDate(weightDate);
     }

@@ -22,10 +22,24 @@ public class ImportWeightStatisticsMapperTest {
 
     @Test
     public void shouldMapImportWeightStatisticsToWeightStatistics() {
-        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder().withDefaults().build();
+        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder()
+                .withWeightStatistics(WeightInstance.PreTreatment, "22/09/2000", "99.7")
+                .withWeightStatistics(WeightInstance.EndIP, "22/09/2000", "99.7")
+                .withWeightStatistics(WeightInstance.ExtendedIP, "22/09/2000", "99.7")
+                .withWeightStatistics(WeightInstance.TwoMonthsIntoCP, "22/09/2000", "99.7")
+                .withWeightStatistics(WeightInstance.EndTreatment, "22/09/2000", "99.7")
+                .build();
         WeightStatistics weightStatistics = importWeightStatisticsMapper.map(importPatientRequest);
 
-        assertEquals(importPatientRequest.getWeight(WeightInstance.PreTreatment), weightStatistics.get(0).getWeight().toString());
-        assertEquals(importPatientRequest.getWeightDate(WeightInstance.PreTreatment), weightStatistics.get(0).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
+        verifyMapping(importPatientRequest, weightStatistics, 0, WeightInstance.PreTreatment);
+        verifyMapping(importPatientRequest, weightStatistics, 1, WeightInstance.EndIP);
+        verifyMapping(importPatientRequest, weightStatistics, 2, WeightInstance.ExtendedIP);
+        verifyMapping(importPatientRequest, weightStatistics, 3, WeightInstance.TwoMonthsIntoCP);
+        verifyMapping(importPatientRequest, weightStatistics, 4, WeightInstance.EndTreatment);
+    }
+
+    private void verifyMapping(ImportPatientRequest importPatientRequest, WeightStatistics weightStatistics, int index, WeightInstance type) {
+        assertEquals(importPatientRequest.getWeight(type), weightStatistics.get(index).getWeight().toString());
+        assertEquals(importPatientRequest.getWeightDate(type), weightStatistics.get(index).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
     }
 }
