@@ -88,6 +88,25 @@ public class CsvImporterTest extends SpringIntegrationTest {
         assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getWeightStatistics().get(0).getMeasuringDate());
 
     }
+    @Test
+    public void shouldNotStoreAnyPatientIfThereIsInvalidData() throws Exception{
+        String[] arguments = new String[3];
+        arguments[0] = "provider";
+        arguments[1] = getProviderCsv();
+        arguments[2] = getLogFilePath();
+        CsvImporter.main(arguments);
+
+        arguments[0] = "patient";
+        arguments[1] = CsvImporterTest.class.getClassLoader().getResource("patientRecordsWitnInvalidData.csv").getPath();
+        arguments[2] = getLogFilePath();
+        CsvImporter.main(arguments);
+        assertEquals(0, allPatients.getAll().size());
+        assertEquals(0, allTreatments.getAll().size());
+        assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getPatientType());
+        Patient patient2 = allPatients.findByPatientId("234324");
+        assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getWeightStatistics().get(0).getMeasuringDate());
+
+    }
 
     @Test(expected = WHPImportException.class)
     public void shouldThrowExceptionForInvalidLogFile() throws Exception {
