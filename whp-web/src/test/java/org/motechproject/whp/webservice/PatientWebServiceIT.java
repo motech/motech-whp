@@ -152,8 +152,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
-        assertEquals(newProvider.getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertEquals(transferInRequest.getTb_id(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
         assertEquals(patient.getCurrentProvidedTreatment().getTreatmentDocId(), updatedPatient.getCurrentProvidedTreatment().getTreatmentDocId());
 

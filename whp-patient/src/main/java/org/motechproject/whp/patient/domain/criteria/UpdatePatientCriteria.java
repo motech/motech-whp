@@ -23,10 +23,7 @@ public class UpdatePatientCriteria {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
-            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
-            tbIdMatches = false;
-        }
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
         boolean endDateNotSet = true;
         if (patient.isCurrentTreatmentClosed()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
@@ -38,7 +35,7 @@ public class UpdatePatientCriteria {
     public static boolean canPerformSimpleUpdate(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
+        if (currentProvidedTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             return false;
         }
@@ -65,10 +62,7 @@ public class UpdatePatientCriteria {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
-            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
-            tbIdMatches = false;
-        }
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
         if (patient.isCurrentTreatmentClosed()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
             return false;
@@ -80,14 +74,20 @@ public class UpdatePatientCriteria {
         return tbIdMatches;
     }
 
+    private static boolean VerifyAndAddErrorCodeForTbIdValidation(PatientRequest patientRequest, List<WHPErrorCode> errorCodes, ProvidedTreatment currentProvidedTreatment) {
+        boolean  tbIdMatches = true;
+        if (currentProvidedTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
+            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+            tbIdMatches = false;
+        }
+        return tbIdMatches;
+    }
+
     public static boolean canRestartCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         boolean tbIdMatches = true;
-        if (!currentProvidedTreatment.getTbId().equals(patientRequest.getTb_id())) {
-            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
-            tbIdMatches = false;
-        }
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
         boolean treatmentIsPaused = true;
         if (!currentProvidedTreatment.isPaused()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);

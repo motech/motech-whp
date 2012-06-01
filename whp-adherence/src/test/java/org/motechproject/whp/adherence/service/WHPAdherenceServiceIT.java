@@ -35,8 +35,12 @@ import static org.motechproject.whp.patient.builder.PatientRequestBuilder.*;
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
-    public static final String OLD_TB_ID = "elevenDigit";
+    public static final String OLD_TB_ID = "elevendigit";
     public static final String OLD_PROVIDER_ID = "123456";
+    public static final String PATIENT_ID = "patientid";
+    public static final String NEW_PROVIDER_ID = "newproviderid";
+    public static final String NEW_TB_ID = "newtbid";
+    public static final String TB_ID = "elevendigit";
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);
 

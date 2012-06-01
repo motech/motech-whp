@@ -7,7 +7,6 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
-import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.Treatment;
 
 import static org.junit.Assert.*;
@@ -80,17 +79,17 @@ public class PatientMapperTest {
 
         ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTreatment);
 
-        assertNotSame(currentProvidedTreatment.getTbId(), newProvidedTreatment.getTbId());
+        assertNotSame(currentProvidedTreatment.getTbId().toLowerCase(), newProvidedTreatment.getTbId());
         assertNotSame(patient.latestTreatment(), newProvidedTreatment.getTreatment());
-        assertEquals(openNewTreatmentUpdateRequest.getTb_id(), newProvidedTreatment.getTbId());
+        assertEquals(openNewTreatmentUpdateRequest.getTb_id().toLowerCase(), newProvidedTreatment.getTbId());
         assertEquals(currentProvidedTreatment.getPatientAddress(), newProvidedTreatment.getPatientAddress());
-        assertEquals(openNewTreatmentUpdateRequest.getProvider_id(), newProvidedTreatment.getProviderId());
+        assertEquals(openNewTreatmentUpdateRequest.getProvider_id().toLowerCase(), newProvidedTreatment.getProviderId());
         //will set null if request does not have the field.
         assertEquals(openNewTreatmentUpdateRequest.getTb_registration_number(), newProvidedTreatment.getTbRegistrationNumber());
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {
-        assertEquals(patientRequest.getCase_id(), patient.getPatientId());
+        assertEquals(patientRequest.getCase_id().toLowerCase(), patient.getPatientId());
         assertEquals(patientRequest.getFirst_name(), patient.getFirstName());
         assertEquals(patientRequest.getLast_name(), patient.getLastName());
         assertEquals(patientRequest.getGender(), patient.getGender());
@@ -100,7 +99,7 @@ public class PatientMapperTest {
 
     private void assertProvidedTreatment(Patient patient, PatientRequest patientRequest) {
         ProvidedTreatment providedTreatment = patient.getCurrentProvidedTreatment();
-        assertEquals(patientRequest.getTb_id(), providedTreatment.getTbId());
+        assertEquals(patientRequest.getTb_id().toLowerCase(), providedTreatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), providedTreatment.getProviderId());
         assertEquals(patientRequest.getTb_registration_number(), providedTreatment.getTbRegistrationNumber());
         assertEquals(patientRequest.getAddress(), providedTreatment.getPatientAddress());

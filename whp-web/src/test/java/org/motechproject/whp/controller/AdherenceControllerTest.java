@@ -36,7 +36,7 @@ import static org.motechproject.model.DayOfWeek.*;
 
 public class AdherenceControllerTest extends BaseUnitTest {
 
-    public static final String PATIENT_ID = "patientId";
+    public static final String PATIENT_ID = "patientid";
     public static final String CATEGORY_DOC_ID = "categoryDocId";
 
     @Mock

@@ -20,8 +20,8 @@ import static org.motechproject.model.DayOfWeek.Monday;
 
 public class AdherenceDataMapperTest {
 
-    public static final String PROVIDER_ID = "ProviderId";
-    public static final String TB_ID = "TB_ID";
+    public static final String PROVIDER_ID = "providerid";
+    public static final String TB_ID = "tb_id";
 
     private Patient patient;
 

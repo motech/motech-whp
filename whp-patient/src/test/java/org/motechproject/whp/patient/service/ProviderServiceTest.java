@@ -48,7 +48,7 @@ public class ProviderServiceTest extends SpringIntegrationTest {
 
         Provider provider = allProviders.findByProviderId(providerId);
         
-        assertEquals(providerId, provider.getProviderId());
+        assertEquals(providerId.toLowerCase(), provider.getProviderId());
         assertEquals(primaryMobile, provider.getPrimaryMobile());
         assertEquals(secondaryMobile, provider.getSecondaryMobile());
         assertEquals(tertiaryMobile, provider.getTertiaryMobile());
@@ -73,8 +73,8 @@ public class ProviderServiceTest extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
 
-        assertEquals(newProviderId, updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertEquals(tbId, updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertEquals(newProviderId.toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals(tbId.toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(newTbRegistrationNumber, updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
         assertEquals(now.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
         assertEquals(now, updatedPatient.getLastModifiedDate());

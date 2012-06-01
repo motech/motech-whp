@@ -91,7 +91,7 @@ public class AllPatientsIT extends SpringIntegrationTest {
         allTreatments.add(treatment);
 
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tdId", PatientType.New);
+        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tbId", PatientType.New);
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         providedTreatment.setTreatment(treatment);
         providedTreatment.addSmearTestResult(smearTestResult());
