@@ -35,7 +35,7 @@ import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
-public class WHPAdherenceServiceTest extends SpringIntegrationTest {
+public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
     public static final String PATIENT_ID = "patientId";
     public static final String NEW_PROVIDER_ID = "newProviderId";
