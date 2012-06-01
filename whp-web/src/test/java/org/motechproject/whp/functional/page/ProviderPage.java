@@ -74,7 +74,7 @@ public class ProviderPage extends LoggedInUserPage {
 
     public boolean hasTbId(String tbId) {
         for (WebElement tbIdElement : tbIds) {
-            if (tbIdElement.getText().equals(tbId)) {
+            if (tbIdElement.getText().compareToIgnoreCase(tbId) == 0) {
                 return true;
             }
         }

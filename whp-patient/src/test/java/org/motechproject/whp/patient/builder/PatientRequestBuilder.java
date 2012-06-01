@@ -15,9 +15,9 @@ import static org.motechproject.util.DateUtil.today;
 
 public class PatientRequestBuilder {
 
-    public static final String CASE_ID = "caseId";
-    public static final String NEW_TB_ID = "newTbId";
-    public static final String NEW_PROVIDER_ID = "newProviderId";
+    public static final String CASE_ID = "caseid";
+    public static final String NEW_TB_ID = "newtbid";
+    public static final String NEW_PROVIDER_ID = "newproviderid";
     protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
     protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
 
@@ -50,11 +50,11 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withMandatoryFieldsForOpenNewTreatment() {
         patientRequest.setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50));
-        patientRequest.setCase_id("caseId");
+        patientRequest.setCase_id("caseid");
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbId");
+        patientRequest.setTb_id("tbid");
         patientRequest.setTreatment_category(category10);
-        patientRequest.setProvider_id("newProviderId");
+        patientRequest.setProvider_id("newproviderid");
         patientRequest.setDisease_class(DiseaseClass.E);
 
         patientRequest.addSmearTestResults(SmearTestSampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative);
@@ -66,7 +66,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForCloseTreatment() {
         patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("elevenDigit");
+        patientRequest.setTb_id("elevendigit");
         patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
         return this;
     }
@@ -74,7 +74,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForPauseTreatment() {
         patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbId");
+        patientRequest.setTb_id("tbid");
         patientRequest.setReason("paws");
         return this;
     }
@@ -82,7 +82,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
         patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbId");
+        patientRequest.setTb_id("tbid");
         patientRequest.setReason("swap");
         return this;
     }
@@ -102,7 +102,7 @@ public class PatientRequestBuilder {
         TreatmentCategory category = category01;
         patientRequest = new PatientRequest()
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
-                .setTreatmentData(category, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category, "elevendigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
@@ -110,12 +110,12 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withProviderId(String providerId) {
-        patientRequest.setProvider_id(providerId);
+        patientRequest.setProvider_id(providerId.toLowerCase());
         return this;
     }
 
     public PatientRequestBuilder withCaseId(String caseId) {
-        patientRequest.setCase_id(caseId);
+        patientRequest.setCase_id(caseId.toLowerCase());
         return this;
     }
 
@@ -160,7 +160,7 @@ public class PatientRequestBuilder {
     }
 
     public PatientRequestBuilder withTbId(String tbId) {
-        patientRequest.setTb_id(tbId);
+        patientRequest.setTb_id(tbId.toLowerCase());
         return this;
     }
 
