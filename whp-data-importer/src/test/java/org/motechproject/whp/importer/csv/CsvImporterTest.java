@@ -46,6 +46,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
     @Before
     public void setUp(){
+        allPatients.removeAll();
+        allProviders.removeAll();
         allTreatmentCategories.add(new TreatmentCategory("test1","01",3,3,3,null));
         allTreatmentCategories.add(new TreatmentCategory("test2","02",3,3,3,null));
     }

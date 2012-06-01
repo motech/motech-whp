@@ -40,10 +40,11 @@ public class ProviderRecordValidator {
 
                 if (provider == null) {
                     errors.add("No provider found with provider id \"" + request.getProviderId() + "\"");
+                    continue;
                 }
 
                 objectsInDbCount++;
-                validateProvider(request, provider, errors);
+                validateProviderFields(provider, request, errors);
 
                 if (errors.size() > 0) {
                     String errorMessage = String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId());
@@ -60,11 +61,6 @@ public class ProviderRecordValidator {
             ImporterLogger.error("Exception occured while testing...");
             ImporterLogger.error(exception);
         }
-    }
-
-    private List<String> validateProvider(ImportProviderRequest request, Provider provider, List<String> errors) {
-        validateProviderFields(provider, request, errors);
-        return errors;
     }
 
     private void validateProviderFields(Provider provider, ImportProviderRequest request, List<String> errors) {
