@@ -3,6 +3,6 @@
     <update>
         <tb_id>12345678891</tb_id>
         <treatment_update>Restart</treatment_update>
-        <reason_for_restart>Some Reason</reason_for_restart>
+        <reason>Some Reason</reason>
     </update>
 </case>

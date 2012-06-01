@@ -8,14 +8,14 @@ import org.motechproject.whp.contract.ProviderWebRequest;
 public class PrimaryMobileNumberTest extends BaseProviderTest {
     @Test
     public void shouldThrowExceptionWhenPrimaryMobileNumberIsEmpty() {
-        expectFieldValidationRuntimeException("field:primary_mobile:may not be empty");
+        expectFieldValidationRuntimeException("field:primary_mobile:value should not be null");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile("").build();
         validator.validate(providerWebRequest, UpdateScope.createScope); //Can be any scope. None of the validation is scope dependent.
     }
 
     @Test
     public void shouldThrowExceptionWhenPrimaryMobileNumberIsNull() {
-        expectFieldValidationRuntimeException("field:primary_mobile:may not be empty");
+        expectFieldValidationRuntimeException("field:primary_mobile:value should not be null");
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withPrimaryMobile(null).build();
         validator.validate(providerWebRequest, UpdateScope.createScope); //Can be any scope. None of the validation is scope dependent.
     }

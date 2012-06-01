@@ -32,8 +32,6 @@ public class PatientWebRequest {
 
     private String phi;
 
-    private String address_landmark;
-
     @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String first_name;
@@ -73,6 +71,8 @@ public class PatientWebRequest {
     private String disease_class;
 
     private String address_location;
+
+    private String address_landmark;
 
     @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})

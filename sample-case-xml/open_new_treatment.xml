@@ -5,7 +5,6 @@
         <treatment_update>New</treatment_update>
         <tb_id>12345678891</tb_id>
         <treatment_category>12</treatment_category>
-        <patient_type>New</patient_type>
         <smear_sample_instance>PreTreatment</smear_sample_instance>
         <smear_test_date_1>01/03/2012</smear_test_date_1>
         <smear_test_result_1>Positive</smear_test_result_1>
