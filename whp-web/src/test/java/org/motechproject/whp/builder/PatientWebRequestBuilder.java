@@ -1,9 +1,9 @@
 package org.motechproject.whp.builder;
 
 import org.joda.time.DateTime;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.refdata.domain.*;
-import org.motechproject.whp.contract.PatientWebRequest;
 
 public class PatientWebRequestBuilder {
 
@@ -197,6 +197,16 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDiseaseClass(DiseaseClass diseaseClass) {
         patientWebRequest.setDisease_class(diseaseClass.name());
+        return this;
+    }
+
+    public PatientWebRequestBuilder withSmearTestInstance(String instance) {
+        patientWebRequest.setSmear_sample_instance(instance);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withSmearTestResult2(String result) {
+        patientWebRequest.setSmear_test_result_2(result);
         return this;
     }
 }

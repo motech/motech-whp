@@ -1,5 +1,6 @@
 package org.motechproject.whp.mapping;
 
+
 public class StringToEnumeration extends WHPCustomMapper {
 
     public static Object get(Object src, Class<?> destClass) {
