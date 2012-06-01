@@ -5,10 +5,9 @@ import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.patient.domain.WeightStatistics;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,7 +23,8 @@ public class ImportSmearTestResultsMapperTest {
 
     @Test
     public void shouldMapImportSmearTestResultsToSmearTestResults() {
-        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder().withDefaults().build();
+        ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder().
+                withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Negative.name()).build();
         SmearTestResults smearTestResults = importSmearTestResultMapper.map(importPatientRequest);
 
         assertEquals(importPatientRequest.getTestDate1(SmearTestSampleInstance.PreTreatment), smearTestResults.get(0).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));

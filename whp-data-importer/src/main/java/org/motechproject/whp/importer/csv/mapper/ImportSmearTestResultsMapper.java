@@ -29,7 +29,7 @@ public class ImportSmearTestResultsMapper {
             if (request != null && request.isNotEmpty()) {
                 SmearTestResult test1Result = (SmearTestResult) stringToEnumeration.convert(request.getResult1(), SmearTestResult.class);
                 LocalDate test1Date = stringToLocalDate(request.getDate1());
-                SmearTestResult test2Result = (SmearTestResult) stringToEnumeration.convert(request.getResult1(), SmearTestResult.class);
+                SmearTestResult test2Result = (SmearTestResult) stringToEnumeration.convert(request.getResult2(), SmearTestResult.class);
                 LocalDate test2Date = stringToLocalDate(request.getDate2());
                 smearTestResults.add(instance, test1Date, test1Result, test2Date, test2Result);
             }

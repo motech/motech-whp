@@ -3,6 +3,7 @@ package org.motechproject.whp.importer.csv;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
+import org.motechproject.importer.domain.ValidationResponse;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.domain.Provider;
@@ -25,8 +26,8 @@ public class ProviderRecordValidator {
     }
 
     @Validate
-    public boolean validate(List<Object> objects) {
-        return true;
+    public ValidationResponse validate(List<Object> objects) {
+        return new ValidationResponse(true);
     }
 
     @Post
