@@ -36,24 +36,24 @@ public class ProvidedTreatment {
     public ProvidedTreatment(String providerId, String tbId, PatientType patientType) {
         setProviderId(providerId);
         setTbId(tbId);
-        this.patientType = patientType;
+        setPatientType(patientType);
     }
 
     public ProvidedTreatment(ProvidedTreatment oldProvidedTreatment) {
-        this.tbId = oldProvidedTreatment.tbId;
-        this.providerId = oldProvidedTreatment.providerId;
-        this.startDate = oldProvidedTreatment.startDate;
-        this.endDate = oldProvidedTreatment.endDate;
+        setTbId(oldProvidedTreatment.tbId);
+        setProviderId(oldProvidedTreatment.providerId);
+        setStartDate(oldProvidedTreatment.startDate);
+        setEndDate(oldProvidedTreatment.endDate);
         setTreatment(oldProvidedTreatment.getTreatment());
-        this.patientAddress = oldProvidedTreatment.getPatientAddress();
-        this.smearTestResults = oldProvidedTreatment.getSmearTestResults();
-        this.weightStatistics = oldProvidedTreatment.getWeightStatistics();
+        setPatientAddress(oldProvidedTreatment.getPatientAddress());
+        setSmearTestResults(oldProvidedTreatment.getSmearTestResults());
+        setWeightStatistics(oldProvidedTreatment.getWeightStatistics());
     }
 
     public ProvidedTreatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
-        this.tbId = tbId;
-        this.providerId = providerId;
-        this.startDate = startDate;
+        setTbId(tbId);
+        setProviderId(providerId);
+        setStartDate(startDate);
         return this;
     }
 
