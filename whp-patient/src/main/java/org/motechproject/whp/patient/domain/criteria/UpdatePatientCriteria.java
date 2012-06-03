@@ -2,8 +2,7 @@ package org.motechproject.whp.patient.domain.criteria;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
@@ -22,9 +21,9 @@ public class UpdatePatientCriteria {
 
     public static boolean canCloseCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        Treatment currentTreatment = patient.getCurrentTreatment();
         boolean tbIdMatches = true;
-        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentTreatment);
         boolean endDateNotSet = true;
         if (patient.isCurrentTreatmentClosed()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
@@ -35,8 +34,8 @@ public class UpdatePatientCriteria {
 
     public static boolean canPerformSimpleUpdate(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        if (currentProvidedTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
+        Treatment currentTreatment = patient.getCurrentTreatment();
+        if (currentTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             return false;
         }
@@ -61,23 +60,23 @@ public class UpdatePatientCriteria {
 
     public static boolean canPauseCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        Treatment currentTreatment = patient.getCurrentTreatment();
         boolean tbIdMatches = true;
-        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentTreatment);
         if (patient.isCurrentTreatmentClosed()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
             return false;
         }
-        if (currentProvidedTreatment.isPaused()) {
+        if (currentTreatment.isPaused()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_PAUSED);
             return false;
         }
         return tbIdMatches;
     }
 
-    private static boolean VerifyAndAddErrorCodeForTbIdValidation(PatientRequest patientRequest, List<WHPErrorCode> errorCodes, ProvidedTreatment currentProvidedTreatment) {
+    private static boolean VerifyAndAddErrorCodeForTbIdValidation(PatientRequest patientRequest, List<WHPErrorCode> errorCodes, Treatment currentTreatment) {
         boolean  tbIdMatches = true;
-        if (currentProvidedTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
+        if (currentTreatment.getTbId().compareToIgnoreCase(patientRequest.getTb_id())!=0) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             tbIdMatches = false;
         }
@@ -86,11 +85,11 @@ public class UpdatePatientCriteria {
 
     public static boolean canRestartCurrentTreatment(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
         if (sanityCheckFails(patient, errorCodes)) return false;
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        Treatment currentTreatment = patient.getCurrentTreatment();
         boolean tbIdMatches = true;
-        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentProvidedTreatment);
+        tbIdMatches = VerifyAndAddErrorCodeForTbIdValidation(patientRequest, errorCodes, currentTreatment);
         boolean treatmentIsPaused = true;
-        if (!currentProvidedTreatment.isPaused()) {
+        if (!currentTreatment.isPaused()) {
             errorCodes.add(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
             treatmentIsPaused = false;
         }

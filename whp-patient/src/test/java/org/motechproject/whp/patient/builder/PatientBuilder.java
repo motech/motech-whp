@@ -25,7 +25,7 @@ public class PatientBuilder {
         patient.setLastName("lastName");
         patient.setGender(Gender.O);
         patient.setPhoneNumber("1234567890");
-        patient.setCurrentProvidedTreatment(defaultProvidedTreatment());
+        patient.setCurrentTreatment(defaultTreatment());
         return this;
     }
 
@@ -33,19 +33,19 @@ public class PatientBuilder {
         return patient;
     }
 
-    private ProvidedTreatment defaultProvidedTreatment() {
+    private Treatment defaultTreatment() {
         LocalDate today = DateUtil.today();
-        ProvidedTreatment providedTreatment = new ProvidedTreatment();
-        providedTreatment.setTbId("elevenDigit");
-        providedTreatment.setTherapy(defaultTreatment());
-        providedTreatment.setPatientAddress(defaultAddress());
-        providedTreatment.setPatientType(PatientType.New);
-        providedTreatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
-        providedTreatment.addWeightStatistics(new WeightStatisticsRecord(WeightInstance.PreTreatment, 100.0, today));
-        return providedTreatment;
+        Treatment treatment = new Treatment();
+        treatment.setTbId("elevenDigit");
+        treatment.setTherapy(defaultTherapy());
+        treatment.setPatientAddress(defaultAddress());
+        treatment.setPatientType(PatientType.New);
+        treatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
+        treatment.addWeightStatistics(new WeightStatisticsRecord(WeightInstance.PreTreatment, 100.0, today));
+        return treatment;
     }
 
-    private Therapy defaultTreatment() {
+    private Therapy defaultTherapy() {
         Therapy therapy = new Therapy();
         therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);
@@ -57,7 +57,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withType(PatientType type) {
-        patient.getCurrentProvidedTreatment().setPatientType(type);
+        patient.getCurrentTreatment().setPatientType(type);
         return this;
     }
 
@@ -72,12 +72,12 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withTbId(String tbId) {
-        patient.getCurrentProvidedTreatment().setTbId(tbId);
+        patient.getCurrentTreatment().setTbId(tbId);
         return this;
     }
 
-    public PatientBuilder withCurrentProvidedTreatment(ProvidedTreatment currentProvidedTreatment) {
-        patient.setCurrentProvidedTreatment(currentProvidedTreatment);
+    public PatientBuilder withCurrentTreatment(Treatment currentTreatment) {
+        patient.setCurrentTreatment(currentTreatment);
         return this;
     }
 

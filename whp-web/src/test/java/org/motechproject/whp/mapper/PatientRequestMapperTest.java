@@ -47,17 +47,17 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldMapProvidedTreatmentWhenMappingPatient() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
-        assertProvidedTreatment(patientRequest, patientWebRequest);
-    }
-
-    @Test
     public void shouldMapTreatmentWhenMappingPatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
         assertTreatment(patientRequest, patientWebRequest);
+    }
+
+    @Test
+    public void shouldMapTherapyWhenMappingPatient() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
+        assertTherapy(patientRequest, patientWebRequest);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
     }
 
-    private void assertProvidedTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
+    private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
         assertPatientAddress(patientRequest.getAddress(), patientWebRequest);
@@ -103,7 +103,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         );
     }
 
-    private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
+    private void assertTherapy(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals((Integer) Integer.parseInt(patientWebRequest.getAge()), patientRequest.getAge());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
         assertEquals(patientWebRequest.getTb_registration_number(), patientRequest.getTb_registration_number());

@@ -36,7 +36,7 @@ public class AllPatientsIT extends SpringIntegrationTest {
         assertEquals("Singh", savedPatient.getLastName());
         assertEquals(Gender.M, savedPatient.getGender());
 
-        SmearTestRecord smearTestRecord = savedPatient.getCurrentProvidedTreatment().getSmearTestResults().latestResult();
+        SmearTestRecord smearTestRecord = savedPatient.getCurrentTreatment().getSmearTestResults().latestResult();
         assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestRecord.getSmear_test_date_1());
@@ -54,8 +54,8 @@ public class AllPatientsIT extends SpringIntegrationTest {
     public void shouldSaveIdsInLowerCase() {
         createPatient("Cha01100002", "providerId");
         Patient savedPatient = allPatients.findByPatientId("chA01100002");
-        assertEquals("tbid",savedPatient.getCurrentProvidedTreatment().getTbId());
-        assertEquals("providerid",savedPatient.getCurrentProvidedTreatment().getProviderId());
+        assertEquals("tbid",savedPatient.getCurrentTreatment().getTbId());
+        assertEquals("providerid",savedPatient.getCurrentTreatment().getProviderId());
 
     }
 
@@ -91,12 +91,12 @@ public class AllPatientsIT extends SpringIntegrationTest {
         allTherapies.add(therapy);
 
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tbId", PatientType.New);
-        providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
-        providedTreatment.setTherapy(therapy);
-        providedTreatment.addSmearTestResult(smearTestResult());
-        providedTreatment.addWeightStatistics(weightStatistics());
-        patient.addProvidedTreatment(providedTreatment, now());
+        Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
+        treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
+        treatment.setTherapy(therapy);
+        treatment.addSmearTestResult(smearTestResult());
+        treatment.addWeightStatistics(weightStatistics());
+        patient.addTreatment(treatment, now());
 
         allPatients.add(patient);
         return patient;

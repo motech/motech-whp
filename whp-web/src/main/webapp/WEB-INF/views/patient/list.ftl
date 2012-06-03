@@ -35,15 +35,15 @@
                     <#list patientList as patient>
                     <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if>">
                         <td class="patientId"><b>${patient.patientId}</b></td>
-                        <td class="tbId">${patient.currentProvidedTreatment.tbId}</td>
+                        <td class="tbId">${patient.currentTreatment.tbId}</td>
                         <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
-                        <td>${patient.currentProvidedTreatment.therapy.patientAge!}</td>
+                        <td>${patient.currentTreatment.therapy.patientAge!}</td>
                         <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
-                        <td id="patient_${patient.patientId}_Village">${patient.currentProvidedTreatment.patientAddress.address_village}</td>
-                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentProvidedTreatment.therapy.treatmentCategory.name}</td>
+                        <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
+                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
                         <td id="patient_${patient.patientId}_TreatmentStartDate">
-                            <#if patient.currentProvidedTreatment.therapy.startDate?? >
-                                ${patient.currentProvidedTreatment.therapy.startDate?date?string("dd/mm/yyyy") }
+                            <#if patient.currentTreatment.therapy.startDate?? >
+                                ${patient.currentTreatment.therapy.startDate?date?string("dd/mm/yyyy") }
                             </#if>
                         </td>
                         <td class="updateAdherenceLink">

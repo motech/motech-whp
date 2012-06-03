@@ -40,7 +40,7 @@ public class OpenTreatmentCriteriaTest {
 
     @Test
     public void shouldReturnFalseForCanOpenNewTreatmentIfPatientDoesNotHaveEvenASingleTreatment() {
-        Patient patient = new PatientBuilder().withDefaults().withCurrentProvidedTreatment(null).build();
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatment(null).build();
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());

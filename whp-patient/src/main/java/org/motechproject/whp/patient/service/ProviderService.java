@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
@@ -31,16 +31,16 @@ public class ProviderService {
     }
 
     public void transferIn(String newProviderId, Patient patient, String tbId, String tbRegistrationNumber, DateTime dateModified) {
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(currentProvidedTreatment)
+        Treatment currentTreatment = patient.getCurrentTreatment();
+        Treatment newTreatment = new Treatment(currentTreatment)
                 .updateForTransferIn(
                         tbId,
                         newProviderId,
                         dateModified.toLocalDate()
                 );
-        newProvidedTreatment.setTbRegistrationNumber(tbRegistrationNumber);
-        patient.addProvidedTreatment(newProvidedTreatment, dateModified);
-        newProvidedTreatment.setPatientType(PatientType.TransferredIn);
+        newTreatment.setTbRegistrationNumber(tbRegistrationNumber);
+        patient.addTreatment(newTreatment, dateModified);
+        newTreatment.setPatientType(PatientType.TransferredIn);
         allPatients.update(patient);
     }
 }

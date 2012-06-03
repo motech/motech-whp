@@ -9,7 +9,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.*;
@@ -76,14 +76,14 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldRecordProvidedTreatmentsWhenCreatingPatient() {
+    public void shouldRecordTreatmentsWhenCreatingPatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
 
         patientWebService.createCase(patientWebRequest);
 
         Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-        for (ProvidedTreatment providedTreatment : recordedPatient.getProvidedTreatments()) {
-            assertNotNull(providedTreatment.getTherapy());
+        for (Treatment treatment : recordedPatient.getTreatments()) {
+            assertNotNull(treatment.getTherapy());
         }
     }
 
@@ -152,13 +152,13 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
-        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getTbId());
-        assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
-        assertEquals(patient.getCurrentProvidedTreatment().getTherapyDocId(), updatedPatient.getCurrentProvidedTreatment().getTherapyDocId());
+        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
+        assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
+        assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
+        assertEquals(patient.getCurrentTreatment().getTherapyDocId(), updatedPatient.getCurrentTreatment().getTherapyDocId());
 
-        assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
-        assertNotSame(patient.getCurrentProvidedTreatment().getTbId(), updatedPatient.getCurrentProvidedTreatment().getTbId());
+        assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
+        assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
-        assertNotSame(patient.getCurrentProvidedTreatment().getEndDate(), updatedPatient.getCurrentProvidedTreatment().getEndDate());
+        assertNotSame(patient.getCurrentTreatment().getEndDate(), updatedPatient.getCurrentTreatment().getEndDate());
         assertNotSame(patient.latestTreatment(), updatedPatient.latestTreatment());
     }
 
@@ -194,7 +194,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         patientWebService.createCase(patientWebRequest);
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-        assertFalse(patient.getCurrentProvidedTreatment().isPaused());
+        assertFalse(patient.getCurrentTreatment().isPaused());
 
         PatientWebRequest pauseTreatmentRequest = new PatientWebRequestBuilder()
                 .withDefaultsForPauseTreatment()
@@ -206,7 +206,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
 
-        assertTrue(updatedPatient.getCurrentProvidedTreatment().isPaused());
+        assertTrue(updatedPatient.getCurrentTreatment().isPaused());
 
         PatientWebRequest restartTreatmentRequest = new PatientWebRequestBuilder()
                 .withDefaultsForRestartTreatment()
@@ -218,7 +218,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
 
-        assertFalse(updatedPatient.getCurrentProvidedTreatment().isPaused());
+        assertFalse(updatedPatient.getCurrentTreatment().isPaused());
     }
 
     @After

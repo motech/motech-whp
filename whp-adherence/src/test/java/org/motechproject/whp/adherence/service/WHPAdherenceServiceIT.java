@@ -108,7 +108,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime();
         assertEquals(
                 adherence.firstDoseTakenOn(),
-                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate()
+                allPatients.findByPatientId(CASE_ID).getCurrentTreatment().getTherapy().getStartDate()
         );
     }
 
@@ -120,7 +120,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         adherenceService.recordAdherence(CASE_ID, new WeeklyAdherence(), auditParams);
         assertEquals(
                 adherence.firstDoseTakenOn(),
-                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate()
+                allPatients.findByPatientId(CASE_ID).getCurrentTreatment().getTherapy().getStartDate()
         );
     }
 
@@ -130,7 +130,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         mockCurrentDate(today.plusDays(1));
 
         adherenceService.recordAdherence(CASE_ID, new WeeklyAdherence(), auditParams);
-        assertNull(allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate());
+        assertNull(allPatients.findByPatientId(CASE_ID).getCurrentTreatment().getTherapy().getStartDate());
     }
 
     @Test

@@ -12,7 +12,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Data
-public class ProvidedTreatment {
+public class Treatment {
 
     private String providerId;
     private String tbId;
@@ -30,27 +30,27 @@ public class ProvidedTreatment {
     private Therapy therapy;
 
     // Required for ektorp
-    public ProvidedTreatment() {
+    public Treatment() {
     }
 
-    public ProvidedTreatment(String providerId, String tbId, PatientType patientType) {
+    public Treatment(String providerId, String tbId, PatientType patientType) {
         setProviderId(providerId);
         setTbId(tbId);
         setPatientType(patientType);
     }
 
-    public ProvidedTreatment(ProvidedTreatment oldProvidedTreatment) {
-        setTbId(oldProvidedTreatment.tbId);
-        setProviderId(oldProvidedTreatment.providerId);
-        setStartDate(oldProvidedTreatment.startDate);
-        setEndDate(oldProvidedTreatment.endDate);
-        setTherapy(oldProvidedTreatment.getTherapy());
-        setPatientAddress(oldProvidedTreatment.getPatientAddress());
-        setSmearTestResults(oldProvidedTreatment.getSmearTestResults());
-        setWeightStatistics(oldProvidedTreatment.getWeightStatistics());
+    public Treatment(Treatment oldTreatment) {
+        setTbId(oldTreatment.tbId);
+        setProviderId(oldTreatment.providerId);
+        setStartDate(oldTreatment.startDate);
+        setEndDate(oldTreatment.endDate);
+        setTherapy(oldTreatment.getTherapy());
+        setPatientAddress(oldTreatment.getPatientAddress());
+        setSmearTestResults(oldTreatment.getSmearTestResults());
+        setWeightStatistics(oldTreatment.getWeightStatistics());
     }
 
-    public ProvidedTreatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
+    public Treatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
         setTbId(tbId);
         setProviderId(providerId);
         setStartDate(startDate);

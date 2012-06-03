@@ -82,7 +82,7 @@ public class PatientRecordValidator {
 
     private void validatePatient(Patient patient, ImportPatientRequest request, List<String> errors) {
         validatePatientFields(patient, request, errors);
-        validateProvidedTreatmentFields(patient, request, errors);
+        validateTreatmentFields(patient, request, errors);
     }
 
     private void validatePatientFields(Patient patient, ImportPatientRequest request, List<String> errors) {
@@ -106,13 +106,13 @@ public class PatientRecordValidator {
         checkIfEnumsAreEqual(request.getGender(), patient.getGender(), "Gender", errors, Gender.class);
     }
 
-    private void validateProvidedTreatmentFields(Patient patient, ImportPatientRequest request, List<String> errors) {
-        if (patient.getProvidedTreatments().size() != 0) {
-            errors.add("Should have no history of provided treatments, but has count as " + patient.getProvidedTreatments().size());
+    private void validateTreatmentFields(Patient patient, ImportPatientRequest request, List<String> errors) {
+        if (patient.getTreatments().size() != 0) {
+            errors.add("Should have no history of treatments, but has count as " + patient.getTreatments().size());
         }
 
-        ProvidedTreatment treatment = patient.getCurrentProvidedTreatment();
-        checkIfDatesAreEqual(request.getDate_modified(), treatment.getStartDate(), "ProvidedTreatmentStartDate", errors, LocalDate.class);
+        Treatment treatment = patient.getCurrentTreatment();
+        checkIfDatesAreEqual(request.getDate_modified(), treatment.getStartDate(), "TreatmentStartDate", errors, LocalDate.class);
         Address patientAddress = treatment.getPatientAddress();
         checkIfEqual(request.getAddress_district(), patientAddress.getAddress_district(), "District", errors);
         checkIfEqual(request.getAddress_block(), patientAddress.getAddress_block(), "Address Block", errors);
@@ -130,9 +130,9 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(request.getPatient_type(), treatment.getPatientType(), "Patient Type", errors, PatientType.class);
         }
 
-        validateTreatment(patient.getCurrentProvidedTreatment().getTherapy(), request, errors);
+        validateTreatment(patient.getCurrentTreatment().getTherapy(), request, errors);
         validateSmearTestResults(treatment.getSmearTestResults(), errors, request.getSmearTestResultRequest());
-        validateWeightStatistics(patient.getCurrentProvidedTreatment().getWeightStatistics(), request.getWeightStatisticsRequest(), errors);
+        validateWeightStatistics(patient.getCurrentTreatment().getWeightStatistics(), request.getWeightStatisticsRequest(), errors);
 
     }
 

@@ -27,7 +27,7 @@ public class SimpleUpdateCriteriaTest {
     public void shouldReturnFalseForCanPerformSimpleUpdateIfPatientDoesNotHaveEvenASingleTreatment() {
         Patient patient = new PatientBuilder().withDefaults()
                                               .withTbId("elevenDigit")
-                                              .withCurrentProvidedTreatment(null)
+                                              .withCurrentTreatment(null)
                                               .build();
 
         PatientRequest patientRequest = new PatientRequest();

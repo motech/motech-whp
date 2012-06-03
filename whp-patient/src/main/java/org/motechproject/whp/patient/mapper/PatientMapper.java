@@ -8,8 +8,8 @@ public class PatientMapper {
     public static Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
         Therapy therapy = TherapyMapper.map(patientRequest);
-        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, therapy);
-        patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
+        Treatment treatment = mapTreatment(patientRequest, therapy);
+        patient.addTreatment(treatment, patientRequest.getDate_modified());
         return patient;
     }
 
@@ -28,40 +28,40 @@ public class PatientMapper {
         return patient;
     }
 
-    public static ProvidedTreatment mapProvidedTreatment(PatientRequest patientRequest, Therapy therapy) {
+    public static Treatment mapTreatment(PatientRequest patientRequest, Therapy therapy) {
         String providerId = patientRequest.getProvider_id();
         String tbId = patientRequest.getTb_id();
-        ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, patientRequest.getPatient_type());
+        Treatment treatment = new Treatment(providerId, tbId, patientRequest.getPatient_type());
 
-        providedTreatment.setTherapy(therapy);
-        providedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
-        mapSmearTestResults(patientRequest, providedTreatment);
-        mapWeightStatistics(patientRequest, providedTreatment);
+        treatment.setTherapy(therapy);
+        treatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
+        mapSmearTestResults(patientRequest, treatment);
+        mapWeightStatistics(patientRequest, treatment);
 
-        providedTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        mapPatientAddress(patientRequest, providedTreatment);
+        treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
+        mapPatientAddress(patientRequest, treatment);
 
-        return providedTreatment;
+        return treatment;
     }
 
-    public static ProvidedTreatment createNewProvidedTreatmentForTreatmentCategoryChange(Patient patient, PatientRequest patientRequest, Therapy therapy) {
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+    public static Treatment createNewTreatmentForTreatmentCategoryChange(Patient patient, PatientRequest patientRequest, Therapy therapy) {
+        Treatment currentTreatment = patient.getCurrentTreatment();
         String tbId = patientRequest.getTb_id();
 
-        ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(patientRequest.getProvider_id(), tbId, patientRequest.getPatient_type());
+        Treatment newTreatment = new Treatment(patientRequest.getProvider_id(), tbId, patientRequest.getPatient_type());
 
-        newProvidedTreatment.setTherapy(therapy);
-        newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
-        newProvidedTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        newProvidedTreatment.setPatientAddress(currentProvidedTreatment.getPatientAddress());
-        mapSmearTestResults(patientRequest, newProvidedTreatment);
-        mapWeightStatistics(patientRequest, newProvidedTreatment);
+        newTreatment.setTherapy(therapy);
+        newTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
+        newTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
+        newTreatment.setPatientAddress(currentTreatment.getPatientAddress());
+        mapSmearTestResults(patientRequest, newTreatment);
+        mapWeightStatistics(patientRequest, newTreatment);
 
-        return newProvidedTreatment;
+        return newTreatment;
     }
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
-        ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
+        Treatment currentTreatment = patient.getCurrentTreatment();
         Therapy currentTherapy = patient.latestTreatment();
 
         if (patientRequest.getAge() != null)
@@ -69,29 +69,29 @@ public class PatientMapper {
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
 
-        mapPatientAddress(patientRequest, currentProvidedTreatment);
-        mapSmearTestResults(patientRequest, currentProvidedTreatment);
-        mapWeightStatistics(patientRequest, currentProvidedTreatment);
+        mapPatientAddress(patientRequest, currentTreatment);
+        mapSmearTestResults(patientRequest, currentTreatment);
+        mapWeightStatistics(patientRequest, currentTreatment);
 
         patient.setLastModifiedDate(patientRequest.getDate_modified());
 
         return patient;
     }
 
-    private static void mapPatientAddress(PatientRequest patientRequest, ProvidedTreatment providedTreatment) {
+    private static void mapPatientAddress(PatientRequest patientRequest, Treatment treatment) {
         Address address = patientRequest.getAddress();
         if (!address.isEmpty()) {
-            providedTreatment.setPatientAddress(address);
+            treatment.setPatientAddress(address);
         }
     }
 
-    private static void mapSmearTestResults(PatientRequest patientRequest, ProvidedTreatment treatment) {
+    private static void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
         for(SmearTestRecord smearTestRecord : patientRequest.getSmearTestResults().getAll()) {
             treatment.getSmearTestResults().add(smearTestRecord);
         }
     }
 
-    private static void mapWeightStatistics(PatientRequest patientRequest, ProvidedTreatment treatment) {
+    private static void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
         for(WeightStatisticsRecord weightStatisticsRecord : patientRequest.getWeightStatistics().getAll()) {
             treatment.getWeightStatistics().add(weightStatisticsRecord);
         }

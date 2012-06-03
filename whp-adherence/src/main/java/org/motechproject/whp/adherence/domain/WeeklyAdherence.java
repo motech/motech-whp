@@ -1,7 +1,6 @@
 package org.motechproject.whp.adherence.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Patient;
@@ -111,8 +110,8 @@ public class WeeklyAdherence {
                 treatmentWeek,
                 pillDays(patient)
         );
-        adherence.setTbId(patient.getCurrentProvidedTreatment().getTbId());
-        adherence.setProviderId(patient.getCurrentProvidedTreatment().getProviderId());
+        adherence.setTbId(patient.getCurrentTreatment().getTbId());
+        adherence.setProviderId(patient.getCurrentTreatment().getProviderId());
         return adherence;
     }
 

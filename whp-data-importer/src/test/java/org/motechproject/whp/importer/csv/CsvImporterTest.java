@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.*;
@@ -86,9 +86,9 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
         assertEquals(3, allPatients.getAll().size());
         assertEquals(3, allTherapies.getAll().size());
-        assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentProvidedTreatment().getPatientType());
+        assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentTreatment().getPatientType());
         Patient patient2 = allPatients.findByPatientId("234324");
-        assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentProvidedTreatment().getWeightStatistics().get(0).getMeasuringDate());
+        assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentTreatment().getWeightStatistics().get(0).getMeasuringDate());
 
     }
 
@@ -212,7 +212,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         patient2.setMigrated(false);
         patient2.setPhi("blah");
         patient2.setPhoneNumber("00");
-        ProvidedTreatment treatment = patient2.getCurrentProvidedTreatment();
+        Treatment treatment = patient2.getCurrentTreatment();
         treatment.setProviderId("providerId");
         treatment.setPatientType(PatientType.Chronic);
         patient2.setLastModifiedDate(patient2.getLastModifiedDate().plusSeconds(1));

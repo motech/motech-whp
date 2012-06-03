@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.domain.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapProvidedTreatment;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatment;
 
 public class TherapyMapperTest {
 
@@ -30,8 +30,8 @@ public class TherapyMapperTest {
     private Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
         Therapy therapy = TherapyMapper.map(patientRequest);
-        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, therapy);
-        patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
+        Treatment treatment = mapTreatment(patientRequest, therapy);
+        patient.addTreatment(treatment, patientRequest.getDate_modified());
         return patient;
     }
 

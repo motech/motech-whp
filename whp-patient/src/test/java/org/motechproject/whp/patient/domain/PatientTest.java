@@ -17,72 +17,72 @@ import static org.motechproject.util.DateUtil.now;
 public class PatientTest {
 
     Patient patient = new Patient("patientId", "patientFirstName", "patientLastName", Gender.F, "1111111111");
-    ProvidedTreatment providedTreatment = new ProvidedTreatment("providerId", "tbId", PatientType.New);
-    ProvidedTreatment newProviderTreatment = new ProvidedTreatment("newProviderId", "newTbId", PatientType.TreatmentAfterDefault);
+    Treatment treatment = new Treatment("providerId", "tbId", PatientType.New);
+    Treatment newProviderTreatment = new Treatment("newProviderId", "newTbId", PatientType.TreatmentAfterDefault);
 
     public PatientTest() {
-        patient.addProvidedTreatment(providedTreatment, now());
-        patient.addProvidedTreatment(newProviderTreatment, now());
+        patient.addTreatment(treatment, now());
+        patient.addTreatment(newProviderTreatment, now());
     }
 
     @Test
     public void shouldUpdateCurrentProviderTreatmentWhenNewTreatmentIsAdded() {
-        assertEquals(newProviderTreatment, patient.getCurrentProvidedTreatment());
+        assertEquals(newProviderTreatment, patient.getCurrentTreatment());
     }
 
     @Test
     public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAdded() {
-        assertArrayEquals(new Object[]{providedTreatment}, patient.getProvidedTreatments().toArray());
+        assertArrayEquals(new Object[]{treatment}, patient.getTreatments().toArray());
     }
 
     @Test
-    public void shouldNotHaveAnyHistoryWhenProvidedTreatmentHasNeverBeenUpdated() {
-        Patient patientWithoutProvidedTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, "1111111111");
-        assertTrue(patientWithoutProvidedTreatment.getProvidedTreatments().isEmpty());
+    public void shouldNotHaveAnyHistoryWhenTreatmentHasNeverBeenUpdated() {
+        Patient patientWithoutTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, "1111111111");
+        assertTrue(patientWithoutTreatment.getTreatments().isEmpty());
     }
 
     @Test
     public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAddedForPatientWhoHasAHistory() {
-        ProvidedTreatment newerProviderTreatment = new ProvidedTreatment("newerProviderId", "newerTbId", PatientType.Chronic);
-        patient.addProvidedTreatment(newerProviderTreatment, now());
+        Treatment newerProviderTreatment = new Treatment("newerProviderId", "newerTbId", PatientType.Chronic);
+        patient.addTreatment(newerProviderTreatment, now());
 
-        assertArrayEquals(new Object[]{providedTreatment, newProviderTreatment}, patient.getProvidedTreatments().toArray());
+        assertArrayEquals(new Object[]{treatment, newProviderTreatment}, patient.getTreatments().toArray());
     }
 
     @Test
-    public void shouldCloseCurrentProvidedTreatment() {
-        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+    public void shouldCloseCurrentTreatment() {
+        Treatment treatment = mock(Treatment.class);
 
         DateTime now = now();
-        patient.addProvidedTreatment(providedTreatment, now);
+        patient.addTreatment(treatment, now);
 
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now);
         assertEquals(now, patient.getLastModifiedDate());
-        verify(providedTreatment, times(1)).close(TreatmentOutcome.Cured, now);
+        verify(treatment, times(1)).close(TreatmentOutcome.Cured, now);
     }
 
     @Test
-    public void shouldPauseCurrentProvidedTreatment() {
-        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+    public void shouldPauseCurrentTreatment() {
+        Treatment treatment = mock(Treatment.class);
 
         DateTime now = now();
-        patient.addProvidedTreatment(providedTreatment, now);
+        patient.addTreatment(treatment, now);
 
         patient.pauseCurrentTreatment("paws", now);
         assertEquals(now, patient.getLastModifiedDate());
-        verify(providedTreatment, times(1)).pause("paws", now);
+        verify(treatment, times(1)).pause("paws", now);
     }
 
     @Test
-    public void shouldRestartCurrentProvidedTreatment() {
-        ProvidedTreatment providedTreatment = mock(ProvidedTreatment.class);
+    public void shouldRestartCurrentTreatment() {
+        Treatment treatment = mock(Treatment.class);
 
         DateTime now = now();
-        patient.addProvidedTreatment(providedTreatment, now);
+        patient.addTreatment(treatment, now);
 
         patient.restartCurrentTreatment("swap", now);
         assertEquals(now, patient.getLastModifiedDate());
-        verify(providedTreatment, times(1)).resume("swap", now);
+        verify(treatment, times(1)).resume("swap", now);
     }
 
     @Test

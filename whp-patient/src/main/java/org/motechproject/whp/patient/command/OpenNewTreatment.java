@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.canOpenNewTreatment;
-import static org.motechproject.whp.patient.mapper.PatientMapper.createNewProvidedTreatmentForTreatmentCategoryChange;
+import static org.motechproject.whp.patient.mapper.PatientMapper.createNewTreatmentForTreatmentCategoryChange;
 
 @Component
 public class OpenNewTreatment extends TreatmentUpdate {
@@ -40,8 +40,8 @@ public class OpenNewTreatment extends TreatmentUpdate {
     private void addNewTreatmentForCategoryChange(Patient patient, PatientRequest patientRequest, AllPatients allPatients, AllTherapies allTreatments) {
         Therapy newTherapy = TherapyMapper.createNewTreatment(patient, patientRequest);
         allTreatments.add(newTherapy);
-        ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, patientRequest, newTherapy);
-        patient.addProvidedTreatment(newProvidedTreatment, patientRequest.getDate_modified());
+        Treatment newTreatment = createNewTreatmentForTreatmentCategoryChange(patient, patientRequest, newTherapy);
+        patient.addTreatment(newTreatment, patientRequest.getDate_modified());
         allPatients.update(patient);
     }
 }

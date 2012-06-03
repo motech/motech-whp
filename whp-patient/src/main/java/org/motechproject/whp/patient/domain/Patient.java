@@ -26,9 +26,9 @@ public class Patient extends MotechBaseDataObject {
     private String phoneNumber;
     private String phi;
     private PatientStatus status = PatientStatus.Open;
-    private List<ProvidedTreatment> providedTreatments = new ArrayList<ProvidedTreatment>();
+    private List<Treatment> treatments = new ArrayList<Treatment>();
     private DateTime lastModifiedDate;
-    private ProvidedTreatment currentProvidedTreatment;
+    private Treatment currentTreatment;
 
     private boolean migrated;
 
@@ -43,20 +43,20 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void addProvidedTreatment(ProvidedTreatment providedTreatment, DateTime dateModified) {
-        if (currentProvidedTreatment != null) {
-            providedTreatments.add(currentProvidedTreatment);
+    public void addTreatment(Treatment treatment, DateTime dateModified) {
+        if (currentTreatment != null) {
+            treatments.add(currentTreatment);
         }
-        currentProvidedTreatment = providedTreatment;
+        currentTreatment = treatment;
         lastModifiedDate = dateModified;
     }
 
     public Therapy latestTreatment() {
-        return currentProvidedTreatment.getTherapy();
+        return currentTreatment.getTherapy();
     }
 
     public PatientType currentTreatmentType() {
-        return getCurrentProvidedTreatment().getPatientType();
+        return getCurrentTreatment().getPatientType();
     }
 
     public DateTime getLastModifiedDate() {
@@ -65,63 +65,63 @@ public class Patient extends MotechBaseDataObject {
 
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
-        currentProvidedTreatment.close(treatmentOutcome, dateModified);
+        currentTreatment.close(treatmentOutcome, dateModified);
     }
 
     public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {
         lastModifiedDate = dateModified;
-        currentProvidedTreatment.pause(reasonForPause, dateModified);
+        currentTreatment.pause(reasonForPause, dateModified);
     }
 
     public void restartCurrentTreatment(String reasonForResumption, DateTime dateModified) {
         lastModifiedDate = dateModified;
-        currentProvidedTreatment.resume(reasonForResumption, dateModified);
+        currentTreatment.resume(reasonForResumption, dateModified);
     }
 
     @JsonIgnore
     public String tbId() {
-        return currentProvidedTreatment.getTbId();
+        return currentTreatment.getTbId();
     }
 
     @JsonIgnore
     public String providerId() {
-        return currentProvidedTreatment.getProviderId();
+        return currentTreatment.getProviderId();
     }
 
     @JsonIgnore
     public String currentTreatmentId() {
-        if (getCurrentProvidedTreatment() == null) return null;
-        return this.getCurrentProvidedTreatment().getTherapy().getId();
+        if (getCurrentTreatment() == null) return null;
+        return this.getCurrentTreatment().getTherapy().getId();
     }
 
     @JsonIgnore
     public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return currentProvidedTreatment.isValid(errorCodes);
+        return currentTreatment.isValid(errorCodes);
     }
 
     @JsonIgnore
     public boolean hasCurrentTreatment() {
-        return currentProvidedTreatment != null;
+        return currentTreatment != null;
     }
 
     @JsonIgnore
     public boolean isCurrentTreatmentClosed() {
-        return currentProvidedTreatment.isClosed();
+        return currentTreatment.isClosed();
     }
 
     @JsonIgnore
     public boolean isCurrentTreatmentPaused() {
-        return currentProvidedTreatment.isPaused();
+        return currentTreatment.isPaused();
     }
 
     @JsonIgnore
     public TreatmentOutcome getTreatmentOutcome() {
-        return getCurrentProvidedTreatment().getTreatmentOutcome();
+        return getCurrentTreatment().getTreatmentOutcome();
     }
 
     @JsonIgnore
     public TreatmentInterruptions getTreatmentInterruptions() {
-        return currentProvidedTreatment.getInterruptions();
+        return currentTreatment.getInterruptions();
     }
 
     @JsonIgnore

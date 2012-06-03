@@ -7,7 +7,7 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.ProvidedTreatment;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
@@ -65,17 +65,17 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     private void loadPatientDependencies(Patient patient) {
-        ProvidedTreatment latestProvidedTreatment = patient.getCurrentProvidedTreatment();
-        Therapy latestTherapy = allTherapies.get(latestProvidedTreatment.getTherapyDocId());
-        latestProvidedTreatment.setTherapy(latestTherapy);
+        Treatment latestTreatment = patient.getCurrentTreatment();
+        Therapy latestTherapy = allTherapies.get(latestTreatment.getTherapyDocId());
+        latestTreatment.setTherapy(latestTherapy);
 
-        for (ProvidedTreatment providedTreatment : patient.getProvidedTreatments()) {
-            Therapy therapy = allTherapies.get(providedTreatment.getTherapyDocId());
-            providedTreatment.setTherapy(therapy);
+        for (Treatment treatment : patient.getTreatments()) {
+            Therapy therapy = allTherapies.get(treatment.getTherapyDocId());
+            treatment.setTherapy(therapy);
         }
     }
 
-    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentProvidedTreatment) {emit([doc.currentProvidedTreatment.providerId, doc.firstName], doc._id);}}")
+    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> findByCurrentProviderId(String providerId) {
         if(providerId == null)
             return new ArrayList<Patient>();
