@@ -120,7 +120,7 @@ public class PatientRecordValidator {
         checkIfEqual(request.getAddress_location(), patientAddress.getAddress_location(), "Location", errors);
         checkIfEqual(request.getAddress_state(), patientAddress.getAddress_state(), "State", errors);
         checkIfEqual(request.getAddress_village(), patientAddress.getAddress_village(), "Village", errors);
-        checkIfEqual(request.getProvider_id(), treatment.getProviderId(), "Treatment's providerId", errors);
+        checkIfEqual(request.getProvider_id(), treatment.getProviderId(), "Therapy's providerId", errors);
         checkIfEqual(request.getTb_id(), treatment.getTbId(), "TbID", errors);
         checkIfEqual(request.getTb_registration_number(), treatment.getTbRegistrationNumber(), "TbRegistrationNumber", errors);
 
@@ -130,25 +130,25 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(request.getPatient_type(), treatment.getPatientType(), "Patient Type", errors, PatientType.class);
         }
 
-        validateTreatment(patient.getCurrentProvidedTreatment().getTreatment(), request, errors);
+        validateTreatment(patient.getCurrentProvidedTreatment().getTherapy(), request, errors);
         validateSmearTestResults(treatment.getSmearTestResults(), errors, request.getSmearTestResultRequest());
         validateWeightStatistics(patient.getCurrentProvidedTreatment().getWeightStatistics(), request.getWeightStatisticsRequest(), errors);
 
     }
 
-    private void validateTreatment(Treatment treatment, ImportPatientRequest request, List<String> errors) {
-        if (treatment != null) {
-            TreatmentCategory treatmentCategory = treatment.getTreatmentCategory();
+    private void validateTreatment(Therapy therapy, ImportPatientRequest request, List<String> errors) {
+        if (therapy != null) {
+            TreatmentCategory treatmentCategory = therapy.getTreatmentCategory();
             if (treatmentCategory != null)
                 checkIfEqual(request.getTreatment_category(), treatmentCategory.getCode(), "Treatement Category", errors);
             else
-                addNotSetError("Treatment Category", request.getTreatment_category(), errors);
-            checkIfDatesAreEqual(request.getDate_modified(), treatment.getCreationDate(), "TreatmentCreationDate", errors, DateTime.class);
-            if (treatment.getStartDate() != null)
-                errors.add("TreatmentStartDate should be set as null for migrated patients. But is set to \"" + treatment.getStartDate() + "\"");
+                addNotSetError("Therapy Category", request.getTreatment_category(), errors);
+            checkIfDatesAreEqual(request.getDate_modified(), therapy.getCreationDate(), "TreatmentCreationDate", errors, DateTime.class);
+            if (therapy.getStartDate() != null)
+                errors.add("TreatmentStartDate should be set as null for migrated patients. But is set to \"" + therapy.getStartDate() + "\"");
 
         } else {
-            addNotSetError("Treatment Category", request.getTreatment_category(), errors);
+            addNotSetError("Therapy Category", request.getTreatment_category(), errors);
             addNotSetError("Disease Class", request.getDisease_class(), errors);
             addNotSetError("Patient Age", request.getAge(), errors);
         }

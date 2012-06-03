@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteri
 public class PauseTreatment extends TreatmentUpdate {
 
     @Autowired
-    public PauseTreatment(AllPatients allPatients, AllTreatments allTreatments) {
+    public PauseTreatment(AllPatients allPatients, AllTherapies allTreatments) {
         super(allPatients, allTreatments, UpdateScope.pauseTreatment);
     }
 

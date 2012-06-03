@@ -5,17 +5,17 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.TreatmentStatus;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class AllTreatmentsIT extends SpringIntegrationTest{
+public class AllTherapiesIT extends SpringIntegrationTest{
     @Autowired
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
 
     @Before
     public void setUp() throws Exception {
@@ -24,18 +24,18 @@ public class AllTreatmentsIT extends SpringIntegrationTest{
 
     @After
     public void tearDown() throws Exception {
-        allTreatments.removeAll();
+        allTherapies.removeAll();
     }
 
     @Test
     public void shouldFetchDateTimeWithTimeZoneSet() {
-        Treatment treatment = new Treatment();
+        Therapy therapy = new Therapy();
         DateTime date = DateTime.parse("20/10/2011 16:30:00", DateTimeFormat.forPattern("dd/MM/YYYY HH:mm:ss"));
-        treatment.setCreationDate(date);
-        treatment.setStatus(TreatmentStatus.Closed);
-        allTreatments.add(treatment);
-        Treatment treatmentFromDb = allTreatments.get(treatment.getId());
-        assertEquals(date,treatmentFromDb.getCreationDate());
+        therapy.setCreationDate(date);
+        therapy.setStatus(TherapyStatus.Closed);
+        allTherapies.add(therapy);
+        Therapy therapyFromDb = allTherapies.get(therapy.getId());
+        assertEquals(date, therapyFromDb.getCreationDate());
 
     }
 }

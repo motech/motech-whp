@@ -1,5 +1,5 @@
 package org.motechproject.whp.refdata.domain;
 
-public enum TreatmentStatus {
+public enum TherapyStatus {
     Ongoing, Closed
 }

@@ -34,7 +34,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @Autowired
     AllPatients allPatients;
     @Autowired
-    AllTreatments allTreatments;
+    AllTherapies allTherapies;
     @Autowired
     RequestValidator validator;
     @Autowired
@@ -83,7 +83,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
         for (ProvidedTreatment providedTreatment : recordedPatient.getProvidedTreatments()) {
-            assertNotNull(providedTreatment.getTreatment());
+            assertNotNull(providedTreatment.getTherapy());
         }
     }
 
@@ -155,7 +155,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentProvidedTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentProvidedTreatment().getStartDate());
-        assertEquals(patient.getCurrentProvidedTreatment().getTreatmentDocId(), updatedPatient.getCurrentProvidedTreatment().getTreatmentDocId());
+        assertEquals(patient.getCurrentProvidedTreatment().getTherapyDocId(), updatedPatient.getCurrentProvidedTreatment().getTherapyDocId());
 
         assertNotSame(patient.getCurrentProvidedTreatment().getProviderId(), updatedPatient.getCurrentProvidedTreatment().getProviderId());
         assertNotSame(patient.getCurrentProvidedTreatment().getTbId(), updatedPatient.getCurrentProvidedTreatment().getTbId());
@@ -224,7 +224,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
-        markForDeletion(allTreatments.getAll().toArray());
+        markForDeletion(allTherapies.getAll().toArray());
         markForDeletion(allProviders.getAll().toArray());
     }
 }

@@ -6,11 +6,11 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.mapper.TreatmentMapper;
+import org.motechproject.whp.patient.mapper.TherapyMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,24 +24,24 @@ import static org.motechproject.whp.patient.mapper.PatientMapper.mapProvidedTrea
 @Service
 public class PatientService {
 
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
     private AllPatients allPatients;
     private UpdateCommandFactory updateCommandFactory;
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTreatments allTreatments, UpdateCommandFactory updateCommandFactory) {
+    public PatientService(AllPatients allPatients, AllTherapies allTherapies, UpdateCommandFactory updateCommandFactory) {
         this.allPatients = allPatients;
-        this.allTreatments = allTreatments;
+        this.allTherapies = allTherapies;
         this.updateCommandFactory = updateCommandFactory;
     }
 
     public void createPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
 
-        Treatment treatment = TreatmentMapper.map(patientRequest);
-        allTreatments.add(treatment);
+        Therapy therapy = TherapyMapper.map(patientRequest);
+        allTherapies.add(therapy);
 
-        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
+        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, therapy);
         patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
         allPatients.add(patient);
     }

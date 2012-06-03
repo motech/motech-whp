@@ -37,7 +37,7 @@ public class PatientBuilder {
         LocalDate today = DateUtil.today();
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
         providedTreatment.setTbId("elevenDigit");
-        providedTreatment.setTreatment(defaultTreatment());
+        providedTreatment.setTherapy(defaultTreatment());
         providedTreatment.setPatientAddress(defaultAddress());
         providedTreatment.setPatientType(PatientType.New);
         providedTreatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
@@ -45,11 +45,11 @@ public class PatientBuilder {
         return providedTreatment;
     }
 
-    private Treatment defaultTreatment() {
-        Treatment treatment = new Treatment();
-        treatment.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, threeDaysAWeek));
-        treatment.setDiseaseClass(DiseaseClass.P);
-        return treatment;
+    private Therapy defaultTreatment() {
+        Therapy therapy = new Therapy();
+        therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, threeDaysAWeek));
+        therapy.setDiseaseClass(DiseaseClass.P);
+        return therapy;
     }
 
     private Address defaultAddress() {

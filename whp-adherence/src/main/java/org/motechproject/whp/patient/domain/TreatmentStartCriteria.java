@@ -16,7 +16,7 @@ public class TreatmentStartCriteria {
     }
 
     private static boolean isNotOnTreatment(ProvidedTreatment providedTreatment) {
-        return providedTreatment.getTreatment().getStartDate() == null;
+        return providedTreatment.getTherapy().getStartDate() == null;
     }
 
     private static boolean isAdherenceBeingRecapturedForTheSameWeekAsTheWeekTreatmentStartedOn(Patient patient, WeeklyAdherence adherence) {

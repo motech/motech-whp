@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.ProviderService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -24,7 +24,7 @@ public class TransferInPatientTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
     @Mock
     private ProviderService providerService;
 
@@ -35,7 +35,7 @@ public class TransferInPatientTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        transferInPatient = new TransferInPatient(allPatients, allTreatments, providerService);
+        transferInPatient = new TransferInPatient(allPatients, allTherapies, providerService);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class TransferInPatientTest extends BaseUnitTest {
                 patientRequest.getTb_registration_number(),
                 patientRequest.getDate_modified());
         assertNull(patient.latestTreatment().getCloseDate());
-        verify(allTreatments).update(patient.latestTreatment());
+        verify(allTherapies).update(patient.latestTreatment());
     }
 
 }

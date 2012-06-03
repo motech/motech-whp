@@ -12,7 +12,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
@@ -27,7 +27,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     public static final String CASE_ID = "123456";
     @Autowired
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
     @Autowired
     private AllPatients allPatients;
     @Autowired
@@ -38,12 +38,12 @@ public class PatientServiceIT extends SpringIntegrationTest {
     @Before
     public void setUp() {
         super.before();
-        patientService = new PatientService(allPatients, allTreatments, commandFactory);
+        patientService = new PatientService(allPatients, allTherapies, commandFactory);
     }
 
     @After
     public void tearDown() {
-        markForDeletion(allTreatments.getAll().toArray());
+        markForDeletion(allTherapies.getAll().toArray());
         markForDeletion(allPatients.getAll().toArray());
         super.after();
     }
@@ -66,7 +66,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Treatment treatment = updatedPatient.latestTreatment();
+        Therapy therapy = updatedPatient.latestTreatment();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
@@ -74,7 +74,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());
         verifySmearTestResultsUpdate(updatePatientRequest, updatedPatient);
         verifyWeightStatisticsUpdate(updatePatientRequest, updatedPatient);
-        assertEquals((Integer) 66, treatment.getPatientAge());
+        assertEquals((Integer) 66, therapy.getPatientAge());
     }
 
     private void verifyWeightStatisticsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
@@ -105,7 +105,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Treatment treatment = updatedPatient.latestTreatment();
+        Therapy therapy = updatedPatient.latestTreatment();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentProvidedTreatment().getTbRegistrationNumber());

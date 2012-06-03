@@ -16,25 +16,25 @@ public class ProvidedTreatmentTest {
 
     @Test
     public void shouldCloseProvidedTreatment() {
-        Treatment treatment = mock(Treatment.class);
+        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
-        providedTreatment.setTreatment(treatment);
+        providedTreatment.setTherapy(therapy);
         providedTreatment.close(TreatmentOutcome.Cured, now);
 
         assertEquals(today(), providedTreatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, providedTreatment.getTreatmentOutcome());
-        verify(treatment, times(1)).close(now);
+        verify(therapy, times(1)).close(now);
     }
 
     @Test
     public void shouldPauseProvidedTreatment() {
-        Treatment treatment = mock(Treatment.class);
+        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
-        providedTreatment.setTreatment(treatment);
+        providedTreatment.setTherapy(therapy);
         providedTreatment.pause("paws", now);
 
         assertTrue(providedTreatment.isPaused());
@@ -42,11 +42,11 @@ public class ProvidedTreatmentTest {
 
     @Test
     public void shouldResumeProvidedTreatment() {
-        Treatment treatment = mock(Treatment.class);
+        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         ProvidedTreatment providedTreatment = new ProvidedTreatment();
-        providedTreatment.setTreatment(treatment);
+        providedTreatment.setTherapy(therapy);
         providedTreatment.pause("paws", now);
         providedTreatment.resume("swap", now);
 

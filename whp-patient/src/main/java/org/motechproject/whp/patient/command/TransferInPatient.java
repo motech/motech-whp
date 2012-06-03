@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class TransferInPatient extends TreatmentUpdate {
     ProviderService providerService;
 
     @Autowired
-    public TransferInPatient(AllPatients allPatients, AllTreatments allTreatments, ProviderService providerService) {
+    public TransferInPatient(AllPatients allPatients, AllTherapies allTreatments, ProviderService providerService) {
         super(allPatients, allTreatments, UpdateScope.transferIn);
         this.providerService = providerService;
     }
@@ -42,6 +42,6 @@ public class TransferInPatient extends TreatmentUpdate {
                 patientRequest.getTb_registration_number(),
                 patientRequest.getDate_modified());
         patient.reviveLastClosedTreatment();
-        allTreatments.update(patient.latestTreatment());
+        allTherapies.update(patient.latestTreatment());
     }
 }

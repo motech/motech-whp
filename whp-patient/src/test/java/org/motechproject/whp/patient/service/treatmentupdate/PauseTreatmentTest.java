@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -20,7 +20,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
 
     private PauseTreatment pauseTreatment;
     private Patient patient;
@@ -29,7 +29,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        pauseTreatment = new PauseTreatment(allPatients, allTreatments);
+        pauseTreatment = new PauseTreatment(allPatients, allTherapies);
     }
 
     @Test

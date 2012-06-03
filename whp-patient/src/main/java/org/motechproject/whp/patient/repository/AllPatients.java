@@ -8,7 +8,7 @@ import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ import java.util.List;
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> {
 
-    AllTreatments allTreatments;
+    AllTherapies allTherapies;
 
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTreatments allTreatments) {
+    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTherapies allTherapies) {
         super(Patient.class, dbCouchDbConnector);
-        this.allTreatments = allTreatments;
+        this.allTherapies = allTherapies;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @Override
     public void update(Patient patient) {
-        allTreatments.update(patient.latestTreatment());
+        allTherapies.update(patient.latestTreatment());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
@@ -66,12 +66,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     private void loadPatientDependencies(Patient patient) {
         ProvidedTreatment latestProvidedTreatment = patient.getCurrentProvidedTreatment();
-        Treatment latestTreatment = allTreatments.get(latestProvidedTreatment.getTreatmentDocId());
-        latestProvidedTreatment.setTreatment(latestTreatment);
+        Therapy latestTherapy = allTherapies.get(latestProvidedTreatment.getTherapyDocId());
+        latestProvidedTreatment.setTherapy(latestTherapy);
 
         for (ProvidedTreatment providedTreatment : patient.getProvidedTreatments()) {
-            Treatment treatment = allTreatments.get(providedTreatment.getTreatmentDocId());
-            providedTreatment.setTreatment(treatment);
+            Therapy therapy = allTherapies.get(providedTreatment.getTherapyDocId());
+            providedTreatment.setTherapy(therapy);
         }
     }
 

@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -20,7 +20,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
 
     private CloseCurrentTreatment closeCurrentTreatment;
     private Patient patient;
@@ -29,7 +29,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, allTreatments);
+        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, allTherapies);
     }
 
     @Test

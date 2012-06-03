@@ -3,7 +3,8 @@ package org.motechproject.whp.patient.domain.criteria;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 
 import java.util.List;
@@ -48,10 +49,10 @@ public class UpdatePatientCriteria {
             errorCodes.add(WHPErrorCode.TREATMENT_NOT_CLOSED);
             return false;
         }
-        Treatment latestTreatment = patient.latestTreatment();
+        Therapy latestTherapy = patient.latestTreatment();
 
-        if (!latestTreatment.getDiseaseClass().equals(patientRequest.getDisease_class())
-                || !latestTreatment.getTreatmentCategory().equals(patientRequest.getTreatment_category())) {
+        if (!latestTherapy.getDiseaseClass().equals(patientRequest.getDisease_class())
+                || !latestTherapy.getTreatmentCategory().equals(patientRequest.getTreatment_category())) {
             errorCodes.add(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH);
             return false;
         }

@@ -51,8 +51,8 @@ public class Patient extends MotechBaseDataObject {
         lastModifiedDate = dateModified;
     }
 
-    public Treatment latestTreatment() {
-        return currentProvidedTreatment.getTreatment();
+    public Therapy latestTreatment() {
+        return currentProvidedTreatment.getTherapy();
     }
 
     public PatientType currentTreatmentType() {
@@ -91,7 +91,7 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public String currentTreatmentId() {
         if (getCurrentProvidedTreatment() == null) return null;
-        return this.getCurrentProvidedTreatment().getTreatment().getId();
+        return this.getCurrentProvidedTreatment().getTherapy().getId();
     }
 
     @JsonIgnore

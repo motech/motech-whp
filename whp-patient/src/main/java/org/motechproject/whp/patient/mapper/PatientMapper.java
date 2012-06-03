@@ -7,8 +7,8 @@ public class PatientMapper {
 
     public static Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
-        Treatment treatment = TreatmentMapper.map(patientRequest);
-        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
+        Therapy therapy = TherapyMapper.map(patientRequest);
+        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, therapy);
         patient.addProvidedTreatment(providedTreatment, patientRequest.getDate_modified());
         return patient;
     }
@@ -28,12 +28,12 @@ public class PatientMapper {
         return patient;
     }
 
-    public static ProvidedTreatment mapProvidedTreatment(PatientRequest patientRequest, Treatment treatment) {
+    public static ProvidedTreatment mapProvidedTreatment(PatientRequest patientRequest, Therapy therapy) {
         String providerId = patientRequest.getProvider_id();
         String tbId = patientRequest.getTb_id();
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, tbId, patientRequest.getPatient_type());
 
-        providedTreatment.setTreatment(treatment);
+        providedTreatment.setTherapy(therapy);
         providedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
         mapSmearTestResults(patientRequest, providedTreatment);
         mapWeightStatistics(patientRequest, providedTreatment);
@@ -44,13 +44,13 @@ public class PatientMapper {
         return providedTreatment;
     }
 
-    public static ProvidedTreatment createNewProvidedTreatmentForTreatmentCategoryChange(Patient patient, PatientRequest patientRequest, Treatment treatment) {
+    public static ProvidedTreatment createNewProvidedTreatmentForTreatmentCategoryChange(Patient patient, PatientRequest patientRequest, Therapy therapy) {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
         String tbId = patientRequest.getTb_id();
 
         ProvidedTreatment newProvidedTreatment = new ProvidedTreatment(patientRequest.getProvider_id(), tbId, patientRequest.getPatient_type());
 
-        newProvidedTreatment.setTreatment(treatment);
+        newProvidedTreatment.setTherapy(therapy);
         newProvidedTreatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
         newProvidedTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         newProvidedTreatment.setPatientAddress(currentProvidedTreatment.getPatientAddress());
@@ -62,10 +62,10 @@ public class PatientMapper {
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
         ProvidedTreatment currentProvidedTreatment = patient.getCurrentProvidedTreatment();
-        Treatment currentTreatment = patient.latestTreatment();
+        Therapy currentTherapy = patient.latestTreatment();
 
         if (patientRequest.getAge() != null)
-            currentTreatment.setPatientAge(patientRequest.getAge());
+            currentTherapy.setPatientAge(patientRequest.getAge());
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
 

@@ -23,7 +23,7 @@ public class AllPatientsIT extends SpringIntegrationTest {
     @Autowired
     AllPatients allPatients;
     @Autowired
-    AllTreatments allTreatments;
+    AllTherapies allTherapies;
 
     @Test
     public void shouldSavePatientInfo() {
@@ -87,13 +87,13 @@ public class AllPatientsIT extends SpringIntegrationTest {
 
     private Patient createPatient(String patientId, String providerId) {
         TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
-        Treatment treatment = new Treatment(treatmentCategory, DiseaseClass.P, 200);
-        allTreatments.add(treatment);
+        Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 200);
+        allTherapies.add(therapy);
 
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
         ProvidedTreatment providedTreatment = new ProvidedTreatment(providerId, "tbId", PatientType.New);
         providedTreatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
-        providedTreatment.setTreatment(treatment);
+        providedTreatment.setTherapy(therapy);
         providedTreatment.addSmearTestResult(smearTestResult());
         providedTreatment.addWeightStatistics(weightStatistics());
         patient.addProvidedTreatment(providedTreatment, now());
@@ -119,6 +119,6 @@ public class AllPatientsIT extends SpringIntegrationTest {
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
-        markForDeletion(allTreatments.getAll().toArray());
+        markForDeletion(allTherapies.getAll().toArray());
     }
 }

@@ -19,7 +19,7 @@ public class ProvidedTreatment {
     private LocalDate startDate;
     private LocalDate endDate;
     private Address patientAddress;
-    private String treatmentDocId;
+    private String therapyDocId;
     private TreatmentOutcome treatmentOutcome;
     private PatientType patientType;
     private String tbRegistrationNumber;
@@ -27,7 +27,7 @@ public class ProvidedTreatment {
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
 
-    private Treatment treatment;
+    private Therapy therapy;
 
     // Required for ektorp
     public ProvidedTreatment() {
@@ -44,7 +44,7 @@ public class ProvidedTreatment {
         setProviderId(oldProvidedTreatment.providerId);
         setStartDate(oldProvidedTreatment.startDate);
         setEndDate(oldProvidedTreatment.endDate);
-        setTreatment(oldProvidedTreatment.getTreatment());
+        setTherapy(oldProvidedTreatment.getTherapy());
         setPatientAddress(oldProvidedTreatment.getPatientAddress());
         setSmearTestResults(oldProvidedTreatment.getSmearTestResults());
         setWeightStatistics(oldProvidedTreatment.getWeightStatistics());
@@ -60,7 +60,7 @@ public class ProvidedTreatment {
     public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
         this.treatmentOutcome = treatmentOutcome;
-        treatment.close(dateModified);
+        therapy.close(dateModified);
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
@@ -72,14 +72,14 @@ public class ProvidedTreatment {
     }
 
     @JsonIgnore
-    public Treatment getTreatment() {
-        return treatment;
+    public Therapy getTherapy() {
+        return therapy;
     }
 
     @JsonIgnore
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
-        this.treatmentDocId = treatment.getId();
+    public void setTherapy(Therapy therapy) {
+        this.therapy = therapy;
+        this.therapyDocId = therapy.getId();
     }
 
     @JsonIgnore
@@ -104,7 +104,7 @@ public class ProvidedTreatment {
 
     @JsonIgnore
     public boolean isClosed() {
-        return treatment.isClosed();
+        return therapy.isClosed();
     }
 
     public void addSmearTestResult(SmearTestRecord smearTestRecord) {

@@ -41,7 +41,7 @@ public class TreatmentCategoryTest extends BasePatientTest {
             validator.validate(webRequest, UpdateScope.createScope);
         } catch (WHPRuntimeException e) {
             WHPError error = e.error(WHPErrorCode.FIELD_VALIDATION_FAILED);
-            if (error != null && error.getMessage().contains("field:treatment_category:Treatment Category cannot be null"))
+            if (error != null && error.getMessage().contains("field:treatment_category:Therapy Category cannot be null"))
                 fail("Not Null validation is not required. Validator implements null validation.");
             assertTrue(error.getMessage().contains("field:treatment_category:value should not be null"));
         }

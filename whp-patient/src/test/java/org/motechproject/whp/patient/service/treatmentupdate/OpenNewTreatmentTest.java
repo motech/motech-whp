@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static org.mockito.Mockito.*;
@@ -23,7 +23,7 @@ public class OpenNewTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
 
     private OpenNewTreatment openNewTreatment;
     private Patient patient;
@@ -32,7 +32,7 @@ public class OpenNewTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        openNewTreatment = new OpenNewTreatment(allPatients, allTreatments);
+        openNewTreatment = new OpenNewTreatment(allPatients, allTherapies);
     }
 
     @Test

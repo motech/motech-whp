@@ -2,25 +2,17 @@ package org.motechproject.whp.patient.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
@@ -30,7 +22,7 @@ public class AllPatientsTest {
     @Mock
     private ViewQuery patientViewQuery;
     @Mock
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
     @Mock
     private CouchDbConnector couchDbConnector;
     private AllPatients allPatients;
@@ -38,7 +30,7 @@ public class AllPatientsTest {
     @Before
     public void setUp() {
         initMocks(this);
-        allPatients = spy(new AllPatients(couchDbConnector, allTreatments));
+        allPatients = spy(new AllPatients(couchDbConnector, allTherapies));
     }
 
     @Test

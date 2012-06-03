@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.Therapy;
 
 import static org.junit.Assert.*;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
@@ -41,8 +41,8 @@ public class PatientMapperTest {
                 .withCaseId("caseId")
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        Treatment treatment = TreatmentMapper.map(patientRequest);
-        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, treatment);
+        Therapy therapy = TherapyMapper.map(patientRequest);
+        ProvidedTreatment providedTreatment = mapProvidedTreatment(patientRequest, therapy);
 
         assertNotNull(providedTreatment.getStartDate());
     }
@@ -75,12 +75,12 @@ public class PatientMapperTest {
                 .withTbId("newTbId")
                 .build();
 
-        Treatment newTreatment = TreatmentMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
+        Therapy newTherapy = TherapyMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
 
-        ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTreatment);
+        ProvidedTreatment newProvidedTreatment = createNewProvidedTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTherapy);
 
         assertNotSame(currentProvidedTreatment.getTbId().toLowerCase(), newProvidedTreatment.getTbId());
-        assertNotSame(patient.latestTreatment(), newProvidedTreatment.getTreatment());
+        assertNotSame(patient.latestTreatment(), newProvidedTreatment.getTherapy());
         assertEquals(openNewTreatmentUpdateRequest.getTb_id().toLowerCase(), newProvidedTreatment.getTbId());
         assertEquals(currentProvidedTreatment.getPatientAddress(), newProvidedTreatment.getPatientAddress());
         assertEquals(openNewTreatmentUpdateRequest.getProvider_id().toLowerCase(), newProvidedTreatment.getProviderId());
@@ -110,12 +110,12 @@ public class PatientMapperTest {
     }
 
     private void assertTreatment(Patient patient, PatientRequest patientRequest) {
-        Treatment treatment = patient.latestTreatment();
-        assertEquals(patientRequest.getAge(), treatment.getPatientAge());
-        assertEquals(patientRequest.getTreatment_category(), treatment.getTreatmentCategory());
-        assertNull(treatment.getStartDate());
+        Therapy therapy = patient.latestTreatment();
+        assertEquals(patientRequest.getAge(), therapy.getPatientAge());
+        assertEquals(patientRequest.getTreatment_category(), therapy.getTreatmentCategory());
+        assertNull(therapy.getStartDate());
 
-        assertEquals(patientRequest.getTreatmentCreationDate(), treatment.getCreationDate());
+        assertEquals(patientRequest.getTreatmentCreationDate(), therapy.getCreationDate());
     }
 
     private void assertSmearTests(PatientRequest patientRequest, ProvidedTreatment treatment) {

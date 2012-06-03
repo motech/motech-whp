@@ -9,7 +9,8 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.ProvidedTreatment;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -27,10 +28,10 @@ public class AdherenceDataMapperTest {
 
     @Before
     public void setup() {
-        Treatment treatment = new Treatment(new TreatmentCategory(), DiseaseClass.E, 10);
+        Therapy therapy = new Therapy(new TreatmentCategory(), DiseaseClass.E, 10);
 
         ProvidedTreatment currentProvidedTreatment = new ProvidedTreatment(PROVIDER_ID, TB_ID, PatientType.New);
-        currentProvidedTreatment.setTreatment(treatment);
+        currentProvidedTreatment.setTherapy(therapy);
 
         patient = new PatientBuilder().withDefaults().withCurrentProvidedTreatment(currentProvidedTreatment).build();
     }

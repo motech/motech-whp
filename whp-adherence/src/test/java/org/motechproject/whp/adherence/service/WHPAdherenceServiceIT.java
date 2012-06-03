@@ -20,7 +20,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTreatments;
+import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     @Autowired
     private AllPatients allPatients;
     @Autowired
-    private AllTreatments allTreatments;
+    private AllTherapies allTherapies;
     @Autowired
     private AllAuditLogs allAuditLogs;
 
@@ -108,7 +108,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         WeeklyAdherence adherence = adherenceIsRecordedForTheFirstTime();
         assertEquals(
                 adherence.firstDoseTakenOn(),
-                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTreatment().getStartDate()
+                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate()
         );
     }
 
@@ -120,7 +120,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         adherenceService.recordAdherence(CASE_ID, new WeeklyAdherence(), auditParams);
         assertEquals(
                 adherence.firstDoseTakenOn(),
-                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTreatment().getStartDate()
+                allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate()
         );
     }
 
@@ -130,7 +130,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         mockCurrentDate(today.plusDays(1));
 
         adherenceService.recordAdherence(CASE_ID, new WeeklyAdherence(), auditParams);
-        assertNull(allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTreatment().getStartDate());
+        assertNull(allPatients.findByPatientId(CASE_ID).getCurrentProvidedTreatment().getTherapy().getStartDate());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         deleteAdherenceLogs();
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allAuditLogs.getAll().toArray());
-        markForDeletion(allTreatments.getAll().toArray());
+        markForDeletion(allTherapies.getAll().toArray());
     }
 
     @Override
