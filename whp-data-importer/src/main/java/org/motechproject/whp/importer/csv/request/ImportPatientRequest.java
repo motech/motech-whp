@@ -93,7 +93,7 @@ public class ImportPatientRequest {
 
     @NotNullOrEmpty
     @Pattern(regexp = "[0|1][1|2]")
-    @ColumnName(name = "Current Therapy Category: 01/ 02 /11/12*")
+    @ColumnName(name = "Current Treatment Category: 01/ 02 /11/12*")
     private String treatment_category;
 
     @NotNullOrEmpty

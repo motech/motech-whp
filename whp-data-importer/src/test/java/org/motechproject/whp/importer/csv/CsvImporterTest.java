@@ -72,7 +72,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
 
     @Test
-    @Ignore("Shruthi to follow up")
     public void shouldStorePatientDataWithDefaultValues() throws Exception {
         String[] arguments = new String[3];
         arguments[0] = "provider";
