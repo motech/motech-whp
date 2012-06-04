@@ -199,7 +199,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
-        expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))

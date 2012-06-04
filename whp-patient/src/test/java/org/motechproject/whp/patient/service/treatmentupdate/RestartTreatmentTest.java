@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
+import org.motechproject.whp.patient.service.TreatmentService;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -22,35 +23,77 @@ public class RestartTreatmentTest extends BaseUnitTest {
     private AllPatients allPatients;
     @Mock
     private AllTherapies allTherapies;
-
+    @Mock
+    private TreatmentService treatmentService;
     private RestartTreatment restartTreatment;
+
     private PatientRequest patientRequest;
 
     @Before
     public void setUp() {
         initMocks(this);
         patientRequest = new PatientRequestBuilder().withDefaults().build();
-        restartTreatment = new RestartTreatment(allPatients, allTherapies);
+        restartTreatment = new RestartTreatment(allPatients, allTherapies, treatmentService);
     }
 
     @Test
-    public void shouldNotRestartCurrentTreatment_OnAnyErrors() {
-        Patient patient = new PatientBuilder().withDefaults().build();
+    public void shouldNotRestartTreatmentIfPatientTreatmentIsNotPaused() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
-
         restartTreatment.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(treatmentService, never()).restartTreatment(patientRequest);
     }
 
     @Test
-    public void shouldRestartAndUpdatePatientCurrentTreatment_IfNoErrorsFound() {
-        Patient patient = new PatientBuilder().withDefaults().build();
+    public void shouldNotRestartTreatmentIfRequestTbIdDoesNotMatchPatientTbId() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        restartTreatment.apply(patientRequest);
+        verify(treatmentService, never()).restartTreatment(patientRequest);
+    }
+
+    @Test
+    public void shouldNotRestartTreatmentIfTreatmentIsNotPaused() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("wrongTbId");
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
+        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        restartTreatment.apply(patientRequest);
+        verify(treatmentService, never()).restartTreatment(patientRequest);
+    }
+
+    @Test
+    public void shouldRestartCurrentTreatmentIfPatientTreatmentCanBeRestarted() {
+        String tbId = "tbId";
+        Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
+        patient.pauseCurrentTreatment("paws", now());
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id(tbId);
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         restartTreatment.apply(patientRequest);
-        verify(allPatients).update(patient);
+        verify(treatmentService).restartTreatment(patientRequest);
     }
-
 }

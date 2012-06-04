@@ -25,7 +25,6 @@ public class Therapy extends MotechBaseDataObject {
     private DiseaseClass diseaseClass;
     private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
 
-    // Required for ektorp
     public Therapy() {
     }
 
@@ -41,17 +40,20 @@ public class Therapy extends MotechBaseDataObject {
     }
 
     public void revive() {
+        /* Not handling not null case as the only use case is in
+         * Transfer In where check has already been made to see if current treatment is closed.
+         *   now, whether closing a treatment sets the end date or not, that is cause for concern
+         */
         closeDate = null;
         status = TherapyStatus.Ongoing;
-        /*not handling not null case as the only use case is in Transfer In where check has already been made to see if current treatment is closed.
-        now, whether closing a treatment sets the end date or not, that is cause for concern*/
     }
 
     @JsonIgnore
     public boolean isClosed() {
         return TherapyStatus.Closed == status;
     }
-    public DateTime getCreationDate(){
+
+    public DateTime getCreationDate() {
         return DateUtil.setTimeZone(creationDate);
     }
 

@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.motechproject.whp.patient.domain.criteria.UpdatePatientCriteria.sanityCheckFails;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatment;
 
@@ -58,10 +58,16 @@ public class PatientService {
 
     public boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
-        if (!sanityCheckFails(patient, new ArrayList<WHPErrorCode>())) {
+        List<WHPErrorCode> errors = new ArrayList<WHPErrorCode>();
+        if (patient == null) {
+            errors.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+            return false;
+        }else if (!patient.hasCurrentTreatment()) {
+            errors.add(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);
+            return false;
+        } else {
             return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
         }
-        return false;
     }
 
 }
