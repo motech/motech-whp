@@ -13,21 +13,21 @@ import java.util.List;
 public class SmearTestResults {
 
     @JsonProperty
-    private List<SmearTestRecord> smearTestResults = new ArrayList<SmearTestRecord>();
+    private List<SmearTestRecord> all = new ArrayList<SmearTestRecord>();
 
     public boolean add(SmearTestRecord smearTestRecord) {
         if (smearTestRecord.getSmear_sample_instance() != null) {
             SmearTestRecord existingResult = resultForInstance(smearTestRecord.getSmear_sample_instance());
             if (existingResult != null) {
-                this.smearTestResults.remove(existingResult);
+                this.all.remove(existingResult);
             }
-            return this.smearTestResults.add(smearTestRecord);
+            return this.all.add(smearTestRecord);
         }
         return false;
     }
 
     private SmearTestRecord resultForInstance(SmearTestSampleInstance smearTestSampleInstance) {
-        for (SmearTestRecord smearTestRecord : this.smearTestResults) {
+        for (SmearTestRecord smearTestRecord : this.all) {
             if (smearTestRecord.isOfInstance(smearTestSampleInstance))
                 return smearTestRecord;
         }
@@ -35,20 +35,20 @@ public class SmearTestResults {
     }
 
     public SmearTestRecord latestResult() {
-        return this.smearTestResults.get(this.smearTestResults.size() - 1);
+        return this.all.get(this.all.size() - 1);
     }
 
     public SmearTestRecord get(int index) {
-        return this.smearTestResults.get(index);
+        return this.all.get(index);
     }
 
     public int size() {
-        return this.smearTestResults.size();
+        return this.all.size();
     }
 
     @JsonIgnore
     public boolean isEmpty() {
-        return this.smearTestResults.isEmpty();
+        return this.all.isEmpty();
     }
 
     public void add(SmearTestSampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result) {
@@ -64,7 +64,7 @@ public class SmearTestResults {
 
         SmearTestResults that = (SmearTestResults) o;
 
-        if (smearTestResults != null ? !smearTestResults.equals(that.smearTestResults) : that.smearTestResults != null)
+        if (all != null ? !all.equals(that.all) : that.all != null)
             return false;
 
         return true;
@@ -72,11 +72,11 @@ public class SmearTestResults {
 
     @Override
     public int hashCode() {
-        return smearTestResults != null ? smearTestResults.hashCode() : 0;
+        return all != null ? all.hashCode() : 0;
     }
 
     @JsonIgnore
     public List<SmearTestRecord> getAll() {
-        return Collections.unmodifiableList(smearTestResults);
+        return Collections.unmodifiableList(all);
     }
 }
