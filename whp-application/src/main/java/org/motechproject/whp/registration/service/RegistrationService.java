@@ -3,6 +3,8 @@ package org.motechproject.whp.registration.service;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.ProviderRequest;
+import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.ProviderService;
 import org.motechproject.whp.refdata.domain.WHPRole;
@@ -38,7 +40,12 @@ public class RegistrationService {
                 providerRequest.getTertiaryMobile(),
                 providerRequest.getDistrict(),
                 providerRequest.getLastModifiedDate());
-        motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+        try{
+            motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+        }
+        catch (Exception e) {
+            throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR,e.getMessage());
+        }
     }
 
     public void changePasswordAndActivateUser(String userName, String newPassword) {

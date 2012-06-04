@@ -18,7 +18,8 @@ public enum WHPErrorCode {
     NULL_VALUE_IN_WEIGHT_STATISTICS("Invalid weight statistics : null value"),
     NULL_VALUE_IN_ADDRESS("Invalid address : null value"),
 
-    FIELD_VALIDATION_FAILED("Field Validation failed");
+    FIELD_VALIDATION_FAILED("Field Validation failed"),
+    WEB_ACCOUNT_REGISTRATION_ERROR("Error occured while tying to register user");
 
     private String message;
 
