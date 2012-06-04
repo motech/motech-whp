@@ -3,6 +3,7 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.security.domain.Roles;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,11 @@ public class HomeController extends BaseController {
     @RequestMapping("/")
     public String homePage(HttpServletRequest request) {
         AuthenticatedUser user = loggedInUser(request);
-        if (user.getRoles().hasRole(WHPRole.CMF_ADMIN.name())) {
+        Roles userRoles = user.getRoles();
+        if (userRoles.hasRole(WHPRole.CMF_ADMIN.name())) {
             return "admin";
+        } else  if(userRoles.hasRole(WHPRole.IT_ADMIN.name()))  {
+               return "itadmin";
         } else {
             String message = Flash.in("message", request);
             if (StringUtils.isNotEmpty(message)) {

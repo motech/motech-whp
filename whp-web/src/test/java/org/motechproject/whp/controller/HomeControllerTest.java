@@ -46,9 +46,17 @@ public class HomeControllerTest {
     }
 
     @Test
+    public void shouldRedirectToTheItAdminLandingPage() {
+        Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
+        login(authenticatedAdmin(WHPRole.IT_ADMIN));
+        setupProvider(provider);
+        assertEquals("itadmin", homeController.homePage(request));
+    }
+
+    @Test
     public void shouldRedirectToTheAdminPageWhenAdminLogsIn() {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
-        login(authenticatedAdmin());
+        login(authenticatedAdmin(WHPRole.CMF_ADMIN));
         setupProvider(provider);
         assertEquals("admin", homeController.homePage(request));
     }
@@ -66,9 +74,9 @@ public class HomeControllerTest {
         return authenticatedUser;
     }
 
-    private AuthenticatedUser authenticatedAdmin() {
+    private AuthenticatedUser authenticatedAdmin(WHPRole whpRole) {
         AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.CMF_ADMIN.name()))));
+        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(whpRole.name()))));
         return authenticatedUser;
     }
 
