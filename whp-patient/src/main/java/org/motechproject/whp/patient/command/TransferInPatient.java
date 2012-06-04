@@ -2,6 +2,8 @@ package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -40,7 +42,9 @@ public class TransferInPatient extends TreatmentUpdate {
         providerService.transferIn(patientRequest.getProvider_id(),
                 patient, patientRequest.getTb_id(),
                 patientRequest.getTb_registration_number(),
-                patientRequest.getDate_modified());
+                patientRequest.getDate_modified(),
+                patientRequest.getSmearTestResults(),
+                patientRequest.getWeightStatistics());
         patient.reviveLastClosedTreatment();
         allTherapies.update(patient.latestTherapy());
     }

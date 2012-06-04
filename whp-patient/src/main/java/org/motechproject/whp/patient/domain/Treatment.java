@@ -46,8 +46,6 @@ public class Treatment {
         setEndDate(oldTreatment.endDate);
         setTherapy(oldTreatment.getTherapy());
         setPatientAddress(oldTreatment.getPatientAddress());
-        setSmearTestResults(oldTreatment.getSmearTestResults());
-        setWeightStatistics(oldTreatment.getWeightStatistics());
     }
 
     public Treatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {

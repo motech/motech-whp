@@ -1,9 +1,7 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -30,7 +28,7 @@ public class ProviderService {
         return provider.getId();
     }
 
-    public void transferIn(String newProviderId, Patient patient, String tbId, String tbRegistrationNumber, DateTime dateModified) {
+    public void transferIn(String newProviderId, Patient patient, String tbId, String tbRegistrationNumber, DateTime dateModified, SmearTestResults newSmearTestResults, WeightStatistics newWeightStatistics) {
         Treatment currentTreatment = patient.getCurrentTreatment();
         Treatment newTreatment = new Treatment(currentTreatment)
                 .updateForTransferIn(
@@ -38,6 +36,8 @@ public class ProviderService {
                         newProviderId,
                         dateModified.toLocalDate()
                 );
+        newTreatment.setSmearTestResults(newSmearTestResults.isEmpty() ? currentTreatment.getSmearTestResults() : newSmearTestResults);
+        newTreatment.setWeightStatistics(newWeightStatistics.isEmpty() ? currentTreatment.getWeightStatistics() : newWeightStatistics);
         newTreatment.setTbRegistrationNumber(tbRegistrationNumber);
         patient.addTreatment(newTreatment, dateModified);
         newTreatment.setPatientType(PatientType.TransferredIn);
