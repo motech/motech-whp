@@ -16,6 +16,6 @@ public class AdministratorSeed {
 
     @Seed(priority = 0, version = "1.0")
     public void load() {
-        authenticationService.register("admin", "password", null, Arrays.asList(WHPRole.ADMIN.name()));
+        authenticationService.register("admin", "password", null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
     }
 }

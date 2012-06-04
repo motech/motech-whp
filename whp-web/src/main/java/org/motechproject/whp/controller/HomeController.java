@@ -24,7 +24,7 @@ public class HomeController extends BaseController {
     @RequestMapping("/")
     public String homePage(HttpServletRequest request) {
         AuthenticatedUser user = loggedInUser(request);
-        if (user.getRoles().hasRole(WHPRole.ADMIN.name())) {
+        if (user.getRoles().hasRole(WHPRole.CMF_ADMIN.name())) {
             return "admin";
         } else {
             String message = Flash.in("message", request);

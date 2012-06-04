@@ -58,7 +58,7 @@ public class UserControllerTest {
     private AuthenticatedUser authenticatedAdmin() {
         AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
         when(authenticatedUser.getUsername()).thenReturn("admin");
-        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.ADMIN.name()))));
+        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.CMF_ADMIN.name()))));
         return authenticatedUser;
     }
 }
