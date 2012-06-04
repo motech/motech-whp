@@ -7,7 +7,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 public class TreatmentStartCriteria {
 
     public static boolean shouldStartOrRestartTreatment(Patient patient, WeeklyAdherence adherence) {
-        return isAdherenceBeingCapturedForFirstEverWeek(patient, adherence) && !patient.isMigrated();
+        return isAdherenceBeingCapturedForFirstEverWeek(patient, adherence);
     }
 
     private static boolean isAdherenceBeingCapturedForFirstEverWeek(Patient patient, WeeklyAdherence adherence) {
