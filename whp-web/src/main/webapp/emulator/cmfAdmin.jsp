@@ -1,13 +1,20 @@
 <%@page import="org.motechproject.security.service.MotechAuthenticationService" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
+<%@ page import="java.util.Properties" %>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/bootstrap.css/"/>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/standard.css"/>
     <%
         ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
+        String appVersion = whpProperties.getProperty("application.version");
+    %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <spring:eval expression="@whpProperties['application.version']" var="applicationVersion"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
+
+    <%
         MotechAuthenticationService authenticationService = appCtx.getBean("motechAuthenticationService", MotechAuthenticationService.class);
         String providerId = "";
         if (null != request.getParameter("provider_id")) {
