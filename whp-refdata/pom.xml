@@ -5,11 +5,10 @@
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
-        <version>${whp.version}</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>whp-refdata</name>
-    <version>${whp.version}</version>
     <artifactId>whp-refdata</artifactId>
     <properties>
         <build.dir>../build</build.dir>

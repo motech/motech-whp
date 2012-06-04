@@ -5,13 +5,12 @@
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
-        <version>${whp.version}</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>whp-patient</name>
     <artifactId>whp-patient</artifactId>
     <groupId>org.motechproject.whp</groupId>
-    <version>${whp.version}</version>
     <properties>
         <build.dir>../build</build.dir>
     </properties>
