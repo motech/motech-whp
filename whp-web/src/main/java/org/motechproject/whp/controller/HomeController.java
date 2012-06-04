@@ -29,7 +29,7 @@ public class HomeController extends BaseController {
         if (userRoles.hasRole(WHPRole.CMF_ADMIN.name())) {
             return "admin";
         } else  if(userRoles.hasRole(WHPRole.IT_ADMIN.name()))  {
-               return "itadmin";
+               return "itadmin/itadmin";
         } else {
             String message = Flash.in("message", request);
             if (StringUtils.isNotEmpty(message)) {
