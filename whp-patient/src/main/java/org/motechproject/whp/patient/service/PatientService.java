@@ -50,9 +50,9 @@ public class PatientService {
         updateCommandFactory.updateFor(updateScope).apply(patientRequest);
     }
 
-    public void startTreatment(String patientId, LocalDate firstDoseTakenDate) {
+    public void startTherapy(String patientId, LocalDate firstDoseTakenDate) {
         Patient patient = allPatients.findByPatientId(patientId);
-        patient.latestTreatment().setStartDate(firstDoseTakenDate);
+        patient.startTherapy(firstDoseTakenDate);
         allPatients.update(patient);
     }
 

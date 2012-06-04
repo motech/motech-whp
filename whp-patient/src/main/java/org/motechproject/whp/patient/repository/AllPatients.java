@@ -45,7 +45,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @Override
     public void update(Patient patient) {
-        allTherapies.update(patient.latestTreatment());
+        allTherapies.update(patient.latestTherapy());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);

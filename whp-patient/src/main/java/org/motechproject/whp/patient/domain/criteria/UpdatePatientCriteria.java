@@ -48,7 +48,7 @@ public class UpdatePatientCriteria {
             errorCodes.add(WHPErrorCode.TREATMENT_NOT_CLOSED);
             return false;
         }
-        Therapy latestTherapy = patient.latestTreatment();
+        Therapy latestTherapy = patient.latestTherapy();
 
         if (!latestTherapy.getDiseaseClass().equals(patientRequest.getDisease_class())
                 || !latestTherapy.getTreatmentCategory().equals(patientRequest.getTreatment_category())) {

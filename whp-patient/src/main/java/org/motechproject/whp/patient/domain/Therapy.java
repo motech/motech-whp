@@ -10,6 +10,8 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 
+import java.util.Arrays;
+
 @Data
 @TypeDiscriminator("doc.type == 'Therapy'")
 public class Therapy extends MotechBaseDataObject {
@@ -21,6 +23,7 @@ public class Therapy extends MotechBaseDataObject {
     private TherapyStatus status = TherapyStatus.Ongoing;
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
+    private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
 
     // Required for ektorp
     public Therapy() {
@@ -50,5 +53,10 @@ public class Therapy extends MotechBaseDataObject {
     }
     public DateTime getCreationDate(){
         return DateUtil.setTimeZone(creationDate);
+    }
+
+    public void start(LocalDate therapyStartDate){
+        setStartDate(therapyStartDate);
+        phases.setIPStartDate(therapyStartDate);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
@@ -51,7 +52,7 @@ public class Patient extends MotechBaseDataObject {
         lastModifiedDate = dateModified;
     }
 
-    public Therapy latestTreatment() {
+    public Therapy latestTherapy() {
         return currentTreatment.getTherapy();
     }
 
@@ -126,11 +127,11 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public Integer getAge() {
-        return latestTreatment().getPatientAge();
+        return latestTherapy().getPatientAge();
     }
 
     public void reviveLastClosedTreatment() {
-        latestTreatment().revive();
+        latestTherapy().revive();
     }
 
     public void setPatientId(String patientId) {
@@ -138,5 +139,9 @@ public class Patient extends MotechBaseDataObject {
             this.patientId = null;
         else
             this.patientId = patientId.toLowerCase();
+    }
+
+    public void startTherapy(LocalDate firstDoseTakenDate) {
+        latestTherapy().start(firstDoseTakenDate);
     }
 }

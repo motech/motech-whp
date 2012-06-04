@@ -42,6 +42,6 @@ public class TransferInPatient extends TreatmentUpdate {
                 patientRequest.getTb_registration_number(),
                 patientRequest.getDate_modified());
         patient.reviveLastClosedTreatment();
-        allTherapies.update(patient.latestTreatment());
+        allTherapies.update(patient.latestTherapy());
     }
 }

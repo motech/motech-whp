@@ -80,7 +80,7 @@ public class PatientMapperTest {
         Treatment newTreatment = createNewTreatmentForTreatmentCategoryChange(patient, openNewTreatmentUpdateRequest, newTherapy);
 
         assertNotSame(currentTreatment.getTbId().toLowerCase(), newTreatment.getTbId());
-        assertNotSame(patient.latestTreatment(), newTreatment.getTherapy());
+        assertNotSame(patient.latestTherapy(), newTreatment.getTherapy());
         assertEquals(openNewTreatmentUpdateRequest.getTb_id().toLowerCase(), newTreatment.getTbId());
         assertEquals(currentTreatment.getPatientAddress(), newTreatment.getPatientAddress());
         assertEquals(openNewTreatmentUpdateRequest.getProvider_id().toLowerCase(), newTreatment.getProviderId());
@@ -110,7 +110,7 @@ public class PatientMapperTest {
     }
 
     private void assertTherapy(Patient patient, PatientRequest patientRequest) {
-        Therapy therapy = patient.latestTreatment();
+        Therapy therapy = patient.latestTherapy();
         assertEquals(patientRequest.getAge(), therapy.getPatientAge());
         assertEquals(patientRequest.getTreatment_category(), therapy.getTreatmentCategory());
         assertNull(therapy.getStartDate());

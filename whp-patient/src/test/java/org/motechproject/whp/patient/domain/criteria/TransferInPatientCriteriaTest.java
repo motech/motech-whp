@@ -35,8 +35,8 @@ public class TransferInPatientCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTreatment().getDiseaseClass());
-        patientRequest.setTreatment_category(patient.latestTreatment().getTreatmentCategory());
+        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
+        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
 
         assertFalse(canTransferInPatient(patient, patientRequest, errorCodes));
         assertTrue(errorCodes.contains(WHPErrorCode.TREATMENT_NOT_CLOSED));
@@ -48,7 +48,7 @@ public class TransferInPatientCriteriaTest {
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setDisease_class(DiseaseClass.E);
-        patientRequest.setTreatment_category(patient.latestTreatment().getTreatmentCategory());
+        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
 
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 
@@ -61,7 +61,7 @@ public class TransferInPatientCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTreatment().getDiseaseClass());
+        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
         patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, 24, 54, threeDaysAWeek));
 
@@ -77,8 +77,8 @@ public class TransferInPatientCriteriaTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTreatment().getDiseaseClass());
-        patientRequest.setTreatment_category(patient.latestTreatment().getTreatmentCategory());
+        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
+        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
 
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
 

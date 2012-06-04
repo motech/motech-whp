@@ -106,7 +106,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
-        assertNotSame(patient.latestTreatment(), updatedPatient.latestTreatment());
+        assertNotSame(patient.latestTherapy(), updatedPatient.latestTherapy());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
         assertNotSame(patient.getCurrentTreatment().getEndDate(), updatedPatient.getCurrentTreatment().getEndDate());
-        assertNotSame(patient.latestTreatment(), updatedPatient.latestTreatment());
+        assertNotSame(patient.latestTherapy(), updatedPatient.latestTherapy());
     }
 
     @Test

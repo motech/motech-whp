@@ -52,8 +52,8 @@ public class WHPAdherenceService {
         List<AdherenceData> requests = requests(weeklyAdherence);
         adherenceService.saveOrUpdateAdherence(requests);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
-            //implicitly sets doseStartedOn to null if no dose has been taken. this is intended.
-            patientService.startTreatment(patientId, weeklyAdherence.firstDoseTakenOn());
+            //implicitly sets startDate to null if no dose has been taken. this is intended.
+            patientService.startTherapy(patientId, weeklyAdherence.firstDoseTakenOn());
         }
         adherenceAuditService.log(weeklyAdherence, auditParams);
     }

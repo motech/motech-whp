@@ -58,8 +58,8 @@ public class TransferInPatientTest extends BaseUnitTest {
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, now());
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
-                .withDiseaseClass(patient.latestTreatment().getDiseaseClass())
-                .withTreatmentCategory(patient.latestTreatment().getTreatmentCategory())
+                .withDiseaseClass(patient.latestTherapy().getDiseaseClass())
+                .withTreatmentCategory(patient.latestTherapy().getTreatmentCategory())
                 .build();
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
@@ -69,8 +69,8 @@ public class TransferInPatientTest extends BaseUnitTest {
                 patientRequest.getTb_id(),
                 patientRequest.getTb_registration_number(),
                 patientRequest.getDate_modified());
-        assertNull(patient.latestTreatment().getCloseDate());
-        verify(allTherapies).update(patient.latestTreatment());
+        assertNull(patient.latestTherapy().getCloseDate());
+        verify(allTherapies).update(patient.latestTherapy());
     }
 
 }

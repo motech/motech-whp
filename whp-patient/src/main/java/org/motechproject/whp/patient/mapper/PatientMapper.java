@@ -62,7 +62,7 @@ public class PatientMapper {
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
         Treatment currentTreatment = patient.getCurrentTreatment();
-        Therapy currentTherapy = patient.latestTreatment();
+        Therapy currentTherapy = patient.latestTherapy();
 
         if (patientRequest.getAge() != null)
             currentTherapy.setPatientAge(patientRequest.getAge());

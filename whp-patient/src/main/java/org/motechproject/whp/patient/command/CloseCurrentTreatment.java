@@ -35,7 +35,7 @@ public class CloseCurrentTreatment extends TreatmentUpdate {
 
     private void closeCurrentTreatment(Patient patient, PatientRequest patientRequest, AllPatients allPatients, AllTherapies allTreatments) {
         patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
-        allTreatments.update(patient.latestTreatment());
+        allTreatments.update(patient.latestTherapy());
         allPatients.update(patient);
     }
 }
