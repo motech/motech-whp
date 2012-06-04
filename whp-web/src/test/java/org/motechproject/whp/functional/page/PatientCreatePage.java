@@ -28,7 +28,7 @@ public class PatientCreatePage extends Page {
     }
 
     public static PatientCreatePage fetch(WebDriver webDriver) {
-        webDriver.get(WHPUrl.baseFor("emulator/patient.html"));
+        webDriver.get(WHPUrl.baseFor("emulator/patient.jsp"));
         return MyPageFactory.initElements(webDriver, PatientCreatePage.class);
     }
 

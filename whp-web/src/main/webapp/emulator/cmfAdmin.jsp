@@ -10,7 +10,6 @@
         String appVersion = whpProperties.getProperty("application.version");
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <spring:eval expression="@whpProperties['application.version']" var="applicationVersion"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 

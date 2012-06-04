@@ -3,13 +3,19 @@
 <%@page import="org.motechproject.whp.patient.repository.AllProviders" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
+<%@ page import="java.util.Properties" %>
 <%@page import="java.util.Arrays" %>
 <!DOCTYPE html>
 <html>
 <head>
+    <%
+        ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
+        String appVersion = whpProperties.getProperty("application.version");
+    %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/bootstrap.css/"/>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/standard.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 </head>
 <body>
 
