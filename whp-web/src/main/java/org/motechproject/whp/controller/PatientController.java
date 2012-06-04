@@ -19,8 +19,6 @@ import java.util.List;
 public class PatientController {
 
     public static final String PATIENT_LIST = "patientList";
-    public static final String MESSAGE = "message";
-
     AllPatients allPatients;
 
     @Autowired
@@ -29,14 +27,13 @@ public class PatientController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
+    public String listByProvider(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatment(providerId);
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
-
         String message = Flash.in("message", request);
         if (StringUtils.isNotEmpty(message)) {
             uiModel.addAttribute("message", message);
         }
-        return "patient/list";
+        return "patient/listByProvider";
     }
 }
