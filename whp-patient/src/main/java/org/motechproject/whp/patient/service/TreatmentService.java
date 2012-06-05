@@ -51,7 +51,6 @@ public class TreatmentService {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.pauseCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
 
-        patient.setOnActiveTreatment(false);
         allPatients.update(patient);
     }
 
@@ -59,7 +58,6 @@ public class TreatmentService {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.restartCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
 
-        patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
 

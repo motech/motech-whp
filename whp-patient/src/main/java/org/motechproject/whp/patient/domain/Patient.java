@@ -127,6 +127,16 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public SmearTestResults getSmearTestResults() {
+        return currentTreatment.getSmearTestResults();
+    }
+
+    @JsonIgnore
+    public WeightStatistics getWeightStatistics() {
+        return currentTreatment.getWeightStatistics();
+    }
+
+    @JsonIgnore
     public Integer getAge() {
         return latestTherapy().getPatientAge();
     }
