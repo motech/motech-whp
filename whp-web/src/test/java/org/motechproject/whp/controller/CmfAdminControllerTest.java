@@ -25,7 +25,7 @@ import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ItAdminControllerTest {
+public class CmfAdminControllerTest {
     @Mock
     AllProviders allProviders;
     @Mock
@@ -37,12 +37,12 @@ public class ItAdminControllerTest {
     MotechAuthenticationService motechAuthenticationService;
     @Mock
     BindingResult bindingResult;
-    ItAdminController itAdminController;
+    CmfAdminController itAdminController;
 
     @Before
     public void setup() {
        initMocks(this);
-       itAdminController = new ItAdminController(allCmfLocations,allCmfAdmins,allProviders,motechAuthenticationService);
+       itAdminController = new CmfAdminController(allCmfLocations,allCmfAdmins,allProviders,motechAuthenticationService);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ItAdminControllerTest {
 
 
     private void assertInvalidRequestPage(CmfAdminWebRequest request, BindingAwareModelMap uiModel, String view) {
-        assertEquals("itadmin/createCmfAdmin",view);
+        assertEquals("cmfadmin/create",view);
 
         List<String> locations = (List<String>)uiModel.get("locations");
         assertEquals(Arrays.asList("Delhi", "Patna"), locations);

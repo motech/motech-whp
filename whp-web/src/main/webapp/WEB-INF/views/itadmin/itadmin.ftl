@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-WHP">
 <#if message?exists && (message?length>0)>
@@ -10,5 +11,5 @@ ${message}
 <script type="text/javascript">
     createAutoClosingAlert(".message-alert", 5000)
 </script>
-<a href="/whp/itadmin/createCmfAdmin"><b>Create CMF Admin</b></a>
+<a href="<@spring.url '/cmfAdmin/create'/>"><b>Create CMF Admin</b></a>
 </@layout.defaultLayout>

@@ -6,7 +6,7 @@
     </br>
     </br>
     </br>
-    <form action="<@spring.url '/itadmin/createCmfAdminAccount'/>" method="POST" class="row well form-horizontal">
+    <form action="<@spring.url '/cmfAdmin/create'/>" method="POST" class="row well form-horizontal">
         <div class="offset2">
             </br>
             <div class="control-group">

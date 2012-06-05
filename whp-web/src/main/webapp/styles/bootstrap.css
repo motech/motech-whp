@@ -2640,9 +2640,10 @@ input[type="submit"].btn.btn-mini {
     color: #bd4247;
 }
 .alert-info {
-    background-color: #edebe1;
-    border-color: #e0d9cb;
-    color: #817b58;
+    background-color: #EDEBAA;
+    border-color: #E0D6AA;
+    color: #817B02;
+    font-weight: bold;
 }
 .alert-block {
     padding-top: 14px;
