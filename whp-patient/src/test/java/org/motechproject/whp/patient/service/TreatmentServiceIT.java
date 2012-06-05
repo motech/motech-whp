@@ -8,14 +8,18 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
+import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class TreatmentServiceIT extends SpringIntegrationTest {
@@ -90,42 +94,6 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldMarkPatientAsNotHavingActiveTreatmentOnPause() {
-        PatientRequest updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForPauseTreatment()
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-
-        patientService.update(UpdateScope.pauseTreatment, updatePatientRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        assertFalse(updatedPatient.isOnActiveTreatment());
-    }
-
-    @Test
-    public void shouldMarkPatientAsHavingActiveTreatmentOnRestart() {
-        PatientRequest updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForPauseTreatment()
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-
-        patientService.update(UpdateScope.pauseTreatment, updatePatientRequest);
-
-        updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForRestartTreatment()
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-
-        patientService.update(UpdateScope.restartTreatment, updatePatientRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        assertTrue(updatedPatient.isOnActiveTreatment());
-    }
-
-    @Test
     public void shouldMarkPatientAsHavingActiveTreatmentOnTransferIn() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
@@ -145,6 +113,78 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldCaptureNewSmearTestResultsAndWeightStatisticsIfSent() {
+        PatientRequest updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForCloseTreatment()
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+
+        updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
+                .withWeightStatistics(WeightInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
+        SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
+        WeightStatisticsRecord weightStatisticsRecord = updatedPatient.getWeightStatistics().get(0);
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_1());
+        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
+        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_2());
+        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_2());
+
+        assertEquals(WeightInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
+        assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
+        assertEquals(30.00, weightStatisticsRecord.getWeight());
+    }
+
+    @Test
+    public void shouldUpdateWithOldTreatmentSmearTestResultsAndWeightStatisticsIfNotSent() {
+        Patient patient = allPatients.findByPatientId(CASE_ID);
+        PatientRequest updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
+                .withWeightStatistics(WeightInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+        patientService.update(UpdateScope.simpleUpdate, updatePatientRequest);
+
+        updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForCloseTreatment()
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+
+        updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
+        SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
+        WeightStatisticsRecord weightStatisticsRecord = updatedPatient.getWeightStatistics().get(0);
+        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_1());
+        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
+        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_2());
+        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_2());
+
+        assertEquals(WeightInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
+        assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
+        assertEquals(30.00, weightStatisticsRecord.getWeight());
     }
 
     @After
