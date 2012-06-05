@@ -60,6 +60,26 @@ public class ProviderRecordImporterUnitTest {
         assertProviderRequest(importProviderRequest2, providerRequests.get(1));
     }
 
+    @Test
+    public void shouldSaveAllProvidersAndActivateWebAccount() {
+
+        ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
+        ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("2").build();
+
+        providerRecordImporter.post(asList((Object) importProviderRequest1, importProviderRequest2));
+
+        ArgumentCaptor<ProviderRequest> providerRequestArgumentCaptor = ArgumentCaptor.forClass(ProviderRequest.class);
+
+        verify(registrationService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
+        verify(registrationService, times(1)).changePasswordAndActivateUser(importProviderRequest1.getProviderId().toLowerCase(), "password");
+        verify(registrationService, times(1)).changePasswordAndActivateUser(importProviderRequest2.getProviderId().toLowerCase(), "password");
+
+        List<ProviderRequest> providerRequests = providerRequestArgumentCaptor.getAllValues();
+        assertEquals(2, providerRequests.size());
+        assertProviderRequest(importProviderRequest1, providerRequests.get(0));
+        assertProviderRequest(importProviderRequest2, providerRequests.get(1));
+    }
+
     private void assertProviderRequest(ImportProviderRequest importProviderRequest, ProviderRequest providerRequest) {
         assertEquals(importProviderRequest.getProviderId(), providerRequest.getProviderId());
         assertEquals(importProviderRequest.getDistrict(), providerRequest.getDistrict());

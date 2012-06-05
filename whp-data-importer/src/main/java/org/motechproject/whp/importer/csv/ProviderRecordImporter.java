@@ -87,6 +87,7 @@ public class ProviderRecordImporter {
 
     public void registerProvider(ImportProviderRequest importProviderRequest) {
         registrationService.registerProvider(mapToProviderRequest(importProviderRequest));
+        registrationService.changePasswordAndActivateUser(importProviderRequest.getProviderId().toLowerCase(),"password");
     }
 
     private ProviderRequest mapToProviderRequest(ImportProviderRequest importProviderRequest) {
