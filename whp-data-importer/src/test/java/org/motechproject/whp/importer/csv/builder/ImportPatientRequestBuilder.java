@@ -14,7 +14,7 @@ public class ImportPatientRequestBuilder {
                 .withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .withWeightStatistics("22/09/2000", "99.7")
                 .withTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber")
-                .withLastModifiedDate("10/10/2010 10:10:10");
+                .withLastModifiedDate("10/10/2010");
     }
 
     public ImportPatientRequestBuilder withSimpleUpdateFields() {
@@ -322,7 +322,7 @@ public class ImportPatientRequestBuilder {
     }
 
     public ImportPatientRequestBuilder withDate_Modified(DateTime date) {
-        importPatientRequest.setDate_modified(date.toString("dd/MM/YYYY HH:mm:ss"));
+        importPatientRequest.setDate_modified(date.toString("dd/MM/YYYY"));
         return this;
     }
 

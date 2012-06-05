@@ -99,18 +99,18 @@ public class PatientRecordImporterUnitTest {
 
     @Test
     public void shouldSetDefaultValuesOnValidation() {
-        DateTime patient1RegDate = DateTime.now().plusDays(-2);
-        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withPhi(null).withDate_Modified(patient1RegDate).withWeightDate("").withPatientType("").build();
+        DateTime patientRegDate = DateTime.now().plusDays(-2);
+        ImportPatientRequest importPatientRequest1 = new ImportPatientRequestBuilder().withPhi(null).withDate_Modified(patientRegDate).withWeightDate("10/12/2010").withWeight("30").withPatientType("").build();
         DateTime patient2WtMeasuredDate = DateTime.now().plusDays(-5);
         String dateFormat = "dd/MM/YYYY";
-        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withPhi("").withCaseId("1").withWeightDate(patient2WtMeasuredDate.toString(dateFormat)).build();
-        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withCaseId("2").withPhi("yy").withDate_Modified(patient1RegDate).withWeightDate(null).withPatientType(null).build();
+        ImportPatientRequest importPatientRequest2 = new ImportPatientRequestBuilder().withDefaults().withDate_Modified(patientRegDate).withPhi("").withCaseId("1").withWeightDate(patient2WtMeasuredDate.toString(dateFormat)).build();
+        ImportPatientRequest importPatientRequest3 = new ImportPatientRequestBuilder().withDate_Modified(patientRegDate).withCaseId("2").withPhi("yy").withDate_Modified(patientRegDate).withWeightDate(null).withPatientType(null).build();
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)).isValid());
 
-        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
-        assertEquals(patient2WtMeasuredDate.toString(dateFormat), importPatientRequest2.getWeightDate(WeightInstance.PreTreatment));
-        assertEquals(patient1RegDate.toString(dateFormat), importPatientRequest3.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest2.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(WeightInstance.PreTreatment));
 
         assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
         assertEquals(PatientType.PHCTransfer.name(), importPatientRequest2.getPatient_type());
@@ -119,5 +119,6 @@ public class PatientRecordImporterUnitTest {
         assertEquals("WHP", importPatientRequest1.getPhi());
         assertEquals("WHP", importPatientRequest2.getPhi());
         assertEquals("yy", importPatientRequest3.getPhi());
+        assertEquals(patientRegDate.toString(dateFormat),importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
     }
 }

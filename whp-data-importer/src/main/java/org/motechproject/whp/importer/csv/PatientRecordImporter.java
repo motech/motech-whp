@@ -10,6 +10,7 @@ import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
+import org.motechproject.whp.importer.csv.request.WeightStatisticsRequests;
 import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @CSVImporter(entity = "patientRecordImporter", bean = ImportPatientRequest.class)
 @Component
@@ -91,7 +94,12 @@ public class PatientRecordImporter {
             request.setPatient_type(PatientType.New.name());
         if (StringUtils.isBlank(request.getPhi()))
             request.setPhi("WHP");
-        request.setDate_modified(request.getDate_modified() +" 00:00:00");
+
+        for( WeightStatisticsRequests.WeightStatisticsRequest weightStatisticsRequest: request.getWeightStatisticsRequest().getAll())
+            if(hasText(weightStatisticsRequest.getWeight()))
+                weightStatisticsRequest.setWeightDate(request.getDate_modified());
+
+        request.setDate_modified(request.getDate_modified() + " 00:00:00");
     }
 
     @Post

@@ -85,7 +85,6 @@ public class WeightStatisticsRequests {
         @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
         private String weight;
 
-        @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT, validateEmptyString = false)
         private String weightDate;
 
         public boolean isNotEmpty() {
