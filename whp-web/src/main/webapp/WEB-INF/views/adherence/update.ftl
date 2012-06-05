@@ -8,7 +8,7 @@
         ${adherence.warningMessage}
         </div>
     </#if>
-    <h4 class="page-header form-header">Update last week's adherence</h4>
+    <h4 class="page-header form-header" id="adherenceCaption">Update last week's adherence for Patient ID: ${adherence.patientId}</h4>
 </div>
 
 <div class="row">
@@ -31,6 +31,7 @@
         </div>
         <div class="control-group">
             <div class="controls pull-right">
+                <a href="<@spring.url ''/>"><button type="button" class="btn">Cancel</button></a>
                 <#if !readOnly>
                     <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>

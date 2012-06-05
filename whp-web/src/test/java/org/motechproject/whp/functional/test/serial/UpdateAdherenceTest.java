@@ -67,7 +67,9 @@ public class UpdateAdherenceTest extends BaseTest {
     public void shouldAllowUpdateAdherenceOnSunday() {
         adjustDateTime(DateTime.now().withDayOfWeek(7));
 
-        UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id()).setNumberOfDosesTaken(1);
+        UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(patientRequest.getCase_id());
+        assertTrue(updateAdherencePage.getAdherenceCaption().contains(patientRequest.getCase_id()));
+        updateAdherencePage.setNumberOfDosesTaken(1);
         boolean isTaken = updateAdherencePage.submit().clickEditAdherenceLink(patientRequest.getCase_id()).isDosesTaken(1);
         assertTrue(isTaken);
     }

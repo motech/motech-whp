@@ -17,6 +17,10 @@ public class UpdateAdherencePage extends Page {
     @FindBy(how = How.ID, using = ADHERENCE_WARNING_ID)
     private WebElement adherenceWarning;
 
+    private final String ADHERENCE_CAPTION = "adherenceCaption";
+    @FindBy(how = How.ID, using = ADHERENCE_CAPTION)
+    private WebElement adherenceCaption;
+
     @FindBy(how = How.ID, using = "dosesTaken")
     private WebElement numberOfDosesTaken;
 
@@ -45,6 +49,10 @@ public class UpdateAdherencePage extends Page {
 
     public String getAdherenceWarningText() {
         return adherenceWarning.getText();
+    }
+
+    public String getAdherenceCaption() {
+        return adherenceCaption.getText();
     }
 
     public boolean isDosesTaken(int i) {
