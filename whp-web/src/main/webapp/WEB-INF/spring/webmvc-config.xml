@@ -27,6 +27,8 @@
         <!-- This bit of XML will intercept all URLs - which is what you want in a web app -->
         <bean class="org.motechproject.flash.FlashScopeFilter" />
 
+        <bean class="org.motechproject.whp.interceptor.PropertyInjectorInterceptor" />
+
         <bean id="staticContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
             <property name="cacheSeconds" value="0"/>
             <property name="useExpiresHeader" value="true"/>

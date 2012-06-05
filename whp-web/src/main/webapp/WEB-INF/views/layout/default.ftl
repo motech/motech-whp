@@ -4,8 +4,6 @@
 <html>
 <head>
 
-    <#global applicationVersion="1.0"/>
-
     <title> ${title} </title>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/standard.css'/>"/>
