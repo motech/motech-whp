@@ -61,4 +61,8 @@ public class Therapy extends MotechBaseDataObject {
         setStartDate(therapyStartDate);
         phases.setIPStartDate(therapyStartDate);
     }
+
+    void setStartDate(LocalDate therapyStartDate){
+        startDate = therapyStartDate;
+    }
 }

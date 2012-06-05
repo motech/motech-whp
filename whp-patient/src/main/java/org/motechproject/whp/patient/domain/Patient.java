@@ -145,14 +145,14 @@ public class Patient extends MotechBaseDataObject {
         latestTherapy().revive();
     }
 
+    public void startTherapy(LocalDate firstDoseTakenDate) {
+        latestTherapy().start(firstDoseTakenDate);
+    }
+
     public void setPatientId(String patientId) {
         if (patientId == null)
             this.patientId = null;
         else
             this.patientId = patientId.toLowerCase();
-    }
-
-    public void startTherapy(LocalDate firstDoseTakenDate) {
-        latestTherapy().start(firstDoseTakenDate);
     }
 }

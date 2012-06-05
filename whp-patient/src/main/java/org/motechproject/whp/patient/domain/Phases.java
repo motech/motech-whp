@@ -25,7 +25,7 @@ public class Phases extends ArrayList<Phase> {
     }
 
     @JsonIgnore
-    public void setIPStartDate(LocalDate IPStartDate) {
+    void setIPStartDate(LocalDate IPStartDate) {
         getByPhaseName(PhaseName.IP).setStartDate(IPStartDate);
     }
 
@@ -37,7 +37,11 @@ public class Phases extends ArrayList<Phase> {
     @JsonIgnore
     public void setEIPStartDate(LocalDate EIPStartDate) {
         getByPhaseName(PhaseName.EIP).setStartDate(EIPStartDate);
-        getByPhaseName(PhaseName.IP).setEndDate(EIPStartDate.minusDays(1));
+        if (EIPStartDate != null) {
+            setIPEndDate(EIPStartDate.minusDays(1));
+        } else {
+            setIPEndDate(null);
+        }
     }
 
     @JsonIgnore
@@ -49,10 +53,18 @@ public class Phases extends ArrayList<Phase> {
     public void setCPStartDate(LocalDate CPStartDate) {
         getByPhaseName(PhaseName.CP).setStartDate(CPStartDate);
         Phase EIP = getByPhaseName(PhaseName.EIP);
-        if(EIP.getStartDate() != null) {
-            EIP.setEndDate(CPStartDate.minusDays(1));
+        if (EIP.getStartDate() != null) {
+            if (CPStartDate != null) {
+                setEIPEndDate(CPStartDate.minusDays(1));
+            } else {
+                setEIPEndDate(null);
+            }
         } else {
-            getByPhaseName(PhaseName.IP).setEndDate(CPStartDate.minusDays(1));
+            if (CPStartDate != null) {
+                setIPEndDate(CPStartDate.minusDays(1));
+            } else {
+                setIPEndDate(null);
+            }
         }
     }
 

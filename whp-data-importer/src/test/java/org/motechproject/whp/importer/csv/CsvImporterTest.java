@@ -218,7 +218,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         treatment.setStartDate(treatment.getStartDate().plusDays(1));
         treatment.setTbId("modified_tb_id");
         treatment.setTbRegistrationNumber("mod_tb_reg_no");
-        treatment.getTherapy().setStartDate(DateTime.now().toLocalDate());
+        patient2.startTherapy(DateTime.now().toLocalDate());
         treatment.getTherapy().setCreationDate(DateTime.now());
         allPatients.update(patient2);
 

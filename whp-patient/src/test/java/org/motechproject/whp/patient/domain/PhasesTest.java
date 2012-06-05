@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertNull;
 import static org.motechproject.util.DateUtil.today;
 
 public class PhasesTest {
@@ -48,6 +49,16 @@ public class PhasesTest {
         phases.setCPStartDate(today);
 
         assertEquals(today.minusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+    }
+
+    @Test
+    public void shouldSetPreviousPhaseEndDateToNullIfCurrentPhaseStartDateIsBeingSetToNull() {
+        LocalDate today = today();
+        phases.setEIPStartDate(today.minusDays(2));
+        phases.setEIPEndDate(today.minusDays(1));
+        phases.setCPStartDate(null);
+
+        assertNull(phases.getByPhaseName(PhaseName.EIP).getEndDate());
     }
 
 }

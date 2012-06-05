@@ -67,7 +67,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder onTreatmentFrom(LocalDate date) {
-        patient.latestTherapy().setStartDate(date);
+        patient.startTherapy(date);
         return this;
     }
 
