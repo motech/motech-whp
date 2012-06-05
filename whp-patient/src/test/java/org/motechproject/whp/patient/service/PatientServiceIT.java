@@ -198,6 +198,20 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldMarkPatientAsHavingActiveTreatment() {
+        String caseId = "caseId";
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withCaseId(caseId)
+                .withTbId("elevenDigit")
+                .build();
+        patientService.createPatient(patientRequest);
+
+        Patient patient = allPatients.findByPatientId(caseId);
+        assertTrue(patient.isOnActiveTreatment());
+    }
+
+    @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         String caseId = "caseId";

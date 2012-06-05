@@ -30,6 +30,7 @@ public class Patient extends MotechBaseDataObject {
     private List<Treatment> treatments = new ArrayList<Treatment>();
     private DateTime lastModifiedDate;
     private Treatment currentTreatment;
+    private boolean onActiveTreatment = true;
 
     private boolean migrated;
 

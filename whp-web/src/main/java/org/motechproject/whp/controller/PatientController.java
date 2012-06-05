@@ -28,7 +28,7 @@ public class PatientController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listByProvider(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
-        List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatment(providerId);
+        List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatmentFor(providerId);
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
         String message = Flash.in("message", request);
         if (StringUtils.isNotEmpty(message)) {

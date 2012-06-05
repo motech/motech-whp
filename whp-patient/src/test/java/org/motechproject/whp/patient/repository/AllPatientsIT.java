@@ -54,14 +54,14 @@ public class AllPatientsIT extends SpringIntegrationTest {
     public void shouldSaveIdsInLowerCase() {
         createPatient("Cha01100002", "providerId");
         Patient savedPatient = allPatients.findByPatientId("chA01100002");
-        assertEquals("tbid",savedPatient.getCurrentTreatment().getTbId());
-        assertEquals("providerid",savedPatient.getCurrentTreatment().getProviderId());
+        assertEquals("tbid", savedPatient.getCurrentTreatment().getTbId());
+        assertEquals("providerid", savedPatient.getCurrentTreatment().getProviderId());
 
     }
 
     @Test
     public void findByPatientIdShouldReturnNullIfKeywordIsNull() {
-       assertEquals(null,allPatients.findByPatientId(null));
+        assertEquals(null, allPatients.findByPatientId(null));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class AllPatientsIT extends SpringIntegrationTest {
 
     @Test
     public void fetchByCurrentProviderIdShouldReturnEmptyListIfKeywordIsNull() {
-       assertEquals(new ArrayList<Patient>(),allPatients.findByCurrentProviderId(null));
+        assertEquals(new ArrayList<Patient>(), allPatients.findByCurrentProviderId(null));
     }
 
     @Test
@@ -85,11 +85,41 @@ public class AllPatientsIT extends SpringIntegrationTest {
         assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.findByCurrentProviderId("providerId1").toArray());
     }
 
+    @Test
+    public void shouldFetchPatientsForAProviderWithActiveTreatment() {
+        Patient withoutActiveTreatment1 = createPatient("patientId1", "providerId1");
+        withoutActiveTreatment1.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment1.setOnActiveTreatment(false);
+        allPatients.update(withoutActiveTreatment1);
+
+        Patient withActiveTreatment1 = createPatient("patientId2", "providerId1");
+
+        Patient withoutActiveTreatment2 = createPatient("patientId3", "providerId2");
+        withoutActiveTreatment2.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment2.setOnActiveTreatment(false);
+        allPatients.update(withoutActiveTreatment2);
+
+        Patient withActiveTreatment2 = createPatient("patientId4", "providerId2");
+
+        assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
+        assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentFor("providerId2").toArray());
+    }
+
+    @Test
+    public void shouldFetchPatientsWithActiveTreatment() {
+        Patient withoutActiveTreatment = createPatient("patientId1", "providerId1");
+        withoutActiveTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment.setOnActiveTreatment(false);
+        allPatients.update(withoutActiveTreatment);
+
+        Patient withActiveTreatment = createPatient("patientId2", "providerId1");
+        assertPatientEquals(new Patient[]{withActiveTreatment}, allPatients.getAllWithActiveTreatment().toArray());
+    }
+
     private Patient createPatient(String patientId, String providerId) {
         TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
         Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 200);
         allTherapies.add(therapy);
-
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
         Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
@@ -97,7 +127,6 @@ public class AllPatientsIT extends SpringIntegrationTest {
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         patient.addTreatment(treatment, now());
-
         allPatients.add(patient);
         return patient;
     }

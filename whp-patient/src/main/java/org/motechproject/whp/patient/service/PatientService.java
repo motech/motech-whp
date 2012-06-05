@@ -43,6 +43,7 @@ public class PatientService {
 
         Treatment treatment = mapTreatment(patientRequest, therapy);
         patient.addTreatment(treatment, patientRequest.getDate_modified());
+        patient.setOnActiveTreatment(true);
         allPatients.add(patient);
     }
 

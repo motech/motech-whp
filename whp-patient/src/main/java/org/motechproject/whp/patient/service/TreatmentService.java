@@ -35,24 +35,31 @@ public class TreatmentService {
         Treatment newTreatment = createNewTreatmentForTreatmentCategoryChange(patient, patientRequest, newTherapy);
         patient.addTreatment(newTreatment, patientRequest.getDate_modified());
 
+        patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
 
     public void closeTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
+
+        patient.setOnActiveTreatment(false);
         allPatients.update(patient);
     }
 
     public void pauseTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.pauseCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
+
+        patient.setOnActiveTreatment(false);
         allPatients.update(patient);
     }
 
     public void restartTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.restartCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
+
+        patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
 
@@ -65,6 +72,7 @@ public class TreatmentService {
                 patientRequest.getSmearTestResults(),
                 patientRequest.getWeightStatistics());
         patient.reviveLastClosedTreatment();
-        allTherapies.update(patient.latestTherapy());
+        patient.setOnActiveTreatment(true);
+        allPatients.update(patient);
     }
 }

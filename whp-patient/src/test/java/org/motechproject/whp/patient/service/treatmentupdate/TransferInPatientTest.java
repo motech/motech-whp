@@ -20,7 +20,6 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
@@ -76,16 +75,18 @@ public class TransferInPatientTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldTransferInPatientTreatmentAndUpdatePatientAndReviveLastTreatment_IfNoErrorsFound() {
+    public void shouldTransferInPatientTreatmentAndUpdatePatientAndReviveLastTreatment() {
+        Patient patient = new PatientBuilder().withDefaults().build();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, now());
+
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withDiseaseClass(patient.latestTherapy().getDiseaseClass())
                 .withTreatmentCategory(patient.latestTherapy().getTreatmentCategory())
                 .build();
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(patientRequest);
-        assertNull(patient.latestTherapy().getCloseDate());
         verify(treatmentService).transferInPatient(patientRequest);
     }
 

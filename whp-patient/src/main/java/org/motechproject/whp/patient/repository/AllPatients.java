@@ -7,8 +7,8 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,6 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         if (savedPatient != null) {
             throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_CASE_ID);
         }
-
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
@@ -55,7 +54,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @GenerateView
     public Patient findByPatientId(String patientId) {
-        if(patientId == null)
+        if (patientId == null)
             return null;
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         Patient patient = singleResult(db.queryView(find_by_patientId, Patient.class));
@@ -64,20 +63,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patient;
     }
 
-    private void loadPatientDependencies(Patient patient) {
-        Treatment latestTreatment = patient.getCurrentTreatment();
-        Therapy latestTherapy = allTherapies.get(latestTreatment.getTherapyDocId());
-        latestTreatment.setTherapy(latestTherapy);
-
-        for (Treatment treatment : patient.getTreatments()) {
-            Therapy therapy = allTherapies.get(treatment.getTherapyDocId());
-            treatment.setTherapy(therapy);
-        }
-    }
-
     @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> findByCurrentProviderId(String providerId) {
-        if(providerId == null)
+        if (providerId == null)
             return new ArrayList<Patient>();
         String keyword = providerId.toLowerCase();
         ComplexKey startKey = ComplexKey.of(keyword, null);
@@ -90,12 +78,39 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
-    public List<Patient> getAllWithActiveTreatment(String providerId) {
-        ArrayList<Patient> patientsWithActiveTreatment = new ArrayList<Patient>();
-        for (Patient patient : findByCurrentProviderId(providerId)) {
-            if (patient.isCurrentTreatmentClosed()) continue;
-            patientsWithActiveTreatment.add(patient);
+    @View(name = "find_by_provider_having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
+    public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
+        if (providerId == null)
+            return new ArrayList<Patient>();
+        String keyword = providerId.toLowerCase();
+        ComplexKey startKey = ComplexKey.of(keyword, null);
+        ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        for (Patient patient : patients) {
+            loadPatientDependencies(patient);
         }
-        return patientsWithActiveTreatment;
+        return patients;
+    }
+
+    @View(name = "having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit(doc.firstName, doc._id);}}")
+    public List<Patient> getAllWithActiveTreatment() {
+        ViewQuery q = createQuery("having_active_treatment").includeDocs(true).inclusiveEnd(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        for (Patient patient : patients) {
+            loadPatientDependencies(patient);
+        }
+        return patients;
+    }
+
+    private void loadPatientDependencies(Patient patient) {
+        Treatment latestTreatment = patient.getCurrentTreatment();
+        Therapy latestTherapy = allTherapies.get(latestTreatment.getTherapyDocId());
+        latestTreatment.setTherapy(latestTherapy);
+
+        for (Treatment treatment : patient.getTreatments()) {
+            Therapy therapy = allTherapies.get(treatment.getTherapyDocId());
+            treatment.setTherapy(therapy);
+        }
     }
 }

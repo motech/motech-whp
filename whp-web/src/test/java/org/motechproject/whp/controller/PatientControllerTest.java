@@ -46,7 +46,7 @@ public class PatientControllerTest {
     @Test
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patientBuilder.build());
-        when(allPatients.getAllWithActiveTreatment("providerId")).thenReturn(patientsForProvider);
+        when(allPatients.getAllWithActiveTreatmentFor("providerId")).thenReturn(patientsForProvider);
 
         providerController.listByProvider("providerId", uiModel, request);
         verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), same(patientsForProvider));
