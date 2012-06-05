@@ -4,7 +4,7 @@
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>whp-web</name>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-validation</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -38,22 +38,22 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-application</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-mapping</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-data-importer</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -171,7 +171,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
@@ -181,7 +181,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
-            <version>${whp.version}</version>
+            <version>0.1</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
