@@ -93,11 +93,11 @@ public class Treatment {
     }
 
     private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
-        return !weightStatistics.isEmpty() && weightStatistics.latestResult().isValid(errorCodes);
+        return weightStatistics.isEmpty() || weightStatistics.latestResult().isValid(errorCodes);
     }
 
     private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
-        return !smearTestResults.isEmpty() && smearTestResults.latestResult().isValid(errorCodes);
+        return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
     }
 
     @JsonIgnore
