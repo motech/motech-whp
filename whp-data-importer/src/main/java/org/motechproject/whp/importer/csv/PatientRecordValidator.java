@@ -132,7 +132,7 @@ public class PatientRecordValidator {
 
         validateTreatment(patient.getCurrentTreatment().getTherapy(), request, errors);
         validateSmearTestResults(treatment.getSmearTestResults(), errors, request.getSmearTestResultRequest());
-        validateWeightStatistics(patient.getCurrentTreatment().getWeightStatistics(), request.getWeightStatisticsRequest(), errors);
+        validateWeightStatistics(request, errors, patient.getCurrentTreatment().getWeightStatistics());
 
     }
 
@@ -173,7 +173,8 @@ public class PatientRecordValidator {
         }
     }
 
-    private void validateWeightStatistics(WeightStatistics weightStatistics, WeightStatisticsRequests weightStatisticsRequest, List<String> errors) {
+    private void validateWeightStatistics(ImportPatientRequest request, List<String> errors, WeightStatistics weightStatistics) {
+        WeightStatisticsRequests weightStatisticsRequest = request.getWeightStatisticsRequest();
         if (weightStatisticsRequest.getAll().size() == 0) {
             if (weightStatistics.size() == 0) {
                 return;
@@ -188,7 +189,7 @@ public class PatientRecordValidator {
         for (WeightInstance instance : WeightInstance.values()) {
             WeightStatisticsRequests.WeightStatisticsRequest expectedRecord = weightStatisticsRequest.getWeightStatisticsRecord(instance);
             WeightStatisticsRecord actualRecord = getWeightStatisticsRecord(weightStatistics, instance);
-            validateWeightStatisticsRecord(expectedRecord, actualRecord, instance, errors);
+            validateWeightStatisticsRecord(request,expectedRecord, actualRecord, instance, errors);
         }
 
     }
@@ -196,7 +197,7 @@ public class PatientRecordValidator {
     private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SmearTestSampleInstance instanceType, List<String> errors) {
         String date1FieldName = "Date1 of SmearTestResult type " + instanceType.name();
         String date2FieldName = "Date2 of SmearTestResult type " + instanceType.name();
-        String result1FieldName = "Result1 of SmearTestResult type " + instanceType.name();
+        String result1FieldName = "Result1 of SmearTestResult typ;e " + instanceType.name();
         String result2FieldName = "Result2 of SmearTestResult type " + instanceType.name();
 
         if (expectedRecord == null) {
@@ -223,12 +224,12 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(expectedRecord.getResult2(), actualRecord.getSmear_test_result_2(), result2FieldName, errors, SmearTestResult.class);
     }
 
-    private void validateWeightStatisticsRecord(WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, WeightInstance instanceType, List<String> errors) {
+    private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, WeightInstance instanceType, List<String> errors) {
         String weightDateFieldName = "Measuring Date of WeightStatistics type " + instanceType.name();
         String weightFieldName = "Weight of WeightStatistics type " + instanceType.name();
 
-        if (expectedRecord == null) {
-            if (isBlank(expectedRecord.getWeightDate()) && isBlank(expectedRecord.getWeight()))
+        if (actualRecord == null) {
+            if (isBlank(expectedRecord.getWeight()))
                 return;
             else {
                 checkIfEqual(expectedRecord.getWeightDate(), null, weightDateFieldName, errors);
@@ -236,8 +237,7 @@ public class PatientRecordValidator {
             }
         }
 
-        if (hasText(expectedRecord.getWeightDate()))
-            checkIfDatesAreEqual(expectedRecord.getWeightDate(), actualRecord.getMeasuringDate(), weightDateFieldName, errors, LocalDate.class);
+        checkIfDatesAreEqual(request.getDate_modified(), actualRecord.getMeasuringDate(),weightFieldName,errors,LocalDate.class);
 
         if (hasText(expectedRecord.getWeight())) {
             try {
