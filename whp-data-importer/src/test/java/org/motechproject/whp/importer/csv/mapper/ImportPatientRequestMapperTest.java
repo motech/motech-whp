@@ -42,7 +42,7 @@ public class ImportPatientRequestMapperTest {
         assertEquals(importPatientRequest.getAddress_state(), patientRequest.getAddress().getAddress_state());
         assertEquals(importPatientRequest.getAddress_village(), patientRequest.getAddress().getAddress_village());
         assertEquals(importPatientRequest.getAge(), patientRequest.getAge().toString());
-        assertEquals(importPatientRequest.getDate_modified(), patientRequest.getDate_modified().toString(WHPConstants.DATE_TIME_FORMAT));
+        assertEquals(importPatientRequest.getDate_modified() +" 00:00:00", patientRequest.getDate_modified().toString(WHPConstants.DATE_TIME_FORMAT));
         assertEquals(importPatientRequest.getDisease_class(), patientRequest.getDisease_class().name());
         assertEquals(importPatientRequest.getFirst_name(), patientRequest.getFirst_name());
         assertEquals(importPatientRequest.getGender(), patientRequest.getGender().name());

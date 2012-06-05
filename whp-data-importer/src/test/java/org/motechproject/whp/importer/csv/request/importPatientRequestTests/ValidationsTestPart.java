@@ -13,7 +13,6 @@ public class ValidationsTestPart {
     public void shouldHaveNotNullOrEmptyAnnotationForMandatoryFields() throws NoSuchFieldException {
         assertNotNullAnnotationPresentForField("case_id");
         assertNotNullAnnotationPresentForField("first_name");
-        assertNotNullAnnotationPresentForField("last_name");
         assertNotNullAnnotationPresentForField("gender");
         assertNotNullAnnotationPresentForField("disease_class");
         assertNotNullAnnotationPresentForField("address_location");
