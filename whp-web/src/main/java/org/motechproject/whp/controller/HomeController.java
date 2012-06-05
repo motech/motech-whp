@@ -9,10 +9,12 @@ import org.motechproject.whp.refdata.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@RequestMapping(value = "/")
 public class HomeController extends BaseController {
 
     private AllProviders allProviders;
@@ -22,7 +24,7 @@ public class HomeController extends BaseController {
         this.allProviders = allProviders;
     }
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/" ,method = RequestMethod.GET)
     public String homePage(HttpServletRequest request) {
         AuthenticatedUser user = loggedInUser(request);
         Roles userRoles = user.getRoles();
@@ -38,5 +40,7 @@ public class HomeController extends BaseController {
             return "redirect:/patients?provider=" + allProviders.get(user.getExternalId()).getProviderId();
         }
     }
+
+
 }
 

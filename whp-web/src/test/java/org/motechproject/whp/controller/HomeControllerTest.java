@@ -50,7 +50,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.IT_ADMIN));
         setupProvider(provider);
-        assertEquals("itadmin", homeController.homePage(request));
+        assertEquals("itadmin/itadmin", homeController.homePage(request));
     }
 
     @Test

@@ -807,6 +807,9 @@ select:focus {
 .input-xlarge {
     width: 270px;
 }
+.select-xlarge {
+    width: 280px;
+}
 .input-xxlarge {
     width: 530px;
 }
@@ -2633,6 +2636,9 @@ input[type="submit"].btn.btn-mini {
     border-color: #e8d1df;
     color: #bd4247;
 }
+.field-error {
+    color: #bd4247;
+}
 .alert-info {
     background-color: #edebe1;
     border-color: #e0d9cb;
@@ -4422,4 +4428,12 @@ i[class^="icon-"] {
 }
 .invisible {
     visibility: hidden;
+}
+.form-button-left {
+    margin: 0px;
+    float: left;
+}
+.form-button-right {
+    margin-right: 301px;
+    float: right;
 }
