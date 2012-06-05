@@ -21,7 +21,7 @@ public class ImportPatientRequest {
     private String case_id;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT, validateEmptyString = false)
+    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT, validateEmptyString = false)
     @ColumnName(name = "Registration date")
     private String date_modified;
 
@@ -38,8 +38,7 @@ public class ImportPatientRequest {
     @ColumnName(name = "Patient First Name*")
     private String first_name;
 
-    @NotNullOrEmpty
-    @ColumnName(name = "Patient Last Name*")
+    @ColumnName(name = "Patient Last Name")
     private String last_name;
 
     @NotNullOrEmpty

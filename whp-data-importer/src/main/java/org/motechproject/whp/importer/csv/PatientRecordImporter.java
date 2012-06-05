@@ -91,6 +91,7 @@ public class PatientRecordImporter {
             request.setPatient_type(PatientType.New.name());
         if (StringUtils.isBlank(request.getPhi()))
             request.setPhi("WHP");
+        request.setDate_modified(request.getDate_modified() +" 00:00:00");
     }
 
     @Post

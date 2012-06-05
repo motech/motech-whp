@@ -36,7 +36,6 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope})
     private String first_name;
 
-    @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
     private String last_name;
 
