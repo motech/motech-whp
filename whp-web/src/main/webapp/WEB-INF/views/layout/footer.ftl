@@ -8,7 +8,7 @@
             </div>
             <div class="row" id="version">
                 <#if Session.version?exists>
-                    Version 1.0.${Session.version}
+                    Version ${Session.version}
                 </#if>
             </div>
         </div>
