@@ -111,3 +111,7 @@ body {
     display: inline-block;
     overflow: auto;
 }
+
+.sharp, .sharp td, .sharp th {
+    border-color: #000000;
+}
