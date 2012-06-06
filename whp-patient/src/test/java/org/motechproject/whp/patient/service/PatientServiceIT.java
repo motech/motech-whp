@@ -359,7 +359,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.startTherapy(patientId, today);
 
         assertEquals(today, allPatients.findByPatientId(patientId).latestTherapy().getStartDate());
-        assertEquals(today, allPatients.findByPatientId(patientId).latestTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
     }
 
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {

@@ -23,7 +23,6 @@ public class Therapy extends MotechBaseDataObject {
     private TherapyStatus status = TherapyStatus.Ongoing;
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
-    private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
 
     public Therapy() {
     }
@@ -59,6 +58,5 @@ public class Therapy extends MotechBaseDataObject {
 
     public void start(LocalDate therapyStartDate){
         setStartDate(therapyStartDate);
-        phases.setIPStartDate(therapyStartDate);
     }
 }

@@ -26,7 +26,6 @@ public class TherapyTest {
         therapy.start(today);
 
         assertEquals(today, therapy.getStartDate());
-        assertEquals(today, therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate());
         assertEquals(TherapyStatus.Ongoing, therapy.getStatus());
     }
 
