@@ -113,7 +113,7 @@ public class PatientRecordImporterUnitTest {
         assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(WeightInstance.PreTreatment));
 
         assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
-        assertEquals(PatientType.PHCTransfer.name(), importPatientRequest2.getPatient_type());
+        assertEquals(PatientType.Chronic.name(), importPatientRequest2.getPatient_type());
         assertEquals(PatientType.New.name(), importPatientRequest3.getPatient_type());
 
         assertEquals("WHP", importPatientRequest1.getPhi());

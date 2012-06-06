@@ -9,7 +9,7 @@ public class ImportPatientRequestBuilder {
     private ImportPatientRequest importPatientRequest = new ImportPatientRequest();
 
     public ImportPatientRequestBuilder withDefaults() {
-        return withPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
+        return withPatientInfo("1234567890", "Foo", "Bar", Gender.M.name(), PatientType.Chronic.name(), "1234567890", "phi")
                 .withPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .withWeightStatistics("22/09/2000", "99.7")

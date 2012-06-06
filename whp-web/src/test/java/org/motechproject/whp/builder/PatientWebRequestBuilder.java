@@ -13,7 +13,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaults() {
 
         patientWebRequest = new PatientWebRequest()
-                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M.name(), PatientType.PHCTransfer.name(), "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M.name(), PatientType.Chronic.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
