@@ -31,7 +31,7 @@ public class HomeController extends BaseController {
         if (userRoles.hasRole(WHPRole.CMF_ADMIN.name())) {
             return "admin/index";
         } else  if(userRoles.hasRole(WHPRole.IT_ADMIN.name()))  {
-               return "itadmin/itadmin";
+               return "itadmin/index";
         } else {
             String message = Flash.in("message", request);
             if (StringUtils.isNotEmpty(message)) {

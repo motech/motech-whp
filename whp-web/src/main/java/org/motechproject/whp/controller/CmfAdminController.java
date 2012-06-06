@@ -70,7 +70,7 @@ public class CmfAdminController {
                             allCmfAdmins.addOrReplace(admin);
                             motechAuthenticationService.register(admin.getUserId(), request.getPassword(), null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
                             uiModel.addAttribute(NOTIFICATION_MESSAGE,"Successfully created cmf admin with user id " + request.getUserId());
-                            return "itadmin/itadmin";
+                            return "itadmin/index";
                         } catch (Exception e) {
                             bindingResult.addError(new ObjectError(CREATE_CMF_ADMIN_MODEL_NAME,e.getMessage()));
                         }

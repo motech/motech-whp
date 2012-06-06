@@ -1,9 +1,24 @@
 <#import "../layout/default.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-WHP">
-    <h4 class="page-header form-header">View all patients</h4>
-    <a id="show-patients" href="/whp/patients/all"><b>Show all patients</b></a>
-    <h4 class="page-header form-header">Adherence reports</h4>
-    <a href="/whp/reports/adherence/adherenceReport.xls"><b>Download all adherence data to excel</b></a>
+
+<div>
+<ul class="nav nav-list leftnav-menu-margin">
+    <li class="nav-header hero-unit">
+        <b>Patient Listings</b>
+    </li>
+    <li>
+        <a id="show-patients" href="/whp/patients/all">Show all patients</a>
+    </li>
+    <hr>
+    <li class="nav-header hero-unit">
+        <b>Downloads</b>
+    </li>
+    <li style="color: #f7f7f7;" ">
+        <a href="/whp/reports/adherence/adherenceReport.xls">Download all adherence data to excel</a>
+    <li>
+    <hr>
+</ul>
+</div>
 </@layout.defaultLayout>
 
 

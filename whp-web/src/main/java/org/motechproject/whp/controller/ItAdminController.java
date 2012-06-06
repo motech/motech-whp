@@ -12,7 +12,7 @@ public class ItAdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String homePage(HttpServletRequest request) {
-        return "itadmin/itadmin";
+        return "itadmin/index";
     }
 
 }
