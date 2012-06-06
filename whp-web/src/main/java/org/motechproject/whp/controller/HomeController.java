@@ -29,7 +29,7 @@ public class HomeController extends BaseController {
         AuthenticatedUser user = loggedInUser(request);
         Roles userRoles = user.getRoles();
         if (userRoles.hasRole(WHPRole.CMF_ADMIN.name())) {
-            return "admin";
+            return "admin/index";
         } else  if(userRoles.hasRole(WHPRole.IT_ADMIN.name()))  {
                return "itadmin/itadmin";
         } else {

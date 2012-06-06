@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Matchers.any;
@@ -26,15 +27,18 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PatientControllerTest {
 
-    PatientController patientController;
-
     @Mock
     Model uiModel;
     @Mock
     HttpServletRequest request;
     @Mock
-    private AllPatients allPatients;
-    private Patient patient;
+    AllPatients allPatients;
+
+    PatientController patientController;
+
+    PatientBuilder patientBuilder;
+
+    Patient patient;
 
     @Before
     public void setup() {
@@ -93,7 +97,7 @@ public class PatientControllerTest {
 
         verify(uiModel).addAttribute(eq("messages"), messageList.capture());
 
-        assertArrayEquals(new String[] {"message1", "message2"}, messageList.getValue().toArray());
+        assertArrayEquals(new String[]{"message1", "message2"}, messageList.getValue().toArray());
     }
 
     @Test
@@ -109,5 +113,19 @@ public class PatientControllerTest {
 
         assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().latestTherapy().getStartDate());
         assertEquals("redirect:/patients/dashboard?patientId=" + patient.getPatientId(), view);
+    }
+
+    @Test
+    public void shouldShowListAllViewOnRequest() {
+        assertEquals("patient/list", patientController.list(uiModel));
+    }
+
+    @Test
+    public void shouldPassAllPatientsAsModelToListAllView() {
+        List<Patient> patients = emptyList();
+        when(allPatients.getAllWithActiveTreatment()).thenReturn(patients);
+
+        patientController.list(uiModel);
+        verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
     }
 }

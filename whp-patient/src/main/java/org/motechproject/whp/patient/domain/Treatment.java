@@ -26,10 +26,8 @@ public class Treatment {
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
-
     private Therapy therapy;
 
-    // Required for ektorp
     public Treatment() {
     }
 

@@ -7,8 +7,8 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.ListPatientsPage;
 import org.motechproject.whp.functional.page.LoginPage;
+import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
-public class ListAllPatientsTest extends BaseTest {
+public class ListAllPatientsForProviderTest extends BaseTest {
 
     @Autowired
     PatientService patientService;
@@ -60,14 +60,14 @@ public class ListAllPatientsTest extends BaseTest {
 
     @Test
     public void shouldLoginAsProviderAndListAllPatientsForProvider() {
-        ListPatientsPage providerPage = loginAsAdmin();
+        ProviderPage providerPage = loginAsProvider();
         assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
         assertEquals("Male", providerPage.getGenderText(patientRequest.getCase_id()));
         assertEquals("village", providerPage.getVillageText(patientRequest.getCase_id()));
     }
 
-    private ListPatientsPage loginAsAdmin() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().navigateToShowAllPatients();
+    ProviderPage loginAsProvider() {
+        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
     }
 
     @After

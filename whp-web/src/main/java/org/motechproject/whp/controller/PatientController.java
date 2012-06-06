@@ -36,12 +36,27 @@ public class PatientController {
     @RequestMapping(method = RequestMethod.GET)
     public String listByProvider(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatmentFor(providerId);
-        uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
+        passPatientsAsModelToListView(uiModel, patientsForProvider);
+        passAdherenceSavedMessageToListView(uiModel, request);
+        return "patient/listByProvider";
+    }
+
+    @RequestMapping(value = "all", method = RequestMethod.GET)
+    public String list(Model uiModel) {
+        List<Patient> patients = allPatients.getAllWithActiveTreatment();
+        passPatientsAsModelToListView(uiModel, patients);
+        return "patient/list";
+    }
+
+    private void passAdherenceSavedMessageToListView(Model uiModel, HttpServletRequest request) {
         String message = Flash.in("message", request);
         if (StringUtils.isNotEmpty(message)) {
             uiModel.addAttribute("message", message);
         }
-        return "patient/listByProvider";
+    }
+
+    private void passPatientsAsModelToListView(Model uiModel, List<Patient> patientsForProvider) {
+        uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET)

@@ -58,7 +58,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.CMF_ADMIN));
         setupProvider(provider);
-        assertEquals("admin", homeController.homePage(request));
+        assertEquals("admin/index", homeController.homePage(request));
     }
 
     private void login(AuthenticatedUser authenticatedUser) {

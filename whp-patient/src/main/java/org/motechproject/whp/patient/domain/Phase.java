@@ -6,13 +6,6 @@ import org.joda.time.LocalDate;
 @Data
 public class Phase {
 
-    public Phase(){
-    }
-
-    public Phase(PhaseName phaseName){
-        this.name = phaseName;
-    }
-
     private LocalDate startDate;
     private LocalDate endDate;
     private PhaseName name;
@@ -23,5 +16,12 @@ public class Phase {
     4) Phase transition
     */
     private Integer numberOfDosesTaken;
+
+    public Phase() {
+    }
+
+    public Phase(PhaseName phaseName) {
+        this.name = phaseName;
+    }
 }
 
