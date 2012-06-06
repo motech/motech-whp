@@ -29,7 +29,7 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withDefaults() {
         patientRequest = new PatientRequest()
-                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
                 .setTreatmentData(category01, "elevenDigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
@@ -94,14 +94,14 @@ public class PatientRequestBuilder {
         patientRequest.setTb_id(NEW_TB_ID);
         patientRequest.setDisease_class(DiseaseClass.P);
         patientRequest.setTreatment_category(category01);
-        patientRequest.setPatient_type(PatientType.PHCTransfer);
+        patientRequest.setPatient_type(PatientType.Chronic);
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForImportPatient(){
         TreatmentCategory category = category01;
         patientRequest = new PatientRequest()
-                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.PHCTransfer, "1234567890", "phi")
+                .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
                 .setTreatmentData(category, "elevendigit", "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive)
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
