@@ -54,11 +54,11 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void shouldRedirectToTheAdminPageWhenAdminLogsIn() {
+    public void shouldRedirectToTheAllPatientsPageWhenCmfAdminLogsIn() {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.CMF_ADMIN));
         setupProvider(provider);
-        assertEquals("admin/index", homeController.homePage(request));
+        assertEquals("redirect:/patients/all", homeController.homePage(request));
     }
 
     private void login(AuthenticatedUser authenticatedUser) {

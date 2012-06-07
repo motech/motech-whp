@@ -3,24 +3,25 @@
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
 
-<div class="left">
+<div class="pull-left">
 <ul class="nav nav-list leftnav-menu-margin pull-left">
-    <li class="nav-header hero-unit">
-        <b>Patient Listings</b>
+    <li class="nav-header">
+        <b>Patient List</b>
     </li>
     <li>
         <a id="show-patients" href="/whp/patients/all">Show all patients</a>
     </li>
-    <br>
-    <li class="nav-header hero-unit">
+    <li class="divider"></li>
+    <li class="nav-header">
         <b>Downloads</b>
     </li>
-    <li style="color: #f7f7f7;" ">
+    <li>
     <a href="/whp/reports/adherence/adherenceReport.xls">Download all adherence data to excel</a>
     <li>
+    <li class="divider"></li>
 </ul>
 </div>
-<div class="right">
+<div class="pull-right">
     <@legend key1="paused" value1="Current Treatment Paused" span="span13"/>
     <div class="row">
         <div>
@@ -50,7 +51,7 @@
                         <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if>">
                             <td class="patientId"><b>${patient.patientId}</b></td>
                             <td class="tbId">${patient.currentTreatment.tbId}</td>
-                            <td class="name">${patient.firstName?cap_first} ${patient.lastName?cap_first}</td>
+                            <td class="name">${patient.firstName?cap_first} <#if patient.lastName?exists>${patient.lastName?cap_first}</#if></td>
                             <td>${patient.currentTreatment.therapy.patientAge!}</td>
                             <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                             <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
