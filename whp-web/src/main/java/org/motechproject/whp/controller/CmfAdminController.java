@@ -66,7 +66,7 @@ public class CmfAdminController {
                 if (cmfLocation != null) {
                     String locationId = cmfLocation.getLocation();
                         try {
-                            CmfAdmin admin = new CmfAdmin(request.getUserId(), request.getEmail(), request.getDepartment(), locationId);
+                            CmfAdmin admin = new CmfAdmin(request.getUserId(), request.getEmail(), request.getDepartment(), locationId, request.getStaffName());
                             allCmfAdmins.addOrReplace(admin);
                             motechAuthenticationService.register(admin.getUserId(), request.getPassword(), null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
                             uiModel.addAttribute(NOTIFICATION_MESSAGE,"Successfully created cmf admin with user id " + request.getUserId());

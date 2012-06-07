@@ -3,14 +3,23 @@
 <@layout.defaultLayout "Create CMF Admin Account">
 <div class="span12" id="createCmfAdminForm">
     </br>
-    </br>
-    </br>
-    </br>
     <form action="<@spring.url '/cmfAdmin/create'/>" method="POST" class="row well form-horizontal">
         <div class="offset2">
-            </br>
+
             <div class="control-group">
-                <label class="control-label" for="userId"> User ID</label>
+                <label class="control-label" for="staffName">Staff Name*</label>
+
+                <div class="controls">
+                    <@spring.formInput "account.staffName","class='input-xlarge' autocomplete='off'","text"/>
+                    <div class="field-error">
+                        <@spring.bind "account.staffName" />
+                        <@spring.showErrors ',' />
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="userId">User ID*</label>
 
                 <div class="controls">
                     <@spring.formInput "account.userId","class='input-xlarge' autocomplete='off'","text"/>
@@ -22,7 +31,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="password">Password</label>
+                <label class="control-label" for="password">Password*</label>
 
                 <div class="controls">
                     <@spring.formInput "account.password","class='input-xlarge' autocomplete='off'","password"/>
@@ -34,7 +43,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="confirmPassword">Confirm Password</label>
+                <label class="control-label" for="confirmPassword">Confirm Password*</label>
 
                 <div class="controls">
                     <@spring.formInput "account.confirmPassword","class='input-xlarge' autocomplete='off'","password"/>
@@ -46,7 +55,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="email">Email</label>
+                <label class="control-label" for="email">Email*</label>
 
                 <div class="controls">
                     <@spring.formInput "account.email","class='input-xlarge' autocomplete='off'","text"/>
@@ -71,7 +80,7 @@
 
             <#if locations?size != 0>
                 <div class="control-group">
-                    <label class="control-label" for="location">Location</label>
+                    <label class="control-label" for="location">Location*</label>
 
                     <div class="controls">
                         <@spring.formSingleSelect "account.location",locations,"class='select-xlarge' autocomplete='off'"/>

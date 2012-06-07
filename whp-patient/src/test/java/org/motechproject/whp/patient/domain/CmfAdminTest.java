@@ -8,7 +8,7 @@ public class CmfAdminTest {
 
     @Test
     public void shouldsetUserNameToLowerCase() {
-        CmfAdmin cmfAdmin = new CmfAdmin("USER","a@b.com","dept",null);
+        CmfAdmin cmfAdmin = new CmfAdmin("USER","a@b.com","dept",null, "staffName");
         assertEquals("user",cmfAdmin.getUserId());
     }
 }

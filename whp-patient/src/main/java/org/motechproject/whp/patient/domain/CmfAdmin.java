@@ -16,15 +16,18 @@ public class CmfAdmin extends MotechBaseDataObject {
 
     private String locationId;
 
+    private String staffName;
+
     // Required for ektorp
     public CmfAdmin() {
     }
 
-    public CmfAdmin(String userId, String email, String department, String locationId) {
+    public CmfAdmin(String userId, String email, String department, String locationId, String staffName) {
         setUserId(userId);
         this.email = email;
         this.department = department;
         this.locationId = locationId;
+        this.staffName = staffName;
     }
     private void setUserId(String userId) {
         if(userId==null)

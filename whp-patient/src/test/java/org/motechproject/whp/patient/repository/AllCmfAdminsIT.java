@@ -22,14 +22,14 @@ public class AllCmfAdminsIT extends SpringIntegrationTest{
     }
     @Test
     public void shouldAddCmfAdminToDb() {
-        allCmfAdmins.add(new CmfAdmin("user","email","dept", "location"));
+        allCmfAdmins.add(new CmfAdmin("user","email","dept", "location", "staffName"));
 
         assertNotNull(allCmfAdmins.findByUserId("user"));
     }
 
     @Test
     public void findByUserIdShouldBeCaseInsensitive() {
-        allCmfAdmins.add(new CmfAdmin("user","email","dept", "location"));
+        allCmfAdmins.add(new CmfAdmin("user","email","dept", "location", "staffName"));
 
         assertNotNull(allCmfAdmins.findByUserId("USER"));
     }
