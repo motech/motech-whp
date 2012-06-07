@@ -24,18 +24,6 @@ body {
     height: 38px
 }
 
-#sidebar-nav-fixed {
-    padding: 9px 0;
-    position:fixed;
-    left:20px;
-    top:60px;
-    min-width:250px;
-}
-
-.row-fluid > .span-fixed-sidebar {
-    margin-left: 290px;
-}
-
 #navibar {
     padding-top: 5px;
 }

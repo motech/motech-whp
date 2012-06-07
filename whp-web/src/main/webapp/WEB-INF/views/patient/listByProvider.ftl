@@ -9,7 +9,7 @@
         <#assign message=""/>
         </div>
     </#if>
-<@legend key1="paused" value1="Current Treatment Paused" span="span13"/>
+<@legend key1="paused" value1="Current Treatment Paused" />
 <div class="row">
     <div>
         <table id="patientList" class="table table-bordered table-condensed">
