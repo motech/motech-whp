@@ -51,7 +51,10 @@
                         <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if>">
                             <td class="patientId"><b>${patient.patientId}</b></td>
                             <td class="tbId">${patient.currentTreatment.tbId}</td>
-                            <td class="name">${patient.firstName?cap_first} <#if patient.lastName?exists>${patient.lastName?cap_first}</#if></td>
+                            <td class="name">${patient.firstName?cap_first}
+                                <#if patient.lastName?exists>
+                                    ${patient.lastName?cap_first}
+                                </#if></td>
                             <td>${patient.currentTreatment.therapy.patientAge!}</td>
                             <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                             <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
