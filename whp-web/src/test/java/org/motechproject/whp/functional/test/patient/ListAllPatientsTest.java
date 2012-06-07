@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.test.patient;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
+@Ignore
 public class ListAllPatientsTest extends BaseTest {
 
     @Autowired
