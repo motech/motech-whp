@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 import java.util.Arrays;
 
@@ -43,6 +44,7 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
                 .withTreatmentCategory(newCategory)
                 .withProviderId(patientRequest.getProvider_id())
                 .withDateModified(DateUtil.newDateTime(2012, 3, 17, 4, 55, 50))
+                .withPatientType(PatientType.Chronic)
                 .withTbId("elevenDigit")
                 .build();
         factory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);

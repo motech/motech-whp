@@ -807,9 +807,6 @@ select:focus {
 .input-xlarge {
     width: 270px;
 }
-.select-xlarge {
-    width: 280px;
-}
 .input-xxlarge {
     width: 530px;
 }
@@ -2636,14 +2633,10 @@ input[type="submit"].btn.btn-mini {
     border-color: #e8d1df;
     color: #bd4247;
 }
-.field-error {
-    color: #bd4247;
-}
 .alert-info {
-    background-color: #EDEBBF;
-    border-color: #E0D6AA;
-    color: #817B02;
-    font-weight: bold;
+    background-color: #edebe1;
+    border-color: #e0d9cb;
+    color: #817b58;
 }
 .alert-block {
     padding-top: 14px;
@@ -4429,15 +4422,4 @@ i[class^="icon-"] {
 }
 .invisible {
     visibility: hidden;
-}
-.form-button-left {
-    margin: 0px;
-    float: left;
-}
-.form-button-right {
-    margin-right: 301px;
-    float: right;
-}
-.leftnav-menu-margin {
-    margin-left: -200px;
 }
