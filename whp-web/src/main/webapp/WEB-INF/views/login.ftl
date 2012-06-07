@@ -2,15 +2,20 @@
 <#import "layout/default.ftl" as layout>
 <@layout.defaultLayout "Login">
 
-<div class="span12" id="loginForm">
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/login.js'/>"></script>
+
+<div class="span12">
     </br>
     </br>
     </br>
     </br>
     <#if RequestParameters.login_error?exists>
         <div id="loginError" class="alert alert-error row">${Session.loginFailure}</div>
+    <#else>
+            <div id="loginError" style="display: none;" class="alert alert-error row"></div>
     </#if>
-    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="row well form-horizontal">
+    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" id="loginForm"
+          class="row well form-horizontal">
         <div class="offset2">
             </br>
             <div class="control-group">
