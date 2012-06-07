@@ -33,6 +33,7 @@
                     <th>Name</th>
                     <th>Age</th>
                     <th>Gender</th>
+                    <th>Provider ID</th>
                     <th>Village</th>
                     <th>District</th>
                     <th>Treatment Category</th>
@@ -44,7 +45,7 @@
                 <tbody>
                     <#if patientList?size == 0>
                     <tr>
-                        <td style="text-align: center" colspan="11">No patients to show</td>
+                        <td style="text-align: center" colspan="12">No patients to show</td>
                     </tr>
                     <#else>
                         <#list patientList as patient>
@@ -57,6 +58,7 @@
                                 </#if></td>
                             <td>${patient.currentTreatment.therapy.patientAge!}</td>
                             <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
+                            <td id="patient_${patient.patientId}_ProviderId">${patient.currentTreatment.providerId}</td>
                             <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
                             <td id="patient_${patient.patientId}_District">${patient.currentTreatment.patientAddress.address_district}</td>
                             <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
