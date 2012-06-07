@@ -115,3 +115,8 @@ body {
 .sharp, .sharp td, .sharp th {
     border-color: #000000;
 }
+
+.sidebar {
+    max-width: 250px;
+    overflow-x: visible;
+}

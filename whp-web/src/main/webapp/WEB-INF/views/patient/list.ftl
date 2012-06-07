@@ -3,7 +3,7 @@
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
 
-<div class="pull-left">
+<div class="pull-left sidebar">
 <ul class="nav nav-list leftnav-menu-margin pull-left">
     <li class="nav-header">
         <b>Patient List</b>
@@ -16,7 +16,7 @@
         <b>Downloads</b>
     </li>
     <li>
-    <a href="/whp/reports/adherence/adherenceReport.xls">Download all adherence data to excel</a>
+    <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data to excel</a>
     <li>
     <li class="divider"></li>
 </ul>
