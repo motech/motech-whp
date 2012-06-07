@@ -11,7 +11,7 @@ public class CmfAdminWebRequest {
     @Size(min = 1, message = "UserId cannot be empty")
     private String userId;
 
-    @Pattern(regexp = "^$|[\\w-]+(\\.[\\w-]+)*@([a-z0-9-]+(\\.[a-z0-9-]+)*?\\.[a-z]{2,6}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{4})?$" , message = "Please enter a valid email id")
+    @Pattern(regexp = "^[\\w-]+(\\.[\\w-]+)*@([a-z0-9-]+(\\.[a-z0-9-]+)*?\\.[a-z]{2,6}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{4})?$" , message = "Please enter a valid email id in the format abc@xyz.com")
     private String email;
 
     private String department;
