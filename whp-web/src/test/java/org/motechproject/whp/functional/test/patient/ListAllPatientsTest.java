@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
-@Ignore
 public class ListAllPatientsTest extends BaseTest {
 
     @Autowired
