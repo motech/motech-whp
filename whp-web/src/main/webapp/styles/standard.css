@@ -108,37 +108,30 @@ body {
     width: 15px;
     text-align: center;
 }
+.fixed td {
+   max-width: 15px;
+   min-width: 15px;
+}
 
 .tick-icon{
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    *margin-right: .3em;
-    line-height: 14px;
-    vertical-align: text-top;
-    background-image: url("../img/glyphicons-halflings.png");
-    background-position: -282px 5px;
-    background-repeat: no-repeat;
+    font-family: wingdings;
+    font-size: 150%;
+}
+.disable-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .cross-icon{
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    *margin-right: .3em;
-    line-height: 14px;
-    vertical-align: text-top;
-    background-image: url("../img/glyphicons-halflings.png");
-    background-position: -305px 5px;
-    background-repeat: no-repeat;
+    font-family: wingdings;
+    font-size: 150%;
 }
-.round-icon{
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    *margin-right: .3em;
-    line-height: 14px;
-    vertical-align: text-top;
-    background-repeat: no-repeat;
+
+.editable {
+    cursor: pointer
 }
 .sunday div {
     border: 3px coral groove;
