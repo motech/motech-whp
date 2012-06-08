@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.contract.ProviderRequest;
@@ -35,7 +36,7 @@ public class RegistrationServiceTest {
     }
 
     @Test
-    public void shouldRegisterUserAsInactiveByDefault() {
+    public void shouldRegisterUserAsInactiveByDefault() throws WebSecurityException {
         ProviderRequest providerRequest = new ProviderRequest("providerId", "district", "1111111111", DateUtil.now());
         String externalId = "externalId";
         when(providerService.createProvider(Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<DateTime>any())).thenReturn(externalId);
@@ -45,7 +46,7 @@ public class RegistrationServiceTest {
     }
 
     @Test(expected = WHPRuntimeException.class)
-    public void shouldThrowWhpRunTimeExceptionIfRegisterThrowsException() {
+    public void shouldThrowWhpRunTimeExceptionIfRegisterThrowsException() throws WebSecurityException {
         ProviderRequest providerRequest = new ProviderRequest("providerId", "district", "1111111111", DateUtil.now());
         String externalId = "externalId";
         when(providerService.createProvider(Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<DateTime>any())).thenReturn(externalId);

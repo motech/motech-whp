@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.builder.CmfAdminWebRequestBuilder;
 import org.motechproject.whp.contract.CmfAdminWebRequest;
@@ -46,7 +47,7 @@ public class CmfAdminControllerTest {
     }
 
     @Test
-    public void shouldCreateCmfAccount() {
+    public void shouldCreateCmfAccount() throws WebSecurityException {
         CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withDefaults().build();
         BindingAwareModelMap uiModel = new BindingAwareModelMap();
 
