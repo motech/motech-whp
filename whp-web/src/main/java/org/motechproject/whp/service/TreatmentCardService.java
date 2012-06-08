@@ -23,21 +23,16 @@ public class TreatmentCardService {
     public TreatmentCardModel getIntensivePhaseTreatmentCardModel(Patient patient) {
         if (patient != null && patient.latestTherapy() != null && patient.latestTherapy().getStartDate() != null) {
 
+            TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
             LocalDate ipStartDate = patient.latestTherapy().getStartDate();
             LocalDate endDate = ipStartDate.plusMonths(5);
 
             List<AdherenceData> adherenceData = allAdherenceLogs.findLogsInRange(patient.getPatientId(), ipStartDate, endDate);
-
-            TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
-
             List<DayOfWeek> patientPillDays = patient.latestTherapy().getTreatmentCategory().getPillDays();
-
-            ipTreatmentCard.addAdherenceData(ipStartDate, endDate, adherenceData, patientPillDays);
+            ipTreatmentCard.addAdherenceData(ipStartDate, endDate, adherenceData, patientPillDays, patient.getAllTreatmentInterruptions());
 
             return ipTreatmentCard;
         }
         return null;
     }
-
-
 }

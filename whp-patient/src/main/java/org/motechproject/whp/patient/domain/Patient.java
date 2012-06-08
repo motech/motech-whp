@@ -122,7 +122,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public TreatmentInterruptions getTreatmentInterruptions() {
+    public TreatmentInterruptions getCurrentTreatmentInterruptions() {
         return currentTreatment.getInterruptions();
     }
 
@@ -139,6 +139,16 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public Integer getAge() {
         return latestTherapy().getPatientAge();
+    }
+
+    @JsonIgnore
+    public TreatmentInterruptions getAllTreatmentInterruptions() {
+        TreatmentInterruptions interruptions = new TreatmentInterruptions();
+        interruptions.addAll(getCurrentTreatmentInterruptions());
+        for (Treatment treatment : getTreatments()) {
+            interruptions.addAll(treatment.getInterruptions());
+        }
+        return interruptions;
     }
 
     public void reviveLastClosedTreatment() {

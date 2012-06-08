@@ -16,18 +16,22 @@
                 <#assign sunday = monthlyAdherence.firstSunday/>
                 <#list 1..31 as day>
                     <#assign drawn = false/>
-                    <#assign sundayClass = ""/>
+                    <#assign isItASunday = ""/>
                     <#if day == sunday>
-                        <#assign sundayClass = "sunday"/>
+                        <#assign isItASunday = "sunday"/>
                         <#assign sunday=sunday+7/>
                     </#if>
                     <#list monthlyAdherence.getLogs() as dailyAdherence>
+                        <#assign isItDuringPausedPeriod = ""/>
+                        <#if dailyAdherence.adherenceCapturedDuringPausedPeriod>
+                            <#assign isItDuringPausedPeriod = "pausedAdherenceData">
+                        </#if>
                         <#if dailyAdherence.day == day>
                             <#assign drawn = true/>
                             <td class=
-                            <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${sundayClass}"
-                            <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${sundayClass}"
-                            <#else> "round-icon editable ${sundayClass}"
+                            <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#else> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                             </#if>
                             >
                             <#if dailyAdherence.pillStatus == 1> &#252;
@@ -40,7 +44,7 @@
                     <#if drawn == false>
                         <td class=
                             <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                            <#else>"bg-gray ${sundayClass}"
+                            <#else>"bg-gray ${isItASunday}"
                             </#if>
                             >
                         <div/>

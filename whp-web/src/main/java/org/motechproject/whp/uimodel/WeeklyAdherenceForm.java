@@ -69,7 +69,7 @@ public class WeeklyAdherenceForm {
 
     private void populatePauseRestartData(LocalDate weekStartDate) {
         List<LocalDate> datesInRange = getDatesInRange(weekStartDate, today());
-        List<String> pauseReasons = patient.getTreatmentInterruptions().getPauseReasons(datesInRange);
+        List<String> pauseReasons = patient.getCurrentTreatmentInterruptions().getPauseReasons(datesInRange);
         if (!pauseReasons.isEmpty()) {
             this.pauseReasons.addAll(pauseReasons);
         }

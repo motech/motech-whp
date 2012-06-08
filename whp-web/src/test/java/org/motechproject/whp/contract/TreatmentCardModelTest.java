@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.patient.domain.TreatmentInterruptions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TreatmentCardModelTest {
         List<Integer> julyTakenDays = asList();
         List<Integer> julyNotTakenDays = asList();
 
-        treatmentCardModel.addAdherenceData(therapyStartDate, therapyStartDate.plusMonths(5), adherenceData, asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+        treatmentCardModel.addAdherenceData(therapyStartDate, therapyStartDate.plusMonths(5), adherenceData, asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday), new TreatmentInterruptions());
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
         validateMonthLog(treatmentCardModel, "Feb 2012", 0, 5, 29, febLogDays, febTakenDays, febNotTakenDays, 12);
@@ -75,7 +76,7 @@ public class TreatmentCardModelTest {
         AdherenceData log1 = new AdherenceData(externalId, "", new LocalDate(2012, 4, 10));
         log1.status(PillStatus.Taken.getStatus());
 
-        treatmentCardModel.addAdherenceData(therapyStartDate, therapyStartDate.plusMonths(5), asList(log1), asList(DayOfWeek.values()));
+        treatmentCardModel.addAdherenceData(therapyStartDate, therapyStartDate.plusMonths(5), asList(log1), asList(DayOfWeek.values()), new TreatmentInterruptions());
 
         List<Integer> aprilLogDays = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30);
         List<Integer> aprilTakenDays = asList(10);
