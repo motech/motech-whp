@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.repository.SpringIntegrationTest;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.refdata.domain.WeightInstance;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class TreatmentServiceIT extends SpringIntegrationTest {
@@ -113,6 +115,32 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldUpdateDiseaseClassOnTransferIn() {
+        PatientRequest updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForCloseTreatment()
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+
+        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
+        assertEquals(DiseaseClass.P, updatedPatient.latestTherapy().getDiseaseClass());
+
+        updatePatientRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withDiseaseClass(DiseaseClass.E)
+                .withCaseId(CASE_ID)
+                .withTbId(TB_ID)
+                .build();
+
+        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+
+        updatedPatient = allPatients.findByPatientId(CASE_ID);
+        assertEquals(DiseaseClass.E, updatedPatient.latestTherapy().getDiseaseClass());
     }
 
     @Test

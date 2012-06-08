@@ -70,6 +70,7 @@ public class TreatmentService {
                 patientRequest.getSmearTestResults(),
                 patientRequest.getWeightStatistics());
         patient.reviveLastClosedTreatment();
+        patient.latestTherapy().setDiseaseClass(patientRequest.getDisease_class());
         patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
