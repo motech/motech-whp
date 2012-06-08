@@ -49,12 +49,7 @@ public class TransferInPatient extends TreatmentUpdate {
     }
 
     private boolean treatmentDetailsDoNotMatch(Patient patient, PatientRequest patientRequest) {
-        return notOfSameDiseaseClass(patient, patientRequest) || notOfSameTreatmentCategory(patient, patientRequest);
-    }
-
-    private boolean notOfSameDiseaseClass(Patient patient, PatientRequest patientRequest) {
-        Therapy latestTherapy = patient.latestTherapy();
-        return !latestTherapy.getDiseaseClass().equals(patientRequest.getDisease_class());
+        return notOfSameTreatmentCategory(patient, patientRequest);
     }
 
     private boolean notOfSameTreatmentCategory(Patient patient, PatientRequest patientRequest) {

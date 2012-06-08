@@ -14,7 +14,6 @@ import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.Arrays;
@@ -54,22 +53,6 @@ public class TransferInPatientTest extends BaseUnitTest {
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_NOT_CLOSED);
-        transferInPatient.apply(patientRequest);
-        verify(treatmentService, never()).transferInPatient(patientRequest);
-    }
-
-    @Test
-    public void shouldNotTransferInPatientIfDiseaseClassInRequestDoesNotMatchCurrentTreatmentDiseaseClass() {
-        Patient patient = new PatientBuilder().withDefaults().build();
-
-        PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(DiseaseClass.E);
-        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
-
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
-
-        expectWHPRuntimeException(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH);
         transferInPatient.apply(patientRequest);
         verify(treatmentService, never()).transferInPatient(patientRequest);
     }
