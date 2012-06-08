@@ -5,9 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
 import org.springframework.ui.Model;
 
@@ -33,6 +36,11 @@ public class PatientControllerTest {
     HttpServletRequest request;
     @Mock
     AllPatients allPatients;
+    @Mock
+    AllAdherenceLogs allAdherenceLogs;
+
+    @Mock
+    TreatmentCardService treatmentCardService;
 
     PatientController patientController;
 
@@ -43,7 +51,7 @@ public class PatientControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients);
+        patientController = new PatientController(allPatients, allAdherenceLogs,treatmentCardService);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
@@ -65,15 +73,31 @@ public class PatientControllerTest {
 
     @Test
     public void shouldLoadPatientDashboard() {
-        String view = patientController.show(patient.getPatientId(), uiModel, request);
+        patientController.show(patient.getPatientId(), uiModel, request);
 
         ArgumentCaptor<PatientDTO> patientDTOArgumentCaptor = ArgumentCaptor.forClass(PatientDTO.class);
 
         verify(uiModel).addAttribute(eq("patient"), patientDTOArgumentCaptor.capture());
         verify(uiModel).addAttribute(eq("patientId"), same(patient.getPatientId()));
 
-        assertEquals("patient/show", view);
         assertEquals(new PatientDTO(patient), patientDTOArgumentCaptor.getValue());
+    }
+
+    @Test
+    public void shouldReturnDashBoardView() {
+        String view = patientController.show(patient.getPatientId(), uiModel, request);
+
+        assertEquals("patient/show", view);
+    }
+
+    @Test
+    public void shouldReturnTreatmentCardModelToView() {
+        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        when(treatmentCardService.getIntensivePhaseTreatmentCardModel(patient)).thenReturn(treatmentCardModel);
+
+        patientController.show(patient.getPatientId(), uiModel, request);
+
+        verify(uiModel).addAttribute("treatmentCard", treatmentCardModel);
     }
 
     @Test

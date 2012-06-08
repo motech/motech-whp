@@ -2,12 +2,13 @@ package org.motechproject.whp.controller;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.flash.Flash;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.uimodel.PatientDTO;
 import org.motechproject.whp.util.FlashUtil;
+import org.motechproject.whp.service.TreatmentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Controller
 @RequestMapping(value = "/patients")
@@ -26,11 +28,14 @@ public class PatientController {
 
     public static final String PATIENT_LIST = "patientList";
     AllPatients allPatients;
-    PatientService patientService;
+    AllAdherenceLogs allAdherenceLogs;
+    TreatmentCardService treatmentCardService;
 
     @Autowired
-    public PatientController(AllPatients allPatients) {
+    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, TreatmentCardService treatmentCardService) {
         this.allPatients = allPatients;
+        this.allAdherenceLogs = allAdherenceLogs;
+        this.treatmentCardService = treatmentCardService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -38,6 +43,7 @@ public class PatientController {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatmentFor(providerId);
         passPatientsAsModelToListView(uiModel, patientsForProvider);
         passAdherenceSavedMessageToListView(uiModel, request);
+
         return "patient/listByProvider";
     }
 
@@ -69,8 +75,11 @@ public class PatientController {
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
+        uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
         return "patient/show";
     }
+
+
 
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)
     public String update(@RequestParam("patientId") String patientId, PatientDTO patientDTO, HttpServletRequest httpServletRequest) {
@@ -99,7 +108,7 @@ public class PatientController {
         String message4 = "Continuation Phase Start Date: ";
         message4 = message4.concat(StringUtils.isBlank(cpStartDate) ? "Not Set" : cpStartDate);
 
-        messages.addAll(Arrays.asList(message1, message2, message3, message4));
+        messages.addAll(asList(message1, message2, message3, message4));
 
         FlashUtil.flashAllOut("dateUpdatedMessage", messages, httpServletRequest);
     }

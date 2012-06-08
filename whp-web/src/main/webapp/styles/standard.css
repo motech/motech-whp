@@ -103,3 +103,54 @@ body {
 .sharp, .sharp td, .sharp th {
     border-color: #000000;
 }
+
+.fixed th, .fixed td {
+    width: 15px;
+    text-align: center;
+}
+
+.tick-icon{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    background-position: -282px 5px;
+    background-repeat: no-repeat;
+}
+.cross-icon{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    background-position: -305px 5px;
+    background-repeat: no-repeat;
+}
+.round-icon{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+}
+.sunday div {
+    border: 3px coral groove;
+    width: 22px;
+    height: 22px;
+    margin-left: -6px;
+    margin-top: -5px;
+    padding: 0px;
+    margin-bottom: -5px;
+    margin-right: -6px;
+}
+
+.bg-gray{
+    background-color: #cccccc;
+}

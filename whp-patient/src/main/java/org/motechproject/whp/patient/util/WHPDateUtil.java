@@ -16,4 +16,12 @@ public class WHPDateUtil {
         }
         return datesAcrossCurrentWeek;
     }
+
+    public static int findNumberOfDays(int monthOfYear, int year) {
+        if ( (monthOfYear<8 && monthOfYear% 2!= 0) || (monthOfYear>7 && monthOfYear%2==0)) return 31;
+        else if (monthOfYear == 2) {
+            if (year % 4 == 0 && year % 400 != 0) return 29;
+            else return 28;
+        } else return 30;
+    }
 }
