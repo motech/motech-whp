@@ -1,5 +1,27 @@
 <#macro treatmentCardView>
-<#if treatmentCard?exists>
+    <#if treatmentCard?exists>
+    <div id="legend-container" class="pull-right">
+    <table id="legend" class="table table-bordered table-condensed">
+        <thead>
+        <tr>
+            <th>Legend</th>
+        </tr>
+        </thead>
+    <tbody>
+        <#list treatmentCard.providerIds as providerId>
+        <tr>
+            <td>
+                <div class="windings-font" providerId=${providerId}> &#252; &#251;</div>
+        </td>
+        <td>
+            <div class="text-center text-center">By Provider :${providerId}</div>
+        </td>
+        </tr>
+        </#list>
+    </tbody>
+    </table>
+    </div>
+
     <table class="table table-bordered table-condensed fixed sharp disable-select">
         <thead>
         <tr>
@@ -11,7 +33,7 @@
             <#list treatmentCard.monthlyAdherences as monthlyAdherence>
             <tr>
                 <div>
-                <td>${monthlyAdherence.monthAndYear}</td>
+                    <td>${monthlyAdherence.monthAndYear}</td>
                 </div>
                 <#assign sunday = monthlyAdherence.firstSunday/>
                 <#list 1..31 as day>
@@ -33,7 +55,7 @@
                             <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                             <#else> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                             </#if>
-                            >
+                            providerId = ${dailyAdherence.providerId}>
                             <#if dailyAdherence.pillStatus == 1> &#252;
                             <#elseif dailyAdherence.pillStatus == 2> &#251;
                             </#if>
@@ -57,24 +79,44 @@
         <tbody>
         </tbody>
     </table>
-</#if>
-<script type="text/javascript">
-    $('.editable').click(function(){
-        if($(this).hasClass('tick-icon')) {
-           $(this).removeClass('tick-icon');
-           $(this).addClass('cross-icon');
-           $(this).html('&#251;');
-        }
-        else if($(this).hasClass('cross-icon')) {
-            $(this).removeClass('cross-icon');
-            $(this).addClass('round-icon');
-            $(this).text('');
-        }
-        else {
-            $(this).removeClass('round-icon');
-            $(this).addClass('tick-icon');
-            $(this).html('&#252;');
-        }
-    });
-</script>
+
+    <script type="text/javascript">
+        $(function () {
+            var providerIds = new Array();
+            var providerColors = new Array();
+            <!--setting provider id & colors to javascript variables-->
+            <#assign i=0/>
+            <#list treatmentCard.providerIds as providerId>
+                providerIds[${i}] = "${providerId}";
+                <#assign i=i+1/>
+            </#list>
+            <#assign i=0/>
+            <#list treatmentCard.providerColorCodes as color>
+                providerColors[${i}] = "${color}";
+                <#assign i=i+1/>
+            </#list>
+
+            for (var i = 0; i < providerIds.length; i++) {
+                $("[providerid =" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
+            }
+        });
+        $('.editable').click(function () {
+            if ($(this).hasClass('tick-icon')) {
+                $(this).removeClass('tick-icon');
+                $(this).addClass('cross-icon');
+                $(this).html('&#251;');
+            }
+            else if ($(this).hasClass('cross-icon')) {
+                $(this).removeClass('cross-icon');
+                $(this).addClass('round-icon');
+                $(this).text('');
+            }
+            else {
+                $(this).removeClass('round-icon');
+                $(this).addClass('tick-icon');
+                $(this).html('&#252;');
+            }
+        });
+    </script>
+    </#if>
 </#macro>

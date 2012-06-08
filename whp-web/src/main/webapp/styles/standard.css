@@ -113,7 +113,7 @@ body {
    min-width: 15px;
 }
 
-.tick-icon{
+.tick-icon, .windings-font {
     font-family: wingdings;
     font-size: 150%;
 }

@@ -8,9 +8,12 @@ public class DailyAdherence {
     private int pillStatus;
     private boolean adherenceCapturedDuringPausedPeriod;
 
-    public DailyAdherence(int day, int pillStatus, boolean adherenceCapturedDuringPausedPeriod) {
+    private String providerId;
+
+    public DailyAdherence(int day, int pillStatus, String providerId,boolean adherenceCapturedDuringPausedPeriod) {
         this.day = day;
         this.pillStatus = pillStatus;
+        this.providerId = providerId;
         this.adherenceCapturedDuringPausedPeriod = adherenceCapturedDuringPausedPeriod;
     }
 }

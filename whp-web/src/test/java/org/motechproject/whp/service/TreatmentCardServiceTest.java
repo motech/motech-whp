@@ -15,10 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.builder.AdherenceDataBuilder.createLog;
 
 public class TreatmentCardServiceTest {
 
@@ -40,14 +39,10 @@ public class TreatmentCardServiceTest {
         LocalDate therapyStartDate = new LocalDate(2012, 2, 3);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate);
 
-        AdherenceData log1 = new AdherenceData(externalId, "", new LocalDate(2012, 2, 10));
-        log1.status(PillStatus.Taken.getStatus());
-        AdherenceData log2 = new AdherenceData(externalId, "", new LocalDate(2012, 2, 15));
-        log2.status(PillStatus.NotTaken.getStatus());
-        AdherenceData log3 = new AdherenceData(externalId, "", new LocalDate(2012, 3, 12));
-        log3.status(PillStatus.Unknown.getStatus());
-        AdherenceData log4 = new AdherenceData(externalId, "", new LocalDate(2012, 3, 28));
-        log4.status(PillStatus.Taken.getStatus());
+        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10),"",PillStatus.Taken);
+        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), "",PillStatus.NotTaken);
+        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12),"", PillStatus.Unknown);
+        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28),"",PillStatus.Taken);
         List<AdherenceData> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
         when(allAdherenceLogs.findLogsInRange(externalId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
@@ -63,4 +58,5 @@ public class TreatmentCardServiceTest {
         patient.startTherapy(therapyStartDate);
         return patient;
     }
+
 }
