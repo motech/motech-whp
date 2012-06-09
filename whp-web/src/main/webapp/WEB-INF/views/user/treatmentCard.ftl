@@ -8,14 +8,22 @@
         </tr>
         </thead>
     <tbody>
+        <tr>
+            <td>
+                <div class="label pausedAdherenceData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </td>
+            <td>
+                <div class="text-center">Therapy Paused</div>
+            </td>
+        </tr>
         <#list treatmentCard.providerIds as providerId>
         <tr>
             <td>
                 <div class="windings-font" providerId=${providerId}> &#252; &#251;</div>
-        </td>
-        <td>
-            <div class="text-center text-center">By Provider :${providerId}</div>
-        </td>
+            </td>
+            <td>
+                <div class="text-center text-center">Adherence given by provider ${providerId}</div>
+            </td>
         </tr>
         </#list>
     </tbody>
@@ -100,6 +108,32 @@
                 $("[providerid =" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
             }
         });
+
+        <!--Tooltips to show provider information and dose status-->
+
+        function annotate(){
+            $('.tick-icon, .cross-icon').each(function(){
+                var providerId = $(this).attr('providerId');
+                if(!providerId) {
+                    providerId = "CMF Admin";
+                }
+                var pillStatus;
+                if ($(this).hasClass('tick-icon')) {
+                    pillStatus = "Taken."
+                }
+                else if ($(this).hasClass('cross-icon')) {
+                    pillStatus = "Not Taken."
+                }
+                else {
+                    pillStatus = "";
+                }
+                $(this).tooltip({title: "Provider " + providerId + " gave adherence as " + pillStatus});
+            })
+        }
+
+        annotate();
+
+        <!--Troggle - 3 state toggling-->
         $('.editable').click(function () {
             if ($(this).hasClass('tick-icon')) {
                 $(this).removeClass('tick-icon');

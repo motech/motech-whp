@@ -14,6 +14,7 @@
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-alerts.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-datepicker.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-transition.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-tooltip.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
 <body>
