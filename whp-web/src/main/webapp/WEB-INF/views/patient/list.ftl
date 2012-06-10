@@ -54,6 +54,7 @@
                             </#if>
                         </td>
                         <td class="patient_adherence">
+                            <a href="<@spring.url '/patients/dashboard?patientId=${patient.patientId}' />">Edit</a>
                         </td>
                     </tr>
                     </#list>
