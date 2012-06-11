@@ -30,17 +30,23 @@ public class ProviderService {
 
     public void transferIn(String newProviderId, Patient patient, String tbId, String tbRegistrationNumber, DateTime dateModified, SmearTestResults newSmearTestResults, WeightStatistics newWeightStatistics) {
         Treatment currentTreatment = patient.getCurrentTreatment();
-        Treatment newTreatment = new Treatment(currentTreatment)
+        Treatment newTreatment = new Treatment()
                 .updateForTransferIn(
                         tbId,
                         newProviderId,
-                        dateModified.toLocalDate()
+                        dateModified.toLocalDate(),
+                        currentTreatment
                 );
-        newTreatment.setSmearTestResults(newSmearTestResults.isEmpty() ? currentTreatment.getSmearTestResults() : newSmearTestResults);
-        newTreatment.setWeightStatistics(newWeightStatistics.isEmpty() ? currentTreatment.getWeightStatistics() : newWeightStatistics);
+
+        if (!newSmearTestResults.isEmpty())
+            newTreatment.setSmearTestResults(newSmearTestResults);
+        if (!newWeightStatistics.isEmpty())
+            newTreatment.setWeightStatistics(newWeightStatistics);
+
         newTreatment.setTbRegistrationNumber(tbRegistrationNumber);
         patient.addTreatment(newTreatment, dateModified);
         newTreatment.setPatientType(PatientType.TransferredIn);
         allPatients.update(patient);
     }
+
 }

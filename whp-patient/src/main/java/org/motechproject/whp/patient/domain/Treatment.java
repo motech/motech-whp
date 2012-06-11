@@ -39,19 +39,12 @@ public class Treatment {
         setPatientType(patientType);
     }
 
-    public Treatment(Treatment oldTreatment) {
-        setTbId(oldTreatment.tbId);
-        setProviderId(oldTreatment.providerId);
-        setStartDate(oldTreatment.startDate);
-        setEndDate(oldTreatment.endDate);
+    public Treatment updateForTransferIn(String newTbId, String newProviderId, LocalDate startDate, Treatment oldTreatment) {
+        setTbId(newTbId);
+        setProviderId(newProviderId);
+        setStartDate(startDate);
         setTherapy(oldTreatment.getTherapy());
         setPatientAddress(oldTreatment.getPatientAddress());
-    }
-
-    public Treatment updateForTransferIn(String tbId, String providerId, LocalDate startDate) {
-        setTbId(tbId);
-        setProviderId(providerId);
-        setStartDate(startDate);
         return this;
     }
 

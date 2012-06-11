@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -58,6 +59,34 @@ public class ProviderServiceTest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldTransferInPatient_WhenMinimumRequiredFieldsAreSent() {
+
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+
+        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+
+        String newProviderId = "newProviderId";
+        String tbId = "newTbId";
+        DateTime now = now();
+
+        providerService.transferIn(newProviderId, patient, tbId, "" , now, new SmearTestResults(), new WeightStatistics());
+
+        Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
+
+        assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentTreatment().getPatientType());
+
+        assertEquals(newProviderId.toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
+        assertEquals(tbId.toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
+        assertEquals("", updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
+        assertEquals(now.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
+        assertEquals(now, updatedPatient.getLastModifiedDate());
+
+        assertTrue(patient.getCurrentTreatment().getSmearTestResults().isEmpty());
+        assertTrue(patient.getCurrentTreatment().getWeightStatistics().isEmpty());
+    }
+
+    @Test
     public void shouldTransferInPatient_WithNewlySent_SmearTestResultsAndWeightStatistics() {
 
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
@@ -88,42 +117,6 @@ public class ProviderServiceTest extends SpringIntegrationTest {
         assertEquals(SmearTestResult.Positive, patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_result_2());
         assertEquals(DateUtil.newDate(2010, 5, 19), patient.getCurrentTreatment().getWeightStatistics().latestResult().getMeasuringDate());
         assertEquals(Double.valueOf(99.7), patient.getCurrentTreatment().getWeightStatistics().latestResult().getWeight());
-    }
-
-    @Test
-    public void shouldTransferInPatient_WithSmearTestResultsAndWeightStatistics_FromPreviousTreatment() {
-
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-        patientService.createPatient(patientRequest);
-
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-
-        String newProviderId = "newProviderId";
-        String tbId = "newTbId";
-        String newTbRegistrationNumber = "newTbRegistrationNumber";
-        DateTime now = now();
-
-        // Emulating Patient Request doesn't have new lab test results and/or weight statistics
-        providerService.transferIn(newProviderId, patient, tbId, newTbRegistrationNumber, now, new SmearTestResults(), new WeightStatistics());
-
-        Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
-
-        assertEquals(newProviderId.toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
-        assertEquals(tbId.toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-        assertEquals(newTbRegistrationNumber, updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
-        assertEquals(now.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-        assertEquals(now, updatedPatient.getLastModifiedDate());
-        assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentTreatment().getPatientType());
-
-        Treatment previousTreatment = patient.getTreatments().get(patient.getTreatments().size() - 1);
-
-        assertEquals(1, patient.getCurrentTreatment().getSmearTestResults().size());
-        assertEquals(previousTreatment.getSmearTestResults().latestResult().getSmear_test_date_1(), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_date_1());
-        assertEquals(previousTreatment.getSmearTestResults().latestResult().getSmear_test_date_2(), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_date_2());
-        assertEquals(previousTreatment.getSmearTestResults().latestResult().getSmear_test_result_1(), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_result_1());
-        assertEquals(previousTreatment.getSmearTestResults().latestResult().getSmear_test_result_2(), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_result_2());
-        assertEquals(previousTreatment.getWeightStatistics().latestResult().getMeasuringDate(), patient.getCurrentTreatment().getWeightStatistics().latestResult().getMeasuringDate());
-        assertEquals(previousTreatment.getWeightStatistics().latestResult().getWeight(), patient.getCurrentTreatment().getWeightStatistics().latestResult().getWeight());
     }
 
 }

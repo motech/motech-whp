@@ -175,46 +175,6 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         assertEquals(30.00, weightStatisticsRecord.getWeight());
     }
 
-    @Test
-    public void shouldUpdateWithOldTreatmentSmearTestResultsAndWeightStatisticsIfNotSent() {
-        Patient patient = allPatients.findByPatientId(CASE_ID);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForTransferInTreatment()
-                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
-                .withWeightStatistics(WeightInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-        patientService.update(UpdateScope.simpleUpdate, updatePatientRequest);
-
-        updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForCloseTreatment()
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
-
-        updatePatientRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForTransferInTreatment()
-                .withCaseId(CASE_ID)
-                .withTbId(TB_ID)
-                .build();
-        patientService.update(UpdateScope.transferIn, updatePatientRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
-        WeightStatisticsRecord weightStatisticsRecord = updatedPatient.getWeightStatistics().get(0);
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
-        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_1());
-        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
-        assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_2());
-        assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_2());
-
-        assertEquals(WeightInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
-        assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
-        assertEquals(30.00, weightStatisticsRecord.getWeight());
-    }
-
     @After
     public void tearDown() {
         markForDeletion(allTherapies.getAll().toArray());
