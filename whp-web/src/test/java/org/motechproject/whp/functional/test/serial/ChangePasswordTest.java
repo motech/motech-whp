@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class ChangePasswordTest extends BaseTest {
 
     @Test
-    public void testChangePasswordForAdministrator() {
+    public void testChangePasswordForAdministrator() throws InterruptedException {
         LoggedInUserPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().openChangePasswordModal();
         verifyValidations(adminPage);
 

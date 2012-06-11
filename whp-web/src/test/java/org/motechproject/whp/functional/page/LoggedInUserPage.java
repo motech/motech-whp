@@ -54,9 +54,13 @@ public class LoggedInUserPage extends Page {
         return welcomeDiv.getText();
     }
 
-    public LoggedInUserPage openChangePasswordModal() {
+    public LoggedInUserPage openChangePasswordModal() throws InterruptedException {
         changePasswordLink.click();
         waitForElementWithIdToLoad(CURRENT_PASSWORD_ID);
+
+        /* Fade In time for modal */
+        Thread.sleep(200);
+
         return this;
     }
 
