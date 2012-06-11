@@ -69,6 +69,8 @@ public class PatientMapper {
             currentTherapy.setPatientAge(patientRequest.getAge());
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
+        if (patientRequest.getTb_registration_number() != null)
+            patient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
 
         mapPatientAddress(patientRequest, currentTreatment);
         mapSmearTestResults(patientRequest, currentTreatment);
