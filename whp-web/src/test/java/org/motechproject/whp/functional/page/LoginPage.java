@@ -70,4 +70,9 @@ public class LoginPage extends Page {
         login(username, password);
         return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
+
+    public ItAdminPage loginWithItAdminUserNamePassword(String username, String password) {
+        login(username, password);
+        return MyPageFactory.initElements(webDriver, ItAdminPage.class);
+    }
 }

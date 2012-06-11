@@ -12,4 +12,6 @@ ${message}
     createAutoClosingAlert(".message-alert", 5000)
 </script>
 <a href="<@spring.url '/cmfAdmin/create'/>"><b>Create CMF Admin</b></a>
+<br>
+<a id="list-providers" href="<@spring.url '/providers/list'/>"><b>Search Providers</b></a>
 </@layout.defaultLayout>

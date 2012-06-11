@@ -17,7 +17,7 @@ public class ProviderDataService {
 
     // Leaves the browser in the Login Page
     public TestProvider createProvider() {
-        TestProvider testProvider = new TestProvider(generateId(), "password");
+        TestProvider testProvider = new TestProvider(generateId(), "password", "district", "1234567890", "1234567890", "1234567890");
         ProviderCreatePage providerCreatePage = ProviderCreatePage.fetch(webDriver);
         providerCreatePage.createProviderWithLogin(testProvider.getProviderId(), testProvider.getPassword());
 
