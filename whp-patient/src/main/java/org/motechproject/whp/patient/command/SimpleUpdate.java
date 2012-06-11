@@ -28,7 +28,6 @@ public class SimpleUpdate extends UpdateCommand {
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
             Patient updatedPatient = mapUpdates(patientRequest, patient);
-            updatedPatient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
             allPatients.update(updatedPatient);
         } else {
             throw new WHPRuntimeException(errorCodes);
