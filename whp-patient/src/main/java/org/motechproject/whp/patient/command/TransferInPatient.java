@@ -54,6 +54,6 @@ public class TransferInPatient extends TreatmentUpdate {
 
     private boolean notOfSameTreatmentCategory(Patient patient, PatientRequest patientRequest) {
         Therapy latestTherapy = patient.latestTherapy();
-        return !latestTherapy.getTreatmentCategory().equals(patientRequest.getTreatment_category());
+        return patientRequest.getTreatment_category() != null && !latestTherapy.getTreatmentCategory().equals(patientRequest.getTreatment_category());
     }
 }

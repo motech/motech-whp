@@ -92,9 +92,7 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id(CASE_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id(NEW_TB_ID);
-        patientRequest.setDisease_class(DiseaseClass.P);
-        patientRequest.setTreatment_category(category01);
-        patientRequest.setPatient_type(PatientType.Chronic);
+        patientRequest.setPatient_type(PatientType.TransferredIn);
         return this;
     }
 

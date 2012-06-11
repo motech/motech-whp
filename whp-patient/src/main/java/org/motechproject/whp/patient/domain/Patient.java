@@ -141,7 +141,7 @@ public class Patient extends MotechBaseDataObject {
         return latestTherapy().getPatientAge();
     }
 
-    public void reviveLastClosedTreatment() {
+    public void reviveLatestTherapy() {
         latestTherapy().revive();
     }
 
