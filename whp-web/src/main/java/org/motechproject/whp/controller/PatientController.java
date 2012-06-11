@@ -79,8 +79,6 @@ public class PatientController {
         return "patient/show";
     }
 
-
-
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)
     public String update(@RequestParam("patientId") String patientId, PatientDTO patientDTO, HttpServletRequest httpServletRequest) {
         Patient updatedPatient = patientDTO.mapNewPhaseInfoToPatient(allPatients.findByPatientId(patientId));

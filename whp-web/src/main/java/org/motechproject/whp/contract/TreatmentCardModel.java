@@ -24,6 +24,7 @@ public class TreatmentCardModel {
     private List<MonthlyAdherence> monthlyAdherences = new ArrayList<MonthlyAdherence>();
     private List<String> providerColorCodes = asList("red", "blue", "green", "orange", "purple", "brown", "black", "yellow", "olive", "cyan");
     private List<String> providerIds = new ArrayList<String>();
+
     public TreatmentCardModel() {
     }
 
@@ -43,9 +44,9 @@ public class TreatmentCardModel {
         return newlyAddedMonthlyAdherence;
     }
 
-    public void addAdherenceDatum(LocalDate doseDate, int status,String providerId,boolean adherenceCapturedDuringPausedPeriod) {
+    public void addAdherenceDatum(LocalDate doseDate, int status, String providerId, boolean adherenceCapturedDuringPausedPeriod) {
         MonthlyAdherence monthlyAdherence = getMonthAdherence(doseDate);
-        monthlyAdherence.getLogs().add(new DailyAdherence(doseDate.getDayOfMonth(), status,providerId,adherenceCapturedDuringPausedPeriod));
+        monthlyAdherence.getLogs().add(new DailyAdherence(doseDate.getDayOfMonth(), status, providerId, adherenceCapturedDuringPausedPeriod));
     }
 
     public void addAdherenceData(LocalDate startDate, LocalDate endDate, List<AdherenceData> adherenceData, List<DayOfWeek> patientPillDays, TreatmentInterruptions interruptions) {
@@ -56,13 +57,13 @@ public class TreatmentCardModel {
             if (adherenceDates.contains(doseDate)) {
                 AdherenceData log = adherenceData.get(adherenceDates.indexOf(doseDate));
                 String providerId = log.meta().get(AdherenceConstants.PROVIDER_ID).toString();
-                addAdherenceDatum(doseDate, log.status(), providerId,doseDateInPausedPeriod);
-                if(!providerIds.contains(providerId))
+                addAdherenceDatum(doseDate, log.status(), providerId, doseDateInPausedPeriod);
+                if (!providerIds.contains(providerId))
                     providerIds.add(providerId);
 
             } else {
                 if (patientPillDays.contains(DayOfWeek.getDayOfWeek(doseDate))) {
-                    addAdherenceDatum(doseDate, PillStatus.Unknown.getStatus(),"",doseDateInPausedPeriod);
+                    addAdherenceDatum(doseDate, PillStatus.Unknown.getStatus(), "", doseDateInPausedPeriod);
                 }
             }
         }
@@ -71,7 +72,7 @@ public class TreatmentCardModel {
     private boolean isDoseDateInPausedPeriod(LocalDate doseDate, TreatmentInterruptions interruptions) {
         boolean isIt = false;
         for (TreatmentInterruption interruption : interruptions) {
-            if (isDoseDateInInterruptionPeriod(doseDate, interruption)){
+            if (isDoseDateInInterruptionPeriod(doseDate, interruption)) {
                 isIt = true;
                 break;
             }

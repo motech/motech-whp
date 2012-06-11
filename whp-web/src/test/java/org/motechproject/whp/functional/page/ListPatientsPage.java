@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,6 +23,9 @@ public class ListPatientsPage extends LoggedInUserPage {
 
     @FindBy(how = How.CLASS_NAME, using = "category")
     protected List<WebElement> categories;
+
+    @FindBy(how = How.CLASS_NAME, using = "patient_adherence")
+    private List<WebElement> dashboardLinks;
 
     public ListPatientsPage(WebDriver webDriver) {
         super(webDriver);
@@ -58,6 +62,18 @@ public class ListPatientsPage extends LoggedInUserPage {
 
     public boolean isPatientTreatmentPaused(String patientId) {
         return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").equals("rgb(255, 182, 193)");
+    }
+
+    public PatientDashboardPage clickEditAdherenceForPatient(String patientId) {
+        int index = -1;
+        for (int i = 0; i < patientIds.size(); i++) {
+            if (patientIds.get(i).getText().equals(patientId)) {
+                index = i;
+                break;
+            }
+        }
+        dashboardLinks.get(index).findElement(By.linkText("Edit")).click();
+        return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }
 
     public boolean hasTbId(String tbId) {

@@ -30,7 +30,7 @@
     </table>
     </div>
 
-    <table class="table table-bordered table-condensed fixed sharp disable-select">
+    <table id="IPTreatmentCard" class="table table-bordered table-condensed fixed sharp disable-select">
         <thead>
         <tr>
             <th>Month/Year</th>
@@ -59,14 +59,18 @@
                         <#if dailyAdherence.day == day>
                             <#assign drawn = true/>
                             <td class=
-                            <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            <#else> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            </#if>
-                            providerId = ${dailyAdherence.providerId}>
-                            <#if dailyAdherence.pillStatus == 1> &#252;
-                            <#elseif dailyAdherence.pillStatus == 2> &#251;
-                            </#if>
+                                <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <#else> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                </#if>
+                                id="${day} ${monthlyAdherence.monthAndYear}"
+                                dayOfMonth="${day}"
+                                monthStartDate="${monthlyAdherence.monthStartDate}"
+                                pillStatus="${dailyAdherence.pillStatus}"
+                                providerId = ${dailyAdherence.providerId}>
+                                <#if dailyAdherence.pillStatus == 1> &#252;
+                                <#elseif dailyAdherence.pillStatus == 2> &#251;
+                                </#if>
                             </td>
                             <#break/>
                         </#if>
@@ -76,7 +80,7 @@
                             <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
                             <#else>"bg-gray ${isItASunday}"
                             </#if>
-                            >
+                            id="${day} ${monthlyAdherence.monthAndYear}">
                         <div/>
                         </td>
                     </#if>
@@ -138,19 +142,24 @@
             if ($(this).hasClass('tick-icon')) {
                 $(this).removeClass('tick-icon');
                 $(this).addClass('cross-icon');
+                $(this).attr('pillStatus', '2');
                 $(this).html('&#251;');
             }
             else if ($(this).hasClass('cross-icon')) {
                 $(this).removeClass('cross-icon');
                 $(this).addClass('round-icon');
+                $(this).attr('pillStatus', '0');
                 $(this).text('');
             }
             else {
                 $(this).removeClass('round-icon');
                 $(this).addClass('tick-icon');
+                $(this).attr('pillStatus', '1');
                 $(this).html('&#252;');
             }
         });
+
+
     </script>
     </#if>
 </#macro>

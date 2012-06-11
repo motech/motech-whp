@@ -7,7 +7,6 @@ public class DailyAdherence {
     private int day;
     private int pillStatus;
     private boolean adherenceCapturedDuringPausedPeriod;
-
     private String providerId;
 
     public DailyAdherence(int day, int pillStatus, String providerId,boolean adherenceCapturedDuringPausedPeriod) {
