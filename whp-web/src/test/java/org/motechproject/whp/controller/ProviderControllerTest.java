@@ -3,17 +3,25 @@ package org.motechproject.whp.controller;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.motechproject.security.domain.MotechWebUser;
+import org.motechproject.security.domain.Role;
+import org.motechproject.security.domain.Roles;
+import org.motechproject.security.repository.AllMotechWebUsers;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.refdata.domain.WHPRole;
+import org.motechproject.whp.uimodel.ProviderRow;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
@@ -27,6 +35,8 @@ public class ProviderControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
+    private AllMotechWebUsers allMotechWebUsers;
+    @Mock
     private AllProviders allProviders;
     @Mock
     private AllCmfLocations allDistricts;
@@ -37,6 +47,10 @@ public class ProviderControllerTest {
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
     Provider providerAc = new Provider("ac", "9845678761", "district",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+
+    MotechWebUser providerWebUserAa;
+    MotechWebUser providerWebUserAb;
+    MotechWebUser providerWebUserAc;
 
     private ProviderController providerController;
     List<Provider> testProviders = new ArrayList<Provider>();
@@ -51,7 +65,18 @@ public class ProviderControllerTest {
         when(allProviders.findByProviderId("aa")).thenReturn(providerAa);
         when(allProviders.findByProviderId("ab")).thenReturn(providerAb);
         when(allProviders.findByProviderId("ac")).thenReturn(providerAc);
-        providerController = new ProviderController(allProviders, allDistricts);
+
+        providerAa.setId("aa");
+        providerAb.setId("ab");
+        providerAc.setId("ac");
+        providerWebUserAa = new MotechWebUser("aa", "password", providerAa.getId(), new Roles(asList(new Role[]{new Role(WHPRole.PROVIDER.name())})));
+        providerWebUserAb = new MotechWebUser("ab", "password", providerAb.getId(), new Roles(asList(new Role[]{new Role(WHPRole.PROVIDER.name())})));
+        providerWebUserAc = new MotechWebUser("ac", "password", providerAc.getId(), new Roles(asList(new Role[]{new Role(WHPRole.PROVIDER.name())})));
+        providerWebUserAa.setActive(true);
+        when(allMotechWebUsers.findByRoles(Matchers.<Role>any())).thenReturn(asList(new MotechWebUser[]{providerWebUserAa, providerWebUserAb, providerWebUserAc}));
+        providerWebUserAb.setActive(true);
+        providerWebUserAc.setActive(true);
+        providerController = new ProviderController(allProviders, allDistricts, allMotechWebUsers);
     }
 
     @Test
@@ -69,19 +94,27 @@ public class ProviderControllerTest {
     @Test
     public void shouldLoadProviderSearchPage_withAllProvidersByDefault() throws Exception {
         providerController.loadProviderSearchPage(uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(testProviders));
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
+    }
+
+    private List<ProviderRow> wrapIntoProviderRows(List<Provider> providers) {
+        List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
+        for(Provider provider : providers) {
+            providerRows.add(new ProviderRow(provider, true));
+        }
+        return providerRows;
     }
 
     @Test
     public void shouldListAllProviders_whenSearchedByNullOrEmptyStringAsProviderId() throws Exception {
         providerController.searchMatchingProviders(null, uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(testProviders));
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
     }
 
     @Test
     public void shouldListAllProviders_whenSearchedByEmptyStringAsProviderId() throws Exception {
         providerController.searchMatchingProviders("", uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(testProviders));
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
     }
 
     @Test
@@ -89,13 +122,13 @@ public class ProviderControllerTest {
         providerController.searchMatchingProviders("ab", uiModel);
         List<Provider> matchingProviders = new ArrayList<Provider>();
         matchingProviders.add(providerAb);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(matchingProviders));
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(matchingProviders)));
     }
 
     @Test
     public void shouldNotListAnything_whenSearchedByInvalidProviderId() throws Exception {
         providerController.searchMatchingProviders("doesNotExist", uiModel);
-        List<Provider> matchingProviders = new ArrayList<Provider>();
+        List<ProviderRow> matchingProviders = new ArrayList<ProviderRow>();
         verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(matchingProviders));
     }
 }

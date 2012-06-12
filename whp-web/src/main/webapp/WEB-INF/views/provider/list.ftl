@@ -44,18 +44,19 @@
                 <th>Primary Mobile Number</th>
                 <th>Secondary Mobile Number</th>
                 <th>Tertiary Mobile Number</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
             <#if providerList?size == 0>
                 <tr>
-                    <td style="text-align: center" colspan="5">No providers to show</td>
+                    <td style="text-align: center" colspan="6">No providers to show</td>
                 </tr>
             <#else>
                 <#list providerList as provider>
                     <tr id="providerList_${provider.providerId}">
-                        <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId?cap_first}</td>
-                        <td id="provider_${provider.providerId}_District">${provider.district}</td>
+                        <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId}</td>
+                        <td id="provider_${provider.providerId}_District">${provider.district?cap_first}</td>
                         <td id="provider_${provider.providerId}_PrimaryMobile">
                             <#if provider.primaryMobile?exists>
                             ${provider.primaryMobile}
@@ -69,6 +70,13 @@
                         <td id="provider_${provider.providerId}_TertiaryMobile">
                             <#if provider.tertiaryMobile?exists>
                             ${provider.tertiaryMobile}
+                            </#if>
+                        </td>
+                        <td id="provider_${provider.providerId}_Status">
+                            <#if provider.active>
+                            Active
+                                <#else>
+                                Inactive
                             </#if>
                         </td>
                     </tr>
