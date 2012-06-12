@@ -22,7 +22,7 @@ import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
 public class TreatmentCardModel {
 
     private List<MonthlyAdherence> monthlyAdherences = new ArrayList<MonthlyAdherence>();
-    private List<String> providerColorCodes = asList("red", "blue", "green", "orange", "purple", "brown", "black", "yellow", "olive", "cyan");
+    private List<String> providerColorCodes = asList("blue", "green", "orange", "brown", "purple", "rosyBrown", "olive", "salmon", "cyan", "red");
     private List<String> providerIds = new ArrayList<String>();
     private boolean isSundayDoseDate;
 
