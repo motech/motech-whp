@@ -18,16 +18,14 @@
 
     <mvc:annotation-driven/>
 
-    <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/" />
+    <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
 
     <mvc:default-servlet-handler/>
 
     <!-- Configures Handler Interceptors -->
     <mvc:interceptors>
         <!-- This bit of XML will intercept all URLs - which is what you want in a web app -->
-        <bean class="org.motechproject.flash.FlashScopeFilter" />
-
-        <bean class="org.motechproject.whp.interceptor.PropertyInjectorInterceptor" />
+        <bean class="org.motechproject.flash.FlashScopeFilter"/>
 
         <bean id="staticContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
             <property name="cacheSeconds" value="0"/>
@@ -48,6 +46,11 @@
     <!-- Freemarker config -->
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="applicationVersion" value="#{whpProperties['application.version']}"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
