@@ -57,7 +57,7 @@ public class ImportPatientRequestMapperTest {
 
     @Before
     public void setup() {
-        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 22, 36, 66, Arrays.asList(DayOfWeek.Monday));
+        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 36, 4, 12, 22, 66, Arrays.asList(DayOfWeek.Monday));
         allTreatmentCategories.add(treatmentCategory);
     }
 

@@ -16,10 +16,13 @@ public class TreatmentCategory extends MotechBaseDataObject {
 
     private Integer dosesPerWeek;
 
-    private Integer numberOfWeeksOfIP;
-    private Integer numberOfWeeksOfCP;
-
     private Integer numberOfDosesInIP;
+    private Integer numberOfWeeksOfIP;
+
+    private Integer numberOfWeeksOfEIP;
+    private Integer numberOfDosesInEIP;
+
+    private Integer numberOfWeeksOfCP;
     private Integer numberOfDosesInCP;
 
     private List<DayOfWeek> pillDays;
@@ -28,14 +31,18 @@ public class TreatmentCategory extends MotechBaseDataObject {
     }
 
     public TreatmentCategory(String name, String code, Integer dosesPerWeek,
-                             Integer numberOfWeeksOfIP, Integer numberOfWeeksOfCP,
-                             Integer numberOfDosesInIP, Integer numberOfDosesInCP, List<DayOfWeek> pillDays) {
+                             Integer numberOfWeeksOfIP, Integer numberOfDosesInIP,
+                             Integer numberOfWeeksOfEIP, Integer numberOfDosesInEIP,
+                             Integer numberOfWeeksOfCP, Integer numberOfDosesInCP,
+                             List<DayOfWeek> pillDays) {
         this.name = name;
         this.code = code;
         this.dosesPerWeek = dosesPerWeek;
         this.numberOfWeeksOfIP = numberOfWeeksOfIP;
-        this.numberOfWeeksOfCP = numberOfWeeksOfCP;
         this.numberOfDosesInIP = numberOfDosesInIP;
+        this.numberOfWeeksOfEIP = numberOfWeeksOfEIP;
+        this.numberOfDosesInEIP = numberOfDosesInEIP;
+        this.numberOfWeeksOfCP = numberOfWeeksOfCP;
         this.numberOfDosesInCP = numberOfDosesInCP;
         this.pillDays = pillDays;
     }

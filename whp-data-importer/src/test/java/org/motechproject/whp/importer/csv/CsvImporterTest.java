@@ -50,8 +50,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
     public void setUp() {
         allPatients.removeAll();
         allProviders.removeAll();
-        allTreatmentCategories.add(new TreatmentCategory("test1", "01", 3, 3, 3, 9, 9, null));
-        allTreatmentCategories.add(new TreatmentCategory("test2", "02", 3, 3, 3, 9, 9, null));
+        allTreatmentCategories.add(new TreatmentCategory("test1", "01", 3, 3, 9, 4, 12, 3, 9, null));
+        allTreatmentCategories.add(new TreatmentCategory("test2", "02", 3, 3, 9, 4, 12, 3, 9, null));
     }
 
     @Test
@@ -209,7 +209,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         patient2.setFirstName("first");
         patient2.setLastName("last");
         patient2.setMigrated(false);
-        patient2.setPhi("blah");
+        patient2.setPhi("12");
         patient2.setPhoneNumber("00");
         Treatment treatment = patient2.getCurrentTreatment();
         treatment.setProviderId("providerId");

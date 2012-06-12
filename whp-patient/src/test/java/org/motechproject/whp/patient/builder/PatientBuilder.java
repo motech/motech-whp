@@ -48,7 +48,7 @@ public class PatientBuilder {
 
     private Therapy defaultTherapy() {
         Therapy therapy = new Therapy();
-        therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, threeDaysAWeek));
+        therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);
         return therapy;
     }

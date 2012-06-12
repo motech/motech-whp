@@ -18,8 +18,8 @@ public class PatientRequestBuilder {
     public static final String CASE_ID = "caseid";
     public static final String NEW_TB_ID = "newtbid";
     public static final String NEW_PROVIDER_ID = "newproviderid";
-    protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
-    protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
+    protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
+    protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday));
 
     private PatientRequest patientRequest = new PatientRequest();
 
