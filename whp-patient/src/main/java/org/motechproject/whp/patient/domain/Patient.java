@@ -16,6 +16,8 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrAfter;
+
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
 public class Patient extends MotechBaseDataObject {
@@ -149,6 +151,38 @@ public class Patient extends MotechBaseDataObject {
             interruptions.addAll(treatment.getInterruptions());
         }
         return interruptions;
+    }
+
+    @JsonIgnore
+    public Treatment getTreatmentForDateInTherapy(LocalDate date, String therapyDocId) {
+        /* A treatment not closed is treated as the last treatment extending to the end of IP
+             - this can only be the last treatment (there cannot be 2 open treatments) */
+
+        if (currentTreatment.getTherapyDocId().equals(therapyDocId)
+                && isOnOrAfter(date, currentTreatment.getStartDate())) {
+            return currentTreatment;
+        }
+
+        List<Treatment> treatments = allTreatmentsChronologically();
+
+        /* Not including last treatment as that check has already been made at the start */
+        for (int i = 0; i < treatments.size() - 1; i++) {
+            Treatment treatment = treatments.get(i);
+            if (treatment.getTherapyDocId().equals(therapyDocId)
+                    && isOnOrAfter(date, treatment.getStartDate())
+                    && date.isBefore(treatments.get(i + 1).getStartDate())) {
+                return treatment;
+            }
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public List<Treatment> allTreatmentsChronologically() {
+        List<Treatment> treatments = new ArrayList<Treatment>();
+        treatments.addAll(this.treatments);
+        treatments.add(currentTreatment);
+        return treatments;
     }
 
     public void reviveLastClosedTreatment() {

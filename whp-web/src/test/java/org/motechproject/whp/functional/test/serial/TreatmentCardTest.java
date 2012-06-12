@@ -103,11 +103,11 @@ public class TreatmentCardTest extends BaseTest {
         assertAdherenceDataOn(patientDashboardPage, "1", provider.getProviderId(), new LocalDate(2012, 7, 25));
         assertAdherenceDataOn(patientDashboardPage, "1", provider.getProviderId(), new LocalDate(2012, 7, 27));
 
-        /* Asserting on blank adherence data that was not given by provider */
+        /* Asserting on blank adherence data */
 
-        assertAdherenceDataOn(patientDashboardPage, "0", "", new LocalDate(2012, 7, 16));
-        assertAdherenceDataOn(patientDashboardPage, "0", "", new LocalDate(2012, 7, 18));
-        assertAdherenceDataOn(patientDashboardPage, "0", "", new LocalDate(2012, 7, 20));
+        assertAdherenceDataOn(patientDashboardPage, "0", provider.getProviderId(), new LocalDate(2012, 7, 16));
+        assertAdherenceDataOn(patientDashboardPage, "0", provider.getProviderId(), new LocalDate(2012, 7, 18));
+        assertAdherenceDataOn(patientDashboardPage, "0", provider.getProviderId(), new LocalDate(2012, 7, 20));
 
         /* Asserting on dates that are not editable */
 

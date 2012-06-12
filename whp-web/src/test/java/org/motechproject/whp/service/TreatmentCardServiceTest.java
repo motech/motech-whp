@@ -56,6 +56,10 @@ public class TreatmentCardServiceTest {
     private Patient createPatientOn3DayAWeekTreatmentCategory(String externalId, LocalDate therapyStartDate) {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(externalId).build();
         patient.startTherapy(therapyStartDate);
+        patient.latestTherapy().setId("1");
+        patient.getCurrentTreatment().setTherapyDocId("1");
+        patient.getCurrentTreatment().getTherapy().setId("1");
+        patient.getCurrentTreatment().setStartDate(therapyStartDate);
         return patient;
     }
 

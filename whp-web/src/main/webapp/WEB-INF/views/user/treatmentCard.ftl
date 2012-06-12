@@ -19,7 +19,9 @@
         <#list treatmentCard.providerIds as providerId>
         <tr>
             <td>
-                <div class="windings-font" providerId=${providerId}> &#252; &#251;</div>
+                <div class="windings-font pull-left" providerId=${providerId}> &#10003; </div>
+                <div class="pull-left"> , &nbsp; </div>
+                <div class="legend-round-icon" providerId=${providerId}>O </div>
             </td>
             <td>
                 <div class="text-center text-center">Adherence given by provider ${providerId}</div>
@@ -60,17 +62,22 @@
                             <#assign drawn = true/>
                             <td class=
                                 <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                                <#elseif dailyAdherence.pillStatus == 2> "cross-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                                <#else> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <#elseif dailyAdherence.pillStatus == 2> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <#elseif dailyAdherence.futureAdherence == true> "editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                                 </#if>
                                 id="${day} ${monthlyAdherence.monthAndYear}"
                                 dayOfMonth="${day}"
                                 monthStartDate="${monthlyAdherence.monthStartDate}"
                                 pillStatus="${dailyAdherence.pillStatus}"
                                 providerId = ${dailyAdherence.providerId}>
-                                <#if dailyAdherence.pillStatus == 1> &#252;
-                                <#elseif dailyAdherence.pillStatus == 2> &#251;
-                                </#if>
+                                <div>
+                                    <#if dailyAdherence.pillStatus == 1> &#10003;
+                                    <#elseif dailyAdherence.pillStatus == 2> O
+                                    <#elseif dailyAdherence.futureAdherence == true>
+                                    <#else> -
+                                    </#if>
+                                </div>
                             </td>
                             <#break/>
                         </#if>
@@ -81,7 +88,11 @@
                             <#else>"bg-gray ${isItASunday}"
                             </#if>
                             id="${day} ${monthlyAdherence.monthAndYear}">
-                        <div/>
+                            <div class="watermarked-sunday">
+                                <#if isItASunday == 'sunday'>
+                                    S
+                                </#if>
+                            </div>
                         </td>
                     </#if>
                 </#list>
@@ -116,7 +127,7 @@
         <!--Tooltips to show provider information and dose status-->
 
         function annotate(){
-            $('.tick-icon, .cross-icon').each(function(){
+            $('.tick-icon, .round-icon').each(function(){
                 var providerId = $(this).attr('providerId');
                 if(!providerId) {
                     providerId = "CMF Admin";
@@ -125,7 +136,7 @@
                 if ($(this).hasClass('tick-icon')) {
                     pillStatus = "Taken."
                 }
-                else if ($(this).hasClass('cross-icon')) {
+                else if ($(this).hasClass('round-icon')) {
                     pillStatus = "Not Taken."
                 }
                 else {
@@ -141,21 +152,21 @@
         $('.editable').click(function () {
             if ($(this).hasClass('tick-icon')) {
                 $(this).removeClass('tick-icon');
-                $(this).addClass('cross-icon');
-                $(this).attr('pillStatus', '2');
-                $(this).html('&#251;');
-            }
-            else if ($(this).hasClass('cross-icon')) {
-                $(this).removeClass('cross-icon');
                 $(this).addClass('round-icon');
-                $(this).attr('pillStatus', '0');
-                $(this).text('');
+                $(this).attr('pillStatus', '2');
+                $(this).html('O');
             }
-            else {
+            else if ($(this).hasClass('round-icon')) {
                 $(this).removeClass('round-icon');
                 $(this).addClass('tick-icon');
                 $(this).attr('pillStatus', '1');
-                $(this).html('&#252;');
+                $(this).html('&#10003;');
+            }
+            else {
+                $(this).removeClass('dash-icon');
+                $(this).addClass('tick-icon');
+                $(this).attr('pillStatus', '1');
+                $(this).html('&#10003;');
             }
         });
 

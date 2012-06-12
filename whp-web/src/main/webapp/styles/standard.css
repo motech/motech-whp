@@ -114,9 +114,28 @@ body {
 }
 
 .tick-icon, .windings-font {
-    font-family: wingdings;
-    font-size: 150%;
+    font-weight: bold;
+    font-size: 175%;
 }
+.round-icon {
+    font-weight: bold;
+    font-size: 140%;
+}
+
+.legend-round-icon {
+    font-weight: bold;
+    font-size: 130%;
+}
+
+.tick-icon div, .round-icon div {
+    margin-left: -1px;
+}
+
+.dash-icon{
+    font-family: Arial;
+    font-size: 200%;
+}
+
 .disable-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -125,16 +144,17 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
-.cross-icon{
-    font-family: wingdings;
-    font-size: 150%;
-}
 
 .editable {
     cursor: pointer
 }
-.sunday div {
-    border: 3px coral groove;
+.watermarked-sunday{
+    color: black;
+    font-weight: bold;
+}
+
+.sunday div{
+    border: 3px black solid;
     width: 22px;
     height: 22px;
     margin-left: -6px;
@@ -142,12 +162,16 @@ body {
     padding: 0px;
     margin-bottom: -5px;
     margin-right: -6px;
+    line-height: 21px;
 }
 
 .bg-gray{
-    background-color: #cccccc;
+    background: url('../img/grey-dot.png') repeat 0 0;
 }
 
 .pausedAdherenceData{
     background-color: #F5F508;
+}
+.float-right {
+ float:right;
 }

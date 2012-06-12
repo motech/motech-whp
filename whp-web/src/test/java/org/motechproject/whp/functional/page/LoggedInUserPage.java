@@ -59,7 +59,7 @@ public class LoggedInUserPage extends Page {
         waitForElementWithIdToLoad(CURRENT_PASSWORD_ID);
 
         /* Fade In time for modal */
-        Thread.sleep(200);
+        Thread.sleep(2000);
 
         return this;
     }

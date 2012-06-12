@@ -6,6 +6,7 @@ import org.motechproject.whp.patient.util.WHPDateUtil;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WHPDateUtilTest {
 
@@ -62,5 +63,17 @@ public class WHPDateUtilTest {
         assertEquals(30, WHPDateUtil.findNumberOfDays(11, 2012));
         //december
         assertEquals(31, WHPDateUtil.findNumberOfDays(12, 2012));
+    }
+
+    @Test
+    public void testIfDateIsOnOrAfterAnotherDate() {
+        assertTrue(WHPDateUtil.isOnOrAfter(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 2)));
+        assertTrue(WHPDateUtil.isOnOrAfter(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 3)));
+    }
+
+    @Test
+    public void testIfDateIsOnOrBeforeAnotherDate() {
+        assertTrue(WHPDateUtil.isOnOrBefore(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 4)));
+        assertTrue(WHPDateUtil.isOnOrBefore(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 3)));
     }
 }

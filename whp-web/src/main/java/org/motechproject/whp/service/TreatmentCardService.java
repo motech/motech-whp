@@ -1,9 +1,9 @@
 package org.motechproject.whp.service;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class TreatmentCardService {
             LocalDate endDate = ipStartDate.plusMonths(5);
 
             List<AdherenceData> adherenceData = allAdherenceLogs.findLogsInRange(patient.getPatientId(), ipStartDate, endDate);
-            List<DayOfWeek> patientPillDays = patient.latestTherapy().getTreatmentCategory().getPillDays();
-            ipTreatmentCard.addAdherenceData(ipStartDate, endDate, adherenceData, patientPillDays, patient.getAllTreatmentInterruptions());
+            Period period = new Period().withMonths(5);
+            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), period);
 
             return ipTreatmentCard;
         }
