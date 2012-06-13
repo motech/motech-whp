@@ -36,7 +36,9 @@ public class RegistrationService {
     public void registerProvider(ProviderRequest providerRequest) {
         boolean providerAlreadyExists = providerService.hasProvider(providerRequest.getProviderId());
 
-        String providerDocId = providerService.createProvider(providerRequest.getProviderId(),
+        String providerId = providerRequest.getProviderId().toLowerCase();
+
+        String providerDocId = providerService.createProvider(providerId,
                 providerRequest.getPrimaryMobile(),
                 providerRequest.getSecondaryMobile(),
                 providerRequest.getTertiaryMobile(),
@@ -44,7 +46,7 @@ public class RegistrationService {
                 providerRequest.getLastModifiedDate());
         if(!providerAlreadyExists) {
             try {
-                motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+                motechAuthenticationService.register(providerId, "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
             } catch (Exception e) {
                 throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR, e.getMessage());
             }

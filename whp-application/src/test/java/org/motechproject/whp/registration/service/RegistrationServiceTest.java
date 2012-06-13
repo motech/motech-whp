@@ -11,10 +11,12 @@ import org.motechproject.whp.patient.contract.ProviderRequest;
 import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.ProviderService;
+import org.motechproject.whp.refdata.domain.WHPRole;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -37,7 +39,7 @@ public class RegistrationServiceTest {
 
     @Test
     public void shouldRegisterUserAsInactiveByDefault() {
-        ProviderRequest providerRequest = new ProviderRequest("providerId", "district", "1111111111", DateUtil.now());
+        ProviderRequest providerRequest = new ProviderRequest("providerid", "district", "1111111111", DateUtil.now());
         String externalId = "externalId";
         when(providerService.createProvider(Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<DateTime>any())).thenReturn(externalId);
         registrationService.registerProvider(providerRequest);
@@ -47,17 +49,16 @@ public class RegistrationServiceTest {
 
     @Test(expected = WHPRuntimeException.class)
     public void shouldThrowWhpRunTimeExceptionIfRegisterThrowsException() {
-        ProviderRequest providerRequest = new ProviderRequest("providerId", "district", "1111111111", DateUtil.now());
+        ProviderRequest providerRequest = new ProviderRequest("providerid", "district", "1111111111", DateUtil.now());
         String externalId = "externalId";
         when(providerService.createProvider(Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<String>any(), Matchers.<DateTime>any())).thenReturn(externalId);
-        doThrow(new RuntimeException("Exception to be thrown for test")).when(motechAuthenticationService).register(providerRequest.getProviderId(),"password",externalId,Arrays.asList("PROVIDER"), false);
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(motechAuthenticationService).register(providerRequest.getProviderId(), "password", externalId, Arrays.asList("PROVIDER"), false);
         registrationService.registerProvider(providerRequest);
     }
 
     @Test
     public void registerProviderShouldNotCreateWebAccountIfProviderAlreadyExists() {
-
-        String providerId = "providerId";
+        String providerId = "providerid";
         DateTime modifiedDate = DateUtil.now();
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "1111111111", modifiedDate);
 
@@ -65,7 +66,21 @@ public class RegistrationServiceTest {
 
         registrationService.registerProvider(providerRequest);
 
-        verify(motechAuthenticationService,never()).register(anyString(),anyString(),anyString(),any(List.class));
-        verify(providerService,times(1)).createProvider(providerId, providerRequest.getPrimaryMobile(), providerRequest.getSecondaryMobile(), providerRequest.getTertiaryMobile(), providerRequest.getDistrict(),modifiedDate);
+        verify(motechAuthenticationService, never()).register(anyString(),anyString(),anyString(),any(List.class),anyBoolean());
+        verify(providerService,times(1)).createProvider(providerId, providerRequest.getPrimaryMobile(), providerRequest.getSecondaryMobile(), providerRequest.getTertiaryMobile(), providerRequest.getDistrict(), modifiedDate);
+    }
+    
+    @Test
+    public void shouldSaveProviderIdInLowercase() {
+        String providerId = "providerId";
+        DateTime modifiedDate = DateUtil.now();
+        ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "1111111111", modifiedDate);
+
+        when(providerService.createProvider("providerid", providerRequest.getPrimaryMobile(), providerRequest.getSecondaryMobile(), providerRequest.getTertiaryMobile(), providerRequest.getDistrict(), modifiedDate)).thenReturn("docId");
+        registrationService.registerProvider(providerRequest);
+
+        verify(motechAuthenticationService, times(1)).register("providerid", "password", "docId", asList(WHPRole.PROVIDER.name()), false);
+        verify(providerService,times(1)).createProvider("providerid", providerRequest.getPrimaryMobile(), providerRequest.getSecondaryMobile(), providerRequest.getTertiaryMobile(), providerRequest.getDistrict(), modifiedDate);
+        
     }
 }
