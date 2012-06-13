@@ -40,7 +40,7 @@
 
     </http>
 
-    <beans:bean id="loginFailureHandler" class="org.motechproject.security.LoginFailureHandler">
+    <beans:bean id="loginFailureHandler" class="org.motechproject.security.authentication.LoginFailureHandler">
         <beans:constructor-arg value="/login?login_error=t"></beans:constructor-arg>
     </beans:bean>
 
@@ -48,7 +48,7 @@
         <authentication-provider ref="authenticationProvider"/>
     </authentication-manager>
 
-    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint" class="org.motechproject.security.AjaxAwareAuthenticationEntryPoint">
+    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint" class="org.motechproject.security.authentication.AjaxAwareAuthenticationEntryPoint">
         <beans:property name="loginFormUrl" value="/login"/>
         <beans:property name="forceHttps" value="false"/>
     </beans:bean>
