@@ -12,7 +12,6 @@ import org.motechproject.whp.patient.domain.CmfAdmin;
 import org.motechproject.whp.patient.domain.CmfLocation;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.refdata.domain.WHPRole;
 import org.motechproject.whp.service.CmfAdminService;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
@@ -60,10 +59,6 @@ public class CmfAdminControllerTest {
         ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
         verify(cmfAdminService,times(1)).add(argumentCaptor.capture(),passwordCaptor.capture());
         assertEquals(argumentCaptor.getValue().getUserId(), request.getUserId());
-        assertEquals("password",argumentCaptor.getValue());
-        verify(motechAuthenticationService,times(1)).register(request.getUserId(), request.getPassword(), null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
-
-
         assertEquals("Successfully created cmf admin with user id "+ request.getUserId(), uiModel.get("message"));
     }
 
