@@ -22,7 +22,7 @@ public class AllCmfLocations extends MotechBaseRepository<CmfLocation> {
 
    public void addOrReplace(CmfLocation location) {
         try {
-            addOrReplace(location, "location", location.getLocation());
+            super.addOrReplace(location, "location", location.getLocation());
         } catch (BusinessIdNotUniqueException e) {
             throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_PROVIDER_ID);
         }

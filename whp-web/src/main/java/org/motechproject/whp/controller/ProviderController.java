@@ -1,7 +1,6 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.security.domain.MotechWebUser;
-import org.motechproject.security.domain.Role;
 import org.motechproject.security.repository.AllMotechWebUsers;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
@@ -54,7 +53,7 @@ public class ProviderController {
     }
 
     private Set<MotechWebUser> fetchAllProviderWebUsers() {
-        return new HashSet<MotechWebUser>(allMotechWebUsers.findByRoles(new Role(WHPRole.PROVIDER.name())));
+        return new HashSet<MotechWebUser>(allMotechWebUsers.findByRole(WHPRole.PROVIDER.name()));
     }
 
     private List<Provider> filterByProviderId(String providerId) {

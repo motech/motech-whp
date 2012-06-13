@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.motechproject.export.annotation.Report;
 import org.motechproject.export.annotation.ReportGroup;
 import org.motechproject.flash.Flash;
-import org.motechproject.security.domain.AuthenticatedUser;
+import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -60,10 +60,10 @@ public class AdherenceController extends BaseController {
                          WeeklyAdherenceForm weeklyAdherenceForm,
                          HttpServletRequest httpServletRequest) {
 
-        AuthenticatedUser authenticatedUser = loggedInUser(httpServletRequest);
+        MotechWebUser authenticatedUser = loggedInUser(httpServletRequest);
         TreatmentCategory category = allTreatmentCategories.findByCode(categoryCode);
 
-        AuditParams auditParams = new AuditParams(authenticatedUser.getUsername(), AdherenceSource.WEB, remarks);
+        AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
         adherenceService.recordAdherence(patientId, weeklyAdherenceForm.weeklyAdherence(category), auditParams);
         Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";

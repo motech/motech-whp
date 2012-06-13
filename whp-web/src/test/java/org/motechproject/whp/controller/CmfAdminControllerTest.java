@@ -10,10 +10,10 @@ import org.motechproject.whp.builder.CmfAdminWebRequestBuilder;
 import org.motechproject.whp.contract.CmfAdminWebRequest;
 import org.motechproject.whp.patient.domain.CmfAdmin;
 import org.motechproject.whp.patient.domain.CmfLocation;
-import org.motechproject.whp.patient.repository.AllCmfAdmins;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPRole;
+import org.motechproject.whp.service.CmfAdminService;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
 import org.springframework.validation.support.BindingAwareModelMap;
@@ -30,7 +30,7 @@ public class CmfAdminControllerTest {
     @Mock
     AllProviders allProviders;
     @Mock
-    AllCmfAdmins allCmfAdmins;
+    CmfAdminService cmfAdminService;
     @Mock
     AllCmfLocations allCmfLocations;
 
@@ -43,7 +43,7 @@ public class CmfAdminControllerTest {
     @Before
     public void setup() {
        initMocks(this);
-       itAdminController = new CmfAdminController(allCmfLocations,allCmfAdmins,allProviders,motechAuthenticationService);
+       itAdminController = new CmfAdminController(allCmfLocations, cmfAdminService,allProviders,motechAuthenticationService);
     }
 
     @Test
@@ -54,26 +54,28 @@ public class CmfAdminControllerTest {
         when(allCmfLocations.findByLocation(request.getLocation())).thenReturn(new CmfLocation(request.getLocation()));
         when(allCmfLocations.getAll()).thenReturn(Arrays.asList(new CmfLocation("Delhi"), new CmfLocation("Patna")));
 
-        itAdminController.createCmfAdmin(request,bindingResult, uiModel);
+        itAdminController.create(request, bindingResult, uiModel);
 
         ArgumentCaptor<CmfAdmin> argumentCaptor = ArgumentCaptor.forClass(CmfAdmin.class);
-        verify(allCmfAdmins,times(1)).addOrReplace(argumentCaptor.capture());
-        assertEquals(argumentCaptor.getValue().getUserId(),request.getUserId());
-        verify(motechAuthenticationService,times(1)).register(request.getUserId(),request.getPassword(),null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+        verify(cmfAdminService,times(1)).add(argumentCaptor.capture(),passwordCaptor.capture());
+        assertEquals(argumentCaptor.getValue().getUserId(), request.getUserId());
+        assertEquals("password",argumentCaptor.getValue());
+        verify(motechAuthenticationService,times(1)).register(request.getUserId(), request.getPassword(), null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
 
 
         assertEquals("Successfully created cmf admin with user id "+ request.getUserId(), uiModel.get("message"));
     }
 
     @Test
-    public void shouldPopulateValidationErrorForUserId() {
+    public void shouldPopulateValidationErrorForUserId() throws WebSecurityException {
         CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withDefaults().build();
         BindingAwareModelMap uiModel = new BindingAwareModelMap();
         BindingResult bindingResult = new DirectFieldBindingResult(request,"account");
-        when(allCmfAdmins.findByUserId(request.getUserId())).thenReturn(new CmfAdmin());
+        when(motechAuthenticationService.hasUser(request.getUserId())).thenReturn(true);
         when(allCmfLocations.getAll()).thenReturn(Arrays.asList(new CmfLocation("Delhi"), new CmfLocation("Patna")));
 
-        String view = itAdminController.createCmfAdmin(request, bindingResult, uiModel);
+        String view = itAdminController.create(request, bindingResult, uiModel);
 
         assertInvalidRequestPage(request, uiModel, view);
 
@@ -84,13 +86,13 @@ public class CmfAdminControllerTest {
     }
 
     @Test
-    public void shouldPopulateValidationErrorForMismatchPassword() {
+    public void shouldPopulateValidationErrorForMismatchPassword() throws WebSecurityException {
         CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withUserName("test").withPassword("pwd1").withConfirmPassword("pwd2").build();
         BindingAwareModelMap uiModel = new BindingAwareModelMap();
         BindingResult bindingResult = new DirectFieldBindingResult(request,"account");
         when(allCmfLocations.getAll()).thenReturn(Arrays.asList(new CmfLocation("Delhi"), new CmfLocation("Patna")));
 
-        String view = itAdminController.createCmfAdmin(request, bindingResult, uiModel);
+        String view = itAdminController.create(request, bindingResult, uiModel);
 
         assertInvalidRequestPage(request, uiModel, view);
 
@@ -99,13 +101,13 @@ public class CmfAdminControllerTest {
     }
 
     @Test
-    public void shouldPopulateValidationErrorForLocation() {
+    public void shouldPopulateValidationErrorForLocation() throws WebSecurityException {
         CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withDefaults().build();
         BindingAwareModelMap uiModel = new BindingAwareModelMap();
         BindingResult bindingResult = new DirectFieldBindingResult(request,"account");
         when(allCmfLocations.getAll()).thenReturn(Arrays.asList(new CmfLocation("Delhi"), new CmfLocation("Patna")));
         when(allCmfLocations.findByLocation(request.getLocation())).thenReturn(null);
-        String view = itAdminController.createCmfAdmin(request, bindingResult, uiModel);
+        String view = itAdminController.create(request, bindingResult, uiModel);
 
         assertInvalidRequestPage(request, uiModel, view);
 
@@ -114,7 +116,7 @@ public class CmfAdminControllerTest {
     }
 
 
-    private void assertInvalidRequestPage(CmfAdminWebRequest request, BindingAwareModelMap uiModel, String view) {
+    private void assertInvalidRequestPage(CmfAdminWebRequest request, BindingAwareModelMap uiModel, String view) throws WebSecurityException {
         assertEquals("cmfadmin/create",view);
 
         List<String> locations = (List<String>)uiModel.get("locations");
@@ -123,7 +125,7 @@ public class CmfAdminControllerTest {
         CmfAdminWebRequest webRequest = (CmfAdminWebRequest)uiModel.get("account");
         assertEquals(request, webRequest);
 
-        verify(allCmfAdmins,never()).addOrReplace(any(CmfAdmin.class));
+        verify(cmfAdminService,never()).add(any(CmfAdmin.class), anyString());
     }
 
 

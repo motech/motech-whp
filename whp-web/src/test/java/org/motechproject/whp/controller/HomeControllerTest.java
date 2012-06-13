@@ -3,10 +3,8 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.security.LoginSuccessHandler;
-import org.motechproject.security.domain.AuthenticatedUser;
-import org.motechproject.security.domain.Role;
-import org.motechproject.security.domain.Roles;
+import org.motechproject.security.authentication.LoginSuccessHandler;
+import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
@@ -17,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -61,22 +60,22 @@ public class HomeControllerTest {
         assertEquals("redirect:/patients/all", homeController.homePage(request));
     }
 
-    private void login(AuthenticatedUser authenticatedUser) {
+    private void login(MotechWebUser authenticatedUser) {
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }
 
-    private AuthenticatedUser authenticatedUserFor(Provider provider) {
-        AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
+    private MotechWebUser authenticatedUserFor(Provider provider) {
+        MotechWebUser authenticatedUser = mock(MotechWebUser.class);
         when(authenticatedUser.getExternalId()).thenReturn(provider.getId());
-        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(WHPRole.PROVIDER.name()))));
+        when(authenticatedUser.getRoles()).thenReturn(asList(WHPRole.PROVIDER.name()));
         return authenticatedUser;
     }
 
-    private AuthenticatedUser authenticatedAdmin(WHPRole whpRole) {
-        AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-        when(authenticatedUser.getRoles()).thenReturn(new Roles(Arrays.asList(new Role(whpRole.name()))));
+    private MotechWebUser authenticatedAdmin(WHPRole whpRole) {
+        MotechWebUser authenticatedUser = mock(MotechWebUser.class);
+        when(authenticatedUser.getRoles()).thenReturn(Arrays.asList(whpRole.name()));
         return authenticatedUser;
     }
 

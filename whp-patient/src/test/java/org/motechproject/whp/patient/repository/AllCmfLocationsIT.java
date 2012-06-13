@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
@@ -34,7 +33,7 @@ public class AllCmfLocationsIT extends SpringIntegrationTest{
     }
     @Test
     public void shouldFindByLocation() {
-        allCmfLocations.addOrReplace(new CmfLocation("Delhi"));
-        assertNotNull(allCmfLocations.findByLocation("Delhi"));
+        allCmfLocations.add(new CmfLocation("Delhi"));
+        assertEquals(1,allCmfLocations.getAll().size());
     }
 }
