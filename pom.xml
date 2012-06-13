@@ -25,10 +25,10 @@
         <module>whp-patient</module>
         <module>whp-application</module>
         <module>whp-mapping</module>
-        <module>whp-web</module>
         <module>whp-adherence</module>
         <module>whp-validation</module>
         <module>whp-data-importer</module>
+        <module>whp-web</module>
     </modules>
 
     <repositories>

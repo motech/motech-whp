@@ -2,7 +2,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="production" class="org.apache.log4j.RollingFileAppender">
-        <param value="logs/whp.log" name="File"/>
+        <param value="${catalina.home}/logs/whp.log" name="File"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="4096KB"/>
         <param name="maxBackupIndex" value="5"/>
@@ -12,7 +12,7 @@
         </layout>
     </appender>
     <appender name="integration" class="org.apache.log4j.RollingFileAppender">
-        <param value="logs/whp-integration.log" name="File"/>
+        <param value="${catalina.home}/logs/whp-integration.log" name="File"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="4096KB"/>
         <param name="maxBackupIndex" value="5"/>
