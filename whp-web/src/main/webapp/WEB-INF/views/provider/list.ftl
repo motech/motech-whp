@@ -50,7 +50,9 @@
         <tbody>
             <#if providerList?size == 0>
                 <tr>
-                    <td style="text-align: center" colspan="6">No providers to show</td>
+                    <td class= "warning-text" style="text-align: center" colspan="6">
+                        No providers fetched with provider ID: '${queryProviderId}'
+                    </td>
                 </tr>
             <#else>
                 <#list providerList as provider>

@@ -42,9 +42,9 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         }
     }
 
-    @View(name = "list_alphabetically_sorted", map = "function(doc) {if (doc.type ==='Provider') {emit([doc.providerId, doc.district, doc.primaryMobile, doc.secondaryMobile, doc.tertiaryMobile], doc._id);}}")
+    @View(name = "list_district_sorted", map = "function(doc) {if (doc.type ==='Provider') {emit([doc.district, doc.providerId, doc.primaryMobile, doc.secondaryMobile, doc.tertiaryMobile], doc._id);}}")
     public List<Provider> list() {
-        ViewQuery q = createQuery("list_alphabetically_sorted").includeDocs(true);
+        ViewQuery q = createQuery("list_district_sorted").includeDocs(true);
         List<Provider> providers = db.queryView(q, Provider.class);
         return providers;
     }

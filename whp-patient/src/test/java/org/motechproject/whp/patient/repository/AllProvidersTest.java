@@ -51,19 +51,20 @@ public class AllProvidersTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldListAllProviders_alphabeticallySorted() {
+    public void shouldListAllProviders_alphabeticallySortedByDistrict() {
         List<Provider> testProviders = new ArrayList<Provider>();
-        provider = new Provider("aa", "984567876", "district",
+
+        provider = new Provider("ac", "984567876", "c",
                 DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         testProviders.add(provider);
         allProviders.add(provider);
 
-        provider = new Provider("ab", "984567876", "district",
+        provider = new Provider("ab", "984567876", "b",
                 DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         testProviders.add(provider);
         allProviders.add(provider);
 
-        provider = new Provider("ac", "984567876", "district",
+        provider = new Provider("aa", "984567876", "a",
                 DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         testProviders.add(provider);
         allProviders.add(provider);
@@ -71,9 +72,9 @@ public class AllProvidersTest extends SpringIntegrationTest {
         List<Provider> providers = allProviders.list();
         assertNotNull(providers);
         assertTrue(providers.containsAll(testProviders));
-        assertTrue(providers.indexOf(testProviders.get(0)) < providers.indexOf(testProviders.get(1)));
-        assertTrue(providers.indexOf(testProviders.get(1)) < providers.indexOf(testProviders.get(2)));
-        assertTrue(providers.indexOf(testProviders.get(0)) < providers.indexOf(testProviders.get(2)));
+        assertTrue(providers.indexOf(testProviders.get(0)) > providers.indexOf(testProviders.get(1)));
+        assertTrue(providers.indexOf(testProviders.get(1)) > providers.indexOf(testProviders.get(2)));
+        assertTrue(providers.indexOf(testProviders.get(0)) > providers.indexOf(testProviders.get(2)));
     }
 
     @Override

@@ -33,7 +33,6 @@ body {
     margin-bottom: 5px;
     color: #54555a;
 }
-
 #whp-logo {
     margin-right: 0px;
 }
@@ -174,4 +173,9 @@ body {
 }
 .float-right {
  float:right;
+}
+
+.warning-text {
+    color: #b22222;
+    font-weight: bold;
 }
