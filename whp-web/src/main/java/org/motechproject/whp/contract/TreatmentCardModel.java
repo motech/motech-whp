@@ -1,6 +1,7 @@
 package org.motechproject.whp.contract;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.motechproject.adherence.contract.AdherenceData;
@@ -50,7 +51,7 @@ public class TreatmentCardModel {
         monthlyAdherence.getLogs().add(new DailyAdherence(doseDate.getDayOfMonth(), status, providerId, adherenceCapturedDuringPausedPeriod, doseDate.isAfter(today())));
 
         /* Add to pool of providerIds to color them using pool of providerId colors. */
-        if (!providerIds.contains(providerId))
+        if (!StringUtils.isEmpty(providerId) && !providerIds.contains(providerId))
             providerIds.add(providerId);
     }
 

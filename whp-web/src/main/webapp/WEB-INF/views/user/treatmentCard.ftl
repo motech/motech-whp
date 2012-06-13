@@ -120,7 +120,7 @@
             </#list>
 
             for (var i = 0; i < providerIds.length; i++) {
-                $("[providerid =" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
+                $("[providerid=" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
             }
         });
 
@@ -142,7 +142,7 @@
                 else {
                     pillStatus = "";
                 }
-                $(this).tooltip({title: "Provider " + providerId + " gave adherence as " + pillStatus});
+                $(this).tooltip({title: providerId + " gave adherence as " + pillStatus});
             })
         }
 
