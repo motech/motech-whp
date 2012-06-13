@@ -34,17 +34,20 @@ public class RegistrationService {
     }
 
     public void registerProvider(ProviderRequest providerRequest) {
+        boolean providerAlreadyExists = providerService.hasProvider(providerRequest.getProviderId());
+
         String providerDocId = providerService.createProvider(providerRequest.getProviderId(),
                 providerRequest.getPrimaryMobile(),
                 providerRequest.getSecondaryMobile(),
                 providerRequest.getTertiaryMobile(),
                 providerRequest.getDistrict(),
                 providerRequest.getLastModifiedDate());
-        try{
-            motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
-        }
-        catch (Exception e) {
-            throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR,e.getMessage());
+        if(!providerAlreadyExists) {
+            try {
+                motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+            } catch (Exception e) {
+                throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR, e.getMessage());
+            }
         }
     }
 

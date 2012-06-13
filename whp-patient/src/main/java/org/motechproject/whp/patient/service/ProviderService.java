@@ -49,4 +49,7 @@ public class ProviderService {
         allPatients.update(patient);
     }
 
+    public boolean hasProvider(String providerId) {
+        return allProviders.findByProviderId(providerId)!=null;
+    }
 }

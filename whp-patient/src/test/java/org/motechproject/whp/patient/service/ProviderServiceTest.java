@@ -119,4 +119,21 @@ public class ProviderServiceTest extends SpringIntegrationTest {
         assertEquals(Double.valueOf(99.7), patient.getCurrentTreatment().getWeightStatistics().latestResult().getWeight());
     }
 
+    @Test
+    public void hasProviderShouldReturnTrueOnlyIfProviderExists() {
+        String providerId = "providerId";
+        String primaryMobile = "1234567890";
+        String secondaryMobile = "0987654321";
+        String tertiaryMobile = "1111111111";
+        String district = "Muzzafarpur";
+        DateTime now = now();
+
+        assertEquals(false,providerService.hasProvider(providerId));
+
+        providerService.createProvider(providerId, primaryMobile, secondaryMobile, tertiaryMobile, district, now);
+
+        assertEquals(true,providerService.hasProvider(providerId));
+
+    }
+
 }
