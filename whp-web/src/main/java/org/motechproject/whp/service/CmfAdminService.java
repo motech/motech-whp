@@ -13,10 +13,10 @@ import java.util.Arrays;
 @Component
 public class CmfAdminService {
     @Autowired
-    AllCmfAdmins allCmfAdmins;
+    private AllCmfAdmins allCmfAdmins;
 
     @Autowired
-    MotechAuthenticationService motechAuthenticationService;
+    private MotechAuthenticationService motechAuthenticationService;
 
     @Autowired
     public CmfAdminService (AllCmfAdmins allCmfAdmins, MotechAuthenticationService motechAuthenticationService){
@@ -26,6 +26,6 @@ public class CmfAdminService {
     }
     public void add(CmfAdmin admin, String password) throws WebSecurityException {
         allCmfAdmins.addOrReplace(admin);
-        motechAuthenticationService.register(admin.getUserId(), password, null, Arrays.asList(WHPRole.CMF_ADMIN.name()));
+        motechAuthenticationService.register(admin.getUserId(), password, admin.getId(), Arrays.asList(WHPRole.CMF_ADMIN.name()));
     }
 }

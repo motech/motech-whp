@@ -64,7 +64,7 @@ public class CmfAdminController {
                 if (cmfLocation != null) {
                     String locationId = cmfLocation.getLocation();
                         try {
-                            CmfAdmin admin = new CmfAdmin(request.getUserId(), request.getEmail(), request.getDepartment(), locationId, request.getStaffName());
+                            CmfAdmin admin = new CmfAdmin(request.getUserId().trim(), request.getEmail(), request.getDepartment(), locationId, request.getStaffName());
                             cmfAdminService.add(admin,request.getPassword());
                             uiModel.addAttribute(NOTIFICATION_MESSAGE,"Successfully created cmf admin with user id " + request.getUserId());
                             return "itadmin/index";

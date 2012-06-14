@@ -96,6 +96,24 @@ public class CmfAdminControllerTest {
     }
 
     @Test
+    public void userIdShouldBeTrimmedWhileSaving() throws WebSecurityException {
+        CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withDefaults().withUserName("  cmfadmin  ").build();
+        BindingAwareModelMap uiModel = new BindingAwareModelMap();
+
+        when(allCmfLocations.findByLocation(request.getLocation())).thenReturn(new CmfLocation(request.getLocation()));
+        when(allCmfLocations.getAll()).thenReturn(Arrays.asList(new CmfLocation("Delhi"), new CmfLocation("Patna")));
+
+        itAdminController.create(request, bindingResult, uiModel);
+
+        ArgumentCaptor<CmfAdmin> argumentCaptor = ArgumentCaptor.forClass(CmfAdmin.class);
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+        verify(cmfAdminService,times(1)).add(argumentCaptor.capture(),passwordCaptor.capture());
+        assertEquals("cmfadmin",argumentCaptor.getValue().getUserId());
+        assertEquals("Successfully created cmf admin with user id "+ request.getUserId(), uiModel.get("message"));
+
+    }
+
+    @Test
     public void shouldPopulateValidationErrorForLocation() throws WebSecurityException {
         CmfAdminWebRequest request= new CmfAdminWebRequestBuilder().withDefaults().build();
         BindingAwareModelMap uiModel = new BindingAwareModelMap();
