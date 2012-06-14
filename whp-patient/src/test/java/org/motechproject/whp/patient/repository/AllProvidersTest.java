@@ -4,7 +4,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,9 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class AllProvidersTest extends SpringIntegrationTest {
@@ -38,10 +35,13 @@ public class AllProvidersTest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowWHPRuntimeExceptionWhenProviderIdAlreadyExists() {
-        exceptionThrown.expect(WHPRuntimeException.class);
+    public void shouldUpdateProviderIfAlreadyExists() {
         allProviders.add(provider);
+        provider.setPrimaryMobile("modifiedNumber");
         allProviders.addOrReplace(provider);
+        List<Provider> providers = allProviders.getAll();
+        assertEquals(1, providers.size());
+        assertEquals("modifiedNumber",providers.get(0).getPrimaryMobile());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class AllProvidersTest extends SpringIntegrationTest {
 
     @Override
     public void after() {
-        markForDeletion(provider);
+        allProviders.removeAll();
     }
 
 }
