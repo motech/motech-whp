@@ -6,6 +6,7 @@ import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +25,13 @@ public class TreatmentCardService {
         if (patient != null && patient.latestTherapy() != null && patient.latestTherapy().getStartDate() != null) {
 
             TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
-            LocalDate ipStartDate = patient.latestTherapy().getStartDate();
+            Therapy latestTherapy = patient.latestTherapy();
+            LocalDate ipStartDate = latestTherapy.getStartDate();
             LocalDate endDate = ipStartDate.plusMonths(5);
 
-            List<AdherenceData> adherenceData = allAdherenceLogs.findLogsInRange(patient.getPatientId(), ipStartDate, endDate);
+            List<AdherenceData> adherenceData = allAdherenceLogs.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, endDate);
             Period period = new Period().withMonths(5);
-            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), period);
+            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, period);
 
             return ipTreatmentCard;
         }

@@ -39,18 +39,19 @@ public class TreatmentCardServiceTest {
         LocalDate therapyStartDate = new LocalDate(2012, 2, 3);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate);
 
-        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10),"",PillStatus.Taken);
-        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), "",PillStatus.NotTaken);
-        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12),"", PillStatus.Unknown);
-        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28),"",PillStatus.Taken);
+        String therapyDocId = patient.latestTherapy().getId();
+        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), therapyDocId,PillStatus.Taken);
+        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), therapyDocId,PillStatus.NotTaken);
+        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12), therapyDocId, PillStatus.Unknown);
+        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28), therapyDocId,PillStatus.Taken);
         List<AdherenceData> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
-        when(allAdherenceLogs.findLogsInRange(externalId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
+        when(allAdherenceLogs.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
 
         TreatmentCardModel treatmentCardModel = treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        verify(allAdherenceLogs, times(1)).findLogsInRange(externalId, therapyStartDate, therapyStartDate.plusMonths(5));
+        verify(allAdherenceLogs, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5));
     }
 
     private Patient createPatientOn3DayAWeekTreatmentCategory(String externalId, LocalDate therapyStartDate) {

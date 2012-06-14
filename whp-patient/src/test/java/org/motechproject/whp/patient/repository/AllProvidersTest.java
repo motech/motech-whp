@@ -39,9 +39,8 @@ public class AllProvidersTest extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowWHPRuntimeExceptionWhenProviderIdAlreadyExists() {
-        allProviders.add(provider);
         exceptionThrown.expect(WHPRuntimeException.class);
-
+        allProviders.add(provider);
         allProviders.addOrReplace(provider);
     }
 

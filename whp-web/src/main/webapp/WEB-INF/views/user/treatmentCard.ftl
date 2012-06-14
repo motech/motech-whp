@@ -89,7 +89,7 @@
                             </#if>
                             id="${day} ${monthlyAdherence.monthAndYear}">
                             <div class="watermarked-sunday">
-                                <#if isItASunday == 'sunday'>
+                                <#if isItASunday == 'sunday' && monthlyAdherence.maxDays &gt; day>
                                     S
                                 </#if>
                             </div>
@@ -154,19 +154,19 @@
                 $(this).removeClass('tick-icon');
                 $(this).addClass('round-icon');
                 $(this).attr('pillStatus', '2');
-                $(this).html('O');
+                $($(this).find('div')[0]).html('O');
             }
             else if ($(this).hasClass('round-icon')) {
                 $(this).removeClass('round-icon');
                 $(this).addClass('tick-icon');
                 $(this).attr('pillStatus', '1');
-                $(this).html('&#10003;');
+                $($(this).find('div')[0]).html('&#10003;');
             }
             else {
                 $(this).removeClass('dash-icon');
                 $(this).addClass('tick-icon');
                 $(this).attr('pillStatus', '1');
-                $(this).html('&#10003;');
+                $($(this).find('div')[0]).html('&#10003;');
             }
         });
 
