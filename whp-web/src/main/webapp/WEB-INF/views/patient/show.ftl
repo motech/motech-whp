@@ -36,9 +36,9 @@
 <@phaseInfo/>
 <@treatmentCardView/>
 <script type="text/javascript">
-    $('#ipDatePicker').datepicker();
-    $('#eipDatePicker').datepicker();
-    $('#cpDatePicker').datepicker();
+    $('#ipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
+    $('#eipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
+    $('#cpDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
     $("#clearFields").click(function () {
         $('#ipDatePicker').val('');
         $('#eipDatePicker').val('');

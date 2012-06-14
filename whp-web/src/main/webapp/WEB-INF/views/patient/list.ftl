@@ -19,7 +19,7 @@
             <th>Treatment Category</th>
             <th>Patient Type</th>
             <th>Treatment Start Date</th>
-            <th>Adherence</th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
                             </#if>
                         </td>
                         <td class="patient_adherence">
-                            <a href="<@spring.url '/patients/dashboard?patientId=${patient.patientId}' />">Edit</a>
+                            <a href="<@spring.url '/patients/dashboard?patientId=${patient.patientId}' />">View Dashboard</a>
                         </td>
                     </tr>
                     </#list>
