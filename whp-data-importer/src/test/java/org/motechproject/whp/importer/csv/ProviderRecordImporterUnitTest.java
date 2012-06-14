@@ -71,8 +71,8 @@ public class ProviderRecordImporterUnitTest {
         ArgumentCaptor<ProviderRequest> providerRequestArgumentCaptor = ArgumentCaptor.forClass(ProviderRequest.class);
 
         verify(registrationService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
-        verify(registrationService, times(1)).changePasswordAndActivateUser(importProviderRequest1.getProviderId().toLowerCase(), "password");
-        verify(registrationService, times(1)).changePasswordAndActivateUser(importProviderRequest2.getProviderId().toLowerCase(), "password");
+        verify(registrationService, times(1)).activateUser(importProviderRequest1.getProviderId().toLowerCase());
+        verify(registrationService, times(1)).activateUser(importProviderRequest2.getProviderId().toLowerCase());
 
         List<ProviderRequest> providerRequests = providerRequestArgumentCaptor.getAllValues();
         assertEquals(2, providerRequests.size());

@@ -2,11 +2,12 @@ package org.motechproject.whp.service;
 
 import org.junit.After;
 import org.junit.Test;
-import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.domain.CmfAdmin;
 import org.motechproject.whp.patient.repository.AllCmfAdmins;
+import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
-public class CmfAdminServiceIT {
+public class CmfAdminServiceIT extends SpringIntegrationTest{
     @Autowired
     CmfAdminService cmfAdminService;
 
@@ -40,9 +41,9 @@ public class CmfAdminServiceIT {
         assertTrue(motechAuthenticationService.hasUser("cmfadmin"));
 
         assertFalse(cmfAdmin.getId().isEmpty());
-        MotechWebUser motechWebUser = motechAuthenticationService.changePassword("cmfadmin", "password");
-        assertEquals(cmfAdmin.getId(),motechWebUser);
+        MotechUser  user = motechAuthenticationService.retrieveUserByCredentials("cmfadmin", "password");
+        assertEquals(cmfAdmin.getId(), user.getExternalId());
 
-        assertTrue(motechWebUser.getRoles().contains(WHPRole.CMF_ADMIN.name()));
+        assertTrue( user.getRoles().contains(WHPRole.CMF_ADMIN.name()));
     }
 }

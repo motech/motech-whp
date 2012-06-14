@@ -1,5 +1,4 @@
 <#macro changePassword>
-<input type="hidden" id="userPassword" value="${Session.loggedInUser.password?html}"/>
 <form class="modal hide fade" id="changePasswordModal" action="<@spring.url '/changePassword'/>">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>

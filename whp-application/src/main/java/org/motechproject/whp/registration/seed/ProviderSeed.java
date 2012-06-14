@@ -18,7 +18,7 @@ public class ProviderSeed {
     @Seed(priority = 1, version = "1.0")
     public void load() {
         registrationService.registerProvider(new ProviderRequest("raj", "district", "1234567890", DateUtil.now()));
-        registrationService.changePasswordAndActivateUser("raj", "password");
+        registrationService.activateUser("raj");
     }
 
 }

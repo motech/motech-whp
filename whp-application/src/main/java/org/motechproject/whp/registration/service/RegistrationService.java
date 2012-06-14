@@ -48,8 +48,7 @@ public class RegistrationService {
         }
     }
 
-    public void changePasswordAndActivateUser(String userName, String newPassword) {
-        motechAuthenticationService.changePassword(userName, newPassword);
+    public void activateUser(String userName) {
         motechAuthenticationService.activateUser(userName);
     }
 }

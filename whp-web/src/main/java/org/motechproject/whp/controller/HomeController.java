@@ -2,7 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.flash.Flash;
-import org.motechproject.security.domain.MotechWebUser;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/" ,method = RequestMethod.GET)
     public String homePage(HttpServletRequest request) {
-        MotechWebUser user = loggedInUser(request);
+        MotechUser user = loggedInUser(request);
         List<String> userRoles = user.getRoles();
         if (userRoles.contains(WHPRole.CMF_ADMIN.name())) {
             return "redirect:/patients/all";

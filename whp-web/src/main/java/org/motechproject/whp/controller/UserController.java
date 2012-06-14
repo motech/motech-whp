@@ -1,8 +1,8 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
+import org.motechproject.security.service.MotechUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +32,10 @@ public class UserController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/changePassword")
     @ResponseBody
-    public String changePassword(String newPassword, HttpServletRequest request) {
-        MotechWebUser authenticatedUser = motechAuthenticationService.changePassword(loggedInUser(request).getUserName(), newPassword);
+    public String changePassword(String currentPassword,String newPassword, HttpServletRequest request) {
+        MotechUser authenticatedUser = motechAuthenticationService.changePassword(loggedInUser(request).getUserName(), currentPassword, newPassword);
+        if(authenticatedUser==null)
+            return "'Current Password' you entered is incorrect";
         request.getSession().setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
         return "";
     }

@@ -29,6 +29,10 @@ $('#changePasswordModal').submit(function(event) {
                     $('#userPassword').val($('#newPassword').val());
                     $('#changePasswordModal').modal('hide');
                 }
+                else {
+                    $('#changePasswordError').text(data);
+                    $('#changePasswordError').show();
+                }
             }
         );
     }
@@ -37,8 +41,7 @@ $('#changePasswordModal').submit(function(event) {
 $('#changePasswordModal').validate({
     rules: {
         currentPassword: {
-            required: true,
-            equalTo: '#userPassword'
+            required: true
         },
         newPassword:  {
             required: true,

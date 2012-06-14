@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.WHPRole;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,23 +36,23 @@ public class UserControllerTest {
 
     @Test
     public void shouldChangePassword() {
-        MotechWebUser authenticatedUser = authenticatedAdmin();
+        MotechUser authenticatedUser = authenticatedAdmin();
         login(authenticatedUser);
 
-        when(motechAuthenticationService.changePassword("admin", "newPassword")).thenReturn(authenticatedUser);
+        when(motechAuthenticationService.changePassword("admin","oldPassword", "newPassword")).thenReturn(authenticatedUser);
 
-        String responseBody = userController.changePassword("newPassword", request);
+        String responseBody = userController.changePassword("oldPassword","newPassword", request);
 
         assertEquals("", responseBody);
         verify(session).setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
     }
 
-    private void login(MotechWebUser authenticatedUser) {
+    private void login(MotechUser authenticatedUser) {
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }
 
-    private MotechWebUser authenticatedAdmin() {
-        MotechWebUser authenticatedUser = mock(MotechWebUser.class);
+    private MotechUser authenticatedAdmin() {
+        MotechUser authenticatedUser = mock(MotechUser.class);
         when(authenticatedUser.getUserName()).thenReturn("admin");
         when(authenticatedUser.getRoles()).thenReturn(asList(WHPRole.CMF_ADMIN.name()));
         return authenticatedUser;

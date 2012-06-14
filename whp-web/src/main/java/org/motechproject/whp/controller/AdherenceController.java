@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.motechproject.export.annotation.Report;
 import org.motechproject.export.annotation.ReportGroup;
 import org.motechproject.flash.Flash;
-import org.motechproject.security.domain.MotechWebUser;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -60,7 +60,7 @@ public class AdherenceController extends BaseController {
                          WeeklyAdherenceForm weeklyAdherenceForm,
                          HttpServletRequest httpServletRequest) {
 
-        MotechWebUser authenticatedUser = loggedInUser(httpServletRequest);
+        MotechUser authenticatedUser = loggedInUser(httpServletRequest);
         TreatmentCategory category = allTreatmentCategories.findByCode(categoryCode);
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
