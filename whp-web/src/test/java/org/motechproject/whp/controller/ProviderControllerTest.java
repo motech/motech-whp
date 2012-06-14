@@ -4,13 +4,12 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.security.domain.MotechWebUser;
-import org.motechproject.security.repository.AllMotechWebUsers;
+import org.motechproject.security.service.MotechAuthenticationService;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.WHPConstants;
-import org.motechproject.whp.refdata.domain.WHPRole;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.springframework.ui.Model;
 
@@ -22,8 +21,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ProviderControllerTest {
@@ -33,22 +31,18 @@ public class ProviderControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
-    private AllMotechWebUsers allMotechWebUsers;
+    private MotechAuthenticationService motechAuthenticationService;
     @Mock
     private AllProviders allProviders;
     @Mock
     private AllCmfLocations allDistricts;
 
-    Provider providerAa = new Provider("aa", "9845678761", "district",
+    Provider provider1 = new Provider("aa", "9845678761", "district",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-    Provider providerAb = new Provider("ab", "9845678761", "district",
+    Provider provider2 = new Provider("ab", "9845678761", "district",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-    Provider providerAc = new Provider("ac", "9845678761", "district",
+    Provider provider3 = new Provider("ac", "9845678761", "district",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-
-    MotechWebUser providerWebUserAa;
-    MotechWebUser providerWebUserAb;
-    MotechWebUser providerWebUserAc;
 
     private ProviderController providerController;
     List<Provider> testProviders = new ArrayList<Provider>();
@@ -56,25 +50,30 @@ public class ProviderControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        testProviders.add(providerAa);
-        testProviders.add(providerAb);
-        testProviders.add(providerAc);
+        testProviders.add(provider1);
+        testProviders.add(provider2);
+        testProviders.add(provider3);
         when(allProviders.list()).thenReturn(testProviders);
-        when(allProviders.findByProviderId("aa")).thenReturn(providerAa);
-        when(allProviders.findByProviderId("ab")).thenReturn(providerAb);
-        when(allProviders.findByProviderId("ac")).thenReturn(providerAc);
+        when(allProviders.findByProviderId("aa")).thenReturn(provider1);
+        when(allProviders.findByProviderId("ab")).thenReturn(provider2);
+        when(allProviders.findByProviderId("ac")).thenReturn(provider3);
 
-        providerAa.setId("aa");
-        providerAb.setId("ab");
-        providerAc.setId("ac");
-        providerWebUserAa = new MotechWebUser("aa", "password", providerAa.getId(), asList(WHPRole.PROVIDER.name()));
-        providerWebUserAb = new MotechWebUser("ab", "password", providerAb.getId(), asList(WHPRole.PROVIDER.name()));
-        providerWebUserAc = new MotechWebUser("ac", "password", providerAc.getId(), asList(WHPRole.PROVIDER.name()));
-        providerWebUserAa.setActive(true);
-        when(allMotechWebUsers.findByRole(anyString())).thenReturn(asList(new MotechWebUser[]{providerWebUserAa, providerWebUserAb, providerWebUserAc}));
-        providerWebUserAb.setActive(true);
-        providerWebUserAc.setActive(true);
-        providerController = new ProviderController(allProviders, allDistricts, allMotechWebUsers);
+        MotechUser user1 = mock(MotechUser.class);
+        when(user1.getUserName()).thenReturn(provider1.getProviderId());
+        MotechUser user2 = mock(MotechUser.class);
+        when(user1.isActive()).thenReturn(true);
+
+        when(user2.getUserName()).thenReturn(provider2.getProviderId());
+        when(user2.isActive()).thenReturn(true);
+
+        MotechUser user3 = mock(MotechUser.class);
+        when(user3.getUserName()).thenReturn(provider3.getProviderId());
+        when(user3.isActive()).thenReturn(true);
+
+        List<MotechUser> motechUsers = asList(user1,user2,user3);
+
+        when(motechAuthenticationService.findByRole(anyString())).thenReturn(motechUsers);
+        providerController = new ProviderController(allProviders, allDistricts, motechAuthenticationService);
     }
 
     @Test
@@ -119,7 +118,7 @@ public class ProviderControllerTest {
     public void shouldListMatchingProvider_whenSearchedByValidProviderId() throws Exception {
         providerController.searchMatchingProviders("ab", uiModel);
         List<Provider> matchingProviders = new ArrayList<Provider>();
-        matchingProviders.add(providerAb);
+        matchingProviders.add(provider2);
         verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(matchingProviders)));
     }
 

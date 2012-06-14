@@ -1,7 +1,7 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.security.domain.MotechWebUser;
-import org.motechproject.security.repository.AllMotechWebUsers;
+import org.motechproject.security.service.MotechAuthenticationService;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -24,7 +22,7 @@ import static org.springframework.util.StringUtils.hasText;
 @RequestMapping(value = "/providers")
 public class ProviderController {
 
-    AllMotechWebUsers allMotechWebUsers;
+    MotechAuthenticationService motechAuthenticationService;
     AllProviders allProviders;
     AllCmfLocations allDistricts;
     public static final String PROVIDER_LIST = "providerList";
@@ -32,10 +30,10 @@ public class ProviderController {
     private static final String QUERY_PROVIDER_ID = "queryProviderId";
 
     @Autowired
-    public ProviderController(AllProviders allProviders, AllCmfLocations allDistricts, AllMotechWebUsers allMotechWebUsers) {
+    public ProviderController(AllProviders allProviders, AllCmfLocations allDistricts, MotechAuthenticationService motechAuthenticationService) {
         this.allProviders = allProviders;
         this.allDistricts = allDistricts;
-        this.allMotechWebUsers = allMotechWebUsers;
+        this.motechAuthenticationService = motechAuthenticationService;
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
@@ -52,8 +50,8 @@ public class ProviderController {
         return "provider/list";
     }
 
-    private Set<MotechWebUser> fetchAllProviderWebUsers() {
-        return new HashSet<MotechWebUser>(allMotechWebUsers.findByRole(WHPRole.PROVIDER.name()));
+    private List<MotechUser> fetchAllProviderWebUsers() {
+        return motechAuthenticationService.findByRole(WHPRole.PROVIDER.name());
     }
 
     private List<Provider> filterByProviderId(String providerId) {
@@ -76,11 +74,11 @@ public class ProviderController {
         uiModel.addAttribute(DISTRICT_LIST, extract(cmfLocations, on(CmfLocation.class).getLocation()));*/
     }
 
-    private void prepareResultsModel(Model uiModel, List<Provider> matchingProviders, Set<MotechWebUser> motechWebUsers) {
+    private void prepareResultsModel(Model uiModel, List<Provider> matchingProviders, List<MotechUser> users) {
         List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
         for(Provider provider : matchingProviders) {
-            for(MotechWebUser webUser : motechWebUsers) {
-                if(provider.getId().equals(webUser.getExternalId())) {
+            for(MotechUser webUser : users) {
+                if(provider.getProviderId().equals(webUser.getUserName())) {
                     providerRows.add(new ProviderRow(provider, webUser.isActive()));
                 }
             }

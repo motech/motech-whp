@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.domain.MotechWebUser;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.repository.AllProviders;
@@ -60,21 +60,21 @@ public class HomeControllerTest {
         assertEquals("redirect:/patients/all", homeController.homePage(request));
     }
 
-    private void login(MotechWebUser authenticatedUser) {
+    private void login(MotechUser authenticatedUser) {
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }
 
-    private MotechWebUser authenticatedUserFor(Provider provider) {
-        MotechWebUser authenticatedUser = mock(MotechWebUser.class);
+    private MotechUser authenticatedUserFor(Provider provider) {
+        MotechUser authenticatedUser = mock(MotechUser.class);
         when(authenticatedUser.getExternalId()).thenReturn(provider.getId());
         when(authenticatedUser.getRoles()).thenReturn(asList(WHPRole.PROVIDER.name()));
         return authenticatedUser;
     }
 
-    private MotechWebUser authenticatedAdmin(WHPRole whpRole) {
-        MotechWebUser authenticatedUser = mock(MotechWebUser.class);
+    private MotechUser authenticatedAdmin(WHPRole whpRole) {
+        MotechUser authenticatedUser = mock(MotechUser.class);
         when(authenticatedUser.getRoles()).thenReturn(Arrays.asList(whpRole.name()));
         return authenticatedUser;
     }

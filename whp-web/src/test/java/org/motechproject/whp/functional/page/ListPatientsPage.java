@@ -72,7 +72,7 @@ public class ListPatientsPage extends LoggedInUserPage {
                 break;
             }
         }
-        dashboardLinks.get(index).findElement(By.linkText("Edit")).click();
+        dashboardLinks.get(index).findElement(By.linkText("View Dashboard")).click();
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }
 

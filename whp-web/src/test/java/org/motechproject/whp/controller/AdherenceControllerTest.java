@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.domain.MotechWebUser;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AuditParams;
@@ -189,7 +189,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     private void setupLoggedInUser(String userName) {
         HttpSession session = mock(HttpSession.class);
-        MotechWebUser loggedInUser = mock(MotechWebUser.class);
+        MotechUser loggedInUser = mock(MotechUser.class);
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
         when(loggedInUser.getUserName()).thenReturn(userName);
