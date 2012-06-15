@@ -45,6 +45,6 @@ public class PatientDashboardPage extends Page {
     }
 
     private WebElement findWebElementByDate(LocalDate localDate) {
-        return webDriver.findElement(By.id(String.format("%s %s", String.valueOf(localDate.getDayOfMonth()), localDate.toString("MMM YYYY"))));
+        return webDriver.findElement(By.id(String.format("%s", localDate.toString("d-M-yyyy"))));
     }
 }
