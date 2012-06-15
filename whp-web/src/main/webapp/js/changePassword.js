@@ -19,12 +19,16 @@ $('#changePasswordModal').submit(function(event) {
                     $('#changePasswordModal').modal('hide');
                 }
                 else {
-                    $('#changePasswordError').text(data);
-                    $('#changePasswordError').show();
+                    $('#changePasswordServerSideError').text(data);
+                    $('#changePasswordServerSideError').show();
                 }
             }
         );
     }
+});
+
+$('#currentPassword').change(function(){
+  $('#changePasswordServerSideError').hide();
 });
 
 $('#changePasswordModal').validate({
