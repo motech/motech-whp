@@ -9,7 +9,7 @@
         Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
         String appVersion = whpProperties.getProperty("application.version");
     %>
-    <script type="text/javascript" href="/whp/resources-<%=appVersion%>/js/jquery-1.7.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 
