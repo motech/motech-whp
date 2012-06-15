@@ -6,7 +6,6 @@
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
         <version>0.1</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>whp-patient</name>
