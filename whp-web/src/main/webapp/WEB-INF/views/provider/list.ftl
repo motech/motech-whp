@@ -1,9 +1,9 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default.ftl" as layout>
+<#import "../layout/default-itadmin.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-WHP">
 <div id="searchProvidersForm">
     <form action="<@spring.url '/providers/search'/>" method="POST" class="row well form-horizontal">
-        <div class="offset2">
+        <div class="offset4">
 
             <div class="control-group">
                 <label class="control-label" for="providerId">Provider ID</label>

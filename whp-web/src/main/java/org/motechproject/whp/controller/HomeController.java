@@ -31,7 +31,7 @@ public class HomeController extends BaseController {
         if (userRoles.contains(WHPRole.CMF_ADMIN.name())) {
             return "redirect:/patients/all";
         } else  if(userRoles.contains(WHPRole.IT_ADMIN.name()))  {
-               return "itadmin/index";
+            return "redirect:/providers/list";
         } else {
             String message = Flash.in("message", request);
             if (StringUtils.isNotEmpty(message)) {

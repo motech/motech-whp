@@ -10,9 +10,11 @@ import org.motechproject.whp.builder.CmfAdminWebRequestBuilder;
 import org.motechproject.whp.contract.CmfAdminWebRequest;
 import org.motechproject.whp.patient.domain.CmfAdmin;
 import org.motechproject.whp.patient.domain.CmfLocation;
+import org.motechproject.whp.patient.repository.AllCmfAdmins;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.service.CmfAdminService;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
 import org.springframework.validation.support.BindingAwareModelMap;
@@ -26,12 +28,17 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CmfAdminControllerTest {
+
+    @Mock
+    Model uiModel;
     @Mock
     AllProviders allProviders;
     @Mock
     CmfAdminService cmfAdminService;
     @Mock
     AllCmfLocations allCmfLocations;
+    @Mock
+    AllCmfAdmins allCmfAdmins;
 
     @Mock
     MotechAuthenticationService motechAuthenticationService;
@@ -42,7 +49,13 @@ public class CmfAdminControllerTest {
     @Before
     public void setup() {
        initMocks(this);
-       itAdminController = new CmfAdminController(allCmfLocations, cmfAdminService,allProviders,motechAuthenticationService);
+       itAdminController = new CmfAdminController(allCmfLocations, allProviders, allCmfAdmins, cmfAdminService, motechAuthenticationService);
+    }
+
+    @Test
+    public void shouldLoadProviderSearchPage_verifyViewMappingForGET() throws Exception {
+        String viewName = itAdminController.list(uiModel);
+        assertEquals("providers/list", viewName);
     }
 
     @Test

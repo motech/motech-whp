@@ -4,6 +4,7 @@ import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.contract.CmfAdminWebRequest;
 import org.motechproject.whp.patient.domain.CmfAdmin;
 import org.motechproject.whp.patient.domain.CmfLocation;
+import org.motechproject.whp.patient.repository.AllCmfAdmins;
 import org.motechproject.whp.patient.repository.AllCmfLocations;
 import org.motechproject.whp.patient.repository.AllProviders;
 import org.motechproject.whp.service.CmfAdminService;
@@ -28,20 +29,22 @@ import static org.springframework.util.StringUtils.hasText;
 @RequestMapping(value = "/cmfAdmin")
 public class CmfAdminController {
 
-
     AllCmfLocations allCmfLocations;
+    AllCmfAdmins allCmfAdmins;
     AllProviders allProviders;
     MotechAuthenticationService motechAuthenticationService;
     private static final String LOCATION_LIST = "locations";
     private static final String CREATE_CMF_ADMIN_MODEL_NAME = "account";
     private static final String NOTIFICATION_MESSAGE = "message";
     private CmfAdminService cmfAdminService;
+    private static final String ALL_CMF_ADMINS = "allCmfAdmins";
 
     @Autowired
-    public CmfAdminController(AllCmfLocations allCmfLocations, CmfAdminService cmfAdminService, AllProviders allProviders, MotechAuthenticationService motechAuthenticationService) {
+    public CmfAdminController(AllCmfLocations allCmfLocations, AllProviders allProviders, AllCmfAdmins allCmfAdmins, CmfAdminService cmfAdminService, MotechAuthenticationService motechAuthenticationService) {
         this.allCmfLocations = allCmfLocations;
-        this.cmfAdminService = cmfAdminService;
         this.allProviders = allProviders;
+        this.allCmfAdmins = allCmfAdmins;
+        this.cmfAdminService = cmfAdminService;
         this.motechAuthenticationService = motechAuthenticationService;
     }
 
@@ -67,7 +70,8 @@ public class CmfAdminController {
                             CmfAdmin admin = new CmfAdmin(request.getUserId().trim(), request.getEmail(), request.getDepartment(), locationId, request.getStaffName());
                             cmfAdminService.add(admin,request.getPassword());
                             uiModel.addAttribute(NOTIFICATION_MESSAGE,"Successfully created cmf admin with user id " + request.getUserId());
-                            return "itadmin/index";
+                            queryAndPopulateAllCmfAdminsInModel(uiModel);
+                            return "cmfAdmin/list";
                         } catch (Exception e) {
                             bindingResult.addError(new ObjectError(CREATE_CMF_ADMIN_MODEL_NAME,e.getMessage()));
                         }
@@ -78,6 +82,17 @@ public class CmfAdminController {
         setUpModel(uiModel);
         uiModel.addAttribute(CREATE_CMF_ADMIN_MODEL_NAME, request);
         return "cmfadmin/create";
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(Model uiModel) {
+        queryAndPopulateAllCmfAdminsInModel(uiModel);
+        return  "cmfadmin/list";
+    }
+
+    private void queryAndPopulateAllCmfAdminsInModel(Model uiModel) {
+        List<CmfAdmin> cmfAdmins = allCmfAdmins.list();
+        uiModel.addAttribute(ALL_CMF_ADMINS, cmfAdmins);
     }
 
     private boolean isValid(BindingResult bindingResult, CmfAdminWebRequest request) {

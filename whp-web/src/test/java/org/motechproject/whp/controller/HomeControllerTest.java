@@ -45,11 +45,11 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void shouldRedirectToTheItAdminLandingPage() {
+    public void shouldRedirectToProvidersListingPageUponItAdminLogin() {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.IT_ADMIN));
         setupProvider(provider);
-        assertEquals("itadmin/index", homeController.homePage(request));
+        assertEquals("redirect:/providers/list", homeController.homePage(request));
     }
 
     @Test
