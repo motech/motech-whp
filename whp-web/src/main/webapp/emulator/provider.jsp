@@ -1,10 +1,6 @@
-<%@page import="org.motechproject.security.service.MotechAuthenticationService" %>
-<%@page import="org.motechproject.whp.patient.domain.Provider" %>
-<%@page import="org.motechproject.whp.patient.repository.AllProviders" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@ page import="java.util.Properties" %>
-<%@page import="java.util.Arrays" %>
+<%@page import="java.util.Properties" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +9,7 @@
         Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
         String appVersion = whpProperties.getProperty("application.version");
     %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" href="/whp/resources-<%=appVersion%>/js/jquery-1.7.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 </head>

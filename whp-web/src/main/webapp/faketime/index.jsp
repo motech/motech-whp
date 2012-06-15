@@ -1,12 +1,18 @@
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@page import="java.util.Arrays" %>
+<%@ page import="java.util.Properties" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/bootstrap.css/"/>
-    <link rel="stylesheet" type="text/css" href="/whp/resources/styles/standard.css"/>
+    <%
+        ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
+        String appVersion = whpProperties.getProperty("application.version");
+    %>
+    <script type="text/javascript" href="/whp/resources-<%=appVersion%>/js/jquery-1.7.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 </head>
 <body>
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
