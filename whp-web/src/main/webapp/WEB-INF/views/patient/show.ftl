@@ -45,9 +45,19 @@
     <@phaseInfo/>
     <@treatmentCardView/>
 <script type="text/javascript">
-    $('#ipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
-    $('#eipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
-    $('#cpDatePicker').datepicker({dateFormat:'dd/mm/yy'});
+    $('#saveTheDate').click(function(){
+        if ($('#ipDatePicker').val()==="" && $('#eipDatePicker').val()==="" && $('#cpDatePicker').val()==="") {
+            event.preventDefault();
+            jConfirm('All phase start dates are set to empty. Do you want to continue?', 'Warning', function(r) {
+                if(r===true){
+                    $('#setDatesModal').submit();
+                }
+            });
+        }
+    });
+    $('#ipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
+    $('#eipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
+    $('#cpDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
     $("#clearFields").click(function () {
         $('#ipDatePicker').val('');
         $('#eipDatePicker').val('');

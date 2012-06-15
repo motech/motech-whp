@@ -88,16 +88,16 @@
                         </#if>
                     </#list>
                     <#if drawn == false>
-                            <td class=
-                        <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                        <#else>"bg-gray ${isItASunday}"
-                        </#if>
-                        id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
-                        <div class="watermarked-sunday">
-                            <#if isItASunday == 'sunday' && monthlyAdherence.maxDays &gt; day>
-                                S
+                        <td class=
+                            <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
+                            <#else>"bg-gray ${isItASunday}"
                             </#if>
-                        </div>
+                            id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
+                            <div class="watermarked-sunday">
+                                <#if isItASunday == 'sunday' (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
+                                    S
+                                </#if>
+                            </div>
                         </td>
                     </#if>
                 </#list>
