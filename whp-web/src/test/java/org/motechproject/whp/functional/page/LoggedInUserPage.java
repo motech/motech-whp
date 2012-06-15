@@ -34,6 +34,8 @@ public class LoggedInUserPage extends Page {
     @FindBy(how = How.ID, using = "changePasswordError")
     private WebElement changePasswordError;
 
+    @FindBy(how=How.ID, using = "changePasswordServerSideError")
+    private WebElement changePasswordServerSideError;
     public LoggedInUserPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -73,6 +75,9 @@ public class LoggedInUserPage extends Page {
 
     public List<String> getChangePasswordErrorMessages() {
         return Arrays.asList(changePasswordError.getText().split("\n"));
+    }
+    public String getServerErrorMessage(){
+        return changePasswordServerSideError.getText();
     }
 
     @Override

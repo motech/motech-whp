@@ -41,7 +41,8 @@ public class ChangePasswordTest extends BaseTest {
     }
 
     private void validateCurrentPasswordToMatchExistingPassword(LoggedInUserPage adminPage) {
-        changePasswordAndValidate(adminPage, "incorrectoldpassword", "newpassword", "newpassword", Arrays.asList("'Current Password' you entered is incorrect"));
+        adminPage.changePassword("incorrectoldpassword", "newpassword" , "newpassword");
+        assertTrue(adminPage.getServerErrorMessage().contains("'Current Password' you entered is incorrect"));
     }
 
     private void validateNewPasswordForLength(LoggedInUserPage adminPage) {
@@ -68,4 +69,5 @@ public class ChangePasswordTest extends BaseTest {
             assertTrue(changePasswordErrorMessages.contains(errorMessage));
         }
     }
+
 }
