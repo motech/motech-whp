@@ -1,6 +1,7 @@
 <#macro treatmentCardView>
     <#if treatmentCard?exists>
     <div id="legend-container" class="pull-right">
+    <div id="patient-id" class="hide">${patientId}</div>
     <table id="legend" class="table table-bordered table-condensed">
         <thead>
         <tr>
@@ -66,10 +67,12 @@
                                 <#elseif dailyAdherence.futureAdherence == true> "editable ${isItASunday} ${isItDuringPausedPeriod}"
                                 <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                                 </#if>
-                                id="${day} ${monthlyAdherence.monthAndYear}"
-                                dayOfMonth="${day}"
-                                monthStartDate="${monthlyAdherence.monthStartDate}"
-                                pillStatus="${dailyAdherence.pillStatus}"
+                                id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
+                                day="${day}"
+                                month="${monthlyAdherence.month}"
+                                year="${monthlyAdherence.year}"
+                                currentPillStatus="${dailyAdherence.pillStatus}"
+                                oldPillStatus="${dailyAdherence.pillStatus}"
                                 providerId = ${dailyAdherence.providerId}>
                                 <div>
                                     <#if dailyAdherence.pillStatus == 1> &#10003;
@@ -102,7 +105,11 @@
         <tbody>
         </tbody>
     </table>
-
+    <div class="buttons">
+    <a href="" class="btn btn-primary">Clear</a>
+    <a href="<@spring.url "/"/>" class="btn btn-primary">Cancel</a>
+    <button type="button" id='submit' class="btn btn-primary">Save Adherence</button>
+    </div>
     <script type="text/javascript">
         $(function () {
             var providerIds = new Array();
@@ -123,54 +130,7 @@
                 $("[providerid=" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
             }
         });
-
-        <!--Tooltips to show provider information and dose status-->
-
-        function annotate(){
-            $('.tick-icon, .round-icon').each(function(){
-                var providerId = $(this).attr('providerId');
-                if(!providerId) {
-                    providerId = "CMF Admin";
-                }
-                var pillStatus;
-                if ($(this).hasClass('tick-icon')) {
-                    pillStatus = "Taken."
-                }
-                else if ($(this).hasClass('round-icon')) {
-                    pillStatus = "Not Taken."
-                }
-                else {
-                    pillStatus = "";
-                }
-                $(this).tooltip({title: providerId + " gave adherence as " + pillStatus});
-            })
-        }
-
-        annotate();
-
-        <!--Troggle - 3 state toggling-->
-        $('.editable').click(function () {
-            if ($(this).hasClass('tick-icon')) {
-                $(this).removeClass('tick-icon');
-                $(this).addClass('round-icon');
-                $(this).attr('pillStatus', '2');
-                $($(this).find('div')[0]).html('O');
-            }
-            else if ($(this).hasClass('round-icon')) {
-                $(this).removeClass('round-icon');
-                $(this).addClass('tick-icon');
-                $(this).attr('pillStatus', '1');
-                $($(this).find('div')[0]).html('&#10003;');
-            }
-            else {
-                $(this).removeClass('dash-icon');
-                $(this).addClass('tick-icon');
-                $(this).attr('pillStatus', '1');
-                $($(this).find('div')[0]).html('&#10003;');
-            }
-        });
-
-
     </script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
     </#if>
 </#macro>

@@ -15,11 +15,15 @@ public class MonthlyAdherence {
     private String monthAndYear;
     private LocalDate monthStartDate;
     private int firstSunday;
+    private String month;
+    private String year;
 
     public MonthlyAdherence(int maxDays, String monthAndYear, LocalDate monthStartDate) {
         this.maxDays = maxDays;
         this.monthAndYear = monthAndYear;
         this.monthStartDate = monthStartDate;
         firstSunday = new TreatmentWeek(monthStartDate).dateOf(DayOfWeek.Sunday).getDayOfMonth();
+        month = Integer.toString(monthStartDate.getMonthOfYear());
+        year = Integer.toString(monthStartDate.getYear());
     }
 }

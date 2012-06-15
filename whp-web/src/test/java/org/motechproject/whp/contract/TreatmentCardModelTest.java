@@ -66,12 +66,12 @@ public class TreatmentCardModelTest {
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), new Period().withMonths(5));
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        validateMonthLog(treatmentCardModel, "Feb 2012", 0, 5, 29, febLogDays, febTakenDays, febNotTakenDays, 12);
-        validateMonthLog(treatmentCardModel, "Mar 2012", 1, 4, 31, marchLogDays, marchTakenDays, marchNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel, "Apr 2012", 2, 1, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel, "May 2012", 3, 6, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel, "Jun 2012", 4, 3, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel, "Jul 2012", 5, 1, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 1);
+        validateMonthLog(treatmentCardModel,2,2012, "Feb 2012", 0, 5, 29, febLogDays, febTakenDays, febNotTakenDays, 12);
+        validateMonthLog(treatmentCardModel, 3,2012,"Mar 2012", 1, 4, 31, marchLogDays, marchTakenDays, marchNotTakenDays, 13);
+        validateMonthLog(treatmentCardModel, 4,2012,"Apr 2012", 2, 1, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 13);
+        validateMonthLog(treatmentCardModel,5,2012, "May 2012", 3, 6, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 13);
+        validateMonthLog(treatmentCardModel,6,2012, "Jun 2012", 4, 3, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 13);
+        validateMonthLog(treatmentCardModel,7,2012, "Jul 2012", 5, 1, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 1);
         assertEquals(asList(provider), treatmentCardModel.getProviderIds());
 
     }
@@ -183,16 +183,18 @@ public class TreatmentCardModelTest {
 
         assertEquals(5, treatmentCardModel.getMonthlyAdherences().size());
 
-        validateMonthLog(treatmentCardModel, "Apr 2012", 0, 1, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 30);
-        validateMonthLog(treatmentCardModel, "May 2012", 1, 6, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 31);
-        validateMonthLog(treatmentCardModel, "Jun 2012", 2, 3, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 30);
-        validateMonthLog(treatmentCardModel, "Jul 2012", 3, 1, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 31);
-        validateMonthLog(treatmentCardModel, "Aug 2012", 4, 5, 31, augustLogDays, augustTakenDays, augustNotTakenDays, 31);
+        validateMonthLog(treatmentCardModel, 4,2012,"Apr 2012", 0, 1, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 30);
+        validateMonthLog(treatmentCardModel, 5,2012,"May 2012", 1, 6, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 31);
+        validateMonthLog(treatmentCardModel, 6,2012,"Jun 2012", 2, 3, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 30);
+        validateMonthLog(treatmentCardModel, 7,2012,"Jul 2012", 3, 1, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 31);
+        validateMonthLog(treatmentCardModel, 8,2012,"Aug 2012", 4, 5, 31, augustLogDays, augustTakenDays, augustNotTakenDays, 31);
     }
 
-    private void validateMonthLog(TreatmentCardModel treatmentCardModel, String monthAndYear, int pos, int firstSunday, int maxDays, List<Integer> logDays, List<Integer> takenDays, List<Integer> notTakenDays, int totalNumberOfLogsInMonth) {
+    private void validateMonthLog(TreatmentCardModel treatmentCardModel, Integer month, Integer year, String monthAndYear, int pos, int firstSunday, int maxDays, List<Integer> logDays, List<Integer> takenDays, List<Integer> notTakenDays, int totalNumberOfLogsInMonth) {
         MonthlyAdherence monthlyAdherence = treatmentCardModel.getMonthlyAdherences().get(pos);
         assertEquals(monthAndYear, monthlyAdherence.getMonthAndYear());
+        assertEquals(month.toString(),monthlyAdherence.getMonth());
+        assertEquals(year.toString(),monthlyAdherence.getYear());
         assertEquals(firstSunday, monthlyAdherence.getFirstSunday());
         assertEquals(maxDays, monthlyAdherence.getMaxDays());
         List<DailyAdherence> logs = monthlyAdherence.getLogs();

@@ -205,3 +205,8 @@ body {
 .leftnav-menu-margin {
     margin-left: -200px;
 }
+
+div.buttons a, div.buttons button {
+    float: right;
+    margin-left: 20px;
+}
