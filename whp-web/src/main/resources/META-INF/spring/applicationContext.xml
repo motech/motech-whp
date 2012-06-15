@@ -18,6 +18,7 @@
     <import resource="classpath*:applicationDateTimeSimulatorContext.xml"/>
     <import resource="classpath*:applicationBulkExportContext.xml"/>
     <import resource="classpath*:applicationBulkImportContext.xml"/>
+    <import resource="classpath*:applicationContext-registration-service.xml"/>
 
     <context:annotation-config/>
     <context:spring-configured/>
