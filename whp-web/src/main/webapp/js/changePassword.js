@@ -1,14 +1,3 @@
-$(function() {
-    $('#changePasswordModal input').keypress(function (e) {
-        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-            $('#changePasswordModal').submit();
-            return false;
-        } else {
-            return true;
-        }
-    });
-});
-
 $('#changePasswordModal').on('shown', function() {
     $('#currentPassword').focus();
     $('#changePasswordError').empty();

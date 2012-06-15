@@ -1,9 +1,10 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout>
 <@layout.defaultLayout "Create CMF Admin Account">
-<div class="span12" id="createCmfAdminForm">
+<div class="span12" id="createCmfAdmin">
     </br>
-    <form action="<@spring.url '/cmfAdmin/create'/>" method="POST" class="row well form-horizontal">
+    <div id="test"></div>
+    <form action="<@spring.url '/cmfAdmin/create'/>" id="createCmfAdminForm" submitOnEnterKey="true" method="POST" class="row well form-horizontal">
         <div class="offset2">
 
             <div class="control-group">
@@ -101,4 +102,6 @@
         </div>
     </form>
 </div>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/createCmfAdmin.js'/>"></script>
+
 </@layout.defaultLayout>
