@@ -29,16 +29,25 @@
         </table>
     </div>
     </#if>
+    <#if message?exists && (message?length>0)>
+    <div class="message-alert row text-center alert alert-info fade in">
+        <button class="close" data-dismiss="alert">&times;</button>
+    ${message}
+        <#assign message=""/>
+    </div>
+    </#if>
+
 <div class="well">
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="brand pull-left">Adjust Phase Start Dates</a>
+
     <div class="float-right">Patient Id : ${patientId}</div>
 </div>
-<@phaseInfo/>
-<@treatmentCardView/>
+    <@phaseInfo/>
+    <@treatmentCardView/>
 <script type="text/javascript">
-    $('#ipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
-    $('#eipDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
-    $('#cpDatePicker').datepicker({dateFormat : 'dd/mm/yy'});
+    $('#ipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
+    $('#eipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
+    $('#cpDatePicker').datepicker({dateFormat:'dd/mm/yy'});
     $("#clearFields").click(function () {
         $('#ipDatePicker').val('');
         $('#eipDatePicker').val('');
@@ -46,5 +55,6 @@
         event.preventDefault();
     });
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
+    createAutoClosingAlert(".message-alert", 5000)
 </script>
 </@layout.defaultLayout>

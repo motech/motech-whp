@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.exception.WHPErrorCode;
+import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.util.CollectionUtils;
@@ -122,5 +123,12 @@ public class Treatment {
             this.tbId = null;
         else
             this.tbId = tbId.toLowerCase();
+    }
+
+    public boolean isOnTreatment(LocalDate date) {
+        if(endDate==null)
+            return WHPDateUtil.isOnOrAfter(date,startDate);
+        else
+            return WHPDateUtil.isOnOrAfter(date,startDate) && WHPDateUtil.isOnOrBefore(date,endDate);
     }
 }

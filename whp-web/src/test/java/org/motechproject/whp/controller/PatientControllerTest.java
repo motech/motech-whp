@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.security.authentication.LoginSuccessHandler;
+import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.contract.DailyAdherenceRequest;
 import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.contract.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -13,10 +16,11 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
-import org.motechproject.whp.util.JsonUtil;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -53,7 +57,7 @@ public class PatientControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients, allAdherenceLogs,treatmentCardService);
+        patientController = new PatientController(allPatients, allAdherenceLogs, treatmentCardService);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
@@ -156,10 +160,28 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldSaveAdherenceData() {
-        String delta = "[{patientId:a3de608d-33a8-418d-bc52-8b6b7720febf,day:6,month:7,year:2012,pillStatus:2},{patientId:a3de608d-33a8-418d-bc52-8b6b7720febf,day:13,month:7,year:2012,pillStatus:2}]";
-        List<UpdateAdherenceRequest> adherenceData = new JsonUtil().fromJsonArray(delta, UpdateAdherenceRequest.class);
-        patientController.saveTreatmentCard(delta);
-        verify(treatmentCardService,times(1)).addLogs(adherenceData);
+    public void shouldSaveAdherenceData() throws IOException {
+        String delta = "{patientId:test , dailyAdherenceRequests:[{day:6,month:7,year:2012,pillStatus:1},{day:13,month:8,year:2012,pillStatus:2}]}";
+        UpdateAdherenceRequest adherenceData = new UpdateAdherenceRequest();
+        adherenceData.setPatientId("test");
+        DailyAdherenceRequest dailyAdherenceRequest1 = new DailyAdherenceRequest(6, 7, 2012, 1);
+        DailyAdherenceRequest dailyAdherenceRequest2 = new DailyAdherenceRequest(13, 8, 2012, 2);
+        adherenceData.setDailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2));
+
+        setUpUserInSession("username");
+        Patient patient = new PatientBuilder().withDefaults().build();
+        when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
+        String view = patientController.saveTreatmentCard(delta, uiModel, request);
+        assertEquals("patient/show", view);
+
+        verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, "username", patient);
+    }
+
+    private void setUpUserInSession(String username) {
+        HttpSession httpSession = mock(HttpSession.class);
+        MotechUser user = mock(MotechUser.class);
+        when(user.getUserName()).thenReturn(username);
+        when(httpSession.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(user);
+        when(request.getSession()).thenReturn(httpSession);
     }
 }

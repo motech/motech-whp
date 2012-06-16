@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import com.google.gson.Gson;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
@@ -10,7 +11,6 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
 import org.motechproject.whp.util.FlashUtil;
-import org.motechproject.whp.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +26,13 @@ import static java.util.Arrays.asList;
 
 @Controller
 @RequestMapping(value = "/patients")
-public class PatientController {
+public class PatientController  extends BaseController{
 
     public static final String PATIENT_LIST = "patientList";
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
     TreatmentCardService treatmentCardService;
+    private static final String NOTIFICATION_MESSAGE = "message";
 
     @Autowired
     public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, TreatmentCardService treatmentCardService) {
@@ -70,21 +71,28 @@ public class PatientController {
     @RequestMapping(value = "dashboard", method = RequestMethod.GET)
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = allPatients.findByPatientId(patientId);
+        setupModelForDashboard(uiModel, request, patient);
+        return "patient/show";
+    }
+
+    private void setupModelForDashboard(Model uiModel, HttpServletRequest request, Patient patient) {
         PatientDTO patientDTO = new PatientDTO(patient);
         uiModel.addAttribute("patient", patientDTO);
-        uiModel.addAttribute("patientId", patientId);
+        uiModel.addAttribute("patientId", patient.getPatientId());
         List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
         uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
-        return "patient/show";
     }
 
     @RequestMapping(value = "saveTreatmentCard", method = RequestMethod.POST)
-    public String saveTreatmentCard(@RequestParam("delta") String delta) {
-        List<UpdateAdherenceRequest> updateAherenceRequests = new JsonUtil().fromJsonArray(delta, UpdateAdherenceRequest.class);
-        treatmentCardService.addLogs(updateAherenceRequests);
+    public String saveTreatmentCard(@RequestParam("delta") String delta, Model uiModel, HttpServletRequest request) {
+        UpdateAdherenceRequest updateAherenceRequest = new Gson().fromJson(delta, UpdateAdherenceRequest.class);
+        Patient patient = allPatients.findByPatientId(updateAherenceRequest.getPatientId());
+        treatmentCardService.addLogsForPatient(updateAherenceRequest, loggedInUser(request).getUserName(), patient);
+        setupModelForDashboard(uiModel, request, patient);
+        uiModel.addAttribute(NOTIFICATION_MESSAGE, "Successfully saved Adherence logs");
         return "patient/show";
     }
 

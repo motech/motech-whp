@@ -18,7 +18,7 @@ public class PatientDashboardPage extends Page {
     }
 
     public String adherenceStatusOn(LocalDate localDate) {
-        return findWebElementByDate(localDate).getAttribute("pillStatus");
+        return findWebElementByDate(localDate).getAttribute("currentPillStatus");
     }
 
     public String adherenceOnProvidedBy(LocalDate localDate) {

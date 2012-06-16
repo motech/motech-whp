@@ -90,7 +90,7 @@
                             <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
                             <#else>"bg-gray ${isItASunday}"
                             </#if>
-                            id="${day} ${monthlyAdherence.monthAndYear}">
+                            id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
                             <div class="watermarked-sunday">
                                 <#if isItASunday == 'sunday' && monthlyAdherence.maxDays &gt; day>
                                     S
@@ -105,8 +105,11 @@
         <tbody>
         </tbody>
     </table>
+    <form id="treatmentCardDeltaform" class="hide" action="/whp/patients/saveTreatmentCard" method="post">
+       <input type="hidden" name="delta" id="delta"/>
+    </form>
     <div class="buttons">
-    <a href="" class="btn btn-primary">Clear</a>
+    <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn btn-primary">Clear</a>
     <a href="<@spring.url "/"/>" class="btn btn-primary">Cancel</a>
     <button type="button" id='submit' class="btn btn-primary">Save Adherence</button>
     </div>
@@ -133,13 +136,13 @@
 
         //submitting changed pill status for saving
         $('#submit').click(function () {
-            var jsonData = [];
+            var dailyAdherenceRequests = [];
             $.each($('[pillStatusChanged=true]'), function () {
-                jsonData.push({patientId:$("#patient-id").text(), day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
+                dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
             });
-            var url="/whp/patients/saveTreatmentCard";
-            $.post(url,"delta= "+JSON.stringify(jsonData),function(data){
-            });
+            var delta = "{patientId:"+ $("#patient-id").text() + ", dailyAdherenceRequests: "+ JSON.stringify(dailyAdherenceRequests) +"}";
+            $('#delta').val(delta);
+            $('#treatmentCardDeltaform').submit();
         });
     </script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
