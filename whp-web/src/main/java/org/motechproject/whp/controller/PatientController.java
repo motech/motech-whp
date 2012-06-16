@@ -4,11 +4,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.flash.Flash;
+import org.motechproject.whp.contract.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
 import org.motechproject.whp.util.FlashUtil;
-import org.motechproject.whp.service.TreatmentCardService;
+import org.motechproject.whp.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,6 +78,13 @@ public class PatientController {
             uiModel.addAttribute("messages", messages);
         }
         uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
+        return "patient/show";
+    }
+
+    @RequestMapping(value = "saveTreatmentCard", method = RequestMethod.POST)
+    public String saveTreatmentCard(@RequestParam("delta") String delta) {
+        List<UpdateAdherenceRequest> updateAherenceRequests = new JsonUtil().fromJsonArray(delta, UpdateAdherenceRequest.class);
+        treatmentCardService.addLogs(updateAherenceRequests);
         return "patient/show";
     }
 

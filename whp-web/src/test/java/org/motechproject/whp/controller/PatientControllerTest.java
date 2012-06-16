@@ -7,11 +7,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.contract.TreatmentCardModel;
+import org.motechproject.whp.contract.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
+import org.motechproject.whp.util.JsonUtil;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -151,5 +153,13 @@ public class PatientControllerTest {
 
         patientController.list(uiModel);
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
+    }
+
+    @Test
+    public void shouldSaveAdherenceData() {
+        String delta = "[{patientId:a3de608d-33a8-418d-bc52-8b6b7720febf,day:6,month:7,year:2012,pillStatus:2},{patientId:a3de608d-33a8-418d-bc52-8b6b7720febf,day:13,month:7,year:2012,pillStatus:2}]";
+        List<UpdateAdherenceRequest> adherenceData = new JsonUtil().fromJsonArray(delta, UpdateAdherenceRequest.class);
+        patientController.saveTreatmentCard(delta);
+        verify(treatmentCardService,times(1)).addLogs(adherenceData);
     }
 }

@@ -130,6 +130,17 @@
                 $("[providerid=" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
             }
         });
+
+        //submitting changed pill status for saving
+        $('#submit').click(function () {
+            var jsonData = [];
+            $.each($('[pillStatusChanged=true]'), function () {
+                jsonData.push({patientId:$("#patient-id").text(), day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
+            });
+            var url="/whp/patients/saveTreatmentCard";
+            $.post(url,"delta= "+JSON.stringify(jsonData),function(data){
+            });
+        });
     </script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
     </#if>

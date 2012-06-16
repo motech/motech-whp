@@ -51,12 +51,6 @@ $(function () {
         }
     });
 
-//submitting changed pill status for saving
-    $('#submit').click(function () {
-        var jsonData = [];
-        $.each($('[pillStatusChanged=true]'), function () {
-            jsonData.push({patientId:$("#patient-id").text(), day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
-        });
-    });
+
 });
 

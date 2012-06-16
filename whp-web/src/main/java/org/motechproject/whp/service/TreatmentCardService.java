@@ -5,6 +5,7 @@ import org.joda.time.Period;
 import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.contract.TreatmentCardModel;
+import org.motechproject.whp.contract.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,9 @@ public class TreatmentCardService {
             return ipTreatmentCard;
         }
         return null;
+    }
+
+    public void addLogs(List<UpdateAdherenceRequest> updateAdherenceRequests) {
+
     }
 }
