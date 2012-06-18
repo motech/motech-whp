@@ -13,8 +13,6 @@ import org.motechproject.whp.patient.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static java.util.Arrays.asList;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
@@ -56,14 +54,14 @@ public class TreatmentCardModel {
     }
 
     public void addAdherenceDataForGivenTherapy(Patient patient, List<AdherenceData> adherenceData, Therapy therapy, Period period) {
-
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         LocalDate startDate = therapy.getStartDate();
         LocalDate endDate = startDate.plus(period);
 
         isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
-        List<LocalDate> adherenceDates = extract(adherenceData, on(AdherenceData.class).doseDate());
-
+        List<LocalDate> adherenceDates = new ArrayList<>();
+        for(AdherenceData datum : adherenceData)
+            adherenceDates.add(datum.doseDate());
         for (LocalDate doseDate = startDate; doseDate.isBefore(endDate); doseDate = doseDate.plusDays(1)) {
 
             boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, therapy, doseDate);

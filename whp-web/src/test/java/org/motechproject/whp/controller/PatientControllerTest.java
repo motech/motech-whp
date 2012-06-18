@@ -173,7 +173,7 @@ public class PatientControllerTest {
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
         String view = patientController.saveTreatmentCard(delta, uiModel, request);
         assertEquals("patient/show", view);
-
+        verify(uiModel,times(1)).addAttribute(PatientController.NOTIFICATION_MESSAGE,"Treatment Card saved successfully");
         verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, "username", patient);
     }
 

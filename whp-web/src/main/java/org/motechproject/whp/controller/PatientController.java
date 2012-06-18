@@ -32,7 +32,7 @@ public class PatientController  extends BaseController{
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
     TreatmentCardService treatmentCardService;
-    private static final String NOTIFICATION_MESSAGE = "message";
+    public static final String NOTIFICATION_MESSAGE = "message";
 
     @Autowired
     public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, TreatmentCardService treatmentCardService) {
@@ -91,9 +91,10 @@ public class PatientController  extends BaseController{
         UpdateAdherenceRequest updateAherenceRequest = new Gson().fromJson(delta, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAherenceRequest.getPatientId());
         treatmentCardService.addLogsForPatient(updateAherenceRequest, loggedInUser(request).getUserName(), patient);
-        setupModelForDashboard(uiModel, request, patient);
-        uiModel.addAttribute(NOTIFICATION_MESSAGE, "Successfully saved Adherence logs");
-        return "patient/show";
+        uiModel.addAttribute(NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
+        return show(patient.getPatientId(), uiModel, request);
+//        setupModelForDashboard(uiModel, request, patient);
+//        return "patient/show";
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)

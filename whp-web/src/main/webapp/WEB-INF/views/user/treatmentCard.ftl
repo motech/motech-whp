@@ -1,36 +1,36 @@
 <#macro treatmentCardView>
     <#if treatmentCard?exists>
     <div id="legend-container" class="pull-right">
-    <div id="patient-id" class="hide">${patientId}</div>
-    <table id="legend" class="table table-bordered table-condensed">
-        <thead>
-        <tr>
-            <th>Legend</th>
-        </tr>
-        </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div class="label pausedAdherenceData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            </td>
-            <td>
-                <div class="text-center">Therapy Paused</div>
-            </td>
-        </tr>
-        <#list treatmentCard.providerIds as providerId>
-        <tr>
-            <td>
-                <div class="windings-font pull-left" providerId=${providerId}> &#10003; </div>
-                <div class="pull-left"> , &nbsp; </div>
-                <div class="legend-round-icon" providerId=${providerId}>O </div>
-            </td>
-            <td>
-                <div class="text-center text-center">Adherence given by provider ${providerId}</div>
-            </td>
-        </tr>
-        </#list>
-    </tbody>
-    </table>
+        <div id="patient-id" class="hide">${patientId}</div>
+        <table id="legend" class="table table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>Legend</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="label pausedAdherenceData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                </td>
+                <td>
+                    <div class="text-center">Treatment Paused</div>
+                </td>
+            </tr>
+                <#list treatmentCard.providerIds as providerId>
+                <tr>
+                    <td>
+                        <div class="windings-font pull-left" providerId=${providerId}> &#10003; </div>
+                        <div class="pull-left"> , &nbsp; </div>
+                        <div class="legend-round-icon" providerId=${providerId}>O</div>
+                    </td>
+                    <td>
+                        <div class="text-center text-center">Adherence given by provider ${providerId}</div>
+                    </td>
+                </tr>
+                </#list>
+            </tbody>
+        </table>
     </div>
 
     <table id="IPTreatmentCard" class="table table-bordered table-condensed fixed sharp disable-select">
@@ -61,41 +61,43 @@
                         </#if>
                         <#if dailyAdherence.day == day>
                             <#assign drawn = true/>
-                            <td class=
-                                <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                                <#elseif dailyAdherence.pillStatus == 2> "round-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                                <#elseif dailyAdherence.futureAdherence == true> "editable ${isItASunday} ${isItDuringPausedPeriod}"
-                                <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                                <td class=
+                            <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#elseif dailyAdherence.pillStatus == 2> "round-icon
+                                editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#elseif dailyAdherence.futureAdherence == true>
+                                "editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            </#if>
+                            id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
+                            day="${day}"
+                            month="${monthlyAdherence.month}"
+                            year="${monthlyAdherence.year}"
+                            currentPillStatus="${dailyAdherence.pillStatus}"
+                            oldPillStatus="${dailyAdherence.pillStatus}"
+                            providerId = ${dailyAdherence.providerId}>
+                            <div>
+                                <#if dailyAdherence.pillStatus == 1> &#10003;
+                                <#elseif dailyAdherence.pillStatus == 2> O
+                                <#elseif dailyAdherence.futureAdherence == true>
+                                <#else> -
                                 </#if>
-                                id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
-                                day="${day}"
-                                month="${monthlyAdherence.month}"
-                                year="${monthlyAdherence.year}"
-                                currentPillStatus="${dailyAdherence.pillStatus}"
-                                oldPillStatus="${dailyAdherence.pillStatus}"
-                                providerId = ${dailyAdherence.providerId}>
-                                <div>
-                                    <#if dailyAdherence.pillStatus == 1> &#10003;
-                                    <#elseif dailyAdherence.pillStatus == 2> O
-                                    <#elseif dailyAdherence.futureAdherence == true>
-                                    <#else> -
-                                    </#if>
-                                </div>
+                            </div>
                             </td>
                             <#break/>
                         </#if>
                     </#list>
                     <#if drawn == false>
-                        <td class=
-                            <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                            <#else>"bg-gray ${isItASunday}"
+                            <td class=
+                        <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
+                        <#else>"bg-gray ${isItASunday}"
+                        </#if>
+                        id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
+                        <div class="watermarked-sunday">
+                            <#if isItASunday == 'sunday' && monthlyAdherence.maxDays &gt; day>
+                                S
                             </#if>
-                            id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
-                            <div class="watermarked-sunday">
-                                <#if isItASunday == 'sunday' && monthlyAdherence.maxDays &gt; day>
-                                    S
-                                </#if>
-                            </div>
+                        </div>
                         </td>
                     </#if>
                 </#list>
@@ -105,14 +107,17 @@
         <tbody>
         </tbody>
     </table>
-    <form id="treatmentCardDeltaform" class="hide" action="/whp/patients/saveTreatmentCard" method="post">
-       <input type="hidden" name="delta" id="delta"/>
+    <form id="treatmentCardDeltaform" action="/whp/patients/saveTreatmentCard" method="post">
+        <input type="hidden" name="delta" id="delta"/>
+
+        <div class="buttons">
+            <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn btn-primary">Clear</a>
+            <a href="<@spring.url "/"/>" class="btn btn-primary">Cancel</a>
+            <button type="button" id='submitJson' class="btn btn-primary">Save</button>
+        </div>
     </form>
-    <div class="buttons">
-    <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn btn-primary">Clear</a>
-    <a href="<@spring.url "/"/>" class="btn btn-primary">Cancel</a>
-    <button type="button" id='submit' class="btn btn-primary">Save Adherence</button>
-    </div>
+
+
     <script type="text/javascript">
         $(function () {
             var providerIds = new Array();
@@ -135,12 +140,12 @@
         });
 
         //submitting changed pill status for saving
-        $('#submit').click(function () {
+        $('#submitJson').click(function () {
             var dailyAdherenceRequests = [];
             $.each($('[pillStatusChanged=true]'), function () {
                 dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
             });
-            var delta = "{patientId:"+ $("#patient-id").text() + ", dailyAdherenceRequests: "+ JSON.stringify(dailyAdherenceRequests) +"}";
+            var delta = "{patientId:" + $("#patient-id").text() + ", dailyAdherenceRequests: " + JSON.stringify(dailyAdherenceRequests) + "}";
             $('#delta').val(delta);
             $('#treatmentCardDeltaform').submit();
         });
