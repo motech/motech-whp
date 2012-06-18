@@ -17,19 +17,17 @@
             <th>Village</th>
             <th>District</th>
             <th>Treatment Category</th>
-            <th>Patient Type</th>
             <th>Treatment Start Date</th>
-            <th> </th>
         </tr>
         </thead>
         <tbody>
             <#if patientList?size == 0>
             <tr>
-                <td style="text-align: center" colspan="12">No patients to show</td>
+                <td class="text-center" colspan="12">No patients to show</td>
             </tr>
                 <#else>
                     <#list patientList as patient>
-                    <tr id="patientList_${patient.patientId}"
+                    <tr id="patientList_${patient.patientId}" class="link" redirect-url="<@spring.url '/patients/dashboard?patientId=${patient.patientId}' />"
                         class="<#if patient.currentTreatmentPaused>paused</#if>">
                         <td class="patientId"><b>${patient.patientId}</b></td>
                         <td class="tbId">${patient.currentTreatment.tbId}</td>
@@ -43,18 +41,10 @@
                         <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
                         <td id="patient_${patient.patientId}_District">${patient.currentTreatment.patientAddress.address_district}</td>
                         <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
-                        <td id="patient_${patient.patientId}_PatientType">
-                            <#if patient.currentTreatment?? >
-                                ${patient.currentTreatment.patientType }
-                            </#if>
-                        </td>
                         <td id="patient_${patient.patientId}_TreatmentStartDate">
                             <#if patient.currentTreatment.therapy.startDate?? >
                                     ${patient.currentTreatment.therapy.startDate?date?string("dd/mm/yyyy") }
                             </#if>
-                        </td>
-                        <td class="patient_adherence">
-                            <a href="<@spring.url '/patients/dashboard?patientId=${patient.patientId}' />">View Dashboard</a>
                         </td>
                     </tr>
                     </#list>
@@ -63,4 +53,10 @@
     </table>
 </div>
 
+<script type="text/javascript">
+  $('#patientList td').click(function(){
+      if($(this).parent().attr('redirect-url') != null)
+        window.location= $(this).parent().attr('redirect-url');
+  })
+</script>
 </@layout.defaultLayout>

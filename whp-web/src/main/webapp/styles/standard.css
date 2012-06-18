@@ -144,7 +144,7 @@ body {
     user-select: none;
 }
 
-.editable {
+.link, .editable {
     cursor: pointer
 }
 .watermarked-sunday{
@@ -169,7 +169,7 @@ body {
 }
 
 .pausedAdherenceData{
-    background-color: #F5F508;
+    background-color: lightPink;
 }
 .float-right {
  float:right;
