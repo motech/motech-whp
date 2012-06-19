@@ -1,7 +1,7 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.export.annotation.ExcelReportGroup;
-import org.motechproject.export.annotation.Report;
+import org.motechproject.export.annotation.DataProvider;
+import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
@@ -28,7 +28,7 @@ import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 
 @Controller
 @RequestMapping(value = "/adherence")
-@ExcelReportGroup(name = "adherence")
+@ExcelDataSource(name = "adherence")
 public class AdherenceController extends BaseController {
 
     private AllPatients allPatients;
@@ -69,7 +69,7 @@ public class AdherenceController extends BaseController {
         return "redirect:/";
     }
 
-    @Report
+    @DataProvider
     public List<Adherence> adherenceReport(int pageNumber) {
         return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }

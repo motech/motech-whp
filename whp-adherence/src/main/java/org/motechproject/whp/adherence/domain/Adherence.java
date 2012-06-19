@@ -2,7 +2,7 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
-import org.motechproject.export.annotation.ReportValue;
+import org.motechproject.export.annotation.ExportValue;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 
@@ -47,22 +47,22 @@ public class Adherence {
         this.providerId = providerId;
     }
 
-    @ReportValue(index = 0)
+    @ExportValue(index = 0)
     public String getPatientId() {
         return patientId;
     }
 
-    @ReportValue(index = 1)
+    @ExportValue(index = 1)
     public String getTbId() {
         return tbId;
     }
 
-    @ReportValue(index = 2, column = "Adherence date")
+    @ExportValue(index = 2, column = "Adherence date")
     public String pillDate() {
         return pillDate.toString(WHPConstants.DATE_FORMAT);
     }
 
-    @ReportValue(index = 3, column = "Adherence value")
+    @ExportValue(index = 3, column = "Adherence value")
     public String pillStatus() {
         return pillStatus.name();
     }
