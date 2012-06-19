@@ -141,27 +141,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         assertNotSame(-1, reader.read());
     }
 
-    @Test
-    public void shouldLogInSpecifiedLogPathEvenIfExceptionOccurs() throws IOException {
-        File logFile = new File(getLogDir() + "logCheck1.log");
-        logFile.delete();
-        assertFalse(logFile.exists());
-
-        String[] arguments = new String[3];
-        arguments[0] = "provider";
-        arguments[1] = getLogDir() + "invalidFile.csv";
-        arguments[2] = logFile.getAbsolutePath();
-
-        try {
-            CsvImporter.main(arguments);
-        } catch (Exception e) {
-        }
-
-        assertTrue(logFile.exists());
-        FileReader reader = new FileReader(logFile.getAbsoluteFile());
-        assertNotSame(-1, reader.read());
-    }
-
     @Ignore
     @Test
     public void shouldVerifyImportedProviderData() throws Exception {
