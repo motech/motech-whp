@@ -3,8 +3,11 @@ package org.motechproject.whp.patient.repository;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

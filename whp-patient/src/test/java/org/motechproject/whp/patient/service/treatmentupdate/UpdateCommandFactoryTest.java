@@ -1,14 +1,15 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.patient.command.OpenNewTreatment;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class UpdateCommandFactoryTest extends SpringIntegrationTest {

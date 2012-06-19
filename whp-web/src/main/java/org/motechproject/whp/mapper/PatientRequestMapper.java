@@ -2,10 +2,10 @@ package org.motechproject.whp.mapper;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.MappingException;
-import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.common.exception.WHPRuntimeException;
 import org.motechproject.whp.contract.PatientWebRequest;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class PatientRequestMapper {
         this.smearTestResultsMapper = smearTestResultsMapper;
     }
 
-    public PatientRequest map(PatientWebRequest patientWebRequest) {
+    public PatientRequest map(PatientWebRequest patientWebRequest) throws WHPRuntimeException {
         try {
             PatientRequest request = dozerPatientRequestMapper.map(patientWebRequest, PatientRequest.class);
             request.setSmearTestResults(smearTestResultsMapper.map(patientWebRequest));

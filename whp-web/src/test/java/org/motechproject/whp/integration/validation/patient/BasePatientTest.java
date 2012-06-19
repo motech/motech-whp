@@ -2,13 +2,13 @@ package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.After;
 import org.junit.Before;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.contract.PatientWebRequest;
+import org.motechproject.whp.patient.command.UpdateScope;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

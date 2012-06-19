@@ -1,11 +1,12 @@
 package org.motechproject.whp.patient.service;
 
+import org.joda.time.DateTime;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
+import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,15 +61,30 @@ public class TreatmentService {
 
     public void transferInPatient(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        providerService.transferIn(patientRequest.getProvider_id(),
-                patient, patientRequest.getTb_id(),
-                patientRequest.getTb_registration_number(),
-                patientRequest.getDate_modified(),
-                patientRequest.getSmearTestResults(),
-                patientRequest.getWeightStatistics());
+        DateTime dateModified = patientRequest.getDate_modified();
+        SmearTestResults newSmearTestResults = patientRequest.getSmearTestResults();
+        WeightStatistics newWeightStatistics = patientRequest.getWeightStatistics();
+        Treatment currentTreatment = patient.getCurrentTreatment();
+
+        copyOverTreatment(patientRequest, patient, dateModified, newSmearTestResults, newWeightStatistics, currentTreatment);
         patient.reviveLastClosedTreatment();
         patient.latestTherapy().setDiseaseClass(patientRequest.getDisease_class());
         patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
+
+    private void copyOverTreatment(PatientRequest patientRequest, Patient patient, DateTime dateModified, SmearTestResults newSmearTestResults, WeightStatistics newWeightStatistics, Treatment currentTreatment) {
+        Treatment newTreatment = new Treatment(currentTreatment)
+                .updateForTransferIn(
+                        patientRequest.getTb_id(),
+                        patientRequest.getProvider_id(),
+                        dateModified.toLocalDate()
+                );
+        newTreatment.setSmearTestResults(newSmearTestResults.isEmpty() ? currentTreatment.getSmearTestResults() : newSmearTestResults);
+        newTreatment.setWeightStatistics(newWeightStatistics.isEmpty() ? currentTreatment.getWeightStatistics() : newWeightStatistics);
+        newTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
+        patient.addTreatment(newTreatment, dateModified);
+        newTreatment.setPatientType(PatientType.TransferredIn);
+    }
+
 }

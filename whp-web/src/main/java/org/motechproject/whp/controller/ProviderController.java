@@ -2,10 +2,10 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllCmfLocations;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.refdata.domain.WHPRole;
+import org.motechproject.whp.refdata.repository.AllCmfLocations;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.WHPRole;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

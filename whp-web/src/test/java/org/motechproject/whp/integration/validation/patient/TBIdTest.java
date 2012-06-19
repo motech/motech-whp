@@ -1,10 +1,10 @@
 package org.motechproject.whp.integration.validation.patient;
 
 import org.junit.Test;
+import org.motechproject.common.exception.WHPRuntimeException;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.motechproject.whp.contract.PatientWebRequest;
+import org.motechproject.whp.patient.command.UpdateScope;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;

@@ -1,6 +1,7 @@
 package org.motechproject.whp.importer.csv;
 
 import org.joda.time.DateTime;
+import org.motechproject.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
@@ -9,10 +10,9 @@ import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.contract.ProviderRequest;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.registration.service.RegistrationService;
+import org.motechproject.whp.user.contract.ProviderRequest;
+import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,15 +24,15 @@ import java.util.List;
 @Component
 public class ProviderRecordImporter {
 
-    private RegistrationService registrationService;
+    private ProviderService providerService;
     private RequestValidator validator;
     private AllProviders allProviders;
 
 
     @Autowired
-    public ProviderRecordImporter(AllProviders allProviders, RegistrationService registrationService, RequestValidator validator) {
+    public ProviderRecordImporter(AllProviders allProviders, ProviderService providerService, RequestValidator validator) {
         this.allProviders = allProviders;
-        this.registrationService = registrationService;
+        this.providerService = providerService;
         this.validator = validator;
     }
 
@@ -86,8 +86,8 @@ public class ProviderRecordImporter {
     }
 
     public void registerProvider(ImportProviderRequest importProviderRequest) {
-        registrationService.registerProvider(mapToProviderRequest(importProviderRequest));
-        registrationService.activateUser(importProviderRequest.getProviderId().toLowerCase());
+        providerService.registerProvider(mapToProviderRequest(importProviderRequest));
+        providerService.activateUser(importProviderRequest.getProviderId().toLowerCase());
     }
 
     private ProviderRequest mapToProviderRequest(ImportProviderRequest importProviderRequest) {

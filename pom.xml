@@ -21,9 +21,10 @@
     </properties>
 
     <modules>
+        <module>whp-common</module>
         <module>whp-refdata</module>
+        <module>whp-user</module>
         <module>whp-patient</module>
-        <module>whp-application</module>
         <module>whp-mapping</module>
         <module>whp-adherence</module>
         <module>whp-validation</module>
@@ -52,6 +53,11 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-seed</artifactId>
+            <version>${motech.delivery.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-testing-utils</artifactId>

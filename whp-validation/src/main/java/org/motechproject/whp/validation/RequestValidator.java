@@ -1,7 +1,7 @@
 package org.motechproject.whp.validation;
 
+import org.motechproject.common.exception.WHPRuntimeException;
 import org.motechproject.validation.validator.BeanValidator;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;

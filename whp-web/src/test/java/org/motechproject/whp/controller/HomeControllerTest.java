@@ -6,9 +6,9 @@ import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.refdata.domain.WHPRole;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.WHPRole;
+import org.motechproject.whp.user.repository.AllProviders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

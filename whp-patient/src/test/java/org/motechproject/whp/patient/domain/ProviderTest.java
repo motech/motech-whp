@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.motechproject.whp.user.domain.Provider;
 
 import static junit.framework.Assert.assertEquals;
 

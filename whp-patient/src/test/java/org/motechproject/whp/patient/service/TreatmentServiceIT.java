@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.service;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -12,7 +13,6 @@ import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
-import static junit.framework.Assert.assertEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class TreatmentServiceIT extends SpringIntegrationTest {

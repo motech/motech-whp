@@ -2,7 +2,7 @@ package org.motechproject.whp.validation;
 
 
 import org.motechproject.validation.validator.root.NamedConstraintValidator;
-import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

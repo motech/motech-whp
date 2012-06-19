@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.builder;
 
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.user.domain.Provider;
 
 public class ProviderBuilder {
 

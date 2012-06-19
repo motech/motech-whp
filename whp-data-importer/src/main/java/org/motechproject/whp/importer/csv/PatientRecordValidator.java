@@ -15,7 +15,7 @@ import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

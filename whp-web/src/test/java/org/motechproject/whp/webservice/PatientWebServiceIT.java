@@ -4,19 +4,23 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.mapper.PatientRequestMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.Provider;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.repository.*;
+import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTherapies;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.registration.service.RegistrationService;
-import org.motechproject.whp.contract.PatientWebRequest;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,7 +34,7 @@ import static junit.framework.Assert.*;
 public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
-    RegistrationService patientRegistrationService;
+    ProviderService providerService;
     @Autowired
     AllPatients allPatients;
     @Autowired
@@ -58,7 +62,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        patientWebService = new PatientWebService(patientRegistrationService, patientService, validator, patientRequestMapper);
+        patientWebService = new PatientWebService(patientService, validator, patientRequestMapper);
     }
 
     @Test

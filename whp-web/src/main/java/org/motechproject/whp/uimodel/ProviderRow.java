@@ -1,7 +1,7 @@
 package org.motechproject.whp.uimodel;
 
 import lombok.Data;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.user.domain.Provider;
 
 @Data
 public class ProviderRow {

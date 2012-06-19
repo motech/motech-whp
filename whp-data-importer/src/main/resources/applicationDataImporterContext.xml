@@ -9,7 +9,7 @@
 
     <import resource="classpath*:applicationMappingContext.xml"/>
     <import resource="classpath*:applicationWHPValidationContext.xml"/>
-    <import resource="classpath*:applicationWHPContext.xml"/>
+    <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
 
     <import resource="classpath*:applicationBulkImportContext.xml"/>

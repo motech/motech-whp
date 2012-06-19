@@ -9,7 +9,7 @@
 
     <context:property-placeholder location="classpath*:*.properties"/>
 
-    <import resource="classpath*:applicationWHPContext.xml"/>
+    <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
     <import resource="classpath*:applicationValidationContext.xml"/>
     <import resource="classpath*:applicationWebSecurityContext.xml"/>

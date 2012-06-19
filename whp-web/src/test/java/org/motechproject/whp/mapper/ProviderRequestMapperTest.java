@@ -5,7 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
-import org.motechproject.whp.patient.contract.ProviderRequest;
+import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.contract.ProviderWebRequest;
 
@@ -30,7 +30,7 @@ public class ProviderRequestMapperTest {
 
         ProviderRequest provider = providerRequestMapper.map(providerWebRequest);
 
-        assertEquals("providerId", provider.getProviderId());
+        assertEquals("providerid", provider.getProviderId());
         assertEquals("9880123456", provider.getPrimaryMobile());
         assertEquals("9880123457", provider.getSecondaryMobile());
         assertEquals("9880123458", provider.getTertiaryMobile());

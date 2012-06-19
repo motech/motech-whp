@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.contract.PatientWebRequest;
 
 public class GenderTest extends BasePatientTest {

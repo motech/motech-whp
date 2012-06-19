@@ -2,6 +2,7 @@ package org.motechproject.whp.importer.csv;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.motechproject.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
@@ -14,12 +15,11 @@ import org.motechproject.whp.importer.csv.request.WeightStatisticsRequests;
 import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
-import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ import static org.springframework.util.StringUtils.hasText;
 @Component
 public class PatientRecordImporter {
 
-    private RegistrationService registrationService;
+    private PatientService patientService;
     private RequestValidator validator;
     private ImportPatientRequestMapper importPatientRequestMapper;
     private StringToDateTime stringToDateTime = new StringToDateTime();
@@ -41,11 +41,11 @@ public class PatientRecordImporter {
     private AllPatients allPatients;
 
     @Autowired
-    public PatientRecordImporter(RegistrationService registrationService,
+    public PatientRecordImporter(PatientService patientService,
                                  RequestValidator validator,
                                  ImportPatientRequestMapper importPatientRequestMapper,
                                  AllPatients allPatients) {
-        this.registrationService = registrationService;
+        this.patientService = patientService;
         this.importPatientRequestMapper = importPatientRequestMapper;
         this.validator = validator;
         this.allPatients = allPatients;
@@ -119,7 +119,7 @@ public class PatientRecordImporter {
 
     public void registerPatient(ImportPatientRequest importPatientRequest) {
         PatientRequest patientRequest = importPatientRequestMapper.map(importPatientRequest);
-        registrationService.registerPatient(patientRequest);
+        patientService.createPatient(patientRequest);
     }
 }
 

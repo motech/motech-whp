@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.common.exception.WHPErrorCode;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -10,7 +11,6 @@ import org.motechproject.whp.patient.command.TransferInPatient;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
@@ -34,12 +34,9 @@ public class TransferInPatientTest extends BaseUnitTest {
 
     private TransferInPatient transferInPatient;
 
-    private Patient patient;
-
     @Before
     public void setUp() {
         initMocks(this);
-        patient = new PatientBuilder().withDefaults().build();
         transferInPatient = new TransferInPatient(allPatients, allTherapies, treatmentService);
     }
 

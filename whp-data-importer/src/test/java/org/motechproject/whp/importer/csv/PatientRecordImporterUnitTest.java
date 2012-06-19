@@ -11,9 +11,9 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.WeightInstance;
-import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.validation.RequestValidator;
 
 import static java.util.Arrays.asList;
@@ -29,7 +29,7 @@ public class PatientRecordImporterUnitTest {
     PatientRecordImporter patientRecordImporter;
 
     @Mock
-    private RegistrationService registrationService;
+    private PatientService patientService;
 
     @Mock
     private ImportPatientRequestMapper importPatientRequestMapper;
@@ -40,7 +40,7 @@ public class PatientRecordImporterUnitTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientRecordImporter = new PatientRecordImporter(registrationService, validator, importPatientRequestMapper, allPatients);
+        patientRecordImporter = new PatientRecordImporter(patientService, validator, importPatientRequestMapper, allPatients);
     }
 
     @Test
@@ -56,12 +56,12 @@ public class PatientRecordImporterUnitTest {
 
         when(importPatientRequestMapper.map(importPatientRequest1)).thenReturn(patientRequest1);
         when(importPatientRequestMapper.map(importPatientRequest2)).thenReturn(patientRequest2);
-        doThrow(new RuntimeException("Exception to be thrown for test")).when(registrationService).registerPatient(patientRequest1);
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(patientService).createPatient(patientRequest1);
 
         patientRecordImporter.post(asList((Object) importPatientRequest1, importPatientRequest2));
 
-        verify(registrationService, times(1)).registerPatient(patientRequest1);
-        verify(registrationService, times(1)).registerPatient(patientRequest2);
+        verify(patientService, times(1)).createPatient(patientRequest1);
+        verify(patientService, times(1)).createPatient(patientRequest2);
     }
 
     @Test

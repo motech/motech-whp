@@ -8,10 +8,10 @@ import org.mockito.Mock;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.contract.ProviderRequest;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.registration.service.RegistrationService;
+import org.motechproject.whp.user.contract.ProviderRequest;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.validation.RequestValidator;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ProviderRecordImporterUnitTest {
     ProviderRecordImporter providerRecordImporter;
 
     @Mock
-    private RegistrationService registrationService;
+    private ProviderService providerService;
 
 
     @Mock
@@ -38,7 +38,7 @@ public class ProviderRecordImporterUnitTest {
     @Before
     public void setup() {
         initMocks(this);
-        providerRecordImporter = new ProviderRecordImporter(allProviders,registrationService, validator);
+        providerRecordImporter = new ProviderRecordImporter(allProviders, providerService, validator);
     }
 
     @Test
@@ -46,13 +46,13 @@ public class ProviderRecordImporterUnitTest {
         ImportProviderRequest importProviderRequest1 = new ImportProviderRequestBuilder().withDefaults("1").build();
         ImportProviderRequest importProviderRequest2 = new ImportProviderRequestBuilder().withDefaults("2").build();
 
-        doThrow(new RuntimeException("Exception to be thrown for test")).when(registrationService).registerProvider(Matchers.<ProviderRequest>any());
+        doThrow(new RuntimeException("Exception to be thrown for test")).when(providerService).registerProvider(Matchers.<ProviderRequest>any());
 
         providerRecordImporter.post(asList((Object) importProviderRequest1, importProviderRequest2));
 
         ArgumentCaptor<ProviderRequest> providerRequestArgumentCaptor = ArgumentCaptor.forClass(ProviderRequest.class);
 
-        verify(registrationService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
+        verify(providerService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
 
         List<ProviderRequest> providerRequests = providerRequestArgumentCaptor.getAllValues();
         assertEquals(2, providerRequests.size());
@@ -70,9 +70,10 @@ public class ProviderRecordImporterUnitTest {
 
         ArgumentCaptor<ProviderRequest> providerRequestArgumentCaptor = ArgumentCaptor.forClass(ProviderRequest.class);
 
-        verify(registrationService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
-        verify(registrationService, times(1)).activateUser(importProviderRequest1.getProviderId().toLowerCase());
-        verify(registrationService, times(1)).activateUser(importProviderRequest2.getProviderId().toLowerCase());
+        verify(providerService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
+        verify(providerService, times(1)).activateUser(importProviderRequest1.getProviderId().toLowerCase());
+        verify(providerService, times(1)).activateUser(importProviderRequest2.getProviderId().toLowerCase()
+        );
 
         List<ProviderRequest> providerRequests = providerRequestArgumentCaptor.getAllValues();
         assertEquals(2, providerRequests.size());

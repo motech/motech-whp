@@ -5,6 +5,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class AllTherapiesIT extends SpringIntegrationTest{
+public class AllTherapiesIT extends SpringIntegrationTest {
+
     @Autowired
     private AllTherapies allTherapies;
 
@@ -38,4 +40,5 @@ public class AllTherapiesIT extends SpringIntegrationTest{
         assertEquals(date, therapyFromDb.getCreationDate());
 
     }
+
 }

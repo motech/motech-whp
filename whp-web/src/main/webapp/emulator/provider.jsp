@@ -1,6 +1,6 @@
 <%@page import="org.motechproject.security.service.MotechAuthenticationService" %>
-<%@page import="org.motechproject.whp.patient.domain.Provider" %>
-<%@page import="org.motechproject.whp.patient.repository.AllProviders" %>
+<%@page import="org.motechproject.whp.user.domain.Provider" %>
+<%@page import="org.motechproject.whp.user.repository.AllProviders" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.util.Properties" %>

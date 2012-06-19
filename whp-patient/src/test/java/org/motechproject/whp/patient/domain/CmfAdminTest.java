@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
+import org.motechproject.whp.user.domain.CmfAdmin;
 
 import static junit.framework.Assert.assertEquals;
 

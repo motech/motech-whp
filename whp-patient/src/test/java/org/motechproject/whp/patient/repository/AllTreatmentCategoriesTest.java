@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.repository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.springframework.beans.factory.annotation.Autowired;

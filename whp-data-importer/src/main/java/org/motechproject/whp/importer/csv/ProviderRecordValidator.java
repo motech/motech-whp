@@ -6,8 +6,8 @@ import org.motechproject.importer.annotation.Validate;
 import org.motechproject.importer.domain.ValidationResponse;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllProviders;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

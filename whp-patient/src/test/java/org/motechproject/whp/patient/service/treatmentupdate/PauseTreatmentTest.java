@@ -3,11 +3,11 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.command.PauseTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
@@ -26,12 +26,10 @@ public class PauseTreatmentTest extends BaseUnitTest {
     @Mock
     private TreatmentService treatmentService;
     private PauseTreatment pauseTreatment;
-    private Patient patient;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patient = new PatientBuilder().withDefaults().build();
         pauseTreatment = new PauseTreatment(allPatients, allTherapies, treatmentService);
     }
 

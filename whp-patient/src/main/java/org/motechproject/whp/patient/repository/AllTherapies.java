@@ -14,4 +14,5 @@ public class AllTherapies extends MotechBaseRepository<Therapy> {
     public AllTherapies(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(Therapy.class, dbCouchDbConnector);
     }
+
 }

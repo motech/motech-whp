@@ -4,9 +4,9 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.motechproject.whp.patient.exception.WHPError;
-import org.motechproject.whp.patient.exception.WHPErrorCode;
-import org.motechproject.whp.patient.exception.WHPRuntimeException;
+import org.motechproject.common.exception.WHPError;
+import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.common.exception.WHPRuntimeException;
 
 public class BaseUnitTest {
 

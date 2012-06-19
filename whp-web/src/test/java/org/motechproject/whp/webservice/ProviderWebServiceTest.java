@@ -2,18 +2,18 @@ package org.motechproject.whp.webservice;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
-import org.motechproject.whp.registration.service.RegistrationService;
 import org.motechproject.whp.builder.ProviderRequestBuilder;
-import org.motechproject.whp.patient.domain.Provider;
-import org.motechproject.whp.patient.repository.AllProviders;
-import org.motechproject.whp.patient.repository.SpringIntegrationTest;
 import org.motechproject.whp.contract.ProviderWebRequest;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
@@ -24,14 +24,14 @@ public class ProviderWebServiceTest extends SpringIntegrationTest {
     @Autowired
     private RequestValidator validator;
     @Autowired
-    private RegistrationService registrationService;
+    private ProviderService providerServices;
 
     ProviderWebService providerWebService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerWebService = new ProviderWebService(validator, registrationService);
+        providerWebService = new ProviderWebService(validator, providerServices);
     }
 
     @Test
