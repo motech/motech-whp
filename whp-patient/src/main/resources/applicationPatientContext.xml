@@ -7,7 +7,6 @@
 
     <context:property-placeholder location="classpath*:*.properties"/>
 
-    <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
 
