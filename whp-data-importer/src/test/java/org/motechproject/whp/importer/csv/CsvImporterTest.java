@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Provider;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.*;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 
 import static junit.framework.Assert.*;
 
@@ -59,7 +58,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         Provider provider1 = allProviders.findByProviderId("john");
@@ -76,12 +74,10 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         arguments[0] = "patient";
         arguments[1] = getPatientCsv();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
         assertEquals(3, allPatients.getAll().size());
         assertEquals(3, allTherapies.getAll().size());
@@ -96,12 +92,10 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         arguments[0] = "patient";
         arguments[1] = CsvImporterTest.class.getClassLoader().getResource("patientRecordsWitnInvalidData.csv").getPath();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
         assertEquals(0, allPatients.getAll().size());
         assertEquals(0, allTherapies.getAll().size());
@@ -121,7 +115,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getLogDir() + "invalidFile.csv";
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
     }
 
@@ -147,7 +140,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         String[] arguments = new String[3];
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = getLogFilePath();
         CsvImporter.main(arguments);
 
         Provider provider2 = allProviders.findByProviderId("raj");
@@ -212,9 +204,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         return CsvImporterTest.class.getClassLoader().getResource("providerRecords.csv").getPath();
     }
 
-    private String getLogFilePath() {
-        return getLogDir() + "importer.log";
-    }
 
     private String getLogDir() {
         return System.getProperty("user.dir") + "/logs/";

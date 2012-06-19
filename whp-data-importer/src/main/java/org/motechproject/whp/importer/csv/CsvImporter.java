@@ -9,6 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
+
 public class CsvImporter {
 
     private static final String APPLICATION_CONTEXT_XML = "applicationDataImporterContext.xml";
@@ -51,11 +53,13 @@ public class CsvImporter {
     }
 
     private static void setLogger(String logFile) throws WHPImportException {
-        try {
-            new File(logFile).createNewFile();
-            ImporterLogger.loadAppender(logFile);
-        } catch (Exception exception) {
-            throw new WHPImportException("Unable to create/access the log file -" + logFile);
+        if (isNotEmpty(logFile)) {
+            try {
+                new File(logFile).createNewFile();
+                ImporterLogger.loadAppender(logFile);
+            } catch (Exception exception) {
+                throw new WHPImportException("Unable to create/access the log file -" + logFile);
+            }
         }
     }
 
