@@ -1,7 +1,7 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.export.annotation.ExcelReportGroup;
 import org.motechproject.export.annotation.Report;
-import org.motechproject.export.annotation.ReportGroup;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
@@ -28,7 +28,7 @@ import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 
 @Controller
 @RequestMapping(value = "/adherence")
-@ReportGroup(name = "adherence")
+@ExcelReportGroup(name = "adherence")
 public class AdherenceController extends BaseController {
 
     private AllPatients allPatients;
