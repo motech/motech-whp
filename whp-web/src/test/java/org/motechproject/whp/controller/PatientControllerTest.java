@@ -174,7 +174,7 @@ public class PatientControllerTest {
         String view = patientController.saveTreatmentCard(delta, uiModel, request);
         assertEquals("patient/show", view);
         verify(uiModel,times(1)).addAttribute(PatientController.NOTIFICATION_MESSAGE,"Treatment Card saved successfully");
-        verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, "username", patient);
+        verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, patient);
     }
 
     private void setUpUserInSession(String username) {

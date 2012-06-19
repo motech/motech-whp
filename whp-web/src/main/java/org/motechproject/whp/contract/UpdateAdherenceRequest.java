@@ -8,6 +8,6 @@ import java.util.List;
 public class UpdateAdherenceRequest {
     private String patientId;
     private List<DailyAdherenceRequest> dailyAdherenceRequests;
-
+    private String therapy;
 }
 

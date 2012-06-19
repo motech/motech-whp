@@ -27,7 +27,8 @@ public class TreatmentCardModelTest {
         String provider = "prov_id1";
 
         LocalDate therapyStartDate = new LocalDate(2012, 2, 3);
-        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate);
+        String therapyDocId = "therapyDocId";
+        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, therapyDocId);
         patient.getCurrentTreatment().setProviderId(provider);
 
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
@@ -66,15 +67,31 @@ public class TreatmentCardModelTest {
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), new Period().withMonths(5));
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        validateMonthLog(treatmentCardModel,2,2012, "Feb 2012", 0, 5, 29, febLogDays, febTakenDays, febNotTakenDays, 12);
+        validateMonthLog(treatmentCardModel, 2, 2012, "Feb 2012", 0, 5, 29, febLogDays, febTakenDays, febNotTakenDays, 12);
         validateMonthLog(treatmentCardModel, 3,2012,"Mar 2012", 1, 4, 31, marchLogDays, marchTakenDays, marchNotTakenDays, 13);
         validateMonthLog(treatmentCardModel, 4,2012,"Apr 2012", 2, 1, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 13);
         validateMonthLog(treatmentCardModel,5,2012, "May 2012", 3, 6, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 13);
         validateMonthLog(treatmentCardModel,6,2012, "Jun 2012", 4, 3, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 13);
         validateMonthLog(treatmentCardModel,7,2012, "Jul 2012", 5, 1, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 1);
         assertEquals(asList(provider), treatmentCardModel.getProviderIds());
-
     }
+
+    @Test
+    public void shouldSetTherapyDocId() {
+        String provider = "prov_id1";
+        LocalDate therapyStartDate = new LocalDate(2012, 2, 3);
+        String therapyDocId = "therapyDocId";
+        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, therapyDocId);
+        patient.getCurrentTreatment().setProviderId(provider);
+
+        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+
+        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
+        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.latestTherapy(), new Period().withMonths(5));
+
+        assertEquals(therapyDocId,treatmentCardModel.getTherapyDocId());
+    }
+
 
     @Test
     public void shouldSetProviderIdForDailyAdherence() {
@@ -213,18 +230,18 @@ public class TreatmentCardModelTest {
 
     }
 
-    private Patient createPatientOn3DayAWeekTreatmentCategory(String externalId, LocalDate therapyStartDate) {
+    private Patient createPatientOn3DayAWeekTreatmentCategory(String externalId, LocalDate therapyStartDate, String therapyDocId) {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(externalId).build();
         patient.startTherapy(therapyStartDate);
-        patient.latestTherapy().setId("1");
-        patient.getCurrentTreatment().setTherapyDocId("1");
-        patient.getCurrentTreatment().getTherapy().setId("1");
+        patient.latestTherapy().setId(therapyDocId);
+        patient.getCurrentTreatment().setTherapyDocId(therapyDocId);
+        patient.getCurrentTreatment().getTherapy().setId(therapyDocId);
         patient.getCurrentTreatment().setStartDate(therapyStartDate);
         return patient;
     }
 
     private Patient createPatientOn7DayAWeekTreatmentCategory(String externalId, LocalDate therapyStartDate) {
-        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate);
+        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, "1");
         patient.latestTherapy().getTreatmentCategory().setPillDays(asList(DayOfWeek.values()));
         return patient;
     }

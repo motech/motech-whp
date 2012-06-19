@@ -24,7 +24,7 @@ public class TreatmentCardModel {
     private List<String> providerColorCodes = asList("blue", "green", "orange", "brown", "purple", "rosyBrown", "olive", "salmon", "cyan", "red");
     private List<String> providerIds = new ArrayList<String>();
     private boolean isSundayDoseDate;
-
+    private String therapyDocId;
     public TreatmentCardModel() {
     }
 
@@ -57,7 +57,7 @@ public class TreatmentCardModel {
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         LocalDate startDate = therapy.getStartDate();
         LocalDate endDate = startDate.plus(period);
-
+        therapyDocId = therapy.getId();
         isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
         List<LocalDate> adherenceDates = new ArrayList<>();
         for(AdherenceData datum : adherenceData)

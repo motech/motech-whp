@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +25,9 @@ public class TreatmentCardService {
     AllAdherenceLogs allAdherenceLogs;
     AllPatients allPatients;
     AdherenceService adherenceService;
+
     @Autowired
-    public TreatmentCardService(AllAdherenceLogs allAdherenceLogs, AdherenceService adherenceService,AllPatients allPatients) {
+    public TreatmentCardService(AllAdherenceLogs allAdherenceLogs, AdherenceService adherenceService, AllPatients allPatients) {
         this.allAdherenceLogs = allAdherenceLogs;
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
@@ -48,43 +50,25 @@ public class TreatmentCardService {
         return null;
     }
 
-    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, String addedByUser, Patient patient) {
+    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
         List<AdherenceData> adherenceData = new ArrayList();
 
-        for(DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
-            AdherenceData datum;
-
-            Treatment doseForTreatment = getTreatment(patient, request.getDoseDate());
-
-            if(doseForTreatment==null){
-                datum = new AdherenceData(patient.getPatientId(),"",request.getDoseDate());
-            }
-            else {
-                datum = new AdherenceData(patient.getPatientId(),doseForTreatment.getTherapyDocId(),request.getDoseDate());
-            }
-
-            datum.addMeta(AdherenceConstants.PROVIDER_ID,addedByUser);
+        for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
+            AdherenceData datum = new AdherenceData(patient.getPatientId(), updateAdherenceRequest.getTherapy(), request.getDoseDate());
             datum.status(request.getPillStatus());
             adherenceData.add(datum);
-        }
 
-        adherenceService.addOrUpdateLogsByDosedate(adherenceData,patient.getPatientId());
-    }
-
-    private Treatment getTreatment(Patient patient, LocalDate doseDate) {
-        Treatment doseForTreatment=null;
-
-        if(patient.getCurrentTreatment()!=null && patient.getCurrentTreatment().isOnTreatment(doseDate)){
-            doseForTreatment = patient.getCurrentTreatment();
-        }
-        else {
-            for(Treatment treatment : patient.getTreatments()){
-                if(treatment.isOnTreatment(doseDate)) {
-                    doseForTreatment = treatment;
-                    break;
-                }
+            Treatment doseForTreatment = patient.getTreatmentForDateInTherapy(request.getDoseDate(), updateAdherenceRequest.getTherapy());
+            if (doseForTreatment != null) {
+                datum.addMeta(AdherenceConstants.TB_ID, doseForTreatment.getTbId());
+                datum.addMeta(AdherenceConstants.PROVIDER_ID, doseForTreatment.getProviderId());
+            }
+            else {
+                datum.addMeta(AdherenceConstants.TB_ID, WHPConstants.UNKNOWN);
+                datum.addMeta(AdherenceConstants.PROVIDER_ID, WHPConstants.UNKNOWN);
             }
         }
-        return doseForTreatment;
+
+        adherenceService.addOrUpdateLogsByDosedate(adherenceData, patient.getPatientId());
     }
 }

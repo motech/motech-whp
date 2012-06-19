@@ -90,11 +90,9 @@ public class PatientController  extends BaseController{
     public String saveTreatmentCard(@RequestParam("delta") String delta, Model uiModel, HttpServletRequest request) {
         UpdateAdherenceRequest updateAherenceRequest = new Gson().fromJson(delta, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAherenceRequest.getPatientId());
-        treatmentCardService.addLogsForPatient(updateAherenceRequest, loggedInUser(request).getUserName(), patient);
+        treatmentCardService.addLogsForPatient(updateAherenceRequest, patient);
         uiModel.addAttribute(NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         return show(patient.getPatientId(), uiModel, request);
-//        setupModelForDashboard(uiModel, request, patient);
-//        return "patient/show";
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)

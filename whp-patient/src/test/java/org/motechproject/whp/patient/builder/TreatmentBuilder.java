@@ -70,4 +70,9 @@ public class TreatmentBuilder {
         treatment.setEndDate(date);
         return this;
     }
+
+    public TreatmentBuilder withTbId(String tbId) {
+        treatment.setTbId(tbId);
+        return this;
+    }
 }

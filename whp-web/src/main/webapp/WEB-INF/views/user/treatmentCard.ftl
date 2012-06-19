@@ -145,7 +145,7 @@
             $.each($('[pillStatusChanged=true]'), function () {
                 dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
             });
-            var delta = "{patientId:" + $("#patient-id").text() + ", dailyAdherenceRequests: " + JSON.stringify(dailyAdherenceRequests) + "}";
+            var delta = "{patientId:" + $("#patient-id").text() + ", therapy:${treatmentCard.therapyDocId}, dailyAdherenceRequests: " + JSON.stringify(dailyAdherenceRequests) + "}";
             $('#delta').val(delta);
             $('#treatmentCardDeltaform').submit();
         });
