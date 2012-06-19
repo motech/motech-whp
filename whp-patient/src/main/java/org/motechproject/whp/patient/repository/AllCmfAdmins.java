@@ -45,4 +45,12 @@ public class AllCmfAdmins extends MotechBaseRepository<CmfAdmin> {
         List<CmfAdmin> cmfAdmins = db.queryView(q, CmfAdmin.class);
         return cmfAdmins;
     }
+
+    public void updateDetails(CmfAdmin cmfAdmin, String staffName, String location, String email, String department) {
+        cmfAdmin.setStaffName(staffName);
+        cmfAdmin.setLocationId(location);
+        cmfAdmin.setEmail(email);
+        cmfAdmin.setDepartment(department);
+        update(cmfAdmin);
+    }
 }

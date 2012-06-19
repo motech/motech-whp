@@ -6,10 +6,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class CmfAdminWebRequest {
+public class UpdateCMFAdminRequest {
 
-    @Size(min = 1, message = "UserID cannot be empty")
-    private String userId;
+    private String id;
 
     @Size(min = 1,message = "Email ID cannot be empty")
     @Pattern(regexp = "$|^[\\w-]+(\\.[\\w-]+)*@([a-z0-9-]+(\\.[a-z0-9-]+)*?\\.[a-z]{2,6}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{4})?$" , message = "Please enter a valid email id. example: abc@xyz.com")
@@ -18,13 +17,7 @@ public class CmfAdminWebRequest {
     private String department;
 
     @Size(min = 1, message = "Location cannot be empty")
-    private String location;
-
-    @Size(min = 1,message = "Password cannot be empty")
-    private String password;
-
-    @Size(min = 1, message="Confirm Password cannot be empty")
-    private String confirmPassword;
+    private String locationId;
 
     @Size(min = 1, message="Staff name cannot be empty")
     private String staffName;

@@ -1,9 +1,9 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.contract.CmfAdminWebRequest;
+import org.motechproject.whp.contract.CreateCMFAdminRequest;
 
 public class CmfAdminWebRequestBuilder {
-    private CmfAdminWebRequest request = new CmfAdminWebRequest();
+    private CreateCMFAdminRequest request = new CreateCMFAdminRequest();
     public CmfAdminWebRequestBuilder withDefaults() {
        request.setUserId("cmfadmin1");
        request.setPassword("password");
@@ -14,7 +14,7 @@ public class CmfAdminWebRequestBuilder {
         return this;
     }
 
-    public CmfAdminWebRequest build(){
+    public CreateCMFAdminRequest build(){
         return request;
     }
 

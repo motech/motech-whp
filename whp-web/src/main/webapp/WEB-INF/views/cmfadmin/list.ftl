@@ -22,6 +22,7 @@
             <th>Staff Name</th>
             <th>User Name</th>
             <th>Location</th>
+            <th>Edit</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,9 @@
                     </td>
                     <td>
                         ${cmfAdmin.locationId}
+                    </td>
+                    <td>
+                        <a href="/whp/cmfAdmin/edit?userId=${cmfAdmin.userId}">Edit</a>
                     </td>
                 </tr>
             </#list>
