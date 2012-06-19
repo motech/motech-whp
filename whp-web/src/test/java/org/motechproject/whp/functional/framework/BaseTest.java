@@ -58,11 +58,10 @@ public abstract class BaseTest {
         String testMethodName = testName.getMethodName();
         testMethodName = StringUtils.isEmpty(testMethodName) ? DateUtil.now().toString("yyyy-MM-dd HH-mm") : testMethodName;
         if (webDriver == null) return;
-        String pageSource = webDriver.getPageSource();
-
-        File file = new File(System.getProperty("base.dir"), String.format("target/%s.html", testMethodName));
         BufferedWriter output = null;
         try {
+            String pageSource = webDriver.getPageSource();
+            File file = new File(System.getProperty("base.dir"), String.format("target/%s.html", testMethodName));
             output = new BufferedWriter(new FileWriter(file));
             output.write(pageSource);
             logger.info("HTML Output logged to %s", file.getName());
