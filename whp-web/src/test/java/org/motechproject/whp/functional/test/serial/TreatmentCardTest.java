@@ -133,7 +133,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         ListPatientsPage listPatientsPage = loginAsCMFAdminAndListAllPatients();
 
-        PatientDashboardPage patientDashboardPage = listPatientsPage.clickEditAdherenceForPatient(patientRequest.getCase_id());
+        PatientDashboardPage patientDashboardPage = listPatientsPage.clickOnPatient(patientRequest.getCase_id());
 
         /* Asserting on adherence data given by provider */
 

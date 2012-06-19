@@ -9,7 +9,7 @@
             <a id="cmf-admins" href="/whp/cmfAdmin/list">CMF Admins</a>
         </li>
         <li>
-            <a href="/whp/providers/list">Providers</a>
+            <a id="list-providers" href="/whp/providers/list">Providers</a>
         <li>
         <li class="divider"></li>
     </ul>

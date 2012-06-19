@@ -24,7 +24,7 @@ public class ListPatientsPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "category")
     protected List<WebElement> categories;
 
-    @FindBy(how = How.CLASS_NAME, using = "patient_adherence")
+    @FindBy(how = How.CLASS_NAME, using = "link")
     private List<WebElement> dashboardLinks;
 
     public ListPatientsPage(WebDriver webDriver) {
@@ -64,7 +64,7 @@ public class ListPatientsPage extends LoggedInUserPage {
         return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").equals("rgb(255, 182, 193)");
     }
 
-    public PatientDashboardPage clickEditAdherenceForPatient(String patientId) {
+    public PatientDashboardPage clickOnPatient(String patientId) {
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {
             if (patientIds.get(i).getText().equals(patientId)) {
@@ -72,7 +72,7 @@ public class ListPatientsPage extends LoggedInUserPage {
                 break;
             }
         }
-        dashboardLinks.get(index).findElement(By.linkText("View Dashboard")).click();
+        dashboardLinks.get(index).findElement(By.className("patientId")).click();
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }
 

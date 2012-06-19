@@ -23,7 +23,7 @@
         <tbody>
             <#if patientList?size == 0>
             <tr>
-                <td class="text-center" colspan="12">No patients to show</td>
+                <td style="text-align: center" colspan="12">No patients to show</td>
             </tr>
                 <#else>
                     <#list patientList as patient>
@@ -54,9 +54,22 @@
 </div>
 
 <script type="text/javascript">
-  $('#patientList td').click(function(){
-      if($(this).parent().attr('redirect-url') != null)
-        window.location= $(this).parent().attr('redirect-url');
-  })
+    var isDragging = false;
+    $("#patientList td")
+        .mousedown(function() {
+            $(window).mousemove(function() {
+                isDragging = true;
+                $(window).unbind("mousemove");
+            });
+        })
+        .mouseup(function() {
+            var wasDragging = isDragging;
+            isDragging = false;
+            $(window).unbind("mousemove");
+            if (!wasDragging) { //was clicking
+                if($(this).parent().attr('redirect-url') != null)
+                window.location= $(this).parent().attr('redirect-url');
+            }
+        });
 </script>
 </@layout.defaultLayout>

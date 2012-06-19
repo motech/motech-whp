@@ -94,7 +94,7 @@
                             </#if>
                             id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
                             <div class="watermarked-sunday">
-                                <#if isItASunday == 'sunday' (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
+                                <#if isItASunday == 'sunday' && (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
                                     S
                                 </#if>
                             </div>
