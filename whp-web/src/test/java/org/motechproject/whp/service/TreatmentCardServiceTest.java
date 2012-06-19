@@ -6,11 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.adherence.contract.AdherenceData;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceService;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.contract.DailyAdherenceRequest;
 import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.contract.UpdateAdherenceRequest;
@@ -32,11 +30,9 @@ import static org.motechproject.whp.builder.AdherenceDataBuilder.createLog;
 
 public class TreatmentCardServiceTest {
 
-    @Mock
-    AllAdherenceLogs allAdherenceLogs;
 
     @Mock
-    AdherenceService adherenceService;
+    WHPAdherenceService whpAdherenceService;
 
     @Mock
     AllPatients allPatients;
@@ -47,7 +43,7 @@ public class TreatmentCardServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardService = new TreatmentCardService(allAdherenceLogs,adherenceService,allPatients);
+        treatmentCardService = new TreatmentCardService(allPatients, whpAdherenceService);
     }
 
     @Test
@@ -56,18 +52,18 @@ public class TreatmentCardServiceTest {
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, "1");
 
         String therapyDocId = patient.latestTherapy().getId();
-        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), therapyDocId,PillStatus.Taken);
-        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), therapyDocId,PillStatus.NotTaken);
-        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12), therapyDocId, PillStatus.Unknown);
-        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28), therapyDocId,PillStatus.Taken);
-        List<AdherenceData> adherenceData = Arrays.asList(log1, log2, log3, log4);
+        Adherence log1 = createLog(new LocalDate(2012, 2, 10), therapyDocId,PillStatus.Taken);
+        Adherence log2 = createLog(new LocalDate(2012, 2, 15), therapyDocId,PillStatus.NotTaken);
+        Adherence log3 = createLog(new LocalDate(2012, 3, 12), therapyDocId, PillStatus.Unknown);
+        Adherence log4 = createLog(new LocalDate(2012, 3, 28), therapyDocId,PillStatus.Taken);
+        List<Adherence> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
-        when(allAdherenceLogs.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
+        when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
 
         TreatmentCardModel treatmentCardModel = treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        verify(allAdherenceLogs, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5));
+        verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5));
     }
 
     @Test
@@ -98,9 +94,9 @@ public class TreatmentCardServiceTest {
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<String> patientIdCaptor = ArgumentCaptor.forClass(String.class);
-        verify(adherenceService,times(1)).addOrUpdateLogsByDosedate(argumentCaptor.capture(),patientIdCaptor.capture());
+        verify(whpAdherenceService,times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), patientIdCaptor.capture());
         assertEquals(patient.getPatientId(),patientIdCaptor.getValue());
-        List<AdherenceData> dataToBeStored = argumentCaptor.getValue();
+        List<Adherence> dataToBeStored = argumentCaptor.getValue();
 
         assertEquals(3, dataToBeStored.size());
 
@@ -109,12 +105,12 @@ public class TreatmentCardServiceTest {
         assertLog(dataToBeStored.get(2), patientId, new LocalDate(2012, 2, 15), therapydocId, "provider2", "tb2");
     }
 
-    private void assertLog(AdherenceData adherenceData, String patientId, LocalDate doseDate, String therapydocId, String providerId, String tbId) {
-        assertEquals(therapydocId, adherenceData.treatmentId());
-        assertEquals(tbId, adherenceData.meta().get(AdherenceConstants.TB_ID));
-        assertEquals(providerId, adherenceData.meta().get(AdherenceConstants.PROVIDER_ID));
-        assertEquals(doseDate, adherenceData.doseDate());
-        assertEquals(patientId, adherenceData.externalId());
+    private void assertLog(Adherence adherenceData, String patientId, LocalDate doseDate, String therapydocId, String providerId, String tbId) {
+        assertEquals(therapydocId, adherenceData.getTreatmentId());
+        assertEquals(tbId, adherenceData.getTbId());
+        assertEquals(providerId, adherenceData.getProviderId());
+        assertEquals(doseDate, adherenceData.getPillDate());
+        assertEquals(patientId, adherenceData.getPatientId());
     }
 
     @Test
@@ -135,13 +131,13 @@ public class TreatmentCardServiceTest {
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<String> patientIdCaptor = ArgumentCaptor.forClass(String.class);
 
-        verify(adherenceService,times(1)).addOrUpdateLogsByDosedate(argumentCaptor.capture(),patientIdCaptor.capture());
+        verify(whpAdherenceService,times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), patientIdCaptor.capture());
 
         assertEquals(patient.getPatientId(),patientIdCaptor.getValue());
-        List<AdherenceData> dataToBeStored = argumentCaptor.getValue();
+        List<Adherence> dataToBeStored = argumentCaptor.getValue();
         assertEquals(1,dataToBeStored.size());
-        assertEquals(WHPConstants.UNKNOWN,dataToBeStored.get(0).meta().get(AdherenceConstants.PROVIDER_ID));
-        assertEquals(WHPConstants.UNKNOWN,dataToBeStored.get(0).meta().get(AdherenceConstants.TB_ID));
+        assertEquals(WHPConstants.UNKNOWN,dataToBeStored.get(0).getProviderId());
+        assertEquals(WHPConstants.UNKNOWN,dataToBeStored.get(0).getTbId());
     }
 
     @Test
@@ -164,13 +160,13 @@ public class TreatmentCardServiceTest {
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<String> patientIdCaptor = ArgumentCaptor.forClass(String.class);
 
-        verify(adherenceService,times(1)).addOrUpdateLogsByDosedate(argumentCaptor.capture(),patientIdCaptor.capture());
-        List<AdherenceData> dataToBeStored = argumentCaptor.getValue();
+        verify(whpAdherenceService,times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), patientIdCaptor.capture());
+        List<Adherence> dataToBeStored = argumentCaptor.getValue();
 
         assertEquals(patient.getPatientId(),patientIdCaptor.getValue());
 
         assertEquals(1,dataToBeStored.size());
-        assertEquals("patientid",dataToBeStored.get(0).externalId());
+        assertEquals("patientid",dataToBeStored.get(0).getPatientId());
     }
 
 

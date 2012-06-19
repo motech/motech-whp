@@ -2,10 +2,9 @@ package org.motechproject.whp.service;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
-import org.motechproject.adherence.contract.AdherenceData;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceService;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.contract.DailyAdherenceRequest;
 import org.motechproject.whp.contract.TreatmentCardModel;
 import org.motechproject.whp.contract.UpdateAdherenceRequest;
@@ -22,15 +21,12 @@ import java.util.List;
 
 @Component
 public class TreatmentCardService {
-    AllAdherenceLogs allAdherenceLogs;
     AllPatients allPatients;
-    AdherenceService adherenceService;
-
+    WHPAdherenceService whpAdherenceService;
     @Autowired
-    public TreatmentCardService(AllAdherenceLogs allAdherenceLogs, AdherenceService adherenceService, AllPatients allPatients) {
-        this.allAdherenceLogs = allAdherenceLogs;
-        this.adherenceService = adherenceService;
+    public TreatmentCardService(AllPatients allPatients, WHPAdherenceService whpAdherenceService) {
         this.allPatients = allPatients;
+        this.whpAdherenceService = whpAdherenceService;
     }
 
     public TreatmentCardModel getIntensivePhaseTreatmentCardModel(Patient patient) {
@@ -41,7 +37,7 @@ public class TreatmentCardService {
             LocalDate ipStartDate = latestTherapy.getStartDate();
             LocalDate endDate = ipStartDate.plusMonths(5);
 
-            List<AdherenceData> adherenceData = allAdherenceLogs.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, endDate);
+            List<Adherence> adherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, endDate);
             Period period = new Period().withMonths(5);
             ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, period);
 
@@ -51,24 +47,27 @@ public class TreatmentCardService {
     }
 
     public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
-        List<AdherenceData> adherenceData = new ArrayList();
+        List<Adherence> adherenceData = new ArrayList();
 
         for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
-            AdherenceData datum = new AdherenceData(patient.getPatientId(), updateAdherenceRequest.getTherapy(), request.getDoseDate());
-            datum.status(request.getPillStatus());
+            Adherence datum = new Adherence();
+            datum.setPatientId(patient.getPatientId());
+            datum.setTreatmentId(updateAdherenceRequest.getTherapy());
+            datum.setPillDate(request.getDoseDate());
+            datum.setPillStatus(PillStatus.get(request.getPillStatus()));
             adherenceData.add(datum);
 
             Treatment doseForTreatment = patient.getTreatmentForDateInTherapy(request.getDoseDate(), updateAdherenceRequest.getTherapy());
             if (doseForTreatment != null) {
-                datum.addMeta(AdherenceConstants.TB_ID, doseForTreatment.getTbId());
-                datum.addMeta(AdherenceConstants.PROVIDER_ID, doseForTreatment.getProviderId());
+                datum.setTbId(doseForTreatment.getTbId());
+                datum.setProviderId(doseForTreatment.getProviderId());
             }
             else {
-                datum.addMeta(AdherenceConstants.TB_ID, WHPConstants.UNKNOWN);
-                datum.addMeta(AdherenceConstants.PROVIDER_ID, WHPConstants.UNKNOWN);
+                datum.setTbId(WHPConstants.UNKNOWN);
+                datum.setProviderId(WHPConstants.UNKNOWN);
             }
         }
 
-        adherenceService.addOrUpdateLogsByDosedate(adherenceData, patient.getPatientId());
+        whpAdherenceService.addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
     }
 }

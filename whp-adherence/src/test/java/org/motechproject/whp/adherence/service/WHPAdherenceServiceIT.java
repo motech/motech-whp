@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.testing.utils.SpringIntegrationTest;
@@ -12,6 +13,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
@@ -27,9 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
-import static org.motechproject.whp.patient.builder.PatientRequestBuilder.*;
+import static org.motechproject.whp.patient.builder.PatientRequestBuilder.CASE_ID;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
@@ -160,6 +165,48 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
         adherenceService.recordAdherence(CASE_ID, new WeeklyAdherence(), auditParams);
         assertEquals(1, allAuditLogs.getAll().size());
+    }
+
+    @Test
+    public void shouldAddOrUpdateAdherenceData() {
+        Adherence log1 = createLog(PATIENT_ID, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", "therapyDocId", "providerId1");
+        Adherence log2 = createLog(PATIENT_ID, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", "therapyDocId", "providerId1");
+        List<Adherence> adherences = asList(log1,log2);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, PATIENT_ID);
+        List<AdherenceLog> logs = allAdherenceLogs.getAll();
+        assertEquals(2,logs.size());
+        assertEquals(PATIENT_ID,logs.get(0).externalId());
+        assertEquals(PATIENT_ID,logs.get(1).externalId());
+    }
+
+    @Test
+    public void shouldFindLogsByDateRangeForPatient() {
+        String patientId = "patientId";
+        String therapyDocId = "therapyDocId";
+        Adherence log1 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", therapyDocId, "providerId1");
+        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", therapyDocId, "providerId1");
+        Adherence log3 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", therapyDocId, "providerId1");
+        Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
+        List<Adherence> adherences = asList(log1,log2,log3,log4);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, patientId);
+
+        List<Adherence> result = adherenceService.findLogsInRange(patientId, therapyDocId, new LocalDate(2012, 1, 1), new LocalDate(2012, 2, 1));
+        assertEquals(2,result.size());
+        assertEquals("tbid1",result.get(0).getTbId());
+        assertEquals("tbid2",result.get(1).getTbId());
+    }
+
+    private Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyDocId, String providerId) {
+        Adherence log = new Adherence();
+        log.setTbId(tbId);
+        log.setProviderId(providerId);
+        log.setPillStatus(pillStatus);
+        log.setTreatmentId(therapyDocId);
+        log.setPillDate(pillDate);
+        log.setPatientId(patientId);
+        return log;
     }
 
     @After

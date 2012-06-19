@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.service;
 
+import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.adherence.service.AdherenceService;
@@ -75,6 +76,23 @@ public class WHPAdherenceService {
     public List<Adherence> allAdherenceData(int pageNumber, int pageSize) {
         List<AdherenceData> adherenceData = adherenceService.adherenceLogs(DateUtil.today(), pageNumber, pageSize);
         return new AdherenceMapper().map(adherenceData);
+    }
+
+    public void addOrUpdateLogsByDoseDate(List<Adherence> adherences, String patientId) {
+        List<AdherenceData> adherenceData = requests(adherences);
+        adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patientId);
+    }
+
+    public List<Adherence> findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
+        List<AdherenceData> adherenceData = adherenceService.findLogsInRange(patientId, treatmentId, start, end);
+        return new AdherenceMapper().map(adherenceData);
+    }
+
+    private List<AdherenceData> requests(List<Adherence> adherences) {
+        List<AdherenceData> adherenceData = new ArrayList<>();
+        for (Adherence adherence : adherences)
+            adherenceData.add(AdherenceDataMapper.request(adherence));
+        return adherenceData;
     }
 
     private List<AdherenceData> requests(WeeklyAdherence weeklyAdherence) {

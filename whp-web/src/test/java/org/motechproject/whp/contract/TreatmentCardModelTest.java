@@ -3,8 +3,8 @@ package org.motechproject.whp.contract;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.junit.Test;
-import org.motechproject.adherence.contract.AdherenceData;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -33,12 +33,12 @@ public class TreatmentCardModelTest {
 
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
 
-        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
-        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), provider, PillStatus.NotTaken);
-        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12), provider, PillStatus.Unknown);
-        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28), provider, PillStatus.Taken);
+        Adherence log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
+        Adherence log2 = createLog(new LocalDate(2012, 2, 15), provider, PillStatus.NotTaken);
+        Adherence log3 = createLog(new LocalDate(2012, 3, 12), provider, PillStatus.Unknown);
+        Adherence log4 = createLog(new LocalDate(2012, 3, 28), provider, PillStatus.Taken);
 
-        List<AdherenceData> adherenceData = asList(log1, log2, log3, log4);
+        List<Adherence> adherenceData = asList(log1, log2, log3, log4);
 
         List<Integer> febLogDays = asList(3, 6, 8, 10, 13, 15, 17, 20, 22, 24, 27, 29);
         List<Integer> febTakenDays = asList(10);
@@ -86,7 +86,7 @@ public class TreatmentCardModelTest {
 
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
 
-        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
+        Adherence log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.latestTherapy(), new Period().withMonths(5));
 
         assertEquals(therapyDocId,treatmentCardModel.getTherapyDocId());
@@ -110,11 +110,11 @@ public class TreatmentCardModelTest {
 
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
 
-        AdherenceData log1 = createLog(new LocalDate(2012, 2, 10), provider1, PillStatus.Taken);
-        AdherenceData log2 = createLog(new LocalDate(2012, 2, 15), provider2, PillStatus.NotTaken);
-        AdherenceData log3 = createLog(new LocalDate(2012, 3, 12), provider4, PillStatus.Unknown);
-        AdherenceData log4 = createLog(new LocalDate(2012, 3, 28), provider4, PillStatus.Taken);
-        List<AdherenceData> adherenceData = Arrays.asList(log1, log2, log3, log4);
+        Adherence log1 = createLog(new LocalDate(2012, 2, 10), provider1, PillStatus.Taken);
+        Adherence log2 = createLog(new LocalDate(2012, 2, 15), provider2, PillStatus.NotTaken);
+        Adherence log3 = createLog(new LocalDate(2012, 3, 12), provider4, PillStatus.Unknown);
+        Adherence log4 = createLog(new LocalDate(2012, 3, 28), provider4, PillStatus.Taken);
+        List<Adherence> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), new Period().withMonths(5));
         List<MonthlyAdherence> monthlyAdherences = treatmentCardModel.getMonthlyAdherences();
@@ -157,8 +157,8 @@ public class TreatmentCardModelTest {
 
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
 
-        AdherenceData log1 = createLog(firstDoseTakenDate, "notp1", PillStatus.Taken);
-        List<AdherenceData> adherenceData = asList(log1);
+        Adherence log1 = createLog(firstDoseTakenDate, "notp1", PillStatus.Taken);
+        List<Adherence> adherenceData = asList(log1);
 
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.latestTherapy(), new Period().withMonths(5));
 
@@ -174,7 +174,7 @@ public class TreatmentCardModelTest {
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
         Patient patient = createPatientOn7DayAWeekTreatmentCategory(externalId, therapyStartDate);
 
-        AdherenceData log1 = createLog(new LocalDate(2012, 4, 10), "ext_id", PillStatus.Taken);
+        Adherence log1 = createLog(new LocalDate(2012, 4, 10), "ext_id", PillStatus.Taken);
 
         treatmentCardModel.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.latestTherapy(), new Period().withMonths(5));
 
