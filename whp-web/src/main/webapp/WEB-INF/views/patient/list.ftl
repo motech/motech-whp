@@ -2,10 +2,11 @@
 <#import "../layout/default-cmfadmin.ftl" as layout>
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
 
 <div>
 <@legend key1="paused" value1="Current Treatment Paused" />
-    <table id="patientList" class="table table-bordered table-condensed">
+    <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
         <thead>
         <tr>
             <th>Patient ID</th>
@@ -23,7 +24,7 @@
         <tbody>
             <#if patientList?size == 0>
             <tr>
-                <td style="text-align: center" colspan="12">No patients to show</td>
+                <td class="text-center" colspan="12">No patients to show</td>
             </tr>
                 <#else>
                     <#list patientList as patient>
@@ -52,24 +53,4 @@
         </tbody>
     </table>
 </div>
-
-<script type="text/javascript">
-    var isDragging = false;
-    $("#patientList td")
-        .mousedown(function() {
-            $(window).mousemove(function() {
-                isDragging = true;
-                $(window).unbind("mousemove");
-            });
-        })
-        .mouseup(function() {
-            var wasDragging = isDragging;
-            isDragging = false;
-            $(window).unbind("mousemove");
-            if (!wasDragging) { //was clicking
-                if($(this).parent().attr('redirect-url') != null)
-                window.location= $(this).parent().attr('redirect-url');
-            }
-        });
-</script>
 </@layout.defaultLayout>

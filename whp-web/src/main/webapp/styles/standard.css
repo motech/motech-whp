@@ -77,6 +77,11 @@ body {
     background-color: #E3F5FA;
     color: black;
 }
+table tbody .link:hover td {
+    font-size: 14px;
+    color: #369BD7;
+    text-decoration: underline;
+}
 
 #numberSelect {
     text-align: center;
@@ -146,8 +151,10 @@ body {
 }
 
 .link, .editable {
-    cursor: pointer
+    cursor: pointer;
 }
+
+
 .watermarked-sunday{
     color: black;
     font-weight: bold;
@@ -224,8 +231,4 @@ div.buttons a, div.buttons button {
 .offset1-fixed {
     width: 379px;
     max-width: 379px;
-}
-.caption {
-    font-weight: bold;
-    text-align: left
 }
