@@ -86,6 +86,7 @@ public abstract class SpringIntegrationTest {
                 return false;
 
             }
+
             @Override
             public void describeTo(Description description) {
             }

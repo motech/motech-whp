@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
-public enum PhaseName{
+public enum PhaseName {
     IP("Intensive Phase"), CP("Continuation Phase"), EIP("Extended Intensive Phase");
 
     private String name;

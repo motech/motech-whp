@@ -57,12 +57,12 @@ public class Therapy extends MotechBaseDataObject {
         return DateUtil.setTimeZone(creationDate);
     }
 
-    public void start(LocalDate therapyStartDate){
+    public void start(LocalDate therapyStartDate) {
         setStartDate(therapyStartDate);
         phases.setIPStartDate(therapyStartDate);
     }
 
-    void setStartDate(LocalDate therapyStartDate){
+    void setStartDate(LocalDate therapyStartDate) {
         startDate = therapyStartDate;
     }
 }

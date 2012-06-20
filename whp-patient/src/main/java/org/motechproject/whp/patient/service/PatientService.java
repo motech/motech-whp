@@ -63,7 +63,7 @@ public class PatientService {
         if (patient == null) {
             errors.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
             return false;
-        }else if (!patient.hasCurrentTreatment()) {
+        } else if (!patient.hasCurrentTreatment()) {
             errors.add(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);
             return false;
         } else {

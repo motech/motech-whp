@@ -27,7 +27,7 @@ public class ProviderRecordImporter {
     private ProviderService providerService;
     private RequestValidator validator;
     private AllProviders allProviders;
-
+    private ImporterLogger importerLogger = new ImporterLogger();
 
     @Autowired
     public ProviderRecordImporter(AllProviders allProviders, ProviderService providerService, RequestValidator validator) {
@@ -50,7 +50,7 @@ public class ProviderRecordImporter {
             } catch (Exception e) {
                 String errorMessage = String.format("Exception thrown for object in row %d, with provider id - %s", i + 1, ((ImportProviderRequest) objects.get(i)).getProviderId()) +
                         "\n" + e.getMessage() + "\n";
-                ImporterLogger.error(errorMessage);
+                importerLogger.error(errorMessage);
                 isValid = false;
             }
             providerIdList.add(request.getProviderId());
@@ -73,14 +73,14 @@ public class ProviderRecordImporter {
 
     @Post
     public void post(List<Object> objects) {
-        ImporterLogger.info("Number of provider records to be stored in db :" + objects.size());
+        importerLogger.info("Number of provider records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
                 ImportProviderRequest importProviderRequest = (ImportProviderRequest) object;
-                ImporterLogger.info("Storing provider with provider id :" + importProviderRequest.getProviderId());
+                importerLogger.info("Storing provider with provider id :" + importProviderRequest.getProviderId());
                 registerProvider(importProviderRequest);
             } catch (Exception exception) {
-                ImporterLogger.error(exception);
+                importerLogger.error(exception);
             }
         }
     }

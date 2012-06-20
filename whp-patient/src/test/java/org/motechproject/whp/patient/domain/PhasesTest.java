@@ -6,9 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.today;
 
 public class PhasesTest {
@@ -16,7 +14,7 @@ public class PhasesTest {
     private Phases phases;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
     }
 

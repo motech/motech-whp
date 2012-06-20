@@ -37,7 +37,7 @@ public class PatientRecordImporter {
     private RequestValidator validator;
     private ImportPatientRequestMapper importPatientRequestMapper;
     private StringToDateTime stringToDateTime = new StringToDateTime();
-
+    private ImporterLogger importerLogger = new ImporterLogger();
     private AllPatients allPatients;
 
     @Autowired
@@ -65,7 +65,7 @@ public class PatientRecordImporter {
             } catch (Exception e) {
                 String errorMessage = String.format("Exception thrown for object in row %d, with case id - %s", i + 1, ((ImportPatientRequest) objects.get(i)).getCase_id()) +
                         "\n" + e.getMessage() + "\n";
-                ImporterLogger.error(errorMessage);
+                importerLogger.error(errorMessage);
                 isValid = false;
             }
             patientIds.add(request.getCase_id());
@@ -104,15 +104,15 @@ public class PatientRecordImporter {
 
     @Post
     public void post(List<Object> objects) {
-        ImporterLogger.info("Number of patient records to be stored in db :" + objects.size());
+        importerLogger.info("Number of patient records to be stored in db :" + objects.size());
         for (Object object : objects) {
             try {
                 ImportPatientRequest importPatientRequest = (ImportPatientRequest) object;
-                ImporterLogger.info("Storing patient with patient id :" + importPatientRequest.getCase_id());
+                importerLogger.info("Storing patient with patient id :" + importPatientRequest.getCase_id());
                 importPatientRequest.setMigrated(true);
                 registerPatient(importPatientRequest);
             } catch (Exception exception) {
-                ImporterLogger.error(exception);
+                importerLogger.error(exception);
             }
         }
     }

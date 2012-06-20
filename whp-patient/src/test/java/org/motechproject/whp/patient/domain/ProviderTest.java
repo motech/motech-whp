@@ -11,23 +11,23 @@ public class ProviderTest {
     public void shouldSetProviderIdInLowercase() {
         Provider provider = new Provider();
         provider.setProviderId("QWER");
-        assertEquals("qwer",provider.getProviderId());
+        assertEquals("qwer", provider.getProviderId());
     }
 
     @Test
     public void shouldCreatProviderWithIdInLowercase() {
-        Provider provider = new Provider("QWE","","", DateTime.now());
-        assertEquals("qwe",provider.getProviderId());
+        Provider provider = new Provider("QWE", "", "", DateTime.now());
+        assertEquals("qwe", provider.getProviderId());
     }
 
     @Test
     public void shouldHandleNullValuesForId() {
-        Provider provider=new Provider("","","",DateTime.now());
+        Provider provider = new Provider("", "", "", DateTime.now());
         provider.setProviderId(null);
-        assertEquals(null,provider.getProviderId());
+        assertEquals(null, provider.getProviderId());
 
-        provider = new Provider(null,"","",DateTime.now());
-        assertEquals(null,provider.getProviderId());
+        provider = new Provider(null, "", "", DateTime.now());
+        assertEquals(null, provider.getProviderId());
 
     }
 }

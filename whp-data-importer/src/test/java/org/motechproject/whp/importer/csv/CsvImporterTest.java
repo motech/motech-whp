@@ -35,17 +35,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllProviders allProviders;
     @Autowired
     AllTherapies allTherapies;
-
     @Autowired
     AllTreatmentCategories allTreatmentCategories;
-
-    @After
-    public void cleanDb() {
-        allPatients.removeAll();
-        allTherapies.removeAll();
-        allTreatmentCategories.removeAll();
-        allProviders.removeAll();
-    }
 
     @Before
     public void setUp() {
@@ -104,19 +95,10 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
 
     @Test(expected = WHPImportException.class)
-    public void shouldThrowExceptionForInvalidLogFile() throws Exception {
-        String[] arguments = new String[3];
-        arguments[0] = "provider";
-        arguments[1] = getProviderCsv();
-        arguments[2] = getLogDir() + "/impor\\/ter5.log";
-        CsvImporter.main(arguments);
-    }
-
-    @Test(expected = WHPImportException.class)
     public void shouldThrowExceptionForInvalidImportFile() throws Exception {
         String[] arguments = new String[3];
         arguments[0] = "provider";
-        arguments[1] = getLogDir() + "invalidFile.csv";
+        arguments[1] = "invalidFile.csv";
         CsvImporter.main(arguments);
     }
 
@@ -138,23 +120,18 @@ public class CsvImporterTest extends SpringIntegrationTest {
 
         arguments[0] = ImportType.ProviderTest.name();
         CsvImporter.main(arguments);
-
-
     }
 
     @Ignore
     @Test
     public void shouldVerifyPatientDataWithDefaultValues() throws Exception {
         String[] arguments = new String[3];
-        String logFile = getLogDir() + "patient.log";
         arguments[0] = "provider";
         arguments[1] = getProviderCsv();
-        arguments[2] = logFile;
         CsvImporter.main(arguments);
 
         arguments[0] = "patient";
         arguments[1] = getPatientCsv();
-        arguments[2] = logFile;
         CsvImporter.main(arguments);
 
         arguments[0] = ImportType.PatientTest.name();
@@ -182,6 +159,14 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
     }
 
+    @After
+    public void tearDown() {
+        allPatients.removeAll();
+        allTherapies.removeAll();
+        allTreatmentCategories.removeAll();
+        allProviders.removeAll();
+    }
+
     private String getPatientCsv() {
         return CsvImporterTest.class.getClassLoader().getResource("patientRecords.csv").getPath();
     }
@@ -190,8 +175,4 @@ public class CsvImporterTest extends SpringIntegrationTest {
         return CsvImporterTest.class.getClassLoader().getResource("providerRecords.csv").getPath();
     }
 
-
-    private String getLogDir() {
-        return System.getProperty("user.dir") + "/logs/";
-    }
 }

@@ -14,7 +14,7 @@ public class SmearTestResultsTest {
     @Test
     public void shouldAddANewSmearTestResult_AllInstancesInOrder_shouldPreserveOrder() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        for(SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
+        for (SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
             SmearTestRecord SmearTestRecord = new SmearTestRecord(type, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
             smearTestResults.add(SmearTestRecord);
         }
@@ -30,13 +30,13 @@ public class SmearTestResultsTest {
     @Test
     public void shouldUpdateCurrentSmearTestResult_AllInstancesInOrder_shouldPreserveOrder() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        for(SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
+        for (SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
             SmearTestRecord oldSmearTestRecord = new SmearTestRecord(type, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive);
             smearTestResults.add(oldSmearTestRecord);
         }
 
         LocalDate newTestDate = new LocalDate(2010, 12, 12);
-        for(SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
+        for (SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
             SmearTestRecord newSmearTestRecord = new SmearTestRecord(type, newTestDate, SmearTestResult.Negative, newTestDate, SmearTestResult.Negative);
             smearTestResults.add(newSmearTestRecord);
         }
@@ -86,7 +86,7 @@ public class SmearTestResultsTest {
 
     @Test
     public void shouldReplaceSmearTestResultsAsLatest_WhenResultsAreRecentForSameInstance() {
-        for(SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
+        for (SmearTestSampleInstance type : SmearTestSampleInstance.values()) {
             verifyFor(type);
         }
     }

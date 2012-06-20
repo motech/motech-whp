@@ -3,7 +3,9 @@ package org.motechproject.whp.patient.mapper;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Treatment;
 
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;

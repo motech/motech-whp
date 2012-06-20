@@ -5,9 +5,7 @@ import org.junit.Test;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
@@ -61,18 +59,18 @@ public class TreatmentTest {
         assertEquals("qwer", treatment.getProviderId());
         assertEquals("asd", treatment.getTbId());
 
-        treatment = new Treatment("QWER","asd", PatientType.New);
+        treatment = new Treatment("QWER", "asd", PatientType.New);
         assertEquals("qwer", treatment.getProviderId());
         assertEquals("asd", treatment.getTbId());
     }
 
     @Test
     public void shouldHandleNullValuesForId() {
-        Treatment treatment = new Treatment(null,null, PatientType.New);
+        Treatment treatment = new Treatment(null, null, PatientType.New);
         assertEquals(null, treatment.getProviderId());
         assertEquals(null, treatment.getTbId());
 
-        treatment = new Treatment("","",PatientType.New);
+        treatment = new Treatment("", "", PatientType.New);
         treatment.setProviderId(null);
         treatment.setTbId(null);
         assertEquals(null, treatment.getProviderId());

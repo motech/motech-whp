@@ -9,32 +9,24 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
-
 public class CsvImporter {
 
     private static final String APPLICATION_CONTEXT_XML = "applicationDataImporterContext.xml";
+    private static ImporterLogger importerLogger = new ImporterLogger();
 
-    public static void main(String argvs[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         try {
-            validateAndSetUpLogger(argvs);
-            ImportType importType = validateAndSetImportType(argvs[0]);
-            ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_XML);
-            CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
-            importType.performAction(argvs[1], csvDataImporter);
+            validateArgCount(args);
+            ImportType importType = verifyImportType(args[0]);
+            String file = verifyImportFile(args[1]);
+            importData(importType, file);
         } catch (Exception exception) {
-            ImporterLogger.error(exception);
+            importerLogger.error(exception);
             throw exception;
         }
     }
 
-    private static void validateAndSetUpLogger(String[] argvs) throws Exception {
-        validateArgCount(argvs);
-        setLogger(argvs[2]);
-        validateImportFile(argvs[1]);
-    }
-
-    private static ImportType validateAndSetImportType(String mode) throws WHPImportException {
+    private static ImportType verifyImportType(String mode) throws WHPImportException {
         ImportType importType = (ImportType) new StringToEnumeration().convert(mode, ImportType.class);
         if (importType == null) {
             throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
@@ -42,7 +34,7 @@ public class CsvImporter {
         return importType;
     }
 
-    private static void validateImportFile(String importFile) throws WHPImportException {
+    private static String verifyImportFile(String importFile) throws WHPImportException {
         try {
             if (!new File(importFile).canRead()) {
                 throw new WHPImportException("invalid file");
@@ -50,53 +42,53 @@ public class CsvImporter {
         } catch (Exception exception) {
             throw new WHPImportException("Unable to read file - " + importFile + " Either file does not exist or the file does not have read permission");
         }
+        return importFile;
     }
 
-    private static void setLogger(String logFile) throws WHPImportException {
-        if (isNotEmpty(logFile)) {
-            try {
-                new File(logFile).createNewFile();
-                ImporterLogger.loadAppender(logFile);
-            } catch (Exception exception) {
-                throw new WHPImportException("Unable to create/access the log file -" + logFile);
-            }
-        }
-    }
-
-    public static void validateArgCount(String args[]) throws Exception {
-        if (args.length < 3) {
+    private static void validateArgCount(String args[]) throws Exception {
+        if (args.length < 2) {
             throw new WHPImportException(ExceptionMessages.ILLEGAL_ARGUMENTS);
         }
+    }
+
+    private static void importData(ImportType importType, String file) {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_XML);
+        CSVDataImporter csvDataImporter = (CSVDataImporter) context.getBean("csvDataImporter");
+        importType.importData(file, csvDataImporter);
     }
 }
 
 enum ImportType {
     Provider() {
         @Override
-        void performAction(String importFile, CSVDataImporter csvDataImporter) {
-            ImporterLogger.info("Importing provider records from file : " + importFile);
+        void importData(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger logger = new ImporterLogger();
+            logger.info("Importing provider records from file : " + importFile);
             csvDataImporter.importData("providerRecordImporter", importFile);
         }
     }, Patient {
         @Override
-        void performAction(String importFile, CSVDataImporter csvDataImporter) {
-            ImporterLogger.info("Importing patient records from file : " + importFile);
+        void importData(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger logger = new ImporterLogger();
+            logger.info("Importing patient records from file : " + importFile);
             csvDataImporter.importData("patientRecordImporter", importFile);
         }
     }, ProviderTest {
         @Override
-        void performAction(String importFile, CSVDataImporter csvDataImporter) {
-            ImporterLogger.info("Testing import of provider records from file : " + importFile);
+        void importData(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger logger = new ImporterLogger();
+            logger.info("Testing import of provider records from file : " + importFile);
             csvDataImporter.importData("providerRecordValidator", importFile);
         }
     }, PatientTest {
         @Override
-        void performAction(String importFile, CSVDataImporter csvDataImporter) {
-            ImporterLogger.info("Testing import of patient records from file : " + importFile);
+        void importData(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger logger = new ImporterLogger();
+            logger.info("Testing import of patient records from file : " + importFile);
             csvDataImporter.importData("patientRecordValidator", importFile);
         }
     };
 
-    abstract void performAction(String importFile, CSVDataImporter csvDataImporter);
+    abstract void importData(String importFile, CSVDataImporter csvDataImporter);
 };
 

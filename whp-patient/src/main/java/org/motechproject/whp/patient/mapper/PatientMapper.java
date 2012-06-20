@@ -86,13 +86,13 @@ public class PatientMapper {
     }
 
     private static void mapSmearTestResults(PatientRequest patientRequest, Treatment treatment) {
-        for(SmearTestRecord smearTestRecord : patientRequest.getSmearTestResults().getAll()) {
+        for (SmearTestRecord smearTestRecord : patientRequest.getSmearTestResults().getAll()) {
             treatment.getSmearTestResults().add(smearTestRecord);
         }
     }
 
     private static void mapWeightStatistics(PatientRequest patientRequest, Treatment treatment) {
-        for(WeightStatisticsRecord weightStatisticsRecord : patientRequest.getWeightStatistics().getAll()) {
+        for (WeightStatisticsRecord weightStatisticsRecord : patientRequest.getWeightStatistics().getAll()) {
             treatment.getWeightStatistics().add(weightStatisticsRecord);
         }
     }

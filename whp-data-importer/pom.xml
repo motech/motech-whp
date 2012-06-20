@@ -58,17 +58,4 @@
             <version>0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>test-log4j.xml</include>
-                    <include>*.csv</include>
-                </includes>
-            </testResource>
-        </testResources>
-    </build>
-
 </project>

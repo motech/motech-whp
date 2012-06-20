@@ -15,8 +15,8 @@ import org.motechproject.whp.mapping.StringToDateTime;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +34,7 @@ public class PatientRecordValidator {
     private AllPatients allPatients;
     private AllProviders allProviders;
     private static final StringToEnumeration stringToEnumeration = new StringToEnumeration();
+    private ImporterLogger importerLogger = new ImporterLogger();
 
     @Autowired
     public PatientRecordValidator(AllPatients allPatients, AllProviders allProviders) {
@@ -67,16 +68,16 @@ public class PatientRecordValidator {
                     String errorMessage = String.format("Row %d: Patient with case_id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getCase_id());
                     for (String error : errors)
                         errorMessage += error + "\n";
-                    ImporterLogger.error(errorMessage);
+                    importerLogger.error(errorMessage);
                 } else {
-                    ImporterLogger.info(String.format("Row %d: Patient with case_id \"%s\" has been imported properly", i + 1, request.getCase_id()));
+                    importerLogger.info(String.format("Row %d: Patient with case_id \"%s\" has been imported properly", i + 1, request.getCase_id()));
                 }
             }
-            ImporterLogger.info("Number of Objects found in the data file : " + objects.size());
-            ImporterLogger.info("Number of Objects found in the db : " + objectsInDbCount);
+            importerLogger.info("Number of Objects found in the data file : " + objects.size());
+            importerLogger.info("Number of Objects found in the db : " + objectsInDbCount);
         } catch (Exception exception) {
-            ImporterLogger.error("Exception occured while testing...");
-            ImporterLogger.error(exception);
+            importerLogger.error("Exception occured while testing...");
+            importerLogger.error(exception);
         }
     }
 
@@ -189,7 +190,7 @@ public class PatientRecordValidator {
         for (WeightInstance instance : WeightInstance.values()) {
             WeightStatisticsRequests.WeightStatisticsRequest expectedRecord = weightStatisticsRequest.getWeightStatisticsRecord(instance);
             WeightStatisticsRecord actualRecord = getWeightStatisticsRecord(weightStatistics, instance);
-            validateWeightStatisticsRecord(request,expectedRecord, actualRecord, instance, errors);
+            validateWeightStatisticsRecord(request, expectedRecord, actualRecord, instance, errors);
         }
 
     }
@@ -237,7 +238,7 @@ public class PatientRecordValidator {
             }
         }
 
-        checkIfDatesAreEqual(request.getDate_modified(), actualRecord.getMeasuringDate(),weightFieldName,errors,LocalDate.class);
+        checkIfDatesAreEqual(request.getDate_modified(), actualRecord.getMeasuringDate(), weightFieldName, errors, LocalDate.class);
 
         if (hasText(expectedRecord.getWeight())) {
             try {

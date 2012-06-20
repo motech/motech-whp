@@ -19,6 +19,7 @@ import java.util.List;
 public class ProviderRecordValidator {
 
     private AllProviders allProviders;
+    private ImporterLogger importerLogger;
 
     @Autowired
     public ProviderRecordValidator(AllProviders allProviders) {
@@ -51,16 +52,16 @@ public class ProviderRecordValidator {
                     String errorMessage = String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId());
                     for (String error : errors)
                         errorMessage += error + "\n";
-                    ImporterLogger.error(errorMessage);
+                    importerLogger.error(errorMessage);
                 } else {
-                    ImporterLogger.info(String.format("Row %d: Provider with provider id \"%s\" has been imported properly", i + 1, request.getProviderId()));
+                    importerLogger.info(String.format("Row %d: Provider with provider id \"%s\" has been imported properly", i + 1, request.getProviderId()));
                 }
             }
-            ImporterLogger.info("Number of Objects found in the data file : " + objects.size());
-            ImporterLogger.info("Number of Objects found in the db : " + objectsInDbCount);
+            importerLogger.info("Number of Objects found in the data file : " + objects.size());
+            importerLogger.info("Number of Objects found in the db : " + objectsInDbCount);
         } catch (Exception exception) {
-            ImporterLogger.error("Exception occured while testing...");
-            ImporterLogger.error(exception);
+            importerLogger.error("Exception occured while testing...");
+            importerLogger.error(exception);
         }
     }
 

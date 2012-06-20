@@ -98,7 +98,7 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withMandatoryFieldsForImportPatient(){
+    public PatientRequestBuilder withMandatoryFieldsForImportPatient() {
         TreatmentCategory category = category01;
         patientRequest = new PatientRequest()
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")

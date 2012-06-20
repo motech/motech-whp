@@ -13,7 +13,7 @@ public class WeightStatisticsTest {
     @Test
     public void shouldAddANewWeightResult_AllInstancesInOrder_shouldPreserveOrder() {
         WeightStatistics weightStatistics = new WeightStatistics();
-        for(WeightInstance type : WeightInstance.values()) {
+        for (WeightInstance type : WeightInstance.values()) {
             WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(type, null, DateUtil.today());
             weightStatistics.add(weightStatisticsRecord);
         }
@@ -29,13 +29,13 @@ public class WeightStatisticsTest {
     @Test
     public void shouldUpdateCurrentWeightResult_AllInstancesInOrder_shouldPreserveOrder() {
         WeightStatistics weightStatistics = new WeightStatistics();
-        for(WeightInstance type : WeightInstance.values()) {
+        for (WeightInstance type : WeightInstance.values()) {
             WeightStatisticsRecord oldWeightStatisticsRecord = new WeightStatisticsRecord(type, null, new LocalDate(2010, 10, 10));
             weightStatistics.add(oldWeightStatisticsRecord);
         }
 
         LocalDate newMeasuringDate = new LocalDate(2010, 12, 12);
-        for(WeightInstance type : WeightInstance.values()) {
+        for (WeightInstance type : WeightInstance.values()) {
             WeightStatisticsRecord newWeightStatisticsRecord = new WeightStatisticsRecord(type, null, newMeasuringDate);
             weightStatistics.add(newWeightStatisticsRecord);
         }
@@ -70,7 +70,7 @@ public class WeightStatisticsTest {
 
     @Test
     public void shouldReplaceWeightStatisticsAsLatest_WhenStatisticsAreRecentForSameInstance() {
-        for(WeightInstance type : WeightInstance.values()) {
+        for (WeightInstance type : WeightInstance.values()) {
             verifyFor(type);
         }
     }

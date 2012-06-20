@@ -5,13 +5,10 @@ import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.util.DateUtil;
 
 import java.util.List;
 
-import static org.motechproject.util.DateUtil.isOnOrAfter;
-import static org.motechproject.util.DateUtil.isOnOrBefore;
-import static org.motechproject.util.DateUtil.newDateTime;
+import static org.motechproject.util.DateUtil.*;
 
 public class TreatmentInterruption {
 
@@ -60,7 +57,7 @@ public class TreatmentInterruption {
             }
         } else {
             for (LocalDate treatmentWeekDate : treatmentWeekDates) {
-                if(isOnOrAfter(newDateTime(treatmentWeekDate), newDateTime(pauseDate)) && isOnOrBefore(newDateTime(treatmentWeekDate), newDateTime(resumptionDate))){
+                if (isOnOrAfter(newDateTime(treatmentWeekDate), newDateTime(pauseDate)) && isOnOrBefore(newDateTime(treatmentWeekDate), newDateTime(resumptionDate))) {
                     return true;
                 }
             }
