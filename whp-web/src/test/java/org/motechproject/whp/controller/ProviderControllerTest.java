@@ -53,7 +53,7 @@ public class ProviderControllerTest {
         testProviders.add(provider1);
         testProviders.add(provider2);
         testProviders.add(provider3);
-        when(allProviders.list()).thenReturn(testProviders);
+        when(allProviders.getAllSortedByDistrictAndProviderId()).thenReturn(testProviders);
         when(allProviders.findByProviderId("aa")).thenReturn(provider1);
         when(allProviders.findByProviderId("ab")).thenReturn(provider2);
         when(allProviders.findByProviderId("ac")).thenReturn(provider3);

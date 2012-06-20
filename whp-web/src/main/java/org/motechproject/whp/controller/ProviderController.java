@@ -62,7 +62,7 @@ public class ProviderController {
                 matchingProviders.add(matchingProvider);
             }
         } else {
-            matchingProviders.addAll(allProviders.list());
+            matchingProviders.addAll(allProviders.getAllSortedByDistrictAndProviderId());
         }
         return matchingProviders;
     }
