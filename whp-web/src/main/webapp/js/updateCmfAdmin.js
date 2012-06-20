@@ -1,26 +1,19 @@
 $(function () {
-    $('#createCmfAdminForm').submit(function (event) {
-        if (!$('#createCmfAdminForm').valid()) {
+    $('#editCmfAdminForm').submit(function (event) {
+        if (!$('#editCmfAdminForm').valid()) {
             event.preventDefault();
             return false;
         }
     });
 
-    $('#createCmfAdminForm').validate({
+    $('#editCmfAdminForm input').change(function () {
+        $('#editCmfAdminForm').valid();
+    });
+
+    $('#editCmfAdminForm').validate({
         rules:{
             staffName:{
                 required:true
-            },
-            userId:{
-                required:true
-            },
-            password:{
-                required:true,
-                minlength:4
-            },
-            confirmPassword:{
-                required:true,
-                equalTo:'#password'
             },
             email:{
                 required:true,
@@ -31,17 +24,6 @@ $(function () {
         messages:{
             staffName:{
                 required:"'Staff Name' cannot be empty"
-            },
-            userId:{
-                required:"'User ID' cannot be empty"
-            },
-            password:{
-                required:"'Password' cannot be empty",
-                minlength:"'Password' should be at least 4 characters long"
-            },
-            confirmPassword:{
-                required:"'Confirm Password' cannot be empty",
-                equalTo:"'Confirm Password' should match 'Password'"
             },
             email:{
                 required:"'Email' cannot be empty",

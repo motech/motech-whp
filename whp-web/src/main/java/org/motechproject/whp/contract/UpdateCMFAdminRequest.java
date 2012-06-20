@@ -11,7 +11,7 @@ public class UpdateCMFAdminRequest {
     private String id;
 
     @Size(min = 1,message = "Email ID cannot be empty")
-    @Pattern(regexp = "$|^[\\w-]+(\\.[\\w-]+)*@([a-z0-9-]+(\\.[a-z0-9-]+)*?\\.[a-z]{2,6}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{4})?$" , message = "Please enter a valid email id. example: abc@xyz.com")
+    @Pattern(regexp = "$|^[\\w-]+(\\.[\\w-]+)*@([a-z0-9-]+(\\.[a-z0-9-]+)*?\\.[a-z]{2,6}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{4})?$" , message = "Please enter a valid email id. Example: abc@xyz.com")
     private String email;
 
     private String department;

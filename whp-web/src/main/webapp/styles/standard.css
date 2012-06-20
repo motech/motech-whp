@@ -202,23 +202,6 @@ table tbody .link:hover td {
     color: #817B02;
     font-weight: bold;
 }
-.offset2 .form-button-left {
-    margin: 0px;
-    float: left;
-}
-.offset2 .form-button-right {
-    margin-right: 301px;
-    float: right;
-}
-
-.offset1-fixed .form-button-left {
-    margin: 0px;
-    float: left;
-}
-.offset1-fixed .form-button-right {
-    margin-right: 0px;
-    float: right;
-}
 .leftnav-menu-margin {
     margin-left: -200px;
 }
@@ -228,7 +211,8 @@ div.buttons a, div.buttons button {
     margin-left: 20px;
 }
 
-.offset1-fixed {
-    width: 379px;
-    max-width: 379px;
+.offset2-fixed {
+    margin:auto;
+    width: 679px;
+    max-width: 679px;
 }
