@@ -1,8 +1,9 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
-<@layout.defaultLayout "Create CMF Admin Account">
-    <form action="<@spring.url '/cmfAdmin/edit'/>" method="POST" class="row well form-horizontal">
-        <div class="offset4">
+<@layout.defaultLayout "Edit CMF Admin Account">
+<div class="span12">
+    <form action="<@spring.url '/cmfAdmin/edit'/>" method="POST" class="well form-horizontal">
+        <div class="offset1 offset1-fixed">
             <div class="control-group">
                 <label class="control-label" for="staffName">Staff Name*</label>
                 <div class="controls">
@@ -14,7 +15,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="email">Email</label>
+                <label class="control-label" for="email">Email*</label>
                 <div class="controls">
                     <input name="email" id="email" value="${cmfAdmin.email}"/>
                 </div>
@@ -47,11 +48,13 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <a href="<@spring.url "/cmfAdmin/list"/>" class="btn btn-primary">Cancel</a>
-                    <button type="submit" class="btn btn-primary" style="margin-right: 504px; float:right">Update</button>
+                    <a href="<@spring.url "/cmfAdmin/list"/>" class="btn btn-primary form-button-left">Cancel</a>
+                    <button type="submit" class="btn btn-primary form-button-right">Update</button>
                 </div>
             </div>
+
             <input type="hidden" id="id" name="id" value="${cmfAdmin.id}">
         </div>
     </form>
+</div>
 </@layout.defaultLayout>

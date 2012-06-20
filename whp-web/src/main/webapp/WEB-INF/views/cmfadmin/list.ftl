@@ -14,6 +14,7 @@
     <a href="/whp/cmfAdmin/create">Create CMF Admin</a>
 </div>
 <table id="cmfAdminList" class="table table-bordered table-condensed">
+    <caption class="caption">Click on a row to edit the CMF Admin details</caption>
     <thead>
         <tr>
             <th>Staff Name</th>

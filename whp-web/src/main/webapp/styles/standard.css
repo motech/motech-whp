@@ -37,6 +37,7 @@ body {
     margin-right: 0px;
 }
 
+
 #footer-left-section {
     padding-bottom: 5px;
 }
@@ -194,12 +195,21 @@ body {
     color: #817B02;
     font-weight: bold;
 }
-.form-button-left {
+.offset2 .form-button-left {
     margin: 0px;
     float: left;
 }
-.form-button-right {
+.offset2 .form-button-right {
     margin-right: 301px;
+    float: right;
+}
+
+.offset1-fixed .form-button-left {
+    margin: 0px;
+    float: left;
+}
+.offset1-fixed .form-button-right {
+    margin-right: 0px;
     float: right;
 }
 .leftnav-menu-margin {
@@ -209,4 +219,13 @@ body {
 div.buttons a, div.buttons button {
     float: right;
     margin-left: 20px;
+}
+
+.offset1-fixed {
+    width: 379px;
+    max-width: 379px;
+}
+.caption {
+    font-weight: bold;
+    text-align: left
 }

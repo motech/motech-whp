@@ -3,7 +3,7 @@
 <@layout.defaultLayout "MoTeCH-WHP">
 <div id="searchProvidersForm">
     <form action="<@spring.url '/providers/search'/>" method="POST" class="row well form-horizontal">
-        <div class="offset4">
+        <div class="offset1">
 
             <div class="control-group">
                 <label class="control-label" for="providerId">Provider ID</label>
