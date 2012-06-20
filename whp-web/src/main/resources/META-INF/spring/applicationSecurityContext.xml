@@ -30,7 +30,8 @@
 
         <!--Only IT Admin-->
         <intercept-url pattern="/itadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
-        <intercept-url pattern="/cmfadmin/create" access="hasRole('IT_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/cmfadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/providers/list" access="hasRole('IT_ADMIN')" requires-channel="any"/>
 
         <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')" requires-channel="any"/>
