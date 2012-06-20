@@ -9,11 +9,11 @@
     <name>motech-whp</name>
 
     <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
+        <spring.version>3.1.0.RELEASE</spring.version>
+        <spring-security.version>3.1.0.RELEASE</spring-security.version>
         <slf4j.version>1.6.1</slf4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-security.version>3.0.5.RELEASE</spring-security.version>
         <build.dir>build</build.dir>
         <motech.version>0.11-SNAPSHOT</motech.version>
         <motech.contrib.version>0.11-SNAPSHOT</motech.contrib.version>
@@ -171,12 +171,32 @@
         <dependency>
             <groupId>org.ektorp</groupId>
             <artifactId>org.ektorp</artifactId>
-            <version>1.1.1</version>
+            <version>1.2.2</version>
+            <exclusions>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
         <dependency>
             <groupId>org.ektorp</groupId>
             <artifactId>org.ektorp.spring</artifactId>
-            <version>1.1.1</version>
+            <version>1.2.2</version>
+            <exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

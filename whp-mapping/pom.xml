@@ -12,7 +12,6 @@
     <name>whp-mapping</name>
     <artifactId>whp-mapping</artifactId>
     <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
         <build.dir>../build</build.dir>
     </properties>
 

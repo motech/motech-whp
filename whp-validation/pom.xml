@@ -12,7 +12,6 @@
     <name>whp-validation</name>
     <artifactId>whp-validation</artifactId>
     <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
         <build.dir>../build</build.dir>
     </properties>
 

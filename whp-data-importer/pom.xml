@@ -12,7 +12,6 @@
     <name>whp-data-importer</name>
     <artifactId>whp-data-importer</artifactId>
     <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
         <build.dir>../build</build.dir>
     </properties>
 
