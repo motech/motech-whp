@@ -48,22 +48,40 @@ public class TreatmentCardServiceTest {
 
     @Test
     public void shouldBuildIPTreatmentCardModelForPatient_BasedOnCategory_AndIPStartDate() {
-        LocalDate therapyStartDate = new LocalDate(2012, 2, 3);
+        LocalDate therapyStartDate = new LocalDate(2011, 2, 3);
+        LocalDate therapyEndDate = new LocalDate(2011, 7, 2);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, "1");
 
         String therapyDocId = patient.latestTherapy().getId();
-        Adherence log1 = createLog(new LocalDate(2012, 2, 10), therapyDocId,PillStatus.Taken);
-        Adherence log2 = createLog(new LocalDate(2012, 2, 15), therapyDocId,PillStatus.NotTaken);
-        Adherence log3 = createLog(new LocalDate(2012, 3, 12), therapyDocId, PillStatus.Unknown);
-        Adherence log4 = createLog(new LocalDate(2012, 3, 28), therapyDocId,PillStatus.Taken);
+        Adherence log1 = createLog(new LocalDate(2011, 2, 10), therapyDocId,PillStatus.Taken);
+        Adherence log2 = createLog(new LocalDate(2011, 2, 15), therapyDocId,PillStatus.NotTaken);
+        Adherence log3 = createLog(new LocalDate(2011, 3, 12), therapyDocId, PillStatus.Unknown);
+        Adherence log4 = createLog(new LocalDate(2011, 3, 28), therapyDocId,PillStatus.Taken);
         List<Adherence> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
-        when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5))).thenReturn(adherenceData);
+        when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyEndDate)).thenReturn(adherenceData);
 
         TreatmentCardModel treatmentCardModel = treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
 
         assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyStartDate.plusMonths(5));
+        verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyEndDate);
+    }
+
+    @Test
+    public void shouldBuildIPTreatmentCardTillTodayIfEndDateIsInFuture() {
+        LocalDate today = LocalDate.now();
+        LocalDate therapyStartDate = today.minusMonths(1);
+        Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, "1");
+
+        String therapyDocId = patient.latestTherapy().getId();
+        Adherence log1 = createLog(today.minusDays(10), therapyDocId,PillStatus.Taken);
+        List<Adherence> adherenceData = Arrays.asList(log1);
+
+        when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, today)).thenReturn(adherenceData);
+
+        treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
+
+        verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, today);
     }
 
     @Test

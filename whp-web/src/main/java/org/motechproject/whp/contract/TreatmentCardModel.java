@@ -3,12 +3,12 @@ package org.motechproject.whp.contract;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.util.WHPDateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,16 +53,14 @@ public class TreatmentCardModel {
             providerIds.add(providerId);
     }
 
-    public void addAdherenceDataForGivenTherapy(Patient patient, List<Adherence> adherenceData, Therapy therapy, Period period) {
+    public void addAdherenceDataForGivenTherapy(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate) {
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
-        LocalDate startDate = therapy.getStartDate();
-        LocalDate endDate = startDate.plus(period);
         therapyDocId = therapy.getId();
         isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
         List<LocalDate> adherenceDates = new ArrayList<>();
         for(Adherence datum : adherenceData)
             adherenceDates.add(datum.getPillDate());
-        for (LocalDate doseDate = startDate; doseDate.isBefore(endDate); doseDate = doseDate.plusDays(1)) {
+        for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate,endDate); doseDate = doseDate.plusDays(1)) {
 
             boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, therapy, doseDate);
             Treatment treatmentForDateInTherapy = patient.getTreatmentForDateInTherapy(doseDate, therapy.getId());

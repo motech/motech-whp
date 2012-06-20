@@ -1,7 +1,6 @@
 package org.motechproject.whp.service;
 
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -35,11 +34,14 @@ public class TreatmentCardService {
             TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
             Therapy latestTherapy = patient.latestTherapy();
             LocalDate ipStartDate = latestTherapy.getStartDate();
-            LocalDate endDate = ipStartDate.plusMonths(5);
+
+            LocalDate endDate = ipStartDate.plusMonths(5).minusDays(1);
+            LocalDate today = LocalDate.now();
+            if(endDate.isAfter(today))
+                endDate = today;
 
             List<Adherence> adherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, endDate);
-            Period period = new Period().withMonths(5);
-            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, period);
+            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, ipStartDate,endDate);
 
             return ipTreatmentCard;
         }
