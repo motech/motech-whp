@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public abstract class SpringIntegrationTest {
+public class SpringIntegrationTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();

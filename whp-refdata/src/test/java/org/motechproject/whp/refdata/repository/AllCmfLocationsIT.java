@@ -16,25 +16,26 @@ public class AllCmfLocationsIT extends SpringIntegrationTest {
 
     @Autowired
     AllCmfLocations allCmfLocations;
-    @Before
+
     @After
     public void setup() {
-       allCmfLocations.removeAll();
+        allCmfLocations.removeAll();
     }
 
     @Test
     public void shouldStoreAndFindLocationById() {
-       allCmfLocations.addOrReplace(new CmfLocation("Delhi"));
-       assertEquals(1,allCmfLocations.getAll().size());
+        allCmfLocations.addOrReplace(new CmfLocation("Delhi"));
+        assertEquals(1, allCmfLocations.getAll().size());
     }
 
     @Test
     public void shouldReturnNullIfIdIsNull() {
-       assertNull(allCmfLocations.findByLocation(null));
+        assertNull(allCmfLocations.findByLocation(null));
     }
+
     @Test
     public void shouldFindByLocation() {
         allCmfLocations.add(new CmfLocation("Delhi"));
-        assertEquals(1,allCmfLocations.getAll().size());
+        assertEquals(1, allCmfLocations.getAll().size());
     }
 }
