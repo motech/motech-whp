@@ -65,7 +65,7 @@ public abstract class BaseTest {
             output = new BufferedWriter(new FileWriter(file));
             output.write(pageSource);
             logger.info("HTML Output logged to %s", file.getName());
-        } catch (IOException ignore) {
+        } catch (Exception ignore) {
             System.err.println("Unable to write html result to file " + ignore.getMessage());
         } finally {
             webDriver.manage().deleteAllCookies();
