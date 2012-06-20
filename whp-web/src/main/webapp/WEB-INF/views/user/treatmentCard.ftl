@@ -88,16 +88,16 @@
                         </#if>
                     </#list>
                     <#if drawn == false>
-                        <td class=
-                            <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                            <#else>"bg-gray ${isItASunday}"
+                            <td class=
+                        <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
+                        <#else>"bg-gray ${isItASunday}"
+                        </#if>
+                        id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
+                        <div class="watermarked-sunday">
+                            <#if isItASunday == 'sunday' && (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
+                                S
                             </#if>
-                            id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
-                            <div class="watermarked-sunday">
-                                <#if isItASunday == 'sunday' && (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
-                                    S
-                                </#if>
-                            </div>
+                        </div>
                         </td>
                     </#if>
                 </#list>
@@ -110,9 +110,13 @@
     <form id="treatmentCardDeltaform" action="/whp/patients/saveTreatmentCard" method="post">
         <input type="hidden" name="delta" id="delta"/>
 
-        <div class="buttons">
-            <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn btn-primary">Clear</a>
-            <a href="<@spring.url "/"/>" class="btn btn-primary">Cancel</a>
+        <div class="controls pull-right">
+            <a href="/whp/patients/dashboard?patientId=${patientId}" class="no-underline">
+                <button type="button" class="btn">Clear</button>
+            </a>
+            <a href="<@spring.url "/"/>" class="no-underline">
+                <button type="button" class="btn">Back To CmfAdmin List Page</button>
+            </a>
             <button type="button" id='submitJson' class="btn btn-primary">Save</button>
         </div>
     </form>

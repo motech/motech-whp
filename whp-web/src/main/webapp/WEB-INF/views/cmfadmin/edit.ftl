@@ -56,7 +56,7 @@
             </div>
             <div class="control-group pull-right">
                 <div class="controls">
-                    <a href="<@spring.url "/cmfAdmin/list"/>">
+                    <a href="<@spring.url "/cmfAdmin/list"/>" class="no-underline">
                         <button type="button" class="btn">Cancel</button>
                     </a>
                     <button type="submit" class="btn btn-primary" id>Update</button>

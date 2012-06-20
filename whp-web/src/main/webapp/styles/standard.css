@@ -216,3 +216,6 @@ div.buttons a, div.buttons button {
     width: 679px;
     max-width: 679px;
 }
+.no-underline:hover{
+    text-decoration: none;
+}
