@@ -1,6 +1,6 @@
 <#macro phaseInfo>
 <form class="modal hide fade" id="setDatesModal" method="POST" action="<@spring.url '/patients/dashboard'/>">
-    <input type="hidden" id="patientId" name="patientId" value="${patientId}"/>
+    <input type="hidden" id="patientId" name="patientId" value="${patient.patientId}"/>
 
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>

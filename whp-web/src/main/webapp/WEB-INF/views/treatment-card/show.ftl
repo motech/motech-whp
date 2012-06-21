@@ -166,7 +166,7 @@ ${message}
         var delta = {patientId: patientId , therapy: therapy, dailyAdherenceRequests: dailyAdherenceRequests };
         $.ajax({
             type : 'POST',
-            url : '/whp/patients/saveTreatmentCard',
+            url : '/whp/treatmentcard/update',
             data : JSON.stringify(delta),
             contentType: "application/json",
             success : function(data) {

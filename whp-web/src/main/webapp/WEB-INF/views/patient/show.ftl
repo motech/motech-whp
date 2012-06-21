@@ -59,7 +59,7 @@
 
     $.ajax({
         type : 'GET',
-        url : '/whp/patients/treatmentCard?patientId=${patientId}',
+        url : '/whp/treatmentcard/show?patientId=${patient.patientId}',
         success : function(data) {
             $("#treatmentCard").html(data);
         }
