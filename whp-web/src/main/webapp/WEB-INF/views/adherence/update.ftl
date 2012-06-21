@@ -31,7 +31,7 @@
         </div>
         <div class="control-group">
             <div class="controls pull-right">
-                <a href="<@spring.url ''/>" class="no-underline"><button type="button" class="btn">Cancel</button></a>
+                <a href="<@spring.url ''/>" class="btn">Cancel</a>
                 <#if !readOnly>
                     <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>

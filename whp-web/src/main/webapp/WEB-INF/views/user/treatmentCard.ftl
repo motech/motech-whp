@@ -29,7 +29,7 @@
                     </td>
                 </tr>
                 </#list>
-                <tr>
+            <tr>
                 <td>
                     <div class="windings-font pull-left" providerId=""> &#10003; </div>
                     <div class="pull-left"> , &nbsp; </div>
@@ -121,12 +121,8 @@
         <input type="hidden" name="delta" id="delta"/>
 
         <div class="controls pull-right">
-            <a href="/whp/patients/dashboard?patientId=${patientId}" class="no-underline">
-                <button type="button" class="btn">Clear</button>
-            </a>
-            <a href="<@spring.url "/"/>" class="no-underline">
-                <button type="button" class="btn">Back To Patient List</button>
-            </a>
+            <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn">Clear</a>
+            <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
             <button type="button" id='submitJson' class="btn btn-primary">Save</button>
         </div>
     </form>
