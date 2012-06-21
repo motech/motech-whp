@@ -27,7 +27,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary form-button-center">Search</button>
+                    <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <tbody>
             <#if providerList?size == 0>
                 <tr>
-                    <td class= "warning-text" style="text-align: center" colspan="6">
+                    <td class= "warning" style="text-align: center" colspan="6">
                         <#if providerId != "">
                                 No providers found for District: '${selectedDistrict}' with provider ID: '${providerId}'
                             <#else>

@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.test.provider;
 
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -25,40 +25,56 @@ public class ListAllProvidersTest extends BaseTest {
 
     ProviderDataService providerDataService;
 
-    List<TestProvider> testProviders = new ArrayList<TestProvider>();
-    private ListProvidersPage providerPage;
+    private ListProvidersPage listProvidersPage;
+
+    private TestProvider provider1;
+    private TestProvider provider2;
+    private TestProvider provider3;
 
     @Override
     public void setUp() {
         super.setUp();
         setupProvider();
-        providerPage = loginAsItAdmin();
+        listProvidersPage = loginAsItAdmin();
     }
 
     public void setupProvider() {
         providerDataService = new ProviderDataService(webDriver);
-        testProviders.add(providerDataService.createProvider());
-        testProviders.add(providerDataService.createProvider());
-        testProviders.add(providerDataService.createProvider());
+        provider1 = providerDataService.createProvider("Begusarai");
+        provider2 = providerDataService.createProvider("Saharsa");
+        provider3 = providerDataService.createProvider("Saharsa");
     }
 
     @Test
-    public void shouldLoginAsItAdminAndListAllProviders() {
-        for(TestProvider testProvider : testProviders) {
-            verifyProviderRow(testProvider);
-        }
+    public void shouldListProvidersForDistrict() {
+        listProvidersPage.searchBy("Saharsa", "");
+        assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
+        assertTrue(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
+        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
     }
 
-    private void verifyProviderRow(TestProvider testProvider) {
-        assertTrue(providerPage.hasProvider(testProvider.getProviderId()));
+    @Test
+    public void shouldListProvidersForDistrictAndProviderId() {
+        listProvidersPage.searchBy("Saharsa", provider2.getProviderId());
+        assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
+        assertFalse(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
+        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
+    }
+
+    @Test
+    public void shouldDisplayWarningForDistrict_WhenNoProvidersFound() {
+        listProvidersPage.searchBy("Vaishali", "");
+        Assert.assertEquals("No providers found for District: 'Vaishali'", listProvidersPage.getWarningText());
+    }
+
+    @Test
+    public void shouldDisplayWarningForDistrictAndProviderId_WhenNoProvidersFound() {
+        listProvidersPage.searchBy("Saharsa", provider1.getProviderId());
+        Assert.assertEquals("No providers found for District: 'Saharsa' with provider ID: '" + provider1.getProviderId().toLowerCase() + "'", listProvidersPage.getWarningText());
     }
 
     private ListProvidersPage loginAsItAdmin() {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithItAdminUserNamePassword("itadmin1", "password").navigateToSearchProviders();
     }
 
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
-    }
 }

@@ -28,7 +28,7 @@
     <tbody>
         <#if allCmfAdmins?size == 0>
         <tr>
-            <td class="warning-text" style="text-align: center" colspan="4">
+            <td class="warning" style="text-align: center" colspan="4">
                 No registered CMF Admins to show
             </td>
         </tr>
