@@ -2,6 +2,7 @@ package org.motechproject.whp.functional.test.serial;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
     @Test
+    @Ignore
     public void shouldBuildIPTreatmentCardForPatient() {
 
         /*Log Adherence data for patient */
