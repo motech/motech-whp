@@ -31,7 +31,7 @@
 <div class="well">
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="brand pull-left">Adjust Phase Start Dates</a>
 
-    <div class="float-right">Patient Id : ${patientId}</div>
+    <div class="float-right">Patient Id : ${patient.patientId}</div>
 </div>
 <@phaseInfo/>
 <div id="treatmentCard"/>

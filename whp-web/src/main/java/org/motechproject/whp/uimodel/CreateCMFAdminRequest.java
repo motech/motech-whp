@@ -28,4 +28,5 @@ public class CreateCMFAdminRequest {
 
     @Size(min = 1, message="Staff name cannot be empty")
     private String staffName;
+
 }

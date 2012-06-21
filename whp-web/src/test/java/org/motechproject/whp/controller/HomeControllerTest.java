@@ -57,7 +57,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.CMF_ADMIN));
         setupProvider(provider);
-        assertEquals("redirect:/patients/all", homeController.homePage(request));
+        assertEquals("redirect:/patients/list", homeController.homePage(request));
     }
 
     private void login(MotechUser authenticatedUser) {

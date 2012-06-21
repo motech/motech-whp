@@ -29,7 +29,7 @@ public class HomeController extends BaseController {
         MotechUser user = loggedInUser(request);
         List<String> userRoles = user.getRoles();
         if (userRoles.contains(WHPRole.CMF_ADMIN.name())) {
-            return "redirect:/patients/all";
+            return "redirect:/patients/list";
         } else  if(userRoles.contains(WHPRole.IT_ADMIN.name()))  {
             return "redirect:/providers/list";
         } else {

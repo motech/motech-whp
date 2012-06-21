@@ -6,14 +6,14 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.flash.Flash;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientDTO;
-import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.motechproject.whp.util.FlashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -26,16 +26,14 @@ import static java.util.Arrays.asList;
 public class PatientController extends BaseController {
 
     public static final String PATIENT_LIST = "patientList";
+
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
-    TreatmentCardService treatmentCardService;
-    public static final String NOTIFICATION_MESSAGE = "message";
 
     @Autowired
-    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, TreatmentCardService treatmentCardService) {
+    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs) {
         this.allPatients = allPatients;
         this.allAdherenceLogs = allAdherenceLogs;
-        this.treatmentCardService = treatmentCardService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -47,7 +45,7 @@ public class PatientController extends BaseController {
         return "patient/listByProvider";
     }
 
-    @RequestMapping(value = "all", method = RequestMethod.GET)
+    @RequestMapping(value = "list", method = RequestMethod.GET)
     public String list(Model uiModel) {
         List<Patient> patients = allPatients.getAllWithActiveTreatment();
         passPatientsAsModelToListView(uiModel, patients);
@@ -75,32 +73,10 @@ public class PatientController extends BaseController {
     private void setupModelForDashboard(Model uiModel, HttpServletRequest request, Patient patient) {
         PatientDTO patientDTO = new PatientDTO(patient);
         uiModel.addAttribute("patient", patientDTO);
-        uiModel.addAttribute("patientId", patient.getPatientId());
         List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
-    }
-
-
-    @RequestMapping(value = "treatmentCard", method = RequestMethod.GET)
-    public String treatmentCard(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
-        if (CollectionUtils.isNotEmpty(messages)) {
-            uiModel.addAttribute("messages", messages);
-        }
-        uiModel.addAttribute("patientId", patient.getPatientId());
-        uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
-        return "user/treatmentCard";
-    }
-
-    @RequestMapping(value = "saveTreatmentCard", method = RequestMethod.POST)
-    public String saveTreatmentCard(@RequestBody UpdateAdherenceRequest updateAdherenceRequest, Model uiModel, HttpServletRequest request) {
-        Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
-        treatmentCardService.addLogsForPatient(updateAdherenceRequest, patient);
-        uiModel.addAttribute(NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
-        return treatmentCard(patient.getPatientId(), uiModel, request);
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)
@@ -117,7 +93,7 @@ public class PatientController extends BaseController {
         String eipStartDate = patientDTO.getEipStartDate();
         String cpStartDate = patientDTO.getCpStartDate();
 
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
 
         String message1 = "Dates Updated For patient: " + patientId;
 

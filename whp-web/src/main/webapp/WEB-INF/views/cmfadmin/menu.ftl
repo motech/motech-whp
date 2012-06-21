@@ -6,7 +6,7 @@
             <b>Patient List</b>
         </li>
         <li>
-            <a id="show-patients" href="/whp/patients/all">Show all patients</a>
+            <a id="show-patients" href="/whp/patients/list">Show all patients</a>
         </li>
         <li class="divider"></li>
         <li class="nav-header">

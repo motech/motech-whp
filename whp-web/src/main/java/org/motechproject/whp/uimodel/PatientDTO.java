@@ -13,6 +13,8 @@ import org.motechproject.whp.refdata.domain.WHPConstants;
 @Data
 public class PatientDTO {
 
+    private String patientId;
+
     private String ipStartDate;
     private String eipStartDate;
     private String cpStartDate;
@@ -23,6 +25,7 @@ public class PatientDTO {
 
     public PatientDTO(Patient patient) {
         Therapy therapy = patient.latestTherapy();
+        this.patientId = patient.getPatientId();
         this.ipStartDate = therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate() != null ? therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate().toString(WHPConstants.DATE_FORMAT) : "";
         this.eipStartDate = therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate() != null ? therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT) : "";
         this.cpStartDate = therapy.getPhases().getByPhaseName(PhaseName.CP).getStartDate() != null ? therapy.getPhases().getByPhaseName(PhaseName.CP).getStartDate().toString(WHPConstants.DATE_FORMAT) : "";
@@ -48,4 +51,5 @@ public class PatientDTO {
         }
         return patient;
     }
+
 }

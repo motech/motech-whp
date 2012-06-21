@@ -24,7 +24,9 @@
 
         <!--Only admin-->
         <intercept-url pattern="/adherence/reports/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
-        <intercept-url pattern="/patients/**/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/patients/dashboard/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/patients/list/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/treatmentcard/**/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
 
         <!--Only IT Admin-->
         <intercept-url pattern="/itadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
@@ -37,7 +39,6 @@
 
         <!-- Only providers -->
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
-
         <intercept-url pattern="/adherence/**" access="hasRole('PROVIDER')" requires-channel="any"/>
 
     </http>

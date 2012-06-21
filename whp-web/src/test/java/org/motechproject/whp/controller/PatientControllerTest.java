@@ -6,21 +6,13 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.DailyAdherenceRequest;
 import org.motechproject.whp.uimodel.PatientDTO;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
-import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -45,19 +37,14 @@ public class PatientControllerTest {
     @Mock
     AllAdherenceLogs allAdherenceLogs;
 
-    @Mock
-    TreatmentCardService treatmentCardService;
-
     PatientController patientController;
-
-    PatientBuilder patientBuilder;
 
     Patient patient;
 
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients, allAdherenceLogs, treatmentCardService);
+        patientController = new PatientController(allPatients, allAdherenceLogs);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
@@ -84,7 +71,6 @@ public class PatientControllerTest {
         ArgumentCaptor<PatientDTO> patientDTOArgumentCaptor = ArgumentCaptor.forClass(PatientDTO.class);
 
         verify(uiModel).addAttribute(eq("patient"), patientDTOArgumentCaptor.capture());
-        verify(uiModel).addAttribute(eq("patientId"), same(patient.getPatientId()));
 
         assertEquals(new PatientDTO(patient), patientDTOArgumentCaptor.getValue());
     }
@@ -94,16 +80,6 @@ public class PatientControllerTest {
         String view = patientController.show(patient.getPatientId(), uiModel, request);
 
         assertEquals("patient/show", view);
-    }
-
-    @Test
-    public void shouldReturnTreatmentCardModelToView() {
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
-        when(treatmentCardService.getIntensivePhaseTreatmentCardModel(patient)).thenReturn(treatmentCardModel);
-
-        patientController.treatmentCard(patient.getPatientId(), uiModel, request);
-
-        verify(uiModel).addAttribute("treatmentCard", treatmentCardModel);
     }
 
     @Test
@@ -159,28 +135,5 @@ public class PatientControllerTest {
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
     }
 
-    @Test
-    public void shouldSaveAdherenceData() throws IOException {
-        UpdateAdherenceRequest adherenceData = new UpdateAdherenceRequest();
-        adherenceData.setPatientId("test");
-        DailyAdherenceRequest dailyAdherenceRequest1 = new DailyAdherenceRequest(6, 7, 2012, 1);
-        DailyAdherenceRequest dailyAdherenceRequest2 = new DailyAdherenceRequest(13, 8, 2012, 2);
-        adherenceData.setDailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2));
 
-        setUpUserInSession("username");
-        Patient patient = new PatientBuilder().withDefaults().build();
-        when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
-        String view = patientController.saveTreatmentCard(adherenceData, uiModel, request);
-        assertEquals("user/treatmentCard", view);
-        verify(uiModel,times(1)).addAttribute(PatientController.NOTIFICATION_MESSAGE,"Treatment Card saved successfully");
-        verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, patient);
-    }
-
-    private void setUpUserInSession(String username) {
-        HttpSession httpSession = mock(HttpSession.class);
-        MotechUser user = mock(MotechUser.class);
-        when(user.getUserName()).thenReturn(username);
-        when(httpSession.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(user);
-        when(request.getSession()).thenReturn(httpSession);
-    }
 }

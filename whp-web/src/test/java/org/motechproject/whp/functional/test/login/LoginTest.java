@@ -44,4 +44,5 @@ public class LoginTest extends BaseTest {
         assertTrue(StringUtils.containsIgnoreCase(providerPage.getWelcomeText(), provider.getProviderId()));
         providerPage.logout();
     }
+
 }
