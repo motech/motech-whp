@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.user.service;
 
 import org.junit.After;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
 
-@ContextConfiguration(locations = "classpath*:META-INF/spring/applicationContext.xml")
+@ContextConfiguration(locations = "classpath*:applicationUserContext.xml")
 public class CmfAdminServiceIT extends SpringIntegrationTest {
 
     @Autowired
@@ -48,4 +48,5 @@ public class CmfAdminServiceIT extends SpringIntegrationTest {
 
         assertTrue(user.getRoles().contains(WHPRole.CMF_ADMIN.name()));
     }
+
 }

@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.user.service;
 
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;

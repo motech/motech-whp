@@ -7,7 +7,7 @@ import org.motechproject.whp.contract.CreateCMFAdminRequest;
 import org.motechproject.whp.contract.UpdateCMFAdminRequest;
 import org.motechproject.whp.refdata.domain.CmfLocation;
 import org.motechproject.whp.refdata.repository.AllCmfLocations;
-import org.motechproject.whp.service.CmfAdminService;
+import org.motechproject.whp.user.service.CmfAdminService;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.repository.AllCmfAdmins;
 import org.motechproject.whp.user.repository.AllProviders;

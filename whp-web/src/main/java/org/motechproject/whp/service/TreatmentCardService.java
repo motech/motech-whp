@@ -52,10 +52,11 @@ public class TreatmentCardService {
             return ipTreatmentCard;
         }
         return null;
+
     }
 
     public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
-        List<Adherence> adherenceData = new ArrayList();
+        List<Adherence> adherenceData = new ArrayList<>();
 
         for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
             Adherence datum = new Adherence();
