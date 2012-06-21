@@ -13,21 +13,17 @@
                 </div>
             </div>
 
-            <#if districts?exists>
-                <#if districts?size != 0>
-                    <div class="control-group">
-                        <label class="control-label" for="district">District</label>
+            <div class="control-group">
+                <label class="control-label">District</label>
 
-                        <div class="controls">
-                            <select id="districts" name="district">
-                                <#list districts as district>
-                                    <option value="${district}">${district}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                </#if>
-            </#if>
+                <div class="controls">
+                    <select id="district" name="selectedDistrict">
+                        <#list districts as district>
+                            <option <#if selectedDistrict == district.name> selected </#if> value="${district.name}">${district.name}</option>
+                        </#list>
+                    </select>
+                </div>
+            </div>
 
             <div class="control-group">
                 <div class="controls">
@@ -51,14 +47,18 @@
             <#if providerList?size == 0>
                 <tr>
                     <td class= "warning-text" style="text-align: center" colspan="6">
-                        No providers fetched with provider ID: '${queryProviderId}'
+                        <#if providerId != "">
+                                No providers found for District: '${selectedDistrict}' with provider ID: '${providerId}'
+                            <#else>
+                                No providers found for District: '${selectedDistrict}'
+                        </#if>
                     </td>
                 </tr>
             <#else>
                 <#list providerList as provider>
                     <tr id="providerList_${provider.providerId}">
                         <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId}</td>
-                        <td id="provider_${provider.providerId}_District">${provider.district?cap_first}</td>
+                        <td id="provider_${provider.providerId}_District">${provider.district}</td>
                         <td id="provider_${provider.providerId}_PrimaryMobile">
                             <#if provider.primaryMobile?exists>
                             ${provider.primaryMobile}

@@ -6,16 +6,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.refdata.repository.AllCmfLocations;
-import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.repository.AllProviders;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.refdata.domain.District;
+import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
 import org.motechproject.whp.uimodel.ProviderRow;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
@@ -31,32 +31,22 @@ public class ProviderControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
-    private MotechAuthenticationService motechAuthenticationService;
+    private ProviderService providerService;
     @Mock
-    private AllProviders allProviders;
-    @Mock
-    private AllCmfLocations allDistricts;
+    private AllDistrictsCache allDistricts;
 
-    Provider provider1 = new Provider("aa", "9845678761", "district",
+    Provider provider1 = new Provider("aa", "9845678761", "districtA",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-    Provider provider2 = new Provider("ab", "9845678761", "district",
+    Provider provider2 = new Provider("ab", "9845678761", "districtB",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-    Provider provider3 = new Provider("ac", "9845678761", "district",
+    Provider provider3 = new Provider("ac", "9845678761", "districtA",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
     private ProviderController providerController;
-    List<Provider> testProviders = new ArrayList<Provider>();
 
     @Before
     public void setup() {
         initMocks(this);
-        testProviders.add(provider1);
-        testProviders.add(provider2);
-        testProviders.add(provider3);
-        when(allProviders.getAllSortedByDistrictAndProviderId()).thenReturn(testProviders);
-        when(allProviders.findByProviderId("aa")).thenReturn(provider1);
-        when(allProviders.findByProviderId("ab")).thenReturn(provider2);
-        when(allProviders.findByProviderId("ac")).thenReturn(provider3);
 
         MotechUser user1 = mock(MotechUser.class);
         when(user1.getUserName()).thenReturn(provider1.getProviderId());
@@ -70,10 +60,19 @@ public class ProviderControllerTest {
         when(user3.getUserName()).thenReturn(provider3.getProviderId());
         when(user3.isActive()).thenReturn(true);
 
-        List<MotechUser> motechUsers = asList(user1,user2,user3);
+        Map<String, MotechUser> motechUsers = new HashMap();
+        motechUsers.put(user1.getUserName(), user1);
+        motechUsers.put(user2.getUserName(), user2);
+        motechUsers.put(user3.getUserName(), user3);
 
-        when(motechAuthenticationService.findByRole(anyString())).thenReturn(motechUsers);
-        providerController = new ProviderController(allProviders, allDistricts, motechAuthenticationService);
+        when(providerService.fetchAllWebUsers()).thenReturn(motechUsers);
+
+        ArrayList<District> districts = new ArrayList<>();
+        districts.add(new District("districtA"));
+        districts.add(new District("districtB"));
+        when(allDistricts.getAll()).thenReturn(districts);
+
+        providerController = new ProviderController(providerService, allDistricts);
     }
 
     @Test
@@ -83,49 +82,25 @@ public class ProviderControllerTest {
     }
 
     @Test
+    public void shouldLoadProviderSearchPage_withProvidersByFirstDistrict() throws Exception {
+        List<Provider> expectedList = Arrays.asList(provider1, provider3);
+        when(providerService.fetchBy("districtA", "")).thenReturn(expectedList);
+
+        providerController.loadProviderSearchPage(uiModel);
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(expectedList)));
+    }
+
+    @Test
     public void shouldLoadProviderSearchPage_verifyViewMappingForPOST() throws Exception {
-        String viewName = providerController.searchMatchingProviders("providerId", uiModel);
+        String viewName = providerController.searchMatchingProviders("districtA", "providerId", uiModel);
         assertEquals("provider/list", viewName);
     }
 
-    @Test
-    public void shouldLoadProviderSearchPage_withAllProvidersByDefault() throws Exception {
-        providerController.loadProviderSearchPage(uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
-    }
-
-    private List<ProviderRow> wrapIntoProviderRows(List<Provider> providers) {
-        List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
-        for(Provider provider : providers) {
+    private List<ProviderRow> wrapIntoProviderRows(List<Provider> providerList) {
+        List<ProviderRow> providerRows = new ArrayList();
+        for(Provider provider : providerList) {
             providerRows.add(new ProviderRow(provider, true));
         }
         return providerRows;
-    }
-
-    @Test
-    public void shouldListAllProviders_whenSearchedByNullOrEmptyStringAsProviderId() throws Exception {
-        providerController.searchMatchingProviders(null, uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
-    }
-
-    @Test
-    public void shouldListAllProviders_whenSearchedByEmptyStringAsProviderId() throws Exception {
-        providerController.searchMatchingProviders("", uiModel);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(testProviders)));
-    }
-
-    @Test
-    public void shouldListMatchingProvider_whenSearchedByValidProviderId() throws Exception {
-        providerController.searchMatchingProviders("ab", uiModel);
-        List<Provider> matchingProviders = new ArrayList<Provider>();
-        matchingProviders.add(provider2);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(matchingProviders)));
-    }
-
-    @Test
-    public void shouldNotListAnything_whenSearchedByInvalidProviderId() throws Exception {
-        providerController.searchMatchingProviders("doesNotExist", uiModel);
-        List<ProviderRow> matchingProviders = new ArrayList<ProviderRow>();
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(matchingProviders));
     }
 }

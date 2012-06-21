@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProviderService {
@@ -53,4 +56,19 @@ public class ProviderService {
         return provider.getId();
     }
 
+    public List<Provider> fetchBy(String district, String providerId) {
+        if(providerId.isEmpty()) {
+            return allProviders.findByDistrict(district);
+        } else {
+            return allProviders.findByDistrictAndProviderId(district, providerId);
+        }
+    }
+
+    public Map<String, MotechUser> fetchAllWebUsers() {
+        Map<String, MotechUser> allWebUsers = new HashMap();
+        for (MotechUser motechUser : motechAuthenticationService.findByRole(WHPRole.PROVIDER.name())) {
+            allWebUsers.put(motechUser.getUserName(), motechUser);
+        }
+        return allWebUsers;
+    }
 }

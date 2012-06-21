@@ -61,24 +61,6 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldListAllProviders_alphabeticallySortedByDistrict() {
-        int sizeBeforeAdding = allProviders.getAll().size();
-        Provider provider1 = new Provider("ab", "984567876", "c",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-        Provider provider2 = new Provider("aa", "984567876", "b",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
-
-        addAndMarkForDeletion(provider1);
-        addAndMarkForDeletion(provider2);
-
-        List<Provider> providers = allProviders.getAllSortedByDistrictAndProviderId();
-        assertEquals(sizeBeforeAdding + 2, providers.size());
-        assertTrue(providers.contains(provider1));
-        assertTrue(providers.contains(provider2));
-        assertTrue(providers.indexOf(provider1) > providers.indexOf(provider2));
-    }
-
-    @Test
     public void shouldListProviders_ByDistrict() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
                 DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
@@ -115,6 +97,5 @@ public class AllProvidersIT extends SpringIntegrationTest {
         assertTrue(providers.contains(provider2));
         assertTrue(providers.contains(provider3));
     }
-
 }
 

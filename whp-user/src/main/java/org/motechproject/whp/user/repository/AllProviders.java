@@ -51,8 +51,4 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         return db.queryView(q, Provider.class);
     }
 
-    public List<Provider> getAllSortedByDistrictAndProviderId() {
-        ViewQuery q = createQuery("find_by_district_and_provider_id").includeDocs(true);
-        return db.queryView(q, Provider.class);
-    }
 }
