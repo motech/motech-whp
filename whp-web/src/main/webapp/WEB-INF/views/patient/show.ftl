@@ -1,7 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout/>
 <#include "../user/phaseInfo.ftl"/>
-<#include "../user/treatmentCard.ftl"/>
 <@layout.defaultLayout "Patient Dashboard">
     <#if messages?exists && (messages?size>0)>
     <div class="dateUpdated-message-alert row alert alert-info fade in">
@@ -29,27 +28,19 @@
         </table>
     </div>
     </#if>
-    <#if message?exists && (message?length>0)>
-    <div class="message-alert row text-center alert alert-info fade in">
-        <button class="close" data-dismiss="alert">&times;</button>
-    ${message}
-        <#assign message=""/>
-    </div>
-    </#if>
-
 <div class="well">
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="brand pull-left">Adjust Phase Start Dates</a>
 
     <div class="float-right">Patient Id : ${patientId}</div>
 </div>
-    <@phaseInfo/>
-    <@treatmentCardView/>
+<@phaseInfo/>
+<div id="treatmentCard"/>
 <script type="text/javascript">
-    $('#saveTheDate').click(function(){
-        if ($('#ipDatePicker').val()==="" && $('#eipDatePicker').val()==="" && $('#cpDatePicker').val()==="") {
+    $('#saveTheDate').click(function() {
+        if ($('#ipDatePicker').val() === "" && $('#eipDatePicker').val() === "" && $('#cpDatePicker').val() === "") {
             event.preventDefault();
             jConfirm('All phase start dates are set to empty. Do you want to continue?', 'Warning', function(r) {
-                if(r===true){
+                if (r === true) {
                     $('#setDatesModal').submit();
                 }
             });
@@ -65,6 +56,15 @@
         event.preventDefault();
     });
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
-    createAutoClosingAlert(".message-alert", 5000)
+
+    $.ajax({
+        type : 'GET',
+        url : '/whp/patients/treatmentCard?patientId=${patientId}',
+        success : function(data) {
+            $("#treatmentCard").html(data);
+        }
+    });
 </script>
+
+
 </@layout.defaultLayout>

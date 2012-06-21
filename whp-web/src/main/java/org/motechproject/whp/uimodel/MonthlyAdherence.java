@@ -4,13 +4,13 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.uimodel.DailyAdherence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class MonthlyAdherence {
+
     private List<DailyAdherence> logs = new ArrayList<DailyAdherence>();
     private int maxDays;
     private String monthAndYear;
@@ -28,4 +28,5 @@ public class MonthlyAdherence {
         month = Integer.toString(monthStartDate.getMonthOfYear());
         year = Integer.toString(monthStartDate.getYear());
     }
+
 }

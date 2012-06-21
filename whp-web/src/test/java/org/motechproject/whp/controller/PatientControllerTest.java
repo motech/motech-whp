@@ -8,14 +8,14 @@ import org.mockito.Mock;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.uimodel.DailyAdherenceRequest;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
-import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.service.TreatmentCardService;
+import org.motechproject.whp.uimodel.DailyAdherenceRequest;
 import org.motechproject.whp.uimodel.PatientDTO;
+import org.motechproject.whp.uimodel.TreatmentCardModel;
+import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,7 +101,7 @@ public class PatientControllerTest {
         TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
         when(treatmentCardService.getIntensivePhaseTreatmentCardModel(patient)).thenReturn(treatmentCardModel);
 
-        patientController.show(patient.getPatientId(), uiModel, request);
+        patientController.treatmentCard(patient.getPatientId(), uiModel, request);
 
         verify(uiModel).addAttribute("treatmentCard", treatmentCardModel);
     }
@@ -161,7 +161,6 @@ public class PatientControllerTest {
 
     @Test
     public void shouldSaveAdherenceData() throws IOException {
-        String delta = "{patientId:test , dailyAdherenceRequests:[{day:6,month:7,year:2012,pillStatus:1},{day:13,month:8,year:2012,pillStatus:2}]}";
         UpdateAdherenceRequest adherenceData = new UpdateAdherenceRequest();
         adherenceData.setPatientId("test");
         DailyAdherenceRequest dailyAdherenceRequest1 = new DailyAdherenceRequest(6, 7, 2012, 1);
@@ -171,8 +170,8 @@ public class PatientControllerTest {
         setUpUserInSession("username");
         Patient patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
-        String view = patientController.saveTreatmentCard(delta, uiModel, request);
-        assertEquals("patient/show", view);
+        String view = patientController.saveTreatmentCard(adherenceData, uiModel, request);
+        assertEquals("user/treatmentCard", view);
         verify(uiModel,times(1)).addAttribute(PatientController.NOTIFICATION_MESSAGE,"Treatment Card saved successfully");
         verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, patient);
     }
