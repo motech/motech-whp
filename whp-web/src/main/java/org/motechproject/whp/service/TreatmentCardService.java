@@ -18,10 +18,13 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.today;
+
 @Component
 public class TreatmentCardService {
     AllPatients allPatients;
     WHPAdherenceService whpAdherenceService;
+
     @Autowired
     public TreatmentCardService(AllPatients allPatients, WHPAdherenceService whpAdherenceService) {
         this.allPatients = allPatients;
@@ -35,13 +38,16 @@ public class TreatmentCardService {
             Therapy latestTherapy = patient.latestTherapy();
             LocalDate ipStartDate = latestTherapy.getStartDate();
 
-            LocalDate endDate = ipStartDate.plusMonths(5).minusDays(1);
-            LocalDate today = LocalDate.now();
-            if(endDate.isAfter(today))
-                endDate = today;
+            LocalDate therapyEndDate = ipStartDate.plusMonths(5).minusDays(1);
+            LocalDate lastDoseDate;
 
-            List<Adherence> adherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, endDate);
-            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, ipStartDate,endDate);
+            if (therapyEndDate.isAfter(today()))
+                lastDoseDate = today();
+            else
+                lastDoseDate = therapyEndDate;
+
+            List<Adherence> adherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), latestTherapy.getId(), ipStartDate, lastDoseDate);
+            ipTreatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, latestTherapy, ipStartDate, therapyEndDate);
 
             return ipTreatmentCard;
         }
@@ -63,8 +69,7 @@ public class TreatmentCardService {
             if (doseForTreatment != null) {
                 datum.setTbId(doseForTreatment.getTbId());
                 datum.setProviderId(doseForTreatment.getProviderId());
-            }
-            else {
+            } else {
                 datum.setTbId(WHPConstants.UNKNOWN);
                 datum.setProviderId(WHPConstants.UNKNOWN);
             }

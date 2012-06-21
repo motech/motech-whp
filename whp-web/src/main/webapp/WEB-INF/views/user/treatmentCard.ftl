@@ -29,6 +29,16 @@
                     </td>
                 </tr>
                 </#list>
+                <tr>
+                <td>
+                    <div class="windings-font pull-left" providerId=""> &#10003; </div>
+                    <div class="pull-left"> , &nbsp; </div>
+                    <div class="legend-round-icon" providerId="">O</div>
+                </td>
+                <td>
+                    <div class="text-center text-center">Provider Unknown</div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -115,7 +125,7 @@
                 <button type="button" class="btn">Clear</button>
             </a>
             <a href="<@spring.url "/"/>" class="no-underline">
-                <button type="button" class="btn">Back To CmfAdmin List Page</button>
+                <button type="button" class="btn">Back To Patient List</button>
             </a>
             <button type="button" id='submitJson' class="btn btn-primary">Save</button>
         </div>

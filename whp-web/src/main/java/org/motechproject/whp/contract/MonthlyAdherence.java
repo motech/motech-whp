@@ -17,6 +17,7 @@ public class MonthlyAdherence {
     private int firstSunday;
     private String month;
     private String year;
+    public static final String MonthAndYearFormat = "MMM YYYY";
 
     public MonthlyAdherence(int maxDays, String monthAndYear, LocalDate monthStartDate) {
         this.maxDays = maxDays;

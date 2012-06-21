@@ -9,6 +9,7 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.util.WHPDateUtil;
+import org.motechproject.whp.refdata.domain.WHPConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +26,19 @@ public class TreatmentCardModel {
     private List<String> providerIds = new ArrayList<String>();
     private boolean isSundayDoseDate;
     private String therapyDocId;
+
     public TreatmentCardModel() {
     }
 
-    public MonthlyAdherence getMonthAdherence(LocalDate localDate) {
-        String monthAndYear = localDate.toString("MMM YYYY");
+    private MonthlyAdherence getMonthAdherence(LocalDate localDate) {
+        String monthAndYear = localDate.toString(MonthlyAdherence.MonthAndYearFormat);
 
         for (MonthlyAdherence existingMonthlyAdherence : monthlyAdherences) {
             if (monthAndYear.equals(existingMonthlyAdherence.getMonthAndYear())) {
                 return existingMonthlyAdherence;
             }
         }
-
-        int numberOfDays = findNumberOfDays(localDate.getMonthOfYear(), localDate.getYear());
-
-        MonthlyAdherence newlyAddedMonthlyAdherence = new MonthlyAdherence(numberOfDays, monthAndYear, new LocalDate(localDate.getYear(), localDate.getMonthOfYear(), 1));
-        monthlyAdherences.add(newlyAddedMonthlyAdherence);
-        return newlyAddedMonthlyAdherence;
+        return null;
     }
 
     public void addAdherenceDatum(LocalDate doseDate, PillStatus pillStatus, String providerId, boolean adherenceCapturedDuringPausedPeriod) {
@@ -57,10 +54,15 @@ public class TreatmentCardModel {
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         therapyDocId = therapy.getId();
         isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
+
+        addMonthAdherenceForRange(startDate, endDate);
+
         List<LocalDate> adherenceDates = new ArrayList<>();
-        for(Adherence datum : adherenceData)
+        for (Adherence datum : adherenceData)
             adherenceDates.add(datum.getPillDate());
-        for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate,endDate); doseDate = doseDate.plusDays(1)) {
+
+        LocalDate today = DateUtil.today();
+        for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, today) && WHPDateUtil.isOnOrBefore(doseDate, endDate); doseDate = doseDate.plusDays(1)) {
 
             boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, therapy, doseDate);
             Treatment treatmentForDateInTherapy = patient.getTreatmentForDateInTherapy(doseDate, therapy.getId());
@@ -70,13 +72,30 @@ public class TreatmentCardModel {
             }
             if (adherenceDates.contains(doseDate)) {
                 Adherence log = adherenceData.get(adherenceDates.indexOf(doseDate));
-                addAdherenceDatum(doseDate, log.getPillStatus(), providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
-
+                addAdherenceDatum(log, doseDateInPausedPeriod);
             } else {
                 if (patientPillDays.contains(DayOfWeek.getDayOfWeek(doseDate))) {
                     addAdherenceDatum(doseDate, PillStatus.Unknown, providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
                 }
             }
+        }
+    }
+
+    private void addAdherenceDatum(Adherence log, boolean doseDateInPausedPeriod) {
+        String providerIdForTreatmentToWhichDoseBelongs = "";
+        if (!log.getProviderId().equals(WHPConstants.UNKNOWN))
+            providerIdForTreatmentToWhichDoseBelongs = log.getProviderId();
+
+        addAdherenceDatum(log.getPillDate(), log.getPillStatus(), providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
+    }
+
+    private void addMonthAdherenceForRange(LocalDate startDate, LocalDate endDate) {
+        for (LocalDate monthStartDate = new LocalDate(startDate.getYear(), startDate.getMonthOfYear(), 1); WHPDateUtil.isOnOrBefore(monthStartDate, endDate); monthStartDate = monthStartDate.plusMonths(1)) {
+            String monthAndYear = monthStartDate.toString(MonthlyAdherence.MonthAndYearFormat);
+            int numberOfDays = findNumberOfDays(monthStartDate.getMonthOfYear(), monthStartDate.getYear());
+
+            MonthlyAdherence newlyAddedMonthlyAdherence = new MonthlyAdherence(numberOfDays, monthAndYear, monthStartDate);
+            monthlyAdherences.add(newlyAddedMonthlyAdherence);
         }
     }
 
