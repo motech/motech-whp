@@ -10,6 +10,9 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.uimodel.DailyAdherence;
+import org.motechproject.whp.uimodel.MonthlyAdherence;
+import org.motechproject.whp.uimodel.TreatmentCardModel;
 
 import java.util.Arrays;
 import java.util.List;

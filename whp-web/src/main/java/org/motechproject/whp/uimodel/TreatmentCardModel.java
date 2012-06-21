@@ -1,4 +1,4 @@
-package org.motechproject.whp.contract;
+package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +10,8 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.uimodel.DailyAdherence;
+import org.motechproject.whp.uimodel.MonthlyAdherence;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.contract;
+package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 

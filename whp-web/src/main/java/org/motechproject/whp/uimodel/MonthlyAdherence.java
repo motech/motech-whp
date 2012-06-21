@@ -1,9 +1,10 @@
-package org.motechproject.whp.contract;
+package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
+import org.motechproject.whp.uimodel.DailyAdherence;
 
 import java.util.ArrayList;
 import java.util.List;

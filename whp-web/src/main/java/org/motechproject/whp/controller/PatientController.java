@@ -5,7 +5,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.flash.Flash;
-import org.motechproject.whp.contract.UpdateAdherenceRequest;
+import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.service.TreatmentCardService;
