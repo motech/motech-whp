@@ -70,7 +70,7 @@ public class CmfAdminController {
                 try {
                     CmfAdmin admin = new CmfAdmin(createRequest.getUserId().trim(), createRequest.getEmail(), createRequest.getDepartment(), locationId, createRequest.getStaffName());
                     cmfAdminService.add(admin, createRequest.getPassword());
-                    Flash.out(NOTIFICATION_MESSAGE, "Successfully updated cmf admin with user id " + createRequest.getUserId(), request);
+                    Flash.out(NOTIFICATION_MESSAGE, "Successfully created cmf admin with user id " + createRequest.getUserId(), request);
                     return "redirect:/cmfAdmin/list";
                 } catch (Exception e) {
                     bindingResult.addError(new ObjectError(CREATE_CMF_ADMIN_MODEL_NAME, e.getMessage()));

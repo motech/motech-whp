@@ -11,6 +11,9 @@
     </div>
     </#if>
 
+<script type="text/javascript">
+    createAutoClosingAlert(".message-alert", 5000);
+</script>
 <div class="well float-right">
     <a href="/whp/cmfAdmin/create">Create CMF Admin</a>
 </div>
