@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page;
 
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -27,6 +28,11 @@ public class ListProvidersPage extends LoggedInUserPage {
     @Override
     protected void waitForPageToLoad() {
         waitForElementWithIdToLoad("search");
+    }
+
+    @Override
+    public void postInitialize() {
+        district = WebDriverFactory.createWebElement(district);
     }
 
     public boolean hasProviderRow(String providerId) {
