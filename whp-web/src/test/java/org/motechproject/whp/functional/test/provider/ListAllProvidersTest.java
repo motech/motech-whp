@@ -34,6 +34,7 @@ public class ListAllProvidersTest extends BaseTest {
         listProvidersPage = loginAsItAdmin();
     }
 
+
     public void setupProvider() {
         providerDataService = new ProviderDataService(webDriver);
         provider1 = providerDataService.createProvider("Begusarai");
@@ -43,7 +44,7 @@ public class ListAllProvidersTest extends BaseTest {
 
     @Test
     public void shouldListProvidersForDistrict() {
-        listProvidersPage.searchBy("Saharsa", "");
+        listProvidersPage.searchBy("Saharsa", "", true);
         assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
@@ -51,7 +52,7 @@ public class ListAllProvidersTest extends BaseTest {
 
     @Test
     public void shouldListProvidersForDistrictAndProviderId() {
-        listProvidersPage.searchBy("Saharsa", provider2.getProviderId());
+        listProvidersPage.searchBy("Saharsa", provider2.getProviderId(), true);
         assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
         assertFalse(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
@@ -59,13 +60,13 @@ public class ListAllProvidersTest extends BaseTest {
 
     @Test
     public void shouldDisplayWarningForDistrict_WhenNoProvidersFound() {
-        listProvidersPage.searchBy("Vaishali", "");
+        listProvidersPage.searchBy("Vaishali", "", false);
         Assert.assertEquals("No providers found for District: 'Vaishali'", listProvidersPage.getWarningText());
     }
 
     @Test
     public void shouldDisplayWarningForDistrictAndProviderId_WhenNoProvidersFound() {
-        listProvidersPage.searchBy("Saharsa", provider1.getProviderId());
+        listProvidersPage.searchBy("Saharsa", provider1.getProviderId(), false);
         Assert.assertEquals("No providers found for District: 'Saharsa' with provider ID: '" + provider1.getProviderId().toLowerCase() + "'", listProvidersPage.getWarningText());
     }
 

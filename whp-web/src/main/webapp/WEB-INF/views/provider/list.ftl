@@ -43,7 +43,7 @@
         <tbody>
             <#if providerList?size == 0>
                 <tr>
-                    <td class= "warning" style="text-align: center" colspan="6">
+                    <td class="warning" style="text-align: center" colspan="6">
                         <#if providerId != "">
                                 No providers found for District: '${selectedDistrict}' with provider ID: '${providerId}'
                             <#else>
@@ -53,7 +53,7 @@
                 </tr>
             <#else>
                 <#list providerList as provider>
-                    <tr id="providerList_${provider.providerId}">
+                    <tr class="provider-row" id="providerList_${provider.providerId}">
                         <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId}</td>
                         <td id="provider_${provider.providerId}_District">${provider.district}</td>
                         <td id="provider_${provider.providerId}_PrimaryMobile">

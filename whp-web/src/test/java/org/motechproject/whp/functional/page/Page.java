@@ -71,8 +71,8 @@ public abstract class Page {
         waitForElementToLoad(By.xpath(path));
     }
 
-    protected void waitForElementWithCSSToLoad(final String path) {
-        waitForElementToLoad(By.cssSelector(path));
+    protected void waitForElementWithCSSToLoad(final String className) {
+        waitForElementToLoad(By.className(className));
     }
 
     protected void waitForElementToLoadWithRetry(final By by) {

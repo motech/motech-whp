@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page;
 
+import org.motechproject.whp.functional.framework.WHPWebElement;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -39,11 +40,15 @@ public class ListProvidersPage extends LoggedInUserPage {
         return safeFindElement(By.id(String.format("provider_%s_ProviderId", providerId))) != null;
     }
 
-    public void searchBy(String district, String providerId) {
+    public void searchBy(String district, String providerId, boolean expectingResult) {
         this.providerId.sendKeys(providerId.toLowerCase());
-        this.district.sendKeys(district);
+        ((WHPWebElement) this.district).select(district);
         this.submit.click();
-        waitForElementWithCSSToLoad("warning");
+        if (expectingResult) {
+            waitForElementWithCSSToLoad("provider-row");
+        } else {
+            waitForElementWithCSSToLoad("warning");
+        }
     }
 
     public String getWarningText() {

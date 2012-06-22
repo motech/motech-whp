@@ -99,7 +99,7 @@ public class WHPWebElement implements ExtendedWebElement {
 
     @Override
     public void select(String value) {
-        sendKeys(value);
+        webElement.sendKeys(value);
         click(); // required to simulate onKeyPress that sets the dojo backing element
     }
 
