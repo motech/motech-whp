@@ -6,6 +6,7 @@ import java.util.List;
 
 //This class should be agnostic of any specific driver
 public class WHPWebElement implements ExtendedWebElement {
+
     protected WebElement webElement;
 
     public WHPWebElement(WebElement webElement) {
@@ -99,8 +100,12 @@ public class WHPWebElement implements ExtendedWebElement {
 
     @Override
     public void select(String value) {
-        webElement.sendKeys(value);
-        click(); // required to simulate onKeyPress that sets the dojo backing element
+        List<WebElement> options = webElement.findElements(By.tagName("option"));
+        for (WebElement option : options) {
+            if (value.equalsIgnoreCase(option.getAttribute("value"))) {
+                option.click();
+            }
+        }
     }
 
     @Override
