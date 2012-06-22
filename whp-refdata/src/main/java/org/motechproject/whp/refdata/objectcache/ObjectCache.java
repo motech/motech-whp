@@ -1,32 +1,34 @@
 package org.motechproject.whp.refdata.objectcache;
 
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.model.MotechBaseDataObject;
 
 import java.util.*;
 
-public abstract class ObjectCache<T> {
+public abstract class ObjectCache<T extends MotechBaseDataObject> {
 
-    protected HashMap<String, T> objectMap = new HashMap<String, T>();
-
-    protected List<T> objectList = new ArrayList<T>();
-
-    protected MotechBaseRepository repository;
     private Class<T> type;
+    protected HashMap<String, T> objectMap = new HashMap<String, T>();
+    protected List<T> objectList = new ArrayList<T>();
+    protected MotechBaseRepository<T> repository;
 
-    public ObjectCache(MotechBaseRepository repository, Class<T> type) {
+    public ObjectCache(MotechBaseRepository<T> repository, Class<T> type) {
         this.repository = repository;
         this.type = type;
         populateData();
     }
 
-    protected abstract String getKey(T t);
+    protected String getKey(T object) {
+        return object.getId();
+    }
 
-    public T getBy(String key){
+    public T getBy(String key) {
         return objectMap.get(key);
     }
 
-    public void refresh(){
+    public void refresh() {
         objectMap.clear();
+        objectList.clear();
         populateData();
     }
 
@@ -39,9 +41,9 @@ public abstract class ObjectCache<T> {
         for (T t : objectList) {
             this.objectMap.put(getKey(t), t);
         }
-        if(Arrays.asList(type.getInterfaces()).contains(Comparable.class)) {
-            Collections.sort((List<Comparable>) objectList);
+        if (Arrays.asList(type.getInterfaces()).contains(Comparable.class)) {
+            List data = objectList;
+            Collections.sort((List<Comparable>) data);
         }
     }
-
 }

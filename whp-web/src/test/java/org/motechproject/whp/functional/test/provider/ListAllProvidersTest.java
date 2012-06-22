@@ -1,7 +1,6 @@
 package org.motechproject.whp.functional.test.provider;
 
 import junit.framework.Assert;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.functional.data.TestProvider;
@@ -13,10 +12,7 @@ import org.motechproject.whp.functional.service.ProviderDataService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-
 import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,17 +44,17 @@ public class ListAllProvidersTest extends BaseTest {
     @Test
     public void shouldListProvidersForDistrict() {
         listProvidersPage.searchBy("Saharsa", "");
+        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
-        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
     }
 
     @Test
     public void shouldListProvidersForDistrictAndProviderId() {
         listProvidersPage.searchBy("Saharsa", provider2.getProviderId());
+        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
         assertTrue(listProvidersPage.hasProviderRow(provider2.getProviderId().toLowerCase()));
         assertFalse(listProvidersPage.hasProviderRow(provider3.getProviderId().toLowerCase()));
-        assertFalse(listProvidersPage.hasProviderRow(provider1.getProviderId().toLowerCase()));
     }
 
     @Test

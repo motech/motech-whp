@@ -37,6 +37,7 @@ public class ListProvidersPage extends LoggedInUserPage {
         this.providerId.sendKeys(providerId.toLowerCase());
         this.district.sendKeys(district);
         this.submit.click();
+        waitForElementWithCSSToLoad("warning");
     }
 
     public String getWarningText() {

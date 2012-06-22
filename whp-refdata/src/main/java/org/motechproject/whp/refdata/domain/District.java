@@ -22,6 +22,4 @@ public class District extends MotechBaseDataObject implements Comparable<Distric
     public int compareTo(District district) {
         return getName().toLowerCase().compareTo(district.getName().toLowerCase());
     }
-
-
 }

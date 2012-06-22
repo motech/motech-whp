@@ -7,7 +7,6 @@
 
             <div class="control-group">
                 <label class="control-label" for="providerId">Provider ID</label>
-
                 <div class="controls">
                     <input class="input-xlarge" type="text" name='providerId' id="providerId" autofocus="autofocus"/>
                 </div>
@@ -15,7 +14,6 @@
 
             <div class="control-group">
                 <label class="control-label">District</label>
-
                 <div class="controls">
                     <select id="district" name="selectedDistrict">
                         <#list districts as district>
@@ -24,7 +22,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>

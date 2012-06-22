@@ -8,15 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AllDistrictsCache extends ObjectCache<District> {
 
-        @Autowired
-        public AllDistrictsCache(AllDistricts allDistricts) {
-            super(allDistricts, District.class);
-        }
-
-        @Override
-        protected String getKey(District district) {
-            return district.getId();
-        }
-
+    @Autowired
+    public AllDistrictsCache(AllDistricts allDistricts) {
+        super(allDistricts, District.class);
+    }
 }
 
