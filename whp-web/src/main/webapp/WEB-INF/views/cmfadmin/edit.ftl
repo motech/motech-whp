@@ -19,15 +19,21 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="staffName">User Name</label>
+                    <div class="controls">
+                        <input name="userId" id="userId" value="${cmfAdmin.userId}" disabled/>
+                        <input name="userId" id="hiddenUserId" value="${cmfAdmin.userId}" type="hidden"/>
+                    </div>
+                </div>
                 <div class="control-group">
                     <label class="control-label" for="email">Email*</label>
-
                     <div class="controls">
                         <@spring.formInput "cmfAdmin.email","class='input-xlarge' autocomplete='off'","text"/>
-
                         <div class="field-error">
                             <@spring.bind "cmfAdmin.email" />
-                    <@spring.showErrors ',' />
+                            <@spring.showErrors ',' />
                         </div>
                     </div>
                 </div>
@@ -38,7 +44,7 @@
                         <@spring.formInput "cmfAdmin.department","class='input-xlarge' autocomplete='off'","text"/>
                         <div class="field-error">
                             <@spring.bind "cmfAdmin.department" />
-                    <@spring.showErrors ',' />
+                            <@spring.showErrors ',' />
                         </div>
                     </div>
                 </div>
@@ -53,6 +59,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="id" name="id" value="${cmfAdmin.id}">
             </div>
             <div class="control-group pull-right">
                 <div class="controls">
@@ -60,8 +67,6 @@
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
-
-            <input type="hidden" id="id" name="id" value="${cmfAdmin.id}">
         </div>
     </form>
 </div>
