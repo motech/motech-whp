@@ -24,7 +24,7 @@ public class PatientDTO {
     }
 
     public PatientDTO(Patient patient) {
-        Therapy therapy = patient.latestTherapy();
+        Therapy therapy = patient.currentTherapy();
         this.patientId = patient.getPatientId();
         this.ipStartDate = therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate() != null ? therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate().toString(WHPConstants.DATE_FORMAT) : "";
         this.eipStartDate = therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate() != null ? therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT) : "";
@@ -32,7 +32,7 @@ public class PatientDTO {
     }
 
     public Patient mapNewPhaseInfoToPatient(Patient patient) {
-        Phases phases = patient.latestTherapy().getPhases();
+        Phases phases = patient.currentTherapy().getPhases();
         DateTimeFormatter formatter = DateTimeFormat.forPattern(WHPConstants.DATE_FORMAT);
         if (StringUtils.isNotBlank(ipStartDate)) {
             patient.startTherapy(formatter.parseLocalDate(ipStartDate));

@@ -127,7 +127,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        assertEquals(DiseaseClass.P, updatedPatient.latestTherapy().getDiseaseClass());
+        assertEquals(DiseaseClass.P, updatedPatient.currentTherapy().getDiseaseClass());
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
@@ -139,7 +139,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         patientService.update(UpdateScope.transferIn, updatePatientRequest);
 
         updatedPatient = allPatients.findByPatientId(CASE_ID);
-        assertEquals(DiseaseClass.E, updatedPatient.latestTherapy().getDiseaseClass());
+        assertEquals(DiseaseClass.E, updatedPatient.currentTherapy().getDiseaseClass());
     }
 
     @Test

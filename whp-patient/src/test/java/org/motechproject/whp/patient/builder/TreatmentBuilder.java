@@ -19,6 +19,10 @@ public class TreatmentBuilder {
         treatment = new Treatment();
     }
 
+    public static Treatment treatment() {
+        return new TreatmentBuilder().withDefaults().build();
+    }
+
     public TreatmentBuilder withDefaults() {
         LocalDate today = DateUtil.today();
         treatment.setTbId("elevenDigit");

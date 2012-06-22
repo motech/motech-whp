@@ -6,86 +6,76 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
-import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
+import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
 
 public class PatientTest {
 
-    Patient patient = new Patient("patientId", "patientFirstName", "patientLastName", Gender.F, "1111111111");
-    Treatment treatment = new Treatment("providerId", "tbId", PatientType.New);
-    Treatment newProviderTreatment = new Treatment("newProviderId", "newTbId", PatientType.TreatmentAfterDefault);
-
-    public PatientTest() {
+    @Test
+    public void shouldSetTreatmentAddedAsCurrentTreatment() {
+        Patient patient = patient();
+        Treatment treatment = treatment();
         patient.addTreatment(treatment, now());
-        patient.addTreatment(newProviderTreatment, now());
+        assertEquals(treatment, patient.getCurrentTreatment());
     }
 
     @Test
-    public void shouldUpdateCurrentProviderTreatmentWhenNewTreatmentIsAdded() {
-        assertEquals(newProviderTreatment, patient.getCurrentTreatment());
-    }
+    public void shouldUpdateTreatmentHistoryWhenNewTreatmentIdAdded() {
+        Patient patient = patient();
+        Treatment firstTreatment = patient.getCurrentTreatment();
+        patient.addTreatment(treatment(), now());
 
-    @Test
-    public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAdded() {
-        assertArrayEquals(new Object[]{treatment}, patient.getTreatments().toArray());
+        assertArrayEquals(new Object[]{firstTreatment}, patient.getTreatments().toArray());
     }
 
     @Test
     public void shouldNotHaveAnyHistoryWhenTreatmentHasNeverBeenUpdated() {
-        Patient patientWithoutTreatment = new Patient("patientId", "firstName", "lastName", Gender.F, "1111111111");
-        assertTrue(patientWithoutTreatment.getTreatments().isEmpty());
+        Patient patientWithOneTreatment = patient();
+        assertTrue(patientWithOneTreatment.getTreatments().isEmpty());
     }
 
     @Test
-    public void shouldUpdateProviderTreatmentHistoryWhenNewTreatmentIdAddedForPatientWhoHasAHistory() {
-        Treatment newerProviderTreatment = new Treatment("newerProviderId", "newerTbId", PatientType.Chronic);
-        patient.addTreatment(newerProviderTreatment, now());
+    public void shouldAddCurrentTreatmentToHistoryWhenNewTreatmentIsAdded() {
+        Patient patient = patient();
+        Treatment treatment = patient.getCurrentTreatment();
+        patient.addTreatment(treatment(), now());
 
-        assertArrayEquals(new Object[]{treatment, newProviderTreatment}, patient.getTreatments().toArray());
+        assertArrayEquals(new Object[]{treatment}, patient.getTreatments().toArray());
     }
 
     @Test
-    public void shouldCloseCurrentTreatment() {
-        Treatment treatment = mock(Treatment.class);
-
+    public void shouldUpdateLastModifiedDateWhenTreatmentIsClosed() {
         DateTime now = now();
-        patient.addTreatment(treatment, now);
-
+        Patient patient = patient();
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now);
+
         assertEquals(now, patient.getLastModifiedDate());
-        verify(treatment, times(1)).close(TreatmentOutcome.Cured, now);
     }
 
     @Test
-    public void shouldPauseCurrentTreatment() {
-        Treatment treatment = mock(Treatment.class);
-
+    public void shouldUpdateLastModifiedDateWhenTreatmentIsPaused() {
         DateTime now = now();
-        patient.addTreatment(treatment, now);
-
+        Patient patient = patient();
         patient.pauseCurrentTreatment("paws", now);
+
         assertEquals(now, patient.getLastModifiedDate());
-        verify(treatment, times(1)).pause("paws", now);
     }
 
     @Test
-    public void shouldRestartCurrentTreatment() {
-        Treatment treatment = mock(Treatment.class);
-
+    public void shouldUpdateLastModifiedDateWhenTreatmentIsRestarted() {
         DateTime now = now();
-        patient.addTreatment(treatment, now);
+        Patient patient = patient();
+        patient.pauseCurrentTreatment("paws", now.minusHours(2));
 
         patient.restartCurrentTreatment("swap", now);
+
         assertEquals(now, patient.getLastModifiedDate());
-        verify(treatment, times(1)).resume("swap", now);
     }
 
     @Test
@@ -102,21 +92,6 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldReturnAllTreatmentForPatientChronologically() {
-        Treatment treatment1 = new TreatmentBuilder().withDefaults().withProviderId("provider1").build();
-        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatment(treatment1).build();
-        Treatment treatment2 = new TreatmentBuilder().withDefaults().withProviderId("provider2").build();
-        Treatment treatment3 = new TreatmentBuilder().withDefaults().withProviderId("provider3").build();
-        Treatment treatment4 = new TreatmentBuilder().withDefaults().withProviderId("provider4").build();
-        patient.addTreatment(treatment2, now());
-        patient.addTreatment(treatment3, now());
-        patient.addTreatment(treatment4, now());
-
-        List<Treatment> treatments = patient.allTreatmentsChronologically();
-        assertArrayEquals(new Treatment[]{treatment1, treatment2, treatment3, treatment4}, treatments.toArray());
-    }
-
-    @Test
     public void shouldGetCurrentTreatmentIfGivenDateIsInCurrentTreatmentPeriod() {
         Patient patient = new PatientBuilder().withDefaults().build();
         String therapyDocId = "therapyDocId";
@@ -125,29 +100,9 @@ public class PatientTest {
         LocalDate endDate = new LocalDate(2012, 3, 15);
         patient.getCurrentTreatment().setStartDate(startDate);
         patient.getCurrentTreatment().setEndDate(endDate);
-        assertEquals(patient.getCurrentTreatment(), patient.getTreatmentForDateInTherapy(startDate, therapyDocId));
-        assertEquals(patient.getCurrentTreatment(), patient.getTreatmentForDateInTherapy(endDate, therapyDocId));
-        assertEquals(patient.getCurrentTreatment(), patient.getTreatmentForDateInTherapy(startDate.plusDays(15), therapyDocId));
-    }
-
-    @Test
-    public void shouldReturnTreatmentForGivenDate() {
-        Patient patient = new PatientBuilder().withDefaults().build();
-        LocalDate startDate1 = new LocalDate(2012, 1, 2);
-        LocalDate startDate2 = new LocalDate(2012, 2, 2);
-        LocalDate startDate3 = new LocalDate(2012, 3, 2);
-
-        patient.setCurrentTreatment(new TreatmentBuilder().withDefaults().withStartDate(startDate3).withTherapyDocId("1").build());
-        Treatment treatment1 = new TreatmentBuilder().withDefaults().withTherapyDocId("1").withStartDate(startDate1).build();
-        Treatment treatment2 = new TreatmentBuilder().withDefaults().withTherapyDocId("2").withStartDate(startDate2).build();
-
-        patient.setTreatments(asList(treatment1, treatment2));
-        assertEquals(treatment1, patient.getTreatmentForDateInTherapy(startDate1, "1"));
-        assertNull(patient.getTreatmentForDateInTherapy(startDate2, "1"));
-        assertEquals(treatment2, patient.getTreatmentForDateInTherapy(startDate2, "2"));
-        assertNull(patient.getTreatmentForDateInTherapy(startDate3, "2"));
-        assertEquals(patient.getCurrentTreatment(), patient.getTreatmentForDateInTherapy(startDate3, "1"));
-        assertEquals(patient.getCurrentTreatment(), patient.getTreatmentForDateInTherapy(startDate3.plusMonths(10), "1"));
+        assertEquals(patient.getCurrentTreatment(), patient.getTreatment(startDate));
+        assertEquals(patient.getCurrentTreatment(), patient.getTreatment(endDate));
+        assertEquals(patient.getCurrentTreatment(), patient.getTreatment(startDate.plusDays(15)));
     }
 
     @Test
@@ -159,6 +114,70 @@ public class PatientTest {
         patient = new Patient(null, "", "", Gender.F, "");
         assertEquals(null, patient.getPatientId());
 
+    }
+
+    @Test
+    public void shouldGetCurrentTreatment_WhenDateIsTheStartDayOfCurrentTreatment() {
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+
+        assertEquals(currentTreatment, patient.getTreatment(date(2012, 4, 1)));
+    }
+
+    @Test
+    public void shouldGetCurrentTreatment_WhenDateIsAfterStartDayOfCurrentTreatment() {
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+
+        assertEquals(currentTreatment, patient.getTreatment(date(2012, 4, 2)));
+    }
+
+    @Test
+    public void shouldGetFirstTreatment_WhenDateIsSameAsEndDate() {
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        Treatment firstTreatment = patient.getCurrentTreatment();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1));
+
+        assertEquals(firstTreatment, patient.getTreatment(date(2011, 12, 1)));
+    }
+
+    @Test
+    public void shouldGetLatestTreatment_WhenTreatmentIsCloseAndOpenedOnSameDay() {
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        Treatment secondTreatment = new TreatmentBuilder().withDefaults().build();
+        patient.addTreatment(secondTreatment, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1));
+
+        assertEquals(secondTreatment, patient.getTreatment(date(2011, 12, 1)));
+    }
+
+    private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
+        return new LocalDate(year, monthOfYear, dayOfMonth);
+    }
+
+    private DateTime dateTime(int year, int monthOfYear, int dayOfMonth) {
+        return new LocalDate(year, monthOfYear, dayOfMonth).toDateTimeAtCurrentTime();
     }
 
 }

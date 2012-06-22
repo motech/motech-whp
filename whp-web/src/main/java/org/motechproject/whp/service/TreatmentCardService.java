@@ -32,10 +32,10 @@ public class TreatmentCardService {
     }
 
     public TreatmentCardModel getIntensivePhaseTreatmentCardModel(Patient patient) {
-        if (patient != null && patient.latestTherapy() != null && patient.latestTherapy().getStartDate() != null) {
+        if (patient != null && patient.currentTherapy() != null && patient.currentTherapy().getStartDate() != null) {
 
             TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
-            Therapy latestTherapy = patient.latestTherapy();
+            Therapy latestTherapy = patient.currentTherapy();
             LocalDate ipStartDate = latestTherapy.getStartDate();
 
             LocalDate therapyEndDate = ipStartDate.plusMonths(5).minusDays(1);
@@ -66,7 +66,7 @@ public class TreatmentCardService {
             datum.setPillStatus(PillStatus.get(request.getPillStatus()));
             adherenceData.add(datum);
 
-            Treatment doseForTreatment = patient.getTreatmentForDateInTherapy(request.getDoseDate(), updateAdherenceRequest.getTherapy());
+            Treatment doseForTreatment = patient.getTreatment(request.getDoseDate());
             if (doseForTreatment != null) {
                 datum.setTbId(doseForTreatment.getTbId());
                 datum.setProviderId(doseForTreatment.getProviderId());

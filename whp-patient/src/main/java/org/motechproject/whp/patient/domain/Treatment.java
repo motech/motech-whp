@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.util.CollectionUtils;
@@ -66,6 +67,22 @@ public class Treatment {
         interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
     }
 
+    public void addSmearTestResult(SmearTestRecord smearTestRecord) {
+        smearTestResults.add(smearTestRecord);
+    }
+
+    public void addWeightStatistics(WeightStatisticsRecord weightStatisticsRecord) {
+        weightStatistics.add(weightStatisticsRecord);
+    }
+
+    public boolean isDateInTreatment(LocalDate date) {
+        if (WHPDateUtil.isOnOrAfter(date, startDate)) {
+            if (endDate == null || WHPDateUtil.isOnOrBefore(date, endDate))
+                return true;
+        }
+        return false;
+    }
+
     @JsonIgnore
     public Therapy getTherapy() {
         return therapy;
@@ -83,31 +100,8 @@ public class Treatment {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return patientAddress.isValid(errorCodes)
-                && areSmearInstancesValid(errorCodes)
-                && areWeightInstancesValid(errorCodes);
-    }
-
-    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
-        return weightStatistics.isEmpty() || weightStatistics.latestResult().isValid(errorCodes);
-    }
-
-    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
-        return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
-    }
-
-    @JsonIgnore
     public boolean isClosed() {
         return therapy.isClosed();
-    }
-
-    public void addSmearTestResult(SmearTestRecord smearTestRecord) {
-        smearTestResults.add(smearTestRecord);
-    }
-
-    public void addWeightStatistics(WeightStatisticsRecord weightStatisticsRecord) {
-        weightStatistics.add(weightStatisticsRecord);
     }
 
     public void setProviderId(String providerId) {
@@ -123,4 +117,20 @@ public class Treatment {
         else
             this.tbId = tbId.toLowerCase();
     }
+
+    @JsonIgnore
+    public boolean isValid(List<WHPErrorCode> errorCodes) {
+        return patientAddress.isValid(errorCodes)
+                && areSmearInstancesValid(errorCodes)
+                && areWeightInstancesValid(errorCodes);
+    }
+
+    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
+        return weightStatistics.isEmpty() || weightStatistics.latestResult().isValid(errorCodes);
+    }
+
+    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
+        return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
+    }
+
 }

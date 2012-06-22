@@ -1,3 +1,4 @@
+
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
@@ -68,7 +69,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Therapy therapy = updatedPatient.latestTherapy();
+        Therapy therapy = updatedPatient.currentTherapy();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate());
@@ -107,7 +108,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
-        Therapy therapy = updatedPatient.latestTherapy();
+        Therapy therapy = updatedPatient.currentTherapy();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
@@ -358,16 +359,16 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         patientService.startTherapy(patientId, today);
 
-        assertEquals(today, allPatients.findByPatientId(patientId).latestTherapy().getStartDate());
-        assertEquals(today, allPatients.findByPatientId(patientId).latestTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
+        assertEquals(today, allPatients.findByPatientId(patientId).currentTherapy().getStartDate());
+        assertEquals(today, allPatients.findByPatientId(patientId).currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
     }
 
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {
         Treatment currentTreatment = updatedPatient.getCurrentTreatment();
         assertEquals(openNewPatientRequest.getDate_modified().toLocalDate(), currentTreatment.getStartDate());
         assertEquals(openNewPatientRequest.getTb_id().toLowerCase(), currentTreatment.getTbId());
-        assertEquals(openNewPatientRequest.getTreatment_category(), updatedPatient.latestTherapy().getTreatmentCategory());
-        assertEquals(openNewPatientRequest.getDisease_class(), updatedPatient.latestTherapy().getDiseaseClass());
+        assertEquals(openNewPatientRequest.getTreatment_category(), updatedPatient.currentTherapy().getTreatmentCategory());
+        assertEquals(openNewPatientRequest.getDisease_class(), updatedPatient.currentTherapy().getDiseaseClass());
         assertEquals(openNewPatientRequest.getProvider_id().toLowerCase(), currentTreatment.getProviderId());
         assertEquals(openNewPatientRequest.getTb_registration_number(), currentTreatment.getTbRegistrationNumber());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
@@ -375,7 +376,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     private void assertCurrentTreatmentClosed(Patient updatedPatient, DateTime lastModifiedDate) {
         Treatment currentTreatment = updatedPatient.getCurrentTreatment();
-        assertEquals(lastModifiedDate.toLocalDate(), updatedPatient.latestTherapy().getCloseDate());
+        assertEquals(lastModifiedDate.toLocalDate(), updatedPatient.currentTherapy().getCloseDate());
         assertEquals(lastModifiedDate.toLocalDate(), currentTreatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, updatedPatient.getTreatmentOutcome());
         assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());

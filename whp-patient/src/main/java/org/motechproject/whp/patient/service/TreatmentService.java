@@ -67,8 +67,8 @@ public class TreatmentService {
         Treatment currentTreatment = patient.getCurrentTreatment();
 
         copyOverTreatment(patientRequest, patient, dateModified, newSmearTestResults, newWeightStatistics, currentTreatment);
-        patient.reviveLastClosedTreatment();
-        patient.latestTherapy().setDiseaseClass(patientRequest.getDisease_class());
+        patient.reviveLatestTherapy();
+        patient.currentTherapy().setDiseaseClass(patientRequest.getDisease_class());
         patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }

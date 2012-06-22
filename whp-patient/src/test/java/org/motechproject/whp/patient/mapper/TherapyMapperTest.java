@@ -25,7 +25,7 @@ public class TherapyMapperTest {
         Therapy newTherapy = TherapyMapper.createNewTreatment(patient, openNewTreatmentUpdateRequest);
 
         assertEquals(openNewTreatmentUpdateRequest.getDisease_class(), newTherapy.getDiseaseClass());
-        assertEquals(patient.latestTherapy().getPatientAge(), newTherapy.getPatientAge());
+        assertEquals(patient.currentTherapy().getPatientAge(), newTherapy.getPatientAge());
         assertEquals(openNewTreatmentUpdateRequest.getTreatment_category(), newTherapy.getTreatmentCategory());
     }
 

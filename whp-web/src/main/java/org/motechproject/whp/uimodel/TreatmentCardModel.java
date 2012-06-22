@@ -64,8 +64,8 @@ public class TreatmentCardModel {
         LocalDate today = DateUtil.today();
         for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, today) && WHPDateUtil.isOnOrBefore(doseDate, endDate); doseDate = doseDate.plusDays(1)) {
 
-            boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, therapy, doseDate);
-            Treatment treatmentForDateInTherapy = patient.getTreatmentForDateInTherapy(doseDate, therapy.getId());
+            boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, doseDate);
+            Treatment treatmentForDateInTherapy = patient.getTreatment(doseDate);
             String providerIdForTreatmentToWhichDoseBelongs = "";
             if (treatmentForDateInTherapy != null) {
                 providerIdForTreatmentToWhichDoseBelongs = treatmentForDateInTherapy.getProviderId();
@@ -99,13 +99,13 @@ public class TreatmentCardModel {
         }
     }
 
-    private boolean isDoseDateInPausedPeriod(Patient patient, Therapy therapy, LocalDate doseDate) {
+    private boolean isDoseDateInPausedPeriod(Patient patient, LocalDate doseDate) {
         boolean isIt = false;
-        Treatment treatmentForDateInTherapy = patient.getTreatmentForDateInTherapy(doseDate, therapy.getId());
-        if (treatmentForDateInTherapy != null) {
-            TreatmentInterruptions interruptions = treatmentForDateInTherapy.getInterruptions();
+        Treatment treatment = patient.getTreatment(doseDate);
+        if (treatment != null) {
+            TreatmentInterruptions interruptions = treatment.getInterruptions();
             for (TreatmentInterruption interruption : interruptions) {
-                if (isDoseDateInInterruptionPeriod(doseDate, interruption, treatmentForDateInTherapy)) {
+                if (isDoseDateInInterruptionPeriod(doseDate, interruption, treatment)) {
                     isIt = true;
                     break;
                 }

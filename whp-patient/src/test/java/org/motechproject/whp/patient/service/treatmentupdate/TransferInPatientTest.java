@@ -45,8 +45,8 @@ public class TransferInPatientTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
-        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
+        patientRequest.setDisease_class(patient.currentTherapy().getDiseaseClass());
+        patientRequest.setTreatment_category(patient.currentTherapy().getTreatmentCategory());
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_NOT_CLOSED);
@@ -61,8 +61,8 @@ public class TransferInPatientTest extends BaseUnitTest {
 
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
-                .withDiseaseClass(patient.latestTherapy().getDiseaseClass())
-                .withTreatmentCategory(patient.latestTherapy().getTreatmentCategory())
+                .withDiseaseClass(patient.currentTherapy().getDiseaseClass())
+                .withTreatmentCategory(patient.currentTherapy().getTreatmentCategory())
                 .build();
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
@@ -75,7 +75,7 @@ public class TransferInPatientTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
+        patientRequest.setDisease_class(patient.currentTherapy().getDiseaseClass());
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
         patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, 24, 54, threeDaysAWeek));
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
@@ -92,8 +92,8 @@ public class TransferInPatientTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
 
         PatientRequest patientRequest = new PatientRequest();
-        patientRequest.setDisease_class(patient.latestTherapy().getDiseaseClass());
-        patientRequest.setTreatment_category(patient.latestTherapy().getTreatmentCategory());
+        patientRequest.setDisease_class(patient.currentTherapy().getDiseaseClass());
+        patientRequest.setTreatment_category(patient.currentTherapy().getTreatmentCategory());
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 

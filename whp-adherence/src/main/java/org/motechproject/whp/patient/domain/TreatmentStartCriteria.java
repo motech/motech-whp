@@ -19,7 +19,7 @@ public class TreatmentStartCriteria {
     }
 
     private static boolean isAdherenceBeingRecapturedForTheSameWeekAsTheWeekTreatmentStartedOn(Patient patient, WeeklyAdherence adherence) {
-        LocalDate currentlySetDoseStartDate = patient.latestTherapy().getStartDate();
+        LocalDate currentlySetDoseStartDate = patient.currentTherapy().getStartDate();
         return adherence.getWeek().equals(new TreatmentWeek(currentlySetDoseStartDate));
     }
 }

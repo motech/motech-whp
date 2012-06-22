@@ -34,6 +34,7 @@ public class PatientMapper {
         Treatment treatment = new Treatment(providerId, tbId, patientRequest.getPatient_type());
 
         treatment.setTherapy(therapy);
+        // TODO : remove
         treatment.setStartDate(patientRequest.getDate_modified().toLocalDate()); //Not being set so far?
         mapSmearTestResults(patientRequest, treatment);
         mapWeightStatistics(patientRequest, treatment);
@@ -62,7 +63,7 @@ public class PatientMapper {
 
     public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
         Treatment currentTreatment = patient.getCurrentTreatment();
-        Therapy currentTherapy = patient.latestTherapy();
+        Therapy currentTherapy = patient.currentTherapy();
 
         if (patientRequest.getAge() != null)
             currentTherapy.setPatientAge(patientRequest.getAge());

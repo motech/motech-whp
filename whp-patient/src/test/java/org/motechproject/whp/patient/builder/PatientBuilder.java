@@ -19,6 +19,10 @@ public class PatientBuilder {
         patient = new Patient();
     }
 
+    public static Patient patient() {
+        return new PatientBuilder().withDefaults().build();
+    }
+
     public PatientBuilder withDefaults() {
         patient.setPatientId("patientId");
         patient.setFirstName("firstName");
@@ -88,6 +92,16 @@ public class PatientBuilder {
 
     public PatientBuilder withMigrated(boolean migrated) {
         patient.setMigrated(migrated);
+        return this;
+    }
+
+    public PatientBuilder withCurrentTreatmentStartDate(LocalDate startDate) {
+        patient.getCurrentTreatment().setStartDate(startDate);
+        return this;
+    }
+
+    public PatientBuilder withCurrentTreatmentEndDate(LocalDate endDate) {
+        patient.getCurrentTreatment().setEndDate(endDate);
         return this;
     }
 }

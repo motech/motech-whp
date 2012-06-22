@@ -117,7 +117,7 @@ public class PatientControllerTest {
 
         verify(allPatients).update(patientArgumentCaptor.capture());
 
-        assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().latestTherapy().getStartDate());
+        assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().currentTherapy().getStartDate());
         assertEquals("redirect:/patients/dashboard?patientId=" + patient.getPatientId(), view);
     }
 

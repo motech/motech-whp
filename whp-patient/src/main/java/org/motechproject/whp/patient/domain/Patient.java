@@ -10,13 +10,10 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrAfter;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -47,38 +44,52 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void addTreatment(Treatment treatment, DateTime dateModified) {
-        if (currentTreatment != null) {
-            treatments.add(currentTreatment);
-        }
-        currentTreatment = treatment;
-        lastModifiedDate = dateModified;
-    }
-
-    public Therapy latestTherapy() {
+    public Therapy currentTherapy() {
         return currentTreatment.getTherapy();
     }
 
-    public PatientType currentTreatmentType() {
-        return getCurrentTreatment().getPatientType();
+    public void addTreatment(Treatment treatment, DateTime dateModified) {
+        if (currentTreatment != null)
+            treatments.add(currentTreatment);
+        currentTreatment = treatment;
+        treatment.setStartDate(dateModified.toLocalDate());
+        setLastModifiedDate(dateModified);
     }
 
-    public DateTime getLastModifiedDate() {
-        return DateUtil.setTimeZone(lastModifiedDate);
+    @JsonIgnore
+    public Treatment getTreatment(LocalDate date) {
+        if (currentTreatment.isDateInTreatment(date)) {
+            return currentTreatment;
+        }
+        for (int i = treatments.size() - 1; i >= 0; i--) {
+            Treatment treatment = treatments.get(i);
+            if (treatment.isDateInTreatment(date)) {
+                return treatment;
+            }
+        }
+        return null;
+    }
+
+    public void startTherapy(LocalDate firstDoseTakenDate) {
+        currentTherapy().start(firstDoseTakenDate);
+    }
+
+    public void reviveLatestTherapy() {
+        currentTherapy().revive();
     }
 
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
-        lastModifiedDate = dateModified;
+        setLastModifiedDate(dateModified);
         currentTreatment.close(treatmentOutcome, dateModified);
     }
 
     public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {
-        lastModifiedDate = dateModified;
+        setLastModifiedDate(dateModified);
         currentTreatment.pause(reasonForPause, dateModified);
     }
 
     public void restartCurrentTreatment(String reasonForResumption, DateTime dateModified) {
-        lastModifiedDate = dateModified;
+        setLastModifiedDate(dateModified);
         currentTreatment.resume(reasonForResumption, dateModified);
     }
 
@@ -99,8 +110,19 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return currentTreatment.isValid(errorCodes);
+    public Integer getAge() {
+        return currentTherapy().getPatientAge();
+    }
+
+    public void setPatientId(String patientId) {
+        if (patientId == null)
+            this.patientId = null;
+        else
+            this.patientId = patientId.toLowerCase();
+    }
+
+    public DateTime getLastModifiedDate() {
+        return DateUtil.setTimeZone(lastModifiedDate);
     }
 
     @JsonIgnore
@@ -139,64 +161,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public Integer getAge() {
-        return latestTherapy().getPatientAge();
-    }
-
-    @JsonIgnore
-    public TreatmentInterruptions getAllTreatmentInterruptions() {
-        TreatmentInterruptions interruptions = new TreatmentInterruptions();
-        interruptions.addAll(getCurrentTreatmentInterruptions());
-        for (Treatment treatment : getTreatments()) {
-            interruptions.addAll(treatment.getInterruptions());
-        }
-        return interruptions;
-    }
-
-    @JsonIgnore
-    public Treatment getTreatmentForDateInTherapy(LocalDate date, String therapyDocId) {
-        /* A treatment not closed is treated as the last treatment extending to the end of IP
-             - this can only be the last treatment (there cannot be 2 open treatments) */
-
-        if (currentTreatment.getTherapyDocId().equals(therapyDocId)
-                && isOnOrAfter(date, currentTreatment.getStartDate())) {
-            return currentTreatment;
-        }
-
-        List<Treatment> treatments = allTreatmentsChronologically();
-
-        /* Not including last treatment as that check has already been made at the start */
-        for (int i = 0; i < treatments.size() - 1; i++) {
-            Treatment treatment = treatments.get(i);
-            if (treatment.getTherapyDocId().equals(therapyDocId)
-                    && isOnOrAfter(date, treatment.getStartDate())
-                    && date.isBefore(treatments.get(i + 1).getStartDate())) {
-                return treatment;
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public List<Treatment> allTreatmentsChronologically() {
-        List<Treatment> treatments = new ArrayList<Treatment>();
-        treatments.addAll(this.treatments);
-        treatments.add(currentTreatment);
-        return treatments;
-    }
-
-    public void reviveLastClosedTreatment() {
-        latestTherapy().revive();
-    }
-
-    public void startTherapy(LocalDate firstDoseTakenDate) {
-        latestTherapy().start(firstDoseTakenDate);
-    }
-
-    public void setPatientId(String patientId) {
-        if (patientId == null)
-            this.patientId = null;
-        else
-            this.patientId = patientId.toLowerCase();
+    public boolean isValid(List<WHPErrorCode> errorCodes) {
+        return currentTreatment.isValid(errorCodes);
     }
 }

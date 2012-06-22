@@ -116,6 +116,6 @@ public class WeeklyAdherence {
     }
 
     private static List<DayOfWeek> pillDays(Patient patient) {
-        return patient.latestTherapy().getTreatmentCategory().getPillDays();
+        return patient.currentTherapy().getTreatmentCategory().getPillDays();
     }
 }

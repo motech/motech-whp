@@ -1,7 +1,9 @@
 package org.motechproject.whp.patient.domain;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -77,5 +79,34 @@ public class TreatmentTest {
         assertEquals(null, treatment.getTbId());
     }
 
+    @Test
+    public void shouldReturnTrueIfDoseDateIsTheFirstDayOfTreatment() {
+        Treatment treatment = new TreatmentBuilder().withStartDate(new LocalDate(2012, 1, 1)).build();
+        assertTrue(treatment.isDateInTreatment(new LocalDate(2012, 1, 1)));
+    }
+
+    @Test
+    public void shouldReturnTrueIfDoseDateBelongsToTreatment() {
+        Treatment treatment = new TreatmentBuilder().withStartDate(new LocalDate(2012, 1, 1)).build();
+        assertTrue(treatment.isDateInTreatment(new LocalDate(2013, 10, 20)));
+    }
+
+    @Test
+    public void shouldReturnTrueIfDoseDateIsTheLastDayOfTreatment() {
+        Treatment treatment = new TreatmentBuilder().withStartDate(new LocalDate(2012, 1, 1)).withEndDate(new LocalDate(2012, 5, 1)).build();
+        assertTrue(treatment.isDateInTreatment(new LocalDate(2012, 5, 1)));
+    }
+
+    @Test
+    public void shouldReturnFalseIfDoseDateIsBeforeTreatmentStartDate() {
+        Treatment treatment = new TreatmentBuilder().withStartDate(new LocalDate(2012, 1, 2)).withEndDate(new LocalDate(2012, 5, 1)).build();
+        assertFalse(treatment.isDateInTreatment(new LocalDate(2012, 1, 1)));
+    }
+
+    @Test
+    public void shouldReturnFalseIfDoseDateIsAfterTreatmentEndDate() {
+        Treatment treatment = new TreatmentBuilder().withStartDate(new LocalDate(2012, 1, 2)).withEndDate(new LocalDate(2012, 5, 1)).build();
+        assertFalse(treatment.isDateInTreatment(new LocalDate(2012, 5, 2)));
+    }
 
 }
