@@ -243,12 +243,27 @@
                             <name>jetty.port</name>
                             <value>${jetty.port}</value>
                         </systemProperty>
+                        <systemProperty>
+                            <name>org.apache.commons.logging.Log</name>
+                            <value>
+                                org.apache.commons.logging.impl.Log4JLogger
+                            </value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>slf4j</name>
+                            <value>false</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>log4j.configuration</name>
+                            <value>file:./src/main/resources/application-log4j.xml</value>
+                        </systemProperty>
                     </systemProperties>
                     <webAppConfig>
                         <contextPath>/whp</contextPath>
                     </webAppConfig>
                     <stopKey>secret</stopKey>
                     <stopPort>6667</stopPort>
+
                 </configuration>
                 <executions>
                     <execution>
