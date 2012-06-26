@@ -65,8 +65,8 @@ public class AdherenceController extends BaseController {
         return "redirect:/";
     }
 
-    public WeeklyAdherenceSummary weeklyAdherenceSummary(WeeklyAdherenceForm weeklyAdherenceForm) {
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
+    private WeeklyAdherenceSummary weeklyAdherenceSummary(WeeklyAdherenceForm weeklyAdherenceForm) {
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
         weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
         return weeklyAdherenceSummary;
     }

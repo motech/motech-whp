@@ -10,7 +10,7 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class WeeklyAdherenceSummaryBuilder {
 
-    private WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummary(currentWeekInstance());
+    private WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummary(PATIENT_ID, currentWeekInstance());
 
     public WeeklyAdherenceSummaryBuilder() {
         adherenceSummary.setPatientId(PATIENT_ID);

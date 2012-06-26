@@ -19,7 +19,7 @@ public class WeeklyAdherenceSummaryMapper {
     }
 
     public WeeklyAdherenceSummary map(List<Adherence> adherenceList) {
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(treatmentWeek);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(patientId, treatmentWeek);
         int dosesTaken = 0;
         for (Adherence adherenceRecord : adherenceList) {
             if(PillStatus.Taken.equals(adherenceRecord.getPillStatus())) {

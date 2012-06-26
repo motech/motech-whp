@@ -15,7 +15,7 @@ public class WeeklyAdherenceSummary {
 
     @Getter
     @Setter
-    private TreatmentWeek week;
+    private TreatmentWeek week = currentWeekInstance();
 
     @Getter
     @Setter
@@ -26,21 +26,16 @@ public class WeeklyAdherenceSummary {
     private String patientId;
 
     public WeeklyAdherenceSummary() {
-        this.week = currentWeekInstance();
     }
 
-    public WeeklyAdherenceSummary(TreatmentWeek week) {
+    public WeeklyAdherenceSummary(String patientId, TreatmentWeek week) {
         this.week = week;
-    }
-
-    public WeeklyAdherenceSummary(Patient patient, TreatmentWeek week) {
-        this.week = week;
-        this.patientId = patient.getPatientId();
+        this.patientId = patientId;
     }
 
     public static WeeklyAdherenceSummary currentWeek(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
-        return new WeeklyAdherenceSummary(patient, treatmentWeek);
+        return new WeeklyAdherenceSummary(patient.getPatientId(), treatmentWeek);
     }
 
     public List<DayOfWeek> takenDays(TreatmentCategory treatmentCategory) {
