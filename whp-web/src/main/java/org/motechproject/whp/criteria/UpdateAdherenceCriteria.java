@@ -4,10 +4,7 @@ package org.motechproject.whp.criteria;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 public class UpdateAdherenceCriteria {
 

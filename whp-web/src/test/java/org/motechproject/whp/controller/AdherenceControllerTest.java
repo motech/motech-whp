@@ -110,16 +110,6 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldPassReferenceDateToAdherenceCard() {
-        mockCurrentDate(DateUtil.newDate(2012, 5, 10));
-        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummary();
-        when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherenceSummary);
-        adherenceController.update(PATIENT_ID, uiModel);
-
-        verify(uiModel).addAttribute(eq("referenceDate"), eq("04-05-2012"));
-    }
-
-    @Test
     public void shouldCaptureAdherence() {
         new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();

@@ -11,7 +11,6 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 

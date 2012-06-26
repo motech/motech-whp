@@ -1,9 +1,7 @@
 package org.motechproject.whp.importer.csv.mapper;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.importer.csv.request.WeightStatisticsRequests;
 import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;

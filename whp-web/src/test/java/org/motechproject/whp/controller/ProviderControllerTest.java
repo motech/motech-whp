@@ -4,7 +4,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
@@ -17,9 +16,7 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;

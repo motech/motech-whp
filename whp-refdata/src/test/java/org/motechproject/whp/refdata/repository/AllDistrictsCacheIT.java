@@ -4,13 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.common.utils.SpringIntegrationTest;
-import org.motechproject.whp.refdata.domain.CmfLocation;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;

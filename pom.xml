@@ -29,6 +29,7 @@
         <module>whp-adherence</module>
         <module>whp-validation</module>
         <module>whp-data-importer</module>
+        <module>whp-webservice</module>
         <module>whp-web</module>
     </modules>
 

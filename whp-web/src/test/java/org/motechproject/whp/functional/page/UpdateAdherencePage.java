@@ -1,8 +1,6 @@
 package org.motechproject.whp.functional.page;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WHPWebElement;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

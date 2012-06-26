@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -16,11 +17,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-validation</artifactId>
-            <version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
@@ -32,19 +28,22 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>case-service</artifactId>
-            <version>${motech.contrib.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-user</artifactId>
             <version>0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-mapping</artifactId>
+            <artifactId>whp-webservice</artifactId>
             <version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-webservice</artifactId>
+            <version>0.2-SNAPSHOT</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -63,11 +62,6 @@
             <groupId>org.motechproject</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
             <version>0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>openrosa-registration-service</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.webflow</groupId>

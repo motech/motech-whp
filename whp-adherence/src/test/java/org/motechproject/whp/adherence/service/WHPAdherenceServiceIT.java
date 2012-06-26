@@ -128,7 +128,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         assertNotNull(startDate);
 
         mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
-        adherenceService.recordAdherence(new WeeklyAdherenceSummary(), auditParams);
+        adherenceService.recordAdherence(new WeeklyAdherenceSummaryBuilder().build(), auditParams);
 
         assertEquals(
                 startDate,
@@ -141,7 +141,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         adherenceIsRecordedForTheFirstTime();
         mockCurrentDate(today.plusDays(1));
 
-        adherenceService.recordAdherence(new WeeklyAdherenceSummary(), auditParams);
+        adherenceService.recordAdherence(new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build(), auditParams);
         assertNull(allPatients.findByPatientId(PATIENT_ID).getCurrentTreatment().getTherapy().getStartDate());
     }
 
@@ -171,7 +171,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     public void shouldLogAuditAfterRecordingAdherence() {
         createPatient(new PatientRequestBuilder().withDefaults().build());
 
-        adherenceService.recordAdherence(new WeeklyAdherenceSummary(), auditParams);
+        adherenceService.recordAdherence(new WeeklyAdherenceSummaryBuilder().build(), auditParams);
         assertEquals(1, allAuditLogs.getAll().size());
     }
 

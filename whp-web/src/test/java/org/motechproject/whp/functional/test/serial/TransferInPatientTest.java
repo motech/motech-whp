@@ -6,15 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
-import org.motechproject.whp.contract.PatientWebRequest;
 import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;

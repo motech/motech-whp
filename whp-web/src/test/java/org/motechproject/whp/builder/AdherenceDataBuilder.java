@@ -2,10 +2,7 @@ package org.motechproject.whp.builder;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.PillStatus;
-
-import java.util.HashMap;
 
 public class AdherenceDataBuilder {
 

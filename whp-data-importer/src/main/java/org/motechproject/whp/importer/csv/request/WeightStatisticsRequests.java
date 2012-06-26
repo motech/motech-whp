@@ -1,9 +1,7 @@
 package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
-import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.util.StringUtils;
 

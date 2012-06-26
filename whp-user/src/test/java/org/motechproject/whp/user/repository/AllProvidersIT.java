@@ -2,7 +2,6 @@ package org.motechproject.whp.user.repository;
 
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.user.domain.Provider;

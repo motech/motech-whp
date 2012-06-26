@@ -1,6 +1,5 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;

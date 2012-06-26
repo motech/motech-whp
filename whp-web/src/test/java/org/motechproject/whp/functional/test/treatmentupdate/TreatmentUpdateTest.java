@@ -14,7 +14,7 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.webservice.PatientWebService;
+import org.motechproject.whp.webservice.service.PatientWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
