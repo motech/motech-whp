@@ -53,7 +53,6 @@ public class AdherenceController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId,
-                         String categoryCode,
                          String remarks,
                          WeeklyAdherenceForm weeklyAdherenceForm,
                          HttpServletRequest httpServletRequest) {
@@ -82,7 +81,6 @@ public class AdherenceController extends BaseController {
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherenceSummary, patient);
 
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
-        uiModel.addAttribute("categoryCode", category.getCode());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("totalDoses", category.getDosesPerWeek());
         uiModel.addAttribute("readOnly", !(canUpdate(patient)));

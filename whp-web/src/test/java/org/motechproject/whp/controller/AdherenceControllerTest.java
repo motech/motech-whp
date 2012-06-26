@@ -123,7 +123,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     public void shouldCaptureAdherence() {
         new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
-        adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
+        adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
         verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(auditParams));
@@ -175,7 +175,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherenceSummary);
 
-        String form = adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
+        String form = adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
         assertEquals("redirect:/", form);
     }
 
