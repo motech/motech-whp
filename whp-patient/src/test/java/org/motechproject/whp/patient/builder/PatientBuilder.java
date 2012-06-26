@@ -9,7 +9,14 @@ import org.motechproject.whp.refdata.domain.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.joda.time.DateTime.now;
+
 public class PatientBuilder {
+
+    public static final String PATIENT_ID = "patientid";
+    public static final String TB_ID = "tbid";
+    public static final String PROVIDER_ID = "providerid";
+
 
     List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
 
@@ -24,12 +31,12 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withDefaults() {
-        patient.setPatientId("patientId");
+        patient.setPatientId(PATIENT_ID);
         patient.setFirstName("firstName");
         patient.setLastName("lastName");
         patient.setGender(Gender.O);
         patient.setPhoneNumber("1234567890");
-        patient.setCurrentTreatment(defaultTreatment());
+        patient.addTreatment(defaultTreatment(), now());
         return this;
     }
 
@@ -40,7 +47,7 @@ public class PatientBuilder {
     private Treatment defaultTreatment() {
         LocalDate today = DateUtil.today();
         Treatment treatment = new Treatment();
-        treatment.setTbId("elevenDigit");
+        treatment.setTbId(TB_ID);
         treatment.setTherapy(defaultTherapy());
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);

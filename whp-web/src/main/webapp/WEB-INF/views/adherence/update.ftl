@@ -14,7 +14,6 @@
 <div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
         <input type="hidden" name="patientId" value="${adherence.patientId}"/>
-        <input type="hidden" name="treatmentId" value="${adherence.treatmentId}"/>
         <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
         <input type="hidden" name="categoryCode" value="${categoryCode}"/>
         <div id="numberSelect" class="well control-group">

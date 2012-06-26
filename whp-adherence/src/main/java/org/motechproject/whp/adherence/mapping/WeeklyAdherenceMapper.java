@@ -1,56 +1,43 @@
 package org.motechproject.whp.adherence.mapping;
 
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.contract.AdherenceRecords;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-import static org.motechproject.adherence.contract.AdherenceRecords.AdherenceRecord;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class WeeklyAdherenceMapper {
 
+    private String patientId;
     private TreatmentWeek treatmentWeek;
-    private AdherenceRecords adherenceRecords;
+    private List<Adherence> adherenceRecords;
 
-    public WeeklyAdherenceMapper(TreatmentWeek treatmentWeek, AdherenceRecords adherenceRecords) {
+    public WeeklyAdherenceMapper(String patientId, TreatmentWeek treatmentWeek, List<Adherence> adherenceList) {
+        this.patientId = patientId;
         this.treatmentWeek = treatmentWeek;
-        this.adherenceRecords = adherenceRecords;
+        this.adherenceRecords = adherenceList;
     }
 
     public WeeklyAdherence map() {
-        if (isEmpty(adherenceRecords.adherenceRecords()))
+        if (isEmpty(adherenceRecords))
             return null;
         WeeklyAdherence weeklyAdherence = createAdherence();
-        for (AdherenceRecord adherenceRecord : adherenceRecords.adherenceRecords()) {
-            LocalDate recordDate = adherenceRecord.recordDate();
+        for (Adherence adherenceRecord : adherenceRecords) {
+            LocalDate recordDate = adherenceRecord.getPillDate();
             DayOfWeek pillDay = DayOfWeek.getDayOfWeek(recordDate.getDayOfWeek());
-            PillStatus pillStatus = PillStatus.get(adherenceRecord.status());
-            weeklyAdherence.addAdherenceLog(pillDay, pillStatus);
+            PillStatus pillStatus = adherenceRecord.getPillStatus();
+            weeklyAdherence.addAdherenceLog(pillDay, patientId, pillStatus, adherenceRecord.getTreatmentId(), adherenceRecord.getProviderId(), adherenceRecord.getTbId());
         }
         return weeklyAdherence;
     }
 
     private WeeklyAdherence createAdherence() {
-        String patientId = adherenceRecords.externalId();
-        String treatmentId = adherenceRecords.treatmentId();
-        String tbId = metaData(AdherenceConstants.TB_ID);
-        String providerId = metaData(AdherenceConstants.PROVIDER_ID);
-
-        WeeklyAdherence adherence = new WeeklyAdherence(patientId, treatmentId, treatmentWeek);
-        adherence.setTbId(tbId);
-        adherence.setProviderId(providerId);
-        return adherence;
+        return new WeeklyAdherence(treatmentWeek);
     }
 
-    private String metaData(String key) {
-        List<AdherenceRecord> records = adherenceRecords.adherenceRecords();
-        return CollectionUtils.isEmpty(records) ? null : records.get(0).meta().get(key).toString();
-    }
 }

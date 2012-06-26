@@ -3,13 +3,9 @@ package org.motechproject.whp.uimodel;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentInterruption;
 
 import java.util.ArrayList;
@@ -21,10 +17,8 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
-import static org.motechproject.whp.adherence.domain.PillStatus.NotTaken;
 import static org.motechproject.whp.adherence.domain.PillStatus.Taken;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
-import static org.motechproject.whp.uimodel.PillDays.takenDays;
 import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
 
 @Data
@@ -32,7 +26,6 @@ public class WeeklyAdherenceForm {
 
     LocalDate referenceDate;
     private String patientId;
-    private String treatmentId;
     private int numberOfDosesTaken;
 
     private Patient patient;
@@ -46,7 +39,6 @@ public class WeeklyAdherenceForm {
     public WeeklyAdherenceForm(WeeklyAdherence weeklyAdherence, Patient patient) {
         referenceDate = weeklyAdherence.getWeek().getReference();
         patientId = weeklyAdherence.getPatientId();
-        treatmentId = weeklyAdherence.getTreatmentId();
 
         this.patient = patient;
         for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
@@ -55,16 +47,6 @@ public class WeeklyAdherenceForm {
             }
         }
         populatePauseRestartData(currentWeekInstance().startDate());
-    }
-
-    public WeeklyAdherence weeklyAdherence(TreatmentCategory treatmentCategory) {
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherence(patientId, treatmentId, new TreatmentWeek(referenceDate));
-        List<DayOfWeek> takenDays = takenDays(treatmentCategory, numberOfDosesTaken);
-        for (DayOfWeek pillDay : treatmentCategory.getPillDays()) {
-            PillStatus pillStatus = (takenDays.contains(pillDay)) ? Taken : NotTaken;
-            weeklyAdherence.addAdherenceLog(pillDay, pillStatus);
-        }
-        return weeklyAdherence;
     }
 
     private void populatePauseRestartData(LocalDate weekStartDate) {

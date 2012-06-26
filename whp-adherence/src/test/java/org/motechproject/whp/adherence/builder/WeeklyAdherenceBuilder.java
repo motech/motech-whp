@@ -9,14 +9,15 @@ import org.motechproject.whp.patient.domain.Patient;
 
 import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 
 public class WeeklyAdherenceBuilder {
 
-    private WeeklyAdherence adherence = new WeeklyAdherence("patientId", "treatmentId", currentWeekInstance());
+    public static final String THERAPY_ID = "therapyId";
+
+    private WeeklyAdherence adherence = new WeeklyAdherence(currentWeekInstance());
 
     public WeeklyAdherenceBuilder() {
-        adherence.setTbId("tbId");
-        adherence.setProviderId("providerId");
     }
 
     public WeeklyAdherenceBuilder withDefaultLogs() {
@@ -25,16 +26,16 @@ public class WeeklyAdherenceBuilder {
     }
 
     private void buildWeeklyAdherenceLogs(PillStatus pillStatus) {
-        adherence.addAdherenceLog(Monday, pillStatus);
-        adherence.addAdherenceLog(Wednesday, pillStatus);
-        adherence.addAdherenceLog(Friday, pillStatus);
+        adherence.addAdherenceLog(Monday, PATIENT_ID, pillStatus, THERAPY_ID, PROVIDER_ID, TB_ID);
+        adherence.addAdherenceLog(Wednesday, PATIENT_ID, pillStatus, THERAPY_ID, PROVIDER_ID, TB_ID);
+        adherence.addAdherenceLog(Friday, PATIENT_ID, pillStatus, THERAPY_ID, PROVIDER_ID, TB_ID);
     }
 
     public WeeklyAdherenceBuilder withDefaultLogsForWeek(LocalDate dayInWeek) {
-        adherence = new WeeklyAdherence("patientId", "treatmentId", new TreatmentWeek(dayInWeek));
-        adherence.addAdherenceLog(Monday, PillStatus.NotTaken);
-        adherence.addAdherenceLog(Wednesday, PillStatus.NotTaken);
-        adherence.addAdherenceLog(Friday, PillStatus.Taken);
+        adherence = new WeeklyAdherence(new TreatmentWeek(dayInWeek));
+        adherence.addAdherenceLog(Monday, PATIENT_ID, PillStatus.NotTaken, THERAPY_ID, PROVIDER_ID, TB_ID);
+        adherence.addAdherenceLog(Wednesday, PATIENT_ID, PillStatus.NotTaken, THERAPY_ID, PROVIDER_ID, TB_ID);
+        adherence.addAdherenceLog(Friday, PATIENT_ID, PillStatus.Taken, THERAPY_ID, PROVIDER_ID, TB_ID);
         return this;
     }
 
@@ -49,25 +50,12 @@ public class WeeklyAdherenceBuilder {
     }
 
     public WeeklyAdherenceBuilder withLog(DayOfWeek dayOfWeek, PillStatus pillStatus) {
-        adherence.addAdherenceLog(dayOfWeek, pillStatus);
+        adherence.addAdherenceLog(dayOfWeek, PATIENT_ID, pillStatus, THERAPY_ID, PROVIDER_ID, TB_ID);
         return this;
     }
 
     public WeeklyAdherenceBuilder forPatient(Patient patient) {
-        return this.withPatientId(patient.getPatientId())
-                .withTbId(patient.tbId())
-                .withProviderId(patient.providerId())
-                .withTreatmentId(patient.currentTreatmentId());
-    }
-
-    private WeeklyAdherenceBuilder withTbId(String tbId) {
-        adherence.setTbId(tbId);
-        return this;
-    }
-
-    private WeeklyAdherenceBuilder withProviderId(String providerId) {
-        adherence.setProviderId(providerId);
-        return this;
+        return this.withPatientId(patient.getPatientId()).withTreatmentId(patient.currentTherapyId());
     }
 
     public WeeklyAdherenceBuilder zeroDosesTaken() {

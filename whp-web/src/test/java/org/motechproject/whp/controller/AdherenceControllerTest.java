@@ -11,6 +11,7 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AuditParams;
+import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -33,11 +34,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
+import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class AdherenceControllerTest extends BaseUnitTest {
-
-    public static final String PATIENT_ID = "patientid";
-    public static final String CATEGORY_DOC_ID = "categoryDocId";
 
     @Mock
     AllPatients allPatients;
@@ -45,20 +44,19 @@ public class AdherenceControllerTest extends BaseUnitTest {
     AllTreatmentCategories allTreatmentCategories;
     @Mock
     WHPAdherenceService adherenceService;
-
     @Mock
     Model uiModel;
     @Mock
     HttpServletRequest request;
 
     private Patient patient;
-    private TreatmentCategory category;
 
-    private String loggedInUserName;
+    private TreatmentCategory category;
 
     private ArgumentCaptors captors;
 
     private AdherenceController adherenceController;
+
     private final String remarks = "remarks";
     private final String providerUserName = "someProviderUserName";
     private final AuditParams auditParams = new AuditParams(providerUserName, AdherenceSource.WEB, remarks);
@@ -68,8 +66,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         setUpMocks();
         setUpPatient();
         adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories);
-        loggedInUserName = providerUserName;
-        setupLoggedInUser(loggedInUserName);
+        setupLoggedInUser(providerUserName);
     }
 
     private void setUpMocks() {
@@ -86,7 +83,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
     }
 
     private void setUpPatient() {
-        patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).withStatus(PatientStatus.Open).build();
+        patient = new PatientBuilder().withDefaults().withStatus(PatientStatus.Open).build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
         setupTreatmentCategory();
     }
@@ -102,12 +99,13 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldPassWeeklyAdherenceLogToAdherenceCard() {
-        WeeklyAdherence adherence = new WeeklyAdherence();
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
         adherenceController.update(PATIENT_ID, uiModel);
 
         verify(uiModel).addAttribute(eq("adherence"), captors.adherenceForm.capture());
-        assertEquals(adherence.getPatientId(), captors.adherenceForm.getValue().getPatientId());
+        assertEquals(PatientBuilder.PATIENT_ID, captors.adherenceForm.getValue().getPatientId());
     }
 
     @Test
@@ -122,7 +120,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldCaptureAdherence() {
-        WeeklyAdherence adherence = new WeeklyAdherence();
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
         adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherence, patient), request);
 
         ArgumentCaptor<WeeklyAdherence> captor = forClass(WeeklyAdherence.class);
@@ -171,7 +169,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldShowForwardToProviderHomeAfterCapturingAdherence() {
-        WeeklyAdherence adherence = new WeeklyAdherence();
+        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
         String form = adherenceController.update(PATIENT_ID, category.getCode(), remarks, new WeeklyAdherenceForm(adherence, patient), request);

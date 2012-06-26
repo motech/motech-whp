@@ -41,7 +41,6 @@ public class Treatment {
     public Treatment(Treatment oldTreatment) {
         setTbId(oldTreatment.tbId);
         setProviderId(oldTreatment.providerId);
-        setStartDate(oldTreatment.startDate);
         setTherapy(oldTreatment.getTherapy());
         setPatientAddress(oldTreatment.getPatientAddress());
     }

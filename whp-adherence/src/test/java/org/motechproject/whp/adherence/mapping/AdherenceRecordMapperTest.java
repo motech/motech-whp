@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.motechproject.model.DayOfWeek.Monday;
 
-public class AdherenceDataMapperTest {
+public class AdherenceRecordMapperTest {
 
     public static final String PROVIDER_ID = "providerid";
     public static final String TB_ID = "tb_id";
@@ -37,37 +37,37 @@ public class AdherenceDataMapperTest {
 
     @Test
     public void shouldSetExternalIdOnRequest() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
 
-        assertEquals(patient.getPatientId(), AdherenceDataMapper.request(day).externalId());
+        assertEquals(patient.getPatientId(), AdherenceRecordMapper.map(day).externalId());
     }
 
     @Test
     public void shouldSetProviderIdOnRequest() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
 
-        assertEquals(PROVIDER_ID, AdherenceDataMapper.request(day).meta().get(AdherenceConstants.PROVIDER_ID));
+        assertEquals(PROVIDER_ID, AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.PROVIDER_ID));
     }
 
     @Test
     public void shouldSetTbIdAsMetaDataOnRequest() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.Unknown, TB_ID, PROVIDER_ID);
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.Unknown, TB_ID, PROVIDER_ID);
 
         assertNotNull(patient.tbId());
-        assertEquals(patient.tbId(), AdherenceDataMapper.request(day).meta().get(AdherenceConstants.TB_ID));
+        assertEquals(patient.tbId(), AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.TB_ID));
     }
 
     @Test
     public void shouldMarkDosesTaken() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.Taken, TB_ID, PROVIDER_ID);
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.Taken, TB_ID, PROVIDER_ID);
 
-        assertEquals(1, AdherenceDataMapper.request(day).status());
+        assertEquals(1, AdherenceRecordMapper.map(day).status());
     }
 
     @Test
     public void shouldMarkDosesMissed() {
-        Adherence day = new Adherence(patient.getPatientId(), patient.currentTreatmentId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
 
-        assertEquals(2, AdherenceDataMapper.request(day).status());
+        assertEquals(2, AdherenceRecordMapper.map(day).status());
     }
 }
