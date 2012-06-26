@@ -3,7 +3,7 @@ package org.motechproject.whp.adherence.mapping;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceConstants;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +26,12 @@ public class AdherenceRecordMapper {
         return adherenceData;
     }
 
-    public static List<AdherenceRecord> map(WeeklyAdherence weeklyAdherence) {
-        return map(weeklyAdherence.getAdherenceLogs());
+    public static List<AdherenceRecord> map(AdherenceList adherenceList) {
+        ArrayList<AdherenceRecord> adherenceRecords = new ArrayList<>();
+        for (Adherence adherence : adherenceList) {
+            adherenceRecords.add(AdherenceRecordMapper.map(adherence));
+        }
+        return adherenceRecords;
     }
 
     private static Map<String, Object> metaData(Adherence adherence) {

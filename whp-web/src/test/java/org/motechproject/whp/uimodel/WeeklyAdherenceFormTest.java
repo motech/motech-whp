@@ -4,8 +4,8 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentInterruption;
@@ -36,8 +36,8 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     public void showsNoWarningMessage() {
         mockCurrentDate(new LocalDate(2012, 5, 13));  //Sunday
         LocalDate monday = new LocalDate(2012, 5, 7);      // no interruptions
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().forWeek(monday).build();
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherenceSummary, getPatientWith(new TreatmentInterruptions()));
         assertEquals("", weeklyAdherenceForm.getWarningMessage());
     }
 
@@ -51,8 +51,8 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
     public void warningMessageShows_That_ProviderCannotUpdateAdherence() {
         mockCurrentDate(new LocalDate(2012, 5, 9));     // Wednesday
         LocalDate monday = new LocalDate(2012, 5, 7);   // no interruptions
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(new TreatmentInterruptions()));
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().forWeek(monday).build();
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherenceSummary, getPatientWith(new TreatmentInterruptions()));
         assertEquals("Please contact the CMF admin to update adherence.", weeklyAdherenceForm.getWarningMessage());
     }
 
@@ -72,20 +72,20 @@ public class WeeklyAdherenceFormTest extends BaseUnitTest {
         interruption2.resumeTreatment("resuming paws", monday.plusDays(3));
         TreatmentInterruption interruption3 = new TreatmentInterruption("pawsAgain", monday.plusDays(3));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
-        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().forWeek(monday).build();
+        weeklyAdherenceForm = new WeeklyAdherenceForm(weeklyAdherenceSummary, getPatientWith(treatmentInterruptions));
         assertTrue(weeklyAdherenceForm.isTreatmentCurrentlyPaused());
         assertEquals("paws, pawsAgain", weeklyAdherenceForm.getTreatmentPauseReasons());
     }
 
     private WeeklyAdherenceForm createTestWeeklyAdherenceForm() {
         LocalDate monday = new LocalDate(2012, 5, 7);
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherenceBuilder().withDefaultLogsForWeek(monday).build();
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().forWeek(monday).build();
         TreatmentInterruption interruption = new TreatmentInterruption("paws", monday);
         interruption.resumeTreatment("swap", monday.plusDays(1));
         TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption));
         mockCurrentDate(new LocalDate(2012, 5, 10)); // Any day in the week of pause
-        return new WeeklyAdherenceForm(weeklyAdherence, getPatientWith(treatmentInterruptions));
+        return new WeeklyAdherenceForm(weeklyAdherenceSummary, getPatientWith(treatmentInterruptions));
     }
 
     private Patient getPatientWith(TreatmentInterruptions treatmentInterruptions) {

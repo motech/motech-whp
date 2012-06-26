@@ -7,11 +7,13 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AdherenceAuditService;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
-import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
+import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
@@ -26,10 +28,10 @@ import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.should
 @Service
 public class WHPAdherenceService {
 
-    AllPatients allPatients;
-    AdherenceService adherenceService;
-    PatientService patientService;
-    AdherenceAuditService adherenceAuditService;
+    private AllPatients allPatients;
+    private AdherenceService adherenceService;
+    private PatientService patientService;
+    private AdherenceAuditService adherenceAuditService;
 
     @Autowired
     public WHPAdherenceService(AdherenceService adherenceService,
@@ -43,19 +45,20 @@ public class WHPAdherenceService {
         this.adherenceAuditService = adherenceAuditService;
     }
 
-    public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, AuditParams auditParams) {
+    public void recordAdherence(String patientId, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         Patient patient = allPatients.findByPatientId(patientId);
 
-        List<AdherenceRecord> requests = AdherenceRecordMapper.map(weeklyAdherence);
-        adherenceService.saveOrUpdateAdherence(requests);
-        if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
-            patientService.startTherapy(patientId, weeklyAdherence.firstDoseTakenOn());
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        adherenceService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
+
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patientId, adherenceList.firstDoseTakenOn());
         }
-        adherenceAuditService.log(patient, weeklyAdherence, auditParams);
+        adherenceAuditService.log(patient, weeklyAdherenceSummary, auditParams);
 
     }
 
-    public WeeklyAdherence currentWeekAdherence(Patient patient) {
+    public WeeklyAdherenceSummary currentWeekAdherence(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
         List<AdherenceRecord> adherenceRecords = adherenceService.adherence(
                 patient.getPatientId(),
@@ -64,9 +67,9 @@ public class WHPAdherenceService {
                 treatmentWeek.endDate());
 
         if (adherenceRecords.size() > 0) {
-            return new WeeklyAdherenceMapper(patient, treatmentWeek).map(new AdherenceMapper().map(adherenceRecords));
+            return new WeeklyAdherenceSummaryMapper(patient, treatmentWeek).map(new AdherenceMapper().map(adherenceRecords));
         } else {
-            return WeeklyAdherence.createAdherenceFor(patient);
+            return WeeklyAdherenceSummary.currentWeek(patient);
         }
     }
 

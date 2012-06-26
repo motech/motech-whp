@@ -3,13 +3,14 @@ package org.motechproject.whp.controller;
 import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.flash.Flash;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
-import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
+import org.motechproject.whp.adherence.domain.TreatmentWeek;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
@@ -24,11 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static org.motechproject.whp.adherence.domain.PillStatus.NotTaken;
-import static org.motechproject.whp.adherence.domain.PillStatus.Taken;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
-import static org.motechproject.whp.refdata.domain.WHPConstants.UNKNOWN;
-import static org.motechproject.whp.uimodel.PillDays.takenDays;
 
 @Controller
 @RequestMapping(value = "/adherence")
@@ -49,8 +46,8 @@ public class AdherenceController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
-        WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
-        prepareModel(patient, uiModel, adherence);
+        WeeklyAdherenceSummary adherenceSummary = adherenceService.currentWeekAdherence(patient);
+        prepareModel(patient, uiModel, adherenceSummary);
         return "adherence/update";
     }
 
@@ -62,30 +59,17 @@ public class AdherenceController extends BaseController {
                          HttpServletRequest httpServletRequest) {
 
         MotechUser authenticatedUser = loggedInUser(httpServletRequest);
-        TreatmentCategory category = allTreatmentCategories.findByCode(categoryCode);
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
-        adherenceService.recordAdherence(patientId, weeklyAdherence(weeklyAdherenceForm, category), auditParams);
+        adherenceService.recordAdherence(patientId, weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
         Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }
 
-    public WeeklyAdherence weeklyAdherence(WeeklyAdherenceForm weeklyAdherenceForm, TreatmentCategory treatmentCategory) {
-        WeeklyAdherence weeklyAdherence = new WeeklyAdherence(new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
-        Patient patient = allPatients.findByPatientId(weeklyAdherenceForm.getPatientId());
-
-        List<DayOfWeek> takenDays = takenDays(treatmentCategory, weeklyAdherenceForm.getNumberOfDosesTaken());
-        for (DayOfWeek pillDay : treatmentCategory.getPillDays()) {
-            PillStatus pillStatus = (takenDays.contains(pillDay)) ? Taken : NotTaken;
-            Treatment treatment = patient.getTreatment(weeklyAdherence.getWeek().dateOf(pillDay));
-            // AAAAAAAAhhhh redundant code : need to fix
-            if (treatment == null) {
-                weeklyAdherence.addAdherenceLog(pillDay, patient.getPatientId(), pillStatus, UNKNOWN, UNKNOWN, UNKNOWN);
-            } else {
-                weeklyAdherence.addAdherenceLog(pillDay, patient.getPatientId(), pillStatus, treatment.getTherapyDocId(), treatment.getProviderId(), treatment.getTbId());
-            }
-        }
-        return weeklyAdherence;
+    public WeeklyAdherenceSummary weeklyAdherenceSummary(WeeklyAdherenceForm weeklyAdherenceForm) {
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
+        weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
+        return weeklyAdherenceSummary;
     }
 
     @DataProvider
@@ -93,9 +77,9 @@ public class AdherenceController extends BaseController {
         return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }
 
-    private void prepareModel(Patient patient, Model uiModel, WeeklyAdherence adherence) {
+    private void prepareModel(Patient patient, Model uiModel, WeeklyAdherenceSummary adherenceSummary) {
         TreatmentCategory category = allTreatmentCategories.findByCode(patient.currentTherapy().getTreatmentCategory().getCode());
-        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherenceSummary, patient);
 
         uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("categoryCode", category.getCode());

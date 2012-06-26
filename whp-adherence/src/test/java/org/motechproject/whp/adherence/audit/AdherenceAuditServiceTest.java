@@ -4,9 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.common.utils.SpringIntegrationTest;
-import org.motechproject.whp.adherence.builder.WeeklyAdherenceBuilder;
+import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,50 +35,56 @@ public class AdherenceAuditServiceTest extends SpringIntegrationTest {
 
     @Test
     public void shouldLogNumberOfDosesTakenWhenAdherenceCaptured() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals(3, adherenceAuditService.fetchAuditLogs().get(0).numberOfDosesTaken());
     }
 
     @Test
     public void shouldLogRemarksWhenAdherenceCaptured() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals("remarks", adherenceAuditService.fetchAuditLogs().get(0).remark());
     }
 
     @Test
     public void shouldLogSourceOfChangeWhenAdherenceCaptured() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals("WEB", adherenceAuditService.fetchAuditLogs().get(0).sourceOfChange());
     }
 
     @Test
     public void shouldLogPatientIdWhenAdherenceCaptured() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals(PATIENT_ID, adherenceAuditService.fetchAuditLogs().get(0).patientId());
     }
 
     @Test
     public void shouldLogTbIdWhenAdherenceCaptured() {
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals(TB_ID, adherenceAuditService.fetchAuditLogs().get(0).tbId());
     }
 
     @Test
     public void shouldLogRemarksWhenAdherenceIsCaptured(){
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals("remarks", adherenceAuditService.fetchAuditLogs().get(0).remark());
     }
 
     @Test
     public void shouldLogUserWhenAdherenceIsCaptured(){
-        WeeklyAdherence adherence = new WeeklyAdherenceBuilder().withDefaultLogs().build();
-        adherenceAuditService.log(patient, adherence, auditParams);
+        new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceAuditService.log(patient, adherenceSummary, auditParams);
         assertEquals("user", adherenceAuditService.fetchAuditLogs().get(0).user());
     }
 

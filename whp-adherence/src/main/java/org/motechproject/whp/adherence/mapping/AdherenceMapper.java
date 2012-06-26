@@ -5,15 +5,15 @@ import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceConstants;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdherenceMapper {
 
-    public List<Adherence> map(List<AdherenceRecord> adherenceRecords) {
-        List<Adherence> adherenceList = new ArrayList<>();
+    public AdherenceList map(List<AdherenceRecord> adherenceRecords) {
+        AdherenceList adherenceList = new AdherenceList();
         for (AdherenceRecord adherenceDatum : adherenceRecords) {
             adherenceList.add(map(adherenceDatum));
         }
