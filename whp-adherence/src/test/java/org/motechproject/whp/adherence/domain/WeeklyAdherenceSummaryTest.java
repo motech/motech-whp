@@ -18,7 +18,7 @@ public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
     @Test
     public void shouldReturnAdherenceTemplate() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        WeeklyAdherenceSummary adherenceSummary = WeeklyAdherenceSummary.currentWeek(patient);
+        WeeklyAdherenceSummary adherenceSummary = WeeklyAdherenceSummary.forFirstWeek(patient);
         assertEquals(patient.getPatientId(), adherenceSummary.getPatientId());
         assertEquals(0, adherenceSummary.getDosesTaken());
         assertEquals(currentWeekInstance(), adherenceSummary.getWeek());

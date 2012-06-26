@@ -60,7 +60,7 @@ public class AdherenceController extends BaseController {
         MotechUser authenticatedUser = loggedInUser(httpServletRequest);
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
-        adherenceService.recordAdherence(patientId, weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
+        adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
         Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }

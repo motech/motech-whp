@@ -126,7 +126,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
-        verify(adherenceService).recordAdherence(eq(PATIENT_ID), captor.capture(), eq(auditParams));
+        verify(adherenceService).recordAdherence(captor.capture(), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getDosesTaken());
     }
 

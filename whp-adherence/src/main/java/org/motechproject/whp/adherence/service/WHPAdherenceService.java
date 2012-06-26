@@ -45,17 +45,16 @@ public class WHPAdherenceService {
         this.adherenceAuditService = adherenceAuditService;
     }
 
-    public void recordAdherence(String patientId, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public void recordAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+        Patient patient = allPatients.findByPatientId(weeklyAdherenceSummary.getPatientId());
 
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         adherenceService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
 
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patientService.startTherapy(patientId, adherenceList.firstDoseTakenOn());
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
         }
         adherenceAuditService.log(patient, weeklyAdherenceSummary, auditParams);
-
     }
 
     public WeeklyAdherenceSummary currentWeekAdherence(Patient patient) {
@@ -69,7 +68,7 @@ public class WHPAdherenceService {
         if (adherenceRecords.size() > 0) {
             return new WeeklyAdherenceSummaryMapper(patient, treatmentWeek).map(new AdherenceMapper().map(adherenceRecords));
         } else {
-            return WeeklyAdherenceSummary.currentWeek(patient);
+            return WeeklyAdherenceSummary.forFirstWeek(patient);
         }
     }
 

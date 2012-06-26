@@ -33,7 +33,7 @@ public class WeeklyAdherenceSummary {
         this.patientId = patientId;
     }
 
-    public static WeeklyAdherenceSummary currentWeek(Patient patient) {
+    public static WeeklyAdherenceSummary forFirstWeek(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
         return new WeeklyAdherenceSummary(patient.getPatientId(), treatmentWeek);
     }
