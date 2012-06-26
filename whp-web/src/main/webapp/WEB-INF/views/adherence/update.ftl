@@ -14,7 +14,7 @@
 <div class="row">
     <form id="weeklyAdherenceForm" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
         <input type="hidden" name="patientId" value="${adherence.patientId}"/>
-        <input type="hidden" name="referenceDateString" value="${referenceDate}"/>
+        <input type="hidden" name="referenceDateString" value="${adherence.referenceDateString}"/>
         <div id="numberSelect" class="well control-group">
             <label class="pull-left span7 offset1"><b>How many doses did the patient take in the last week?</b></label>
             <select id="dosesTaken" name="numberOfDosesTaken" <#if readOnly> disabled </#if>>

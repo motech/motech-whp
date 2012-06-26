@@ -80,7 +80,6 @@ public class AdherenceController extends BaseController {
         TreatmentCategory category = allTreatmentCategories.findByCode(patient.currentTherapy().getTreatmentCategory().getCode());
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherenceSummary, patient);
 
-        uiModel.addAttribute("referenceDate", weeklyAdherenceForm.getReferenceDateString());
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("totalDoses", category.getDosesPerWeek());
         uiModel.addAttribute("readOnly", !(canUpdate(patient)));
