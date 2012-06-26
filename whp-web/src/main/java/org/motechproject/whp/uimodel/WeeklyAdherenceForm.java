@@ -56,7 +56,7 @@ public class WeeklyAdherenceForm {
             this.pauseReasons.addAll(pauseReasons);
         }
         TreatmentInterruption latestInterruption = patient.getCurrentTreatment().getInterruptions().latestInterruption();
-        if (latestInterruption != null && latestInterruption.isTreatmentInterrupted(datesInRange)){
+        if (latestInterruption != null && latestInterruption.isTreatmentInterrupted(datesInRange)) {
             latestPauseDate = latestInterruption.getPauseDate().toString("dd-MM-YYYY");
             latestResumptionDate = latestInterruption.isCurrentlyPaused() ? null : latestInterruption.getResumptionDate().toString("dd-MM-YYYY");
         }
@@ -88,7 +88,7 @@ public class WeeklyAdherenceForm {
         if (isTreatmentCurrentlyPaused()) {
             warningMessages.add(String.format("Patient has been paused on medication since %s. Please contact CMF Admin for further details. Reasons for pause: %s",
                     latestPauseDate, getTreatmentPauseReasons()));
-        }else if (wasTreatmentInPauseStateLastWeekAndIsNowRestarted()) {
+        } else if (wasTreatmentInPauseStateLastWeekAndIsNowRestarted()) {
             warningMessages.add(String.format("This patient has been restarted on medicines on %s after being paused on %s. Reasons for pause: %s",
                     latestResumptionDate, latestPauseDate, getTreatmentPauseReasons()));
         }

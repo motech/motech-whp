@@ -6,6 +6,7 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
+import org.motechproject.whp.patient.domain.Patient;
 
 import java.util.List;
 
@@ -15,19 +16,17 @@ public class WeeklyAdherenceMapper {
 
     private String patientId;
     private TreatmentWeek treatmentWeek;
-    private List<Adherence> adherenceRecords;
 
-    public WeeklyAdherenceMapper(String patientId, TreatmentWeek treatmentWeek, List<Adherence> adherenceList) {
-        this.patientId = patientId;
+    public WeeklyAdherenceMapper(Patient patient, TreatmentWeek treatmentWeek) {
+        this.patientId = patient.getPatientId();
         this.treatmentWeek = treatmentWeek;
-        this.adherenceRecords = adherenceList;
     }
 
-    public WeeklyAdherence map() {
-        if (isEmpty(adherenceRecords))
+    public WeeklyAdherence map(List<Adherence> adherenceList) {
+        if (isEmpty(adherenceList))
             return null;
         WeeklyAdherence weeklyAdherence = createAdherence();
-        for (Adherence adherenceRecord : adherenceRecords) {
+        for (Adherence adherenceRecord : adherenceList) {
             LocalDate recordDate = adherenceRecord.getPillDate();
             DayOfWeek pillDay = DayOfWeek.getDayOfWeek(recordDate.getDayOfWeek());
             PillStatus pillStatus = adherenceRecord.getPillStatus();

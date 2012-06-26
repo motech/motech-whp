@@ -50,9 +50,6 @@ public class AdherenceController extends BaseController {
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
         WeeklyAdherence adherence = adherenceService.currentWeekAdherence(patient);
-        if (adherence == null) {
-            adherence = WeeklyAdherence.createAdherenceFor(patient);
-        }
         prepareModel(patient, uiModel, adherence);
         return "adherence/update";
     }

@@ -26,8 +26,9 @@ public class WeeklyAdherence {
         this.week = week;
     }
 
-    public WeeklyAdherence(Patient patient, TreatmentWeek week, List<DayOfWeek> pillDays) {
+    public WeeklyAdherence(Patient patient, TreatmentWeek week) {
         this.week = week;
+        List<DayOfWeek> pillDays = patient.currentTherapy().getTreatmentCategory().getPillDays();
 
         for (DayOfWeek pillDay : pillDays) {
             Treatment treatment = patient.getTreatment(week.dateOf(pillDay));
@@ -88,7 +89,7 @@ public class WeeklyAdherence {
 
     public static WeeklyAdherence createAdherenceFor(Patient patient) {
         TreatmentWeek treatmentWeek = currentWeekInstance();
-        return new WeeklyAdherence(patient, treatmentWeek, pillDays(patient));
+        return new WeeklyAdherence(patient, treatmentWeek);
     }
 
     private static List<DayOfWeek> pillDays(Patient patient) {
