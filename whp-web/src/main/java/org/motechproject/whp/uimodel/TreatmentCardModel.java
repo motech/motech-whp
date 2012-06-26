@@ -14,7 +14,6 @@ import org.motechproject.whp.refdata.domain.WHPConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
 
@@ -22,7 +21,6 @@ import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
 public class TreatmentCardModel {
 
     private List<MonthlyAdherence> monthlyAdherences = new ArrayList<MonthlyAdherence>();
-    private List<String> providerColorCodes = asList("blue", "green", "orange", "brown", "purple", "rosyBrown", "olive", "salmon", "cyan", "red");
     private List<String> providerIds = new ArrayList<String>();
     private boolean isSundayDoseDate;
     private String therapyDocId;

@@ -27,9 +27,9 @@ ${message}
             <#list treatmentCard.providerIds as providerId>
             <tr>
                 <td>
-                    <div class="windings-font pull-left" providerId=${providerId}> &#10003; </div>
+                    <div class="tick-icon pull-left" providerId=${providerId}> &#10004; </div>
                     <div class="pull-left"> , &nbsp; </div>
-                    <div class="legend-round-icon" providerId=${providerId}>O</div>
+                    <div class="round-icon legend-round-icon" providerId=${providerId}>O</div>
                 </td>
                 <td>
                     <div class="text-center text-center">Adherence given by provider ${providerId}</div>
@@ -38,9 +38,9 @@ ${message}
             </#list>
         <tr>
             <td>
-                <div class="windings-font pull-left" providerId=""> &#10003; </div>
+                <div class="tick-icon pull-left" providerId=""> &#10004; </div>
                 <div class="pull-left"> , &nbsp; </div>
-                <div class="legend-round-icon" providerId="">O</div>
+                <div class="round-icon legend-round-icon" providerId="">O</div>
             </td>
             <td>
                 <div class="text-center text-center">Provider Unknown</div>
@@ -49,7 +49,7 @@ ${message}
         </tbody>
     </table>
 </div>
-
+<br/>
 <table id="IPTreatmentCard" class="table table-bordered table-condensed fixed sharp disable-select">
     <thead>
     <tr>
@@ -80,11 +80,11 @@ ${message}
                         <#assign drawn = true/>
                             <td class=
                         <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            <#elseif dailyAdherence.pillStatus == 2> "round-icon
-                                editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            <#elseif dailyAdherence.futureAdherence == true>
-                                "editable ${isItASunday} ${isItDuringPausedPeriod}"
-                            <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                        <#elseif dailyAdherence.pillStatus == 2> "round-icon
+                            editable ${isItASunday} ${isItDuringPausedPeriod}"
+                        <#elseif dailyAdherence.futureAdherence == true>
+                            "editable ${isItASunday} ${isItDuringPausedPeriod}"
+                        <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                         </#if>
                         id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
                         day="${day}"
@@ -94,10 +94,10 @@ ${message}
                         oldPillStatus="${dailyAdherence.pillStatus}"
                         providerId = ${dailyAdherence.providerId}>
                         <div>
-                            <#if dailyAdherence.pillStatus == 1> &#10003;
-                                <#elseif dailyAdherence.pillStatus == 2> O
-                                <#elseif dailyAdherence.futureAdherence == true>
-                                <#else> -
+                            <#if dailyAdherence.pillStatus == 1>&#10004;
+                            <#elseif dailyAdherence.pillStatus == 2>O
+                            <#elseif dailyAdherence.futureAdherence == true>
+                            <#else>-
                             </#if>
                         </div>
                         </td>
@@ -107,7 +107,7 @@ ${message}
                 <#if drawn == false>
                         <td class=
                     <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                        <#else>"bg-gray ${isItASunday}"
+                    <#else>"bg-gray ${isItASunday}"
                     </#if>
                     id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
                     <div class="watermarked-sunday">
@@ -136,48 +136,10 @@ ${message}
 
 <script type="text/javascript">
     $(function () {
-        var providerIds = new Array();
-        var providerColors = new Array();
-        <!--setting provider id & colors to javascript variables-->
-        <#assign i=0/>
-        <#list treatmentCard.providerIds as providerId>
-            providerIds[${i}] = "${providerId}";
-            <#assign i=i+1/>
-        </#list>
-        <#assign i=0/>
-        <#list treatmentCard.providerColorCodes as color>
-            providerColors[${i}] = "${color}";
-            <#assign i=i+1/>
-        </#list>
-
-        for (var i = 0; i < providerIds.length; i++) {
-            $("[providerid=" + providerIds[i] + "]").css('color', providerColors[i % providerColors.length]);
-        }
+        setUpTreatmentCardTable('${treatmentCard.therapyDocId}');
     });
 
-    //submitting changed pill status for saving
-    $('#submitJson').click(function () {
-        var dailyAdherenceRequests = [];
-        $.each($('[pillStatusChanged=true]'), function () {
-            dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
-        });
-        var therapy = '${treatmentCard.therapyDocId}';
-        var patientId = $("#patient-id").text();
-        var delta = {patientId: patientId , therapy: therapy, dailyAdherenceRequests: dailyAdherenceRequests };
-        $.ajax({
-            type : 'POST',
-            url : '/whp/treatmentcard/update',
-            data : JSON.stringify(delta),
-            contentType: "application/json",
-            success : function(data) {
-                $("#treatmentCard").html(data);
-            }
-        });
-    });
-
-    createAutoClosingAlert(".message-alert", 5000)
 
 </script>
 
-<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
 </#if>

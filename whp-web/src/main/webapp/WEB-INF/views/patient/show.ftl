@@ -2,6 +2,9 @@
 <#import "../layout/default.ftl" as layout/>
 <#include "../user/phaseInfo.ftl"/>
 <@layout.defaultLayout "Patient Dashboard">
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/injectHtml.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
+
     <#if messages?exists && (messages?size>0)>
     <div class="dateUpdated-message-alert row alert alert-info fade in">
         <button class="close" data-dismiss="alert">&times;</button>
@@ -61,9 +64,11 @@
         type : 'GET',
         url : '/whp/treatmentcard/show?patientId=${patient.patientId}',
         success : function(data) {
-            $("#treatmentCard").html(data);
+            set_html('treatmentCard',data)
         }
     });
+
+
 </script>
 
 

@@ -113,13 +113,15 @@ table tbody .link:hover td {
     width: 15px;
     text-align: center;
 }
-.fixed td {
-   max-width: 15px;
-   min-width: 15px;
+.fixed td:not(.sunday) div {
+    width: 15px;
+}
+.fixed td{
+   text-align: center;
 }
 
-.tick-icon, .windings-font {
-    font-weight: bold;
+.tick-icon {
+    font-weight: normal;
     font-size: 175%;
 }
 .round-icon {
@@ -132,7 +134,11 @@ table tbody .link:hover td {
     font-size: 130%;
 }
 
-.tick-icon div, .round-icon div {
+.round-icon div {
+    margin-left: 0px;
+}
+
+.tick-icon div{
     margin-left: -1px;
 }
 
@@ -158,6 +164,7 @@ table tbody .link:hover td {
 .watermarked-sunday{
     color: black;
     font-weight: bold;
+    cursor: default;
 }
 
 .sunday div{
