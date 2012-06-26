@@ -1,6 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-WHP">
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 <div id="searchProvidersForm">
     <form action="<@spring.url '/providers/search'/>" method="POST" class="row well form-horizontal">
         <div class="offset1">
@@ -13,7 +14,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label">District</label>
+                <label class="control-label">District*</label>
                 <div class="controls">
                     <select id="district" name="selectedDistrict">
                         <#list districts as district>

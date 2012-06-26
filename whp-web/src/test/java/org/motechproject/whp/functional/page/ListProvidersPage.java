@@ -1,8 +1,7 @@
 package org.motechproject.whp.functional.page;
 
-import org.motechproject.whp.functional.framework.WHPWebElement;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,9 +11,6 @@ public class ListProvidersPage extends LoggedInUserPage {
 
     @FindBy(how = How.ID, using = "providerId")
     protected WebElement providerId;
-
-    @FindBy(how = How.ID, using = "district")
-    protected WebElement district;
 
     @FindBy(how = How.ID, using = "search")
     protected WebElement submit;
@@ -31,18 +27,15 @@ public class ListProvidersPage extends LoggedInUserPage {
         waitForElementWithIdToLoad("search");
     }
 
-    @Override
-    public void postInitialize() {
-        district = WebDriverFactory.createWebElement(district);
-    }
-
     public boolean hasProviderRow(String providerId) {
         return safeFindElement(By.id(String.format("provider_%s_ProviderId", providerId))) != null;
     }
 
     public void searchBy(String district, String providerId, boolean expectingResult) {
+        this.providerId.clear();
         this.providerId.sendKeys(providerId.toLowerCase());
-        ((WHPWebElement) this.district).select(district);
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
+        javascriptExecutor.executeScript("$('#district').val('" + district + "');"); // can't set select box directly as it is hidden
         this.submit.click();
         if (expectingResult) {
             waitForElementWithCSSToLoad("provider-row");
