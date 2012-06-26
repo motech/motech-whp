@@ -9,8 +9,8 @@ import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherence;
-import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
+import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -18,7 +18,6 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
@@ -47,7 +46,7 @@ public class WHPAdherenceService {
     public void recordAdherence(String patientId, WeeklyAdherence weeklyAdherence, AuditParams auditParams) {
         Patient patient = allPatients.findByPatientId(patientId);
 
-        List<AdherenceRecord> requests = requests(weeklyAdherence);
+        List<AdherenceRecord> requests = AdherenceRecordMapper.map(weeklyAdherence);
         adherenceService.saveOrUpdateAdherence(requests);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherence)) {
             patientService.startTherapy(patientId, weeklyAdherence.firstDoseTakenOn());
@@ -77,7 +76,7 @@ public class WHPAdherenceService {
     }
 
     public void addOrUpdateLogsByDoseDate(List<Adherence> adherenceList, String patientId) {
-        List<AdherenceRecord> adherenceData = requests(adherenceList);
+        List<AdherenceRecord> adherenceData = AdherenceRecordMapper.map(adherenceList);
         adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patientId);
     }
 
@@ -86,18 +85,4 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
-    private List<AdherenceRecord> requests(List<Adherence> adherenceList) {
-        List<AdherenceRecord> adherenceData = new ArrayList<>();
-        for (Adherence adherence : adherenceList)
-            adherenceData.add(AdherenceRecordMapper.map(adherence));
-        return adherenceData;
-    }
-
-    private List<AdherenceRecord> requests(WeeklyAdherence weeklyAdherence) {
-        List<AdherenceRecord> requests = new ArrayList<>();
-        for (Adherence adherence : weeklyAdherence.getAdherenceLogs()) {
-            requests.add(AdherenceRecordMapper.map(adherence));
-        }
-        return requests;
-    }
 }
