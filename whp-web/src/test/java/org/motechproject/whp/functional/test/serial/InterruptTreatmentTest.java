@@ -17,14 +17,14 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldDemarcateDaysForReportingAdherenceWhenTreatmentIsPaused() {
-        ProviderPage providerPage = loginAsProvider(provider);
-        assertTrue(providerPage.hasPatient(patient.getFirstName()));
-        assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(patient.getCaseId()));
+        ProviderPage providerPage = loginAsProvider(testProvider);
+        assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
+        assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
 
         PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(patient.getTbId())
-                .withCaseId(patient.getCaseId())
+                .withTbId(testPatient.getTbId())
+                .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 5, 7, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
@@ -32,14 +32,14 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
 
         providerPage.logout();
-        providerPage = loginAsProvider(provider);
+        providerPage = loginAsProvider(testProvider);
 
-        assertTrue(providerPage.isPatientTreatmentPaused(patient.getCaseId()));
+        assertTrue(providerPage.isPatientTreatmentPaused(testPatient.getCaseId()));
 
         PatientRequest resumeTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
-                .withTbId(patient.getTbId())
-                .withCaseId(patient.getCaseId())
+                .withTbId(testPatient.getTbId())
+                .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 5, 9, 0, 0, 0))
                 .build();
 
@@ -48,11 +48,11 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         adjustDateTime(DateUtil.newDateTime(2012, 5, 15, 0, 0, 0));
 
         providerPage.logout();
-        providerPage = loginAsProvider(provider);
+        providerPage = loginAsProvider(testProvider);
 
-        assertFalse(providerPage.isPatientTreatmentPaused(patient.getCaseId()));
+        assertFalse(providerPage.isPatientTreatmentPaused(testPatient.getCaseId()));
 
-        UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(patient.getCaseId());
+        UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
         assertEquals("This patient has been restarted on medicines on 09-05-2012 after being paused on 07-05-2012. Reasons for pause: paws",
                 updateAdherencePage.getAdherenceWarningText());
     }

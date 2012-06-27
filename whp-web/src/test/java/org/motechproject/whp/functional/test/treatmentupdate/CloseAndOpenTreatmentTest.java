@@ -20,29 +20,29 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldUpdateTreatmentCategoryForPatientOnCloseOfCurrentTreatmentAndOpenOfNewTreatment() {
-        ProviderPage providerPage = loginAsProvider(provider);
-        assertTrue(providerPage.hasPatient(patient.getFirstName()));
-        assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(patient.getCaseId()));
+        ProviderPage providerPage = loginAsProvider(testProvider);
+        assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
+        assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
 
         PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
-                .withTbId(patient.getTbId())
-                .withCaseId(patient.getCaseId())
+                .withTbId(testPatient.getTbId())
+                .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         factory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
         providerPage.logout();
-        providerPage = loginAsProvider(provider);
+        providerPage = loginAsProvider(testProvider);
 
-        assertFalse(providerPage.hasPatient(patient.getFirstName()));
+        assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
 
         TreatmentCategory newCategory = new TreatmentCategory("Do Not Copy", "10", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
 
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
-                .withCaseId(patient.getCaseId())
+                .withCaseId(testPatient.getCaseId())
                 .withTreatmentCategory(newCategory)
-                .withProviderId(patient.getProviderId())
+                .withProviderId(testPatient.getProviderId())
                 .withDateModified(DateUtil.newDateTime(2012, 3, 17, 4, 55, 50))
                 .withPatientType(PatientType.Chronic)
                 .withTbId("elevenDigit")
@@ -50,9 +50,9 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
         factory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);
 
         providerPage.logout();
-        providerPage = loginAsProvider(provider);
+        providerPage = loginAsProvider(testProvider);
 
-        assertTrue(providerPage.hasPatient(patient.getFirstName()));
-        assertEquals(openNewTreatmentUpdateRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patient.getCaseId()));
+        assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
+        assertEquals(openNewTreatmentUpdateRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
     }
 }
