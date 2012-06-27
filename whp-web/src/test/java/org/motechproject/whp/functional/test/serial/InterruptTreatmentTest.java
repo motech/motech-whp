@@ -18,13 +18,13 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
     @Test
     public void shouldDemarcateDaysForReportingAdherenceWhenTreatmentIsPaused() {
         ProviderPage providerPage = loginAsProvider(provider);
-        assertTrue(providerPage.hasPatient(patientRequest.getFirst_name()));
-        assertEquals(patientRequest.getTreatment_category().getName(), providerPage.getTreatmentCategoryText(patientRequest.getCase_id()));
+        assertTrue(providerPage.hasPatient(patient.getFirstName()));
+        assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(patient.getCaseId()));
 
         PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 5, 7, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
@@ -34,12 +34,12 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
-        assertTrue(providerPage.isPatientTreatmentPaused(patientRequest.getCase_id()));
+        assertTrue(providerPage.isPatientTreatmentPaused(patient.getCaseId()));
 
         PatientRequest resumeTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 5, 9, 0, 0, 0))
                 .build();
 
@@ -50,9 +50,9 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         providerPage.logout();
         providerPage = loginAsProvider(provider);
 
-        assertFalse(providerPage.isPatientTreatmentPaused(patientRequest.getCase_id()));
+        assertFalse(providerPage.isPatientTreatmentPaused(patient.getCaseId()));
 
-        UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(patientRequest.getCase_id());
+        UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(patient.getCaseId());
         assertEquals("This patient has been restarted on medicines on 09-05-2012 after being paused on 07-05-2012. Reasons for pause: paws",
                 updateAdherencePage.getAdherenceWarningText());
     }
