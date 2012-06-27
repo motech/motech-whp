@@ -37,14 +37,14 @@ public class CaseUpdate {
 
     private static String readFile(String fileName) {
         try {
-            FileReader fr = new FileReader("sample-case-xml/" + fileName);
-            BufferedReader br = new BufferedReader(fr);
+            InputStream inputStream = CaseUpdate.class.getClassLoader().getResourceAsStream("sample-case-xml/" + fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String s;
             StringBuilder result = new StringBuilder();
-            while ((s = br.readLine()) != null) {
+            while ((s = bufferedReader.readLine()) != null) {
                 result.append(s);
             }
-            fr.close();
+            inputStream.close();
             return result.toString();
         } catch (IOException e) {
             e.printStackTrace();
