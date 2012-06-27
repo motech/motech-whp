@@ -15,8 +15,8 @@ public class WHPUrl {
         return base() + resource;
     }
 
-    public static String viewPageUrlFor(TestEntity testEntity) {
-        return String.format("%s%s/%s", base(), testEntity.resourceName(), testEntity.id());
+    public static String patientProcess() {
+        return String.format("%spatient/process", base());
     }
 
 }

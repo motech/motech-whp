@@ -3,16 +3,11 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.functional.data.CaseUpdate;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.*;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
-import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.webservice.request.PatientWebRequest;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -37,59 +32,34 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         /* Pausing and restarting treatment for patient */
 
-        PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForPauseTreatment()
-                .withCaseId(testPatient.getCaseId())
-                .withDateModified(DateUtil.newDateTime(2012, 7, 13, 0, 0, 0))
-                .build();
-        factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
+        String pauseTreatmentRequest = CaseUpdate.PauseTreatmentRequest(testPatient.getCaseId(), "13/07/2012", testPatient.getTbId(), "paws");
+        caseDataService.updateCase(pauseTreatmentRequest);
 
-        PatientRequest resumeTreatmentRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForRestartTreatment()
-                .withCaseId(testPatient.getCaseId())
-                .withDateModified(DateUtil.newDateTime(2012, 7, 19, 0, 0, 0))
-                .build();
-
-        factory.updateFor(UpdateScope.restartTreatment).apply(resumeTreatmentRequest);
+        String restartTreatmentRequest = CaseUpdate.RestartTreatmentRequest(testPatient.getCaseId(), "19/07/2012", testPatient.getTbId(), "swap");
+        caseDataService.updateCase(restartTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 29)));
 
-        updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
+        updateAdherencePage = loginAsProvider(testProvider).clickEditAdherenceLink(testPatient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(2);
         providerPage = updateAdherencePage.submit();
         providerPage.logout();
 
         /* Pausing treatment again */
 
-        pauseTreatmentRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForPauseTreatment()
-                .withCaseId(testPatient.getCaseId())
-                .withDateModified(DateUtil.newDateTime(2012, 7, 25, 0, 0, 0))
-                .build();
-        factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
+        pauseTreatmentRequest = CaseUpdate.PauseTreatmentRequest(testPatient.getCaseId(), "25/07/2012", testPatient.getTbId(), "paws");
+        caseDataService.updateCase(pauseTreatmentRequest);
 
         /* Transferring patient out to another provider (NB: treatment is still paused and has not been restarted)*/
 
         TestProvider newProvider = providerDataService.createProvider();
 
-        PatientWebRequest closeTreatmentUpdateRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withTreatmentOutcome("TransferredOut")
-                .withCaseId(testPatient.getCaseId())
-                .withLastModifiedDate("28/07/2012 04:55:50")
-                .build();
-        patientWebService.updateCase(closeTreatmentUpdateRequest);
+        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), testPatient.getTbId());
+        caseDataService.updateCase(closeTreatmentRequest);
 
-        PatientWebRequest transferInPatientRequest = new PatientWebRequestBuilder()
-                .withDefaultsForTransferIn()
-                .withTbId(PatientRequestBuilder.NEW_TB_ID)
-                .withProviderId(newProvider.getProviderId())
-                .withTreatmentCategory("01")
-                .withDiseaseClass(DiseaseClass.valueOf(testPatient.getDiseaseClass()))
-                .withCaseId(testPatient.getCaseId())
-                .withLastModifiedDate("29/07/2012 04:55:50")
-                .build();
-        patientWebService.updateCase(transferInPatientRequest);
+        String transferInTBId = "elevenDigit";
+        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), transferInTBId, "01", newProvider.getProviderId());
+        caseDataService.updateCase(transferInPatientRequest);
 
         /* Logging adherence for patient as new provider */
 
@@ -104,13 +74,8 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         /* Pausing treatment */
 
-        pauseTreatmentRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForPauseTreatment()
-                .withCaseId(testPatient.getCaseId())
-                .withTbId(PatientRequestBuilder.NEW_TB_ID)
-                .withDateModified(DateUtil.newDateTime(2012, 8, 7, 0, 0, 0))
-                .build();
-        factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
+        pauseTreatmentRequest = CaseUpdate.PauseTreatmentRequest(testPatient.getCaseId(), "07/08/2012", testPatient.getTbId(), "paws");
+        caseDataService.updateCase(pauseTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 8, 12)));
 

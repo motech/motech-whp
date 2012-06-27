@@ -3,6 +3,7 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+<<<<<<< HEAD
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.ProviderPage;
@@ -10,6 +11,13 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
+=======
+import org.motechproject.whp.functional.data.CaseUpdate;
+import org.motechproject.whp.functional.data.TestProvider;
+import org.motechproject.whp.functional.page.ProviderPage;
+import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
+import org.motechproject.whp.refdata.domain.WHPConstants;
+>>>>>>> Luka | #0000 | Removed the application functional test context. Using patient process to send case updates.
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -34,41 +42,30 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         //record some adherence so that we can verify the same start date on transfer in - to distinguish between transfer in and provider change
         providerPage.clickEditAdherenceLink(testPatient.getCaseId()).setNumberOfDosesTaken(2).submit();
 
-        PatientWebRequest closeTreatmentUpdateRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withTreatmentOutcome("TransferredOut")
-                .withTbId(testPatient.getTbId())
-                .withCaseId(testPatient.getCaseId())
-                .withLastModifiedDate("17/03/1990 04:55:50")
-                .build();
-        patientWebService.updateCase(closeTreatmentUpdateRequest);
+        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), testPatient.getTbId());
+        caseDataService.updateCase(closeTreatmentRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider1);
 
         assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
         assertFalse(providerPage.hasTbId(testPatient.getTbId()));
 
-        PatientWebRequest transferInpatient = new PatientWebRequestBuilder()
-                .withDefaultsForTransferIn()
-                .withProviderId(provider2.getProviderId())
-                .withTreatmentCategory("01")
-                .withDiseaseClass(DiseaseClass.valueOf(testPatient.getDiseaseClass()))
-                .withCaseId(testPatient.getCaseId())
-                .build();
-        patientWebService.updateCase(transferInpatient);
+        String transferInTBId = "elevenDigit";
+        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), transferInTBId, "01", provider2.getProviderId());
+        caseDataService.updateCase(transferInPatientRequest);
 
         providerPage.logout();
         providerPage = loginAsProvider(provider1);
 
         assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
         assertFalse(providerPage.hasTbId(testPatient.getTbId()));
-        assertFalse(providerPage.hasTbId(transferInpatient.getTb_id()));
+        assertFalse(providerPage.hasTbId(transferInTBId));
 
         providerPage.logout();
         providerPage = loginAsProvider(provider2);
 
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
-        assertTrue(providerPage.hasTbId(transferInpatient.getTb_id()));
+        assertTrue(providerPage.hasTbId(transferInTBId));
         assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
         assertEquals(new LocalDate(2012, 5, 2).toString(WHPConstants.DATE_FORMAT), providerPage.getTreatmentStartDateText(testPatient.getCaseId()));
     }
