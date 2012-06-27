@@ -6,7 +6,7 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.request.DailyAdherenceRequest;
 import org.motechproject.whp.request.UpdateAdherenceRequest;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
+import org.motechproject.whp.uimodel.TreatmentCard;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -31,10 +31,10 @@ public class TreatmentCardService {
         this.whpAdherenceService = whpAdherenceService;
     }
 
-    public TreatmentCardModel getIntensivePhaseTreatmentCardModel(Patient patient) {
+    public TreatmentCard getIntensivePhaseTreatmentCard(Patient patient) {
         if (patient != null && patient.currentTherapy() != null && patient.currentTherapy().getStartDate() != null) {
 
-            TreatmentCardModel ipTreatmentCard = new TreatmentCardModel();
+            TreatmentCard ipTreatmentCard = new TreatmentCard();
             Therapy latestTherapy = patient.currentTherapy();
             LocalDate ipStartDate = latestTherapy.getStartDate();
 

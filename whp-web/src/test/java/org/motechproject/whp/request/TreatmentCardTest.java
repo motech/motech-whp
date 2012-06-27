@@ -12,7 +12,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.uimodel.DailyAdherence;
 import org.motechproject.whp.uimodel.MonthlyAdherence;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
+import org.motechproject.whp.uimodel.TreatmentCard;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.whp.builder.AdherenceDataBuilder.createLog;
 
-public class TreatmentCardModelTest {
+public class TreatmentCardTest {
 
     private final String externalId = "externalid";
 
@@ -36,7 +36,7 @@ public class TreatmentCardModelTest {
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, therapyDocId);
         patient.getCurrentTreatment().setProviderId(provider);
 
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
 
         Adherence log1 = createLog(new LocalDate(2011, 2, 11), provider, PillStatus.Taken);
         Adherence log2 = createLog(new LocalDate(2011, 2, 16), provider, PillStatus.NotTaken);
@@ -69,16 +69,16 @@ public class TreatmentCardModelTest {
         List<Integer> julyTakenDays = asList();
         List<Integer> julyNotTakenDays = asList();
 
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(),therapyStartDate,therapyEndDate);
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(),therapyStartDate,therapyEndDate);
 
-        assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
-        validateMonthLog(treatmentCardModel, 2, 2011, "Feb 2011", 0, 6, 28, febLogDays, febTakenDays, febNotTakenDays, 11);
-        validateMonthLog(treatmentCardModel, 3,2011,"Mar 2011", 1, 6, 31, marchLogDays, marchTakenDays, marchNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel, 4,2011,"Apr 2011", 2, 3, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel,5,2011, "May 2011", 3, 1, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel,6,2011, "Jun 2011", 4, 5, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 13);
-        validateMonthLog(treatmentCardModel,7,2011, "Jul 2011", 5, 3, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 1);
-        assertEquals(asList(provider), treatmentCardModel.getProviderIds());
+        assertEquals(6, treatmentCard.getMonthlyAdherences().size());
+        validateMonthLog(treatmentCard, 2, 2011, "Feb 2011", 0, 6, 28, febLogDays, febTakenDays, febNotTakenDays, 11);
+        validateMonthLog(treatmentCard, 3,2011,"Mar 2011", 1, 6, 31, marchLogDays, marchTakenDays, marchNotTakenDays, 13);
+        validateMonthLog(treatmentCard, 4,2011,"Apr 2011", 2, 3, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 13);
+        validateMonthLog(treatmentCard,5,2011, "May 2011", 3, 1, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 13);
+        validateMonthLog(treatmentCard,6,2011, "Jun 2011", 4, 5, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 13);
+        validateMonthLog(treatmentCard,7,2011, "Jul 2011", 5, 3, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 1);
+        assertEquals(asList(provider), treatmentCard.getProviderIds());
     }
 
     @Test
@@ -89,12 +89,12 @@ public class TreatmentCardModelTest {
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(externalId, therapyStartDate, therapyDocId);
         patient.getCurrentTreatment().setProviderId(provider);
 
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
 
         Adherence log1 = createLog(new LocalDate(2012, 2, 10), provider, PillStatus.Taken);
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.currentTherapy(), therapyStartDate,therapyStartDate.plusMonths(5).minusDays(1));
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.currentTherapy(), therapyStartDate,therapyStartDate.plusMonths(5).minusDays(1));
 
-        assertEquals(therapyDocId,treatmentCardModel.getTherapyDocId());
+        assertEquals(therapyDocId, treatmentCard.getTherapyDocId());
     }
 
     @Test
@@ -113,14 +113,14 @@ public class TreatmentCardModelTest {
         LocalDate therapyEndDate = new LocalDate(2012, 6, 30);
         patient.startTherapy(therapyStartDate);
 
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
 
         Adherence log1 = createLog(new LocalDate(2012, 2, 13), providerInLogOnly, PillStatus.Unknown);
         Adherence log2 = createLog(new LocalDate(2012, 2, 29), provider3, PillStatus.Taken);
         List<Adherence> adherenceData = Arrays.asList(log1, log2);
 
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate,therapyEndDate);
-        List<MonthlyAdherence> monthlyAdherences = treatmentCardModel.getMonthlyAdherences();
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate,therapyEndDate);
+        List<MonthlyAdherence> monthlyAdherences = treatmentCard.getMonthlyAdherences();
 
         //'p1' is the provider from 6th Feb 2012 to 13th Feb 2012
         assertEquals(provider1, monthlyAdherences.get(0).getLogs().get(0).getProviderId());
@@ -130,7 +130,7 @@ public class TreatmentCardModelTest {
         assertEquals(provider3, monthlyAdherences.get(0).getLogs().get(10).getProviderId());
 
 
-        assertEquals(asList(provider1,providerInLogOnly,provider2,provider3), treatmentCardModel.getProviderIds());
+        assertEquals(asList(provider1,providerInLogOnly,provider2,provider3), treatmentCard.getProviderIds());
     }
 
 
@@ -151,7 +151,7 @@ public class TreatmentCardModelTest {
         LocalDate therapyEndDate = new LocalDate(2012, 6, 30);
         patient.startTherapy(therapyStartDate);
 
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
 
         Adherence log1 = createLog(new LocalDate(2012, 2, 10), provider1, PillStatus.Taken);
         Adherence log2 = createLog(new LocalDate(2012, 2, 15), provider2, PillStatus.NotTaken);
@@ -159,8 +159,8 @@ public class TreatmentCardModelTest {
         Adherence log4 = createLog(new LocalDate(2012, 3, 28), provider4, PillStatus.Taken);
         List<Adherence> adherenceData = Arrays.asList(log1, log2, log3, log4);
 
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate,therapyEndDate);
-        List<MonthlyAdherence> monthlyAdherences = treatmentCardModel.getMonthlyAdherences();
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate,therapyEndDate);
+        List<MonthlyAdherence> monthlyAdherences = treatmentCard.getMonthlyAdherences();
 
         //p1 is the provider from 5th Feb 2012 to 13th Feb 2012
         //getLogs().get(3) returns Adherence log for 13th Feb 2012
@@ -184,7 +184,7 @@ public class TreatmentCardModelTest {
         assertEquals("p4", monthlyAdherences.get(3).getLogs().get(0).getProviderId());
         assertEquals("p4", monthlyAdherences.get(4).getLogs().get(0).getProviderId());
 
-        assertEquals(asList("p1", "p2", "p3", "p4"), treatmentCardModel.getProviderIds());
+        assertEquals(asList("p1", "p2", "p3", "p4"), treatmentCard.getProviderIds());
 
     }
 
@@ -198,30 +198,30 @@ public class TreatmentCardModelTest {
         patient.setCurrentTreatment(currentTreatment);
         patient.startTherapy(therapyStartDate);
 
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
         Adherence log1 = createLog(therapyStartDate.plusDays(10), provider, PillStatus.Taken);
         Adherence log2 = createLog(today.minusDays(1), provider, PillStatus.NotTaken);
         List<Adherence> adherenceData = Arrays.asList(log1, log2);
 
 
         LocalDate endDate = today.plusMonths(5);
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate, endDate);
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, adherenceData, patient.currentTherapy(), therapyStartDate, endDate);
 
-        assertTrue(treatmentCardModel.getMonthlyAdherences().size()>=5);
+        assertTrue(treatmentCard.getMonthlyAdherences().size()>=5);
         //verifying if monthAdherence for fifth month is created without any log
-        assertEquals(0,treatmentCardModel.getMonthlyAdherences().get(4).getLogs().size());
+        assertEquals(0, treatmentCard.getMonthlyAdherences().get(4).getLogs().size());
     }
 
     @Test
     public void shouldBuildIPTreatmentCardModelForPatientOn7DayTreatmentCategory() {
         LocalDate therapyStartDate = new LocalDate(2011, 4, 1);
         LocalDate therapyEndDate = new LocalDate(2011, 8, 31);
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
+        TreatmentCard treatmentCard = new TreatmentCard();
         Patient patient = createPatientOn7DayAWeekTreatmentCategory(externalId, therapyStartDate);
 
         Adherence log1 = createLog(new LocalDate(2011, 4, 10), "ext_id", PillStatus.Taken);
 
-        treatmentCardModel.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.currentTherapy(), therapyStartDate,therapyEndDate);
+        treatmentCard.addAdherenceDataForGivenTherapy(patient, asList(log1), patient.currentTherapy(), therapyStartDate,therapyEndDate);
 
         List<Integer> aprilLogDays = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30);
         List<Integer> aprilTakenDays = asList(10);
@@ -243,17 +243,17 @@ public class TreatmentCardModelTest {
         List<Integer> augustTakenDays = asList();
         List<Integer> augustNotTakenDays = asList();
 
-        assertEquals(5, treatmentCardModel.getMonthlyAdherences().size());
+        assertEquals(5, treatmentCard.getMonthlyAdherences().size());
 
-        validateMonthLog(treatmentCardModel, 4,2011,"Apr 2011", 0, 3, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 30);
-        validateMonthLog(treatmentCardModel, 5,2011,"May 2011", 1, 1, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 31);
-        validateMonthLog(treatmentCardModel, 6,2011,"Jun 2011", 2, 5, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 30);
-        validateMonthLog(treatmentCardModel, 7,2011,"Jul 2011", 3, 3, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 31);
-        validateMonthLog(treatmentCardModel, 8,2011,"Aug 2011", 4, 7, 31, augustLogDays, augustTakenDays, augustNotTakenDays, 31);
+        validateMonthLog(treatmentCard, 4,2011,"Apr 2011", 0, 3, 30, aprilLogDays, aprilTakenDays, aprilNotTakenDays, 30);
+        validateMonthLog(treatmentCard, 5,2011,"May 2011", 1, 1, 31, mayLogDays, mayTakenDays, mayNotTakenDays, 31);
+        validateMonthLog(treatmentCard, 6,2011,"Jun 2011", 2, 5, 30, juneLogDays, juneTakenDays, juneNotTakenDays, 30);
+        validateMonthLog(treatmentCard, 7,2011,"Jul 2011", 3, 3, 31, julyLogDays, julyTakenDays, julyNotTakenDays, 31);
+        validateMonthLog(treatmentCard, 8,2011,"Aug 2011", 4, 7, 31, augustLogDays, augustTakenDays, augustNotTakenDays, 31);
     }
 
-    private void validateMonthLog(TreatmentCardModel treatmentCardModel, Integer month, Integer year, String monthAndYear, int pos, int firstSunday, int maxDays, List<Integer> logDays, List<Integer> takenDays, List<Integer> notTakenDays, int totalNumberOfLogsInMonth) {
-        MonthlyAdherence monthlyAdherence = treatmentCardModel.getMonthlyAdherences().get(pos);
+    private void validateMonthLog(TreatmentCard treatmentCard, Integer month, Integer year, String monthAndYear, int pos, int firstSunday, int maxDays, List<Integer> logDays, List<Integer> takenDays, List<Integer> notTakenDays, int totalNumberOfLogsInMonth) {
+        MonthlyAdherence monthlyAdherence = treatmentCard.getMonthlyAdherences().get(pos);
         assertEquals(monthAndYear, monthlyAdherence.getMonthAndYear());
         assertEquals(month.toString(),monthlyAdherence.getMonth());
         assertEquals(year.toString(),monthlyAdherence.getYear());

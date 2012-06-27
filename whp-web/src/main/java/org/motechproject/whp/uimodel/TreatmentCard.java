@@ -18,14 +18,14 @@ import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
 
 @Data
-public class TreatmentCardModel {
+public class TreatmentCard {
 
     private List<MonthlyAdherence> monthlyAdherences = new ArrayList<MonthlyAdherence>();
     private List<String> providerIds = new ArrayList<String>();
     private boolean isSundayDoseDate;
     private String therapyDocId;
 
-    public TreatmentCardModel() {
+    public TreatmentCard() {
     }
 
     private MonthlyAdherence getMonthAdherence(LocalDate localDate) {

@@ -40,7 +40,7 @@ public class TreatmentCardController extends BaseController {
             uiModel.addAttribute("messages", messages);
         }
         uiModel.addAttribute("patientId", patient.getPatientId());
-        uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
+        uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCard(patient));
         return "treatmentcard/show";
     }
 

@@ -10,7 +10,7 @@ import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.request.DailyAdherenceRequest;
 import org.motechproject.whp.request.UpdateAdherenceRequest;
 import org.motechproject.whp.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
+import org.motechproject.whp.uimodel.TreatmentCard;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +45,13 @@ public class TreatmentCardControllerTest {
 
     @Test
     public void shouldReturnTreatmentCardModelToView() {
-        TreatmentCardModel treatmentCardModel = new TreatmentCardModel();
-        when(treatmentCardService.getIntensivePhaseTreatmentCardModel(patient)).thenReturn(treatmentCardModel);
+        TreatmentCard treatmentCard = new TreatmentCard();
+        when(treatmentCardService.getIntensivePhaseTreatmentCard(patient)).thenReturn(treatmentCard);
 
         String view = treatmentCardController.show(patient.getPatientId(), uiModel, request);
 
         verify(uiModel).addAttribute("patientId", patient.getPatientId());
-        verify(uiModel).addAttribute("treatmentCard", treatmentCardModel);
+        verify(uiModel).addAttribute("treatmentCard", treatmentCard);
         assertEquals("treatmentcard/show", view);
     }
 

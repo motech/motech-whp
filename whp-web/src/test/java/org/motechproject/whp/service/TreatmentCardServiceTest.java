@@ -13,7 +13,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.request.DailyAdherenceRequest;
 import org.motechproject.whp.request.UpdateAdherenceRequest;
-import org.motechproject.whp.uimodel.TreatmentCardModel;
+import org.motechproject.whp.uimodel.TreatmentCard;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -62,9 +62,9 @@ public class TreatmentCardServiceTest {
 
         when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyEndDate)).thenReturn(adherenceData);
 
-        TreatmentCardModel treatmentCardModel = treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
+        TreatmentCard treatmentCard = treatmentCardService.getIntensivePhaseTreatmentCard(patient);
 
-        assertEquals(6, treatmentCardModel.getMonthlyAdherences().size());
+        assertEquals(6, treatmentCard.getMonthlyAdherences().size());
         verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, therapyEndDate);
     }
 
@@ -80,7 +80,7 @@ public class TreatmentCardServiceTest {
 
         when(whpAdherenceService.findLogsInRange(externalId, therapyDocId, therapyStartDate, today)).thenReturn(adherenceData);
 
-        treatmentCardService.getIntensivePhaseTreatmentCardModel(patient);
+        treatmentCardService.getIntensivePhaseTreatmentCard(patient);
 
         verify(whpAdherenceService, times(1)).findLogsInRange(externalId, therapyDocId, therapyStartDate, today);
     }
