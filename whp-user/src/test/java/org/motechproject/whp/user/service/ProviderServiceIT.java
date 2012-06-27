@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.motechproject.util.DateUtil.now;
 
 @ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
 public class ProviderServiceIT extends SpringIntegrationTest {
@@ -32,6 +33,31 @@ public class ProviderServiceIT extends SpringIntegrationTest {
     public void tearDown() {
         markForDeletion(allProviders.getAll().toArray());
         markForDeletion(allMotechWebUsers.getAll().toArray());
+    }
+
+    @Test
+    public void shouldCreateProvider() {
+        String providerId = "providerid";
+        String primaryMobile = "1234567890";
+        String secondaryMobile = "0987654321";
+        String tertiaryMobile = "1111111111";
+        String district = "Muzzafarpur";
+        DateTime now = now();
+
+        ProviderRequest providerRequest = new ProviderRequest(providerId, district, primaryMobile, now);
+        providerRequest.setSecondaryMobile(secondaryMobile);
+        providerRequest.setTertiaryMobile(tertiaryMobile);
+
+        providerService.registerProvider(providerRequest);
+
+        Provider provider = allProviders.findByProviderId(providerId);
+
+        assertEquals(providerId.toLowerCase(), provider.getProviderId());
+        assertEquals(primaryMobile, provider.getPrimaryMobile());
+        assertEquals(secondaryMobile, provider.getSecondaryMobile());
+        assertEquals(tertiaryMobile, provider.getTertiaryMobile());
+        assertEquals(district, provider.getDistrict());
+        assertEquals(now, provider.getLastModifiedDate());
     }
 
     @Test

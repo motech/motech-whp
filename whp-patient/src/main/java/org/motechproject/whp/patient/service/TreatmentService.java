@@ -74,14 +74,19 @@ public class TreatmentService {
     }
 
     private void copyOverTreatment(PatientRequest patientRequest, Patient patient, DateTime dateModified, SmearTestResults newSmearTestResults, WeightStatistics newWeightStatistics, Treatment currentTreatment) {
-        Treatment newTreatment = new Treatment(currentTreatment)
+        Treatment newTreatment = new Treatment()
                 .updateForTransferIn(
                         patientRequest.getTb_id(),
                         patientRequest.getProvider_id(),
-                        dateModified.toLocalDate()
+                        dateModified.toLocalDate(),
+                        currentTreatment
                 );
-        newTreatment.setSmearTestResults(newSmearTestResults.isEmpty() ? currentTreatment.getSmearTestResults() : newSmearTestResults);
-        newTreatment.setWeightStatistics(newWeightStatistics.isEmpty() ? currentTreatment.getWeightStatistics() : newWeightStatistics);
+
+        if (!newSmearTestResults.isEmpty())
+            newTreatment.setSmearTestResults(newSmearTestResults);
+        if (!newWeightStatistics.isEmpty())
+            newTreatment.setWeightStatistics(newWeightStatistics);
+
         newTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         patient.addTreatment(newTreatment, dateModified);
         newTreatment.setPatientType(PatientType.TransferredIn);
