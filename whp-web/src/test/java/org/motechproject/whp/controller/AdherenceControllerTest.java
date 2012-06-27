@@ -15,6 +15,7 @@ import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
@@ -48,6 +49,8 @@ public class AdherenceControllerTest extends BaseUnitTest {
     Model uiModel;
     @Mock
     HttpServletRequest request;
+    @Mock
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     private Patient patient;
 
@@ -61,11 +64,12 @@ public class AdherenceControllerTest extends BaseUnitTest {
     private final String providerUserName = "someProviderUserName";
     private final AuditParams auditParams = new AuditParams(providerUserName, AdherenceSource.WEB, remarks);
 
+
     @Before
     public void setUp() {
         setUpMocks();
         setUpPatient();
-        adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories);
+        adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories, phaseUpdateOrchestrator);
         setupLoggedInUser(providerUserName);
     }
 
@@ -167,6 +171,16 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
         String form = adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
         assertEquals("redirect:/", form);
+    }
+
+    @Test
+    public void shouldRecomputePillCountAfterCapturingAdherence() {
+        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
+        adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
+
+        verify(phaseUpdateOrchestrator).recomputePillCount(PATIENT_ID);
     }
 
     @After

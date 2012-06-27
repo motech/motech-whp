@@ -10,6 +10,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -35,12 +36,14 @@ public class AdherenceController extends BaseController {
     private AllPatients allPatients;
     private WHPAdherenceService adherenceService;
     private AllTreatmentCategories allTreatmentCategories;
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     @Autowired
-    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService, AllTreatmentCategories allTreatmentCategories) {
+    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService, AllTreatmentCategories allTreatmentCategories, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
         this.allPatients = allPatients;
         this.adherenceService = adherenceService;
         this.allTreatmentCategories = allTreatmentCategories;
+        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
@@ -61,6 +64,7 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
         adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
+        phaseUpdateOrchestrator.recomputePillCount(patientId);
         Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }

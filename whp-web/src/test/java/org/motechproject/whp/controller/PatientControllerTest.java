@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -36,6 +37,8 @@ public class PatientControllerTest {
     AllPatients allPatients;
     @Mock
     AllAdherenceLogs allAdherenceLogs;
+    @Mock
+    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     PatientController patientController;
 
@@ -44,7 +47,7 @@ public class PatientControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients, allAdherenceLogs);
+        patientController = new PatientController(allPatients, allAdherenceLogs, phaseUpdateOrchestrator);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
@@ -119,6 +122,14 @@ public class PatientControllerTest {
 
         assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().currentTherapy().getStartDate());
         assertEquals("redirect:/patients/dashboard?patientId=" + patient.getPatientId(), view);
+    }
+
+    @Test
+    public void shouldRecomputePillCountWhenPhaseDatesAreSet() {
+        PatientDTO patientDTO = new PatientDTO(patient);
+        String view = patientController.update(patient.getPatientId(), patientDTO, request);
+
+        verify(phaseUpdateOrchestrator).recomputePillCount(patient.getPatientId());
     }
 
     @Test

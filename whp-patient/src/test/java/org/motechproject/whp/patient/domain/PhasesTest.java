@@ -59,4 +59,18 @@ public class PhasesTest {
         assertNull(phases.getByPhaseName(PhaseName.EIP).getEndDate());
     }
 
+    @Test
+    public void shouldGetCurrentPhase() {
+        LocalDate today = today();
+        phases.setIPStartDate(today);
+        phases.setEIPStartDate(today.plusDays(10));
+
+        assertEquals(phases.getByPhaseName(PhaseName.EIP), phases.getCurrentPhase());
+    }
+
+    @Test
+    public void shouldReturnNullIfNoPhaseHasStarted() {
+        assertNull(phases.getCurrentPhase());
+    }
+
 }

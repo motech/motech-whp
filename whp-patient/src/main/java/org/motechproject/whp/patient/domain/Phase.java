@@ -10,10 +10,10 @@ public class Phase {
     private LocalDate endDate;
     private PhaseName name;
     /*Has to be updated under multiple cases. Identified so far:
-    1) CMF Admin adherence update
-    2) Provider adherence update
-    3) CMF Admin startDate/endDate update
-    4) Phase transition
+    1) CMF Admin adherence update: Triggered by AdherenceController.update() -> PhaseUpdateOrchestrator
+    2) Provider adherence update: Triggered by AdherenceController.update() -> PhaseUpdateOrchestrator
+    3) CMF Admin startDate/endDate update: Triggered by PatientController.update() -> PhaseUpdateOrchestrator
+    4) Phase transition: TODO
     */
     private Integer numberOfDosesTaken;
 
@@ -22,6 +22,10 @@ public class Phase {
 
     public Phase(PhaseName phaseName) {
         this.name = phaseName;
+    }
+
+    public boolean hasStarted() {
+        return startDate != null;
     }
 }
 

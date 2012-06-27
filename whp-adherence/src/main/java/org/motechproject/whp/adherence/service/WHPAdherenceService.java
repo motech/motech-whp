@@ -87,4 +87,8 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
+    public int countOfDosesTakenBetween(String patientId, String therapyDocId, LocalDate startDate, LocalDate endDate) {
+        return adherenceService.countOfDosesTakenBetween(patientId, therapyDocId, startDate, endDate);
+    }
+
 }

@@ -80,18 +80,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals((Integer) 66, therapy.getPatientAge());
     }
 
-    private void verifyWeightStatisticsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
-        WeightStatistics updateRequests = updatePatientRequest.getWeightStatistics();
-        WeightStatistics weightStatistics = updatedPatient.getCurrentTreatment().getWeightStatistics();
-        assertTrue(weightStatistics.getAll().containsAll(updateRequests.getAll()));
-    }
-
-    private void verifySmearTestResultsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
-        SmearTestResults updateRequests = updatePatientRequest.getSmearTestResults();
-        SmearTestResults smearTestResults = updatedPatient.getCurrentTreatment().getSmearTestResults();
-        assertTrue(smearTestResults.getAll().containsAll(updateRequests.getAll()));
-    }
-
     @Test
     public void shouldUpdateOnlyTheSpecifiedFieldsOnPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
@@ -107,8 +95,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
 
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
+
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
-        Therapy therapy = updatedPatient.currentTherapy();
 
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
@@ -328,6 +316,17 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(today, allPatients.findByPatientId(patientId).currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
     }
 
+    @Test
+    public void shouldUpdatePillTakenCountForGivenPhase() {
+        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(createPatientRequest);
+        String patientId = createPatientRequest.getCase_id();
+
+        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), PhaseName.IP, 2);
+
+        assertEquals(Integer.valueOf(2), allPatients.findByPatientId(patientId).currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getNumberOfDosesTaken());
+    }
+
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {
         Treatment currentTreatment = updatedPatient.getCurrentTreatment();
         assertEquals(openNewPatientRequest.getDate_modified().toLocalDate(), currentTreatment.getStartDate());
@@ -357,4 +356,15 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(pauseTreatmentRequest.getDate_modified(), pausedPatient.getLastModifiedDate());
     }
 
+    private void verifyWeightStatisticsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
+        WeightStatistics updateRequests = updatePatientRequest.getWeightStatistics();
+        WeightStatistics weightStatistics = updatedPatient.getCurrentTreatment().getWeightStatistics();
+        assertTrue(weightStatistics.getAll().containsAll(updateRequests.getAll()));
+    }
+
+    private void verifySmearTestResultsUpdate(PatientRequest updatePatientRequest, Patient updatedPatient) {
+        SmearTestResults updateRequests = updatePatientRequest.getSmearTestResults();
+        SmearTestResults smearTestResults = updatedPatient.getCurrentTreatment().getSmearTestResults();
+        assertTrue(smearTestResults.getAll().containsAll(updateRequests.getAll()));
+    }
 }

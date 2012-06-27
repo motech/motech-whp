@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.flash.Flash;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PatientDTO;
@@ -29,11 +30,13 @@ public class PatientController extends BaseController {
 
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     @Autowired
-    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs) {
+    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
         this.allPatients = allPatients;
         this.allAdherenceLogs = allAdherenceLogs;
+        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -83,6 +86,7 @@ public class PatientController extends BaseController {
     public String update(@RequestParam("patientId") String patientId, PatientDTO patientDTO, HttpServletRequest httpServletRequest) {
         Patient updatedPatient = patientDTO.mapNewPhaseInfoToPatient(allPatients.findByPatientId(patientId));
         allPatients.update(updatedPatient);
+        phaseUpdateOrchestrator.recomputePillCount(updatedPatient.getPatientId());
         //TODO: move flashing actions to a service
         flashOutDateUpdatedMessage(patientId, patientDTO, httpServletRequest);
         return String.format("redirect:/patients/dashboard?patientId=%s", patientId);
