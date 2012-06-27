@@ -3,21 +3,11 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-<<<<<<< HEAD
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.page.ProviderPage;
-import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.webservice.request.PatientWebRequest;
-=======
 import org.motechproject.whp.functional.data.CaseUpdate;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
-import org.motechproject.whp.refdata.domain.WHPConstants;
->>>>>>> Luka | #0000 | Removed the application functional test context. Using patient process to send case updates.
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
