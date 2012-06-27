@@ -1,4 +1,4 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.request;
 
 import lombok.Data;
 import org.joda.time.LocalDate;

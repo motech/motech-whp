@@ -7,10 +7,10 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.request.DailyAdherenceRequest;
+import org.motechproject.whp.request.UpdateAdherenceRequest;
 import org.motechproject.whp.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.DailyAdherenceRequest;
 import org.motechproject.whp.uimodel.TreatmentCardModel;
-import org.motechproject.whp.uimodel.UpdateAdherenceRequest;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.request;
 
 import lombok.Data;
 
@@ -6,9 +6,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class CreateCMFAdminRequest {
+public class UpdateCMFAdminRequest {
 
-    @Size(min = 1, message = "UserID cannot be empty")
+    private String id;
+
     private String userId;
 
     @Size(min = 1,message = "Email ID cannot be empty")
@@ -18,15 +19,8 @@ public class CreateCMFAdminRequest {
     private String department;
 
     @Size(min = 1, message = "Location cannot be empty")
-    private String location;
-
-    @Size(min = 1,message = "Password cannot be empty")
-    private String password;
-
-    @Size(min = 1, message="Confirm Password cannot be empty")
-    private String confirmPassword;
+    private String locationId;
 
     @Size(min = 1, message="Staff name cannot be empty")
     private String staffName;
-
 }

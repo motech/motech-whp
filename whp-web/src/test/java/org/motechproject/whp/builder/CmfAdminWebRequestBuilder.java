@@ -1,6 +1,6 @@
 package org.motechproject.whp.builder;
 
-import org.motechproject.whp.uimodel.CreateCMFAdminRequest;
+import org.motechproject.whp.request.CreateCMFAdminRequest;
 
 public class CmfAdminWebRequestBuilder {
     private CreateCMFAdminRequest request = new CreateCMFAdminRequest();

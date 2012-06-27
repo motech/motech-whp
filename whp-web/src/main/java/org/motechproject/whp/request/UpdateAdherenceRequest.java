@@ -1,6 +1,7 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.request;
 
 import lombok.Data;
+import org.motechproject.whp.request.DailyAdherenceRequest;
 
 import java.util.List;
 

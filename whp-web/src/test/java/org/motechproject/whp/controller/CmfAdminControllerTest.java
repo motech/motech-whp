@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.builder.CmfAdminWebRequestBuilder;
-import org.motechproject.whp.uimodel.CreateCMFAdminRequest;
+import org.motechproject.whp.request.CreateCMFAdminRequest;
 import org.motechproject.whp.refdata.domain.CmfLocation;
 import org.motechproject.whp.refdata.repository.AllCmfLocations;
 import org.motechproject.whp.user.service.CmfAdminService;
