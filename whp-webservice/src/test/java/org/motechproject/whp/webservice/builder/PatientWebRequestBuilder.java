@@ -6,6 +6,9 @@ import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
+import static org.motechproject.whp.patient.builder.PatientBuilder.TB_ID;
+import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_TB_ID;
+
 public class PatientWebRequestBuilder {
 
     public static final String CASE_ID = "caseId";
@@ -18,7 +21,7 @@ public class PatientWebRequestBuilder {
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", "elevenDigit", "providerId", "P", "40", "registrationNumber");
+                .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
@@ -30,7 +33,7 @@ public class PatientWebRequestBuilder {
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
-                .setTreatmentData(null, "elevenDigit", null, null, "50", null);
+                .setTreatmentData(null, TB_ID, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
@@ -50,7 +53,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaultsForTransferIn() {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData("New", null)
-                .setTreatmentData("01", "elevenDigit", "newProviderId", "P", null, null)
+                .setTreatmentData("01", NEW_TB_ID, "newProviderId", "P", null, null)
                 .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
                 .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7");
         patientWebRequest.setCase_id(CASE_ID);
@@ -63,7 +66,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaultsForPauseTreatment() {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Pause.name(), null)
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
+                .setTreatmentData(null, TB_ID, "newProviderId", null, null, null);
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
@@ -74,7 +77,7 @@ public class PatientWebRequestBuilder {
     public PatientWebRequestBuilder withDefaultsForRestartTreatment() {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Restart.name(), null)
-                .setTreatmentData(null, "elevenDigit", "newProviderId", null, null, null);
+                .setTreatmentData(null, TB_ID, "newProviderId", null, null, null);
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
@@ -88,7 +91,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
-        patientWebRequest.setTb_id("elevenDigit");
+        patientWebRequest.setTb_id(TB_ID);
         return this;
     }
 

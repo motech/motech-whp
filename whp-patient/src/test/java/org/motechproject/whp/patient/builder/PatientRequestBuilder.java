@@ -76,7 +76,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForPauseTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbid");
+        patientRequest.setTb_id(TB_ID);
         patientRequest.setReason("paws");
         return this;
     }
@@ -84,7 +84,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
-        patientRequest.setTb_id("tbid");
+        patientRequest.setTb_id(TB_ID);
         patientRequest.setReason("swap");
         return this;
     }

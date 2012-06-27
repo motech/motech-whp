@@ -1,7 +1,6 @@
 package org.motechproject.whp.functional.test.serial;
 
 import org.joda.time.LocalDate;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestProvider;
@@ -22,10 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
     @Test
-    @Ignore
     public void shouldBuildIPTreatmentCardForPatient() {
-
-        /*Log Adherence data for patient */
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 8)));
 
@@ -43,7 +39,6 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(testPatient.getTbId())
                 .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 13, 0, 0, 0))
                 .build();
@@ -51,7 +46,6 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         PatientRequest resumeTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
-                .withTbId(testPatient.getTbId())
                 .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 19, 0, 0, 0))
                 .build();
@@ -69,7 +63,6 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(testPatient.getTbId())
                 .withCaseId(testPatient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 25, 0, 0, 0))
                 .build();
@@ -82,7 +75,6 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         PatientWebRequest closeTreatmentUpdateRequest = new PatientWebRequestBuilder()
                 .withDefaultsForCloseTreatment()
                 .withTreatmentOutcome("TransferredOut")
-                .withTbId(testPatient.getTbId())
                 .withCaseId(testPatient.getCaseId())
                 .withLastModifiedDate("28/07/2012 04:55:50")
                 .build();
@@ -90,6 +82,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         PatientWebRequest transferInPatientRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
+                .withTbId(PatientRequestBuilder.NEW_TB_ID)
                 .withProviderId(newProvider.getProviderId())
                 .withTreatmentCategory("01")
                 .withDiseaseClass(DiseaseClass.valueOf(testPatient.getDiseaseClass()))
@@ -113,8 +106,8 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(testPatient.getTbId())
                 .withCaseId(testPatient.getCaseId())
+                .withTbId(PatientRequestBuilder.NEW_TB_ID)
                 .withDateModified(DateUtil.newDateTime(2012, 8, 7, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
@@ -160,10 +153,6 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         assertAdherenceDataOn(patientDashboardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 18));
         assertAdherenceDataOn(patientDashboardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 20));
 
-        assertAdherenceDataOn(patientDashboardPage, "0", newProvider.getProviderId(), new LocalDate(2012, 8, 13));
-        assertAdherenceDataOn(patientDashboardPage, "0", newProvider.getProviderId(), new LocalDate(2012, 8, 15));
-        assertAdherenceDataOn(patientDashboardPage, "0", newProvider.getProviderId(), new LocalDate(2012, 8, 17));
-
         /* Asserting on paused dates */
 
         assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 13));
@@ -194,8 +183,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         /* Asserting on dates that are not even present in the table*/
 
         assertDatesNotEvenPresent(patientDashboardPage, new LocalDate(2012, 6, 30));
-        assertDatesNotEvenPresent(patientDashboardPage, new LocalDate(2012, 12, 1));
-
+        assertDatesNotEvenPresent(patientDashboardPage, new LocalDate(2013, 1, 1));
     }
 
     private void assertTreatmentNotPausedOn(PatientDashboardPage patientDashboardPage, LocalDate localDate) {
