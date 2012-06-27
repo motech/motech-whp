@@ -10,7 +10,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 
 @Data
 @TypeDiscriminator("doc.type == 'Therapy'")
@@ -23,7 +23,7 @@ public class Therapy extends MotechBaseDataObject {
     private TherapyStatus status = TherapyStatus.Ongoing;
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
-    private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
+    private Phases phases = new Phases(asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
 
     public Therapy() {
     }
@@ -62,4 +62,7 @@ public class Therapy extends MotechBaseDataObject {
         startDate = therapyStartDate;
     }
 
+    public Phase getPhase(PhaseName phaseName) {
+        return phases.getByPhaseName(phaseName);
+    }
 }

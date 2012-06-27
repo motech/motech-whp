@@ -1,8 +1,8 @@
 package org.motechproject.whp.mapping;
 
 import org.dozer.CustomConverter;
-import org.motechproject.common.exception.WHPErrorCode;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 
 public abstract class WHPCustomMapper implements CustomConverter {
 

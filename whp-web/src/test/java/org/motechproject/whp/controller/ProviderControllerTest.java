@@ -9,7 +9,7 @@ import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
 

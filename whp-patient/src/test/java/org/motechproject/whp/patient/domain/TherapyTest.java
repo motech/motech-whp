@@ -30,4 +30,9 @@ public class TherapyTest {
         assertEquals(TherapyStatus.Ongoing, therapy.getStatus());
     }
 
+    @Test
+    public void shouldFetchPhaseByName() {
+        Therapy therapy = new Therapy();
+        assertEquals(new Phase(PhaseName.IP), therapy.getPhase(PhaseName.IP));
+    }
 }

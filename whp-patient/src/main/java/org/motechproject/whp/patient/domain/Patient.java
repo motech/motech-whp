@@ -5,7 +5,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -14,6 +15,8 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.motechproject.whp.patient.domain.PhaseName.IP;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data

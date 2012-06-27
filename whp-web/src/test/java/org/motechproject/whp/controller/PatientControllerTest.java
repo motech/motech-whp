@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.uimodel.PatientDTO;
+import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class PatientControllerTest {
 
@@ -68,21 +72,14 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldLoadPatientDashboard() {
-        patientController.show(patient.getPatientId(), uiModel, request);
-
-        ArgumentCaptor<PatientDTO> patientDTOArgumentCaptor = ArgumentCaptor.forClass(PatientDTO.class);
-
-        verify(uiModel).addAttribute(eq("patient"), patientDTOArgumentCaptor.capture());
-
-        assertEquals(new PatientDTO(patient), patientDTOArgumentCaptor.getValue());
-    }
-
-    @Test
-    public void shouldReturnDashBoardView() {
-        String view = patientController.show(patient.getPatientId(), uiModel, request);
-
-        assertEquals("patient/show", view);
+    public void shouldReturnDashBoardView() throws Exception {
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/show").param("patientId", patient.getPatientId()))
+                .andExpect(status().isOk())
+                .andExpect(model().size(2))
+                .andExpect(model().attribute("patient", patient))
+                .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
+                .andExpect(forwardedUrl("patient/show"));
     }
 
     @Test
@@ -110,25 +107,24 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldUpdatePatientAndRedirectToDashboardAfterSettingDates() {
-        PatientDTO patientDTO = new PatientDTO(patient);
-        patientDTO.setIpStartDate("21/05/2012");
+    public void shouldUpdatePatientPhaseStartDatesAndShowPatient() {
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        phaseStartDates.setIpStartDate("21/05/2012");
 
-        String view = patientController.update(patient.getPatientId(), patientDTO, request);
+        String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
 
         verify(allPatients).update(patientArgumentCaptor.capture());
 
         assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().currentTherapy().getStartDate());
-        assertEquals("redirect:/patients/dashboard?patientId=" + patient.getPatientId(), view);
+        assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
     }
 
     @Test
     public void shouldRecomputePillCountWhenPhaseDatesAreSet() {
-        PatientDTO patientDTO = new PatientDTO(patient);
-        String view = patientController.update(patient.getPatientId(), patientDTO, request);
-
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
         verify(phaseUpdateOrchestrator).recomputePillCount(patient.getPatientId());
     }
 

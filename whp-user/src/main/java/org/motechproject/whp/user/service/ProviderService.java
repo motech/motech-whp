@@ -1,7 +1,7 @@
 package org.motechproject.whp.user.service;
 
-import org.motechproject.common.exception.WHPErrorCode;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.user.contract.ProviderRequest;

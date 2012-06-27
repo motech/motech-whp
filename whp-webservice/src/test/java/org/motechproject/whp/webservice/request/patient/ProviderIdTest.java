@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice.request.patient;
 
 import org.junit.Test;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.user.domain.Provider;

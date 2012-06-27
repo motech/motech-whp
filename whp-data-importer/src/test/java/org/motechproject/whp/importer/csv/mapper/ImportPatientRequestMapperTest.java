@@ -10,7 +10,7 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

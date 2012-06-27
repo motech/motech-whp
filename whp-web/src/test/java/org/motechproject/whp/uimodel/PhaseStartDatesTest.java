@@ -6,12 +6,12 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseName;
 import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class PatientDTOTest {
+public class PhaseStartDatesTest {
 
     @Test
     public void shouldSetPhaseStartDatesFromPatientObject() {
@@ -19,22 +19,22 @@ public class PatientDTOTest {
         patient.startTherapy(new LocalDate());
         patient.currentTherapy().getPhases().setEIPStartDate(new LocalDate());
         patient.currentTherapy().getPhases().setCPStartDate(new LocalDate());
-        PatientDTO patientDTO = new PatientDTO(patient);
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Therapy therapy = patient.currentTherapy();
 
-        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate().toString(WHPConstants.DATE_FORMAT), patientDTO.getIpStartDate());
-        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT), patientDTO.getEipStartDate());
-        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.CP).getStartDate().toString(WHPConstants.DATE_FORMAT), patientDTO.getCpStartDate());
+        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getIpStartDate());
+        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getEipStartDate());
+        assertEquals(therapy.getPhases().getByPhaseName(PhaseName.CP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getCpStartDate());
     }
 
     @Test
     public void shouldMapNewPhaseInfoToPatient() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        PatientDTO patientDTO = new PatientDTO(patient);
-        patientDTO.setIpStartDate("21/05/2012");
-        patientDTO.setEipStartDate("22/05/2012");
-        patientDTO.setCpStartDate("23/05/2012");
-        patientDTO.mapNewPhaseInfoToPatient(patient);
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        phaseStartDates.setIpStartDate("21/05/2012");
+        phaseStartDates.setEipStartDate("22/05/2012");
+        phaseStartDates.setCpStartDate("23/05/2012");
+        phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
         assertEquals(new LocalDate(2012, 5, 21), patient.currentTherapy().getStartDate());
         assertEquals(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate(), patient.currentTherapy().getStartDate());
@@ -46,11 +46,11 @@ public class PatientDTOTest {
     public void shouldResetTreatmentStartDateIfIPStartDateIsEmpty() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(new LocalDate());
-        PatientDTO patientDTO = new PatientDTO(patient);
-        patientDTO.setIpStartDate("");
-        patientDTO.setEipStartDate("22/05/2012");
-        patientDTO.setCpStartDate("23/05/2012");
-        patientDTO.mapNewPhaseInfoToPatient(patient);
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        phaseStartDates.setIpStartDate("");
+        phaseStartDates.setEipStartDate("22/05/2012");
+        phaseStartDates.setCpStartDate("23/05/2012");
+        phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
         assertNull(patient.currentTherapy().getStartDate());
     }
@@ -61,11 +61,11 @@ public class PatientDTOTest {
         patient.startTherapy(new LocalDate());
         patient.currentTherapy().getPhases().getByPhaseName(PhaseName.EIP).setStartDate(new LocalDate());
         patient.currentTherapy().getPhases().getByPhaseName(PhaseName.CP).setStartDate(new LocalDate());
-        PatientDTO patientDTO = new PatientDTO(patient);
-        patientDTO.setIpStartDate("");
-        patientDTO.setEipStartDate("");
-        patientDTO.setCpStartDate("");
-        patientDTO.mapNewPhaseInfoToPatient(patient);
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        phaseStartDates.setIpStartDate("");
+        phaseStartDates.setEipStartDate("");
+        phaseStartDates.setCpStartDate("");
+        phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
         assertNull(patient.currentTherapy().getStartDate());
         assertNull(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());

@@ -7,7 +7,7 @@ import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;

@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.apache.commons.collections.CollectionUtils;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.request.UpdateAdherenceRequest;
 import org.motechproject.whp.service.TreatmentCardService;
 import org.motechproject.whp.util.FlashUtil;
@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="/treatmentcard")
-public class TreatmentCardController extends BaseController{
+@RequestMapping(value = "/treatmentcard")
+public class TreatmentCardController extends BaseController {
 
     AllPatients allPatients;
 
@@ -34,14 +34,14 @@ public class TreatmentCardController extends BaseController{
 
     @RequestMapping(value = "show", method = RequestMethod.GET)
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
-        Patient patient =allPatients.findByPatientId(patientId);
+        Patient patient = allPatients.findByPatientId(patientId);
         List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
         uiModel.addAttribute("patientId", patient.getPatientId());
         uiModel.addAttribute("treatmentCard", treatmentCardService.getIntensivePhaseTreatmentCardModel(patient));
-        return "treatment-card/show";
+        return "treatmentcard/show";
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)

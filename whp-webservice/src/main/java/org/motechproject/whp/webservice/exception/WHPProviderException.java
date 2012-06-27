@@ -1,8 +1,8 @@
 package org.motechproject.whp.webservice.exception;
 
 import org.motechproject.casexml.service.exception.CaseError;
-import org.motechproject.common.exception.WHPError;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.springframework.http.HttpStatus;
 

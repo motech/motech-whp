@@ -2,8 +2,8 @@ package org.motechproject.whp.importer.csv.mapper;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.MappingException;
-import org.motechproject.common.exception.WHPErrorCode;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.command;
 
-import org.motechproject.common.exception.WHPErrorCode;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;

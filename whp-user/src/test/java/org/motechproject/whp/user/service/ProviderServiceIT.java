@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.repository.AllMotechWebUsers;

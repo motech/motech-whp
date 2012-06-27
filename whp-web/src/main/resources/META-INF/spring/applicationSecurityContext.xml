@@ -16,7 +16,8 @@
                     authentication-failure-handler-ref="loginFailureHandler"
                     authentication-success-handler-ref="loginSuccessHandler"/>
 
-        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false" success-handler-ref="logoutSuccessHandler"/>
+        <logout logout-url="/security/j_spring_security_logout" invalidate-session="false"
+                success-handler-ref="logoutSuccessHandler"/>
 
         <!-- Permit all -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
@@ -24,7 +25,7 @@
 
         <!--Only admin-->
         <intercept-url pattern="/adherence/reports/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
-        <intercept-url pattern="/patients/dashboard/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/patients/show/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/list/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/treatmentcard/**/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
 
@@ -35,7 +36,8 @@
 
         <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')" requires-channel="any"/>
-        <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')"
+                       requires-channel="any"/>
 
         <!-- Only providers -->
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
@@ -51,7 +53,8 @@
         <authentication-provider ref="motechAuthenticationProvider"/>
     </authentication-manager>
 
-    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint" class="org.motechproject.security.authentication.AjaxAwareAuthenticationEntryPoint">
+    <beans:bean id="ajaxAwareAuthenticationProcessingFilterEntryPoint"
+                class="org.motechproject.security.authentication.AjaxAwareAuthenticationEntryPoint">
         <beans:property name="loginFormUrl" value="/login"/>
         <beans:property name="forceHttps" value="false"/>
     </beans:bean>

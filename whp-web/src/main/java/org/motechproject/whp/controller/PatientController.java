@@ -7,7 +7,7 @@ import org.motechproject.flash.Flash;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.uimodel.PatientDTO;
+import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.util.FlashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,6 @@ import static java.util.Arrays.asList;
 public class PatientController extends BaseController {
 
     public static final String PATIENT_LIST = "patientList";
-
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
@@ -44,7 +43,6 @@ public class PatientController extends BaseController {
         List<Patient> patientsForProvider = allPatients.getAllWithActiveTreatmentFor(providerId);
         passPatientsAsModelToListView(uiModel, patientsForProvider);
         passAdherenceSavedMessageToListView(uiModel, request);
-
         return "patient/listByProvider";
     }
 
@@ -54,6 +52,23 @@ public class PatientController extends BaseController {
         passPatientsAsModelToListView(uiModel, patients);
         return "patient/list";
     }
+
+    @RequestMapping(value = "show", method = RequestMethod.GET)
+    public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        setupModel(uiModel, request, patient);
+        return "patient/show";
+    }
+
+    @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
+    public String adjustPhaseStartDates(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
+        Patient updatedPatient = phaseStartDates.mapNewPhaseInfoToPatient(allPatients.findByPatientId(patientId));
+        allPatients.update(updatedPatient);
+        phaseUpdateOrchestrator.recomputePillCount(updatedPatient.getPatientId());
+        flashOutDateUpdatedMessage(patientId, phaseStartDates, httpServletRequest);
+        return String.format("redirect:/patients/show?patientId=%s", patientId);
+    }
+
 
     private void passAdherenceSavedMessageToListView(Model uiModel, HttpServletRequest request) {
         String message = Flash.in("message", request);
@@ -66,36 +81,23 @@ public class PatientController extends BaseController {
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
     }
 
-    @RequestMapping(value = "dashboard", method = RequestMethod.GET)
-    public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        setupModelForDashboard(uiModel, request, patient);
-        return "patient/show";
-    }
-
-    private void setupModelForDashboard(Model uiModel, HttpServletRequest request, Patient patient) {
-        PatientDTO patientDTO = new PatientDTO(patient);
-        uiModel.addAttribute("patient", patientDTO);
+    private void setupModel(Model uiModel, HttpServletRequest request, Patient patient) {
+        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
+        uiModel.addAttribute("patient", patient);
+        uiModel.addAttribute("phaseStartDates", phaseStartDates);
         List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
     }
 
-    @RequestMapping(value = "dashboard", method = RequestMethod.POST)
-    public String update(@RequestParam("patientId") String patientId, PatientDTO patientDTO, HttpServletRequest httpServletRequest) {
-        Patient updatedPatient = patientDTO.mapNewPhaseInfoToPatient(allPatients.findByPatientId(patientId));
-        allPatients.update(updatedPatient);
-        phaseUpdateOrchestrator.recomputePillCount(updatedPatient.getPatientId());
-        //TODO: move flashing actions to a service
-        flashOutDateUpdatedMessage(patientId, patientDTO, httpServletRequest);
-        return String.format("redirect:/patients/dashboard?patientId=%s", patientId);
-    }
 
-    private void flashOutDateUpdatedMessage(String patientId, PatientDTO patientDTO, HttpServletRequest httpServletRequest) {
-        String ipStartDate = patientDTO.getIpStartDate();
-        String eipStartDate = patientDTO.getEipStartDate();
-        String cpStartDate = patientDTO.getCpStartDate();
+
+    private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
+        //TODO: Use templates and externalize messages
+        String ipStartDate = phaseStartDates.getIpStartDate();
+        String eipStartDate = phaseStartDates.getEipStartDate();
+        String cpStartDate = phaseStartDates.getCpStartDate();
 
         List<String> messages = new ArrayList<>();
 

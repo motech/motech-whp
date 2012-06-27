@@ -1,4 +1,4 @@
-package org.motechproject.common.exception;
+package org.motechproject.whp.common.exception;
 
 
 public enum WHPErrorCode {

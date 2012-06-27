@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;

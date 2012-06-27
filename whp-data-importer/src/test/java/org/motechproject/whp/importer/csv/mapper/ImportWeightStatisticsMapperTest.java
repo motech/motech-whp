@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

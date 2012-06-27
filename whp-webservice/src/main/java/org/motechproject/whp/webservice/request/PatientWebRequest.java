@@ -2,6 +2,7 @@ package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.validation.constraints.*;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;

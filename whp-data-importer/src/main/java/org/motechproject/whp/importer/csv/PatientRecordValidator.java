@@ -3,6 +3,7 @@ package org.motechproject.whp.importer.csv;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;

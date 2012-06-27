@@ -3,11 +3,11 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.WHPConstants;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 

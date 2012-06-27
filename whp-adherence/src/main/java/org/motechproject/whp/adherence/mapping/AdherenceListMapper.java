@@ -8,7 +8,7 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 
 import java.util.List;
 

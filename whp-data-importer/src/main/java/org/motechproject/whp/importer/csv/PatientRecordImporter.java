@@ -2,7 +2,7 @@ package org.motechproject.whp.importer.csv;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
@@ -18,7 +18,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.importer.annotation.ColumnName;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;

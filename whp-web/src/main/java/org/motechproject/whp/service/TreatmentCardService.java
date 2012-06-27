@@ -11,7 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice.service;
 
 import org.motechproject.casexml.service.CaseService;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.service.PatientService;

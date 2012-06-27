@@ -7,7 +7,7 @@ import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.springframework.stereotype.Component;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;

@@ -2,8 +2,8 @@ package org.motechproject.whp.webservice.exception;
 
 import org.motechproject.casexml.service.exception.CaseError;
 import org.motechproject.casexml.service.exception.CaseException;
-import org.motechproject.common.exception.WHPError;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;

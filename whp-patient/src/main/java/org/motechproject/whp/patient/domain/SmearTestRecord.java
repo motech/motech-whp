@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 

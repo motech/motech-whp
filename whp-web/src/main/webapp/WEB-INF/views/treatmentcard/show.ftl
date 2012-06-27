@@ -126,20 +126,16 @@ ${message}
 </table>
 <form id="treatmentCardDeltaform" action="/whp/patients/saveTreatmentCard" method="post">
     <input type="hidden" name="delta" id="delta"/>
-
     <div class="controls pull-right">
-        <a href="/whp/patients/dashboard?patientId=${patientId}" class="btn">Clear</a>
+        <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
         <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
         <button type="button" id='submitJson' class="btn btn-primary">Save</button>
     </div>
 </form>
 
 <script type="text/javascript">
-    $(function () {
+    $(function() {
         setUpTreatmentCardTable('${treatmentCard.therapyDocId}');
     });
-
-
 </script>
-
 </#if>

@@ -19,7 +19,7 @@ import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 
 import java.util.Arrays;
 import java.util.List;

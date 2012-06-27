@@ -7,7 +7,7 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

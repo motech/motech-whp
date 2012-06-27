@@ -1,6 +1,7 @@
 package org.motechproject.whp.importer.csv.builder;
 
 import org.joda.time.DateTime;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.refdata.domain.*;
 

@@ -4,7 +4,7 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.ExportValue;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 
 @Data
 public class Adherence {

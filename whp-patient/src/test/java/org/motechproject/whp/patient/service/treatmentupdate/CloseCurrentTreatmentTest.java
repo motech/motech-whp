@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.service.treatmentupdate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.command.CloseCurrentTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;

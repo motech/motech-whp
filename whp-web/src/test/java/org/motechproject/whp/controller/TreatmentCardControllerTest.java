@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.request.DailyAdherenceRequest;
 import org.motechproject.whp.request.UpdateAdherenceRequest;
 import org.motechproject.whp.service.TreatmentCardService;
@@ -52,7 +52,7 @@ public class TreatmentCardControllerTest {
 
         verify(uiModel).addAttribute("patientId", patient.getPatientId());
         verify(uiModel).addAttribute("treatmentCard", treatmentCardModel);
-        assertEquals("treatment-card/show", view);
+        assertEquals("treatmentcard/show", view);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TreatmentCardControllerTest {
 
         String view = treatmentCardController.update(adherenceData, uiModel, request);
 
-        assertEquals("treatment-card/show", view);
+        assertEquals("treatmentcard/show", view);
         verify(uiModel, times(1)).addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, patient);
     }

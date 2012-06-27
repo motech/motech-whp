@@ -46,6 +46,17 @@
                 <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>spring-repo</id>
+            <name>Spring Maven Repository</name>
+            <url>http://maven.springframework.org/snapshot</url>
+            <releases>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>

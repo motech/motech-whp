@@ -33,10 +33,15 @@
     </#if>
 <div class="well">
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="brand pull-left">Adjust Phase Start Dates</a>
-
     <div class="float-right">Patient Id : ${patient.patientId}</div>
 </div>
 <@phaseInfo/>
+<div class="pull-left">
+  Goes here
+</div>
+<div class="pull-right">
+  Table goes here
+</div>
 <div id="treatmentCard"/>
 <script type="text/javascript">
     $('#saveTheDate').click(function() {
@@ -59,17 +64,6 @@
         event.preventDefault();
     });
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
-
-    $.ajax({
-        type : 'GET',
-        url : '/whp/treatmentcard/show?patientId=${patient.patientId}',
-        success : function(data) {
-            set_html('treatmentCard',data)
-        }
-    });
-
-
+    $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}');
 </script>
-
-
 </@layout.defaultLayout>

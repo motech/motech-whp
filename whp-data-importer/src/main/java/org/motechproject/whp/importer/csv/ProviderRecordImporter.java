@@ -1,7 +1,7 @@
 package org.motechproject.whp.importer.csv;
 
 import org.joda.time.DateTime;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;

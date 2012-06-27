@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 
 import java.util.List;
 

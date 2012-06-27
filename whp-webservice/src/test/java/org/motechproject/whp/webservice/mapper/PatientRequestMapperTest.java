@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.refdata.domain.WHPConstants;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.refdata.domain.WeightInstance;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;

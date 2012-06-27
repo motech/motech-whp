@@ -6,7 +6,7 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.common.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;

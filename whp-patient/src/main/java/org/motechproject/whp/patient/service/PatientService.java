@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
