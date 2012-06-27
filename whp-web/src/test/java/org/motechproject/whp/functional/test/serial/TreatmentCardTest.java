@@ -86,92 +86,92 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         ListPatientsPage listPatientsPage = loginAsCMFAdminAndListAllPatients();
 
-        PatientDashboardPage patientDashboardPage = listPatientsPage.clickOnPatient(testPatient.getCaseId());
+        TreatmentCardPage treatmentCardPage = listPatientsPage.clickOnPatientWithStartedTherapy(testPatient.getCaseId());
 
         /* Asserting on adherence data given by provider */
 
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 2));
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 4));
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 6));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 2));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 4));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 6));
 
-        assertAdherenceDataOn(patientDashboardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 9));
-        assertAdherenceDataOn(patientDashboardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 11));
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 13));
+        assertAdherenceDataOn(treatmentCardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 9));
+        assertAdherenceDataOn(treatmentCardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 11));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 13));
 
-        assertAdherenceDataOn(patientDashboardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 23));
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 25));
-        assertAdherenceDataOn(patientDashboardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 27));
+        assertAdherenceDataOn(treatmentCardPage, "2", testProvider.getProviderId(), new LocalDate(2012, 7, 23));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 25));
+        assertAdherenceDataOn(treatmentCardPage, "1", testProvider.getProviderId(), new LocalDate(2012, 7, 27));
 
         /* Asserting on adherence data given by newProvider */
 
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 7, 30));
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 1));
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 3));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 7, 30));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 1));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 3));
 
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 6));
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 8));
-        assertAdherenceDataOn(patientDashboardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 10));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 6));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 8));
+        assertAdherenceDataOn(treatmentCardPage, "1", newProvider.getProviderId(), new LocalDate(2012, 8, 10));
 
         /* Asserting on blank adherence data */
 
-        assertAdherenceDataOn(patientDashboardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 16));
-        assertAdherenceDataOn(patientDashboardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 18));
-        assertAdherenceDataOn(patientDashboardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 20));
+        assertAdherenceDataOn(treatmentCardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 16));
+        assertAdherenceDataOn(treatmentCardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 18));
+        assertAdherenceDataOn(treatmentCardPage, "0", testProvider.getProviderId(), new LocalDate(2012, 7, 20));
 
         /* Asserting on paused dates */
 
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 13));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 16));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 18));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 25));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 7, 27));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 8, 8));
-        assertTreatmentPausedOn(patientDashboardPage, new LocalDate(2012, 8, 10));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 7, 13));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 7, 16));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 7, 18));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 7, 25));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 7, 27));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 8, 8));
+        assertTreatmentPausedOn(treatmentCardPage, new LocalDate(2012, 8, 10));
 
         /* Asserting on dates not paused */
 
-        assertTreatmentNotPausedOn(patientDashboardPage, new LocalDate(2012, 7, 30));
-        assertTreatmentNotPausedOn(patientDashboardPage, new LocalDate(2012, 8, 1));
-        assertTreatmentNotPausedOn(patientDashboardPage, new LocalDate(2012, 8, 3));
-        assertTreatmentNotPausedOn(patientDashboardPage, new LocalDate(2012, 8, 6));
+        assertTreatmentNotPausedOn(treatmentCardPage, new LocalDate(2012, 7, 30));
+        assertTreatmentNotPausedOn(treatmentCardPage, new LocalDate(2012, 8, 1));
+        assertTreatmentNotPausedOn(treatmentCardPage, new LocalDate(2012, 8, 3));
+        assertTreatmentNotPausedOn(treatmentCardPage, new LocalDate(2012, 8, 6));
 
         /* Asserting on dates that are not editable */
 
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 7, 17));
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 7, 19));
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 7, 22));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 7, 17));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 7, 19));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 7, 22));
 
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 7, 31));
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 8, 9));
-        assertAdherenceDataNotEvenEditableOn(patientDashboardPage, new LocalDate(2012, 8, 21));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 7, 31));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 8, 9));
+        assertAdherenceDataNotEvenEditableOn(treatmentCardPage, new LocalDate(2012, 8, 21));
 
         /* Asserting on dates that are not even present in the table*/
 
-        assertDatesNotEvenPresent(patientDashboardPage, new LocalDate(2012, 6, 30));
-        assertDatesNotEvenPresent(patientDashboardPage, new LocalDate(2013, 1, 1));
+        assertDatesNotEvenPresent(treatmentCardPage, new LocalDate(2012, 6, 30));
+        assertDatesNotEvenPresent(treatmentCardPage, new LocalDate(2012, 12, 1));
     }
 
-    private void assertTreatmentNotPausedOn(PatientDashboardPage patientDashboardPage, LocalDate localDate) {
-        assertFalse(patientDashboardPage.treatmentPausedOn(localDate));
+    private void assertTreatmentNotPausedOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertFalse(treatmentCardPage.treatmentPausedOn(localDate));
     }
 
-    private void assertTreatmentPausedOn(PatientDashboardPage patientDashboardPage, LocalDate localDate) {
-        assertTrue(patientDashboardPage.treatmentPausedOn(localDate));
+    private void assertTreatmentPausedOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.treatmentPausedOn(localDate));
     }
 
-    private void assertDatesNotEvenPresent(PatientDashboardPage patientDashboardPage, LocalDate localDate) {
-        assertTrue(patientDashboardPage.dateNotPresent(localDate));
+    private void assertDatesNotEvenPresent(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.dateNotPresent(localDate));
     }
 
-    private void assertAdherenceDataNotEvenEditableOn(PatientDashboardPage patientDashboardPage, LocalDate localDate) {
-        assertTrue(patientDashboardPage.nonEditableAdherenceOn(localDate));
+    private void assertAdherenceDataNotEvenEditableOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.nonEditableAdherenceOn(localDate));
     }
 
-    private void assertAdherenceDataOn(PatientDashboardPage patientDashboardPage, String expectedAdherenceValue, String adherenceGivenBy, LocalDate doseDate) {
-        assertEquals(expectedAdherenceValue, patientDashboardPage.adherenceStatusOn(doseDate));
+    private void assertAdherenceDataOn(TreatmentCardPage treatmentCardPage, String expectedAdherenceValue, String adherenceGivenBy, LocalDate doseDate) {
+        assertEquals(expectedAdherenceValue, treatmentCardPage.adherenceStatusOn(doseDate));
 
         /* Meta data on Adherence Logs stores providerId in lower case */
-        assertEquals(adherenceGivenBy.toLowerCase(), patientDashboardPage.adherenceOnProvidedBy(doseDate));
+        assertEquals(adherenceGivenBy.toLowerCase(), treatmentCardPage.adherenceOnProvidedBy(doseDate));
     }
 
     private ListPatientsPage loginAsCMFAdminAndListAllPatients() {

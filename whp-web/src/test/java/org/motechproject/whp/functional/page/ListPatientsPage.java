@@ -64,7 +64,7 @@ public class ListPatientsPage extends LoggedInUserPage {
         return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").contains("255,182,193");
     }
 
-    public PatientDashboardPage clickOnPatient(String patientId) {
+    public PatientDashboardPage clickOnPatientWithThreapyNotYetStarted(String patientId) {
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {
             if (patientIds.get(i).getText().equals(patientId)) {
@@ -74,6 +74,18 @@ public class ListPatientsPage extends LoggedInUserPage {
         }
         dashboardLinks.get(index).findElement(By.className("patientId")).click();
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
+    }
+
+    public TreatmentCardPage clickOnPatientWithStartedTherapy(String patientId) {
+        int index = -1;
+        for (int i = 0; i < patientIds.size(); i++) {
+            if (patientIds.get(i).getText().equals(patientId)) {
+                index = i;
+                break;
+            }
+        }
+        dashboardLinks.get(index).findElement(By.className("patientId")).click();
+        return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
     }
 
     public boolean hasTbId(String tbId) {

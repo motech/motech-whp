@@ -1,12 +1,22 @@
 package org.motechproject.whp.functional.page;
 
-import org.joda.time.LocalDate;
+import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
+
+import static org.openqa.selenium.By.name;
 
 public class PatientDashboardPage extends Page {
+
+    @FindBy(how = How.ID, using = "setDateLink")
+    WebElement adjustStartDatesLink;
+
+    private final String ipStartDate = "ipStartDate";
+    private final String eipStartDate = "eipStartDate";
+    private final String cpStartDate = "cpStartDate";
 
     public PatientDashboardPage(WebDriver webDriver) {
         super(webDriver);
@@ -14,37 +24,40 @@ public class PatientDashboardPage extends Page {
 
     @Override
     protected void waitForPageToLoad() {
-        waitForElementWithIdToLoad("IPTreatmentCard");
+        waitForElementWithIdToLoad("setDateLink");
     }
 
-    public String adherenceStatusOn(LocalDate localDate) {
-        return findWebElementByDate(localDate).getAttribute("currentPillStatus");
+    public void clickOnChangePhaseStartDates() {
+        adjustStartDatesLink.click();
+        waitUntilElementEditable(name(ipStartDate));
     }
 
-    public String adherenceOnProvidedBy(LocalDate localDate) {
-        return findWebElementByDate(localDate).getAttribute("providerId");
+    public void editStartDates(String ipStartDate, String eipStartDate, String cpStartDate) {
+        WebElement ipStartDateElement = webDriver.findElement(name(this.ipStartDate));
+        ipStartDateElement.sendKeys(ipStartDate);
+
+        WebElement eipStartDateElement = webDriver.findElement(name(this.eipStartDate));
+        eipStartDateElement.sendKeys(eipStartDate);
+
+        WebElement cpStartDateElement = webDriver.findElement(name(this.cpStartDate));
+        cpStartDateElement.sendKeys(cpStartDate);
     }
 
-    public boolean nonEditableAdherenceOn(LocalDate localDate) {
-        String appliedCssClasses = findWebElementByDate(localDate).getAttribute("class");
-        return !appliedCssClasses.contains("editable");
+    public PatientDashboardPage saveStartDates() {
+        WebElement saveButton = webDriver.findElement(By.id("saveTheDate"));
+        saveButton.click();
+        return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }
 
-    public boolean dateNotPresent(LocalDate localDate) {
-        try{
-            findWebElementByDate(localDate);
-            return false;
-        } catch (NoSuchElementException exception) {
-            return true;
-        }
+    public String getIpStartDate() {
+        return webDriver.findElement(name(ipStartDate)).getAttribute("value");
     }
 
-    public boolean treatmentPausedOn(LocalDate localDate) {
-        String appliedCssClasses = findWebElementByDate(localDate).getAttribute("class");
-        return appliedCssClasses.contains("pausedAdherenceData");
+    public String getEIpStartDate() {
+        return webDriver.findElement(name(eipStartDate)).getAttribute("value");
     }
 
-    private WebElement findWebElementByDate(LocalDate localDate) {
-        return webDriver.findElement(By.id(String.format("%s", localDate.toString("d-M-yyyy"))));
+    public String getCpStartDate() {
+        return webDriver.findElement(name(cpStartDate)).getAttribute("value");
     }
 }

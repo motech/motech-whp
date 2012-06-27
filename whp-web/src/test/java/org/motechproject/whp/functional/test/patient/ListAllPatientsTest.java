@@ -1,50 +1,21 @@
 package org.motechproject.whp.functional.test.patient;
 
 import org.junit.Test;
-import org.motechproject.whp.functional.data.TestPatient;
-import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.framework.BaseTest;
-import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.ListPatientsPage;
-import org.motechproject.whp.functional.page.LoginPage;
-import org.motechproject.whp.functional.service.PatientDataService;
-import org.motechproject.whp.functional.service.ProviderDataService;
+import org.motechproject.whp.functional.test.BasePatientTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ListAllPatientsTest extends BaseTest {
-
-    TestProvider provider;
-
-    TestPatient testPatient;
-
-    @Override
-    public void setUp() {
-        super.setUp();
-        setupProvider();
-        setupPatientForProvider();
-    }
-
-    public void setupProvider() {
-        ProviderDataService providerDataService = new ProviderDataService(webDriver);
-        provider = providerDataService.createProvider();
-    }
-
-    public void setupPatientForProvider() {
-        PatientDataService patientDataService = new PatientDataService(webDriver);
-        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo");
-    }
+public class ListAllPatientsTest extends BasePatientTest {
 
     @Test
     public void shouldLoginAsProviderAndListAllPatientsForProvider() {
-        ListPatientsPage providerPage = loginAsAdmin();
+        ListPatientsPage providerPage = loginAsCMFAdmin();
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertEquals("Male", providerPage.getGenderText(testPatient.getCaseId()));
         assertEquals("village", providerPage.getVillageText(testPatient.getCaseId()));
     }
 
-    private ListPatientsPage loginAsAdmin() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().navigateToShowAllPatients();
-    }
+
 }

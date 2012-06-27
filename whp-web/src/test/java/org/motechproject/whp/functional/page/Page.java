@@ -102,6 +102,15 @@ public abstract class Page {
         }
     }
 
+    protected void waitUntilElementEditable(final By by) {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                return webDriver.findElement(by).isEnabled() && webDriver.findElement(by).isDisplayed();
+            }
+        });
+    }
+
     private void waitForElementToLoad(final By by) {
         wait.until(new ExpectedCondition<Boolean>() {
             @Override
@@ -110,4 +119,5 @@ public abstract class Page {
             }
         });
     }
+
 }
