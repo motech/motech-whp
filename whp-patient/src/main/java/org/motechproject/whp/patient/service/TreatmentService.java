@@ -64,9 +64,8 @@ public class TreatmentService {
         DateTime dateModified = patientRequest.getDate_modified();
         SmearTestResults newSmearTestResults = patientRequest.getSmearTestResults();
         WeightStatistics newWeightStatistics = patientRequest.getWeightStatistics();
-        Treatment currentTreatment = patient.getCurrentTreatment();
 
-        copyOverTreatment(patientRequest, patient, dateModified, newSmearTestResults, newWeightStatistics, currentTreatment);
+        copyOverTreatment(patientRequest, patient, dateModified, newSmearTestResults, newWeightStatistics, patient.getCurrentTreatment());
         patient.reviveLatestTherapy();
         patient.currentTherapy().setDiseaseClass(patientRequest.getDisease_class());
         patient.setOnActiveTreatment(true);
@@ -86,10 +85,14 @@ public class TreatmentService {
             newTreatment.setSmearTestResults(newSmearTestResults);
         if (!newWeightStatistics.isEmpty())
             newTreatment.setWeightStatistics(newWeightStatistics);
+        if (patientRequest.getDisease_class() != null) {
+            patient.currentTherapy().setDiseaseClass(patientRequest.getDisease_class());
+        }
 
         newTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        patient.addTreatment(newTreatment, dateModified);
         newTreatment.setPatientType(PatientType.TransferredIn);
+
+        patient.addTreatment(newTreatment, dateModified);
     }
 
 }

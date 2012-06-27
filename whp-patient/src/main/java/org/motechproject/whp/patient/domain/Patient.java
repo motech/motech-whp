@@ -164,4 +164,5 @@ public class Patient extends MotechBaseDataObject {
     public boolean isValid(List<WHPErrorCode> errorCodes) {
         return currentTreatment.isValid(errorCodes);
     }
+
 }

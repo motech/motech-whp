@@ -53,6 +53,7 @@ public class PatientBuilder {
         treatment.setPatientType(PatientType.New);
         treatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
         treatment.addWeightStatistics(new WeightStatisticsRecord(WeightInstance.PreTreatment, 100.0, today));
+        treatment.setTbRegistrationNumber("tbRegistrationNumber");
         return treatment;
     }
 
