@@ -51,10 +51,10 @@
             <name>Spring Maven Repository</name>
             <url>http://maven.springframework.org/snapshot</url>
             <releases>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </releases>
             <snapshots>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
     </repositories>
