@@ -52,4 +52,5 @@ public abstract class TreatmentUpdateTest extends BaseTest {
     protected ProviderPage loginAsProvider(TestProvider provider) {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
     }
+
 }

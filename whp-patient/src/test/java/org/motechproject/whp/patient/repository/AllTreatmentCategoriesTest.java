@@ -27,9 +27,9 @@ public class AllTreatmentCategoriesTest extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        cat99 = new TreatmentCategory("cat99", CODE, 9, 9, 9, 81, 81, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Tuesday));
+        cat99 = new TreatmentCategory("cat99", CODE, 9, 9, 81, 4, 12, 9, 81, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Tuesday));
         allTreatmentCategories.add(cat99);
-        cat100 = new TreatmentCategory("cat100", "100", 10, 10, 10, 100, 100, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Tuesday));
+        cat100 = new TreatmentCategory("cat100", "100", 10, 10, 100, 4, 12, 10, 100, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Tuesday));
         allTreatmentCategories.add(cat100);
     }
 

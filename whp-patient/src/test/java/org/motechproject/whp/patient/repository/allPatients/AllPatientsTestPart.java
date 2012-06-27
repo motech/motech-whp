@@ -42,7 +42,7 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     }
 
     private Therapy createTherapy() {
-        TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 18, 24, 54, Arrays.asList(DayOfWeek.Monday));
+        TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 36, 4, 12, 22, 66, Arrays.asList(DayOfWeek.Monday));
         Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 200);
         allTherapies.add(therapy);
         return therapy;

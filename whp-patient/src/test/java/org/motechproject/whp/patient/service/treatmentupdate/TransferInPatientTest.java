@@ -77,7 +77,7 @@ public class TransferInPatientTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setDisease_class(patient.currentTherapy().getDiseaseClass());
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
-        patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 18, 24, 54, threeDaysAWeek));
+        patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 

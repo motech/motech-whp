@@ -12,7 +12,12 @@ public class FetchAllPatientsTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldFetchPatientsWithActiveTreatment() {
-        Patient withActiveTreatment = createPatient("patientId", "providerId1");
+        Patient withoutActiveTreatment = createPatient("patientId1", "providerId1");
+        withoutActiveTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment.setOnActiveTreatment(false);
+        allPatients.update(withoutActiveTreatment);
+
+        Patient withActiveTreatment = createPatient("patientId2", "providerId1");
         assertPatientEquals(new Patient[]{withActiveTreatment}, allPatients.getAllWithActiveTreatment().toArray());
     }
 
