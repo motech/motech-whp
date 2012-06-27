@@ -244,4 +244,8 @@ div.buttons a, div.buttons button {
     margin: 0;
     padding: 0.3em;
 }
+.ui-menu {
+    overflow: auto;
+    max-height: 130px;
+}
 
