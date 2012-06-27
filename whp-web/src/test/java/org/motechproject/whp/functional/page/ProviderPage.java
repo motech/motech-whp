@@ -9,6 +9,8 @@ import org.openqa.selenium.support.How;
 
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 public class ProviderPage extends ListPatientsPage {
 
     @FindBy(how = How.CLASS_NAME, using = "updateAdherenceLink")
@@ -27,6 +29,9 @@ public class ProviderPage extends ListPatientsPage {
             }
         }
         updateAdherenceLinks.get(index).findElement(By.linkText("Edit")).click();
-        return MyPageFactory.initElements(webDriver, UpdateAdherencePage.class);
+        UpdateAdherencePage updateAdherencePage = MyPageFactory.initElements(webDriver, UpdateAdherencePage.class);
+        assertTrue(updateAdherencePage.getAdherenceCaption().contains(patientId));
+        return updateAdherencePage;
+
     }
 }

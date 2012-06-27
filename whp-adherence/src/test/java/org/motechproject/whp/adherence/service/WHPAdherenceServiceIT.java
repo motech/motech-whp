@@ -31,7 +31,9 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
@@ -87,6 +89,21 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
         assertEquals(3, adherenceList.size());
         // TODO : Write more asserts to check meta on saved adherence
+    }
+
+    @Test
+    public void shouldOverwritePillStatusForAdherenceUpdate() {
+        patientService.createPatient(new PatientRequestBuilder().withDefaults().build());
+
+        WeeklyAdherenceSummary threeDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        adherenceService.recordAdherence(threeDosesTaken, auditParams);
+
+        WeeklyAdherenceSummary zeroDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
+        adherenceService.recordAdherence(zeroDosesTaken, auditParams);
+
+        Patient patient = allPatients.findByPatientId(PATIENT_ID);
+        WeeklyAdherenceSummary currentWeekAdherence = adherenceService.currentWeekAdherence(patient);
+        assertEquals(0, currentWeekAdherence.getDosesTaken());
     }
 
     @Test

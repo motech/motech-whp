@@ -41,9 +41,28 @@ public class UpdateAdherenceTest extends BaseTest {
         adjustDateTime(DateTime.now().withDayOfWeek(7));
 
         UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(testPatient.getCaseId());
-        assertTrue(updateAdherencePage.getAdherenceCaption().contains(testPatient.getCaseId()));
-        updateAdherencePage.setNumberOfDosesTaken(1);
-        boolean isTaken = updateAdherencePage.submit().clickEditAdherenceLink(testPatient.getCaseId()).isDosesTaken(1);
+        updateAdherencePage.setNumberOfDosesTaken(3);
+
+        updateAdherencePage = updateAdherencePage.submit().clickEditAdherenceLink(testPatient.getCaseId());
+        boolean isTaken = updateAdherencePage.isDosesTaken(3);
+        assertTrue(isTaken);
+    }
+
+    @Test
+    public void shouldAllowMultipleUpdateToAdherence() {
+        adjustDateTime(DateTime.now().withDayOfWeek(7));
+
+        UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(testPatient.getCaseId());
+        updateAdherencePage.setNumberOfDosesTaken(3);
+
+        updateAdherencePage = updateAdherencePage.submit().clickEditAdherenceLink(testPatient.getCaseId());
+        boolean isTaken = updateAdherencePage.isDosesTaken(3);
+        assertTrue(isTaken);
+
+        updateAdherencePage.setNumberOfDosesTaken(0);
+        updateAdherencePage.submit().clickEditAdherenceLink(testPatient.getCaseId());
+        isTaken = updateAdherencePage.isDosesTaken(0);
+
         assertTrue(isTaken);
     }
 
