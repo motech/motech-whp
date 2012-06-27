@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.test.serial;
 
 import org.joda.time.LocalDate;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.CaseUpdate;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
     @Test
+    @Ignore
     public void shouldBuildIPTreatmentCardForPatient() {
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 8)));
