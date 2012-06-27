@@ -2,24 +2,17 @@ package org.motechproject.whp.functional.test.provider;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.ListProvidersPage;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
 public class ListAllProvidersTest extends BaseTest {
-
-    ProviderDataService providerDataService;
 
     private ListProvidersPage listProvidersPage;
 
@@ -34,9 +27,8 @@ public class ListAllProvidersTest extends BaseTest {
         listProvidersPage = loginAsItAdmin();
     }
 
-
     public void setupProvider() {
-        providerDataService = new ProviderDataService(webDriver);
+        ProviderDataService providerDataService = new ProviderDataService(webDriver);
         provider1 = providerDataService.createProvider("Begusarai");
         provider2 = providerDataService.createProvider("Saharsa");
         provider3 = providerDataService.createProvider("Saharsa");

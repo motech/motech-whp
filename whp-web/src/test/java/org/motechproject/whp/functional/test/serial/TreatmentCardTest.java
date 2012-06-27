@@ -1,10 +1,8 @@
 package org.motechproject.whp.functional.test.serial;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.MyPageFactory;
@@ -13,19 +11,14 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.IOException;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationFunctionalTestContext.xml")
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
     @Test
@@ -36,13 +29,13 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 8)));
 
-        UpdateAdherencePage updateAdherencePage = loginAsProvider(provider).clickEditAdherenceLink(patientRequest.getCase_id());
+        UpdateAdherencePage updateAdherencePage = loginAsProvider(provider).clickEditAdherenceLink(patient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(3);
         ProviderPage providerPage = updateAdherencePage.submit();
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 15)));
 
-        updateAdherencePage = providerPage.clickEditAdherenceLink(patientRequest.getCase_id());
+        updateAdherencePage = providerPage.clickEditAdherenceLink(patient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(1);
         providerPage = updateAdherencePage.submit();
 
@@ -50,16 +43,16 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 13, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
 
         PatientRequest resumeTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 19, 0, 0, 0))
                 .build();
 
@@ -67,7 +60,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 29)));
 
-        updateAdherencePage = providerPage.clickEditAdherenceLink(patientRequest.getCase_id());
+        updateAdherencePage = providerPage.clickEditAdherenceLink(patient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(2);
         providerPage = updateAdherencePage.submit();
         providerPage.logout();
@@ -76,8 +69,8 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 7, 25, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
@@ -89,8 +82,8 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         PatientWebRequest closeTreatmentUpdateRequest = new PatientWebRequestBuilder()
                 .withDefaultsForCloseTreatment()
                 .withTreatmentOutcome("TransferredOut")
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withLastModifiedDate("28/07/2012 04:55:50")
                 .build();
         patientWebService.updateCase(closeTreatmentUpdateRequest);
@@ -99,8 +92,8 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
                 .withDefaultsForTransferIn()
                 .withProviderId(newProvider.getProviderId())
                 .withTreatmentCategory("01")
-                .withDiseaseClass(patientRequest.getDisease_class())
-                .withCaseId(patientRequest.getCase_id())
+                .withDiseaseClass(DiseaseClass.valueOf(patient.getDiseaseClass()))
+                .withCaseId(patient.getCaseId())
                 .withLastModifiedDate("29/07/2012 04:55:50")
                 .build();
         patientWebService.updateCase(transferInPatientRequest);
@@ -109,7 +102,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 8, 5)));
 
-        updateAdherencePage = loginAsProvider(newProvider).clickEditAdherenceLink(patientRequest.getCase_id());
+        updateAdherencePage = loginAsProvider(newProvider).clickEditAdherenceLink(patient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(3);
         providerPage = updateAdherencePage.submit();
         providerPage.logout();
@@ -120,22 +113,22 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withTbId(patientRequest.getTb_id())
-                .withCaseId(patientRequest.getCase_id())
+                .withTbId(patient.getTbId())
+                .withCaseId(patient.getCaseId())
                 .withDateModified(DateUtil.newDateTime(2012, 8, 7, 0, 0, 0))
                 .build();
         factory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 8, 12)));
 
-        updateAdherencePage = loginAsProvider(newProvider).clickEditAdherenceLink(patientRequest.getCase_id());
+        updateAdherencePage = loginAsProvider(newProvider).clickEditAdherenceLink(patient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(3);
         providerPage = updateAdherencePage.submit();
         providerPage.logout();
 
         ListPatientsPage listPatientsPage = loginAsCMFAdminAndListAllPatients();
 
-        PatientDashboardPage patientDashboardPage = listPatientsPage.clickOnPatient(patientRequest.getCase_id());
+        PatientDashboardPage patientDashboardPage = listPatientsPage.clickOnPatient(patient.getCaseId());
 
         /* Asserting on adherence data given by provider */
 
@@ -230,10 +223,5 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
     private ListPatientsPage loginAsCMFAdminAndListAllPatients() {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().navigateToShowAllPatients();
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
     }
 }

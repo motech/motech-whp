@@ -13,12 +13,16 @@ public class PatientCreatePage extends Page {
 
     @FindBy(how = How.ID, using = "case_id")
     WebElement caseId;
+    @FindBy(how = How.ID, using = "tb_id")
+    WebElement tbId;
     @FindBy(how = How.ID, using = "provider_id")
     WebElement providerId;
     @FindBy(how = How.ID, using = "first_name")
     WebElement firstName;
     @FindBy(how = How.ID, using = "av")
     WebElement village;
+    @FindBy(how = How.ID, using = "dclass")
+    WebElement diseaseClass;
     @FindBy(how = How.ID, using = "submit")
     WebElement submit;
 
@@ -29,9 +33,11 @@ public class PatientCreatePage extends Page {
     @Override
     public void postInitialize() {
         caseId = WebDriverFactory.createWebElement(caseId);
+        tbId = WebDriverFactory.createWebElement(tbId);
         providerId = WebDriverFactory.createWebElement(providerId);
         firstName = WebDriverFactory.createWebElement(firstName);
         village = WebDriverFactory.createWebElement(village);
+        diseaseClass = WebDriverFactory.createWebElement(diseaseClass);
         submit = WebDriverFactory.createWebElement(submit);
     }
 
@@ -47,9 +53,11 @@ public class PatientCreatePage extends Page {
 
     public LoginPage createPatient(TestPatient testPatient){
         this.caseId.sendKeys(testPatient.getCaseId());
+        this.tbId.sendKeys(testPatient.getTbId());
         this.providerId.sendKeys(testPatient.getProviderId());
         this.firstName.sendKeys(testPatient.getFirstName());
         this.village.sendKeys(testPatient.getVillage());
+        this.diseaseClass.sendKeys(testPatient.getDiseaseClass());
         submit.click();
         webDriver.get(LoginPage.LOGIN_URL);
         return MyPageFactory.initElements(webDriver, LoginPage.class);

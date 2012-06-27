@@ -61,7 +61,7 @@ public class ListPatientsPage extends LoggedInUserPage {
     }
 
     public boolean isPatientTreatmentPaused(String patientId) {
-        return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").equals("rgb(255, 182, 193)");
+        return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").contains("255,182,193");
     }
 
     public PatientDashboardPage clickOnPatient(String patientId) {

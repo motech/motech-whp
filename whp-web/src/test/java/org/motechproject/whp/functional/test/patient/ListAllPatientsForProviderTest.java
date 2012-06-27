@@ -1,9 +1,6 @@
 package org.motechproject.whp.functional.test.patient;
 
-import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestPatient;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
@@ -12,15 +9,6 @@ import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.ProviderPage;
 import org.motechproject.whp.functional.service.PatientDataService;
 import org.motechproject.whp.functional.service.ProviderDataService;
-import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.service.PatientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.IOException;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -58,10 +46,5 @@ public class ListAllPatientsForProviderTest extends BaseTest {
 
     ProviderPage loginAsProvider() {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
     }
 }
