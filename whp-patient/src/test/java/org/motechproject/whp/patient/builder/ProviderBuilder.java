@@ -28,7 +28,7 @@ public class ProviderBuilder {
         return this;
     }
 
-    public static ProviderBuilder startRecording() {
+    public static ProviderBuilder newProviderBuilder() {
         return new ProviderBuilder();
     }
 

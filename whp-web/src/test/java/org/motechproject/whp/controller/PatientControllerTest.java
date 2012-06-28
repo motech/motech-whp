@@ -12,6 +12,8 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PhaseStartDates;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -42,18 +45,24 @@ public class PatientControllerTest {
     @Mock
     AllAdherenceLogs allAdherenceLogs;
     @Mock
+    ProviderService providerService;
+    @Mock
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     PatientController patientController;
 
     Patient patient;
+    Provider provider;
 
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients, allAdherenceLogs, phaseUpdateOrchestrator);
-        patient = new PatientBuilder().withDefaults().build();
+        patientController = new PatientController(allPatients, allAdherenceLogs, providerService, phaseUpdateOrchestrator);
+        String providerId = "providerid";
+        patient = new PatientBuilder().withDefaults().withProviderId(providerId).build();
+        provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
     }
 
     @Test
@@ -76,8 +85,9 @@ public class PatientControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute("patient", patient))
+                .andExpect(model().attribute("provider", provider))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
     }

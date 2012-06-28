@@ -71,4 +71,8 @@ public class ProviderService {
         }
         return allWebUsers;
     }
+
+    public Provider fetchByProviderId(String providerId){
+        return allProviders.findByProviderId(providerId);
+    }
 }

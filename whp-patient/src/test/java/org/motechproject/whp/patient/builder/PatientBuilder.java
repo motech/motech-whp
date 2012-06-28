@@ -112,4 +112,9 @@ public class PatientBuilder {
         patient.getCurrentTreatment().setEndDate(endDate);
         return this;
     }
+
+    public PatientBuilder withProviderId(String providerId) {
+        patient.getCurrentTreatment().setProviderId(providerId);
+        return this;
+    }
 }

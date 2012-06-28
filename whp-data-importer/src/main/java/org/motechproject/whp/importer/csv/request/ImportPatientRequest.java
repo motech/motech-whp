@@ -32,9 +32,6 @@ public class ImportPatientRequest {
     @ColumnName(name = "PHI: World Health Partners (default for all cases)")
     private String phi;
 
-    @ColumnName(name = "Patient Address: Landmark")
-    private String address_landmark;
-
     @NotNullOrEmpty
     @ColumnName(name = "Patient First Name*")
     private String first_name;
@@ -64,6 +61,9 @@ public class ImportPatientRequest {
     @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Location*")
     private String address_location;
+
+    @ColumnName(name = "Patient Address: Landmark")
+    private String address_landmark;
 
     @NotNullOrEmpty
     @ColumnName(name = "Patient Address: Village*")

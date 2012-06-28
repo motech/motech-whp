@@ -8,6 +8,7 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PhaseStartDates;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.util.FlashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,12 +30,14 @@ public class PatientController extends BaseController {
     public static final String PATIENT_LIST = "patientList";
     AllPatients allPatients;
     AllAdherenceLogs allAdherenceLogs;
+    private ProviderService providerService;
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     @Autowired
-    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
+    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, ProviderService providerService, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
         this.allPatients = allPatients;
         this.allAdherenceLogs = allAdherenceLogs;
+        this.providerService = providerService;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
     }
 
@@ -56,7 +59,7 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "show", method = RequestMethod.GET)
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = allPatients.findByPatientId(patientId);
-        setupModel(uiModel, request, patient);
+        setupDashboardModel(uiModel, request, patient);
         return "patient/show";
     }
 
@@ -81,10 +84,12 @@ public class PatientController extends BaseController {
         uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
     }
 
-    private void setupModel(Model uiModel, HttpServletRequest request, Patient patient) {
+    private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         uiModel.addAttribute("patient", patient);
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
+        uiModel.addAttribute("provider", providerService.fetchByProviderId(patient.providerId()));
+
         List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
         if (CollectionUtils.isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);

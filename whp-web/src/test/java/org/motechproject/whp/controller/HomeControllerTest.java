@@ -38,7 +38,7 @@ public class HomeControllerTest {
 
     @Test
     public void shouldRedirectToTheListPageForProviderUponLogin() {
-        Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
+        Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUserFor(provider));
         setupProvider(provider);
         assertEquals("redirect:/patients?provider=" + provider.getProviderId(), homeController.homePage(request));
@@ -46,7 +46,7 @@ public class HomeControllerTest {
 
     @Test
     public void shouldRedirectToProvidersListingPageUponItAdminLogin() {
-        Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
+        Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.IT_ADMIN));
         setupProvider(provider);
         assertEquals("redirect:/providers/list", homeController.homePage(request));
@@ -54,7 +54,7 @@ public class HomeControllerTest {
 
     @Test
     public void shouldRedirectToTheAllPatientsPageWhenCmfAdminLogsIn() {
-        Provider provider = ProviderBuilder.startRecording().withDefaults().withId(UUID.randomUUID().toString()).build();
+        Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedAdmin(WHPRole.CMF_ADMIN));
         setupProvider(provider);
         assertEquals("redirect:/patients/list", homeController.homePage(request));

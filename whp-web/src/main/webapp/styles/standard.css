@@ -50,8 +50,9 @@ body {
     background-color: white;
 }
 
-.text-center {
+.text-center, .text-center th, .text-center td{
     text-align: center;
+    vertical-align: middle;
 }
 
 #version {
@@ -249,3 +250,6 @@ div.buttons a, div.buttons button {
     max-height: 130px;
 }
 
+.patient-info{
+    height: 640px;
+}
