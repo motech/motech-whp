@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
     @Test
-    @Ignore
     public void shouldBuildIPTreatmentCardForPatient() {
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 7, 8)));
@@ -56,11 +55,11 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         TestProvider newProvider = providerDataService.createProvider();
 
-        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), testPatient.getTbId());
+        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), "28/07/2012", testPatient.getTbId());
         caseDataService.updateCase(closeTreatmentRequest);
 
         String transferInTBId = "elevenDigit";
-        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), transferInTBId, "01", newProvider.getProviderId());
+        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), "29/07/2012", transferInTBId, "01", newProvider.getProviderId());
         caseDataService.updateCase(transferInPatientRequest);
 
         /* Logging adherence for patient as new provider */
@@ -76,7 +75,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
 
         /* Pausing treatment */
 
-        pauseTreatmentRequest = CaseUpdate.PauseTreatmentRequest(testPatient.getCaseId(), "07/08/2012", testPatient.getTbId(), "paws");
+        pauseTreatmentRequest = CaseUpdate.PauseTreatmentRequest(testPatient.getCaseId(), "07/08/2012", transferInTBId, "paws");
         caseDataService.updateCase(pauseTreatmentRequest);
 
         adjustDateTime(DateUtil.newDateTime(new LocalDate(2012, 8, 12)));
@@ -150,7 +149,7 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         /* Asserting on dates that are not even present in the table*/
 
         assertDatesNotEvenPresent(treatmentCardPage, new LocalDate(2012, 6, 30));
-        assertDatesNotEvenPresent(treatmentCardPage, new LocalDate(2012, 12, 1));
+        assertDatesNotEvenPresent(treatmentCardPage, new LocalDate(2013, 1, 1));
     }
 
     private void assertTreatmentNotPausedOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {

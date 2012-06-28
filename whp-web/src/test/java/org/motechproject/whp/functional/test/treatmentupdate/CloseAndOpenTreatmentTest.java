@@ -16,7 +16,7 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
 
-        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), testPatient.getTbId());
+        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), "09/05/2012", testPatient.getTbId());
         caseDataService.updateCase(closeTreatmentRequest);
 
         providerPage.logout();

@@ -5,8 +5,8 @@ import java.io.*;
 
 public class CaseUpdate {
 
-    public static String CloseTreatmentRequest(String caseId, String tbId) {
-        String request = String.format(readFile("close_treatment.xml"), caseId, tbId);
+    public static String CloseTreatmentRequest(String caseId, String closeDate, String tbId) {
+        String request = String.format(readFile("close_treatment.xml"), caseId, closeDate, tbId);
         System.out.println(request);
         return request;
     }
@@ -17,8 +17,8 @@ public class CaseUpdate {
         return request;
     }
 
-    public static String TransferInPatientRequest(String caseId, String tbId, String treatmentCategory, String providerId) {
-        String request = String.format(readFile("transfer_in.xml"), caseId, tbId, treatmentCategory, providerId);
+    public static String TransferInPatientRequest(String caseId, String transferDate, String tbId, String treatmentCategory, String providerId) {
+        String request = String.format(readFile("transfer_in.xml"), caseId, transferDate, tbId, treatmentCategory, providerId);
         System.out.println(request);
         return request;
     }

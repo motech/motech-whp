@@ -32,7 +32,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         //record some adherence so that we can verify the same start date on transfer in - to distinguish between transfer in and provider change
         providerPage.clickEditAdherenceLink(testPatient.getCaseId()).setNumberOfDosesTaken(2).submit();
 
-        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), testPatient.getTbId());
+        String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), "09/05/2012", testPatient.getTbId());
         caseDataService.updateCase(closeTreatmentRequest);
         providerPage.logout();
         providerPage = loginAsProvider(provider1);
@@ -41,7 +41,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         assertFalse(providerPage.hasTbId(testPatient.getTbId()));
 
         String transferInTBId = "elevenDigit";
-        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), transferInTBId, "01", provider2.getProviderId());
+        String transferInPatientRequest = CaseUpdate.TransferInPatientRequest(testPatient.getCaseId(), "10/05/2012", transferInTBId, "01", provider2.getProviderId());
         caseDataService.updateCase(transferInPatientRequest);
 
         providerPage.logout();
