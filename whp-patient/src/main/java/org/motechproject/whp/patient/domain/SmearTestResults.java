@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,9 +26,9 @@ public class SmearTestResults {
         return false;
     }
 
-    private SmearTestRecord resultForInstance(SmearTestSampleInstance smearTestSampleInstance) {
+    private SmearTestRecord resultForInstance(SampleInstance sampleInstance) {
         for (SmearTestRecord smearTestRecord : this.all) {
-            if (smearTestRecord.isOfInstance(smearTestSampleInstance))
+            if (smearTestRecord.isOfInstance(sampleInstance))
                 return smearTestRecord;
         }
         return null;
@@ -51,7 +51,7 @@ public class SmearTestResults {
         return this.all.isEmpty();
     }
 
-    public void add(SmearTestSampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result) {
+    public void add(SampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result) {
         if (smearSampleInstance != null) {
             this.add(new SmearTestRecord(smearSampleInstance, test1Date, test1Result, test2Date, test2Result));
         }

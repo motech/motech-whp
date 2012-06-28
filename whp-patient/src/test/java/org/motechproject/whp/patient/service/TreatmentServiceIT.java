@@ -15,8 +15,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -153,8 +152,8 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
-                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
-                .withWeightStatistics(WeightInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
+                .withSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
+                .withWeightStatistics(SampleInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -163,13 +162,13 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
         WeightStatisticsRecord weightStatisticsRecord = updatedPatient.getWeightStatistics().get(0);
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_1());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_2());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_2());
 
-        assertEquals(WeightInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
+        assertEquals(SampleInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
         assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
         assertEquals(30.00, weightStatisticsRecord.getWeight());
     }

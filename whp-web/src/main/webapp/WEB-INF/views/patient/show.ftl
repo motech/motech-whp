@@ -40,7 +40,7 @@
 <div class="patient-info">
     <div class="pull-left">
 
-        <table class="table table-bordered">
+        <table class="table table-bordered default-arrow">
             <tr>
                 <td>State</td>
                 <td>${patient.currentTreatment.patientAddress.address_state}</td>

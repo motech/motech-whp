@@ -91,7 +91,7 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope})
     private String address_state;
 
-    @Enumeration(type = SmearTestSampleInstance.class)
+    @Enumeration(type = SampleInstance.class)
     private String smear_sample_instance;
 
     @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
@@ -106,7 +106,7 @@ public class PatientWebRequest {
     @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_2;
 
-    @Enumeration(type = WeightInstance.class)
+    @Enumeration(type = SampleInstance.class)
     private String weight_instance;
 
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
@@ -184,8 +184,8 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setWeightStatistics(String weightInstance, String weight) {
-        this.weight_instance = weightInstance;
+    public PatientWebRequest setWeightStatistics(String SampleInstance, String weight) {
+        this.weight_instance = SampleInstance;
         this.weight = weight;
         return this;
     }

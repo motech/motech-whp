@@ -51,7 +51,7 @@ public class ImportPatientRequestBuilder {
                 .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
-    public ImportPatientRequestBuilder withSmearTestResults(SmearTestSampleInstance type,
+    public ImportPatientRequestBuilder withSmearTestResults(SampleInstance type,
                                                             String testResultDate1,
                                                             String testResult1,
                                                             String testResultDate2,
@@ -150,7 +150,7 @@ public class ImportPatientRequestBuilder {
                 .withPhi(phi);
     }
 
-    public ImportPatientRequestBuilder withWeightStatistics(WeightInstance type,
+    public ImportPatientRequestBuilder withWeightStatistics(SampleInstance type,
                                                             String measuringDate,
                                                             String weight) {
         switch (type) {

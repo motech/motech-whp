@@ -5,8 +5,8 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -25,7 +25,7 @@ public class PersistenceTestPart extends AllPatientsTestPart {
         assertEquals(Gender.M, savedPatient.getGender());
 
         SmearTestRecord smearTestRecord = savedPatient.getCurrentTreatment().getSmearTestResults().latestResult();
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestRecord.getSmear_test_date_1());
     }
@@ -46,7 +46,7 @@ public class PersistenceTestPart extends AllPatientsTestPart {
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
 
         SmearTestRecord smearTestRecord = savedPatient.getCurrentTreatment().getSmearTestResults().latestResult();
-        assertEquals(SmearTestSampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestRecord.getSmear_test_date_1());
     }

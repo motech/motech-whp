@@ -4,14 +4,14 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 
 import java.util.List;
 
 @Data
 public class WeightStatisticsRecord {
 
-    private WeightInstance weight_instance;
+    private SampleInstance weight_instance;
     private Double weight;
     private LocalDate measuringDate;
 
@@ -19,8 +19,8 @@ public class WeightStatisticsRecord {
     public WeightStatisticsRecord() {
     }
 
-    public WeightStatisticsRecord(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
-        this.weight_instance = weightInstance;
+    public WeightStatisticsRecord(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
+        this.weight_instance = SampleInstance;
         this.weight = weight;
         this.measuringDate = measuringDate;
     }
@@ -40,7 +40,7 @@ public class WeightStatisticsRecord {
     }
 
     @JsonIgnore
-    public boolean isOfInstance(WeightInstance weightInstance) {
-        return this.weight_instance.equals(weightInstance);
+    public boolean isOfInstance(SampleInstance SampleInstance) {
+        return this.weight_instance.equals(SampleInstance);
     }
 }

@@ -16,7 +16,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -131,7 +131,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
-                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, null, null, null, null)
+                .withSmearTestResults(SampleInstance.PreTreatment, null, null, null, null)
                 .withTbId("elevenDigit")
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);

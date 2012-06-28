@@ -5,8 +5,8 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.common.WHPConstants;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class ImportSmearTestResultsMapper {
 
     public SmearTestResults map(ImportPatientRequest importPatientRequest) {
         SmearTestResults smearTestResults = new SmearTestResults();
-        for (SmearTestSampleInstance instance : SmearTestSampleInstance.values()) {
+        for (SampleInstance instance : SampleInstance.values()) {
             SmearTestResultRequest request = importPatientRequest.getSmearTestResultRequestByType(instance);
             if (request != null && request.isNotEmpty()) {
                 SmearTestResult test1Result = (SmearTestResult) stringToEnumeration.convert(request.getResult1(), SmearTestResult.class);

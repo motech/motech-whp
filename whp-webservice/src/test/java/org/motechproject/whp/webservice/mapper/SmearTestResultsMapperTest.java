@@ -8,7 +8,7 @@ import org.motechproject.whp.webservice.request.PatientWebRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
-import static org.motechproject.whp.refdata.domain.SmearTestSampleInstance.PreTreatment;
+import static org.motechproject.whp.refdata.domain.SampleInstance.PreTreatment;
 
 public class SmearTestResultsMapperTest {
 

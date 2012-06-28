@@ -29,8 +29,8 @@ public class TreatmentBuilder {
         treatment.setTherapy(defaultTherapy());
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);
-        treatment.addSmearTestResult(new SmearTestRecord(SmearTestSampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
-        treatment.addWeightStatistics(new WeightStatisticsRecord(WeightInstance.PreTreatment, 100.0, today));
+        treatment.addSmearTestResult(new SmearTestRecord(SampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
+        treatment.addWeightStatistics(new WeightStatisticsRecord(SampleInstance.PreTreatment, 100.0, today));
         return this;
     }
 

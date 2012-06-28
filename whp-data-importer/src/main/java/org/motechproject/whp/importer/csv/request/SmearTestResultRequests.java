@@ -5,8 +5,8 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.common.WHPConstants;
 import org.springframework.util.StringUtils;
 
@@ -30,24 +30,24 @@ public class SmearTestResultRequests {
     @Valid
     private SmearTestResultRequest endTreatmentSmearTestResult = new SmearTestResultRequest();
 
-    public void setDate1(SmearTestSampleInstance smearTestSampleInstance, String date1) {
-        getSmearTestInstanceRecord(smearTestSampleInstance).setDate1(date1);
+    public void setDate1(SampleInstance sampleInstance, String date1) {
+        getSmearTestInstanceRecord(sampleInstance).setDate1(date1);
     }
 
-    public void setResult1(SmearTestSampleInstance smearTestSampleInstance, String result1) {
-        getSmearTestInstanceRecord(smearTestSampleInstance).setResult1(result1);
+    public void setResult1(SampleInstance sampleInstance, String result1) {
+        getSmearTestInstanceRecord(sampleInstance).setResult1(result1);
     }
 
-    public void setDate2(SmearTestSampleInstance smearTestSampleInstance, String date2) {
-        getSmearTestInstanceRecord(smearTestSampleInstance).setDate2(date2);
+    public void setDate2(SampleInstance sampleInstance, String date2) {
+        getSmearTestInstanceRecord(sampleInstance).setDate2(date2);
     }
 
-    public void setResult2(SmearTestSampleInstance smearTestSampleInstance, String result2) {
-        getSmearTestInstanceRecord(smearTestSampleInstance).setResult2(result2);
+    public void setResult2(SampleInstance sampleInstance, String result2) {
+        getSmearTestInstanceRecord(sampleInstance).setResult2(result2);
     }
 
-    public SmearTestResultRequest getSmearTestInstanceRecord(SmearTestSampleInstance smearTestSampleInstance) {
-        switch (smearTestSampleInstance) {
+    public SmearTestResultRequest getSmearTestInstanceRecord(SampleInstance sampleInstance) {
+        switch (sampleInstance) {
             case PreTreatment:
                 return preTreatmentSmearTestResult;
             case EndIP:
@@ -63,23 +63,23 @@ public class SmearTestResultRequests {
         }
     }
 
-    public boolean hasSmearTestInstanceRecord(SmearTestSampleInstance type) {
+    public boolean hasSmearTestInstanceRecord(SampleInstance type) {
         return StringUtils.hasText(getSmearTestInstanceRecord(type).getDate1());
     }
 
-    public String getTestDate1(SmearTestSampleInstance type) {
+    public String getTestDate1(SampleInstance type) {
         return getSmearTestInstanceRecord(type).getDate1();
     }
 
-    public String getTestResult1(SmearTestSampleInstance type) {
+    public String getTestResult1(SampleInstance type) {
         return getSmearTestInstanceRecord(type).getResult1();
     }
 
-    public String getTestDate2(SmearTestSampleInstance type) {
+    public String getTestDate2(SampleInstance type) {
         return getSmearTestInstanceRecord(type).getDate2();
     }
 
-    public String getTestResult2(SmearTestSampleInstance type) {
+    public String getTestResult2(SampleInstance type) {
         return getSmearTestInstanceRecord(type).getResult2();
     }
 

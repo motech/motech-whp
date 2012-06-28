@@ -19,7 +19,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -86,7 +86,7 @@ public class PatientRecordImporter {
     }
 
     private void setDefaultValuesIfEmpty(ImportPatientRequest request) {
-        if (StringUtils.isBlank(request.getWeightDate(WeightInstance.PreTreatment))) {
+        if (StringUtils.isBlank(request.getWeightDate(SampleInstance.PreTreatment))) {
             LocalDate registrationDate = (LocalDate) stringToDateTime.convert(request.getDate_modified(), LocalDate.class);
             request.setPreTreatmentWeightDate(registrationDate.toString(WHPConstants.DATE_FORMAT));
         }

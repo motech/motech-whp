@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class SmearTestResultsMapper {
     public SmearTestResults map(PatientWebRequest patientWebRequest) {
         SmearTestResults smearTestResults = new SmearTestResults();
         if (isNotEmpty(patientWebRequest.getSmear_sample_instance())) {
-            SmearTestSampleInstance smearSampleInstance = mapTestInstance(patientWebRequest.getSmear_sample_instance());
+            SampleInstance smearSampleInstance = mapTestInstance(patientWebRequest.getSmear_sample_instance());
             LocalDate test1Date = stringToLocalDate(patientWebRequest.getSmear_test_date_1());
             LocalDate test2Date = stringToLocalDate(patientWebRequest.getSmear_test_date_2());
             SmearTestResult test1Result = mapTestResult(patientWebRequest.getSmear_test_result_1());
@@ -35,10 +35,10 @@ public class SmearTestResultsMapper {
         return smearTestResults;
     }
 
-    private SmearTestSampleInstance mapTestInstance(String instance) {
-        return (SmearTestSampleInstance) stringToEnumeration.convert(
+    private SampleInstance mapTestInstance(String instance) {
+        return (SampleInstance) stringToEnumeration.convert(
                 instance,
-                SmearTestSampleInstance.class
+                SampleInstance.class
         );
     }
 

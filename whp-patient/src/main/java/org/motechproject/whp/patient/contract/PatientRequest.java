@@ -82,7 +82,7 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest addSmearTestResults(SmearTestSampleInstance smearSampleInstance,
+    public PatientRequest addSmearTestResults(SampleInstance smearSampleInstance,
                                               LocalDate smearTestDate1,
                                               SmearTestResult smear_result_1,
                                               LocalDate smearTestDate2,
@@ -91,9 +91,9 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest setWeightStatistics(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
-        if (weightInstance != null) {
-            weightStatistics.add(new WeightStatisticsRecord(weightInstance, weight, measuringDate));
+    public PatientRequest setWeightStatistics(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
+        if (SampleInstance != null) {
+            weightStatistics.add(new WeightStatisticsRecord(SampleInstance, weight, measuringDate));
         }
         return this;
     }

@@ -13,7 +13,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.validation.RequestValidator;
 
 import static java.util.Arrays.asList;
@@ -108,9 +108,9 @@ public class PatientRecordImporterUnitTest {
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)).isValid());
 
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest2.getWeightDate(WeightInstance.PreTreatment));
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest1.getWeightDate(SampleInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest2.getWeightDate(SampleInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(SampleInstance.PreTreatment));
 
         assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
         assertEquals(PatientType.Chronic.name(), importPatientRequest2.getPatient_type());
@@ -119,6 +119,6 @@ public class PatientRecordImporterUnitTest {
         assertEquals("WHP", importPatientRequest1.getPhi());
         assertEquals("WHP", importPatientRequest2.getPhi());
         assertEquals("yy", importPatientRequest3.getPhi());
-        assertEquals(patientRegDate.toString(dateFormat),importPatientRequest1.getWeightDate(WeightInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat),importPatientRequest1.getWeightDate(SampleInstance.PreTreatment));
     }
 }

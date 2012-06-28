@@ -3,7 +3,7 @@ package org.motechproject.whp.importer.csv.request.importPatientRequestTests;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -20,70 +20,70 @@ public class WeightStatisticsRecordsMappingTestPart {
     @Test
     public void hasPretreatmentWeightStatisticsWhenWeightDateIsNotNull() {
         importPatientRequest.setPreTreatmentWeightDate("19/11/2011");
-        assertTrue(importPatientRequest.hasWeightInstanceRecord(WeightInstance.PreTreatment));
+        assertTrue(importPatientRequest.hasWeightInstanceRecord(SampleInstance.PreTreatment));
     }
 
     @Test
     public void hasEndIpWeightStatisticsWhenWeightDateIsNotNull() {
         importPatientRequest.setEndIpWeightDate("19/11/2011");
-        assertTrue(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndIP));
+        assertTrue(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndIP));
     }
 
     @Test
     public void hasExtendedIpWeightStatisticsWhenWeightDateIsNotNull() {
         importPatientRequest.setExtendedIpWeightDate("19/11/2011");
-        assertTrue(importPatientRequest.hasWeightInstanceRecord(WeightInstance.ExtendedIP));
+        assertTrue(importPatientRequest.hasWeightInstanceRecord(SampleInstance.ExtendedIP));
     }
 
     @Test
     public void hasTwoMonthsIntoCpWeightStatisticsWhenWeightDateIsNotNull() {
         importPatientRequest.setTwoMonthsIntoCpWeightDate("19/11/2011");
-        assertTrue(importPatientRequest.hasWeightInstanceRecord(WeightInstance.TwoMonthsIntoCP));
+        assertTrue(importPatientRequest.hasWeightInstanceRecord(SampleInstance.TwoMonthsIntoCP));
     }
 
     @Test
     public void hasEndTreatmentWeightStatisticsWhenWeightDateIsNotNull() {
         importPatientRequest.setEndTreatmentWeightDate("19/11/2011");
-        assertTrue(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndTreatment));
+        assertTrue(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndTreatment));
     }
 
     @Test
     public void doesNotHavePretreatmentWeightStatisticsWhenWeightDateIsNull() {
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.PreTreatment));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.PreTreatment));
 
         importPatientRequest.setPreTreatmentWeightDate("");
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.PreTreatment));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.PreTreatment));
     }
 
     @Test
     public void doesNotHaveEndIpWeightStatisticsWhenWeightDateIsNull() {
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndIP));
 
         importPatientRequest.setEndIpWeightDate("");
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndIP));
     }
 
     @Test
     public void doesNotHaveExtendedIpWeightStatisticsWhenWeightDateIsNull() {
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.ExtendedIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.ExtendedIP));
 
         importPatientRequest.setExtendedIpWeightDate("");
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.ExtendedIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.ExtendedIP));
     }
 
     @Test
     public void doesNotHaveTwoMonthsIntoCpWeightStatisticsWhenWeightDateIsNull() {
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.TwoMonthsIntoCP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.TwoMonthsIntoCP));
 
         importPatientRequest.setTwoMonthsIntoCpWeightDate("");
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.TwoMonthsIntoCP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.TwoMonthsIntoCP));
     }
 
     @Test
     public void doesNotHaveEndTreatmentWeightStatisticsWhenWeightDateIsNull() {
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndIP));
 
         importPatientRequest.setEndTreatmentWeightDate("");
-        assertFalse(importPatientRequest.hasWeightInstanceRecord(WeightInstance.EndIP));
+        assertFalse(importPatientRequest.hasWeightInstanceRecord(SampleInstance.EndIP));
     }
 }

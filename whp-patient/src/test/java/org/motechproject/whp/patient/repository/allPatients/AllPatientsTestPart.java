@@ -49,12 +49,12 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     }
 
     private WeightStatisticsRecord weightStatistics() {
-        return new WeightStatisticsRecord(WeightInstance.PreTreatment, 88.0, DateUtil.today());
+        return new WeightStatisticsRecord(SampleInstance.PreTreatment, 88.0, DateUtil.today());
     }
 
     private SmearTestRecord smearTestResult() {
         SmearTestRecord smearTestRecord = new SmearTestRecord();
-        smearTestRecord.setSmear_sample_instance(SmearTestSampleInstance.PreTreatment);
+        smearTestRecord.setSmear_sample_instance(SampleInstance.PreTreatment);
         test1(smearTestRecord);
         test2(smearTestRecord);
         return smearTestRecord;

@@ -168,7 +168,7 @@ public class PatientRecordValidator {
             }
         }
 
-        for (SmearTestSampleInstance instance : SmearTestSampleInstance.values()) {
+        for (SampleInstance instance : SampleInstance.values()) {
             SmearTestResultRequests.SmearTestResultRequest expectedRecord = smearTestResultRequest.getSmearTestInstanceRecord(instance);
             SmearTestRecord actualRecord = getSmearTestRecord(smearTestResults, instance);
             validateSmearTestRecord(expectedRecord, actualRecord, instance, errors);
@@ -188,7 +188,7 @@ public class PatientRecordValidator {
             }
         }
 
-        for (WeightInstance instance : WeightInstance.values()) {
+        for (SampleInstance instance : SampleInstance.values()) {
             WeightStatisticsRequests.WeightStatisticsRequest expectedRecord = weightStatisticsRequest.getWeightStatisticsRecord(instance);
             WeightStatisticsRecord actualRecord = getWeightStatisticsRecord(weightStatistics, instance);
             validateWeightStatisticsRecord(request, expectedRecord, actualRecord, instance, errors);
@@ -196,7 +196,7 @@ public class PatientRecordValidator {
 
     }
 
-    private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SmearTestSampleInstance instanceType, List<String> errors) {
+    private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SampleInstance instanceType, List<String> errors) {
         String date1FieldName = "Date1 of SmearTestResult type " + instanceType.name();
         String date2FieldName = "Date2 of SmearTestResult type " + instanceType.name();
         String result1FieldName = "Result1 of SmearTestResult typ;e " + instanceType.name();
@@ -226,7 +226,7 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(expectedRecord.getResult2(), actualRecord.getSmear_test_result_2(), result2FieldName, errors, SmearTestResult.class);
     }
 
-    private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, WeightInstance instanceType, List<String> errors) {
+    private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, SampleInstance instanceType, List<String> errors) {
         String weightDateFieldName = "Measuring Date of WeightStatistics type " + instanceType.name();
         String weightFieldName = "Weight of WeightStatistics type " + instanceType.name();
 
@@ -250,7 +250,7 @@ public class PatientRecordValidator {
         }
     }
 
-    private SmearTestRecord getSmearTestRecord(SmearTestResults smearTestResults, SmearTestSampleInstance instanceType) {
+    private SmearTestRecord getSmearTestRecord(SmearTestResults smearTestResults, SampleInstance instanceType) {
         for (int i = 0; i < smearTestResults.size(); i++) {
             if (smearTestResults.get(i).getSmear_sample_instance().equals(instanceType))
                 return smearTestResults.get(i);
@@ -258,7 +258,7 @@ public class PatientRecordValidator {
         return null;
     }
 
-    private WeightStatisticsRecord getWeightStatisticsRecord(WeightStatistics weightStatistics, WeightInstance instanceType) {
+    private WeightStatisticsRecord getWeightStatisticsRecord(WeightStatistics weightStatistics, SampleInstance instanceType) {
         for (int i = 0; i < weightStatistics.size(); i++) {
             if (weightStatistics.get(i).getWeight_instance().equals(instanceType))
                 return weightStatistics.get(i);

@@ -11,7 +11,7 @@ import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +120,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(WeightInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
+        assertEquals(SampleInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
         assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().get(0).getWeight(), 0.0);
         assertEquals("10/10/2010", patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
     }

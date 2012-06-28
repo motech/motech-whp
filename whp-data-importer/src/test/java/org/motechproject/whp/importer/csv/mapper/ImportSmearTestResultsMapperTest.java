@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SmearTestSampleInstance;
 import org.motechproject.whp.common.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,22 +24,22 @@ public class ImportSmearTestResultsMapperTest {
     @Test
     public void shouldMapImportSmearTestResultsToSmearTestResults() {
         ImportPatientRequest importPatientRequest = new ImportPatientRequestBuilder()
-                .withSmearTestResults(SmearTestSampleInstance.PreTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .withSmearTestResults(SmearTestSampleInstance.EndIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .withSmearTestResults(SmearTestSampleInstance.ExtendedIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .withSmearTestResults(SmearTestSampleInstance.TwoMonthsIntoCP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .withSmearTestResults(SmearTestSampleInstance.EndTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SampleInstance.PreTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SampleInstance.EndIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SampleInstance.ExtendedIP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SampleInstance.TwoMonthsIntoCP, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
+                .withSmearTestResults(SampleInstance.EndTreatment, "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .build();
         SmearTestResults smearTestResults = importSmearTestResultMapper.map(importPatientRequest);
 
-        verifyMapping(importPatientRequest, smearTestResults, 0, SmearTestSampleInstance.PreTreatment);
-        verifyMapping(importPatientRequest, smearTestResults, 1, SmearTestSampleInstance.EndIP);
-        verifyMapping(importPatientRequest, smearTestResults, 2, SmearTestSampleInstance.ExtendedIP);
-        verifyMapping(importPatientRequest, smearTestResults, 3, SmearTestSampleInstance.TwoMonthsIntoCP);
-        verifyMapping(importPatientRequest, smearTestResults, 4, SmearTestSampleInstance.EndTreatment);
+        verifyMapping(importPatientRequest, smearTestResults, 0, SampleInstance.PreTreatment);
+        verifyMapping(importPatientRequest, smearTestResults, 1, SampleInstance.EndIP);
+        verifyMapping(importPatientRequest, smearTestResults, 2, SampleInstance.ExtendedIP);
+        verifyMapping(importPatientRequest, smearTestResults, 3, SampleInstance.TwoMonthsIntoCP);
+        verifyMapping(importPatientRequest, smearTestResults, 4, SampleInstance.EndTreatment);
     }
 
-    private void verifyMapping(ImportPatientRequest importPatientRequest, SmearTestResults smearTestResults, int smearTestResultIndex, SmearTestSampleInstance type) {
+    private void verifyMapping(ImportPatientRequest importPatientRequest, SmearTestResults smearTestResults, int smearTestResultIndex, SampleInstance type) {
         assertEquals(importPatientRequest.getTestDate1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
         assertEquals(importPatientRequest.getTestDate2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
         assertEquals(importPatientRequest.getTestResult1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_result_1().name());

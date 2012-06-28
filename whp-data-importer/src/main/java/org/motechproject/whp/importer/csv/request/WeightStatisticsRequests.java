@@ -2,7 +2,7 @@ package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
@@ -26,20 +26,20 @@ public class WeightStatisticsRequests {
     @Valid
     private WeightStatisticsRequest endTreatmentWeightStatistics = new WeightStatisticsRequest();
 
-    public boolean hasWeightStatistics(WeightInstance weightInstance) {
-        return StringUtils.hasText(getWeightStatisticsRecord(weightInstance).getWeightDate());
+    public boolean hasWeightStatistics(SampleInstance SampleInstance) {
+        return StringUtils.hasText(getWeightStatisticsRecord(SampleInstance).getWeightDate());
     }
 
-    public void setWeight(WeightInstance weightInstance, String weight) {
-        getWeightStatisticsRecord(weightInstance).setWeight(weight);
+    public void setWeight(SampleInstance SampleInstance, String weight) {
+        getWeightStatisticsRecord(SampleInstance).setWeight(weight);
     }
 
-    public void setWeightDate(WeightInstance weightInstance, String weightDate) {
-        getWeightStatisticsRecord(weightInstance).setWeightDate(weightDate);
+    public void setWeightDate(SampleInstance SampleInstance, String weightDate) {
+        getWeightStatisticsRecord(SampleInstance).setWeightDate(weightDate);
     }
 
-    public WeightStatisticsRequest getWeightStatisticsRecord(WeightInstance weightInstance) {
-        switch (weightInstance) {
+    public WeightStatisticsRequest getWeightStatisticsRecord(SampleInstance SampleInstance) {
+        switch (SampleInstance) {
             case PreTreatment:
                 return preTreatmentWeightStatistics;
             case EndIP:
@@ -55,15 +55,15 @@ public class WeightStatisticsRequests {
         }
     }
 
-    public boolean hasWeightInstanceRecord(WeightInstance type) {
+    public boolean hasWeightInstanceRecord(SampleInstance type) {
         return StringUtils.hasText(getWeightStatisticsRecord(type).getWeightDate());
     }
 
-    public String getWeightDate(WeightInstance type) {
+    public String getWeightDate(SampleInstance type) {
         return getWeightStatisticsRecord(type).getWeightDate();
     }
 
-    public String getWeight(WeightInstance type) {
+    public String getWeight(SampleInstance type) {
         return getWeightStatisticsRecord(type).getWeight();
     }
 

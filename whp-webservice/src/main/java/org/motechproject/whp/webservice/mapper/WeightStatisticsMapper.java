@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice.mapper;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class WeightStatisticsMapper {
         if (isNotEmpty(patientWebRequest.getWeight_instance())) {
             LocalDate measuringDate = parse(patientWebRequest.getDate_modified(), forPattern(WHPConstants.DATE_TIME_FORMAT));
             statistics.add(
-                    WeightInstance.valueOf(patientWebRequest.getWeight_instance()),
+                    SampleInstance.valueOf(patientWebRequest.getWeight_instance()),
                     Double.valueOf(patientWebRequest.getWeight()),
                     measuringDate
             );

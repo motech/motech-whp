@@ -20,7 +20,7 @@ public class PatientWebRequestBuilder {
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M.name(), PatientType.Chronic.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
-                .setWeightStatistics(WeightInstance.PreTreatment.name(), "99.7")
+                .setWeightStatistics(SampleInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
@@ -31,8 +31,8 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo(CASE_ID, null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
-                .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7")
+                .setSmearTestResults(SampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
+                .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, TB_ID, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
@@ -54,8 +54,8 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData("New", null)
                 .setTreatmentData("01", NEW_TB_ID, "newProviderId", "P", null, null)
-                .setSmearTestResults(SmearTestSampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
-                .setWeightStatistics(WeightInstance.EndTreatment.name(), "99.7");
+                .setSmearTestResults(SampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name())
+                .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7");
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
@@ -164,8 +164,8 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withWeightStatistics(String weightInstance, String weight) {
-        patientWebRequest.setWeightStatistics(weightInstance, weight);
+    public PatientWebRequestBuilder withWeightStatistics(String SampleInstance, String weight) {
+        patientWebRequest.setWeightStatistics(SampleInstance, weight);
         return this;
     }
 

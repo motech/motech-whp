@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.WeightInstance;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,9 +25,9 @@ public class WeightStatistics {
         return false;
     }
 
-    private WeightStatisticsRecord resultForInstance(WeightInstance weightInstance) {
+    private WeightStatisticsRecord resultForInstance(SampleInstance SampleInstance) {
         for (WeightStatisticsRecord weightStatisticsRecord : weightStatisticsRecords) {
-            if (weightStatisticsRecord.isOfInstance(weightInstance))
+            if (weightStatisticsRecord.isOfInstance(SampleInstance))
                 return weightStatisticsRecord;
         }
         return null;
@@ -37,9 +37,9 @@ public class WeightStatistics {
         return weightStatisticsRecords.get(weightStatisticsRecords.size() - 1);
     }
 
-    public WeightStatistics add(WeightInstance weightInstance, Double weight, LocalDate measuringDate) {
-        if (weightInstance != null) {
-            this.add(new WeightStatisticsRecord(weightInstance, weight, measuringDate));
+    public WeightStatistics add(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
+        if (SampleInstance != null) {
+            this.add(new WeightStatisticsRecord(SampleInstance, weight, measuringDate));
         }
         return this;
     }
