@@ -37,7 +37,25 @@ public class FetchAllPatientsTestPart extends AllPatientsTestPart {
         Patient belongingToSecondProvider = createPatient("patientId2", "providerId1");
         assertPatientEquals(
                 new Patient[]{belongingToFirstProvider, belongingToSecondProvider},
-                allPatients.getAllWithActiveTreatment().toArray()
-        );
+                allPatients.getAllWithActiveTreatment().toArray());
+    }
+
+    @Test
+    public void shouldFetchPatientsBelongingToDistrict() {
+        String district1 = "Vaishali";
+        String district2 = "Begusarai";
+
+        Patient patient1withDistrict1 = createPatient("patientId1", "providerId1", district1);
+        Patient patient2withDistrict1 = createPatient("patientId2", "providerId1", district1);
+
+        Patient patient3withDistrict2 = createPatient("patientId3", "providerId1", district2);
+        Patient patient4withDistrict2 = createPatient("patientId4", "providerId1", district2);
+
+        assertPatientEquals(
+                new Patient[]{patient1withDistrict1, patient2withDistrict1},
+                allPatients.getAllWithActiveTreatmentForDistrict(district1).toArray());
+        assertPatientEquals(
+                new Patient[]{patient3withDistrict2, patient4withDistrict2},
+                allPatients.getAllWithActiveTreatmentForDistrict(district2).toArray());
     }
 }

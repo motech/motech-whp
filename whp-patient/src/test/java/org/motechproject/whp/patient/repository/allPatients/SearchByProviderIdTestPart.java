@@ -49,7 +49,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
 
         Patient withActiveTreatment2 = createPatient("patientId4", "providerId2");
 
-        assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
-        assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentFor("providerId2").toArray());
+        assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentForProvider("providerId1").toArray());
+        assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentForProvider("providerId2").toArray());
     }
 }

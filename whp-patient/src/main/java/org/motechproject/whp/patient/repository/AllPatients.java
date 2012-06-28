@@ -63,14 +63,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patient;
     }
 
-    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
+    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit(doc.currentTreatment.providerId, doc._id);}}")
     public List<Patient> findByCurrentProviderId(String providerId) {
         if (providerId == null)
             return new ArrayList<Patient>();
         String keyword = providerId.toLowerCase();
-        ComplexKey startKey = ComplexKey.of(keyword, null);
-        ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q = createQuery("find_by_providerId").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        ViewQuery q = createQuery("find_by_providerId").key(keyword).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         for (Patient patient : patients) {
             loadPatientDependencies(patient);
@@ -78,14 +76,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
-    @View(name = "find_by_provider_having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
-    public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
+    @View(name = "find_by_provider_on_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
+    public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
         if (providerId == null)
             return new ArrayList<Patient>();
         String keyword = providerId.toLowerCase();
-        ComplexKey startKey = ComplexKey.of(keyword, null);
-        ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        ViewQuery q = createQuery("find_by_provider_on_active_treatment").key(keyword).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         for (Patient patient : patients) {
             loadPatientDependencies(patient);
@@ -112,5 +108,17 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             Therapy therapy = allTherapies.get(treatment.getTherapyDocId());
             treatment.setTherapy(therapy);
         }
+    }
+
+    @View(name = "find_by_district_on_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTreatment.patientAddress.address_district, doc._id);}}")
+    public List<Patient> getAllWithActiveTreatmentForDistrict(String districtName) {
+        if (districtName == null)
+            return new ArrayList();
+        ViewQuery q = createQuery("find_by_district_on_active_treatment").key(districtName).includeDocs(true).inclusiveEnd(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        for (Patient patient : patients) {
+            loadPatientDependencies(patient);
+        }
+        return patients;
     }
 }

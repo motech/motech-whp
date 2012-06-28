@@ -23,6 +23,16 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     @Autowired
     AllTherapies allTherapies;
 
+    public Patient createPatient(String patientId, String providerId, String districtName) {
+        Therapy therapy = createTherapy();
+        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
+
+        Treatment treatment = createTreatment(providerId, therapy, districtName);
+        patient.addTreatment(treatment, now());
+        allPatients.add(patient);
+        return patient;
+    }
+
     public Patient createPatient(String patientId, String providerId) {
         Therapy therapy = createTherapy();
         Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
@@ -35,6 +45,15 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     private Treatment createTreatment(String providerId, Therapy therapy) {
         Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
+        treatment.setTherapy(therapy);
+        treatment.addSmearTestResult(smearTestResult());
+        treatment.addWeightStatistics(weightStatistics());
+        return treatment;
+    }
+
+    private Treatment createTreatment(String providerId, Therapy therapy, String districtName) {
+        Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
+        treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", districtName, "state"));
         treatment.setTherapy(therapy);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());

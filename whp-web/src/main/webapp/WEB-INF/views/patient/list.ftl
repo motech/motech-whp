@@ -5,7 +5,36 @@
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
 
 <div>
-<@legend key1="paused" value1="Current Treatment Paused" />
+    <div class="well row">
+        <form action="<@spring.url '/providers/search'/>" method="POST" class= "offset2-fixed form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">District*</label>
+                    <div class="controls">
+                        <select id="district" name="selectedDistrict">
+                            <#list districts as district>
+                                <option <#if selectedDistrict == district.name> selected </#if> value="${district.name}">${district.name}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Provider ID</label>
+                    <div class="controls">
+                        <select id="providerId" name="selectedProvider">
+                            <!-- AJAX Fetch Provider IDs -->
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
+                    </div>
+                </div>
+        </form>
+
+    </div>
+    <@legend key1="paused" value1="Current Treatment Paused" />
     <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
         <thead>
         <tr>

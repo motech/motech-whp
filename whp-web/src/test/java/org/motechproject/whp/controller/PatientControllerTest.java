@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.uimodel.PatientInfo;
+import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.District;
+import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -37,7 +36,6 @@ import static org.springframework.test.web.server.request.MockMvcRequestBuilders
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-
 public class PatientControllerTest {
 
     @Mock
@@ -45,19 +43,20 @@ public class PatientControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
-    AllPatients allPatients;
-    @Mock
-    AllAdherenceLogs allAdherenceLogs;
+    PatientService patientService;
     @Mock
     ProviderService providerService;
     @Mock
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    @Mock
+    AllDistrictsCache allDistrictsCache;
+    List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     AbstractMessageSource messageSource;
-
-    PatientController patientController;
     Patient patient;
     Provider provider;
+
+    PatientController patientController;
 
     @Before
     public void setup() {
@@ -65,11 +64,12 @@ public class PatientControllerTest {
         String providerId = "providerid";
 
         setupMessageSource();
-        patientController = new PatientController(allPatients, allAdherenceLogs, phaseUpdateOrchestrator, providerService, messageSource);
+        patientController = new PatientController(patientService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
+        when(allDistrictsCache.getAll()).thenReturn(districts);
     }
 
     private void setupMessageSource() {
@@ -86,7 +86,7 @@ public class PatientControllerTest {
     @Test
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patient);
-        when(allPatients.getAllWithActiveTreatmentFor("providerId")).thenReturn(patientsForProvider);
+        when(patientService.getAllWithActiveTreatmentForProvider("providerId")).thenReturn(patientsForProvider);
 
         patientController.listByProvider("providerId", uiModel, request);
         verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), same(patientsForProvider));
@@ -126,7 +126,8 @@ public class PatientControllerTest {
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
-        verify(allPatients).update(patientArgumentCaptor.capture());
+
+        verify(patientService).update(patientArgumentCaptor.capture());
 
         assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().currentTherapy().getStartDate());
         assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
@@ -145,11 +146,21 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldPassAllPatientsAsModelToListAllView() {
-        List<Patient> patients = emptyList();
-        when(allPatients.getAllWithActiveTreatment()).thenReturn(patients);
+    public void shouldPassAllPatientsBelongingToFirstDistrictToListPage() {
+        List<Patient> patients = asList(new Patient());
+        String firstDistrict = districts.get(0).getName();
+        when(patientService.getAllWithActiveTreatmentForDistrict(firstDistrict)).thenReturn(patients);
 
         patientController.list(uiModel);
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
+        verify(patientService).getAllWithActiveTreatmentForDistrict(firstDistrict);
+    }
+
+    @Test
+    public void shouldPassDistrictsToModelForListPage() {
+        patientController.list(uiModel);
+
+        verify(uiModel).addAttribute(PatientController.DISTRICT_LIST, districts);
+        verify(uiModel).addAttribute(PatientController.SELECTED_DISTRICT, districts.get(0).getName());
     }
 }

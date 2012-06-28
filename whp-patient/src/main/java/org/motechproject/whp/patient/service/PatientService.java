@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatment;
+import static org.springframework.util.StringUtils.hasText;
 
 @Service
 public class PatientService {
@@ -101,5 +102,32 @@ public class PatientService {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.startNextPhase();
         allPatients.update(patient);
+    }
+
+    public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
+        return allPatients.getAllWithActiveTreatmentForProvider(providerId);
+    }
+
+    public Patient findByPatientId(String patientId) {
+        return allPatients.findByPatientId(patientId);
+    }
+
+    public void update(Patient updatedPatient) {
+        allPatients.update(updatedPatient);
+    }
+
+    public List<Patient> getAllWithActiveTreatmentForDistrict(String districtName) {
+        return allPatients.getAllWithActiveTreatmentForDistrict(districtName);
+    }
+
+    public List<Patient> getAllWithActiveTreatment() {
+        return allPatients.getAllWithActiveTreatment();
+    }
+
+    public List<Patient> findBy(String districtName, String providerId) {
+        if (hasText(providerId))
+            return getAllWithActiveTreatmentForProvider(providerId);
+        else
+            return getAllWithActiveTreatmentForDistrict(districtName);
     }
 }
