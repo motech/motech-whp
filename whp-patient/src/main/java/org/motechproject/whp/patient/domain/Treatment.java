@@ -127,4 +127,13 @@ public class Treatment {
         return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
     }
 
+    public boolean isDoseDateInPausedPeriod(LocalDate doseDate) {
+        for (TreatmentInterruption interruption : getInterruptions()) {
+            if (interruption.isDoseDateInInterruptionPeriod(doseDate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

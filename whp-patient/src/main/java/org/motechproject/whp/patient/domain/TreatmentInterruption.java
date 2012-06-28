@@ -64,4 +64,13 @@ public class TreatmentInterruption {
         }
         return false;
     }
+
+    public boolean isDoseDateInInterruptionPeriod(LocalDate doseDate) {
+        LocalDate pauseDate = getPauseDate();
+        LocalDate resumptionDate = getResumptionDate();
+        return isCurrentlyPaused() && isOnOrAfter(newDateTime(doseDate), newDateTime(pauseDate)) ||
+                (isOnOrAfter(newDateTime(doseDate), newDateTime(pauseDate))
+                        && isOnOrBefore(newDateTime(doseDate), newDateTime(resumptionDate)));
+    }
+
 }

@@ -73,11 +73,11 @@
                         <#assign drawn = true/>
                             <td class=
                         <#if dailyAdherence.pillStatus == 1> "tick-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
-                        <#elseif dailyAdherence.pillStatus == 2> "round-icon
-                            editable ${isItASunday} ${isItDuringPausedPeriod}"
-                        <#elseif dailyAdherence.futureAdherence == true>
-                            "editable ${isItASunday} ${isItDuringPausedPeriod}"
-                        <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#elseif dailyAdherence.pillStatus == 2> "round-icon
+                                editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#elseif dailyAdherence.futureAdherence == true>
+                                "editable ${isItASunday} ${isItDuringPausedPeriod}"
+                            <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                         </#if>
                         id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
                         day="${day}"
@@ -88,9 +88,9 @@
                         providerId = ${dailyAdherence.providerId}>
                         <div>
                             <#if dailyAdherence.pillStatus == 1>&#10004;
-                            <#elseif dailyAdherence.pillStatus == 2>O
-                            <#elseif dailyAdherence.futureAdherence == true>
-                            <#else>-
+                                <#elseif dailyAdherence.pillStatus == 2>O
+                                <#elseif dailyAdherence.futureAdherence == true>
+                                <#else>-
                             </#if>
                         </div>
                         </td>
@@ -100,7 +100,7 @@
                 <#if drawn == false>
                         <td class=
                     <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
-                    <#else>"bg-gray ${isItASunday}"
+                        <#else>"bg-gray ${isItASunday}"
                     </#if>
                     id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
                     <div class="watermarked-sunday">
@@ -119,6 +119,7 @@
 </table>
 <form id="treatmentCardDeltaform" action="/whp/patients/saveTreatmentCard" method="post">
     <input type="hidden" name="delta" id="delta"/>
+
     <div class="controls pull-right">
         <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
         <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>

@@ -43,16 +43,15 @@ public class AdherenceSection {
 
         LocalDate today = DateUtil.today();
         for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, today) && WHPDateUtil.isOnOrBefore(doseDate, endDate); doseDate = doseDate.plusDays(1)) {
-
-            boolean doseDateInPausedPeriod = isDoseDateInPausedPeriod(patient, doseDate);
+            boolean doseDateInPausedPeriod = patient.isDoseDateInPausedPeriod(doseDate);
             Treatment treatmentForDateInTherapy = patient.getTreatment(doseDate);
             String providerIdForTreatmentToWhichDoseBelongs = "";
             if (treatmentForDateInTherapy != null) {
                 providerIdForTreatmentToWhichDoseBelongs = treatmentForDateInTherapy.getProviderId();
             }
             if (adherenceDates.contains(doseDate)) {
-                Adherence log = adherenceData.get(adherenceDates.indexOf(doseDate));
-                addAdherenceDatum(log, doseDateInPausedPeriod);
+                Adherence adherence = adherenceData.get(adherenceDates.indexOf(doseDate));
+                addAdherenceDatum(adherence, doseDateInPausedPeriod);
             } else {
                 if (patientPillDays.contains(DayOfWeek.getDayOfWeek(doseDate))) {
                     addAdherenceDatum(doseDate, PillStatus.Unknown, providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
@@ -61,12 +60,12 @@ public class AdherenceSection {
         }
     }
 
-    private void addAdherenceDatum(Adherence log, boolean doseDateInPausedPeriod) {
+    private void addAdherenceDatum(Adherence adherence, boolean doseDateInPausedPeriod) {
         String providerIdForTreatmentToWhichDoseBelongs = "";
-        if (!log.getProviderId().equals(WHPConstants.UNKNOWN))
-            providerIdForTreatmentToWhichDoseBelongs = log.getProviderId();
+        if (!adherence.getProviderId().equals(WHPConstants.UNKNOWN))
+            providerIdForTreatmentToWhichDoseBelongs = adherence.getProviderId();
 
-        addAdherenceDatum(log.getPillDate(), log.getPillStatus(), providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
+        addAdherenceDatum(adherence.getPillDate(), adherence.getPillStatus(), providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
     }
 
 
@@ -98,36 +97,6 @@ public class AdherenceSection {
             MonthlyAdherence newlyAddedMonthlyAdherence = new MonthlyAdherence(numberOfDays, monthAndYear, monthStartDate);
             getMonthlyAdherences().add(newlyAddedMonthlyAdherence);
         }
-    }
-
-    private boolean isDoseDateInPausedPeriod(Patient patient, LocalDate doseDate) {
-        boolean isIt = false;
-        Treatment treatment = patient.getTreatment(doseDate);
-        if (treatment != null) {
-            TreatmentInterruptions interruptions = treatment.getInterruptions();
-            for (TreatmentInterruption interruption : interruptions) {
-                if (isDoseDateInInterruptionPeriod(doseDate, interruption, treatment)) {
-                    isIt = true;
-                    break;
-                }
-            }
-        }
-        return isIt;
-    }
-
-    private boolean isDoseDateInInterruptionPeriod(LocalDate doseDate, TreatmentInterruption interruption, Treatment treatmentForDateInTherapy) {
-        LocalDate pauseDate = interruption.getPauseDate();
-        LocalDate resumptionDate = interruption.getResumptionDate();
-        if (resumptionDate == null) {
-            LocalDate endDateOfTreatmentToWhichDoseBelongs = treatmentForDateInTherapy.getEndDate();
-            if (endDateOfTreatmentToWhichDoseBelongs == null) {
-                resumptionDate = today();
-            } else {
-                resumptionDate = endDateOfTreatmentToWhichDoseBelongs;
-            }
-        }
-        return DateUtil.isOnOrAfter(DateUtil.newDateTime(doseDate), DateUtil.newDateTime(pauseDate)) &&
-                DateUtil.isOnOrBefore(DateUtil.newDateTime(doseDate), DateUtil.newDateTime(resumptionDate));
     }
 
 }
