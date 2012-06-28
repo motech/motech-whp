@@ -1,8 +1,10 @@
-package org.motechproject.whp.patient.domain;
+package org.motechproject.whp.adherence.criteria;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 
 public class TreatmentStartCriteria {
 

@@ -48,6 +48,7 @@ public class PatientBuilder {
         LocalDate today = DateUtil.today();
         Treatment treatment = new Treatment();
         treatment.setTbId(TB_ID);
+        treatment.setProviderId(PROVIDER_ID);
         treatment.setTherapy(defaultTherapy());
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);

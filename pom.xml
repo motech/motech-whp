@@ -28,6 +28,7 @@
         <module>whp-mapping</module>
         <module>whp-adherence</module>
         <module>whp-application-service</module>
+        <module>whp-treatment-card</module>
         <module>whp-validation</module>
         <module>whp-data-importer</module>
         <module>whp-webservice</module>

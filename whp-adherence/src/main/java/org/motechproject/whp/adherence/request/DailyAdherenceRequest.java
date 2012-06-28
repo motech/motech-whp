@@ -1,4 +1,4 @@
-package org.motechproject.whp.request;
+package org.motechproject.whp.adherence.request;
 
 import lombok.Data;
 import org.joda.time.LocalDate;

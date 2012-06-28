@@ -1,4 +1,4 @@
-package org.motechproject.whp.builder;
+package org.motechproject.whp.adherence.builder;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.Adherence;

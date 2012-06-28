@@ -27,5 +27,6 @@ public class Phase {
     public boolean hasStarted() {
         return startDate != null;
     }
+
 }
 

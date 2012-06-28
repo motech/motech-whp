@@ -1,7 +1,6 @@
-package org.motechproject.whp.request;
+package org.motechproject.whp.adherence.request;
 
 import lombok.Data;
-import org.motechproject.whp.request.DailyAdherenceRequest;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.treatmentcard.domain;
 
 import lombok.Data;
 

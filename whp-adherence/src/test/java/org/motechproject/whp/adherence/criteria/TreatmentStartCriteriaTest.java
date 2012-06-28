@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.domain;
+package org.motechproject.whp.adherence.criteria;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -6,13 +6,14 @@ import org.junit.Test;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.PatientType;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartOrRestartTreatment;
+import static org.motechproject.whp.adherence.criteria.TreatmentStartCriteria.shouldStartOrRestartTreatment;
 
 public class TreatmentStartCriteriaTest {
 

@@ -6,24 +6,26 @@ import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AdherenceAuditService;
 import org.motechproject.whp.adherence.audit.AuditParams;
-import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceList;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
-import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.adherence.criteria.TreatmentStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
-import static org.motechproject.whp.patient.domain.TreatmentStartCriteria.shouldStartOrRestartTreatment;
 
 @Service
 public class WHPAdherenceService {
@@ -82,13 +84,37 @@ public class WHPAdherenceService {
         adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patientId);
     }
 
-    public List<Adherence> findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
+    public AdherenceList findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
         List<AdherenceRecord> adherenceData = adherenceService.adherence(patientId, treatmentId, start, end);
         return new AdherenceMapper().map(adherenceData);
     }
 
     public int countOfDosesTakenBetween(String patientId, String therapyDocId, LocalDate startDate, LocalDate endDate) {
         return adherenceService.countOfDosesTakenBetween(patientId, therapyDocId, startDate, endDate);
+    }
+
+    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
+        List<Adherence> adherenceData = new ArrayList<>();
+
+        for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
+            Adherence datum = new Adherence();
+            datum.setPatientId(patient.getPatientId());
+            datum.setTreatmentId(updateAdherenceRequest.getTherapy());
+            datum.setPillDate(request.getDoseDate());
+            datum.setPillStatus(PillStatus.get(request.getPillStatus()));
+            adherenceData.add(datum);
+
+            Treatment doseForTreatment = patient.getTreatment(request.getDoseDate());
+            if (doseForTreatment != null) {
+                datum.setTbId(doseForTreatment.getTbId());
+                datum.setProviderId(doseForTreatment.getProviderId());
+            } else {
+                datum.setTbId(WHPConstants.UNKNOWN);
+                datum.setProviderId(WHPConstants.UNKNOWN);
+            }
+        }
+
+        addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
     }
 
 }

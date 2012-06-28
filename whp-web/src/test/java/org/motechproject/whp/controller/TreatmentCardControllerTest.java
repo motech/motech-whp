@@ -3,14 +3,15 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.request.DailyAdherenceRequest;
-import org.motechproject.whp.request.UpdateAdherenceRequest;
-import org.motechproject.whp.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.TreatmentCard;
+import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
+import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,9 @@ public class TreatmentCardControllerTest {
     @Mock
     TreatmentCardService treatmentCardService;
     @Mock
+    WHPAdherenceService adherenceService;
+
+    @Mock
     AllPatients allPatients;
     @Mock
     Model uiModel;
@@ -38,15 +42,15 @@ public class TreatmentCardControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardController = new TreatmentCardController(treatmentCardService, allPatients);
+        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
 
     @Test
     public void shouldReturnTreatmentCardModelToView() {
-        TreatmentCard treatmentCard = new TreatmentCard();
-        when(treatmentCardService.getIntensivePhaseTreatmentCard(patient)).thenReturn(treatmentCard);
+        TreatmentCard treatmentCard = new TreatmentCard(patient);
+        when(treatmentCardService.treatmentCard(patient)).thenReturn(treatmentCard);
 
         String view = treatmentCardController.show(patient.getPatientId(), uiModel, request);
 
@@ -69,7 +73,7 @@ public class TreatmentCardControllerTest {
 
         assertEquals("treatmentcard/show", view);
         verify(uiModel, times(1)).addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
-        verify(treatmentCardService, times(1)).addLogsForPatient(adherenceData, patient);
+        verify(adherenceService, times(1)).addLogsForPatient(adherenceData, patient);
     }
 
 }
