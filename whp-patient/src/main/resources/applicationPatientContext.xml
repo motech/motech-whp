@@ -9,6 +9,8 @@
 
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
+    <import resource="classpath*:applicationRefDataContext.xml"/>
+    <import resource="classpath*:applicationWHPValidationContext.xml"/>
 
     <context:annotation-config/>
     <context:spring-configured/>

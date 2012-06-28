@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-patient</artifactId>
+            <artifactId>whp-user</artifactId>
             <version>0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>

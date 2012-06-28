@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.TransferInPatient;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;

@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PatientType;
 

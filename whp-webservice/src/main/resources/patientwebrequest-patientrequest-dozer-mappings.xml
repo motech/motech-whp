@@ -23,6 +23,10 @@
             <b>disease_class</b>
         </field>
         <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+            <a>treatment_update</a>
+            <b>treatmentUpdate</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
             <a>gender</a>
             <b>gender</b>
         </field>

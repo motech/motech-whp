@@ -1,11 +1,12 @@
-package org.motechproject.whp.patient.repository;
+package org.motechproject.whp.refdata.repository;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-@ContextConfiguration(locations = "classpath*:applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:applicationRefDataContext.xml")
 public class AllTreatmentCategoriesTest extends SpringIntegrationTest {
 
     public static final String CODE = "99";

@@ -3,6 +3,8 @@ package org.motechproject.whp.patient.contract;
 import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.validation.constraints.Scope;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 
@@ -17,6 +19,7 @@ public class PatientRequest {
     private PatientType patient_type;
     private String phi;
 
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope, UpdateScope.transferInScope})
     private String provider_id;
     private Address address = new Address();
     private String mobile_number;
@@ -34,6 +37,7 @@ public class PatientRequest {
     private String reason;
     private DateTime date_modified;
     private boolean migrated;
+    private TreatmentUpdateScenario treatmentUpdate;
 
     public PatientRequest() {
     }
@@ -105,5 +109,14 @@ public class PatientRequest {
 
     public void setWeightStatistics(WeightStatistics statistics) {
         this.weightStatistics = statistics;
+    }
+
+    public UpdateScope updateScope(boolean canBeTransferred) {
+        if (treatmentUpdate == null) {
+            return UpdateScope.simpleUpdate;
+        } else if (TreatmentUpdateScenario.New == treatmentUpdate && PatientType.TransferredIn == getPatient_type() && canBeTransferred) {
+            return UpdateScope.transferIn;
+        }
+        return treatmentUpdate.getScope();
     }
 }

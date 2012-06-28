@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.seed;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.repository.AllTreatmentCategories;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

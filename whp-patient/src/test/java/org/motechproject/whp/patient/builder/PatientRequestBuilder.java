@@ -5,16 +5,15 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.contract.TreatmentUpdateScenario;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.domain.*;
 
 import java.util.Arrays;
 
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
-import static org.motechproject.whp.patient.builder.PatientBuilder.PROVIDER_ID;
-import static org.motechproject.whp.patient.builder.PatientBuilder.TB_ID;
+import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 
 public class PatientRequestBuilder {
 
@@ -58,7 +57,7 @@ public class PatientRequestBuilder {
         patientRequest.setTreatment_category(category10);
         patientRequest.setProvider_id("newproviderid");
         patientRequest.setDisease_class(DiseaseClass.E);
-
+        patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
         patientRequest.addSmearTestResults(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative);
         patientRequest.setWeightStatistics(SampleInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
 
@@ -69,6 +68,7 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id(TB_ID);
+        patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Close);
         patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
         return this;
     }
@@ -77,6 +77,7 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id(TB_ID);
+        patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Pause);
         patientRequest.setReason("paws");
         return this;
     }
@@ -84,6 +85,7 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
+        patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Restart);
         patientRequest.setTb_id(TB_ID);
         patientRequest.setReason("swap");
         return this;
@@ -94,6 +96,7 @@ public class PatientRequestBuilder {
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
         patientRequest.setTb_id(NEW_TB_ID);
+        patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
         patientRequest.setPatient_type(PatientType.TransferredIn);
         return this;
     }

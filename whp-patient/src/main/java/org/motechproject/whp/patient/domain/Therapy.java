@@ -9,6 +9,7 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static java.util.Arrays.asList;
 

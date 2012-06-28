@@ -1,9 +1,8 @@
 package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
-import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.validation.constraints.*;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
@@ -13,6 +12,8 @@ import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
+
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 @Data
 public class PatientWebRequest {
@@ -194,25 +195,18 @@ public class PatientWebRequest {
         this.api_key = apiKey;
     }
 
-    public PatientType patientType() {
-        return (PatientType) StringToEnumeration.get(getPatient_type(), PatientType.class);
-    }
-
-    public UpdateScope updateScope(boolean canBeTransferred) {
+    public UpdateScope updateScope() {
         TreatmentUpdateScenario updateScenario = updateScenario();
         if (updateScenario == null) {
             return UpdateScope.simpleUpdate;
-        } else if (TreatmentUpdateScenario.New == updateScenario && PatientType.TransferredIn == patientType() && canBeTransferred) {
-            return UpdateScope.transferIn;
         }
         return updateScenario.getScope();
     }
 
     public TreatmentUpdateScenario updateScenario() {
-        if (StringUtils.isNotBlank(treatment_update)) {
+        if (isNotBlank(treatment_update)) {
             return (TreatmentUpdateScenario) StringToEnumeration.get(treatment_update, TreatmentUpdateScenario.class);
         }
         return null;
     }
-
 }

@@ -1,4 +1,3 @@
-
 package org.motechproject.whp.patient.service;
 
 import org.joda.time.DateTime;
@@ -6,9 +5,9 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.utils.SpringIntegrationTest;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -35,13 +34,12 @@ public class PatientServiceIT extends SpringIntegrationTest {
     private AllPatients allPatients;
     @Autowired
     private UpdateCommandFactory commandFactory;
-
+    @Autowired
     PatientService patientService;
 
     @Before
     public void setUp() {
         super.before();
-        patientService = new PatientService(allPatients, allTherapies, commandFactory);
     }
 
     @After
@@ -288,7 +286,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(createPatientRequest);
         PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.TransferredOut).build();
-        patientService.update(UpdateScope.closeTreatment, closeRequest);
+        patientService.update(closeRequest);
 
         assertTrue(patientService.canBeTransferred(createPatientRequest.getCase_id()));
     }
@@ -298,7 +296,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(createPatientRequest);
         PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.Died).build();
-        patientService.update(UpdateScope.closeTreatment, closeRequest);
+        patientService.update(closeRequest);
 
         assertFalse(patientService.canBeTransferred(createPatientRequest.getCase_id()));
     }

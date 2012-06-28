@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PatientWebService extends CaseService<PatientWebRequest> {
 
     PatientService patientService;
-
     RequestValidator validator;
     PatientRequestMapper patientRequestMapper;
 
@@ -41,9 +40,9 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
-            UpdateScope updateScope = patientWebRequest.updateScope(patientService.canBeTransferred(patientWebRequest.getCase_id()));
+            UpdateScope updateScope = patientWebRequest.updateScope();
             validator.validate(patientWebRequest, updateScope.name());
-            patientService.update(updateScope, patientRequestMapper.map(patientWebRequest));
+            patientService.update(patientRequestMapper.map(patientWebRequest));
         } catch (WHPRuntimeException e) {
             throw new WHPCaseException(e);
         }

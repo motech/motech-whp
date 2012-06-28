@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.mapper.TherapyMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,17 @@ public class PatientService {
     private AllTherapies allTherapies;
     private AllPatients allPatients;
     private UpdateCommandFactory updateCommandFactory;
+    private RequestValidator validator;
 
     @Autowired
-    public PatientService(AllPatients allPatients, AllTherapies allTherapies, UpdateCommandFactory updateCommandFactory) {
+    public PatientService(AllPatients allPatients,
+                          AllTherapies allTherapies,
+                          UpdateCommandFactory updateCommandFactory,
+                          RequestValidator validator) {
         this.allPatients = allPatients;
         this.allTherapies = allTherapies;
         this.updateCommandFactory = updateCommandFactory;
+        this.validator = validator;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -48,7 +54,9 @@ public class PatientService {
         allPatients.add(patient);
     }
 
-    public void update(UpdateScope updateScope, PatientRequest patientRequest) {
+    public void update(PatientRequest patientRequest) {
+        UpdateScope updateScope = patientRequest.updateScope(canBeTransferred(patientRequest.getCase_id()));
+        validator.validate(patientRequest, updateScope.name());
         updateCommandFactory.updateFor(updateScope).apply(patientRequest);
     }
 
@@ -58,7 +66,7 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public boolean canBeTransferred(String patientId) {
+    boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         List<WHPErrorCode> errors = new ArrayList<WHPErrorCode>();
         if (patient == null) {

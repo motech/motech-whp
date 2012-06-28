@@ -18,16 +18,8 @@
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-patient</artifactId>
+            <artifactId>whp-refdata</artifactId>
             <version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-patient</artifactId>
-            <version>0.2-SNAPSHOT</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>

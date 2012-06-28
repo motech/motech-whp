@@ -17,7 +17,6 @@ import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -114,8 +113,8 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         WeeklyAdherenceSummary weeklyAdherenceSummary = recordAdherence();
         assertValidAdherence(weeklyAdherenceSummary, TB_ID, PROVIDER_ID);
 
-        patientService.update(UpdateScope.closeTreatment, new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build());
-        patientService.update(UpdateScope.transferIn, new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withDateModified(DateUtil.now().minusDays(10)).build());
+        patientService.update(new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build());
+        patientService.update(new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withDateModified(DateUtil.now().minusDays(10)).build());
         recordAdherence();
 
         assertValidAdherence(weeklyAdherenceSummary, NEW_TB_ID, NEW_PROVIDER_ID);

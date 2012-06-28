@@ -1,10 +1,10 @@
-package org.motechproject.whp.patient.repository;
+package org.motechproject.whp.refdata.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;

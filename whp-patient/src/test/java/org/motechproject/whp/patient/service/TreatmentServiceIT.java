@@ -65,7 +65,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
@@ -73,7 +73,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.openTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
@@ -87,7 +87,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertFalse(updatedPatient.isOnActiveTreatment());
@@ -101,7 +101,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
@@ -109,7 +109,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
@@ -123,7 +123,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertEquals(DiseaseClass.P, updatedPatient.currentTherapy().getDiseaseClass());
@@ -135,7 +135,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertEquals(DiseaseClass.E, updatedPatient.currentTherapy().getDiseaseClass());
@@ -148,7 +148,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-        patientService.update(UpdateScope.closeTreatment, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
@@ -157,7 +157,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-        patientService.update(UpdateScope.transferIn, updatePatientRequest);
+        patientService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
