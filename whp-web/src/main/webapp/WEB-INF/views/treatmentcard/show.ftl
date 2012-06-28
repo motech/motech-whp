@@ -1,11 +1,4 @@
 <#import "/spring.ftl" as spring />
-<#if message?exists && (message?length>0)>
-<div class="message-alert row text-center alert alert-info fade in">
-    <button class="close" data-dismiss="alert">&times;</button>
-${message}
-    <#assign message=""/>
-</div>
-</#if>
 <#if treatmentCard?exists>
 <div id="legend-container" class="pull-right">
     <div id="patient-id" class="hide">${patientId}</div>

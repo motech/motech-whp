@@ -5,32 +5,13 @@
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/injectHtml.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
 
-    <#if messages?exists && (messages?size>0)>
-    <div class="dateUpdated-message-alert row alert alert-info fade in">
-        <button class="close" data-dismiss="alert">&times;</button>
-        <#list messages as message>
-        ${message}
-            <#break/>
-        </#list>
-        <table id="messageList" class="table table-bordered table-condensed sharp">
-            <thead>
-            <tr>
-                <th>Phase Information</th>
-            </tr>
-            <tbody>
-                <#list messages as message>
-                    <#if message_index != 0>
-                    <tr>
-                        <td>${message}</td>
-                        <br/>
-                    </tr>
-                    </#if>
-                    <#assign message=""/>
-                </#list>
-            </tbody>
-        </table>
-    </div>
+    <#if messages??>
+        <div class="dateUpdated-message-alert row alert alert-info fade in">
+            <button class="close" data-dismiss="alert">&times;</button>
+            ${messages}
+        </div>
     </#if>
+
 <div class="well">
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="brand pull-left">Adjust Phase Start Dates</a>
 

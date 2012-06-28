@@ -18,10 +18,17 @@
     <import resource="classpath*:applicationBulkImportContext.xml"/>
     <import resource="classpath*:applicationWebServiceContext.xml"/>
 
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <qualifier value="messageBundleSource"/>
+        <property name="basename" value="classpath:message"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
     <context:annotation-config/>
     <context:spring-configured/>
     <context:component-scan base-package="org.motechproject.whp"/>
 
-<util:properties id="whpProperties" location="classpath:/whp.properties"/>
+    <util:properties id="whpProperties" location="classpath:/whp.properties"/>
 
 </beans>

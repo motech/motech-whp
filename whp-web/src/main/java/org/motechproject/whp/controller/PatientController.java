@@ -1,16 +1,15 @@
 package org.motechproject.whp.controller;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.flash.Flash;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.util.FlashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import static java.util.Arrays.asList;
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
+import static org.motechproject.flash.Flash.in;
+import static org.motechproject.flash.Flash.out;
+
 
 @Controller
 @RequestMapping(value = "/patients")
@@ -32,13 +35,20 @@ public class PatientController extends BaseController {
     AllAdherenceLogs allAdherenceLogs;
     private ProviderService providerService;
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private AbstractMessageSource messageSource;
 
     @Autowired
-    public PatientController(AllPatients allPatients, AllAdherenceLogs allAdherenceLogs, ProviderService providerService, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
+    public PatientController(AllPatients allPatients,
+                             AllAdherenceLogs allAdherenceLogs,
+                             PhaseUpdateOrchestrator phaseUpdateOrchestrator,
+                             ProviderService providerService,
+                             @Qualifier("messageBundleSource")
+                             AbstractMessageSource messageSource) {
         this.allPatients = allPatients;
         this.allAdherenceLogs = allAdherenceLogs;
         this.providerService = providerService;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+        this.messageSource = messageSource;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -72,9 +82,8 @@ public class PatientController extends BaseController {
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 
-
     private void passAdherenceSavedMessageToListView(Model uiModel, HttpServletRequest request) {
-        String message = Flash.in("message", request);
+        String message = in("message", request);
         if (StringUtils.isNotEmpty(message)) {
             uiModel.addAttribute("message", message);
         }
@@ -89,36 +98,20 @@ public class PatientController extends BaseController {
         uiModel.addAttribute("patient", patient);
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("provider", providerService.fetchByProviderId(patient.providerId()));
-
-        List<String> messages = FlashUtil.flashAllIn("dateUpdatedMessage", request);
-        if (CollectionUtils.isNotEmpty(messages)) {
+        String messages = in("messages", request);
+        if (isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);
         }
     }
 
-
-
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
-        //TODO: Use templates and externalize messages
-        String ipStartDate = phaseStartDates.getIpStartDate();
-        String eipStartDate = phaseStartDates.getEipStartDate();
-        String cpStartDate = phaseStartDates.getCpStartDate();
+        String ipStartDate = dateMessage(phaseStartDates.getIpStartDate());
+        String eipStartDate = dateMessage(phaseStartDates.getEipStartDate());
+        String cpStartDate = dateMessage(phaseStartDates.getCpStartDate());
+        out("messages", messageSource.getMessage("dates.changed.message", new Object[]{patientId, ipStartDate, eipStartDate, cpStartDate}, Locale.ENGLISH), httpServletRequest);
+    }
 
-        List<String> messages = new ArrayList<>();
-
-        String message1 = "Dates Updated For patient: " + patientId;
-
-        String message2 = "Intensive Phase Start Date: ";
-        message2 = message2.concat(StringUtils.isBlank(ipStartDate) ? "Not Set" : ipStartDate);
-
-        String message3 = "Extended Intensive Phase Start Date: ";
-        message3 = message3.concat(StringUtils.isBlank(eipStartDate) ? "Not Set" : eipStartDate);
-
-        String message4 = "Continuation Phase Start Date: ";
-        message4 = message4.concat(StringUtils.isBlank(cpStartDate) ? "Not Set" : cpStartDate);
-
-        messages.addAll(asList(message1, message2, message3, message4));
-
-        FlashUtil.flashAllOut("dateUpdatedMessage", messages, httpServletRequest);
+    private String dateMessage(String date) {
+        return isBlank(date) ? "Not Set" : date;
     }
 }

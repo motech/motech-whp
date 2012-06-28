@@ -14,15 +14,17 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
+import org.springframework.context.support.AbstractMessageSource;
+import org.springframework.context.support.StaticMessageSource;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -33,6 +35,7 @@ import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderB
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
+
 
 public class PatientControllerTest {
 
@@ -49,20 +52,28 @@ public class PatientControllerTest {
     @Mock
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
-    PatientController patientController;
+    AbstractMessageSource messageSource;
 
+    PatientController patientController;
     Patient patient;
     Provider provider;
 
     @Before
     public void setup() {
         initMocks(this);
-        patientController = new PatientController(allPatients, allAdherenceLogs, providerService, phaseUpdateOrchestrator);
         String providerId = "providerid";
+
+        setupMessageSource();
+        patientController = new PatientController(allPatients, allAdherenceLogs, phaseUpdateOrchestrator, providerService, messageSource);
         patient = new PatientBuilder().withDefaults().withProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
+    }
+
+    private void setupMessageSource() {
+        messageSource = new StaticMessageSource();
+        ((StaticMessageSource) messageSource).addMessage("dates.changed.message", Locale.ENGLISH, "message");
     }
 
     @Test
@@ -95,25 +106,15 @@ public class PatientControllerTest {
     @Test
     public void shouldNotAddMessagesIfTheyAreNotPresentInFlashScope() {
         when(request.getAttribute(anyString())).thenReturn(null);
-
         patientController.show(patient.getPatientId(), uiModel, request);
-
         verify(uiModel, never()).addAttribute(eq("messages"), any());
     }
 
     @Test
     public void shouldAddMessagesIfPresentInFlashScope() {
-        when(request.getAttribute("flash.in.dateUpdatedMessage0")).thenReturn("message1");
-        when(request.getAttribute("flash.in.dateUpdatedMessage1")).thenReturn("message2");
-        when(request.getAttribute("flash.in.dateUpdatedMessage2")).thenReturn("");
-
+        when(request.getAttribute("flash.in.messages")).thenReturn("message");
         patientController.show(patient.getPatientId(), uiModel, request);
-
-        ArgumentCaptor<List> messageList = ArgumentCaptor.forClass(List.class);
-
-        verify(uiModel).addAttribute(eq("messages"), messageList.capture());
-
-        assertArrayEquals(new String[]{"message1", "message2"}, messageList.getValue().toArray());
+        verify(uiModel).addAttribute("messages", "message");
     }
 
     @Test
@@ -124,7 +125,6 @@ public class PatientControllerTest {
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
-
         verify(allPatients).update(patientArgumentCaptor.capture());
 
         assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().currentTherapy().getStartDate());
@@ -151,6 +151,5 @@ public class PatientControllerTest {
         patientController.list(uiModel);
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
     }
-
 
 }
