@@ -28,6 +28,7 @@
         <intercept-url pattern="/patients/show/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/list/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/adjustPhaseStartDates/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/patients/search/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/treatmentcard/**/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
 
         <!--Only IT Admin-->

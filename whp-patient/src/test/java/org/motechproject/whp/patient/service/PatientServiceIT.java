@@ -21,10 +21,15 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
+import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceIT extends SpringIntegrationTest {
@@ -121,7 +126,23 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPatientIsUpdatedWithInvalidSmearTestResults() {
+    public void shouldThrowExceptionWhenPatientIsUpdatedWithOnlyOneSmearTestResults() {
+        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withTbId("elevenDigit")
+                .withCaseId(PATIENT_ID)
+                .build();
+        patientService.createPatient(patientRequest);
+        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
+                .withSmearTestResults(SampleInstance.PreTreatment, today(), Positive, null, null)
+                .withTbId("elevenDigit")
+                .build();
+        commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPatientIsUpdatedWithoutAnySmearTestResults() {
         expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -137,7 +158,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPatientWithGivenCaseIdDoesNotExist() {
+    public void shouldThrowExceptionForUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
         expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
@@ -176,7 +197,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldMarkPatientAsHavingActiveTreatment() {
+    public void shouldCreatePatientWithActiveTreatment() {
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -303,7 +324,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldSetStartDateAndIPStartDateOnTherapy() {
+    public void shouldSetStartDateAndIPStartDateOnTherapyUponCreatingNewPatient() {
         LocalDate today = today();
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(createPatientRequest);
@@ -324,6 +345,32 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), PhaseName.IP, 2);
 
         assertEquals(Integer.valueOf(2), allPatients.findByPatientId(patientId).currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getNumberOfDosesTaken());
+    }
+
+    @Test
+    public void shouldSearchPatientsByDistrict() {
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        patientService.createPatient(createPatientRequest1);
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        patientService.createPatient(createPatientRequest2);
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "Begusarai", "").build();
+        patientService.createPatient(createPatientRequest3);
+
+        List<Patient> patientList = patientService.searchBy("Vaishali", "");
+        assertPatientForRequests(asList(createPatientRequest1, createPatientRequest2), patientList);
+    }
+
+    @Test
+    public void shouldSearchPatientsByDistrictAndProvider() {
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        patientService.createPatient(createPatientRequest1);
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        patientService.createPatient(createPatientRequest2);
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        patientService.createPatient(createPatientRequest3);
+
+        List<Patient> patientList = patientService.searchBy("Vaishali", "provider2");
+        assertPatientForRequests(asList(createPatientRequest2), patientList);
     }
 
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {

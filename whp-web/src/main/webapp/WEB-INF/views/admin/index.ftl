@@ -7,7 +7,7 @@
         <b>Patient Listings</b>
     </li>
     <li>
-        <a id="show-patients" href="/whp/patients/list">Show all patients</a>
+        <a id="show-patients" href="/whp/patients/listByProvider">Show all patients</a>
     </li>
     <hr>
     <li class="nav-header hero-unit">

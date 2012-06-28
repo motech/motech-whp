@@ -25,6 +25,8 @@ import java.util.Locale;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -42,17 +44,20 @@ public class PatientControllerTest {
     Model uiModel;
     @Mock
     HttpServletRequest request;
+
     @Mock
     PatientService patientService;
     @Mock
     ProviderService providerService;
     @Mock
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+
     @Mock
     AllDistrictsCache allDistrictsCache;
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     AbstractMessageSource messageSource;
+
     Patient patient;
     Provider provider;
 
@@ -65,7 +70,7 @@ public class PatientControllerTest {
 
         setupMessageSource();
         patientController = new PatientController(patientService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
-        patient = new PatientBuilder().withDefaults().withProviderId(providerId).build();
+        patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
@@ -78,18 +83,13 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldListPatientsForProvider() {
-        String view = patientController.listByProvider("providerId", uiModel, request);
-        assertEquals("patient/listByProvider", view);
-    }
-
-    @Test
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patient);
         when(patientService.getAllWithActiveTreatmentForProvider("providerId")).thenReturn(patientsForProvider);
 
-        patientController.listByProvider("providerId", uiModel, request);
+        String view = patientController.listByProvider("providerId", uiModel, request);
         verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), same(patientsForProvider));
+        assertEquals("patient/listByProvider", view);
     }
 
     @Test
@@ -105,17 +105,17 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldNotAddMessagesIfTheyAreNotPresentInFlashScope() {
-        when(request.getAttribute(anyString())).thenReturn(null);
-        patientController.show(patient.getPatientId(), uiModel, request);
-        verify(uiModel, never()).addAttribute(eq("messages"), any());
-    }
-
-    @Test
-    public void shouldAddMessagesIfPresentInFlashScope() {
+    public void shouldDisplayAdherenceUpdatedMessageIfAdherenceWasUpdated() {
         when(request.getAttribute("flash.in.messages")).thenReturn("message");
         patientController.show(patient.getPatientId(), uiModel, request);
         verify(uiModel).addAttribute("messages", "message");
+    }
+
+    @Test
+    public void shouldNotDisplayAdherenceUpdatedMessageIfAdherenceWasNotUpdated() {
+        when(request.getAttribute(anyString())).thenReturn(null);
+        patientController.show(patient.getPatientId(), uiModel, request);
+        verify(uiModel, never()).addAttribute(eq("messages"), any());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class PatientControllerTest {
 
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
 
-        ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
+        ArgumentCaptor<Patient> patientArgumentCaptor = forClass(Patient.class);
 
         verify(patientService).update(patientArgumentCaptor.capture());
 
@@ -141,23 +141,45 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void shouldShowListAllViewOnRequest() {
-        assertEquals("patient/list", patientController.list(uiModel));
-    }
-
-    @Test
-    public void shouldPassAllPatientsBelongingToFirstDistrictToListPage() {
+    public void shouldListAllPatientsBelongingToTheDefaultDistrict() {
         List<Patient> patients = asList(new Patient());
         String firstDistrict = districts.get(0).getName();
-        when(patientService.getAllWithActiveTreatmentForDistrict(firstDistrict)).thenReturn(patients);
+        when(patientService.searchBy(firstDistrict, "")).thenReturn(patients);
 
-        patientController.list(uiModel);
+        assertEquals("patient/list", patientController.list(uiModel));
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
-        verify(patientService).getAllWithActiveTreatmentForDistrict(firstDistrict);
+        verify(patientService).searchBy(firstDistrict, "");
     }
 
     @Test
-    public void shouldPassDistrictsToModelForListPage() {
+    public void shouldSearchForPatientsByDistrict() {
+        Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("provider1").withTreatmentUnderDistrict("Vaishali").build();
+        Patient patientUnderProviderB = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("provider2").withTreatmentUnderDistrict("Vaishali").build();
+
+        when(patientService.searchBy("Vaishali", "")).thenReturn(asList(patientUnderProviderA, patientUnderProviderB));
+
+        patientController.filterByDistrictAndProvider("Vaishali", "", uiModel);
+
+        ArgumentCaptor<List> patientsCaptor = forClass(List.class);
+        verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), patientsCaptor.capture());
+        assertArrayEquals(new Patient[]{patientUnderProviderA, patientUnderProviderB}, patientsCaptor.getValue().toArray());
+    }
+
+    @Test
+    public void shouldSearchForPatientsByDistrictAndProvider() {
+        Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("provider1").withTreatmentUnderDistrict("Vaishali").build();
+
+        when(patientService.searchBy("Vaishali", "provider1")).thenReturn(asList(patientUnderProviderA));
+
+        patientController.filterByDistrictAndProvider("Vaishali", "provider1", uiModel);
+
+        ArgumentCaptor<List> patientsCaptor = forClass(List.class);
+        verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), patientsCaptor.capture());
+        assertArrayEquals(new Patient[]{patientUnderProviderA}, patientsCaptor.getValue().toArray());
+    }
+
+    @Test
+    public void shouldPopulateAllDistrictInModelForListPage() {
         patientController.list(uiModel);
 
         verify(uiModel).addAttribute(PatientController.DISTRICT_LIST, districts);

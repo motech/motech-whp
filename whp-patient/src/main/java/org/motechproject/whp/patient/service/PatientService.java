@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatment;
-import static org.springframework.util.StringUtils.hasText;
 
 @Service
 public class PatientService {
@@ -105,7 +105,7 @@ public class PatientService {
     }
 
     public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
-        return allPatients.getAllWithActiveTreatmentForProvider(providerId);
+        return allPatients.getAllWithActiveTreatmentFor(providerId);
     }
 
     public Patient findByPatientId(String patientId) {
@@ -116,18 +116,10 @@ public class PatientService {
         allPatients.update(updatedPatient);
     }
 
-    public List<Patient> getAllWithActiveTreatmentForDistrict(String districtName) {
-        return allPatients.getAllWithActiveTreatmentForDistrict(districtName);
-    }
-
-    public List<Patient> getAllWithActiveTreatment() {
-        return allPatients.getAllWithActiveTreatment();
-    }
-
-    public List<Patient> findBy(String districtName, String providerId) {
-        if (hasText(providerId))
-            return getAllWithActiveTreatmentForProvider(providerId);
+    public List<Patient> searchBy(String districtName, String providerId) {
+        if (isNotEmpty(providerId))
+            return allPatients.getAllWithActiveTreatmentForDistrictAndProvider(districtName, providerId);
         else
-            return getAllWithActiveTreatmentForDistrict(districtName);
+            return allPatients.getAllWithActiveTreatmentForDistrict(districtName);
     }
 }

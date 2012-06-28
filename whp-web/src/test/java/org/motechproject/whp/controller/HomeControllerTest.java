@@ -41,7 +41,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUserFor(provider));
         setupProvider(provider);
-        assertEquals("redirect:/patients?provider=" + provider.getProviderId(), homeController.homePage(request));
+        assertEquals("redirect:/patients/listByProvider?provider=" + provider.getProviderId(), homeController.homePage(request));
     }
 
     @Test

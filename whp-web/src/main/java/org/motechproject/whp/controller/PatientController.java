@@ -43,7 +43,6 @@ public class PatientController extends BaseController {
     private AbstractMessageSource messageSource;
     private AllDistrictsCache allDistrictsCache;
 
-
     @Autowired
     public PatientController(PatientService patientService,
                              PhaseUpdateOrchestrator phaseUpdateOrchestrator,
@@ -51,6 +50,7 @@ public class PatientController extends BaseController {
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
                              AllDistrictsCache allDistrictsCache) {
+
         this.patientService = patientService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
@@ -58,10 +58,10 @@ public class PatientController extends BaseController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
     public String listByProvider(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
         List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(providerId);
-        prepareModelForListView(uiModel, patientsForProvider, allDistrictsCache.getAll().get(0).getName(), "");
+        prepareModelForListView(uiModel, patientsForProvider);
         passAdherenceSavedMessageToListView(uiModel, request);
         return "patient/listByProvider";
     }
@@ -69,8 +69,9 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String list(Model uiModel) {
         String districtName = allDistrictsCache.getAll().get(0).getName();
-        List<Patient> patients = patientService.getAllWithActiveTreatmentForDistrict(districtName);
-        prepareModelForListView(uiModel, patients, districtName, "");
+        String providerId = "";
+        List<Patient> patients = patientService.searchBy(districtName, providerId);
+        prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/list";
     }
 
@@ -82,11 +83,10 @@ public class PatientController extends BaseController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String
-                                                      districtName, @RequestParam("providerId") String providerId, Model uiModel) {
-        List<Patient> patients = patientService.findBy(districtName, providerId);
+    public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam("selectedProvider") String providerId, Model uiModel) {
+        List<Patient> patients = patientService.searchBy(districtName, providerId);
         prepareModelForListView(uiModel, patients, districtName, providerId);
-        return "provider/list";
+        return "patient/patientList";
     }
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
@@ -99,10 +99,10 @@ public class PatientController extends BaseController {
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.POST)
-    public String update(@RequestParam("patientId") String patientId, PhaseStartDates patientDTO, HttpServletRequest httpServletRequest) {
-        Patient updatedPatient = patientDTO.mapNewPhaseInfoToPatient(patientService.findByPatientId(patientId));
+    public String update(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
+        Patient updatedPatient = phaseStartDates.mapNewPhaseInfoToPatient(patientService.findByPatientId(patientId));
         patientService.update(updatedPatient);
-        flashOutDateUpdatedMessage(patientId, patientDTO, httpServletRequest);
+        flashOutDateUpdatedMessage(patientId, phaseStartDates, httpServletRequest);
         return String.format("redirect:/patients/dashboard?patientId=%s", patientId);
     }
 
@@ -111,6 +111,10 @@ public class PatientController extends BaseController {
         if (StringUtils.isNotEmpty(message)) {
             uiModel.addAttribute("message", message);
         }
+    }
+
+    private void prepareModelForListView(Model uiModel, List<Patient> patientsForProvider) {
+        uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
     }
 
     private void prepareModelForListView(Model uiModel, List<Patient> patients, String districtName, String providerId) {

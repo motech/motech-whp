@@ -7,10 +7,10 @@
     <link rel="stylesheet" type="text/css"
           href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.css'/>"/>
     <link rel="stylesheet" type="text/css"
-          href="<@spring.url '/resources-${applicationVersion}/styles/standard.css'/>"/>
-    <link rel="stylesheet" type="text/css"
           href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
     <link rel="SHORTCUT ICON" href="<@spring.url '/resources-${applicationVersion}/images/favicon.ico'/>"/>
+    <link rel="stylesheet" type="text/css"
+          href="<@spring.url '/resources-${applicationVersion}/styles/standard.css'/>"/>
     <script type="text/javascript"
             src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-1.7.2.js'/>"></script>
     <script type="text/javascript"
@@ -22,6 +22,7 @@
     <script type="text/javascript"
             src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-transition.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
+
 </head>
 <body>
 <div class="container-fluid">

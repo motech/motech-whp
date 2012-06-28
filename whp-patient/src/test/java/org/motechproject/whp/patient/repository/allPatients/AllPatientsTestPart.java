@@ -42,6 +42,16 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
         return patient;
     }
 
+    public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId) {
+        Therapy therapy = createTherapy();
+        Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
+        Treatment treatment = createTreatment(providerId, therapy);
+        patient.addTreatment(treatment, now());
+        patient.setOnActiveTreatment(true);
+        allPatients.add(patient);
+        return patient;
+    }
+
     private Treatment createTreatment(String providerId, Therapy therapy) {
         Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));

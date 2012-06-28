@@ -6,6 +6,7 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
@@ -49,7 +50,21 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
 
         Patient withActiveTreatment2 = createPatient("patientId4", "providerId2");
 
-        assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentForProvider("providerId1").toArray());
-        assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentForProvider("providerId2").toArray());
+        assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
+        assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentFor("providerId2").toArray());
+    }
+
+    @Test
+    public void shouldFetchPatientsForProvider_sortByFirstName() {
+        String providerId = "providerId1";
+
+        Patient withGreatestFirstNameButCreatedFirst = createPatientOnActiveTreatment("patientId1", "c", providerId);
+        Patient createdSecond = createPatientOnActiveTreatment("patientId2", "b", providerId);
+        Patient withSmallestFirstNameButCreatedLast = createPatientOnActiveTreatment("patientId3", "a", providerId);
+
+        assertPatientEquals(
+                asList(withSmallestFirstNameButCreatedLast, createdSecond, withGreatestFirstNameButCreatedFirst),
+                allPatients.getAllWithActiveTreatmentFor(providerId)
+        );
     }
 }

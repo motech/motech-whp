@@ -17,7 +17,7 @@ public class ProviderDataService {
 
     // Leaves the browser in the Login Page
     public TestProvider createProvider() {
-        return createProvider("Chambal");
+        return createProvider("Vaishali");
     }
 
     public TestProvider createProvider(String district) {

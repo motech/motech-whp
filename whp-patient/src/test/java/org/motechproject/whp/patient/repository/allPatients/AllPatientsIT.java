@@ -6,7 +6,6 @@ import org.motechproject.whp.common.utils.SpringIntegrationTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        FetchAllPatientsTestPart.class,
         PersistenceTestPart.class,
         SearchByPatientIdTestPart.class,
         SearchByProviderIdTestPart.class

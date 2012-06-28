@@ -6,80 +6,72 @@
 
 <div>
     <div class="well row">
-        <form action="<@spring.url '/providers/search'/>" method="POST" class= "offset2-fixed form-horizontal">
-                <div class="control-group">
-                    <label class="control-label">District*</label>
-                    <div class="controls">
-                        <select id="district" name="selectedDistrict">
-                            <#list districts as district>
-                                <option <#if selectedDistrict == district.name> selected </#if> value="${district.name}">${district.name}</option>
-                            </#list>
-                        </select>
-                    </div>
-                </div>
+        <form id="searchForm" action="<@spring.url '/patients/search'/>" method="POST"
+              class="offset2-fixed form-horizontal">
+            <div class="control-group">
+                <label class="control-label">District*</label>
 
-                <div class="control-group">
-                    <label class="control-label">Provider ID</label>
-                    <div class="controls">
-                        <select id="providerId" name="selectedProvider">
-                            <!-- AJAX Fetch Provider IDs -->
-                        </select>
-                    </div>
+                <div class="controls">
+                    <select id="district" name="selectedDistrict">
+                        <#list districts as district>
+                            <option <#if selectedDistrict == district.name> selected </#if>
+                                                                            value="${district.name}">${district.name}</option>
+                        </#list>
+                    </select>
                 </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
-                    </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Provider ID</label>
+
+                <div class="controls">
+                    <select id="providerId" name="selectedProvider">
+                        <!-- AJAX Fetch Provider IDs -->
+                    </select>
                 </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="button" id="searchButton" class="btn btn-primary form-button-center">Search</button>
+                </div>
+            </div>
         </form>
 
     </div>
     <@legend key1="paused" value1="Current Treatment Paused" />
-    <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
-        <thead>
-        <tr>
-            <th>Patient ID</th>
-            <th>TB-ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Provider ID</th>
-            <th>Village</th>
-            <th>District</th>
-            <th>Treatment Category</th>
-            <th>Treatment Start Date</th>
-        </tr>
-        </thead>
-        <tbody>
-            <#if patientList?size == 0>
+    <div id="patients">
+        <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
+            <thead>
             <tr>
-                <td class="text-center" colspan="12">No patients to show</td>
+                <th>Patient ID</th>
+                <th>TB-ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Provider ID</th>
+                <th>Village</th>
+                <th>District</th>
+                <th>Treatment Category</th>
+                <th>Treatment Start Date</th>
             </tr>
-                <#else>
-                    <#list patientList as patient>
-                    <tr id="patientList_${patient.patientId}" class="link" redirect-url="<@spring.url '/patients/show?patientId=${patient.patientId}' />"
-                        class="<#if patient.currentTreatmentPaused>paused</#if>">
-                        <td class="patientId"><b>${patient.patientId}</b></td>
-                        <td class="tbId">${patient.currentTreatment.tbId}</td>
-                        <td class="name">${patient.firstName?cap_first}
-                                <#if patient.lastName?exists>
-                        ${patient.lastName?cap_first}
-                        </#if></td>
-                        <td>${patient.currentTreatment.therapy.patientAge!}</td>
-                        <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
-                        <td id="patient_${patient.patientId}_ProviderId">${patient.currentTreatment.providerId}</td>
-                        <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
-                        <td id="patient_${patient.patientId}_District">${patient.currentTreatment.patientAddress.address_district}</td>
-                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
-                        <td id="patient_${patient.patientId}_TreatmentStartDate">
-                            <#if patient.currentTreatment.therapy.startDate?? >
-                                    ${patient.currentTreatment.therapy.startDate?date?string("dd/mm/yyyy") }
-                            </#if>
-                        </td>
-                    </tr>
-                    </#list>
-            </#if>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="text-center" colspan="10">No patients to show</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script type="text/javascript">
+    $("#searchButton").click(function () {
+        var districtId = $("#district").val();
+        var providerId = $("#providerId").val() ? $("#providerId").val() : "";
+        var data = {
+            "selectedDistrict":districtId,
+            "selectedProvider":providerId
+        };
+        $("#patients").load('/whp/patients/search', data);
+    });
+</script>
 </@layout.defaultLayout>

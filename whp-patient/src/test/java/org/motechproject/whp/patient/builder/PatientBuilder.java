@@ -114,7 +114,7 @@ public class PatientBuilder {
         return this;
     }
 
-    public PatientBuilder withProviderId(String providerId) {
+    public PatientBuilder withTreatmentUnderProviderId(String providerId) {
         patient.getCurrentTreatment().setProviderId(providerId);
         return this;
     }
@@ -141,6 +141,11 @@ public class PatientBuilder {
 
     public PatientBuilder withPatientMobileNumber(String phoneNumber) {
         patient.setPhoneNumber(phoneNumber);
+        return this;
+    }
+
+    public PatientBuilder withTreatmentUnderDistrict(String district) {
+        patient.getCurrentTreatment().getPatientAddress().setAddress_district(district);
         return this;
     }
 }

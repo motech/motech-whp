@@ -71,7 +71,7 @@ body {
 
 .label-legend {
     background-color: #3A87AD;
-    vertical-align: center;
+    vertical-align: middle;
 }
 
 .table tbody tr:hover td {
