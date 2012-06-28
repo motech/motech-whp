@@ -34,7 +34,7 @@ public class TreatmentCardController extends BaseController {
     }
 
     @RequestMapping(value = "show", method = RequestMethod.GET)
-    public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
+    public String show(@RequestParam("patientId") String patientId, Model uiModel) {
         Patient patient = allPatients.findByPatientId(patientId);
         uiModel.addAttribute("patientId", patient.getPatientId());
         uiModel.addAttribute("treatmentCard", treatmentCardService.treatmentCard(patient));
@@ -46,7 +46,7 @@ public class TreatmentCardController extends BaseController {
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
         uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
-        return show(patient.getPatientId(), uiModel, request);
+        return show(patient.getPatientId(), uiModel);
     }
 
 }

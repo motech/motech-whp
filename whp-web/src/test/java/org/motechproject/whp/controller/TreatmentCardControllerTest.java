@@ -52,7 +52,7 @@ public class TreatmentCardControllerTest {
         TreatmentCard treatmentCard = new TreatmentCard(patient);
         when(treatmentCardService.treatmentCard(patient)).thenReturn(treatmentCard);
 
-        String view = treatmentCardController.show(patient.getPatientId(), uiModel, request);
+        String view = treatmentCardController.show(patient.getPatientId(), uiModel);
 
         verify(uiModel).addAttribute("patientId", patient.getPatientId());
         verify(uiModel).addAttribute("treatmentCard", treatmentCard);
