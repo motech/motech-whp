@@ -2,7 +2,7 @@ package org.motechproject.whp.webservice.request.patient;
 
 import org.junit.After;
 import org.junit.Before;
-import org.motechproject.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.user.domain.Provider;

@@ -3,7 +3,7 @@ package org.motechproject.whp.adherence.audit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;

@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.repository.allPatients;
 
 import org.junit.After;
-import org.motechproject.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;

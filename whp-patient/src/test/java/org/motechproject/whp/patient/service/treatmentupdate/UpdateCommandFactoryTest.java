@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.service.treatmentupdate;
 
 import org.junit.Test;
-import org.motechproject.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.patient.command.OpenNewTreatment;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
