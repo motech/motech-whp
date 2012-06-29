@@ -1,6 +1,7 @@
 package org.motechproject.whp.refdata.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
@@ -46,4 +47,19 @@ public class TreatmentCategory extends MotechBaseDataObject {
         this.numberOfDosesInCP = numberOfDosesInCP;
         this.pillDays = pillDays;
     }
+
+    @JsonIgnore
+    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+        switch (phaseName) {
+            case IP:
+                return numberOfDosesInIP;
+            case EIP:
+                return numberOfDosesInEIP;
+            case CP:
+                return numberOfDosesInCP;
+            default:
+                return null;
+        }
+    }
+
 }

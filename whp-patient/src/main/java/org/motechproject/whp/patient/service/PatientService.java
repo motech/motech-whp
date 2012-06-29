@@ -84,4 +84,22 @@ public class PatientService {
         patient.currentTherapy().getPhases().getByPhaseName(name).setNumberOfDosesTaken(dosesTaken);
         allPatients.update(patient);
     }
+
+    public void setNextPhaseName(String patientId, PhaseName nextPhase) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.nextPhaseName(nextPhase);
+        allPatients.update(patient);
+    }
+
+    public void endCurrentPhase(String patientId, LocalDate endDate) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.endCurrentPhase(endDate);
+        allPatients.update(patient);
+    }
+
+    public void startNextPhase(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.startNextPhase();
+        allPatients.update(patient);
+    }
 }

@@ -183,6 +183,16 @@ public class AdherenceControllerTest extends BaseUnitTest {
         verify(phaseUpdateOrchestrator).recomputePillCount(PATIENT_ID);
     }
 
+    @Test
+    public void shouldAttemptPhaseTransitionAfterCapturingAdherence() {
+        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
+        adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
+
+        verify(phaseUpdateOrchestrator).attemptPhaseTransition(PATIENT_ID);
+    }
+
     @After
     public void tearDown() {
         super.tearDown();

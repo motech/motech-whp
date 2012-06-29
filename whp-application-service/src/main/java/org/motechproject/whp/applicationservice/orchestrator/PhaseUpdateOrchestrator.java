@@ -1,10 +1,13 @@
 package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
+import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phase;
+import org.motechproject.whp.patient.domain.PhaseName;
+import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +38,24 @@ public class PhaseUpdateOrchestrator {
         }
     }
 
+    public void setNextPhase(String patientId, PhaseName phaseToTransitionTo) {
+        patientService.setNextPhaseName(patientId, phaseToTransitionTo);
+        attemptPhaseTransition(patientId);
+    }
+
+    public void attemptPhaseTransition(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+
+        Therapy currentTherapy = patient.currentTherapy();
+        if (currentTherapy.currentPhaseDoseComplete()) {
+            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, currentTherapy.getId(), currentTherapy.cumulativeNumberOfDosesSoFar(), currentTherapy.getStartDate());
+            patientService.endCurrentPhase(patientId, recordOfLastDoseInPhase.doseDate());
+        }
+
+        if (patient.isTransitioning() && patient.hasPhaseToTransitionTo()) {
+            patientService.startNextPhase(patientId);
+        }
+
+        recomputePillCount(patientId);
+    }
 }

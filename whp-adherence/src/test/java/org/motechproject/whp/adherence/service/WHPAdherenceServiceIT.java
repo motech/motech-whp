@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.model.DayOfWeek;
@@ -66,6 +67,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     private AllAuditLogs allAuditLogs;
 
     private final AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
+    private final String THERAPY_DOC_ID = "THERAPY_DOC_ID";
 
 
     @Before
@@ -193,8 +195,8 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldAddOrUpdateAdherenceData() {
-        Adherence log1 = createLog(PATIENT_ID, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", "therapyDocId", "providerId1");
-        Adherence log2 = createLog(PATIENT_ID, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", "therapyDocId", "providerId1");
+        Adherence log1 = createLog(PATIENT_ID, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        Adherence log2 = createLog(PATIENT_ID, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
         List<Adherence> adherences = asList(log1, log2);
 
         adherenceService.addOrUpdateLogsByDoseDate(adherences, PATIENT_ID);
@@ -205,21 +207,47 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldCountTakenDosesForPatientAndTherapyBetweenGivenDates() {
+        Adherence log1 = createLog(PATIENT_ID, new LocalDate(2012, 1, 1), PillStatus.NotTaken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log2 = createLog(PATIENT_ID, new LocalDate(2012, 1, 3), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log3 = createLog(PATIENT_ID, new LocalDate(2012, 1, 5), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        List<Adherence> adherences = asList(log1, log2, log3);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, PATIENT_ID);
+        int dosesTaken = adherenceService.countOfDosesTakenBetween(PATIENT_ID, THERAPY_DOC_ID, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 10));
+        assertEquals(2, dosesTaken);
+    }
+
+    @Test
     public void shouldFindLogsByDateRangeForPatient() {
         String patientId = "patientId";
-        String therapyDocId = "therapyDocId";
-        Adherence log1 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", therapyDocId, "providerId1");
-        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", therapyDocId, "providerId1");
-        Adherence log3 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", therapyDocId, "providerId1");
+        Adherence log1 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log3 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
         Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
         List<Adherence> adherences = asList(log1, log2, log3, log4);
 
         adherenceService.addOrUpdateLogsByDoseDate(adherences, patientId);
 
-        List<Adherence> result = adherenceService.findLogsInRange(patientId, therapyDocId, new LocalDate(2012, 1, 1), new LocalDate(2012, 2, 1));
+        List<Adherence> result = adherenceService.findLogsInRange(patientId, THERAPY_DOC_ID, new LocalDate(2012, 1, 1), new LocalDate(2012, 2, 1));
         assertEquals(2, result.size());
         assertEquals("tbid1", result.get(0).getTbId());
         assertEquals("tbid2", result.get(1).getTbId());
+    }
+
+    @Test
+    public void shouldGetNthTakenDoseForPatientAndTherapy() {
+        String patientId = "patientId";
+        Adherence log1 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
+        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log3 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        List<Adherence> adherences = asList(log1, log2, log3, log4);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, patientId);
+
+        AdherenceRecord adherenceRecord = adherenceService.nThTakenDose(patientId, THERAPY_DOC_ID, 3, new LocalDate(2012, 1, 1));
+        assertEquals(new LocalDate(2012, 3, 1), adherenceRecord.doseDate());
     }
 
     private Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyDocId, String providerId) {

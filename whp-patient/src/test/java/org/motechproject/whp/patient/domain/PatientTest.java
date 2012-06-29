@@ -11,6 +11,7 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
@@ -114,6 +115,57 @@ public class PatientTest {
         patient = new Patient(null, "", "", Gender.F, "");
         assertEquals(null, patient.getPatientId());
 
+    }
+
+    @Test
+    public void shouldSetNextPhaseOnCurrentTherapy() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+
+        patient.nextPhaseName(PhaseName.EIP);
+
+        assertEquals(patient.currentTherapy().getNextPhaseName(), PhaseName.EIP);
+    }
+
+    @Test
+    public void shouldEndCurrentPhaseIfNotNull() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        LocalDate phaseEndDate = new LocalDate(2012, 4, 1);
+        patient.startTherapy(new LocalDate(2012, 3, 1));
+
+        patient.endCurrentPhase(phaseEndDate);
+
+        assertEquals(phaseEndDate, patient.currentTherapy().getPhase(PhaseName.IP).getEndDate());
+    }
+
+    @Test
+    public void startNextPhaseShouldSetStartDateOnNextPhaseAsNextCalendarDateOfEndDateOfLastCompletedPhase() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        LocalDate phaseEndDate = new LocalDate(2012, 4, 1);
+        patient.startTherapy(new LocalDate(2012, 3, 1));
+        patient.nextPhaseName(PhaseName.EIP);
+
+        patient.endCurrentPhase(phaseEndDate);
+        patient.startNextPhase();
+
+        assertEquals(phaseEndDate.plusDays(1), patient.currentTherapy().getPhase(PhaseName.EIP).getStartDate());
+        assertNull(patient.currentTherapy().getNextPhaseName());
+    }
+
+    @Test
+    public void isTransitioningShouldReturnTrueIfCurrentPhaseIsNull() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(new LocalDate(2012, 3, 1));
+        patient.endCurrentPhase(new LocalDate(2012, 4, 1));
+
+        assertTrue(patient.isTransitioning());
+    }
+
+    @Test
+    public void hasPhaseToTransitionToShouldReturnTrueIfNextPhaseNameIsNotNull() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.nextPhaseName(PhaseName.EIP);
+
+        assertTrue(patient.hasPhaseToTransitionTo());
     }
 
     @Test

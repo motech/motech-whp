@@ -98,6 +98,10 @@ public class Patient extends MotechBaseDataObject {
         return currentTreatment.getTbId();
     }
 
+    public void nextPhaseName(PhaseName phaseName) {
+        currentTherapy().setNextPhaseName(phaseName);
+    }
+
     @JsonIgnore
     public String providerId() {
         return currentTreatment.getProviderId();
@@ -107,6 +111,11 @@ public class Patient extends MotechBaseDataObject {
     public String currentTherapyId() {
         if (getCurrentTreatment() == null) return null;
         return this.getCurrentTreatment().getTherapy().getId();
+    }
+
+    @JsonIgnore
+    public boolean isNearingPhaseTransition() {
+        return currentTherapy().isNearingPhaseTransition();
     }
 
     @JsonIgnore
@@ -173,4 +182,26 @@ public class Patient extends MotechBaseDataObject {
         return false;
     }
 
+    @JsonIgnore
+    public void endCurrentPhase(LocalDate endDate) {
+        Phase currentPhase = currentTherapy().getCurrentPhase();
+        if (currentPhase != null) currentPhase.setEndDate(endDate);
+    }
+
+    @JsonIgnore
+    public void startNextPhase() {
+        Therapy currentTherapy = currentTherapy();
+        Phase phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getNextPhaseName());
+        phaseToBeStarted.setStartDate(currentTherapy.getLastCompletedPhase().getEndDate().plusDays(1));
+        nextPhaseName(null);
+    }
+
+    @JsonIgnore
+    public boolean isTransitioning() {
+        return currentTherapy().getCurrentPhase() == null;
+    }
+
+    public boolean hasPhaseToTransitionTo() {
+        return currentTherapy().getNextPhaseName() != null;
+    }
 }

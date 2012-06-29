@@ -69,6 +69,18 @@ public class PhasesTest {
     }
 
     @Test
+    public void shouldGetLastCompletedPhase() {
+        LocalDate today = today();
+        phases.setIPStartDate(today);
+        phases.setIPEndDate(today.plusDays(2));
+        phases.setEIPStartDate(today.plusDays(3));
+        phases.setEIPEndDate(today.plusDays(5));
+        phases.setCPStartDate(today.plusDays(6));
+
+        assertEquals(phases.getByPhaseName(PhaseName.EIP), phases.getLastCompletedPhase());
+    }
+
+    @Test
     public void shouldReturnNullIfNoPhaseHasStarted() {
         assertNull(phases.getCurrentPhase());
     }

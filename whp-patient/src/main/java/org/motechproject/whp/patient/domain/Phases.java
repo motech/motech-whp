@@ -45,6 +45,17 @@ public class Phases extends ArrayList<Phase> {
     }
 
     @JsonIgnore
+    public Phase getLastCompletedPhase() {
+        Phase lastCompletedPhase = null;
+        for (Phase phase : this) {
+            if (phase.getStartDate() != null && phase.getEndDate() != null) {
+                lastCompletedPhase = phase;
+            }
+        }
+        return lastCompletedPhase;
+    }
+
+    @JsonIgnore
     public void setEIPStartDate(LocalDate EIPStartDate) {
         getByPhaseName(PhaseName.EIP).setStartDate(EIPStartDate);
         if (EIPStartDate != null) {
