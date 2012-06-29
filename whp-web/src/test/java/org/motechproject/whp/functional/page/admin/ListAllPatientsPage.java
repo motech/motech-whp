@@ -2,7 +2,7 @@ package org.motechproject.whp.functional.page.admin;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.motechproject.whp.functional.framework.WHPWebElement;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +12,7 @@ import org.openqa.selenium.support.How;
 
 import java.util.List;
 
+import static org.motechproject.whp.functional.framework.WebDriverFactory.createWebElement;
 import static org.openqa.selenium.By.id;
 
 public class ListAllPatientsPage extends LoggedInUserPage {
@@ -40,6 +41,20 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "link")
     private List<WebElement> dashboardLinks;
 
+    @FindBy(how = How.ID, using = "patientList")
+    private WebElement patientList;
+
+
+    @Override
+    protected void waitForPageToLoad() {
+        waitForElementWithIdToLoad("district");
+    }
+
+    @Override
+    public void postInitialize() {
+        districtSearchBox = createWebElement(districtSearchBox);
+        searchButton = createWebElement(searchButton);
+    }
 
     public ListAllPatientsPage(WebDriver webDriver) {
         super(webDriver);
@@ -98,7 +113,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
                 break;
             }
         }
-        WebDriverFactory.createWebElement(dashboardLinks.get(index)).click();
+        createWebElement(dashboardLinks.get(index)).click();
         return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
     }
 
@@ -112,14 +127,14 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     public ListAllPatientsPage searchByDistrict(String district) {
-        districtSearchBox.sendKeys(district);
+        ((WHPWebElement) districtSearchBox).select(district);
         searchButton.click();
         waitForPatientsToLoad();
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
     }
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
-        districtSearchBox.sendKeys(districtName);
+        ((WHPWebElement) districtSearchBox).select(districtName);
         providerSearchBox.sendKeys(providerId);
         searchButton.click();
         waitForPatientsToLoad();
@@ -127,6 +142,6 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     private void waitForPatientsToLoad() {
-        waitForElementToBeReloadedByAjax(id("patientList"));
+        waitForElementToBeReloadedByAjax();
     }
 }

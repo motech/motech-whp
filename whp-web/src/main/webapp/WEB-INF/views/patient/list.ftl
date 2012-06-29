@@ -52,7 +52,9 @@
             "selectedDistrict":districtId,
             "selectedProvider":providerId
         };
-        $("#patients").load('/whp/patients/search', data);
+        $.post('/whp/patients/search', data, function(response) {
+            $('#patients').html(response);
+        })
     });
 </script>
 </@layout.defaultLayout>
