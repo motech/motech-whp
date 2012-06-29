@@ -45,6 +45,8 @@ public abstract class BaseTest {
         } catch (WebDriverException e) {
             if (e.getMessage().contains("Unable to bind to locking port")) {
                 createWebDriver();
+            } else {
+                throw e;
             }
         }
     }
