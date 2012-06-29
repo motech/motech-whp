@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Data
 public class TreatmentCard {
+
+    public static final int MONTHS_IN_IP_BOX = 5;
 
     private Patient patient;
 
@@ -41,10 +44,20 @@ public class TreatmentCard {
     }
 
     public LocalDate ipBoxLastDoseDate() {
-        return patient.currentTherapy().getStartDate().plusMonths(5).minusDays(1);
+        return patient.currentTherapy().getStartDate().plusMonths(MONTHS_IN_IP_BOX).minusDays(1);
     }
 
     public List<MonthlyAdherence> getMonthlyAdherences() {
         return ipAdherenceSection.getMonthlyAdherences();
     }
+
+    public LocalDate ipBoxAdherenceEndDate() {
+        Phases phases = therapy.getPhases();
+        LocalDate endDate = phases.getIPLastDate();
+        if(phases.ipPhaseWasExtended()) {
+            endDate = phases.getEIPLastDate();
+        }
+        return endDate;
+    }
+
 }

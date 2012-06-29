@@ -7,6 +7,8 @@ import org.motechproject.whp.refdata.domain.PhaseName;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.motechproject.util.DateUtil.today;
+
 public class Phases extends ArrayList<Phase> {
 
     //ektorp
@@ -18,9 +20,30 @@ public class Phases extends ArrayList<Phase> {
     }
 
     @JsonIgnore
+    public boolean ipPhaseWasExtended() {
+        Phase eipPhase = getByPhaseName(PhaseName.EIP);
+        return eipPhase != null && eipPhase.getStartDate() != null;
+    }
+
+    @JsonIgnore
     public Phase getByPhaseName(PhaseName phaseName) {
         for (Phase phase : this) {
             if (phase.getName().equals(phaseName)) return phase;
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public LocalDate getIPLastDate() {
+        LocalDate ipEndDate = getByPhaseName(PhaseName.IP).getEndDate();
+        return ipEndDate != null ? ipEndDate : today();
+    }
+
+    @JsonIgnore
+    public LocalDate getEIPLastDate() {
+        if (ipPhaseWasExtended()) {
+            LocalDate epEndDate = getByPhaseName(PhaseName.EIP).getEndDate();
+            return epEndDate != null ? epEndDate : today();
         }
         return null;
     }
@@ -36,7 +59,7 @@ public class Phases extends ArrayList<Phase> {
     }
 
     @JsonIgnore
-    public Phase getCurrentPhase(){
+    public Phase getCurrentPhase() {
         for (Phase phase : this) {
             if (phase.getStartDate() != null && phase.getEndDate() == null) {
                 return phase;
