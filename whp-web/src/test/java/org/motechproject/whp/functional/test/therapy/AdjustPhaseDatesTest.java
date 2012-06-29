@@ -1,8 +1,7 @@
 package org.motechproject.whp.functional.test.therapy;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.functional.page.provider.ListPatientsPage;
+import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.page.admin.PatientDashboardPage;
 import org.motechproject.whp.functional.test.BasePatientTest;
 
@@ -12,9 +11,11 @@ public class AdjustPhaseDatesTest extends BasePatientTest {
 
     private PatientDashboardPage patientDashboardPage;
 
-    @Before
+    @Override
     public void setUp() {
         super.setUp();
+        setupProvider();
+        setupPatientForProvider();
         patientDashboardPage = showPatient();
     }
 
@@ -43,7 +44,7 @@ public class AdjustPhaseDatesTest extends BasePatientTest {
     }
 
     private PatientDashboardPage showPatient() {
-        ListPatientsPage listPatientsPage = loginAsCMFAdmin();
-        return listPatientsPage.clickOnPatientWithThreapyNotYetStarted(testPatient.getCaseId());
+        ListAllPatientsPage listPatientsPage = loginAsCMFAdmin();
+        return listPatientsPage.clickOnPatientWithTherapyNotYetStarted(testPatient.getCaseId());
     }
 }

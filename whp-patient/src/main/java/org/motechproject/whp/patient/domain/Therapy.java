@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
@@ -106,5 +107,10 @@ public class Therapy extends MotechBaseDataObject {
     @JsonIgnore
     public Phase getPhase(PhaseName phaseName) {
         return phases.getByPhaseName(phaseName);
+    }
+
+    @JsonIgnore
+    public String getStartDateAsString() {
+        return WHPDate.date(startDate).value();
     }
 }

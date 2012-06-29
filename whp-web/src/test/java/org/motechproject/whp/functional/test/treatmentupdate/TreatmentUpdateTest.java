@@ -33,7 +33,7 @@ public abstract class TreatmentUpdateTest extends BaseTest {
 
     public void setupPatientForProvider() {
         patientDataService = new PatientDataService(webDriver);
-        testPatient = patientDataService.createPatient(testProvider.getProviderId(), "Foo");
+        testPatient = patientDataService.createPatient(testProvider.getProviderId(), "Foo", testProvider.getDistrict());
     }
 
     protected ProviderPage loginAsProvider(TestProvider provider) {

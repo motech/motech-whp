@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.functional.assertions.treatmentcard.Adherence;
 import org.motechproject.whp.functional.data.TestProvider;
+import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.page.LoginPage;
+import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.motechproject.whp.functional.steps.provideradherence.SubmitAdherenceStep;
 import org.motechproject.whp.functional.steps.treatmentcard.OpenTreatmentCardStep;
@@ -13,6 +16,10 @@ import org.motechproject.whp.functional.steps.treatmentupdate.PauseTreatmentStep
 import org.motechproject.whp.functional.steps.treatmentupdate.RestartTreatmentStep;
 import org.motechproject.whp.functional.steps.treatmentupdate.TransferInTreatmentStep;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TreatmentCardTest extends TreatmentUpdateTest {
 
@@ -113,4 +120,30 @@ public class TreatmentCardTest extends TreatmentUpdateTest {
         Adherence.isNotPresent(treatmentCardPage, new LocalDate(2013, 1, 1));
     }
 
+    private void assertTreatmentNotPausedOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertFalse(treatmentCardPage.treatmentPausedOn(localDate));
+    }
+
+    private void assertTreatmentPausedOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.treatmentPausedOn(localDate));
+    }
+
+    private void assertDatesNotEvenPresent(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.dateNotPresent(localDate));
+    }
+
+    private void assertAdherenceDataNotEvenEditableOn(TreatmentCardPage treatmentCardPage, LocalDate localDate) {
+        assertTrue(treatmentCardPage.nonEditableAdherenceOn(localDate));
+    }
+
+    private void assertAdherenceDataOn(TreatmentCardPage treatmentCardPage, String expectedAdherenceValue, String adherenceGivenBy, LocalDate doseDate) {
+        assertEquals(expectedAdherenceValue, treatmentCardPage.adherenceStatusOn(doseDate));
+
+        /* Meta data on Adherence Logs stores providerId in lower case */
+        assertEquals(adherenceGivenBy.toLowerCase(), treatmentCardPage.adherenceOnProvidedBy(doseDate));
+    }
+
+    private ListAllPatientsPage loginAsCMFAdminAndListAllPatients() {
+        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().navigateToShowAllPatients();
+    }
 }

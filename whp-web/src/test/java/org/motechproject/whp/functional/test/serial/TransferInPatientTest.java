@@ -20,7 +20,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         TestProvider provider1 = providerDataService.createProvider();
         TestProvider provider2 = providerDataService.createProvider();
 
-        testPatient = patientDataService.createPatient(provider1.getProviderId(), "Foo");
+        testPatient = patientDataService.createPatient(provider1.getProviderId(), "Foo", provider1.getDistrict());
 
         adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
 

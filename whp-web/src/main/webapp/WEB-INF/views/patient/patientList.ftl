@@ -39,7 +39,7 @@
                 <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
                 <td id="patient_${patient.patientId}_TreatmentStartDate">
                     <#if patient.currentTreatment.therapy.startDate?? >
-                                    ${patient.currentTreatment.therapy.startDate?date?string("dd/mm/yyyy") }
+                                    ${patient.currentTreatment.therapy.startDateAsString}
                             </#if>
                 </td>
             </tr>
@@ -47,3 +47,4 @@
         </#if>
     </tbody>
 </table>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>

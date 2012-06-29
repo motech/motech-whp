@@ -33,7 +33,7 @@ public class UpdateAdherenceTest extends BaseTest {
 
     public void setupPatientForProvider() {
         PatientDataService patientDataService = new PatientDataService(webDriver);
-        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo");
+        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo", provider.getDistrict());
     }
 
     @Test

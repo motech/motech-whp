@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.stalenessOf;
+
 public abstract class Page {
 
     private Logger logger = LoggerFactory.getLogger(Page.class);
@@ -37,7 +39,6 @@ public abstract class Page {
 
     @FindBy(how = How.LINK_TEXT, using = "Logout")
     private WebElement logoutLink;
-
 
     private void searchById(String id) {
         searchBox = WebDriverFactory.createWebElement(searchBox);
@@ -120,4 +121,16 @@ public abstract class Page {
         });
     }
 
+    protected void waitForElementToBeReloadedByAjax(final By by) {
+        WebElement element = webDriver.findElement(by);
+        if (null != element)
+            wait.until(stalenessOf(element));
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement element = webDriver.findElement(by);
+                return element != null && !stalenessOf(element).apply(webDriver);
+            }
+        });
+    }
 }

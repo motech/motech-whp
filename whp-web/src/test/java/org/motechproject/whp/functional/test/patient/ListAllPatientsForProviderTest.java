@@ -11,6 +11,13 @@ import static org.junit.Assert.assertTrue;
 
 public class ListAllPatientsForProviderTest extends BasePatientTest {
 
+    @Override
+    public void setUp() {
+        super.setUp();
+        setupProvider();
+        setupPatientForProvider();
+    }
+
     @Test
     public void shouldLoginAsProviderAndListAllPatientsForProvider() {
         ProviderPage providerPage = loginAsProvider();

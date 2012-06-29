@@ -10,14 +10,16 @@ public class TestPatient {
     private String tbId;
     private String providerId;
     private String firstName;
+    private String district;
     private String village;
     private String diseaseClass;
 
-    public TestPatient(String caseId, String tbId, String providerId, String firstName) {
+    public TestPatient(String caseId, String tbId, String providerId, String firstName, String district) {
         this.caseId = caseId;
         this.tbId = tbId;
         this.providerId = providerId;
         this.firstName = firstName;
+        this.district = district;
         this.village = "village";
         this.diseaseClass = "P";
     }

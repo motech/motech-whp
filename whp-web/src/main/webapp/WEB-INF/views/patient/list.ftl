@@ -1,6 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-cmfadmin.ftl" as layout>
 <#include "../layout/legend.ftl">
+
 <@layout.defaultLayout "Patient List">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
 
@@ -40,27 +41,7 @@
     </div>
     <@legend key1="paused" value1="Current Treatment Paused" />
     <div id="patients">
-        <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
-            <thead>
-            <tr>
-                <th>Patient ID</th>
-                <th>TB-ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Provider ID</th>
-                <th>Village</th>
-                <th>District</th>
-                <th>Treatment Category</th>
-                <th>Treatment Start Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="text-center" colspan="10">No patients to show</td>
-            </tr>
-            </tbody>
-        </table>
+        <#include "./patientList.ftl"/>
     </div>
 </div>
 <script type="text/javascript">

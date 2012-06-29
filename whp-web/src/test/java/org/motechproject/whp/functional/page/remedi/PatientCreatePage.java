@@ -27,6 +27,8 @@ public class PatientCreatePage extends Page {
     WebElement diseaseClass;
     @FindBy(how = How.ID, using = "submit")
     WebElement submit;
+    @FindBy(how = How.ID, using = "address_district")
+    WebElement district;
 
     public PatientCreatePage(WebDriver webDriver) {
         super(webDriver);
@@ -39,6 +41,7 @@ public class PatientCreatePage extends Page {
         providerId = WebDriverFactory.createWebElement(providerId);
         firstName = WebDriverFactory.createWebElement(firstName);
         village = WebDriverFactory.createWebElement(village);
+        district = WebDriverFactory.createWebElement(district);
         diseaseClass = WebDriverFactory.createWebElement(diseaseClass);
         submit = WebDriverFactory.createWebElement(submit);
     }
@@ -59,6 +62,7 @@ public class PatientCreatePage extends Page {
         this.providerId.sendKeys(testPatient.getProviderId());
         this.firstName.sendKeys(testPatient.getFirstName());
         this.village.sendKeys(testPatient.getVillage());
+        this.district.sendKeys(testPatient.getDistrict());
         this.diseaseClass.sendKeys(testPatient.getDiseaseClass());
         submit.click();
         webDriver.get(LoginPage.LOGIN_URL);

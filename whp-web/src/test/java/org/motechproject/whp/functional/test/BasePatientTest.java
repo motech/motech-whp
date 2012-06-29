@@ -4,8 +4,8 @@ import org.motechproject.whp.functional.data.TestPatient;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.provider.ListPatientsPage;
 import org.motechproject.whp.functional.page.LoginPage;
+import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.service.PatientDataService;
 import org.motechproject.whp.functional.service.ProviderDataService;
 
@@ -15,11 +15,14 @@ public abstract class BasePatientTest extends BaseTest {
 
     protected TestPatient testPatient;
 
-    @Override
-    public void setUp() {
-        super.setUp();
-        setupProvider();
-        setupPatientForProvider();
+    public void setupTestProvider(String district) {
+        ProviderDataService providerDataService = new ProviderDataService(webDriver);
+        provider = providerDataService.createProvider(district);
+    }
+
+    public void setupTestPatientForDistrict(String districtName) {
+        PatientDataService patientDataService = new PatientDataService(webDriver);
+        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo", districtName);
     }
 
     public void setupProvider() {
@@ -29,10 +32,10 @@ public abstract class BasePatientTest extends BaseTest {
 
     public void setupPatientForProvider() {
         PatientDataService patientDataService = new PatientDataService(webDriver);
-        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo");
+        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo", provider.getDistrict());
     }
 
-    protected ListPatientsPage loginAsCMFAdmin() {
+    protected ListAllPatientsPage loginAsCMFAdmin() {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().navigateToShowAllPatients();
     }
 }
