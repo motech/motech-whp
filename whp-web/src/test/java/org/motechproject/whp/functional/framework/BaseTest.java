@@ -14,6 +14,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

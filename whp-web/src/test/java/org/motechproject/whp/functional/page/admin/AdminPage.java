@@ -15,6 +15,11 @@ public class AdminPage extends ListAllPatientsPage {
         super(webDriver);
     }
 
+    @Override
+    protected void waitForPageToLoad() {
+        waitForElementWithIdToLoad("show-patients");
+    }
+
     public ListAllPatientsPage navigateToShowAllPatients() {
         showPatientsLink.click();
         ListAllPatientsPage listAllPatientsPage = MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
