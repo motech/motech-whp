@@ -21,4 +21,10 @@ public class TestPatient {
         this.village = "village";
         this.diseaseClass = "P";
     }
+
+    public void transferIn(String newTbId, String providerId) {
+        setTbId(newTbId);
+        setProviderId(providerId);
+    }
+
 }

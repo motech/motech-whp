@@ -5,6 +5,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -77,6 +78,10 @@ public abstract class BaseTest {
                 output.close();
         }
         adjustDateTime(DateUtil.now());
+    }
+
+    public void adjustDateTime(int dayOfMonth, int monthOfYear, int year) {
+        adjustDateTime(DateUtil.newDateTime(new LocalDate(year, monthOfYear, dayOfMonth)));
     }
 
     public void adjustDateTime(DateTime dateTime) {
