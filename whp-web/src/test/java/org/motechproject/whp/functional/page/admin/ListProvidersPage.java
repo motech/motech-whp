@@ -1,5 +1,6 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.admin;
 
+import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;

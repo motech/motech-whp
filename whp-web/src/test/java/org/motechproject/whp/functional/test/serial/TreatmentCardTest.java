@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.functional.assertions.treatmentcard.Adherence;
 import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.page.TreatmentCardPage;
+import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.motechproject.whp.functional.steps.provideradherence.SubmitAdherenceStep;
 import org.motechproject.whp.functional.steps.treatmentcard.OpenTreatmentCardStep;
 import org.motechproject.whp.functional.steps.treatmentupdate.CloseTreatmentStep;

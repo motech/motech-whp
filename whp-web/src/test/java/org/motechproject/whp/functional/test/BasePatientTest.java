@@ -4,7 +4,7 @@ import org.motechproject.whp.functional.data.TestPatient;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.ListPatientsPage;
+import org.motechproject.whp.functional.page.provider.ListPatientsPage;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.service.PatientDataService;
 import org.motechproject.whp.functional.service.ProviderDataService;

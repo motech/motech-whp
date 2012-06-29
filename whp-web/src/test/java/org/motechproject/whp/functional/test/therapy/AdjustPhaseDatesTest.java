@@ -2,8 +2,8 @@ package org.motechproject.whp.functional.test.therapy;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.functional.page.ListPatientsPage;
-import org.motechproject.whp.functional.page.PatientDashboardPage;
+import org.motechproject.whp.functional.page.provider.ListPatientsPage;
+import org.motechproject.whp.functional.page.admin.PatientDashboardPage;
 import org.motechproject.whp.functional.test.BasePatientTest;
 
 import static org.junit.Assert.assertEquals;

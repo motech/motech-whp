@@ -3,8 +3,8 @@ package org.motechproject.whp.functional.test.serial;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.CaseUpdate;
-import org.motechproject.whp.functional.page.ProviderPage;
-import org.motechproject.whp.functional.page.UpdateAdherencePage;
+import org.motechproject.whp.functional.page.provider.ProviderPage;
+import org.motechproject.whp.functional.page.provider.UpdateAdherencePage;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 
 import static junit.framework.Assert.assertEquals;

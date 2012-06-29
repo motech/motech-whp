@@ -1,6 +1,7 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.admin;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

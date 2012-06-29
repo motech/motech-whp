@@ -2,9 +2,9 @@ package org.motechproject.whp.functional.steps.treatmentcard;
 
 import org.motechproject.whp.functional.data.TestPatient;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.ListPatientsPage;
 import org.motechproject.whp.functional.page.LoginPage;
-import org.motechproject.whp.functional.page.TreatmentCardPage;
+import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
+import org.motechproject.whp.functional.page.provider.ListPatientsPage;
 import org.motechproject.whp.functional.steps.Step;
 import org.openqa.selenium.WebDriver;
 

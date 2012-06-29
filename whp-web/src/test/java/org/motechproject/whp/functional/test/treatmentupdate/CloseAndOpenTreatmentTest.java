@@ -2,7 +2,7 @@ package org.motechproject.whp.functional.test.treatmentupdate;
 
 import org.junit.Test;
 import org.motechproject.whp.functional.data.CaseUpdate;
-import org.motechproject.whp.functional.page.ProviderPage;
+import org.motechproject.whp.functional.page.provider.ProviderPage;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

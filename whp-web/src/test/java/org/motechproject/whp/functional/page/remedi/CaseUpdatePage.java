@@ -1,9 +1,11 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.remedi;
 
 import org.motechproject.whp.functional.framework.ExtendedWebElement;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.motechproject.whp.functional.page.LoginPage;
+import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

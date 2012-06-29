@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.ListProvidersPage;
+import org.motechproject.whp.functional.page.admin.ListProvidersPage;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
 

@@ -1,7 +1,10 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.provider;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.page.LoggedInUserPage;
+import org.motechproject.whp.functional.page.admin.PatientDashboardPage;
+import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,7 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.admin;
 
 import org.joda.time.LocalDate;
+import org.motechproject.whp.functional.page.admin.PatientDashboardPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;

@@ -1,11 +1,7 @@
 package org.motechproject.whp.functional.service;
 
-import org.motechproject.whp.functional.data.TestPatient;
-import org.motechproject.whp.functional.page.CaseUpdatePage;
-import org.motechproject.whp.functional.page.PatientCreatePage;
+import org.motechproject.whp.functional.page.remedi.CaseUpdatePage;
 import org.openqa.selenium.WebDriver;
-
-import java.util.UUID;
 
 public class CaseDataService {
 

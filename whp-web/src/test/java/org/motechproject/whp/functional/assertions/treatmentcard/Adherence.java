@@ -1,7 +1,7 @@
 package org.motechproject.whp.functional.assertions.treatmentcard;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.functional.page.TreatmentCardPage;
+import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

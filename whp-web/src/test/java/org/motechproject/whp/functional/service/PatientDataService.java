@@ -1,7 +1,7 @@
 package org.motechproject.whp.functional.service;
 
 import org.motechproject.whp.functional.data.TestPatient;
-import org.motechproject.whp.functional.page.PatientCreatePage;
+import org.motechproject.whp.functional.page.remedi.PatientCreatePage;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.openqa.selenium.WebDriver;
 

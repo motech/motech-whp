@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional.page;
+package org.motechproject.whp.functional.page.provider;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.openqa.selenium.By;

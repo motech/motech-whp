@@ -1,8 +1,8 @@
 package org.motechproject.whp.functional.service;
 
 import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.page.ProviderActivatePage;
-import org.motechproject.whp.functional.page.ProviderCreatePage;
+import org.motechproject.whp.functional.page.remedi.ProviderActivatePage;
+import org.motechproject.whp.functional.page.remedi.ProviderCreatePage;
 import org.openqa.selenium.WebDriver;
 
 import java.util.UUID;
