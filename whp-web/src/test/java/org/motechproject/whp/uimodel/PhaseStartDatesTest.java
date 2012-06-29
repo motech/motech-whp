@@ -4,7 +4,7 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.common.WHPConstants;
 

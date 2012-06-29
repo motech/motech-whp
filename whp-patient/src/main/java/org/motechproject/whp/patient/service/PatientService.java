@@ -6,7 +6,7 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.mapper.TherapyMapper;

@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.refdata.domain.PhaseName;
 
 @Data
 public class Phase {

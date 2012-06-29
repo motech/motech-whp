@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.refdata.domain.PhaseName;
 
 import java.util.ArrayList;
 import java.util.Collection;

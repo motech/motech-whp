@@ -6,7 +6,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phase;
-import org.motechproject.whp.patient.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;

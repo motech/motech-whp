@@ -15,6 +15,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapies;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.beans.factory.annotation.Autowired;

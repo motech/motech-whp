@@ -61,5 +61,4 @@ public class TreatmentCategory extends MotechBaseDataObject {
                 return null;
         }
     }
-
 }

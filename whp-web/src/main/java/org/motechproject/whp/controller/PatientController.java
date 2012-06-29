@@ -5,6 +5,7 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.request.PhaseTransitionRequest;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +26,6 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
-
 
 @Controller
 @RequestMapping(value = "/patients")
@@ -113,5 +114,11 @@ public class PatientController extends BaseController {
 
     private String dateMessage(String date) {
         return isBlank(date) ? "Not Set" : date;
+    }
+
+    @RequestMapping(value = "transitionPhase", method = RequestMethod.POST)
+    public String update(@RequestBody PhaseTransitionRequest phaseTransitionRequest, Model uiModel, HttpServletRequest request) {
+        phaseUpdateOrchestrator.setNextPhase(phaseTransitionRequest.getPatientId(), phaseTransitionRequest.getPhaseToTransitionTo());
+        return "";
     }
 }

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.assertEquals;

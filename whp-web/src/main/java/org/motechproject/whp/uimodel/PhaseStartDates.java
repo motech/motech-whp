@@ -6,9 +6,9 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
 
-import static org.motechproject.whp.patient.domain.PhaseName.CP;
-import static org.motechproject.whp.patient.domain.PhaseName.EIP;
-import static org.motechproject.whp.patient.domain.PhaseName.IP;
+import static org.motechproject.whp.refdata.domain.PhaseName.CP;
+import static org.motechproject.whp.refdata.domain.PhaseName.EIP;
+import static org.motechproject.whp.refdata.domain.PhaseName.IP;
 
 @Data
 public class PhaseStartDates {

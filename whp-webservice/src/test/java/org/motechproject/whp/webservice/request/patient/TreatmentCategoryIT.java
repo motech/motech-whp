@@ -5,16 +5,13 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.domain.PhaseName;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
-public class TreatmentCategoryTest extends BasePatientTest {
+public class TreatmentCategoryIT extends BasePatientTest {
 
     @Test
     public void shouldThrowExceptionWhenTreatmentCategoryIsValid() {
@@ -49,17 +46,4 @@ public class TreatmentCategoryTest extends BasePatientTest {
             assertTrue(error.getMessage().contains("field:treatment_category:value should not be null"));
         }
     }
-
-    @Test
-    public void shouldReturnApplicableNumberOfDosesForGivenPhase() {
-        TreatmentCategory category = new TreatmentCategory();
-        category.setNumberOfDosesInIP(24);
-        category.setNumberOfDosesInEIP(12);
-        category.setNumberOfDosesInCP(28);
-
-        assertEquals(Integer.valueOf(24), category.numberOfDosesForPhase(PhaseName.IP));
-        assertEquals(Integer.valueOf(12), category.numberOfDosesForPhase(PhaseName.EIP));
-        assertEquals(Integer.valueOf(28), category.numberOfDosesForPhase(PhaseName.CP));
-    }
-
 }
