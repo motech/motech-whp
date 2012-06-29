@@ -26,10 +26,6 @@ public class WeightStatisticsRequests {
     @Valid
     private WeightStatisticsRequest endTreatmentWeightStatistics = new WeightStatisticsRequest();
 
-    public boolean hasWeightStatistics(SampleInstance SampleInstance) {
-        return StringUtils.hasText(getWeightStatisticsRecord(SampleInstance).getWeightDate());
-    }
-
     public void setWeight(SampleInstance SampleInstance, String weight) {
         getWeightStatisticsRecord(SampleInstance).setWeight(weight);
     }

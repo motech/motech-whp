@@ -35,4 +35,9 @@ public class ProviderBuilder {
     public Provider build() {
         return provider;
     }
+
+    public ProviderBuilder withPrimaryMobileNumber(String primaryMobileNumber) {
+        provider.setPrimaryMobile(primaryMobileNumber);
+        return this;
+    }
 }

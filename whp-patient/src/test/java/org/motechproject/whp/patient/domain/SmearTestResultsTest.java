@@ -8,6 +8,9 @@ import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class SmearTestResultsTest {
 
@@ -29,39 +32,30 @@ public class SmearTestResultsTest {
 
     @Test
     public void shouldUpdateCurrentSmearTestResult_AllInstancesInOrder_shouldPreserveOrder() {
+
+        SampleInstance toBeUpdatedInstance = SampleInstance.PreTreatment;
+        SampleInstance anotherInstance = SampleInstance.EndIP;
+        LocalDate anotherInstanceDate1 = new LocalDate(2011, 1, 2);
+        LocalDate anotherInstanceDate2 = new LocalDate(2011, 1, 13);
+        SmearTestResult anotherInstanceResult1 = SmearTestResult.Positive;
+        SmearTestResult anotherInstanceResult2 = SmearTestResult.Negative;
+
         SmearTestResults smearTestResults = new SmearTestResults();
-        for (SampleInstance type : SampleInstance.values()) {
-            SmearTestRecord oldSmearTestRecord = new SmearTestRecord(type, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive);
-            smearTestResults.add(oldSmearTestRecord);
-        }
+        SmearTestRecord oldSmearTestRecord1 = new SmearTestRecord(toBeUpdatedInstance, new LocalDate(2010, 10, 10), SmearTestResult.Negative, new LocalDate(2010, 11, 15), SmearTestResult.Positive);
+        SmearTestRecord oldSmearTestRecord2 = new SmearTestRecord(anotherInstance, anotherInstanceDate1, anotherInstanceResult1, anotherInstanceDate2, anotherInstanceResult2);
+        smearTestResults.add(oldSmearTestRecord1);
+        smearTestResults.add(oldSmearTestRecord2);
 
-        LocalDate newTestDate = new LocalDate(2010, 12, 12);
-        for (SampleInstance type : SampleInstance.values()) {
-            SmearTestRecord newSmearTestRecord = new SmearTestRecord(type, newTestDate, SmearTestResult.Negative, newTestDate, SmearTestResult.Negative);
-            smearTestResults.add(newSmearTestRecord);
-        }
+        LocalDate newTestDate1 = new LocalDate(2010, 12, 12);
+        LocalDate newTestDate2 = new LocalDate(2010, 12, 20);
+        SmearTestResult newResult1 = SmearTestResult.Negative;
+        SmearTestResult newResult2 = SmearTestResult.Positive;
+        SmearTestRecord newSmearTestRecord = new SmearTestRecord(toBeUpdatedInstance, newTestDate1, newResult1, newTestDate2, newResult2);
+        smearTestResults.add(newSmearTestRecord);
 
-        assertEquals(5, smearTestResults.size());
-        Assert.assertTrue(smearTestResults.get(0).getSmear_test_date_1().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(0).getSmear_test_date_2().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(0).getSmear_test_result_1().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(0).getSmear_test_result_2().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(1).getSmear_test_date_1().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(1).getSmear_test_date_2().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(1).getSmear_test_result_1().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(1).getSmear_test_result_2().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(2).getSmear_test_date_1().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(2).getSmear_test_date_2().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(2).getSmear_test_result_1().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(2).getSmear_test_result_2().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(3).getSmear_test_date_1().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(3).getSmear_test_date_2().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(3).getSmear_test_result_1().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(3).getSmear_test_result_2().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(4).getSmear_test_date_1().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(4).getSmear_test_date_2().equals(newTestDate));
-        Assert.assertTrue(smearTestResults.get(4).getSmear_test_result_1().equals(SmearTestResult.Negative));
-        Assert.assertTrue(smearTestResults.get(4).getSmear_test_result_2().equals(SmearTestResult.Negative));
+        assertEquals(2, smearTestResults.size());
+        assertSmearTestResult(smearTestResults.get(0), anotherInstance, anotherInstanceDate1, anotherInstanceResult1, anotherInstanceDate2, anotherInstanceResult2);
+        assertSmearTestResult(smearTestResults.get(1), toBeUpdatedInstance, newTestDate1, newResult1, newTestDate2, newResult2);
     }
 
     @Test
@@ -91,6 +85,21 @@ public class SmearTestResultsTest {
         }
     }
 
+
+    @Test
+    public void shouldReturnSmearTestResultForGivenSampleInstance() {
+        SmearTestResults smearTestResults = new SmearTestResults();
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+
+        smearTestResults.add(endIpSmearTestRecord);
+        smearTestResults.add(pretreatmentSmearTestRecord);
+
+        assertThat(smearTestResults.resultForInstance(SampleInstance.PreTreatment), is(pretreatmentSmearTestRecord));
+        assertThat(smearTestResults.resultForInstance(SampleInstance.EndIP), is(endIpSmearTestRecord));
+        assertThat(smearTestResults.resultForInstance(SampleInstance.ExtendedIP), nullValue());
+    }
+
     private void verifyFor(SampleInstance type) {
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(new SmearTestRecord(type, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive));
@@ -99,5 +108,13 @@ public class SmearTestResultsTest {
         smearTestResults.add(new SmearTestRecord(type, new LocalDate(2010, 10, 10), SmearTestResult.Negative, new LocalDate(2010, 10, 10), SmearTestResult.Negative));
         assertEquals(1, smearTestResults.size());
         Assert.assertTrue(smearTestResults.latestResult().isOfInstance(type));
+    }
+
+    private void assertSmearTestResult(SmearTestRecord smearTestRecord, SampleInstance expectedInstance, LocalDate expectedDate1, SmearTestResult expectedResult1, LocalDate expectedDate2, SmearTestResult expectedResult2) {
+        assertEquals(expectedInstance,smearTestRecord.getSmear_sample_instance());
+        assertEquals(expectedDate1, smearTestRecord.getSmear_test_date_1());
+        assertEquals(expectedDate2, smearTestRecord.getSmear_test_date_2());
+        assertEquals(expectedResult1, smearTestRecord.getSmear_test_result_1());
+        assertEquals(expectedResult2, smearTestRecord.getSmear_test_result_2());
     }
 }

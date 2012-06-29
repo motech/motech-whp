@@ -43,7 +43,7 @@
     </table>
 </div>
 <br/>
-<table id="IPTreatmentCard" class="table table-bordered table-condensed fixed sharp disable-select">
+<table id="IPTreatmentCard" class="table table-bordered table-condensed fixed disable-select">
     <thead>
     <tr>
         <th>Month/Year</th>
@@ -122,7 +122,6 @@
 
     <div class="controls pull-right">
         <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
-        <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
         <button type="button" id='submitJson' class="btn btn-primary">Save</button>
     </div>
 </form>

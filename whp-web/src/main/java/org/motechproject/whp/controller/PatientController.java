@@ -6,7 +6,10 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.request.PhaseTransitionRequest;
+import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
+import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,9 +99,11 @@ public class PatientController extends BaseController {
 
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
-        uiModel.addAttribute("patient", patient);
+        Provider provider = providerService.fetchByProviderId(patient.providerId());
+
+        uiModel.addAttribute("patient", new PatientInfo(patient,provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
-        uiModel.addAttribute("provider", providerService.fetchByProviderId(patient.providerId()));
+
         String messages = in("messages", request);
         if (isNotEmpty(messages)) {
             uiModel.addAttribute("messages", messages);

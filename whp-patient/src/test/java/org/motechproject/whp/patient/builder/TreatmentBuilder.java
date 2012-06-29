@@ -79,4 +79,29 @@ public class TreatmentBuilder {
         treatment.setTbId(tbId);
         return this;
     }
+
+    public TreatmentBuilder withTherapy(Therapy therapy) {
+        treatment.setTherapy(therapy);
+        return this;
+    }
+
+    public TreatmentBuilder withTbRegistrationNumber(String tbRegistrationNo) {
+        treatment.setTbRegistrationNumber(tbRegistrationNo);
+        return  this;
+    }
+
+    public TreatmentBuilder withAddress(Address address) {
+        treatment.setPatientAddress(address);
+        return this;
+    }
+
+    public TreatmentBuilder withWeightStatistics(WeightStatistics weightStatistics) {
+        treatment.setWeightStatistics(weightStatistics);
+        return this;
+    }
+
+    public TreatmentBuilder withSmearTestResults(SmearTestResults smearTestResults) {
+        treatment.setSmearTestResults(smearTestResults);
+        return this;
+    }
 }

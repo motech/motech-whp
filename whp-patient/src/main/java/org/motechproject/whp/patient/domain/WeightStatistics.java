@@ -25,7 +25,7 @@ public class WeightStatistics {
         return false;
     }
 
-    private WeightStatisticsRecord resultForInstance(SampleInstance SampleInstance) {
+    public WeightStatisticsRecord resultForInstance(SampleInstance SampleInstance) {
         for (WeightStatisticsRecord weightStatisticsRecord : weightStatisticsRecords) {
             if (weightStatisticsRecord.isOfInstance(SampleInstance))
                 return weightStatisticsRecord;

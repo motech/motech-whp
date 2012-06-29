@@ -26,7 +26,7 @@ public class SmearTestResults {
         return false;
     }
 
-    private SmearTestRecord resultForInstance(SampleInstance sampleInstance) {
+    public SmearTestRecord resultForInstance(SampleInstance sampleInstance) {
         for (SmearTestRecord smearTestRecord : this.all) {
             if (smearTestRecord.isOfInstance(sampleInstance))
                 return smearTestRecord;

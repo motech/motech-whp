@@ -11,6 +11,7 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -93,12 +94,12 @@ public class PatientControllerTest {
 
     @Test
     public void shouldReturnDashBoardView() throws Exception {
+        PatientInfo patientInfo = new PatientInfo(patient, provider);
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
-                .andExpect(model().attribute("patient", patient))
-                .andExpect(model().attribute("provider", provider))
+                .andExpect(model().size(2))
+                .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
     }
@@ -151,5 +152,4 @@ public class PatientControllerTest {
         patientController.list(uiModel);
         verify(uiModel).addAttribute(PatientController.PATIENT_LIST, patients);
     }
-
 }

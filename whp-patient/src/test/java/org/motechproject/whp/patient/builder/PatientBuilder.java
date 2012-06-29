@@ -118,4 +118,29 @@ public class PatientBuilder {
         patient.getCurrentTreatment().setProviderId(providerId);
         return this;
     }
+
+    public PatientBuilder withPhi(String phi) {
+        patient.setPhi(phi);
+        return this;
+    }
+
+    public PatientBuilder withGender(Gender gender) {
+        patient.setGender(gender);
+        return this;
+    }
+
+    public PatientBuilder withFirstName(String firstName) {
+        patient.setFirstName(firstName);
+        return this;
+    }
+
+    public PatientBuilder withLastName(String lastName) {
+        patient.setLastName(lastName);
+        return this;
+    }
+
+    public PatientBuilder withPatientMobileNumber(String phoneNumber) {
+        patient.setPhoneNumber(phoneNumber);
+        return this;
+    }
 }

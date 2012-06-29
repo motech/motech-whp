@@ -251,5 +251,20 @@ div.buttons a, div.buttons button {
 }
 
 .patient-info{
-    height: 640px;
+    height: 400px;
+}
+.default-arrow, .default-arrow td, .default-arrow th  {
+    cursor: default;
+}
+.word-wrap {
+    word-wrap: break-word;
+}
+.patient-info-left-table {
+    width: 400px;
+}
+.patient-info-right-table {
+    width: 475px;
+}
+.controls a{
+    margin-right: 10px;
 }
