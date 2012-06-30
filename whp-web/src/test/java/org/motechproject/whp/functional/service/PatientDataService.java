@@ -21,5 +21,4 @@ public class PatientDataService {
         patientCreatePage.createPatient(testPatient);
         return testPatient;
     }
-
 }

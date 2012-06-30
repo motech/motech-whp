@@ -20,6 +20,11 @@ public class ProviderPage extends ListPatientsPage {
         super(webDriver);
     }
 
+    @Override
+    protected void waitForPageToLoad() {
+        waitForElementWithIdToLoad("patientList");
+    }
+
     public UpdateAdherencePage clickEditAdherenceLink(String patientId) {
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {

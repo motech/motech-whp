@@ -113,7 +113,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
                 break;
             }
         }
-        createWebElement(dashboardLinks.get(index)).click();
+        createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
         return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
     }
 

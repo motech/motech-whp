@@ -52,8 +52,8 @@ public class ListAllProvidersTest extends BaseTest {
 
     @Test
     public void shouldDisplayWarningForDistrict_WhenNoProvidersFound() {
-        listProvidersPage.searchBy("Vaishali", "", false);
-        Assert.assertEquals("No providers found for District: 'Vaishali'", listProvidersPage.getWarningText());
+        listProvidersPage.searchBy("Bhagalpur", "", false);
+        Assert.assertEquals("No providers found for District: 'Bhagalpur'", listProvidersPage.getWarningText());
     }
 
     @Test

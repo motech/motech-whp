@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page.remedi;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.page.LoginPage;
@@ -8,6 +9,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import static org.openqa.selenium.By.id;
 
 public class ProviderActivatePage extends Page {
 
@@ -34,7 +38,18 @@ public class ProviderActivatePage extends Page {
     public LoginPage activateProvider(String providerId) {
         setProviderId(providerId);
         submit.click();
+        waitForSuccess();
         return transitionToNextPage();
+    }
+
+    private void waitForSuccess() {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement statusMessage = webDriver.findElement(id("statusMessage"));
+                return StringUtils.containsIgnoreCase(statusMessage.getText(), "success");
+            }
+        });
     }
 
     private void setProviderId(String providerId) {

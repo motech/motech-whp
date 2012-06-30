@@ -15,6 +15,8 @@ import org.seleniumhq.jetty7.security.SecurityHandler;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.motechproject.whp.functional.framework.WebDriverFactory.createWebElement;
+
 public class LoggedInUserPage extends Page {
 
     private static final String CURRENT_PASSWORD_ID = "currentPassword";
@@ -55,9 +57,9 @@ public class LoggedInUserPage extends Page {
 
     @Override
     public void postInitialize() {
-        currentPassword = WebDriverFactory.createWebElement(currentPassword);
-        newPassword = WebDriverFactory.createWebElement(newPassword);
-        confirmNewPassword = WebDriverFactory.createWebElement(confirmNewPassword);
+        currentPassword = createWebElement(currentPassword);
+        newPassword = createWebElement(newPassword);
+        confirmNewPassword = createWebElement(confirmNewPassword);
     }
 
     public String getWelcomeText() {
@@ -75,10 +77,11 @@ public class LoggedInUserPage extends Page {
     }
 
     public void changePassword(String currentPasswordText, String newPasswordText, String confirmNewPasswordText) {
-        currentPassword.sendKeys(currentPasswordText);
-        newPassword.sendKeys(newPasswordText);
-        confirmNewPassword.sendKeys(confirmNewPasswordText);
+        createWebElement(currentPassword).sendKeys(currentPasswordText);
+        createWebElement(newPassword).sendKeys(newPasswordText);
+        createWebElement(confirmNewPassword).sendKeys(confirmNewPasswordText);
         currentPassword.submit();
+        waitForElementToBeReloadedByAjax();
     }
 
     public List<String> getChangePasswordErrorMessages() {
@@ -90,6 +93,6 @@ public class LoggedInUserPage extends Page {
 
     @Override
     public void logout() {
-        WebDriverFactory.createWebElement(logoutLink).click();
+        createWebElement(logoutLink).click();
     }
 }
