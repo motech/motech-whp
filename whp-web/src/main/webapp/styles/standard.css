@@ -204,6 +204,11 @@ table tbody .link:hover td {
     color: #bd4247;
     font-weight: bold;
 }
+
+.black {
+    color: #000000;
+    font-weight: bold;
+}
 .alert-info {
     background-color: #EDEBBF;
     border-color: #E0D6AA;
@@ -223,6 +228,12 @@ div.buttons a, div.buttons button {
     margin:auto;
     width: 679px;
     max-width: 679px;
+}
+
+.offset1-fixed {
+    margin:auto;
+    width: 757px;
+    max-width: 757px;
 }
 
 .ui-combobox {

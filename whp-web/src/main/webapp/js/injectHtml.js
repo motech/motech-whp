@@ -3,7 +3,7 @@ function set_html( id, html ) {
     var orphNode = document.createElement('div');
     orphNode.innerHTML = html;
 
-    // get the script nodes, add them into an arrary, and remove them from orphan node
+    // get the script nodes, add them into an array, and remove them from orphan node
     var scriptNodes = orphNode.getElementsByTagName('script');
     var scripts = [];
     while(scriptNodes.length) {

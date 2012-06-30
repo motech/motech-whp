@@ -199,10 +199,32 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean isTransitioning() {
-        return currentTherapy().getCurrentPhase() == null;
+        return currentTherapy().getCurrentPhase() == null && currentTherapy().getLastCompletedPhase() != null;
     }
 
+    @JsonIgnore
     public boolean hasPhaseToTransitionTo() {
         return currentTherapy().getNextPhaseName() != null;
+    }
+
+    @JsonIgnore
+    public ArrayList<String> getPhasesNotPossibleToTransitionTo() {
+        Phases phases = currentTherapy().getPhases();
+        Phase currentPhase = currentTherapy().getCurrentPhase() == null ? currentTherapy().getLastCompletedPhase() : currentTherapy().getCurrentPhase();
+        ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<String>();
+        if (currentPhase == null) return namesOfPhasesNotPossibleToTransitionTo;
+
+        List<Phase> phasesNotPossibleToTransitionTo = phases.subList(0, phases.indexOf(currentPhase) + 1);
+        for (Phase phase : phasesNotPossibleToTransitionTo) {
+            namesOfPhasesNotPossibleToTransitionTo.add(phase.getName().name());
+        }
+
+        return namesOfPhasesNotPossibleToTransitionTo;
+    }
+
+    @JsonIgnore
+    public int getRemainingDosesInCurrentPhase(){
+        Phase currentPhase = currentTherapy().getCurrentPhase();
+        return currentPhase != null ? currentTherapy().remainingDoses(currentPhase) : 0;
     }
 }

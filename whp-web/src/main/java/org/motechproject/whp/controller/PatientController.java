@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
-import org.motechproject.whp.request.PhaseTransitionRequest;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,9 +150,9 @@ public class PatientController extends BaseController {
         return isBlank(date) ? "Not Set" : date;
     }
 
-    @RequestMapping(value = "transitionPhase", method = RequestMethod.POST)
-    public String update(@RequestBody PhaseTransitionRequest phaseTransitionRequest, Model uiModel, HttpServletRequest request) {
-        phaseUpdateOrchestrator.setNextPhase(phaseTransitionRequest.getPatientId(), phaseTransitionRequest.getPhaseToTransitionTo());
-        return "";
+    @RequestMapping(value = "transitionPhase/{id}", method = RequestMethod.GET)
+    public String update(@PathVariable("id") String patientId, @RequestParam("to") String phaseName) {
+        phaseUpdateOrchestrator.setNextPhase(patientId, PhaseName.valueOf(phaseName));
+        return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 }
