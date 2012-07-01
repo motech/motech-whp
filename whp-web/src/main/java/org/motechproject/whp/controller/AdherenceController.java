@@ -70,15 +70,15 @@ public class AdherenceController extends BaseController {
         return "redirect:/";
     }
 
+    @DataProvider
+    public List<Adherence> adherenceReport(int pageNumber) {
+        return adherenceService.allAdherenceData(pageNumber - 1, 10000);
+    }
+
     private WeeklyAdherenceSummary weeklyAdherenceSummary(WeeklyAdherenceForm weeklyAdherenceForm) {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
         weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
         return weeklyAdherenceSummary;
-    }
-
-    @DataProvider
-    public List<Adherence> adherenceReport(int pageNumber) {
-        return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherenceSummary adherenceSummary) {

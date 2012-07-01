@@ -67,20 +67,6 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    boolean canBeTransferred(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        List<WHPErrorCode> errors = new ArrayList<WHPErrorCode>();
-        if (patient == null) {
-            errors.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
-            return false;
-        } else if (!patient.hasCurrentTreatment()) {
-            errors.add(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);
-            return false;
-        } else {
-            return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
-        }
-    }
-
     public void updatePillTakenCount(Patient patient, PhaseName name, int dosesTaken) {
         patient.currentTherapy().getPhases().getByPhaseName(name).setNumberOfDosesTaken(dosesTaken);
         allPatients.update(patient);
@@ -121,5 +107,19 @@ public class PatientService {
             return allPatients.getAllWithActiveTreatmentForDistrictAndProvider(districtName, providerId);
         else
             return allPatients.getAllWithActiveTreatmentForDistrict(districtName);
+    }
+
+    boolean canBeTransferred(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        List<WHPErrorCode> errors = new ArrayList<>();
+        if (patient == null) {
+            errors.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+            return false;
+        } else if (!patient.hasCurrentTreatment()) {
+            errors.add(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);
+            return false;
+        } else {
+            return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
+        }
     }
 }
