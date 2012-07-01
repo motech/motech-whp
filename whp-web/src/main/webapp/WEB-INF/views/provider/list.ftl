@@ -5,7 +5,6 @@
 <div id="searchProvidersForm">
     <form action="<@spring.url '/providers/search'/>" method="POST" class="row well form-horizontal">
         <div class="offset1">
-
             <div class="control-group">
                 <label class="control-label">District*</label>
                 <div class="controls">
@@ -16,7 +15,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="control-group">
                 <label class="control-label" for="providerId">Provider ID</label>
                 <div class="controls">

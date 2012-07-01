@@ -5,21 +5,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class ProviderControllerTest {
 
@@ -93,9 +97,22 @@ public class ProviderControllerTest {
         assertEquals("provider/list", viewName);
     }
 
+    @Test
+    public void shouldFetchAllProvidersForDistrict() throws Exception {
+        List<Provider> providers = emptyList();
+        when(providerService.fetchBy("Begusarai")).thenReturn(providers);
+
+        standaloneSetup(providerController).build()
+                .perform(get("/providers/byDistrict/Begusarai"))
+                .andExpect(status().isOk())
+                .andExpect(model().size(1))
+                .andExpect(model().attribute("providerList", providers))
+                .andExpect(view().name("provider/listByDistrict"));
+    }
+
     private List<ProviderRow> wrapIntoProviderRows(List<Provider> providerList) {
-        List<ProviderRow> providerRows = new ArrayList();
-        for(Provider provider : providerList) {
+        List<ProviderRow> providerRows = new ArrayList<>();
+        for (Provider provider : providerList) {
             providerRows.add(new ProviderRow(provider, true));
         }
         return providerRows;

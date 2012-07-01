@@ -29,10 +29,10 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "category")
     protected List<WebElement> categories;
 
-    @FindBy(how = How.ID, using = "district")
+    @FindBy(how = How.ID, using = "district-autocomplete")
     private WebElement districtSearchBox;
 
-    @FindBy(how = How.ID, using = "providerId")
+    @FindBy(how = How.ID, using = "providerId-autocomplete")
     private WebElement providerSearchBox;
 
     @FindBy(how = How.ID, using = "searchButton")
@@ -53,6 +53,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     @Override
     public void postInitialize() {
         districtSearchBox = createWebElement(districtSearchBox);
+        providerSearchBox = createWebElement(providerSearchBox);
         searchButton = createWebElement(searchButton);
     }
 
@@ -127,21 +128,19 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     public ListAllPatientsPage searchByDistrict(String district) {
-        ((WHPWebElement) districtSearchBox).select(district);
+        districtSearchBox.sendKeys(district);
         searchButton.click();
-        waitForPatientsToLoad();
+        waitForElementToBeReloadedByAjax();
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
     }
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
-        ((WHPWebElement) districtSearchBox).select(districtName);
-        providerSearchBox.sendKeys(providerId);
+        ((WHPWebElement) districtSearchBox).sendKeysWithAutoSelect(districtName);
+        waitForElementToBeReloadedByAjax();
+        ((WHPWebElement) providerSearchBox).sendKeysWithAutoSelect(providerId);
         searchButton.click();
-        waitForPatientsToLoad();
+        waitForElementToBeReloadedByAjax();
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
     }
 
-    private void waitForPatientsToLoad() {
-        waitForElementToBeReloadedByAjax();
-    }
 }

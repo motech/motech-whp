@@ -112,4 +112,10 @@ public class WHPWebElement implements ExtendedWebElement {
     public void sendKey(CharSequence charSequence) {
         webElement.sendKeys(charSequence);
     }
+
+    public void sendKeysWithAutoSelect(CharSequence charSequence){
+        sendKeys(charSequence);
+        sendKeys(Keys.DOWN);
+        sendKeys(Keys.TAB);
+    }
 }

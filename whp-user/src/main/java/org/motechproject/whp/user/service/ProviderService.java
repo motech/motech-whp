@@ -64,6 +64,10 @@ public class ProviderService {
         }
     }
 
+    public List<Provider> fetchBy(String district){
+        return fetchBy(district, "");
+    }
+
     public Map<String, MotechUser> fetchAllWebUsers() {
         Map<String, MotechUser> allWebUsers = new HashMap();
         for (MotechUser motechUser : motechAuthenticationService.findByRole(WHPRole.PROVIDER.name())) {

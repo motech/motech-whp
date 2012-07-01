@@ -1,5 +1,6 @@
 (function( $ ) {
     $.widget( "ui.combobox", {
+        autoComplete: {},
         _create: function() {
             var input,
                 self = this,
@@ -39,6 +40,9 @@
                         self._trigger( "selected", event, {
                             item: ui.item.option
                         });
+                        $(self.element).trigger( "autocompleteselected", event, {
+                            item: ui.item.option
+                        });
                     },
                     change: function( event, ui ) {
                         if ( !ui.item ) {
@@ -61,6 +65,8 @@
                     }
                 })
                 .addClass( "ui-widget ui-widget-content ui-corner-left" );
+
+            input.attr("id", select.attr("id") + "-autocomplete");
 
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
                 return $( "<li></li>" )
@@ -94,12 +100,14 @@
                     input.autocomplete( "search", "" );
                     input.focus();
                 });
+
+            this.autoComplete = input.autocomplete
         },
 
         destroy: function() {
             this.wrapper.remove();
             this.element.show();
             $.Widget.prototype.destroy.call( this );
-        }
+        },
     });
 })( jQuery );

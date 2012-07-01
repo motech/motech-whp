@@ -40,7 +40,7 @@ public class ListAllPatientsTest extends BasePatientTest {
         setupTestPatientForDistrict(district);
 
         ListAllPatientsPage listPage = loginAsCMFAdmin();
-        listPage.searchByDistrictAndProvider(district, "provider");
+        listPage.searchByDistrictAndProvider(district, provider.getProviderId());
         assertTrue(listPage.hasPatient(testPatient.getFirstName()));
         assertEquals("Male", listPage.getGenderText(testPatient.getCaseId()));
         assertEquals("village", listPage.getVillageText(testPatient.getCaseId()));

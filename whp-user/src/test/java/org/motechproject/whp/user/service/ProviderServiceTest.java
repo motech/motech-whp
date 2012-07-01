@@ -17,12 +17,10 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProviderServiceTest  {
+public class ProviderServiceTest {
 
     @Mock
     private MotechAuthenticationService motechAuthenticationService;
@@ -51,11 +49,17 @@ public class ProviderServiceTest  {
     }
 
     @Test
+    public void shouldFetchProvidersByOnlyDistrict() {
+        providerService.fetchBy("district");
+        verify(allProviders).findByDistrict("district");
+    }
+
+    @Test
     public void shouldFetchAllProviderWebUsers() {
         MotechUser motechUser = new MotechUser(new MotechWebUser("provider", "password", "externalId", null));
         when(motechAuthenticationService.findByRole(WHPRole.PROVIDER.name())).thenReturn(Arrays.asList(motechUser));
 
-        Map<String,MotechUser> motechUserMap = providerService.fetchAllWebUsers();
+        Map<String, MotechUser> motechUserMap = providerService.fetchAllWebUsers();
 
         verify(motechAuthenticationService).findByRole(WHPRole.PROVIDER.name());
         assertNotNull(motechUserMap);
@@ -70,7 +74,7 @@ public class ProviderServiceTest  {
         Provider expectedProvider = new Provider();
         when(allProviders.findByProviderId(providerId)).thenReturn(expectedProvider);
         Provider provider = providerService.fetchByProviderId(providerId);
-        assertEquals(expectedProvider,provider);
+        assertEquals(expectedProvider, provider);
         verify(allProviders).findByProviderId(providerId);
     }
 
