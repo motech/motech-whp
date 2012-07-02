@@ -2,6 +2,7 @@ $(function() {
     $( "#district" ).combobox();
     $( "#providerId" ).combobox();
     $( "#district" ).bind( "autocompleteselected", function(event, ui) {
+        $("#providerId-autocomplete").val("");
         initProviders();
     });
     $("#searchButton").click(function () {
