@@ -50,30 +50,28 @@ function setUpTreatmentCardTable(therapyDocId) {
             $(this).attr('pillStatusChanged', 'false');
         }
     });
-
-    //submitting changed pill status for saving
-    $('#submitJson').click(function () {
-        var dailyAdherenceRequests = [];
-        $.each($('[pillStatusChanged=true]'), function () {
-            dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
-        });
-        var patientId = $("#patient-id").text();
-        var delta = {patientId: patientId , therapy: therapyDocId, dailyAdherenceRequests: dailyAdherenceRequests };
-        $.ajax({
-            type : 'POST',
-            url : '/whp/treatmentcard/update',
-            data : JSON.stringify(delta),
-            contentType: "application/json",
-            success : function(data) {
-                set_html('treatmentCard', data)
-                //$("#treatmentCard").html(data);
-            }
-        });
-    });
-
     createAutoClosingAlert(".message-alert", 5000);
     colorCellsByProvider();
 }
+
+$('#submitAdherence').click(function () {
+    var dailyAdherenceRequests = [];
+    $.each($('[pillStatusChanged=true]'), function () {
+        dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
+    });
+    var patientId = $("#patient-id").text();
+    var delta = {patientId: patientId , therapy: therapyDocId, dailyAdherenceRequests: dailyAdherenceRequests };
+    $.ajax({
+        type : 'POST',
+        url : '/whp/treatmentcard/update',
+        data : JSON.stringify(delta),
+        contentType: "application/json",
+        success : function(data) {
+            $("#treatmentCard").html(data);
+            setUpTreatmentCardTable('${treatmentCard.therapyDocId}');
+        }
+    });
+});
 
 function colorCellsByProvider() {
     var providerColorCodes = new Array("blue", "green", "orange", "brown", "purple", "rosyBrown", "olive", "salmon", "cyan", "red");

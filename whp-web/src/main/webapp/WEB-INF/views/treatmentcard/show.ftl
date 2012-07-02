@@ -17,13 +17,7 @@
 
     <div class="controls pull-right">
         <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
-        <button type="button" id='submitJson' class="btn btn-primary">Save</button>
+        <button type="button" id='submitAdherence' class="btn btn-primary">Save</button>
     </div>
 </form>
-
-<script type="text/javascript">
-    $(function() {
-        setUpTreatmentCardTable('${treatmentCard.therapyDocId}');
-    });
-</script>
 </#if>

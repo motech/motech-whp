@@ -1,13 +1,11 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout/>
 <@layout.defaultLayout "Patient Dashboard">
-<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/injectHtml.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
 <script type="text/javascript">
         <#if patient.currentTreatment?? && patient.nextPhaseName??>
         $(function() {
             $("#${patient.nextPhaseName.name()}").addClass("active");
-
         });
         </#if>
         <#if patient.currentTreatment??>
