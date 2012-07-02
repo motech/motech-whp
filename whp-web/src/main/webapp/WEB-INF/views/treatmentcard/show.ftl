@@ -8,7 +8,9 @@
     <#include "adherenceBox.ftl"/>
 </div>
 <br/>
+
 <@adherenceBox title="IPTreatmentCard" monthlyAdherences=treatmentCard.ipAdherenceSection.monthlyAdherences />
+<@adherenceBox title="CPTreatmentCard" monthlyAdherences=treatmentCard.cpAdherenceSection.monthlyAdherences />
 
 <form id="treatmentCardDeltaform" action="/whp/patients/saveTreatmentCard" method="post">
     <input type="hidden" name="delta" id="delta"/>
