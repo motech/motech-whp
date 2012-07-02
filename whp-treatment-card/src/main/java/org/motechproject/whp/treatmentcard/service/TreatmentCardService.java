@@ -24,13 +24,23 @@ public class TreatmentCardService {
     }
 
     public TreatmentCard treatmentCard(Patient patient) {
+        Therapy therapy = patient.currentTherapy();
+
         TreatmentCard treatmentCard = new TreatmentCard(patient);
 
-        Therapy therapy = patient.currentTherapy();
-        List<Adherence> ipAndEipAdherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), therapy.getId(),
-                therapy.getStartDate(), treatmentCard.ipBoxAdherenceEndDate());
+        if (therapy.getPhases().isOrHasBeenOnIp()) {
+            List<Adherence> ipAndEipAdherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), therapy.getId(),
+                    therapy.getStartDate(), treatmentCard.ipBoxAdherenceEndDate());
+            treatmentCard.initIPSection(ipAndEipAdherenceData);
+        }
 
-        return treatmentCard.initIPSection(ipAndEipAdherenceData);
+        if (therapy.getPhases().isOrHasBeenOnCp()) {
+            List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), therapy.getId(),
+                    therapy.getStartDate(), treatmentCard.ipBoxAdherenceEndDate());
+            treatmentCard.initCPSection(cpAdherenceData);
+        }
+
+        return treatmentCard;
     }
 
 }

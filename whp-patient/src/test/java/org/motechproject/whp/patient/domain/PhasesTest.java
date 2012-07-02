@@ -2,11 +2,13 @@ package org.motechproject.whp.patient.domain;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.PhaseName;
 
 import java.util.Arrays;
 
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;
 
 public class PhasesTest {
@@ -105,6 +107,69 @@ public class PhasesTest {
         phases.setIPEndDate(today().plusDays(1));
         phases.setCPStartDate(today().plusDays(2));
         assertFalse(phases.ipPhaseWasExtended());
+    }
+
+    @Test
+    public void shouldReturnFalseIfPatientIsOnIP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+    }
+
+    @Test
+    public void shouldReturnFalseIfPatientHasCompletedIP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        patient.endCurrentPhase(today().minusMonths(4));
+        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+    }
+
+    @Test
+    public void shouldReturnFalseIfPatientIsOnEIP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        patient.endCurrentPhase(today().minusMonths(4));
+        patient.nextPhaseName(PhaseName.EIP);
+        patient.startNextPhase();
+        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+    }
+
+    @Test
+    public void shouldReturnFalseIfPatientHasCompletedEIP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        patient.endCurrentPhase(today().minusMonths(4));
+        patient.nextPhaseName(PhaseName.EIP);
+        patient.startNextPhase();
+        patient.endCurrentPhase(today().minusMonths(2));
+        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+    }
+
+    @Test
+    public void shouldReturnTrueIfPatientHasStartedCP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        patient.endCurrentPhase(today().minusMonths(4));
+        patient.nextPhaseName(PhaseName.EIP);
+        patient.startNextPhase();
+        patient.endCurrentPhase(today().minusMonths(2));
+        patient.nextPhaseName(PhaseName.CP);
+        patient.startNextPhase();
+        assertTrue(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+    }
+
+    @Test
+    public void shouldReturnTrueIfPatientHasCompletedCP() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+        patient.endCurrentPhase(today().minusMonths(4));
+        patient.nextPhaseName(PhaseName.EIP);
+        patient.startNextPhase();
+        patient.endCurrentPhase(today().minusMonths(2));
+        patient.nextPhaseName(PhaseName.CP);
+        patient.startNextPhase();
+        patient.endCurrentPhase(today().minusMonths(1));
+        assertTrue(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
 }

@@ -7,14 +7,18 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.refdata.domain.PhaseName;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.motechproject.util.DateUtil.today;
 
 @Data
 public class TreatmentCard {
 
     public static final int MONTHS_IN_IP_BOX = 5;
+    public static final int MONTHS_IN_CP_BOX = 7;
 
     private Patient patient;
 
@@ -27,6 +31,7 @@ public class TreatmentCard {
     private Therapy therapy;
 
     private AdherenceSection ipAdherenceSection = new AdherenceSection();
+    private AdherenceSection cpAdherenceSection = new AdherenceSection();
 
     public TreatmentCard(Patient patient) {
         this.patient = patient;
@@ -43,8 +48,11 @@ public class TreatmentCard {
         return this;
     }
 
-    public LocalDate ipBoxLastDoseDate() {
-        return patient.currentTherapy().getStartDate().plusMonths(MONTHS_IN_IP_BOX).minusDays(1);
+    public TreatmentCard initCPSection(List<Adherence> adherenceData) {
+        Therapy currentTherapy = patient.currentTherapy();
+        LocalDate cpStartDate = currentTherapy.getPhases().getCPStartDate();
+        cpAdherenceSection.init(patient, adherenceData, currentTherapy, cpStartDate, cpBoxLastDoseDate());
+        return this;
     }
 
     public List<MonthlyAdherence> getMonthlyAdherences() {
@@ -54,10 +62,31 @@ public class TreatmentCard {
     public LocalDate ipBoxAdherenceEndDate() {
         Phases phases = therapy.getPhases();
         LocalDate endDate = phases.getIPLastDate();
-        if(phases.ipPhaseWasExtended()) {
+        if (phases.ipPhaseWasExtended()) {
             endDate = phases.getEIPLastDate();
         }
         return endDate;
+    }
+
+    public LocalDate cpBoxAdherenceEndDate() {
+        Phases phases = therapy.getPhases();
+        if (phases.isOrHasBeenOnCp() && phases.getByPhaseName(PhaseName.CP).getEndDate() != null) {
+            return phases.getByPhaseName(PhaseName.CP).getEndDate();
+
+        }
+        return today();
+    }
+
+    public LocalDate ipBoxLastDoseDate() {
+        return therapy.getStartDate().plusMonths(MONTHS_IN_IP_BOX).minusDays(1);
+    }
+
+    public LocalDate cpBoxLastDoseDate() {
+        Phases phases = therapy.getPhases();
+        if(phases.isOrHasBeenOnCp()) {
+            return phases.getByPhaseName(PhaseName.CP).getStartDate().plusMonths(MONTHS_IN_CP_BOX).minusDays(1);
+        }
+        return null;
     }
 
 }
