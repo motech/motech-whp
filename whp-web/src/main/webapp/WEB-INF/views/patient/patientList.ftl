@@ -18,7 +18,13 @@
     <tbody>
         <#if patientList?size == 0>
         <tr>
-            <td class="text-center" colspan="10">No patients to show</td>
+            <td class="warning" style="text-align: center" colspan="10">
+                <#if providerId != "">
+                    No patients found for District: '${selectedDistrict}' with provider ID: '${providerId}'
+                <#else>
+                    No patients found for District: '${selectedDistrict}'
+                </#if>
+            </td>
         </tr>
         <#else>
             <#list patientList as patient>
