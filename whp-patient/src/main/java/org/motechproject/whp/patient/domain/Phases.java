@@ -28,13 +28,13 @@ public class Phases extends ArrayList<Phase> {
     @JsonIgnore
     public boolean isOrHasBeenOnCp() {
         Phase cpPhase = getByPhaseName(PhaseName.CP);
-        return cpPhase != null && cpPhase.getStartDate() != null;
+        return cpPhase != null && cpPhase.hasStarted();
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnIp() {
         Phase ipPhase = getByPhaseName(PhaseName.IP);
-        return ipPhase != null && ipPhase.getStartDate() != null;
+        return ipPhase != null && ipPhase.hasStarted();
     }
 
     @JsonIgnore
