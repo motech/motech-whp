@@ -1,4 +1,3 @@
-<#macro treatmentCardLegend>
 <table id="legend" class="table table-bordered table-condensed">
     <thead>
     <tr>
@@ -14,18 +13,18 @@
             <div class="text-center">Treatment Paused</div>
         </td>
     </tr>
-        <#list treatmentCard.providerIds as providerId>
-        <tr>
-            <td>
-                <div class="tick-icon pull-left" providerId=${providerId}> &#10004; </div>
-                <div class="pull-left"> , &nbsp; </div>
-                <div class="round-icon legend-round-icon" providerId=${providerId}>O</div>
-            </td>
-            <td>
-                <div class="text-center text-center">Adherence given by provider ${providerId}</div>
-            </td>
-        </tr>
-        </#list>
+    <#list treatmentCard.providerIds as providerId>
+    <tr>
+        <td>
+            <div class="tick-icon pull-left" providerId=${providerId}> &#10004; </div>
+            <div class="pull-left"> , &nbsp; </div>
+            <div class="round-icon legend-round-icon" providerId=${providerId}>O</div>
+        </td>
+        <td>
+            <div class="text-center text-center">Adherence given by provider ${providerId}</div>
+        </td>
+    </tr>
+    </#list>
     <tr>
         <td>
             <div class="tick-icon pull-left" providerId=""> &#10004; </div>
@@ -38,4 +37,3 @@
     </tr>
     </tbody>
 </table>
-</#macro>
