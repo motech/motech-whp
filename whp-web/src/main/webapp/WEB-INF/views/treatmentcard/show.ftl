@@ -51,7 +51,7 @@
             <th>${x}</th>
         </#list>
     </tr>
-        <#list treatmentCard.monthlyAdherences as monthlyAdherence>
+        <#list treatmentCard.ipAdherenceSection.monthlyAdherences as monthlyAdherence>
         <tr>
             <div>
                 <td>${monthlyAdherence.monthAndYear}</td>

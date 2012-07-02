@@ -51,7 +51,7 @@ public class TreatmentCardServiceTest {
 
         TreatmentCard treatmentCard = treatmentCardService.treatmentCard(patient);
 
-        assertEquals(6, treatmentCard.getMonthlyAdherences().size());
+        assertEquals(6, treatmentCard.getIpAdherenceSection().getMonthlyAdherences().size());
         verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyDocId, therapyStartDate, today());
     }
 
