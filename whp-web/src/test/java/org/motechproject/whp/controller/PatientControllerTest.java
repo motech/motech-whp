@@ -11,7 +11,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.District;
-import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
+import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -54,12 +54,14 @@ public class PatientControllerTest {
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     @Mock
-    AllDistrictsCache allDistrictsCache;
+    AllDistricts allDistrictsCache;
+
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     AbstractMessageSource messageSource;
 
     Patient patient;
+
     Provider provider;
 
     PatientController patientController;

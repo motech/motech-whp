@@ -5,7 +5,7 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PhaseName;
-import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
+import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -43,7 +43,7 @@ public class PatientController extends BaseController {
 
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
     private AbstractMessageSource messageSource;
-    private AllDistrictsCache allDistrictsCache;
+    private AllDistricts allDistrictsCache;
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -51,7 +51,7 @@ public class PatientController extends BaseController {
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
-                             AllDistrictsCache allDistrictsCache) {
+                             AllDistricts allDistrictsCache) {
 
         this.patientService = patientService;
         this.allDistrictsCache = allDistrictsCache;

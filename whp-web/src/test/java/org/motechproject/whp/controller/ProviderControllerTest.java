@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.refdata.domain.District;
-import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
+import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -34,7 +34,7 @@ public class ProviderControllerTest {
     @Mock
     private ProviderService providerService;
     @Mock
-    private AllDistrictsCache allDistricts;
+    private AllDistricts allDistricts;
 
     Provider provider1 = new Provider("aa", "9845678761", "districtA",
             DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));

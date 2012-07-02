@@ -2,7 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
-import org.motechproject.whp.refdata.objectcache.AllDistrictsCache;
+import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class ProviderController {
 
     private ProviderService providerService;
-    private AllDistrictsCache allDistrictsCache;
+    private AllDistricts allDistrictsCache;
 
     public static final String PROVIDER_LIST = "providerList";
     private static final String DISTRICT_LIST = "districts";
@@ -31,7 +31,7 @@ public class ProviderController {
     private static final String SELECTED_DISTRICT = "selectedDistrict";
 
     @Autowired
-    public ProviderController(ProviderService providerService, AllDistrictsCache allDistrictsCache) {
+    public ProviderController(ProviderService providerService, AllDistricts allDistrictsCache) {
         this.providerService = providerService;
         this.allDistrictsCache = allDistrictsCache;
     }
