@@ -1,4 +1,3 @@
-<#macro patientInfo>
 <div class="patient-info default-arrow">
     <div id="row1">
         <div class="pull-left patient-info-left-table">
@@ -118,4 +117,3 @@
         </table>
     </div>
 </div>
-</#macro>

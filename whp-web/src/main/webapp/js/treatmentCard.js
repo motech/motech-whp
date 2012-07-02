@@ -65,7 +65,7 @@ function setUpTreatmentCardTable(therapyDocId) {
             data : JSON.stringify(delta),
             contentType: "application/json",
             success : function(data) {
-                set_html('treatmentCard',data)
+                set_html('treatmentCard', data)
                 //$("#treatmentCard").html(data);
             }
         });

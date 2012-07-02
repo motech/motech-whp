@@ -1,4 +1,3 @@
-<#macro phaseInfo>
 <form class="modal hide fade" id="setDatesModal" method="POST" action="<@spring.url '/patients/adjustPhaseStartDates'/>">
     <input type="hidden" id="patientId" name="patientId" value="${phaseStartDates.patientId}"/>
     <div class="modal-header">
@@ -48,4 +47,3 @@
         <button type="submit" class="btn btn-group btn-primary" id="saveTheDate">Save</button>
     </div>
 </form>
-</#macro>
