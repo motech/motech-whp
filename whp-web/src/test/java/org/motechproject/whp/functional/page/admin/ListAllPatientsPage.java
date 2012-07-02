@@ -95,26 +95,12 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     public PatientDashboardPage clickOnPatientWithTherapyNotYetStarted(String patientId) {
-        int index = -1;
-        for (int i = 0; i < patientIds.size(); i++) {
-            if (patientIds.get(i).getText().equals(patientId)) {
-                index = i;
-                break;
-            }
-        }
-        dashboardLinks.get(index).findElement(By.className("patientId")).click();
+        clickOnPatientRow(patientId);
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }
 
-    public TreatmentCardPage clickOnPatientWithStartedTherapy(String patientId) {
-        int index = -1;
-        for (int i = 0; i < patientIds.size(); i++) {
-            if (patientIds.get(i).getText().equals(patientId)) {
-                index = i;
-                break;
-            }
-        }
-        createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
+    public TreatmentCardPage clickOnPatientWithTherapyStarted(String patientId) {
+        clickOnPatientRow(patientId);
         return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
     }
 
@@ -143,4 +129,14 @@ public class ListAllPatientsPage extends LoggedInUserPage {
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
     }
 
+    private void clickOnPatientRow(String patientId) {
+        int index = -1;
+        for (int i = 0; i < patientIds.size(); i++) {
+            if (patientIds.get(i).getText().equals(patientId)) {
+                index = i;
+                break;
+            }
+        }
+        createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
+    }
 }

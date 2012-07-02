@@ -79,7 +79,6 @@ body {
     color: black;
 }
 table tbody .link:hover td {
-    font-size: 14px;
     color: #369BD7;
     text-decoration: underline;
 }
