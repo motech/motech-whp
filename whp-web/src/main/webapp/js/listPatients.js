@@ -5,7 +5,8 @@ $(function() {
         $("#providerId-autocomplete").val("");
         initProviders();
     });
-    $("#searchButton").click(function () {
+    $("#searchForm").submit(function (event) {
+            event.preventDefault();
             var districtId = $("#district-autocomplete").val();
             var providerId = $("#providerId-autocomplete").val() ? $("#providerId-autocomplete").val() : "";
             var data = {
