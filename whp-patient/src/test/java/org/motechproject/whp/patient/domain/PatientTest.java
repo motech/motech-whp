@@ -96,8 +96,8 @@ public class PatientTest {
     @Test
     public void shouldGetCurrentTreatmentIfGivenDateIsInCurrentTreatmentPeriod() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        String therapyDocId = "therapyDocId";
-        patient.getCurrentTreatment().setTherapyDocId(therapyDocId);
+        String therapyUid = "therapyUid";
+        patient.getCurrentTreatment().setTherapyUid(therapyUid);
         LocalDate startDate = new LocalDate(2012, 1, 2);
         LocalDate endDate = new LocalDate(2012, 3, 15);
         patient.getCurrentTreatment().setStartDate(startDate);
@@ -124,7 +124,7 @@ public class PatientTest {
 
         patient.nextPhaseName(PhaseName.EIP);
 
-        assertEquals(patient.currentTherapy().getNextPhaseName(), PhaseName.EIP);
+        assertEquals(patient.getCurrentTherapy().getNextPhaseName(), PhaseName.EIP);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class PatientTest {
 
         patient.endCurrentPhase(phaseEndDate);
 
-        assertEquals(phaseEndDate, patient.currentTherapy().getPhase(PhaseName.IP).getEndDate());
+        assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhase(PhaseName.IP).getEndDate());
     }
 
     @Test
@@ -148,8 +148,8 @@ public class PatientTest {
         patient.endCurrentPhase(phaseEndDate);
         patient.startNextPhase();
 
-        assertEquals(phaseEndDate.plusDays(1), patient.currentTherapy().getPhase(PhaseName.EIP).getStartDate());
-        assertNull(patient.currentTherapy().getNextPhaseName());
+        assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhase(PhaseName.EIP).getStartDate());
+        assertNull(patient.getCurrentTherapy().getNextPhaseName());
     }
 
     @Test

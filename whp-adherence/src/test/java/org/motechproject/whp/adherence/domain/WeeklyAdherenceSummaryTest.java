@@ -22,7 +22,7 @@ public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
         assertEquals(patient.getPatientId(), adherenceSummary.getPatientId());
         assertEquals(0, adherenceSummary.getDosesTaken());
         assertEquals(currentWeekInstance(), adherenceSummary.getWeek());
-        assertEquals(0, adherenceSummary.takenDays(patient.currentTherapy().getTreatmentCategory()).size());
+        assertEquals(0, adherenceSummary.takenDays(patient.getCurrentTherapy().getTreatmentCategory()).size());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
         assertEquals(patient.getPatientId(), adherenceSummary.getPatientId());
         assertEquals(3, adherenceSummary.getDosesTaken());
         assertEquals(currentWeekInstance(), adherenceSummary.getWeek());
-        assertEquals(Arrays.asList(Monday, Wednesday, Friday), adherenceSummary.takenDays(patient.currentTherapy().getTreatmentCategory()));
+        assertEquals(Arrays.asList(Monday, Wednesday, Friday), adherenceSummary.takenDays(patient.getCurrentTherapy().getTreatmentCategory()));
     }
 
     @Test

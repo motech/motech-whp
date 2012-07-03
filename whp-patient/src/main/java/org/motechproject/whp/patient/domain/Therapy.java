@@ -2,7 +2,6 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
@@ -16,8 +15,9 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import java.util.Arrays;
 
 @Data
-@TypeDiscriminator("doc.type == 'Therapy'")
-public class Therapy extends MotechBaseDataObject {
+public class Therapy {
+
+    private String uid;
 
     private Integer patientAge;
     private DateTime creationDate;
@@ -28,7 +28,6 @@ public class Therapy extends MotechBaseDataObject {
     private DiseaseClass diseaseClass;
     private PhaseName nextPhaseName = null;
     private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.EIP), new Phase(PhaseName.CP)));
-
     public Therapy() {
     }
 

@@ -12,7 +12,6 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
@@ -33,8 +32,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllPatients allPatients;
     @Autowired
     AllProviders allProviders;
-    @Autowired
-    AllTherapies allTherapies;
     @Autowired
     AllTreatmentCategories allTreatmentCategories;
 
@@ -58,7 +55,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         assertNotNull(provider1);
         assertNotNull(provider2);
         assertEquals(0, allPatients.getAll().size());
-        assertEquals(0, allTherapies.getAll().size());
 
     }
 
@@ -73,7 +69,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         arguments[1] = getPatientCsv();
         CsvImporter.main(arguments);
         assertEquals(3, allPatients.getAll().size());
-        assertEquals(3, allTherapies.getAll().size());
         assertEquals(PatientType.New, allPatients.findByPatientId("12345").getCurrentTreatment().getPatientType());
         Patient patient2 = allPatients.findByPatientId("234324");
         assertEquals(patient2.getLastModifiedDate().toLocalDate(), patient2.getCurrentTreatment().getWeightStatistics().get(0).getMeasuringDate());
@@ -91,7 +86,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
         arguments[1] = CsvImporterTest.class.getClassLoader().getResource("patientRecordsWitnInvalidData.csv").getPath();
         CsvImporter.main(arguments);
         assertEquals(0, allPatients.getAll().size());
-        assertEquals(0, allTherapies.getAll().size());
     }
 
     @Test(expected = WHPImportException.class)
@@ -162,7 +156,6 @@ public class CsvImporterTest extends SpringIntegrationTest {
     @After
     public void tearDown() {
         allPatients.removeAll();
-        allTherapies.removeAll();
         allTreatmentCategories.removeAll();
         allProviders.removeAll();
     }

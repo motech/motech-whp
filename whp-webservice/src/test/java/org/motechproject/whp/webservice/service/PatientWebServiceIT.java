@@ -11,7 +11,6 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
@@ -37,8 +36,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     ProviderService providerService;
     @Autowired
     AllPatients allPatients;
-    @Autowired
-    AllTherapies allTherapies;
     @Autowired
     RequestValidator validator;
     @Autowired
@@ -110,7 +107,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
-        assertNotSame(patient.currentTherapy(), updatedPatient.currentTherapy());
+        assertNotSame(patient.getCurrentTherapy(), updatedPatient.getCurrentTherapy());
     }
 
     @Test
@@ -159,7 +156,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
         assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-        assertEquals(patient.getCurrentTreatment().getTherapyDocId(), updatedPatient.getCurrentTreatment().getTherapyDocId());
+        assertEquals(patient.getCurrentTreatment().getTherapyUid(), updatedPatient.getCurrentTreatment().getTherapyUid());
 
         assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
         assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
@@ -185,7 +182,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertNotSame(patient.getLastModifiedDate(), updatedPatient.getLastModifiedDate());
         assertNotSame(patient.getCurrentTreatment().getEndDate(), updatedPatient.getCurrentTreatment().getEndDate());
-        assertNotSame(patient.currentTherapy(), updatedPatient.currentTherapy());
+        assertNotSame(patient.getCurrentTherapy(), updatedPatient.getCurrentTherapy());
     }
 
     @Test
@@ -228,7 +225,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
-        markForDeletion(allTherapies.getAll().toArray());
         markForDeletion(allProviders.getAll().toArray());
     }
 }

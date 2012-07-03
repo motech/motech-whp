@@ -6,7 +6,6 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +19,8 @@ public class TransferInPatient extends TreatmentUpdate {
     private TreatmentService treatmentService;
 
     @Autowired
-    public TransferInPatient(AllPatients allPatients, AllTherapies allTreatments, TreatmentService treatmentService) {
-        super(allPatients, allTreatments, UpdateScope.transferIn);
+    public TransferInPatient(AllPatients allPatients, TreatmentService treatmentService) {
+        super(allPatients, UpdateScope.transferIn);
         this.treatmentService = treatmentService;
     }
 
@@ -53,7 +52,7 @@ public class TransferInPatient extends TreatmentUpdate {
     }
 
     private boolean notOfSameTreatmentCategory(Patient patient, PatientRequest patientRequest) {
-        Therapy latestTherapy = patient.currentTherapy();
+        Therapy latestTherapy = patient.getCurrentTherapy();
         return patientRequest.getTreatment_category() != null && !latestTherapy.getTreatmentCategory().equals(patientRequest.getTreatment_category());
     }
 

@@ -9,7 +9,6 @@ import org.motechproject.whp.patient.command.CloseCurrentTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -22,8 +21,6 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTherapies allTherapies;
-    @Mock
     private TreatmentService treatmentService;
 
     private CloseCurrentTreatment closeCurrentTreatment;
@@ -34,7 +31,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, allTherapies, treatmentService);
+        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, treatmentService);
     }
 
 

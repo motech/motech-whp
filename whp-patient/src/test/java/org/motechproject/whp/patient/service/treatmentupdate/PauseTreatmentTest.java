@@ -9,7 +9,6 @@ import org.motechproject.whp.patient.command.PauseTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -22,15 +21,13 @@ public class PauseTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTherapies allTherapies;
-    @Mock
     private TreatmentService treatmentService;
     private PauseTreatment pauseTreatment;
 
     @Before
     public void setUp() {
         initMocks(this);
-        pauseTreatment = new PauseTreatment(allPatients, allTherapies, treatmentService);
+        pauseTreatment = new PauseTreatment(allPatients, treatmentService);
     }
 
     @Test

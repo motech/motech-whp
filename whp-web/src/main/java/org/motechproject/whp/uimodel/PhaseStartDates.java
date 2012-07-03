@@ -21,7 +21,7 @@ public class PhaseStartDates {
     }
 
     public PhaseStartDates(Patient patient) {
-        Therapy therapy = patient.currentTherapy();
+        Therapy therapy = patient.getCurrentTherapy();
         this.patientId = patient.getPatientId();
         this.ipStartDate = WHPDate.date(therapy.getPhase(IP).getStartDate()).value();
         this.eipStartDate = WHPDate.date(therapy.getPhase(EIP).getStartDate()).value();
@@ -29,7 +29,7 @@ public class PhaseStartDates {
     }
 
     public Patient mapNewPhaseInfoToPatient(Patient patient) {
-        Phases phases = patient.currentTherapy().getPhases();
+        Phases phases = patient.getCurrentTherapy().getPhases();
         patient.startTherapy(WHPDate.date(ipStartDate).date());
         phases.setEIPStartDate(WHPDate.date(eipStartDate).date());
         phases.setCPStartDate(WHPDate.date(cpStartDate).date());

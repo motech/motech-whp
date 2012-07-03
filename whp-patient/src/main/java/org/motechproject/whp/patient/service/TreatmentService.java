@@ -1,41 +1,31 @@
 package org.motechproject.whp.patient.service;
 
-import org.joda.time.DateTime;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
-import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.motechproject.whp.patient.mapper.PatientMapper.createNewTreatmentForTreatmentCategoryChange;
-import static org.motechproject.whp.patient.mapper.TherapyMapper.createNewTreatment;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapNewTreatmentForCategoryChange;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatmentForTransferIn;
 
 @Service
 public class TreatmentService {
 
     private AllPatients allPatients;
-    private AllTherapies allTherapies;
     private ProviderService providerService;
 
     @Autowired
-    public TreatmentService(AllPatients allPatients, AllTherapies allTherapies, ProviderService providerService) {
+    public TreatmentService(AllPatients allPatients, ProviderService providerService) {
         this.allPatients = allPatients;
-        this.allTherapies = allTherapies;
         this.providerService = providerService;
     }
 
     public void openTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
-        Therapy newTherapy = createNewTreatment(patient, patientRequest);
-        allTherapies.add(newTherapy);
-
-        Treatment newTreatment = createNewTreatmentForTreatmentCategoryChange(patient, patientRequest, newTherapy);
-        patient.addTreatment(newTreatment, patientRequest.getDate_modified());
-
+        mapNewTreatmentForCategoryChange(patientRequest, patient);
         patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
@@ -61,38 +51,11 @@ public class TreatmentService {
 
     public void transferInPatient(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        DateTime dateModified = patientRequest.getDate_modified();
-        SmearTestResults newSmearTestResults = patientRequest.getSmearTestResults();
-        WeightStatistics newWeightStatistics = patientRequest.getWeightStatistics();
 
-        copyOverTreatment(patientRequest, patient, dateModified, newSmearTestResults, newWeightStatistics, patient.getCurrentTreatment());
+        mapTreatmentForTransferIn(patientRequest, patient);
         patient.reviveLatestTherapy();
-        patient.currentTherapy().setDiseaseClass(patientRequest.getDisease_class());
         patient.setOnActiveTreatment(true);
         allPatients.update(patient);
-    }
-
-    private void copyOverTreatment(PatientRequest patientRequest, Patient patient, DateTime dateModified, SmearTestResults newSmearTestResults, WeightStatistics newWeightStatistics, Treatment currentTreatment) {
-        Treatment newTreatment = new Treatment()
-                .updateForTransferIn(
-                        patientRequest.getTb_id(),
-                        patientRequest.getProvider_id(),
-                        dateModified.toLocalDate(),
-                        currentTreatment
-                );
-
-        if (!newSmearTestResults.isEmpty())
-            newTreatment.setSmearTestResults(newSmearTestResults);
-        if (!newWeightStatistics.isEmpty())
-            newTreatment.setWeightStatistics(newWeightStatistics);
-        if (patientRequest.getDisease_class() != null) {
-            patient.currentTherapy().setDiseaseClass(patientRequest.getDisease_class());
-        }
-
-        newTreatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
-        newTreatment.setPatientType(PatientType.TransferredIn);
-
-        patient.addTreatment(newTreatment, dateModified);
     }
 
 }

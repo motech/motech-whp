@@ -17,7 +17,7 @@ public class AdherenceListMapper {
 
     public static AdherenceList map(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary) {
         AdherenceList adherenceRecords = new AdherenceList();
-        TreatmentCategory treatmentCategory = patient.currentTherapy().getTreatmentCategory();
+        TreatmentCategory treatmentCategory = patient.getCurrentTherapy().getTreatmentCategory();
 
         List<DayOfWeek> pillDays = treatmentCategory.getPillDays();
         for (DayOfWeek pillDay : pillDays) {

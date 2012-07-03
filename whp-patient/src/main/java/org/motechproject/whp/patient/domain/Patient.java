@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
@@ -15,6 +16,8 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ch.lambdaj.Lambda.*;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -32,6 +35,9 @@ public class Patient extends MotechBaseDataObject {
     private Treatment currentTreatment;
     private boolean onActiveTreatment = true;
 
+    private List<Therapy> therapies = new ArrayList<Therapy>();
+    private Therapy currentTherapy;
+
     private boolean migrated;
 
     public Patient() {
@@ -45,16 +51,34 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public Therapy currentTherapy() {
-        return currentTreatment.getTherapy();
-    }
-
     public void addTreatment(Treatment treatment, DateTime dateModified) {
-        if (currentTreatment != null)
+        treatment.setTherapyUid(currentTherapy.getUid());
+        treatment.setTherapy(currentTherapy);
+
+        if (currentTreatment != null) {
             treatments.add(currentTreatment);
+        }
         currentTreatment = treatment;
         treatment.setStartDate(dateModified.toLocalDate());
         setLastModifiedDate(dateModified);
+    }
+
+
+    public void addTreatment(Treatment treatment, Therapy therapy, DateTime dateModified) {
+        createNewTherapy(therapy);
+        addTreatment(treatment, dateModified);
+    }
+
+    private void createNewTherapy(Therapy therapy) {
+        if (currentTherapy != null) {
+            therapies.add(currentTherapy);
+        }
+        therapy.setUid(generateUid());
+        currentTherapy = therapy;
+    }
+
+    private String generateUid() {
+        return String.valueOf(DateUtil.now().getMillis());
     }
 
     @JsonIgnore
@@ -72,11 +96,11 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void startTherapy(LocalDate firstDoseTakenDate) {
-        currentTherapy().start(firstDoseTakenDate);
+        currentTherapy.start(firstDoseTakenDate);
     }
 
     public void reviveLatestTherapy() {
-        currentTherapy().revive();
+        currentTherapy.revive();
     }
 
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
@@ -100,7 +124,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void nextPhaseName(PhaseName phaseName) {
-        currentTherapy().setNextPhaseName(phaseName);
+        currentTherapy.setNextPhaseName(phaseName);
     }
 
     @JsonIgnore
@@ -110,18 +134,18 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public String currentTherapyId() {
-        if (getCurrentTreatment() == null) return null;
-        return this.getCurrentTreatment().getTherapy().getId();
+        if (currentTherapy == null) return null;
+        return this.currentTherapy.getUid();
     }
 
     @JsonIgnore
     public boolean isNearingPhaseTransition() {
-        return currentTherapy().isNearingPhaseTransition();
+        return currentTherapy.isNearingPhaseTransition();
     }
 
     @JsonIgnore
     public Integer getAge() {
-        return currentTherapy().getPatientAge();
+        return currentTherapy.getPatientAge();
     }
 
     public void setPatientId(String patientId) {
@@ -152,7 +176,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public TreatmentOutcome getTreatmentOutcome() {
-        return getCurrentTreatment().getTreatmentOutcome();
+        return currentTreatment.getTreatmentOutcome();
     }
 
     @JsonIgnore
@@ -185,13 +209,12 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void endCurrentPhase(LocalDate endDate) {
-        Phase currentPhase = currentTherapy().getCurrentPhase();
+        Phase currentPhase = currentTherapy.getCurrentPhase();
         if (currentPhase != null) currentPhase.setEndDate(endDate);
     }
 
     @JsonIgnore
     public void startNextPhase() {
-        Therapy currentTherapy = currentTherapy();
         Phase phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getNextPhaseName());
         phaseToBeStarted.setStartDate(currentTherapy.getLastCompletedPhase().getEndDate().plusDays(1));
         nextPhaseName(null);
@@ -199,18 +222,18 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean isTransitioning() {
-        return currentTherapy().getCurrentPhase() == null && currentTherapy().getLastCompletedPhase() != null;
+        return currentTherapy.getCurrentPhase() == null && currentTherapy.getLastCompletedPhase() != null;
     }
 
     @JsonIgnore
     public boolean hasPhaseToTransitionTo() {
-        return currentTherapy().getNextPhaseName() != null;
+        return currentTherapy.getNextPhaseName() != null;
     }
 
     @JsonIgnore
     public ArrayList<String> getPhasesNotPossibleToTransitionTo() {
-        Phases phases = currentTherapy().getPhases();
-        Phase currentPhase = currentTherapy().getCurrentPhase() == null ? currentTherapy().getLastCompletedPhase() : currentTherapy().getCurrentPhase();
+        Phases phases = currentTherapy.getPhases();
+        Phase currentPhase = currentTherapy.getCurrentPhase() == null ? currentTherapy.getLastCompletedPhase() : currentTherapy.getCurrentPhase();
         ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<String>();
         if (currentPhase == null) return namesOfPhasesNotPossibleToTransitionTo;
 
@@ -223,8 +246,23 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public int getRemainingDosesInCurrentPhase(){
-        Phase currentPhase = currentTherapy().getCurrentPhase();
-        return currentPhase != null ? currentTherapy().remainingDoses(currentPhase) : 0;
+    public int getRemainingDosesInCurrentPhase() {
+        Phase currentPhase = currentTherapy.getCurrentPhase();
+        return currentPhase != null ? currentTherapy.remainingDoses(currentPhase) : 0;
+    }
+
+    public void loadTherapyIntoTreatments() {
+        currentTreatment.setTherapy(getTherapy(currentTreatment.getTherapyUid()));
+
+        for (Treatment treatment : getTreatments()) {
+            treatment.setTherapy(getTherapy(treatment.getTherapyUid()));
+        }
+    }
+
+    private Therapy getTherapy(String therapyUid) {
+        if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
+
+        List<Therapy> therapyList = select(therapies, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
+        return therapyList.get(0);
     }
 }

@@ -33,7 +33,7 @@ public class TreatmentServiceTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
-        treatmentService = new TreatmentService(allPatients, null, providerService);
+        treatmentService = new TreatmentService(allPatients, providerService);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class TreatmentServiceTest {
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
         verify(allPatients).update(patientArgumentCaptor.capture());
-        assertEquals(DiseaseClass.E, patientArgumentCaptor.getValue().currentTherapy().getDiseaseClass());
+        assertEquals(DiseaseClass.E, patientArgumentCaptor.getValue().getCurrentTherapy().getDiseaseClass());
     }
 
 }

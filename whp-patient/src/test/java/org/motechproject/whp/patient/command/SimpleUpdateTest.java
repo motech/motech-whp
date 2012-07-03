@@ -8,7 +8,6 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
 
@@ -19,8 +18,6 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
     @Mock
     private AllPatients allPatients;
-    @Mock
-    private AllTherapies allTherapies;
     @Mock
     private TreatmentService treatmentService;
     private SimpleUpdate simpleUpdate;

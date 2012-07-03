@@ -20,13 +20,14 @@ public class Treatment {
     private LocalDate startDate;
     private LocalDate endDate;
     private Address patientAddress;
-    private String therapyDocId;
     private TreatmentOutcome treatmentOutcome;
     private PatientType patientType;
     private String tbRegistrationNumber;
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
+    private String therapyUid;
+
     private Therapy therapy;
 
     public Treatment() {
@@ -42,7 +43,6 @@ public class Treatment {
         setTbId(newTbId);
         setProviderId(newProviderId);
         setStartDate(startDate);
-        setTherapy(oldTreatment.getTherapy());
         setPatientAddress(oldTreatment.getPatientAddress());
         return this;
     }
@@ -85,7 +85,7 @@ public class Treatment {
     @JsonIgnore
     public void setTherapy(Therapy therapy) {
         this.therapy = therapy;
-        this.therapyDocId = therapy.getId();
+        this.therapyUid = therapy.getUid();
     }
 
     @JsonIgnore

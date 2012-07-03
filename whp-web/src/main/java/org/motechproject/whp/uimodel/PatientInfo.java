@@ -50,7 +50,7 @@ public class PatientInfo {
 
     private void initialize(Patient patient, Provider provider) {
         currentTreatment = patient.getCurrentTreatment();
-        Therapy latestTherapy = patient.currentTherapy();
+        Therapy latestTherapy = patient.getCurrentTherapy();
         testResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
         patientId = patient.getPatientId();
         firstName = patient.getFirstName();
@@ -73,9 +73,9 @@ public class PatientInfo {
         phasesNotPossibleToTransitionTo = patient.getPhasesNotPossibleToTransitionTo();
         nearingPhaseTransition = patient.isNearingPhaseTransition();
         transitioning = patient.isTransitioning();
-        currentPhase = patient.currentTherapy().getCurrentPhase();
+        currentPhase = patient.getCurrentTherapy().getCurrentPhase();
         remainingDosesInCurrentPhase = patient.getRemainingDosesInCurrentPhase();
-        lastCompletedPhase = patient.currentTherapy().getLastCompletedPhase();
+        lastCompletedPhase = patient.getCurrentTherapy().getLastCompletedPhase();
     }
 }
 

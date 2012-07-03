@@ -21,7 +21,6 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +60,6 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     private AllAdherenceLogs allAdherenceLogs;
     @Autowired
     private AllPatients allPatients;
-    @Autowired
-    private AllTherapies allTherapies;
     @Autowired
     private AllAuditLogs allAuditLogs;
 
@@ -250,12 +247,12 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         assertEquals(new LocalDate(2012, 3, 1), adherenceRecord.doseDate());
     }
 
-    private Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyDocId, String providerId) {
+    private Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyUid, String providerId) {
         Adherence log = new Adherence();
         log.setTbId(tbId);
         log.setProviderId(providerId);
         log.setPillStatus(pillStatus);
-        log.setTreatmentId(therapyDocId);
+        log.setTreatmentId(therapyUid);
         log.setPillDate(pillDate);
         log.setPatientId(patientId);
         return log;
@@ -267,7 +264,6 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         deleteAdherenceLogs();
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allAuditLogs.getAll().toArray());
-        markForDeletion(allTherapies.getAll().toArray());
     }
 
     @Override

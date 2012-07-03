@@ -10,7 +10,6 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.user.repository.AllProviders;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,14 +31,11 @@ public class PatientRecordImporterTest {
     @Autowired
     AllProviders allProviders;
 
-    @Autowired
-    private AllTherapies allTherapies;
 
     @After
     @Before
     public void tearDown() {
         allPatients.removeAll();
-        allTherapies.removeAll();
     }
 
 

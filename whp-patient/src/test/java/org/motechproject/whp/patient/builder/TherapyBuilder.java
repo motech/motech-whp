@@ -32,4 +32,9 @@ public class TherapyBuilder {
         therapy.setDiseaseClass(diseaseClass);
         return this;
     }
+
+    public TherapyBuilder withTherapyUid(String therapyUid) {
+        therapy.setUid(therapyUid);
+        return this;
+    }
 }

@@ -9,8 +9,6 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -18,19 +16,16 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.ektorp.ComplexKey.emptyObject;
 import static org.ektorp.ComplexKey.of;
 
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> {
 
-    AllTherapies allTherapies;
 
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTherapies allTherapies) {
+    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(Patient.class, dbCouchDbConnector);
-        this.allTherapies = allTherapies;
     }
 
     @Override
@@ -48,7 +43,6 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @Override
     public void update(Patient patient) {
-        allTherapies.update(patient.currentTherapy());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
@@ -63,7 +57,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         Patient patient = singleResult(db.queryView(find_by_patientId, Patient.class));
         if (patient != null)
-            loadPatientDependencies(patient);
+            patient.loadTherapyIntoTreatments();
         return patient;
     }
 
@@ -74,9 +68,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         String keyword = providerId.toLowerCase();
         ViewQuery q = createQuery("find_by_providerId").key(keyword).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
-        for (Patient patient : patients) {
-            loadPatientDependencies(patient);
-        }
+        loadDependencies(patients);
         return patients;
     }
 
@@ -89,21 +81,8 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
         ViewQuery q = createQuery("find_by_provider_having_active_treatment").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
-        for (Patient patient : patients) {
-            loadPatientDependencies(patient);
-        }
+        loadDependencies(patients);
         return patients;
-    }
-
-    private void loadPatientDependencies(Patient patient) {
-        Treatment latestTreatment = patient.getCurrentTreatment();
-        Therapy latestTherapy = allTherapies.get(latestTreatment.getTherapyDocId());
-        latestTreatment.setTherapy(latestTherapy);
-
-        for (Treatment treatment : patient.getTreatments()) {
-            Therapy therapy = allTherapies.get(treatment.getTherapyDocId());
-            treatment.setTherapy(therapy);
-        }
     }
 
     @View(name = "find_by_district_and_provider_on_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.patientAddress.address_district, doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
@@ -112,9 +91,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             return new ArrayList();
         ViewQuery q = createQuery("find_by_district_and_provider_on_active_treatment").startKey(of(districtName, providerId, null)).endKey(of(districtName, providerId, emptyObject())).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
-        for (Patient patient : patients) {
-            loadPatientDependencies(patient);
-        }
+        loadDependencies(patients);
         return patients;
     }
 
@@ -124,9 +101,13 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             return new ArrayList();
         ViewQuery q = createQuery("find_by_district_on_active_treatment").startKey(of(districtName, null)).endKey(of(districtName, emptyObject())).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
-        for (Patient patient : patients) {
-            loadPatientDependencies(patient);
-        }
+        loadDependencies(patients);
         return patients;
+    }
+
+    private void loadDependencies(List<Patient> patients) {
+        for (Patient patient : patients) {
+            patient.loadTherapyIntoTreatments();
+        }
     }
 }

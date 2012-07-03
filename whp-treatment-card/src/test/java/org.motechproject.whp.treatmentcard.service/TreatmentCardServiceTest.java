@@ -40,19 +40,19 @@ public class TreatmentCardServiceTest {
         LocalDate therapyStartDate = new LocalDate(2011, 2, 3);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(therapyStartDate, "1");
 
-        String therapyDocId = patient.currentTherapy().getId();
-        Adherence log1 = createLog(new LocalDate(2011, 2, 10), therapyDocId, PillStatus.Taken);
-        Adherence log2 = createLog(new LocalDate(2011, 2, 15), therapyDocId, PillStatus.NotTaken);
-        Adherence log3 = createLog(new LocalDate(2011, 3, 12), therapyDocId, PillStatus.Unknown);
-        Adherence log4 = createLog(new LocalDate(2011, 3, 28), therapyDocId, PillStatus.Taken);
+        String therapyUid = patient.getCurrentTherapy().getUid();
+        Adherence log1 = createLog(new LocalDate(2011, 2, 10), therapyUid, PillStatus.Taken);
+        Adherence log2 = createLog(new LocalDate(2011, 2, 15), therapyUid, PillStatus.NotTaken);
+        Adherence log3 = createLog(new LocalDate(2011, 3, 12), therapyUid, PillStatus.Unknown);
+        Adherence log4 = createLog(new LocalDate(2011, 3, 28), therapyUid, PillStatus.Taken);
         AdherenceList adherenceData = new AdherenceList(asList(log1, log2, log3, log4));
 
-        when(whpAdherenceService.findLogsInRange(patient.getPatientId(), therapyDocId, therapyStartDate, today())).thenReturn(adherenceData);
+        when(whpAdherenceService.findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today())).thenReturn(adherenceData);
 
         TreatmentCard treatmentCard = treatmentCardService.treatmentCard(patient);
 
         assertEquals(6, treatmentCard.getIpAdherenceSection().getMonthlyAdherences().size());
-        verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyDocId, therapyStartDate, today());
+        verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today());
     }
 
     @Test
@@ -61,23 +61,22 @@ public class TreatmentCardServiceTest {
         LocalDate therapyStartDate = today.minusMonths(1);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(therapyStartDate, "1");
 
-        String therapyDocId = patient.currentTherapy().getId();
-        Adherence log1 = createLog(today.minusDays(10), therapyDocId, PillStatus.Taken);
+        String therapyUid = patient.getCurrentTherapy().getUid();
+        Adherence log1 = createLog(today.minusDays(10), therapyUid, PillStatus.Taken);
         AdherenceList adherenceData = new AdherenceList(asList(log1));
 
-        when(whpAdherenceService.findLogsInRange(patient.getPatientId(), therapyDocId, therapyStartDate, today)).thenReturn(adherenceData);
+        when(whpAdherenceService.findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today)).thenReturn(adherenceData);
 
         treatmentCardService.treatmentCard(patient);
 
-        verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyDocId, therapyStartDate, today);
+        verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today);
     }
 
-    private Patient createPatientOn3DayAWeekTreatmentCategory(LocalDate therapyStartDate, String therapyDocId) {
+    private Patient createPatientOn3DayAWeekTreatmentCategory(LocalDate therapyStartDate, String therapyUid) {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(therapyStartDate);
-        patient.currentTherapy().setId(therapyDocId);
-        patient.getCurrentTreatment().setTherapyDocId("1");
-        //patient.getCurrentTreatment().getTherapy().setId("1");
+        patient.getCurrentTherapy().setUid(therapyUid);
+        patient.getCurrentTreatment().setTherapyUid("1");
         patient.getCurrentTreatment().setStartDate(therapyStartDate);
         return patient;
     }

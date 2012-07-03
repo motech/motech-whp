@@ -10,7 +10,6 @@ import org.motechproject.whp.patient.command.RestartTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 
 import static org.mockito.Mockito.*;
@@ -22,8 +21,6 @@ public class RestartTreatmentTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
-    private AllTherapies allTherapies;
-    @Mock
     private TreatmentService treatmentService;
     private RestartTreatment restartTreatment;
 
@@ -33,7 +30,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patientRequest = new PatientRequestBuilder().withDefaults().build();
-        restartTreatment = new RestartTreatment(allPatients, allTherapies, treatmentService);
+        restartTreatment = new RestartTreatment(allPatients, treatmentService);
     }
 
     @Test

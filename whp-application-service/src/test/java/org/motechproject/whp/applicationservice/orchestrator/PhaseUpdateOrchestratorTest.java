@@ -18,7 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PhaseUpdateOrchestratorTest {
 
-    public static final String THERAPY_DOC_ID = "therapyDocId";
+    public static final String THERAPY_UID = "therapyUid";
 
     @Mock
     private AllPatients allPatients;
@@ -35,7 +35,7 @@ public class PhaseUpdateOrchestratorTest {
         initMocks(this);
         phaseUpdateOrchestrator = new PhaseUpdateOrchestrator(allPatients, patientService, whpAdherenceService);
         patient = new PatientBuilder().withDefaults().build();
-        patient.getCurrentTreatment().getTherapy().setId(THERAPY_DOC_ID);
+        patient.getCurrentTherapy().setUid(THERAPY_UID);
 
     }
 
@@ -47,12 +47,12 @@ public class PhaseUpdateOrchestratorTest {
         int numberOfDosesTakenInIP = 10;
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
-        when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_DOC_ID, startDate, today)).thenReturn(numberOfDosesTakenInIP);
+        when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_UID, startDate, today)).thenReturn(numberOfDosesTakenInIP);
 
         phaseUpdateOrchestrator.recomputePillCount(patient.getPatientId());
 
         verify(patientService).updatePillTakenCount(patient, PhaseName.IP, numberOfDosesTakenInIP);
-        verify(whpAdherenceService).countOfDosesTakenBetween(patient.getPatientId(), THERAPY_DOC_ID, startDate, today);
+        verify(whpAdherenceService).countOfDosesTakenBetween(patient.getPatientId(), THERAPY_UID, startDate, today);
 
         verifyNoMoreInteractions(whpAdherenceService);
         verifyNoMoreInteractions(patientService);
@@ -75,26 +75,26 @@ public class PhaseUpdateOrchestratorTest {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.currentTherapy().getCurrentPhase().setNumberOfDosesTaken(24);
-        AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_DOC_ID, twentyFourthDoseTakenDate);
+        patient.getCurrentTherapy().getCurrentPhase().setNumberOfDosesTaken(24);
+        AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_UID, twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
-        when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_DOC_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
+        when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_UID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
         phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), PhaseName.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), PhaseName.EIP);
-        verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_DOC_ID, 24, therapyStartDate);
+        verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_UID, 24, therapyStartDate);
         verify(patientService).endCurrentPhase(patient.getPatientId(), twentyFourthDoseTakenDate);
     }
 
     @Test
     public void shouldSetNextPhaseAndStartNextPhase_PatientIsTransitioning() {
-        patient.currentTherapy().setNextPhaseName(PhaseName.EIP);
+        patient.getCurrentTherapy().setNextPhaseName(PhaseName.EIP);
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.currentTherapy().getCurrentPhase().setEndDate(twentyFourthDoseTakenDate);
+        patient.getCurrentTherapy().getCurrentPhase().setEndDate(twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
@@ -111,27 +111,27 @@ public class PhaseUpdateOrchestratorTest {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.currentTherapy().getCurrentPhase().setNumberOfDosesTaken(24);
-        AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_DOC_ID, twentyFourthDoseTakenDate);
+        patient.getCurrentTherapy().getCurrentPhase().setNumberOfDosesTaken(24);
+        AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_UID, twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
-        when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_DOC_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
+        when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_UID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
         phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
 
-        verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_DOC_ID, 24, therapyStartDate);
+        verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_UID, 24, therapyStartDate);
         verify(patientService).endCurrentPhase(patient.getPatientId(), adherenceRecord.doseDate());
         verify(patientService, never()).startNextPhase(anyString());
     }
 
     @Test
     public void shouldStartNextPhaseWhenAttemptingToTransition_NextPhaseSet() {
-        patient.currentTherapy().setNextPhaseName(PhaseName.EIP);
-        patient.getCurrentTreatment().getTherapy().setId(THERAPY_DOC_ID);
+        patient.getCurrentTherapy().setNextPhaseName(PhaseName.EIP);
+        patient.getCurrentTreatment().getTherapy().setUid(THERAPY_UID);
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.currentTherapy().getCurrentPhase().setEndDate(twentyFourthDoseTakenDate);
+        patient.getCurrentTherapy().getCurrentPhase().setEndDate(twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 

@@ -6,7 +6,6 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,51 +19,24 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
 
     @Autowired
     AllPatients allPatients;
-    @Autowired
-    AllTherapies allTherapies;
-
-    public Patient createPatient(String patientId, String providerId, String districtName) {
-        Therapy therapy = createTherapy();
-        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
-
-        Treatment treatment = createTreatment(providerId, therapy, districtName);
-        patient.addTreatment(treatment, now());
-        allPatients.add(patient);
-        return patient;
-    }
 
     public Patient createPatient(String patientId, String providerId) {
-        Therapy therapy = createTherapy();
-        Patient patient = new Patient(patientId, "Raju", "Singh", Gender.M, "1234567890");
-        Treatment treatment = createTreatment(providerId, therapy);
-        patient.addTreatment(treatment, now());
-        allPatients.add(patient);
-        return patient;
+        return createPatientOnActiveTreatment(patientId, "Raju", providerId);
     }
 
     public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId) {
         Therapy therapy = createTherapy();
         Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
-        Treatment treatment = createTreatment(providerId, therapy);
-        patient.addTreatment(treatment, now());
+        Treatment treatment = createTreatment(providerId);
+        patient.addTreatment(treatment, therapy, now());
         patient.setOnActiveTreatment(true);
         allPatients.add(patient);
         return patient;
     }
 
-    private Treatment createTreatment(String providerId, Therapy therapy) {
+    private Treatment createTreatment(String providerId) {
         Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
-        treatment.setTherapy(therapy);
-        treatment.addSmearTestResult(smearTestResult());
-        treatment.addWeightStatistics(weightStatistics());
-        return treatment;
-    }
-
-    private Treatment createTreatment(String providerId, Therapy therapy, String districtName) {
-        Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
-        treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", districtName, "state"));
-        treatment.setTherapy(therapy);
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());
         return treatment;
@@ -73,7 +45,6 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     private Therapy createTherapy() {
         TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 36, 4, 12, 22, 66, Arrays.asList(DayOfWeek.Monday));
         Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 200);
-        allTherapies.add(therapy);
         return therapy;
     }
 
@@ -102,6 +73,5 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
-        markForDeletion(allTherapies.getAll().toArray());
     }
 }

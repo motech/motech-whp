@@ -17,10 +17,10 @@ public class PhaseStartDatesTest {
     public void shouldSetPhaseStartDatesFromPatientObject() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(new LocalDate());
-        patient.currentTherapy().getPhases().setEIPStartDate(new LocalDate());
-        patient.currentTherapy().getPhases().setCPStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().setEIPStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().setCPStartDate(new LocalDate());
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
-        Therapy therapy = patient.currentTherapy();
+        Therapy therapy = patient.getCurrentTherapy();
 
         assertEquals(therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getIpStartDate());
         assertEquals(therapy.getPhases().getByPhaseName(PhaseName.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getEipStartDate());
@@ -36,10 +36,10 @@ public class PhaseStartDatesTest {
         phaseStartDates.setCpStartDate("23/05/2012");
         phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
-        assertEquals(new LocalDate(2012, 5, 21), patient.currentTherapy().getStartDate());
-        assertEquals(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate(), patient.currentTherapy().getStartDate());
-        assertEquals(new LocalDate(2012, 5, 22), patient.currentTherapy().getPhases().getByPhaseName(PhaseName.EIP).getStartDate());
-        assertEquals(new LocalDate(2012, 5, 23), patient.currentTherapy().getPhases().getByPhaseName(PhaseName.CP).getStartDate());
+        assertEquals(new LocalDate(2012, 5, 21), patient.getCurrentTherapy().getStartDate());
+        assertEquals(patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate(), patient.getCurrentTherapy().getStartDate());
+        assertEquals(new LocalDate(2012, 5, 22), patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.EIP).getStartDate());
+        assertEquals(new LocalDate(2012, 5, 23), patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.CP).getStartDate());
     }
 
     @Test
@@ -52,25 +52,25 @@ public class PhaseStartDatesTest {
         phaseStartDates.setCpStartDate("23/05/2012");
         phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
-        assertNull(patient.currentTherapy().getStartDate());
+        assertNull(patient.getCurrentTherapy().getStartDate());
     }
 
     @Test
     public void shouldSetPhaseStartDatesToNullIfFormDataIsEmpty() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(new LocalDate());
-        patient.currentTherapy().getPhases().getByPhaseName(PhaseName.EIP).setStartDate(new LocalDate());
-        patient.currentTherapy().getPhases().getByPhaseName(PhaseName.CP).setStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.EIP).setStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.CP).setStartDate(new LocalDate());
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         phaseStartDates.setIpStartDate("");
         phaseStartDates.setEipStartDate("");
         phaseStartDates.setCpStartDate("");
         phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
-        assertNull(patient.currentTherapy().getStartDate());
-        assertNull(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
-        assertNull(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.EIP).getStartDate());
-        assertNull(patient.currentTherapy().getPhases().getByPhaseName(PhaseName.CP).getStartDate());
+        assertNull(patient.getCurrentTherapy().getStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.EIP).getStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(PhaseName.CP).getStartDate());
     }
 
 }

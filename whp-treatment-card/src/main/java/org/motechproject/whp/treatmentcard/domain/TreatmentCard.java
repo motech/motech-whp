@@ -33,22 +33,20 @@ public class TreatmentCard {
 
     public TreatmentCard(Patient patient) {
         this.patient = patient;
-        this.therapy = patient.currentTherapy();
+        this.therapy = patient.getCurrentTherapy();
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         this.isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
     }
 
     public TreatmentCard initIPSection(List<Adherence> adherenceData) {
-        Therapy currentTherapy = patient.currentTherapy();
-        LocalDate ipStartDate = currentTherapy.getStartDate();
-        ipAdherenceSection.init(patient, adherenceData, currentTherapy, ipStartDate, ipBoxLastDoseDate());
+        LocalDate ipStartDate = therapy.getStartDate();
+        ipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate());
         return this;
     }
 
     public TreatmentCard initCPSection(List<Adherence> adherenceData) {
-        Therapy currentTherapy = patient.currentTherapy();
-        LocalDate cpStartDate = currentTherapy.getPhases().getCPStartDate();
-        cpAdherenceSection.init(patient, adherenceData, currentTherapy, cpStartDate, cpBoxLastDoseDate());
+        LocalDate cpStartDate = therapy.getPhases().getCPStartDate();
+        cpAdherenceSection.init(patient, adherenceData, therapy, cpStartDate, cpBoxLastDoseDate());
         return this;
     }
 

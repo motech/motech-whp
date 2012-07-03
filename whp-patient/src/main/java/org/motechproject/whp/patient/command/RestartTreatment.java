@@ -5,7 +5,6 @@ import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +18,8 @@ public class RestartTreatment extends TreatmentUpdate {
     private TreatmentService service;
 
     @Autowired
-    public RestartTreatment(AllPatients allPatients, AllTherapies allTreatments, TreatmentService service) {
-        super(allPatients, allTreatments, UpdateScope.restartTreatment);
+    public RestartTreatment(AllPatients allPatients, TreatmentService service) {
+        super(allPatients, UpdateScope.restartTreatment);
         this.service = service;
     }
 

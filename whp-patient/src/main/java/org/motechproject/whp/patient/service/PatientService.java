@@ -6,12 +6,11 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.mapper.TherapyMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.repository.AllTherapies;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,36 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapBasicInfo;
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatment;
+import static org.motechproject.whp.patient.mapper.PatientMapper.*;
 
 @Service
 public class PatientService {
 
-    private AllTherapies allTherapies;
     private AllPatients allPatients;
     private UpdateCommandFactory updateCommandFactory;
     private RequestValidator validator;
 
     @Autowired
     public PatientService(AllPatients allPatients,
-                          AllTherapies allTherapies,
                           UpdateCommandFactory updateCommandFactory,
                           RequestValidator validator) {
         this.allPatients = allPatients;
-        this.allTherapies = allTherapies;
         this.updateCommandFactory = updateCommandFactory;
         this.validator = validator;
     }
 
     public void createPatient(PatientRequest patientRequest) {
-        Patient patient = mapBasicInfo(patientRequest);
-
-        Therapy therapy = TherapyMapper.map(patientRequest);
-        allTherapies.add(therapy);
-
-        Treatment treatment = mapTreatment(patientRequest, therapy);
-        patient.addTreatment(treatment, patientRequest.getDate_modified());
+        Patient patient = mapPatient(patientRequest);
         patient.setOnActiveTreatment(true);
         allPatients.add(patient);
     }
@@ -68,7 +57,7 @@ public class PatientService {
     }
 
     public void updatePillTakenCount(Patient patient, PhaseName name, int dosesTaken) {
-        patient.currentTherapy().getPhases().getByPhaseName(name).setNumberOfDosesTaken(dosesTaken);
+        patient.getCurrentTherapy().getPhases().getByPhaseName(name).setNumberOfDosesTaken(dosesTaken);
         allPatients.update(patient);
     }
 

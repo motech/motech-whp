@@ -59,12 +59,6 @@ public class TreatmentBuilder {
         return treatment;
     }
 
-    public TreatmentBuilder withTherapyDocId(String docId) {
-        treatment.setTherapyDocId(docId);
-        treatment.getTherapy().setId(docId);
-        return this;
-    }
-
     public TreatmentBuilder withStartDate(LocalDate date) {
         treatment.setStartDate(date);
         return this;
@@ -82,6 +76,7 @@ public class TreatmentBuilder {
 
     public TreatmentBuilder withTherapy(Therapy therapy) {
         treatment.setTherapy(therapy);
+        treatment.setTherapyUid(therapy.getUid());
         return this;
     }
 

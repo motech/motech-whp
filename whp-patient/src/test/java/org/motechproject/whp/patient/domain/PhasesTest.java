@@ -113,7 +113,7 @@ public class PhasesTest {
     public void shouldReturnFalseIfPatientIsOnIP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class PhasesTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class PhasesTest {
         patient.endCurrentPhase(today().minusMonths(4));
         patient.nextPhaseName(PhaseName.EIP);
         patient.startNextPhase();
-        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class PhasesTest {
         patient.nextPhaseName(PhaseName.EIP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(2));
-        assertFalse(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class PhasesTest {
         patient.endCurrentPhase(today().minusMonths(2));
         patient.nextPhaseName(PhaseName.CP);
         patient.startNextPhase();
-        assertTrue(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
     @Test
@@ -169,7 +169,7 @@ public class PhasesTest {
         patient.nextPhaseName(PhaseName.CP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(1));
-        assertTrue(patient.currentTherapy().getPhases().isOrHasBeenOnCp());
+        assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
 
 }

@@ -29,7 +29,7 @@ public class PhaseUpdateOrchestrator {
 
     public void recomputePillCount(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
-        for (Phase phase : patient.currentTherapy().getPhases()) {
+        for (Phase phase : patient.getCurrentTherapy().getPhases()) {
             if (phase.hasStarted()) {
                 LocalDate endDate = phase.getEndDate() != null ? phase.getEndDate() : DateUtil.today();
                 int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phase.getStartDate(), endDate);
@@ -46,9 +46,9 @@ public class PhaseUpdateOrchestrator {
     public void attemptPhaseTransition(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
 
-        Therapy currentTherapy = patient.currentTherapy();
+        Therapy currentTherapy = patient.getCurrentTherapy();
         if (currentTherapy.currentPhaseDoseComplete()) {
-            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, currentTherapy.getId(), currentTherapy.cumulativeNumberOfDosesSoFar(), currentTherapy.getStartDate());
+            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, currentTherapy.getUid(), currentTherapy.cumulativeNumberOfDosesSoFar(), currentTherapy.getStartDate());
             patientService.endCurrentPhase(patientId, recordOfLastDoseInPhase.doseDate());
         }
 

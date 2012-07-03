@@ -82,7 +82,7 @@ public class AdherenceController extends BaseController {
     }
 
     private void prepareModel(Patient patient, Model uiModel, WeeklyAdherenceSummary adherenceSummary) {
-        TreatmentCategory category = allTreatmentCategories.findByCode(patient.currentTherapy().getTreatmentCategory().getCode());
+        TreatmentCategory category = allTreatmentCategories.findByCode(patient.getCurrentTherapy().getTreatmentCategory().getCode());
         WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherenceSummary, patient);
 
         uiModel.addAttribute("adherence", weeklyAdherenceForm);

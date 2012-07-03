@@ -89,8 +89,8 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
-    public int countOfDosesTakenBetween(String patientId, String therapyDocId, LocalDate startDate, LocalDate endDate) {
-        return adherenceService.countOfDosesTakenBetween(patientId, therapyDocId, startDate, endDate);
+    public int countOfDosesTakenBetween(String patientId, String therapyUid, LocalDate startDate, LocalDate endDate) {
+        return adherenceService.countOfDosesTakenBetween(patientId, therapyUid, startDate, endDate);
     }
 
     public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
@@ -117,8 +117,8 @@ public class WHPAdherenceService {
         addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
     }
 
-    public AdherenceRecord nThTakenDose(String patientId, String therapyDocId, Integer doseNumber, LocalDate treatmentStartDate) {
-        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyDocId, treatmentStartDate);
+    public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate treatmentStartDate) {
+        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyUid, treatmentStartDate);
         return adherenceRecords.get(doseNumber - 1);
     }
 }

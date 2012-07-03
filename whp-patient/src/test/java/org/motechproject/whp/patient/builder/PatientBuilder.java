@@ -36,7 +36,13 @@ public class PatientBuilder {
         patient.setLastName("lastName");
         patient.setGender(Gender.O);
         patient.setPhoneNumber("1234567890");
-        patient.addTreatment(defaultTreatment(), now());
+        patient.addTreatment(defaultTreatment(), defaultTherapy(), now());
+        return this;
+    }
+
+    public PatientBuilder withTherapyUid(String therapyUid) {
+        patient.getCurrentTherapy().setUid(therapyUid);
+        patient.getCurrentTreatment().setTherapyUid(therapyUid);
         return this;
     }
 
@@ -62,6 +68,7 @@ public class PatientBuilder {
         Therapy therapy = new Therapy();
         therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);
+        therapy.setUid("therapyUid");
         return therapy;
     }
 
@@ -146,6 +153,11 @@ public class PatientBuilder {
 
     public PatientBuilder withTreatmentUnderDistrict(String district) {
         patient.getCurrentTreatment().getPatientAddress().setAddress_district(district);
+        return this;
+    }
+
+    public PatientBuilder withCurrentTherapy(Therapy therapy) {
+        patient.setCurrentTherapy(therapy);
         return this;
     }
 }

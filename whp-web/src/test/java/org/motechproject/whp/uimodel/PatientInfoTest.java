@@ -46,6 +46,7 @@ public class PatientInfoTest {
         Therapy therapy = new TherapyBuilder()
                 .withAge(patientAge)
                 .withDiseaseClass(diseaseClass)
+                .withTherapyUid("therapyUid")
                 .withTreatmentCategory(treatmentCategory).build();
 
         SmearTestResults smearTestResults = new SmearTestResults();
@@ -82,6 +83,7 @@ public class PatientInfoTest {
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTreatment(currentTreatment)
+                .withCurrentTherapy(therapy)
                 .build();
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(),currentTreatment.getWeightStatistics());
