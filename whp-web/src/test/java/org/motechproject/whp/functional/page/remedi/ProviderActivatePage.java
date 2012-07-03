@@ -3,7 +3,6 @@ package org.motechproject.whp.functional.page.remedi;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.WebDriver;
@@ -26,12 +25,6 @@ public class ProviderActivatePage extends Page {
     }
 
     @Override
-    public void postInitialize() {
-        providerId = WebDriverFactory.createWebElement(providerId);
-        submit = WebDriverFactory.createWebElement(submit);
-    }
-
-    @Override
     protected void waitForPageToLoad() {
         waitForElementWithIdToLoad("provider_id");
     }
@@ -45,8 +38,18 @@ public class ProviderActivatePage extends Page {
     public LoginPage activateProvider(String providerId) {
         setProviderId(providerId);
         submit.click();
-        waitForSuccess("Activate Provider");
+        waitForSuccess();
         return transitionToNextPage();
+    }
+
+    private void waitForSuccess() {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement statusMessage = webDriver.findElement(id("statusMessage"));
+                return StringUtils.containsIgnoreCase(statusMessage.getText(), "success");
+            }
+        });
     }
 
     private void setProviderId(String providerId) {

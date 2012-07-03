@@ -1,7 +1,6 @@
 package org.motechproject.whp.functional.page.admin;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,12 +14,6 @@ public class ItAdminPage extends LoggedInUserPage {
 
     public ItAdminPage(WebDriver webDriver) {
         super(webDriver);
-    }
-
-    @Override
-    public void postInitialize() {
-        super.postInitialize();
-        searchProvidersLink = WebDriverFactory.createWebElement(searchProvidersLink);
     }
 
     public ListProvidersPage navigateToSearchProviders() {

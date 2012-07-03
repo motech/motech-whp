@@ -69,8 +69,18 @@ public class PatientCreatePage extends Page {
         this.district.sendKeys(testPatient.getDistrict());
         this.diseaseClass.sendKeys(testPatient.getDiseaseClass());
         submit.click();
-        waitForSuccess("Create Patient");
+        waitForSuccess();
         webDriver.get(LoginPage.LOGIN_URL);
         return MyPageFactory.initElements(webDriver, LoginPage.class);
+    }
+
+    private void waitForSuccess() {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement statusMessage = webDriver.findElement(id("statusMessage"));
+                return StringUtils.containsIgnoreCase(statusMessage.getText(), "success");
+            }
+        });
     }
 }

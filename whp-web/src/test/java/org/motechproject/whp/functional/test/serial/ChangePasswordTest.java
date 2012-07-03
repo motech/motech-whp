@@ -1,6 +1,5 @@
 package org.motechproject.whp.functional.test.serial;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
@@ -16,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 public class ChangePasswordTest extends BaseTest {
 
     @Test
-    @Ignore
     public void testChangePasswordForAdministrator() throws InterruptedException {
         LoggedInUserPage adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().openChangePasswordModal();
         verifyValidations(adminPage);

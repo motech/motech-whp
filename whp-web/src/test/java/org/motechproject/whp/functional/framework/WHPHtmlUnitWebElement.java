@@ -15,4 +15,10 @@ public class WHPHtmlUnitWebElement extends WHPWebElement {
         click();
         webElement.sendKeys(keysToSend);
     }
+
+    @Override
+    public void select(String value) {
+        sendKeys(value);
+        sendKey(Keys.ENTER);
+    }
 }

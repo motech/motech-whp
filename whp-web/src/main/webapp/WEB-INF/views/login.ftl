@@ -31,7 +31,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <button id="login" type="submit" class="btn btn-primary login-btn"> Login</button>
+                    <button type="submit" class="btn btn-primary login-btn"> Login</button>
                 </div>
             </div>
         </div>

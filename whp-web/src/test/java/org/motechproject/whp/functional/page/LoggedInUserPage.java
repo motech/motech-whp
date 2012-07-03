@@ -33,9 +33,6 @@ public class LoggedInUserPage extends Page {
     @FindBy(how = How.ID, using = CURRENT_PASSWORD_ID)
     private WebElement currentPassword;
 
-    @FindBy(how = How.ID, using = "changePassword")
-    private WebElement changePassword;
-
     @FindBy(how = How.ID, using = "newPassword")
     private WebElement newPassword;
 
@@ -47,7 +44,6 @@ public class LoggedInUserPage extends Page {
 
     @FindBy(how=How.ID, using = "changePasswordServerSideError")
     private WebElement changePasswordServerSideError;
-
     public LoggedInUserPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -61,15 +57,9 @@ public class LoggedInUserPage extends Page {
 
     @Override
     public void postInitialize() {
-        welcomeDiv = createWebElement(welcomeDiv);
-        logoutLink = createWebElement(logoutLink);
-        changePasswordLink = createWebElement(changePasswordLink);
         currentPassword = createWebElement(currentPassword);
         newPassword = createWebElement(newPassword);
         confirmNewPassword = createWebElement(confirmNewPassword);
-        changePassword = createWebElement(changePassword);
-        changePasswordError = createWebElement(changePasswordError);
-        changePasswordServerSideError = createWebElement(changePasswordServerSideError);
     }
 
     public String getWelcomeText() {
@@ -90,7 +80,7 @@ public class LoggedInUserPage extends Page {
         createWebElement(currentPassword).sendKeys(currentPasswordText);
         createWebElement(newPassword).sendKeys(newPasswordText);
         createWebElement(confirmNewPassword).sendKeys(confirmNewPasswordText);
-        changePassword.click();
+        currentPassword.submit();
         waitForElementToBeReloadedByAjax();
     }
 
