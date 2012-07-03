@@ -84,6 +84,10 @@ public class PatientController extends BaseController {
         return "patient/show";
     }
 
+    public static String redirectToPatientDashboardURL(String patientId){
+        return "redirect:/patients/show?patientId=" + patientId;
+    }
+
     @RequestMapping(value = "search", method = RequestMethod.POST)
     public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam("selectedProvider") String providerId, Model uiModel) {
         List<Patient> patients = patientService.searchBy(districtName, providerId);
@@ -138,7 +142,7 @@ public class PatientController extends BaseController {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Provider provider = providerService.fetchByProviderId(patient.providerId());
 
-        uiModel.addAttribute("patient", new PatientInfo(patient,provider));
+        uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
 
         String messages = in("messages", request);

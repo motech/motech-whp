@@ -22,8 +22,6 @@ public class TreatmentCard {
 
     private Patient patient;
 
-    private List<String> providerIds = new ArrayList<>();
-
     private boolean isSundayDoseDate;
 
     private Therapy therapy;
@@ -78,10 +76,17 @@ public class TreatmentCard {
 
     public LocalDate cpBoxLastDoseDate() {
         Phases phases = therapy.getPhases();
-        if(phases.isOrHasBeenOnCp()) {
+        if (phases.isOrHasBeenOnCp()) {
             return phases.getByPhaseName(PhaseName.CP).getStartDate().plusMonths(MONTHS_IN_CP_BOX).minusDays(1);
         }
         return null;
+    }
+
+    public List<String> getProviderIds() {
+        ArrayList<String> all = new ArrayList<String>();
+        all.addAll(ipAdherenceSection.getProviderIds());
+        all.addAll(cpAdherenceSection.getProviderIds());
+        return all;
     }
 
 }

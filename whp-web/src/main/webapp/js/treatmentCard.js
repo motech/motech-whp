@@ -1,4 +1,5 @@
 function setUpTreatmentCardTable() {
+
 //Tooltips to show provider information and dose status
     $('.tick-icon, .round-icon').each(function () {
         var providerId = $(this).attr('providerId');
@@ -52,26 +53,19 @@ function setUpTreatmentCardTable() {
     });
     colorCellsByProvider();
     createAutoClosingAlert(".dateUpdated-message-alert", 5000);
+
+    $('#submitAdherence').click(function () {
+        var dailyAdherenceRequests = [];
+        $.each($('[pillStatusChanged=true]'), function () {
+            dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
+        });
+        var patientId = $("#patient-id").text();
+        var delta = { patientId: patientId , dailyAdherenceRequests: dailyAdherenceRequests };
+        $("#delta").val(JSON.stringify(delta));
+        $("#treatmentCardDeltaform").submit();
+    });
 }
 
-$('#submitAdherence').click(function () {
-    var dailyAdherenceRequests = [];
-    $.each($('[pillStatusChanged=true]'), function () {
-        dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
-    });
-    var patientId = $("#patient-id").text();
-    var delta = {patientId: patientId , dailyAdherenceRequests: dailyAdherenceRequests };
-    $.ajax({
-        type : 'POST',
-        url : '/whp/treatmentcard/update',
-        data : JSON.stringify(delta),
-        contentType: "application/json",
-        success : function(data) {
-            $("#treatmentCard").html(data);
-            setUpTreatmentCardTable();
-        }
-    });
-});
 
 function colorCellsByProvider() {
     var providerColorCodes = new Array("blue", "green", "orange", "brown", "purple", "rosyBrown", "olive", "salmon", "cyan", "red");

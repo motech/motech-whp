@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -73,9 +74,9 @@ public class TreatmentCardControllerTest {
 
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
 
-        String view = treatmentCardController.update(adherenceData, uiModel, request);
+        String view = treatmentCardController.update(new Gson().toJson(adherenceData), uiModel);
 
-        assertEquals("treatmentcard/show", view);
+        assertEquals("redirect:/patients/show?patientId=patientid", view);
         verify(uiModel, times(1)).addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         verify(adherenceService, times(1)).addLogsForPatient(adherenceData, patient);
     }

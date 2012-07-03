@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import com.google.gson.Gson;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
@@ -10,12 +11,11 @@ import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
+import static org.motechproject.whp.controller.PatientController.redirectToPatientDashboardURL;
 
 @Controller
 @RequestMapping(value = "/treatmentcard")
@@ -46,13 +46,14 @@ public class TreatmentCardController extends BaseController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String update(@RequestBody UpdateAdherenceRequest updateAdherenceRequest, Model uiModel, HttpServletRequest request) {
+    public String update(@RequestParam("delta") String adherenceJson, Model uiModel) {
+        UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
         phaseUpdateOrchestrator.recomputePillCount(updateAdherenceRequest.getPatientId());
         phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
         uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
-        return show(patient.getPatientId(), uiModel);
+        return redirectToPatientDashboardURL(patient.getPatientId());
     }
 
 }

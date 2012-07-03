@@ -78,7 +78,6 @@ public class WHPAdherenceServiceTest {
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();
         request.setPatientId(PATIENT_ID);
-        request.setTherapy(patient.getCurrentTherapy().getUid());
         DailyAdherenceRequest dailyAdherenceRequest1 = createDailyAdherenceRequest(1, 10, 2011, PillStatus.NotTaken.getStatus());
         DailyAdherenceRequest dailyAdherenceRequest2 = createDailyAdherenceRequest(3, 1, 2012, PillStatus.Taken.getStatus());
         DailyAdherenceRequest dailyAdherenceRequest3 = createDailyAdherenceRequest(15, 2, 2012, PillStatus.Unknown.getStatus());
@@ -127,7 +126,6 @@ public class WHPAdherenceServiceTest {
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();
         request.setPatientId(PATIENT_ID);
-        request.setTherapy(patient.getCurrentTherapy().getUid());
         DailyAdherenceRequest dailyAdherenceRequest = createDailyAdherenceRequest(1, 10, 2010, PillStatus.NotTaken.getStatus());
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest));
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);

@@ -99,7 +99,7 @@ public class WHPAdherenceService {
         for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
             Adherence datum = new Adherence();
             datum.setPatientId(patient.getPatientId());
-            datum.setTreatmentId(updateAdherenceRequest.getTherapy());
+            datum.setTreatmentId(patient.currentTherapyId());
             datum.setPillDate(request.getDoseDate());
             datum.setPillStatus(PillStatus.get(request.getPillStatus()));
             adherenceData.add(datum);
