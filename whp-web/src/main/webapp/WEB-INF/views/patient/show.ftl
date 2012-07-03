@@ -19,11 +19,10 @@
         $('#achtung').fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350);
     });
 </script>
-
-<#if messages??>
+<#if message??>
 <div class="dateUpdated-message-alert row alert alert-info fade in">
     <button class="close" data-dismiss="alert">&times;</button>
-${messages}
+${message}
 </div>
 </#if>
 

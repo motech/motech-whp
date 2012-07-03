@@ -11,7 +11,6 @@ import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestr
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.springframework.ui.Model;
@@ -74,10 +73,9 @@ public class TreatmentCardControllerTest {
 
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
 
-        String view = treatmentCardController.update(new Gson().toJson(adherenceData), uiModel);
+        String view = treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
         assertEquals("redirect:/patients/show?patientId=patientid", view);
-        verify(uiModel, times(1)).addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         verify(adherenceService, times(1)).addLogsForPatient(adherenceData, patient);
     }
 
@@ -88,7 +86,7 @@ public class TreatmentCardControllerTest {
 
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
 
-        treatmentCardController.update(new Gson().toJson(adherenceData), uiModel);
+        treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
         verify(phaseUpdateOrchestrator, times(1)).recomputePillCount(adherenceData.getPatientId());
         verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(adherenceData.getPatientId());

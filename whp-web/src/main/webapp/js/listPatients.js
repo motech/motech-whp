@@ -1,9 +1,13 @@
 $(function() {
     $( "#district" ).combobox();
     $( "#providerId" ).combobox();
-    $( "#district" ).bind( "autocompleteselected", function(event, ui) {
+    $( "#district" ).bind( "autocomplete-selected", function(event, ui) {
         $("#providerId-autocomplete").val("");
         initProviders();
+    });
+    $( "#district" ).bind( "invalid-value", function() {
+           $("#providerId-autocomplete").val("");
+           $("#providerId").html('');
     });
     $("#searchForm").submit(function (event) {
             event.preventDefault();

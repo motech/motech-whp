@@ -6,8 +6,8 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -18,10 +18,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.extract;
-import static org.apache.commons.lang.StringUtils.isEmpty;
-import static org.motechproject.whp.patient.mapper.PatientMapper.*;
+import static ch.lambdaj.Lambda.on;
+import static org.motechproject.whp.patient.mapper.PatientMapper.mapPatient;
 
 @Service
 public class PatientService {
@@ -93,14 +92,14 @@ public class PatientService {
         allPatients.update(updatedPatient);
     }
 
-    public List<Patient> searchBy(String districtName, String providerId) {
-        if (isEmpty(providerId)) {
-            List<Provider> providers = providerService.fetchBy(districtName);
-            List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
-            return allPatients.getAllWithCurrentProviders(providerIds);
-        }
-        else
-            return allPatients.findByCurrentProvider(providerId);
+    public List<Patient> searchBy(String districtName) {
+        List<Provider> providers = providerService.fetchBy(districtName);
+        List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
+        return allPatients.getAllWithCurrentProviders(providerIds);
+    }
+
+    public List<Patient> searchBy(Provider provider) {
+        return allPatients.findByCurrentProvider(provider.getProviderId());
     }
 
     boolean canBeTransferred(String patientId) {

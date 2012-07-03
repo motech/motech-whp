@@ -18,6 +18,7 @@ import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.contract.ProviderRequest;
+import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -361,24 +362,26 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest3);
 
-        List<Patient> patientList = patientService.searchBy("Vaishali", "");
+        List<Patient> patientList = patientService.searchBy("Vaishali");
         assertPatientForRequests(asList(createPatientRequest1, createPatientRequest2), patientList);
     }
 
     @Test
     public void shouldSearchPatientsByProviderIdWhenBothProviderDistrictAndProviderIdArePresent() {
+        String searchProviderId = "provider2";
         createProvider("provider1", "Vaishali");
-        createProvider("provider2", "Vaishali");
+        createProvider(searchProviderId, "Vaishali");
         createProvider("provider3", "Begusarai");
+        Provider providerToBeUsedForSearch = providerService.fetchByProviderId(searchProviderId);
 
         PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId(searchProviderId).withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest2);
         PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest3);
 
-        List<Patient> patientList = patientService.searchBy("Vaishali", "provider2");
+        List<Patient> patientList = patientService.searchBy(providerToBeUsedForSearch);
         assertPatientForRequests(asList(createPatientRequest2), patientList);
     }
 

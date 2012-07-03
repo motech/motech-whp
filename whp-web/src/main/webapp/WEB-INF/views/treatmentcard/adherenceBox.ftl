@@ -1,5 +1,5 @@
 <#macro adherenceBox title monthlyAdherences >
-<table id=${title} class="table table-bordered table-condensed fixed disable-select">
+<table id="${title}" class="table sharp table-bordered table-condensed fixed disable-select">
 <thead>
 <tr>
     <th>Month/Year</th>

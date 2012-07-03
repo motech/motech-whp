@@ -40,7 +40,7 @@
                         self._trigger( "selected", event, {
                             item: ui.item.option
                         });
-                        $(self.element).trigger( "autocompleteselected", event, {
+                        $(self.element).trigger( "autocomplete-selected", event, {
                             item: ui.item.option
                         });
                     },
@@ -59,9 +59,12 @@
                                 $( this ).val( "" );
                                 select.val( "" );
                                 input.data( "autocomplete" ).term = "";
+                                $(self.element).trigger("invalid-value", event );
+
                                 return false;
                             }
                         }
+
                     }
                 })
                 .addClass( "ui-widget ui-widget-content ui-corner-left" );
@@ -108,6 +111,6 @@
             this.wrapper.remove();
             this.element.show();
             $.Widget.prototype.destroy.call( this );
-        },
+        }
     });
 })( jQuery );

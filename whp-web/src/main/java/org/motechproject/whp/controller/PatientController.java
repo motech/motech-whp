@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PhaseName;
@@ -24,8 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
+import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 
@@ -71,9 +71,8 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String list(Model uiModel) {
         String districtName = allDistrictsCache.getAll().get(0).getName();
-        String providerId = "";
-        List<Patient> patients = patientService.searchBy(districtName, providerId);
-        prepareModelForListView(uiModel, patients, districtName, providerId);
+        List<Patient> patients = patientService.searchBy(districtName);
+        prepareModelForListView(uiModel, patients, districtName, "");
         return "patient/list";
     }
 
@@ -84,13 +83,20 @@ public class PatientController extends BaseController {
         return "patient/show";
     }
 
-    public static String redirectToPatientDashboardURL(String patientId){
+    public static String redirectToPatientDashboardURL(String patientId) {
         return "redirect:/patients/show?patientId=" + patientId;
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
     public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam("selectedProvider") String providerId, Model uiModel) {
-        List<Patient> patients = patientService.searchBy(districtName, providerId);
+        List<Patient> patients;
+        if (isEmpty(providerId))
+            patients = patientService.searchBy(districtName);
+        else {
+            Provider provider = providerService.fetchByProviderId(providerId);
+            districtName = provider.getDistrict();
+            patients = patientService.searchBy(provider);
+        }
         prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/patientList";
     }
@@ -114,9 +120,9 @@ public class PatientController extends BaseController {
     }
 
     private void passAdherenceSavedMessageToListView(Model uiModel, HttpServletRequest request) {
-        String message = in("message", request);
+        String message = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (StringUtils.isNotEmpty(message)) {
-            uiModel.addAttribute("message", message);
+            uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, message);
         }
     }
 
@@ -135,7 +141,7 @@ public class PatientController extends BaseController {
         String ipStartDate = dateMessage(phaseStartDates.getIpStartDate());
         String eipStartDate = dateMessage(phaseStartDates.getEipStartDate());
         String cpStartDate = dateMessage(phaseStartDates.getCpStartDate());
-        out("messages", messageSource.getMessage("dates.changed.message", new Object[]{patientId, ipStartDate, eipStartDate, cpStartDate}, Locale.ENGLISH), httpServletRequest);
+        out(WHPConstants.NOTIFICATION_MESSAGE, messageSource.getMessage("dates.changed.message", new Object[]{patientId, ipStartDate, eipStartDate, cpStartDate}, Locale.ENGLISH), httpServletRequest);
     }
 
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
@@ -145,9 +151,9 @@ public class PatientController extends BaseController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
 
-        String messages = in("messages", request);
+        String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotEmpty(messages)) {
-            uiModel.addAttribute("messages", messages);
+            uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
     }
 

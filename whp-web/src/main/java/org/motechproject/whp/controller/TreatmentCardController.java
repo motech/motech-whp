@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static org.motechproject.flash.Flash.out;
 import static org.motechproject.whp.controller.PatientController.redirectToPatientDashboardURL;
 
 @Controller
@@ -46,13 +49,13 @@ public class TreatmentCardController extends BaseController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String update(@RequestParam("delta") String adherenceJson, Model uiModel) {
+    public String update(@RequestParam("delta") String adherenceJson, HttpServletRequest request) {
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
         phaseUpdateOrchestrator.recomputePillCount(updateAdherenceRequest.getPatientId());
         phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
-        uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
+        out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);
         return redirectToPatientDashboardURL(patient.getPatientId());
     }
 
