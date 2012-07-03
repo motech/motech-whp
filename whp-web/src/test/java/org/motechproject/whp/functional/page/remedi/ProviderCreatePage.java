@@ -1,13 +1,18 @@
 package org.motechproject.whp.functional.page.remedi;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import static org.openqa.selenium.By.id;
 
 public class ProviderCreatePage extends Page {
 
@@ -31,6 +36,17 @@ public class ProviderCreatePage extends Page {
     }
 
     @Override
+    public void postInitialize() {
+        providerId = WebDriverFactory.createWebElement(providerId);
+        password = WebDriverFactory.createWebElement(password);
+        primaryMobile = WebDriverFactory.createWebElement(primaryMobile);
+        secondaryMobile = WebDriverFactory.createWebElement(secondaryMobile);
+        tertiaryMobile = WebDriverFactory.createWebElement(tertiaryMobile);
+        district = WebDriverFactory.createWebElement(district);
+        submit = WebDriverFactory.createWebElement(submit);
+    }
+
+    @Override
     protected void waitForPageToLoad() {
         waitForElementWithIdToLoad("provider_id");
     }
@@ -48,6 +64,7 @@ public class ProviderCreatePage extends Page {
         setTertiaryMobile(provider.getTertiaryMobile());
         setDistrict(provider.getDistrict());
         submit.click();
+        waitForSuccess("Create Provider");
     }
 
     private void setProviderId(String providerId) {

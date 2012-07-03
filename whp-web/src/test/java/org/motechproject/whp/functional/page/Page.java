@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -9,11 +10,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.openqa.selenium.By.id;
+
 public abstract class Page {
 
     private Logger logger = LoggerFactory.getLogger(Page.class);
     protected WebDriver webDriver;
-    private static final long MaxPageLoadTime = 30;
+    private static final long MaxPageLoadTime = 5;
     private static final long RetryTimes = 5;
     private static final long RetryInterval = 5;
     protected WebDriverWait wait;
@@ -37,21 +40,6 @@ public abstract class Page {
 
     @FindBy(how = How.LINK_TEXT, using = "Logout")
     private WebElement logoutLink;
-
-    private void searchById(String id) {
-        searchBox = WebDriverFactory.createWebElement(searchBox);
-        searchBox.sendKeys(id);
-        searchBox.submit();
-    }
-
-    public String getPatientSearchErrorMessage() {
-        return errorDiv.getText();
-    }
-
-    public WebElement getNavigationLinks() {
-        waitForElementWithIdToLoad("links");
-        return webDriver.findElement(By.id("links"));
-    }
 
     protected abstract void waitForPageToLoad();
 
@@ -126,5 +114,19 @@ public abstract class Page {
                 return (Boolean) ((JavascriptExecutor) webDriver).executeScript("return jQuery.active == 0");
             }
         });
+    }
+
+    protected void waitForSuccess(String operation) {
+        System.out.println("START: " + operation + " - Wait for success ...................................");
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement statusMessage = webDriver.findElement(id("statusMessage"));
+                System.out.println(statusMessage.getText());
+                return StringUtils.containsIgnoreCase(statusMessage.getText(), "success");
+            }
+        });
+        System.out.println("END: " + operation + " - Wait for success ...................................");
+        System.out.println("***************************************************************************");
     }
 }

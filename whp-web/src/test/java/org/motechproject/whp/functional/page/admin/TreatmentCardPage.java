@@ -2,6 +2,7 @@ package org.motechproject.whp.functional.page.admin;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +19,12 @@ public class TreatmentCardPage extends PatientDashboardPage {
 
     public TreatmentCardPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    @Override
+    public void postInitialize() {
+        super.postInitialize();
+        adjustStartDatesLink = WebDriverFactory.createWebElement(adjustStartDatesLink);
     }
 
     @Override

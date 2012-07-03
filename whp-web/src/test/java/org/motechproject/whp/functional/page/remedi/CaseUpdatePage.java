@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page.remedi;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.ExtendedWebElement;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
@@ -10,6 +11,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import static org.openqa.selenium.By.id;
 
 public class CaseUpdatePage extends Page {
 
@@ -45,6 +49,7 @@ public class CaseUpdatePage extends Page {
         ((ExtendedWebElement)this.urls).select(WHPUrl.patientProcess());
         this.requestData.sendKeys(requestData);
         this.submit.click();
+        waitForSuccess("Update Case");
         webDriver.get(LoginPage.LOGIN_URL);
         return MyPageFactory.initElements(webDriver, LoginPage.class);
     }

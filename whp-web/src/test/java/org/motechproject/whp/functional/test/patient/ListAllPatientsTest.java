@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.test.patient;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.test.BasePatientTest;
@@ -34,6 +35,7 @@ public class ListAllPatientsTest extends BasePatientTest {
     }
 
     @Test
+    @Ignore
     public void shouldListAllPatientsForTheDistrictUnderAProviderSelectedByCMFAdmin() {
         String district = "Vaishali";
         setupTestProvider(district);

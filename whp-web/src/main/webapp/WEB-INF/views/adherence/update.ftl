@@ -31,7 +31,7 @@
             <div class="controls pull-right">
                 <a href="<@spring.url ''/>" class="btn">Cancel</a>
                 <#if !readOnly>
-                    <input type="submit" class="btn btn-primary login-btn" value="Submit"/>
+                    <input type="submit" id="submit" class="btn btn-primary login-btn" value="Submit"/>
                 </#if>
             </div>
         </div>

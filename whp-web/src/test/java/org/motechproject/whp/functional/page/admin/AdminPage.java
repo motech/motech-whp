@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.page.admin;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,6 +14,12 @@ public class AdminPage extends ListAllPatientsPage {
 
     public AdminPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    @Override
+    public void postInitialize() {
+        super.postInitialize();
+        showPatientsLink = WebDriverFactory.createWebElement(showPatientsLink);
     }
 
     @Override
