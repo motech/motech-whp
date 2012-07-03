@@ -1,4 +1,4 @@
-function setUpTreatmentCardTable(therapyDocId) {
+function setUpTreatmentCardTable() {
 //Tooltips to show provider information and dose status
     $('.tick-icon, .round-icon').each(function () {
         var providerId = $(this).attr('providerId');
@@ -50,8 +50,8 @@ function setUpTreatmentCardTable(therapyDocId) {
             $(this).attr('pillStatusChanged', 'false');
         }
     });
-    createAutoClosingAlert(".message-alert", 5000);
     colorCellsByProvider();
+    createAutoClosingAlert(".dateUpdated-message-alert", 5000);
 }
 
 $('#submitAdherence').click(function () {
@@ -60,7 +60,7 @@ $('#submitAdherence').click(function () {
         dailyAdherenceRequests.push({day:$(this).attr('day'), month:$(this).attr('month'), year:$(this).attr('year'), pillStatus:$(this).attr('currentPillStatus')});
     });
     var patientId = $("#patient-id").text();
-    var delta = {patientId: patientId , therapy: therapyDocId, dailyAdherenceRequests: dailyAdherenceRequests };
+    var delta = {patientId: patientId , dailyAdherenceRequests: dailyAdherenceRequests };
     $.ajax({
         type : 'POST',
         url : '/whp/treatmentcard/update',
@@ -68,7 +68,7 @@ $('#submitAdherence').click(function () {
         contentType: "application/json",
         success : function(data) {
             $("#treatmentCard").html(data);
-            setUpTreatmentCardTable('${treatmentCard.therapyDocId}');
+            setUpTreatmentCardTable();
         }
     });
 });

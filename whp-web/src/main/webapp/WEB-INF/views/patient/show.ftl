@@ -58,6 +58,8 @@
         event.preventDefault();
     });
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
-    $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}');
+    $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}', function() {
+        setUpTreatmentCardTable();
+    });
 </script>
 </@layout.defaultLayout>

@@ -26,8 +26,6 @@ public class TreatmentCard {
 
     private boolean isSundayDoseDate;
 
-    private String therapyDocId;
-
     private Therapy therapy;
 
     private AdherenceSection ipAdherenceSection = new AdherenceSection();
@@ -36,7 +34,6 @@ public class TreatmentCard {
     public TreatmentCard(Patient patient) {
         this.patient = patient;
         this.therapy = patient.currentTherapy();
-        this.therapyDocId = therapy.getId();
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         this.isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
     }
