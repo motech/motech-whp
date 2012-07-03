@@ -50,7 +50,7 @@
 
                 <tr>
                     <th>Treatment Start Date</th>
-                    <td>${patient.treatmentStartDate}</td>
+                    <td>${patient.therapyStartDate}</td>
                 </tr>
             </table>
         </div>

@@ -25,7 +25,7 @@ public class PatientInfo {
     private String gender;
     private String tbId;
     private String providerId;
-    private String treatmentStartDate;
+    private String therapyStartDate;
     private String tbRegistrationNumber;
     private String patientType;
     private Integer age;
@@ -60,7 +60,7 @@ public class PatientInfo {
         gender = patient.getGender().name();
         tbId = currentTreatment.getTbId();
         providerId = currentTreatment.getProviderId();
-        treatmentStartDate = WHPDate.date(currentTreatment.getStartDate()).value();
+        therapyStartDate = WHPDate.date(latestTherapy.getStartDate()).value();
         tbRegistrationNumber = currentTreatment.getTbRegistrationNumber();
         patientType = currentTreatment.getPatientType().name();
         age = latestTherapy.getPatientAge();

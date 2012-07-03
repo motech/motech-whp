@@ -7,10 +7,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.user.domain.Provider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,7 +44,7 @@ public class PatientInfoTest {
                 .withAge(patientAge)
                 .withDiseaseClass(diseaseClass)
                 .withTherapyUid("therapyUid")
-                .withTreatmentCategory(treatmentCategory).build();
+                .withTreatmentCategory(treatmentCategory).withStartDate(startDate).withNoOfDoesTaken(PhaseName.IP, 2).build();
 
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null));
@@ -58,7 +55,7 @@ public class PatientInfoTest {
         expectedTestResults = new TestResults(smearTestResults, weightStatistics);
 
         currentTreatment = new TreatmentBuilder()
-                .withStartDate(startDate)
+                .withStartDate(new LocalDate(2012, 2, 2))
                 .withTbId(tbId)
                 .withProviderId(providerId)
                 .withTbRegistrationNumber(tbRegistrationNo)
@@ -86,7 +83,7 @@ public class PatientInfoTest {
                 .withCurrentTherapy(therapy)
                 .build();
 
-        expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(),currentTreatment.getWeightStatistics());
+        expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
     }
 
     @Test
@@ -102,7 +99,7 @@ public class PatientInfoTest {
         assertThat(patientInfo.getTbId(), is(tbId));
         assertThat(patientInfo.getProviderId(), is(providerId));
         assertThat(patientInfo.getProviderMobileNumber(), is(providerMobileNumber));
-        assertThat(patientInfo.getTreatmentStartDate(), is("28/06/2012"));
+        assertThat(patientInfo.getTherapyStartDate(), is(startDate.toString("dd/MM/yyyy")));
         assertThat(patientInfo.getTbRegistrationNumber(), is(tbRegistrationNo));
         assertThat(patientInfo.getPatientType(), is(patientType.name()));
         assertThat(patientInfo.getAge(), is(patientAge));
