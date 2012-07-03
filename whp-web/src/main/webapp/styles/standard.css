@@ -33,10 +33,10 @@ body {
     margin-bottom: 5px;
     color: #54555a;
 }
+
 #whp-logo {
     margin-right: 0px;
 }
-
 
 #footer-left-section {
     padding-bottom: 5px;
@@ -50,7 +50,7 @@ body {
     background-color: white;
 }
 
-.text-center, .text-center th, .text-center td{
+.text-center, .text-center th, .text-center td {
     text-align: center;
     vertical-align: middle;
 }
@@ -78,6 +78,7 @@ body {
     background-color: #E3F5FA;
     color: black;
 }
+
 table tbody .link:hover td {
     color: #369BD7;
     text-decoration: underline;
@@ -100,7 +101,7 @@ table tbody .link:hover td {
     margin-left: 20px;
 }
 
-#legend-container{
+#legend-container {
     display: inline-block;
     overflow: auto;
 }
@@ -113,17 +114,20 @@ table tbody .link:hover td {
     width: 15px;
     text-align: center;
 }
+
 .fixed td:not(.sunday) div {
     width: 15px;
 }
-.fixed td{
-   text-align: center;
+
+.fixed td {
+    text-align: center;
 }
 
 .tick-icon {
     font-weight: normal;
     font-size: 175%;
 }
+
 .round-icon {
     font-weight: bold;
     font-size: 140%;
@@ -138,11 +142,11 @@ table tbody .link:hover td {
     margin-left: 0px;
 }
 
-.tick-icon div{
+.tick-icon div {
     margin-left: -1px;
 }
 
-.dash-icon{
+.dash-icon {
     font-family: Arial;
     font-size: 200%;
 }
@@ -160,14 +164,13 @@ table tbody .link:hover td {
     cursor: pointer;
 }
 
-
-.watermarked-sunday{
+.watermarked-sunday {
     color: black;
     font-weight: bold;
     cursor: default;
 }
 
-.sunday div{
+.sunday div {
     border: 3px black solid;
     width: 22px;
     height: 22px;
@@ -179,15 +182,16 @@ table tbody .link:hover td {
     line-height: 21px;
 }
 
-.bg-gray{
+.bg-gray {
     background: url('../img/grey-dot.png') repeat 0 0;
 }
 
-.pausedAdherenceData{
+.pausedAdherenceData {
     background-color: lightPink;
 }
+
 .float-right {
- float:right;
+    float: right;
 }
 
 .warning {
@@ -208,12 +212,14 @@ table tbody .link:hover td {
     color: #000000;
     font-weight: bold;
 }
+
 .alert-info {
     background-color: #EDEBBF;
     border-color: #E0D6AA;
     color: #817B02;
     font-weight: bold;
 }
+
 .leftnav-menu-margin {
     margin-left: -200px;
 }
@@ -224,13 +230,13 @@ div.buttons a, div.buttons button {
 }
 
 .offset2-fixed {
-    margin:auto;
+    margin: auto;
     width: 679px;
     max-width: 679px;
 }
 
 .offset1-fixed {
-    margin:auto;
+    margin: auto;
     width: 757px;
     max-width: 757px;
 }
@@ -254,27 +260,38 @@ div.buttons a, div.buttons button {
 .ui-combobox-input {
     margin: 0;
     padding: 0.3em;
+    float: left;
 }
+
 .ui-menu {
     overflow: auto;
     max-height: 130px;
 }
 
-.patient-info{
-    height: 400px;
+.ui-button {
+    height: 25px;
 }
-.default-arrow, .default-arrow td, .default-arrow th  {
+
+.patient-info {
+    overflow: hidden;
+}
+
+.default-arrow, .default-arrow td, .default-arrow th {
     cursor: default;
 }
+
 .word-wrap {
     word-wrap: break-word;
 }
+
 .patient-info-left-table {
     width: 400px;
 }
+
 .patient-info-right-table {
     width: 475px;
 }
-.controls a{
+
+.controls a {
     margin-right: 10px;
 }

@@ -1,5 +1,4 @@
 <#import "/spring.ftl" as spring />
-<#include "../layout/legend.ftl">
 <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
     <thead>
     <tr>
@@ -10,7 +9,7 @@
         <th>Gender</th>
         <th>Provider ID</th>
         <th>Village</th>
-        <th>Patient District</th>
+        <th>Provider District</th>
         <th>Treatment Category</th>
         <th>Treatment Start Date</th>
     </tr>
@@ -20,9 +19,9 @@
         <tr>
             <td class="warning" style="text-align: center" colspan="10">
                 <#if providerId != "">
-                    No patients found for District: '${selectedDistrict}' with provider ID: '${providerId}'
+                    No patients found for Provider District as: '${selectedDistrict}' and Provider ID as: '${providerId}'
                 <#else>
-                    No patients found for District: '${selectedDistrict}'
+                    No patients found for Provider District as: '${selectedDistrict}'
                 </#if>
             </td>
         </tr>
@@ -41,7 +40,7 @@
                 <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                 <td id="patient_${patient.patientId}_ProviderId">${patient.currentTreatment.providerId}</td>
                 <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
-                <td id="patient_${patient.patientId}_District">${patient.currentTreatment.patientAddress.address_district}</td>
+                <td id="patient_${patient.patientId}_District">${selectedDistrict}</td>
                 <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
                 <td id="patient_${patient.patientId}_TreatmentStartDate">
                     <#if patient.currentTreatment.therapy.startDate?? >
