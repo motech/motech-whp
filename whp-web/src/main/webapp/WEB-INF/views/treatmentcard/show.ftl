@@ -3,7 +3,7 @@
 
 <#if treatmentCard?exists>
 
-<div id="legend-container" class="pull-right">
+<div id="legend-container" class="pull-left">
     <div id="patient-id" class="hide">${patientId}</div>
     <#include "legend.ftl"/>
     </div>
