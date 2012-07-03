@@ -26,14 +26,12 @@ public class TreatmentService {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
         mapNewTreatmentForCategoryChange(patientRequest, patient);
-        patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
 
     public void closeTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
-        patient.setOnActiveTreatment(false);
         allPatients.update(patient);
     }
 
@@ -54,7 +52,6 @@ public class TreatmentService {
 
         mapTreatmentForTransferIn(patientRequest, patient);
         patient.reviveLatestTherapy();
-        patient.setOnActiveTreatment(true);
         allPatients.update(patient);
     }
 

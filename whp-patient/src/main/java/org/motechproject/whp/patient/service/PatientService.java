@@ -40,7 +40,6 @@ public class PatientService {
 
     public void createPatient(PatientRequest patientRequest) {
         Patient patient = mapPatient(patientRequest);
-        patient.setOnActiveTreatment(true);
         allPatients.add(patient);
     }
 

@@ -61,6 +61,7 @@ public class Patient extends MotechBaseDataObject {
         currentTreatment = treatment;
         treatment.setStartDate(dateModified.toLocalDate());
         setLastModifiedDate(dateModified);
+        onActiveTreatment = true;
     }
 
 
@@ -106,6 +107,7 @@ public class Patient extends MotechBaseDataObject {
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         setLastModifiedDate(dateModified);
         currentTreatment.close(treatmentOutcome, dateModified);
+        onActiveTreatment = false;
     }
 
     public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {

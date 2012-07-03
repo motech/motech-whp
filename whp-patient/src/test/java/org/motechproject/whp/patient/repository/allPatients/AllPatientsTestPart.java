@@ -29,7 +29,6 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
         Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
         Treatment treatment = createTreatment(providerId);
         patient.addTreatment(treatment, therapy, now());
-        patient.setOnActiveTreatment(true);
         allPatients.add(patient);
         return patient;
     }

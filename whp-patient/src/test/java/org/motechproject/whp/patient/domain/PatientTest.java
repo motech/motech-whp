@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -10,6 +11,7 @@ import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
@@ -224,6 +226,32 @@ public class PatientTest {
 
         assertEquals(secondTreatment, patient.getTreatment(date(2011, 12, 1)));
     }
+
+    @Test
+    public void shouldSetOnActiveTreatmentWhenFirstTreatmentIsAdded() {
+        Patient patient = patient();
+        assertTrue(patient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldSetOnActiveTreatmentWhenSubsequentTreatmentIsAdded() {
+        Patient patient = patient();
+        patient.setOnActiveTreatment(false);
+
+        Treatment treatment = treatment();
+        patient.addTreatment(treatment, now());
+
+        assertTrue(patient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldUnSetOnActiveTreatmentWhenTreatmentIsClosed() {
+        Patient patient = patient();
+        patient.closeCurrentTreatment(TreatmentOutcome.TreatmentCompleted, now());
+
+        assertFalse(patient.isOnActiveTreatment());
+    }
+
 
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);

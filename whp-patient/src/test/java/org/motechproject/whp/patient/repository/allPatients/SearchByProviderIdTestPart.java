@@ -38,14 +38,12 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     public void shouldFetchPatientsForAProviderWithActiveTreatment() {
         Patient withoutActiveTreatment1 = createPatient("patientId1", "providerId1");
         withoutActiveTreatment1.closeCurrentTreatment(TreatmentOutcome.Cured, now());
-        withoutActiveTreatment1.setOnActiveTreatment(false);
         allPatients.update(withoutActiveTreatment1);
 
         Patient withActiveTreatment1 = createPatient("patientId2", "providerId1");
 
         Patient withoutActiveTreatment2 = createPatient("patientId3", "providerId2");
         withoutActiveTreatment2.closeCurrentTreatment(TreatmentOutcome.Cured, now());
-        withoutActiveTreatment2.setOnActiveTreatment(false);
         allPatients.update(withoutActiveTreatment2);
 
         Patient withActiveTreatment2 = createPatient("patientId4", "providerId2");
