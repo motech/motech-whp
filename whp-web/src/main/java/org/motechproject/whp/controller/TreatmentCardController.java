@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -26,11 +27,14 @@ public class TreatmentCardController extends BaseController {
 
     WHPAdherenceService adherenceService;
 
+    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+
     @Autowired
-    public TreatmentCardController(WHPAdherenceService adherenceService, TreatmentCardService treatmentCardService, AllPatients allPatients) {
+    public TreatmentCardController(WHPAdherenceService adherenceService, TreatmentCardService treatmentCardService, AllPatients allPatients, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
         this.allPatients = allPatients;
         this.adherenceService = adherenceService;
         this.treatmentCardService = treatmentCardService;
+        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
     }
 
     @RequestMapping(value = "show", method = RequestMethod.GET)
@@ -45,6 +49,8 @@ public class TreatmentCardController extends BaseController {
     public String update(@RequestBody UpdateAdherenceRequest updateAdherenceRequest, Model uiModel, HttpServletRequest request) {
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
+        phaseUpdateOrchestrator.recomputePillCount(updateAdherenceRequest.getPatientId());
+        phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
         uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         return show(patient.getPatientId(), uiModel);
     }

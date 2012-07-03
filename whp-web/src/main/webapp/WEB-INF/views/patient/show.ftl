@@ -3,29 +3,32 @@
 <@layout.defaultLayout "Patient Dashboard">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
 <script type="text/javascript">
-        <#if patient.currentTreatment?? && patient.nextPhaseName??>
+    <#if patient.currentTreatment?? && patient.nextPhaseName??>
+    $(function() {
+        $("#${patient.nextPhaseName.name()}").addClass("active");
+    });
+    </#if>
+    <#if patient.currentTreatment??>
+        <#list patient.phasesNotPossibleToTransitionTo as phases>
         $(function() {
-            $("#${patient.nextPhaseName.name()}").addClass("active");
+            $("#${phases}").hide();
         });
-        </#if>
-        <#if patient.currentTreatment??>
-            <#list patient.phasesNotPossibleToTransitionTo as phases>
-            $(function() {
-                $("#${phases}").hide();
-            });
-            </#list>
-        </#if>
-    $(document).ready(function() {
-        $('#transitionPatientAlert').fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350);
+        </#list>
+    </#if>
+    $(document).ready(function(){
+        $('#achtung').fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350);
     });
 </script>
-    <#if messages??>
-    <div class="dateUpdated-message-alert row alert alert-info fade in">
-        <button class="close" data-dismiss="alert">&times;</button>
-    ${messages}
-    </div>
-    </#if>
+
+<#if messages??>
+<div class="dateUpdated-message-alert row alert alert-info fade in">
+    <button class="close" data-dismiss="alert">&times;</button>
+${messages}
+</div>
+</#if>
+
 <#include "phaseTransitionAlert.ftl"/>
+<br/>
 <#include "patientInfo.ftl"/>
 <br/>
 <#include "phaseInfo.ftl"/>
@@ -48,9 +51,9 @@
             });
         }
     });
-    $('#ipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
-    $('#eipDatePicker').datepicker({dateFormat:'dd/mm/yy'});
-    $('#cpDatePicker').datepicker({dateFormat:'dd/mm/yy'});
+    $('#ipDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
+    $('#eipDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
+    $('#cpDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
     $("#clearFields").click(function () {
         $('#ipDatePicker').val('');
         $('#eipDatePicker').val('');

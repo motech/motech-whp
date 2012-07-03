@@ -96,6 +96,7 @@ public class PatientController extends BaseController {
         Patient updatedPatient = phaseStartDates.mapNewPhaseInfoToPatient(patientService.findByPatientId(patientId));
         patientService.update(updatedPatient);
         phaseUpdateOrchestrator.recomputePillCount(updatedPatient.getPatientId());
+        phaseUpdateOrchestrator.attemptPhaseTransition(updatedPatient.getPatientId());
         flashOutDateUpdatedMessage(patientId, phaseStartDates, httpServletRequest);
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }

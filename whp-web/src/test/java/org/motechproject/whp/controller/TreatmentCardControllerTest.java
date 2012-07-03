@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -35,6 +36,9 @@ public class TreatmentCardControllerTest {
     Model uiModel;
     @Mock
     HttpServletRequest request;
+    @Mock
+    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+
     Patient patient;
 
     TreatmentCardController treatmentCardController;
@@ -42,7 +46,7 @@ public class TreatmentCardControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients);
+        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients, phaseUpdateOrchestrator);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
@@ -74,6 +78,19 @@ public class TreatmentCardControllerTest {
         assertEquals("treatmentcard/show", view);
         verify(uiModel, times(1)).addAttribute(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully");
         verify(adherenceService, times(1)).addLogsForPatient(adherenceData, patient);
+    }
+
+    @Test
+    public void shouldRecomputePillCountAndAttemptTransitionWhenSavingAdherenceData() {
+        UpdateAdherenceRequest adherenceData = new UpdateAdherenceRequest();
+        adherenceData.setPatientId("test");
+
+        when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
+
+        treatmentCardController.update(adherenceData, uiModel, request);
+
+        verify(phaseUpdateOrchestrator, times(1)).recomputePillCount(adherenceData.getPatientId());
+        verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(adherenceData.getPatientId());
     }
 
 }

@@ -5,6 +5,7 @@ import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoginPage;
+import org.motechproject.whp.functional.page.admin.AdminPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.motechproject.whp.functional.service.CaseDataService;
 import org.motechproject.whp.functional.service.PatientDataService;
@@ -38,6 +39,10 @@ public abstract class TreatmentUpdateTest extends BaseTest {
 
     protected ProviderPage loginAsProvider(TestProvider provider) {
         return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
+    }
+
+    protected AdminPage loginAsAdmin() {
+        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
     }
 
 }
