@@ -3,16 +3,13 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
@@ -126,7 +123,7 @@ public class PatientTest {
 
         patient.nextPhaseName(PhaseName.EIP);
 
-        assertEquals(patient.getCurrentTherapy().getNextPhaseName(), PhaseName.EIP);
+        assertEquals(patient.getCurrentTherapy().getPhases().getNextPhaseName(), PhaseName.EIP);
     }
 
     @Test
@@ -151,7 +148,7 @@ public class PatientTest {
         patient.startNextPhase();
 
         assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhase(PhaseName.EIP).getStartDate());
-        assertNull(patient.getCurrentTherapy().getNextPhaseName());
+        assertNull(patient.getCurrentTherapy().getPhases().getNextPhaseName());
     }
 
     @Test

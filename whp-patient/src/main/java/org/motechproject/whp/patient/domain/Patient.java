@@ -126,7 +126,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void nextPhaseName(PhaseName phaseName) {
-        currentTherapy.setNextPhaseName(phaseName);
+        currentTherapy.getPhases().setNextPhaseName(phaseName);
     }
 
     @JsonIgnore
@@ -217,7 +217,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void startNextPhase() {
-        Phase phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getNextPhaseName());
+        Phase phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getPhases().getNextPhaseName());
         phaseToBeStarted.setStartDate(currentTherapy.getLastCompletedPhase().getEndDate().plusDays(1));
         nextPhaseName(null);
     }
@@ -229,7 +229,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean hasPhaseToTransitionTo() {
-        return currentTherapy.getNextPhaseName() != null;
+        return currentTherapy.getPhases().getNextPhaseName() != null;
     }
 
     @JsonIgnore

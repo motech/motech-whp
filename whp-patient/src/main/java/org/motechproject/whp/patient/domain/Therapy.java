@@ -4,7 +4,6 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
@@ -26,7 +25,6 @@ public class Therapy {
     private TherapyStatus status = TherapyStatus.Ongoing;
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
-    private PhaseName nextPhaseName = null;
     private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.EIP), new Phase(PhaseName.CP)));
     public Therapy() {
     }

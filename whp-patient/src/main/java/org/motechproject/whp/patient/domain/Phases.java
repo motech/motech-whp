@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.PhaseName;
@@ -9,7 +10,10 @@ import java.util.Collection;
 
 import static org.motechproject.util.DateUtil.today;
 
+@Data
 public class Phases extends ArrayList<Phase> {
+
+    private PhaseName nextPhaseName = null;
 
     //ektorp
     public Phases() {

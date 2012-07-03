@@ -90,7 +90,7 @@ public class PhaseUpdateOrchestratorTest {
 
     @Test
     public void shouldSetNextPhaseAndStartNextPhase_PatientIsTransitioning() {
-        patient.getCurrentTherapy().setNextPhaseName(PhaseName.EIP);
+        patient.getCurrentTherapy().getPhases().setNextPhaseName(PhaseName.EIP);
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
@@ -126,7 +126,7 @@ public class PhaseUpdateOrchestratorTest {
 
     @Test
     public void shouldStartNextPhaseWhenAttemptingToTransition_NextPhaseSet() {
-        patient.getCurrentTherapy().setNextPhaseName(PhaseName.EIP);
+        patient.getCurrentTherapy().getPhases().setNextPhaseName(PhaseName.EIP);
         patient.getCurrentTreatment().getTherapy().setUid(THERAPY_UID);
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
