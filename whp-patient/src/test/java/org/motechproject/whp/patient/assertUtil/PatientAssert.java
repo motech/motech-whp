@@ -15,12 +15,13 @@ public class PatientAssert {
         for (int i = 0; i < requests.size(); i++) {
             PatientRequest patientRequest = requests.get(i);
             Patient patient = patients.get(i);
-            Assert.assertEquals(patientRequest.getCase_id(), patient.getPatientId());
+            assertEquals(patientRequest.getCase_id(), patient.getPatientId());
         }
     }
 
     public static void assertPatientEquals(Patient expected, Patient actual) {
         assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getCurrentTherapy(), actual.getCurrentTreatment().getTherapy());
     }
 
     public static void assertPatientEquals(List<Patient> expected, List<Patient> actual) {

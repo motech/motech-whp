@@ -10,7 +10,7 @@
         <th>Gender</th>
         <th>Provider ID</th>
         <th>Village</th>
-        <th>District</th>
+        <th>Patient District</th>
         <th>Treatment Category</th>
         <th>Treatment Start Date</th>
     </tr>

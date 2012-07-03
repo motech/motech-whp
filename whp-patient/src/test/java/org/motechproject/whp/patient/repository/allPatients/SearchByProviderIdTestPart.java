@@ -5,9 +5,11 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
@@ -18,12 +20,12 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient requiredPatient = createPatient("patientId1", "providerId1");
         createPatient("patientId2", "providerId2");
 
-        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.findByCurrentProviderId("providerId1").toArray());
+        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.findByCurrentProvider("providerId1").toArray());
     }
 
     @Test
     public void fetchByCurrentProviderIdShouldReturnEmptyListIfKeywordIsNull() {
-        assertEquals(new ArrayList<Patient>(), allPatients.findByCurrentProviderId(null));
+        assertEquals(new ArrayList<Patient>(), allPatients.findByCurrentProvider(null));
     }
 
     @Test
@@ -31,7 +33,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient patient1 = createPatient("patientId1", "providerId1");
         Patient patient2 = createPatient("patientId2", "providerId1");
 
-        assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.findByCurrentProviderId("providerId1").toArray());
+        assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.findByCurrentProvider("providerId1").toArray());
     }
 
     @Test
@@ -64,5 +66,19 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
                 asList(withSmallestFirstNameButCreatedLast, createdSecond, withGreatestFirstNameButCreatedFirst),
                 allPatients.getAllWithActiveTreatmentFor(providerId)
         );
+    }
+
+    @Test
+    public void shouldFetchByProviderIds() {
+        String provider1 = "provider1";
+        String provider2 = "provider2";
+        String provider3 = "provider3";
+
+        Patient patient1 = createPatient("patientId1", provider1);
+        Patient patient2 = createPatient("patientId2", provider2);
+        Patient patient3 = createPatient("patientId3", provider3);
+
+        List<Patient> patients = allPatients.getAllWithCurrentProviders(asList(provider1, provider3));
+        assertPatientEquals(asList(patient1, patient3), patients);
     }
 }

@@ -58,14 +58,14 @@ public class ProviderService {
 
     public List<Provider> fetchBy(String district, String providerId) {
         if(providerId.isEmpty()) {
-            return allProviders.findByDistrict(district);
+            return fetchBy(district);
         } else {
             return allProviders.findByDistrictAndProviderId(district, providerId);
         }
     }
 
     public List<Provider> fetchBy(String district){
-        return fetchBy(district, "");
+        return allProviders.findByDistrict(district);
     }
 
     public Map<String, MotechUser> fetchAllWebUsers() {

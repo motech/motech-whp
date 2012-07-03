@@ -6,12 +6,11 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.refdata.domain.PhaseName;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.extract;
+import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.motechproject.whp.patient.mapper.PatientMapper.*;
 
 @Service
@@ -28,14 +29,16 @@ public class PatientService {
     private AllPatients allPatients;
     private UpdateCommandFactory updateCommandFactory;
     private RequestValidator validator;
+    private ProviderService providerService;
 
     @Autowired
     public PatientService(AllPatients allPatients,
                           UpdateCommandFactory updateCommandFactory,
-                          RequestValidator validator) {
+                          RequestValidator validator, ProviderService providerService) {
         this.allPatients = allPatients;
         this.updateCommandFactory = updateCommandFactory;
         this.validator = validator;
+        this.providerService = providerService;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -91,10 +94,13 @@ public class PatientService {
     }
 
     public List<Patient> searchBy(String districtName, String providerId) {
-        if (isNotEmpty(providerId))
-            return allPatients.getAllWithActiveTreatmentForDistrictAndProvider(districtName, providerId);
+        if (isEmpty(providerId)) {
+            List<Provider> providers = providerService.fetchBy(districtName);
+            List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
+            return allPatients.getAllWithCurrentProviders(providerIds);
+        }
         else
-            return allPatients.getAllWithActiveTreatmentForDistrict(districtName);
+            return allPatients.findByCurrentProvider(providerId);
     }
 
     boolean canBeTransferred(String patientId) {

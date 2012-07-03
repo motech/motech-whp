@@ -10,7 +10,7 @@
         <form id="searchForm" action="<@spring.url '/patients/search'/>" method="POST"
               class="offset2-fixed form-horizontal">
             <div class="control-group">
-                <label class="control-label">District*</label>
+                <label class="control-label">Provider District*</label>
                 <div class="controls">
                     <select id="district" name="selectedDistrict">
                         <#list districts as district>

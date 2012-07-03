@@ -62,11 +62,18 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit(doc.currentTreatment.providerId, doc._id);}}")
-    public List<Patient> findByCurrentProviderId(String providerId) {
+    public List<Patient> findByCurrentProvider(String providerId) {
         if (providerId == null)
             return new ArrayList<Patient>();
         String keyword = providerId.toLowerCase();
         ViewQuery q = createQuery("find_by_providerId").key(keyword).includeDocs(true).inclusiveEnd(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        loadDependencies(patients);
+        return patients;
+    }
+
+    public List<Patient> getAllWithCurrentProviders(List<String> providerIds) {
+        ViewQuery q = createQuery("find_by_providerId").keys(providerIds).includeDocs(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         loadDependencies(patients);
         return patients;
@@ -80,26 +87,6 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         ComplexKey startKey = ComplexKey.of(keyword, null);
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
         ViewQuery q = createQuery("find_by_provider_having_active_treatment").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
-        List<Patient> patients = db.queryView(q, Patient.class);
-        loadDependencies(patients);
-        return patients;
-    }
-
-    @View(name = "find_by_district_and_provider_on_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.patientAddress.address_district, doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
-    public List<Patient> getAllWithActiveTreatmentForDistrictAndProvider(String districtName, String providerId) {
-        if (districtName == null)
-            return new ArrayList();
-        ViewQuery q = createQuery("find_by_district_and_provider_on_active_treatment").startKey(of(districtName, providerId, null)).endKey(of(districtName, providerId, emptyObject())).includeDocs(true).inclusiveEnd(true);
-        List<Patient> patients = db.queryView(q, Patient.class);
-        loadDependencies(patients);
-        return patients;
-    }
-
-    @View(name = "find_by_district_on_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.patientAddress.address_district, doc.firstName], doc._id);}}")
-    public List<Patient> getAllWithActiveTreatmentForDistrict(String districtName) {
-        if (districtName == null)
-            return new ArrayList();
-        ViewQuery q = createQuery("find_by_district_on_active_treatment").startKey(of(districtName, null)).endKey(of(districtName, emptyObject())).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         loadDependencies(patients);
         return patients;

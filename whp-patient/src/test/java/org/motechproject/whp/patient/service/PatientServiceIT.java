@@ -17,6 +17,8 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.user.contract.ProviderRequest;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -25,6 +27,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
@@ -39,6 +42,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
     private UpdateCommandFactory commandFactory;
     @Autowired
     PatientService patientService;
+    @Autowired
+    ProviderService providerService;
 
     @Before
     public void setUp() {
@@ -344,12 +349,16 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldSearchPatientsByDistrict() {
-        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "Vaishali", "").build();
+    public void shouldSearchPatientsByProviderDistrict() {
+        createProvider("provider1", "Vaishali");
+        createProvider("provider2", "Vaishali");
+        createProvider("provider3", "Begusarai");
+
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest2);
-        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "Begusarai", "").build();
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest3);
 
         List<Patient> patientList = patientService.searchBy("Vaishali", "");
@@ -357,16 +366,34 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldSearchPatientsByDistrictAndProvider() {
-        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "Vaishali", "").build();
+    public void shouldSearchPatientsByProviderIdWhenBothProviderDistrictAndProviderIdArePresent() {
+        createProvider("provider1", "Vaishali");
+        createProvider("provider2", "Vaishali");
+        createProvider("provider3", "Begusarai");
+
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest2);
-        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "Vaishali", "").build();
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest3);
 
         List<Patient> patientList = patientService.searchBy("Vaishali", "provider2");
         assertPatientForRequests(asList(createPatientRequest2), patientList);
+    }
+
+    private void createProvider(String providerId, String district) {
+        String primaryMobile = "1234567890";
+        String secondaryMobile = "0987654321";
+        String tertiaryMobile = "1111111111";
+        DateTime now = now();
+
+        ProviderRequest providerRequest = new ProviderRequest(providerId, district, primaryMobile, now);
+        providerRequest.setSecondaryMobile(secondaryMobile);
+        providerRequest.setTertiaryMobile(tertiaryMobile);
+
+        providerService.registerProvider(providerRequest);
+
     }
 
     private void assertCurrentTreatmentIsNew(Patient updatedPatient, PatientRequest openNewPatientRequest) {
