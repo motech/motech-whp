@@ -88,7 +88,7 @@ public class TreatmentCardControllerTest {
 
         when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
 
-        treatmentCardController.update(adherenceData, uiModel, request);
+        treatmentCardController.update(new Gson().toJson(adherenceData), uiModel);
 
         verify(phaseUpdateOrchestrator, times(1)).recomputePillCount(adherenceData.getPatientId());
         verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(adherenceData.getPatientId());

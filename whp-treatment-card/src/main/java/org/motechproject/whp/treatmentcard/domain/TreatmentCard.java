@@ -9,8 +9,7 @@ import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.refdata.domain.PhaseName;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
 
@@ -38,13 +37,13 @@ public class TreatmentCard {
 
     public TreatmentCard initIPSection(List<Adherence> adherenceData) {
         LocalDate ipStartDate = therapy.getStartDate();
-        ipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate());
+        ipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate(), Arrays.asList(therapy.getPhase(PhaseName.IP), therapy.getPhase(PhaseName.EIP)));
         return this;
     }
 
     public TreatmentCard initCPSection(List<Adherence> adherenceData) {
         LocalDate cpStartDate = therapy.getPhases().getCPStartDate();
-        cpAdherenceSection.init(patient, adherenceData, therapy, cpStartDate, cpBoxLastDoseDate());
+        cpAdherenceSection.init(patient, adherenceData, therapy, cpStartDate, cpBoxLastDoseDate(), Arrays.asList(therapy.getPhase(PhaseName.CP)));
         return this;
     }
 
@@ -83,10 +82,10 @@ public class TreatmentCard {
     }
 
     public List<String> getProviderIds() {
-        ArrayList<String> all = new ArrayList<String>();
+        Set<String> all = new HashSet<String>();
         all.addAll(ipAdherenceSection.getProviderIds());
         all.addAll(cpAdherenceSection.getProviderIds());
-        return all;
+        return new ArrayList<>(all);
     }
 
 }

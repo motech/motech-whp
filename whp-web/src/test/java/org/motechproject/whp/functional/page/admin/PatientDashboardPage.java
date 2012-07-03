@@ -35,13 +35,16 @@ public class PatientDashboardPage extends Page {
 
     public void editStartDates(String ipStartDate, String eipStartDate, String cpStartDate) {
         WebElement ipStartDateElement = webDriver.findElement(name(this.ipStartDate));
-        ipStartDateElement.sendKeys(ipStartDate);
+        if (ipStartDate != null)
+            ipStartDateElement.sendKeys(ipStartDate);
 
         WebElement eipStartDateElement = webDriver.findElement(name(this.eipStartDate));
-        eipStartDateElement.sendKeys(eipStartDate);
+        if (eipStartDate != null)
+            eipStartDateElement.sendKeys(eipStartDate);
 
         WebElement cpStartDateElement = webDriver.findElement(name(this.cpStartDate));
-        cpStartDateElement.sendKeys(cpStartDate);
+        if (cpStartDate != null)
+            cpStartDateElement.sendKeys(cpStartDate);
     }
 
     public PatientDashboardPage saveStartDates() {

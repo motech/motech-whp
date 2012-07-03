@@ -4,11 +4,13 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Phase;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.util.WHPDateUtil;
 
 import java.util.ArrayList;
@@ -22,35 +24,43 @@ public class AdherenceSection {
 
     private List<MonthlyAdherence> monthlyAdherences = new ArrayList<>();
 
-    private List<String> providerIds = new ArrayList<String>();
+    private LocalDate sectionStartDate;
+    private LocalDate sectionEndDate;
+    private List<Phase> phases = new ArrayList<>();
 
+    private List<String> providerIds = new ArrayList<>();
     private boolean isSundayDoseDate;
 
     public AdherenceSection() {
     }
 
-    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate) {
-        addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, startDate, endDate);
+    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate, List<Phase> phases) {
+        this.sectionStartDate = startDate;
+        this.sectionEndDate = endDate;
+        this.phases = phases;
+        addMonthAdherenceForRange(sectionStartDate, sectionEndDate);
+        for (Phase phase : phases) {
+            if (phase.hasStarted())
+                addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, phase.getStartDate(), phase.getEndDate());
+        }
     }
 
     public void addAdherenceDataForGivenTherapy(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate) {
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
-        addMonthAdherenceForRange(startDate, endDate);
 
-        List<LocalDate> adherenceDates = new ArrayList<>();
-        for (Adherence datum : adherenceData)
-            adherenceDates.add(datum.getPillDate());
+        List<LocalDate> providedAdherenceDates = getProvidedAdherenceDates(adherenceData);
 
-        LocalDate today = DateUtil.today();
-        for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, today) && WHPDateUtil.isOnOrBefore(doseDate, endDate); doseDate = doseDate.plusDays(1)) {
+        LocalDate phaseLastDate = endDate;
+        if (phaseLastDate == null) phaseLastDate = today();
+        for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, phaseLastDate); doseDate = doseDate.plusDays(1)) {
             boolean doseDateInPausedPeriod = patient.isDoseDateInPausedPeriod(doseDate);
             Treatment treatmentForDateInTherapy = patient.getTreatment(doseDate);
             String providerIdForTreatmentToWhichDoseBelongs = "";
             if (treatmentForDateInTherapy != null) {
                 providerIdForTreatmentToWhichDoseBelongs = treatmentForDateInTherapy.getProviderId();
             }
-            if (adherenceDates.contains(doseDate)) {
-                Adherence adherence = adherenceData.get(adherenceDates.indexOf(doseDate));
+            if (providedAdherenceDates.contains(doseDate)) {
+                Adherence adherence = adherenceData.get(providedAdherenceDates.indexOf(doseDate));
                 addAdherenceDatum(adherence, doseDateInPausedPeriod);
             } else {
                 if (patientPillDays.contains(DayOfWeek.getDayOfWeek(doseDate))) {
@@ -58,6 +68,13 @@ public class AdherenceSection {
                 }
             }
         }
+    }
+
+    private List<LocalDate> getProvidedAdherenceDates(List<Adherence> adherenceData) {
+        List<LocalDate> adherenceDates = new ArrayList<>();
+        for (Adherence datum : adherenceData)
+            adherenceDates.add(datum.getPillDate());
+        return adherenceDates;
     }
 
     private void addAdherenceDatum(Adherence adherence, boolean doseDateInPausedPeriod) {
@@ -71,6 +88,7 @@ public class AdherenceSection {
 
     public void addAdherenceDatum(LocalDate doseDate, PillStatus pillStatus, String providerId, boolean adherenceCapturedDuringPausedPeriod) {
         MonthlyAdherence monthlyAdherence = getMonthAdherence(doseDate);
+        if (monthlyAdherence == null) return; // TODO : test to be written
         monthlyAdherence.getLogs().add(new DailyAdherence(doseDate.getDayOfMonth(), pillStatus.getStatus(), providerId, adherenceCapturedDuringPausedPeriod, doseDate.isAfter(today())));
 
         /* Add to pool of providerIds to color them using pool of providerId colors. */

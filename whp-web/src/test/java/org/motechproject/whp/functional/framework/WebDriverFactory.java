@@ -22,7 +22,7 @@ public class WebDriverFactory {
             @Override
             WebDriver give() {
                 FirefoxProfile firefoxProfile = new FirefoxProfile();
-                firefoxProfile.setEnableNativeEvents(true);
+                firefoxProfile.setEnableNativeEvents(false);
                 FirefoxDriver firefoxDriver = new FirefoxDriver(firefoxProfile);
                 firefoxDriver.manage().window().maximize();
                 return firefoxDriver;

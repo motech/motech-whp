@@ -19,10 +19,10 @@ public class AdjustPhaseDatesStep extends Step {
 
     public void execute(TestPatient testPatient, String ipStartDate, String eipStartDate, String cpStartDate) {
         openPatientDashboardStep.execute(testPatient);
-        patientDashboardPage = openPatientDashboardStep.patientDashboardPage;PatientDashboardPage patientDashboardPage = this.patientDashboardPage;
-        openPatientDashboardStep.patientDashboardPage.clickOnChangePhaseStartDates();
-        openPatientDashboardStep.patientDashboardPage.editStartDates(ipStartDate, eipStartDate, cpStartDate);
-        openPatientDashboardStep.patientDashboardPage.saveStartDates();
+        patientDashboardPage = openPatientDashboardStep.patientDashboardPage;
+        patientDashboardPage.clickOnChangePhaseStartDates();
+        patientDashboardPage.editStartDates(ipStartDate, eipStartDate, cpStartDate);
+        patientDashboardPage = patientDashboardPage.saveStartDates();
     }
 
 }

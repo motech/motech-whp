@@ -39,6 +39,7 @@ public class TreatmentCardServiceTest {
     public void shouldBuildIPTreatmentCardModelForPatient_BasedOnCategory_AndIPStartDate() {
         LocalDate therapyStartDate = new LocalDate(2011, 2, 3);
         Patient patient = createPatientOn3DayAWeekTreatmentCategory(therapyStartDate, "1");
+        patient.startTherapy(therapyStartDate);
 
         String therapyUid = patient.getCurrentTherapy().getUid();
         Adherence log1 = createLog(new LocalDate(2011, 2, 10), therapyUid, PillStatus.Taken);

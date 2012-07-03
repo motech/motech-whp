@@ -7,14 +7,14 @@ import org.motechproject.whp.functional.test.BasePatientTest;
 
 public class AdjustPhaseDatesTest extends BasePatientTest {
 
-    AdjustPhaseDatesStep adjustPhaseDatesTest;
+    AdjustPhaseDatesStep adjustPhaseDatesStep;
 
     @Override
     public void setUp() {
         super.setUp();
         setupProvider();
         setupPatientForProvider();
-        adjustPhaseDatesTest = new AdjustPhaseDatesStep(webDriver);
+        adjustPhaseDatesStep = new AdjustPhaseDatesStep(webDriver);
     }
 
     @Test
@@ -23,8 +23,9 @@ public class AdjustPhaseDatesTest extends BasePatientTest {
         String eipStartDate = "26/10/2011";
         String cpStartDate = "27/10/2011";
 
-        adjustPhaseDatesTest.execute(testPatient, ipStartDate, eipStartDate, cpStartDate);
-        PhaseDates.is(adjustPhaseDatesTest.patientDashboardPage, ipStartDate, eipStartDate, cpStartDate);
+        adjustPhaseDatesStep.execute(testPatient, ipStartDate, eipStartDate, cpStartDate);
+        PhaseDates.is(adjustPhaseDatesStep.patientDashboardPage, ipStartDate, eipStartDate, cpStartDate);
+        adjustPhaseDatesStep.patientDashboardPage.logout();
     }
 
 }
