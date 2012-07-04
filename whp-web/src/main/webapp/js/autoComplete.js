@@ -15,6 +15,28 @@
                 .appendTo( wrapper )
                 .val( value )
                 .keypress(function(e) {
+                    if(e.which&& e.which==13 || e.keyCode && e.keyCode==13)
+                    {
+                        //same code as change function
+                        var matcher = new RegExp( $.ui.autocomplete.escapeRegex($(input).val()), "i" );
+                        valid = false;
+                        select.children( "option" ).each(function() {
+                            if ( $( this ).text().match( matcher ) ) {
+                                $(input).val($(this).text());
+                                this.selected = valid = true;
+                                return false;
+                            }
+                        });
+                        if ( !valid ) {
+                            // remove invalid value, as it didn't match anything
+                            $( this ).val( "" );
+                            select.val( "" );
+                            input.data( "autocomplete" ).term = "";
+                            $(self.element).trigger("invalid-value", event );
+
+                            return false;
+                        }
+                    }
                     $(self.element).trigger('keypress',[e]);
                 })
                 .addClass( "ui-state-default ui-combobox-input" )
@@ -49,10 +71,11 @@
                     },
                     change: function( event, ui ) {
                         if ( !ui.item ) {
-                            var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+                            var matcher = new RegExp( $.ui.autocomplete.escapeRegex($(input).val()), "i" ),
                                 valid = false;
                             select.children( "option" ).each(function() {
-                                if ( $( this ).text().match( matcher ) ) {
+                                if ( $( this).text().match( matcher ) ) {
+                                    $(input).val($(this).text());
                                     this.selected = valid = true;
                                     return false;
                                 }
@@ -73,7 +96,6 @@
                 .addClass( "ui-widget ui-widget-content ui-corner-left" );
 
             input.attr("id", select.attr("id") + "-autocomplete");
-
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
                 return $( "<li></li>" )
                     .data( "item.autocomplete", item )
