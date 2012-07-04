@@ -8,12 +8,16 @@ import org.motechproject.whp.functional.steps.provideradherence.SubmitAdherenceS
 import org.motechproject.whp.functional.steps.treatmentcard.AdjustPhaseDatesStep;
 import org.motechproject.whp.functional.steps.treatmentcard.OpenTreatmentCardStep;
 import org.motechproject.whp.functional.steps.treatmentupdate.CloseTreatmentStep;
+import org.motechproject.whp.functional.steps.treatmentupdate.OpenNewTreatmentStep;
 import org.motechproject.whp.functional.steps.treatmentupdate.TransferInTreatmentStep;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 
-public class CPTreatmentCardTest extends TreatmentUpdateTest {
+import static org.junit.Assert.assertEquals;
+
+public class CMFAdminViewsCPTreatmentCardTest extends TreatmentUpdateTest {
 
     SubmitAdherenceStep submitAdherenceStep;
+    OpenNewTreatmentStep openNewTreatmentStep;
     CloseTreatmentStep closeTreatmentStep;
     TransferInTreatmentStep transferInTreatmentStep;
     OpenTreatmentCardStep openTreatmentCardStep;
@@ -22,6 +26,7 @@ public class CPTreatmentCardTest extends TreatmentUpdateTest {
     @Before
     public void setup() {
         submitAdherenceStep = new SubmitAdherenceStep(webDriver);
+        openNewTreatmentStep = new OpenNewTreatmentStep(webDriver);
         closeTreatmentStep = new CloseTreatmentStep(webDriver);
         transferInTreatmentStep = new TransferInTreatmentStep(webDriver);
         openTreatmentCardStep = new OpenTreatmentCardStep(webDriver);
@@ -31,6 +36,7 @@ public class CPTreatmentCardTest extends TreatmentUpdateTest {
     @Test
     public void shouldBuildCPTreatmentCardForPatient() {
         adjustDateTime(8, 7, 2012);
+
         submitAdherenceStep
                 .withProvider(testProvider)
                 .withPatient(testPatient)
@@ -64,7 +70,8 @@ public class CPTreatmentCardTest extends TreatmentUpdateTest {
         transferInTreatmentStep
                 .withProvider(newProvider)
                 .withPatient(testPatient)
-                .withTransferDate("29/07/2012");
+                .withTransferDate("29/07/2012")
+                .execute();
 
         adjustDateTime(5, 8, 2012);
 
@@ -92,6 +99,9 @@ public class CPTreatmentCardTest extends TreatmentUpdateTest {
                 .logout();
 
         TreatmentCardPage treatmentCardPage = openTreatmentCardStep.withPatient(testPatient).execute();
+
+        assertEquals("CP", treatmentCardPage.getCurrentPhaseOfPatient());
+
         treatmentCardPage.logout();
     }
 

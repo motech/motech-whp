@@ -65,9 +65,13 @@ public class TreatmentCard {
         Phases phases = therapy.getPhases();
         if (phases.isOrHasBeenOnCp() && phases.getByPhaseName(PhaseName.CP).getEndDate() != null) {
             return phases.getByPhaseName(PhaseName.CP).getEndDate();
-
         }
         return today();
+    }
+
+    public LocalDate cpBoxAdherenceStartDate() {
+        Phases phases = therapy.getPhases();
+        return (phases.getCPStartDate() == null) ? today() : phases.getCPStartDate();
     }
 
     public LocalDate ipBoxLastDoseDate() {
@@ -87,5 +91,9 @@ public class TreatmentCard {
         all.addAll(ipAndEipAdherenceSection.getProviderIds());
         all.addAll(cpAdherenceSection.getProviderIds());
         return new ArrayList<>(all);
+    }
+
+    public boolean isCPAdherenceSectionValid() {
+        return null != patient.getCurrentTherapy().getPhases().getCPStartDate();
     }
 }

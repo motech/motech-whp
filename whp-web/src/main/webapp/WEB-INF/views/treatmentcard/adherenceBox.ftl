@@ -35,7 +35,7 @@
                             "editable ${isItASunday} ${isItDuringPausedPeriod}"
                         <#else> "dash-icon editable ${isItASunday} ${isItDuringPausedPeriod}"
                     </#if>
-                    id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
+                    id="${title}-${day}-${monthlyAdherence.month}-${monthlyAdherence.year}"
                     day="${day}"
                     month="${monthlyAdherence.month}"
                     year="${monthlyAdherence.year}"
@@ -58,7 +58,7 @@
                 <#if monthlyAdherence.maxDays &lt; day >"bg-gray"
                     <#else>"bg-gray ${isItASunday}"
                 </#if>
-                id="${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
+                id="${title}-${day}-${monthlyAdherence.month}-${monthlyAdherence.year}">
                 <div class="watermarked-sunday">
                     <#if isItASunday == 'sunday' && (monthlyAdherence.maxDays &gt; day || monthlyAdherence.maxDays == day)>
                         S

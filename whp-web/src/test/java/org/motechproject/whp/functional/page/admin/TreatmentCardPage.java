@@ -1,8 +1,9 @@
 package org.motechproject.whp.functional.page.admin;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.motechproject.whp.refdata.domain.PhaseName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -11,11 +12,15 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
 import static junit.framework.Assert.fail;
+import static org.apache.commons.lang.StringUtils.trimToEmpty;
 
 public class TreatmentCardPage extends PatientDashboardPage {
 
     @FindBy(how = How.ID, using = "setDateLink")
     WebElement adjustStartDatesLink;
+
+    @FindBy(how = How.ID, using = "patientCurrentPhase")
+    WebElement patientPhaseMessage;
 
     public TreatmentCardPage(WebDriver webDriver) {
         super(webDriver);
@@ -59,10 +64,6 @@ public class TreatmentCardPage extends PatientDashboardPage {
         return appliedCssClasses.contains("pausedAdherenceData");
     }
 
-    private WebElement findWebElementByDate(LocalDate localDate) {
-        return webDriver.findElement(By.id(String.format("%s", localDate.toString("d-M-yyyy"))));
-    }
-
     public void transitionPatient(PhaseName phaseName) {
         try {
             WebElement transitionToEIPLink = webDriver.findElement(By.id(phaseName.name()));
@@ -75,5 +76,13 @@ public class TreatmentCardPage extends PatientDashboardPage {
     public boolean currentPhase(PhaseName phaseName) {
         String patientCurrentPhase = webDriver.findElement(By.id("patientCurrentPhase")).getText();
         return patientCurrentPhase.contains(phaseName.name());
+    }
+
+    public String getCurrentPhaseOfPatient() {
+        return trimToEmpty(patientPhaseMessage.getText().split(":")[1]);
+    }
+
+    private WebElement findWebElementByDate(LocalDate localDate) {
+        return webDriver.findElement(By.id(String.format("%s", localDate.toString("d-M-yyyy"))));
     }
 }

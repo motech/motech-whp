@@ -73,6 +73,24 @@ public class TreatmentCardServiceTest {
         verify(whpAdherenceService, times(1)).findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today);
     }
 
+    @Test
+    public void shouldBuildCPTreatmentCard() {
+        LocalDate today = today();
+        LocalDate therapyStartDate = today.minusDays(1);
+        Patient patient = new PatientBuilder().withDefaults().withTherapyStartDate(therapyStartDate).withCurrentPhaseAsCp(today).build();
+
+        String therapyUid = patient.getCurrentTherapy().getUid();
+        Adherence log1 = createLog(today.minusDays(10), therapyUid, PillStatus.Taken);
+        AdherenceList adherenceData = new AdherenceList(asList(log1));
+
+        when(whpAdherenceService.findLogsInRange(eq(patient.getPatientId()), eq(therapyUid), any(LocalDate.class), any(LocalDate.class))).thenReturn(adherenceData);
+
+        treatmentCardService.treatmentCard(patient);
+
+        verify(whpAdherenceService).findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today.minusDays(1));
+        verify(whpAdherenceService).findLogsInRange(patient.getPatientId(), therapyUid, today, today);
+    }
+
     private Patient createPatientOn3DayAWeekTreatmentCategory(LocalDate therapyStartDate, String therapyUid) {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(therapyStartDate);

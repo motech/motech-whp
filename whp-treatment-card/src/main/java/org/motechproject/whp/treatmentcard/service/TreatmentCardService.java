@@ -49,8 +49,8 @@ public class TreatmentCardService {
             List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(
                     patient.getPatientId(),
                     therapy.getUid(),
-                    therapy.getStartDate(),
-                    treatmentCard.ipBoxAdherenceEndDate()
+                    treatmentCard.cpBoxAdherenceStartDate(),
+                    treatmentCard.cpBoxAdherenceEndDate()
             );
             treatmentCard.initCPSection(cpAdherenceData);
         }

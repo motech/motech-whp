@@ -19,7 +19,7 @@ function setUpTreatmentCardTable() {
         $(this).tooltip({title:providerId + " gave adherence as " + currentPillStatus});
     })
 
-//Troggle - 3 state toggling
+//Toggle - 3 state toggling
     $('.editable').click(function () {
         if ($(this).hasClass('tick-icon')) {
             $(this).removeClass('tick-icon');

@@ -51,7 +51,11 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
                 .withDosesTaken(1)
                 .execute();
 
-        pauseTreatmentStep.execute();
+        pauseTreatmentStep
+                .withPatient(testPatient)
+                .withPauseDate("13/07/2012")
+                .withReason("paws")
+                .execute();
 
         restartTreatmentStep
                 .withPatient(testPatient)
@@ -67,7 +71,11 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
                 .withDosesTaken(2)
                 .execute();
 
-        pauseTreatmentStep.execute();
+        pauseTreatmentStep
+                .withPatient(testPatient)
+                .withPauseDate("25/07/2012")
+                .withReason("paws")
+                .execute();
 
         closeTreatmentStep
                 .withPatient(testPatient)
@@ -93,7 +101,11 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
 
         adjustDateTime(7, 8, 2012);
 
-        pauseTreatmentStep.execute();
+        pauseTreatmentStep
+                .withPatient(testPatient)
+                .withPauseDate("07/08/2012")
+                .withReason("paws")
+                .execute();
 
         adjustDateTime(12, 8, 2012);
 

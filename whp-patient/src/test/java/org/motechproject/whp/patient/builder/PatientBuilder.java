@@ -160,4 +160,16 @@ public class PatientBuilder {
         patient.setCurrentTherapy(therapy);
         return this;
     }
+
+    public PatientBuilder withCurrentPhaseAsCp(LocalDate cpStartDate) {
+        patient.endCurrentPhase(cpStartDate.minusDays(1));
+        patient.nextPhaseName(PhaseName.CP);
+        patient.startNextPhase();
+        return this;
+    }
+
+    public PatientBuilder withTherapyStartDate(LocalDate therapyStartDate) {
+        patient.getCurrentTherapy().start(therapyStartDate);
+        return this;
+    }
 }
