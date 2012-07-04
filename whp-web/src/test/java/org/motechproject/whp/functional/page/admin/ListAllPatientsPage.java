@@ -90,9 +90,10 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
-        ((WHPWebElement) districtSearchBox).sendKeysWithAutoSelect(districtName);
+        districtSearchBox.sendKeys(districtName);
+        searchButton.click();
         waitForElementToBeReloadedByAjax();
-        ((WHPWebElement) providerSearchBox).sendKeysWithAutoSelect(providerId);
+        providerSearchBox.sendKeys(providerId);
         searchButton.click();
         waitForElementToBeReloadedByAjax();
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);

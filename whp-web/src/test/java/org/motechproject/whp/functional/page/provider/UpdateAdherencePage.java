@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.page.provider;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.framework.WHPWebElement;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.By;
@@ -53,7 +54,7 @@ public class UpdateAdherencePage extends Page {
     }
 
     public UpdateAdherencePage setNumberOfDosesTaken(int i) {
-        numberOfDosesTaken.sendKeys(i + "");
+        ((WHPWebElement)numberOfDosesTaken).select(i + "");
         return this;
     }
 

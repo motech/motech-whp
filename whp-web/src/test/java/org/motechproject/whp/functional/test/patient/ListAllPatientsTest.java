@@ -35,7 +35,6 @@ public class ListAllPatientsTest extends BasePatientTest {
     }
 
     @Test
-    @Ignore
     public void shouldListAllPatientsForTheDistrictUnderAProviderSelectedByCMFAdmin() {
         String district = "Vaishali";
         setupTestProvider(district);
