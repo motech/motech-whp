@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page.admin;
 
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -21,6 +22,14 @@ public class ListProvidersPage extends LoggedInUserPage {
 
     public ListProvidersPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    @Override
+    public void postInitialize() {
+        super.postInitialize();
+        providerId = WebDriverFactory.createWebElement(providerId);
+        submit = WebDriverFactory.createWebElement(submit);
+        warning = WebDriverFactory.createWebElement(warning);
     }
 
     @Override

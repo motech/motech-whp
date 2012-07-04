@@ -17,17 +17,9 @@ import static org.openqa.selenium.By.id;
 
 public class ListAllPatientsPage extends LoggedInUserPage {
 
-    @FindBy(how = How.CLASS_NAME, using = "patientId")
     protected List<WebElement> patientIds;
 
-    @FindBy(how = How.CLASS_NAME, using = "name")
     protected List<WebElement> patientNames;
-
-    @FindBy(how = How.CLASS_NAME, using = "tbId")
-    protected List<WebElement> tbIds;
-
-    @FindBy(how = How.CLASS_NAME, using = "category")
-    protected List<WebElement> categories;
 
     @FindBy(how = How.ID, using = "district-autocomplete")
     private WebElement districtSearchBox;
@@ -38,12 +30,10 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     @FindBy(how = How.ID, using = "searchForm")
     private WebElement searchButton;
 
-    @FindBy(how = How.CLASS_NAME, using = "link")
     private List<WebElement> dashboardLinks;
 
     @FindBy(how = How.ID, using = "patientList")
     private WebElement patientList;
-
 
     @Override
     protected void waitForPageToLoad() {
@@ -52,9 +42,11 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     @Override
     public void postInitialize() {
+        super.postInitialize();
         districtSearchBox = createWebElement(districtSearchBox);
         providerSearchBox = createWebElement(providerSearchBox);
         searchButton = createWebElement(searchButton);
+        patientList = createWebElement(patientList);
     }
 
     public ListAllPatientsPage(WebDriver webDriver) {
@@ -62,20 +54,14 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     public boolean hasPatient(String patientName) {
+        waitForElementWithCSSToLoad("name");
+        patientNames = webDriver.findElements(By.className("name"));
         for (WebElement patientNameElement : patientNames) {
             if (StringUtils.containsIgnoreCase(patientNameElement.getText(), patientName)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public String getTreatmentCategoryText(String patientId) {
-        return webDriver.findElement(id(String.format("patient_%s_TreatmentCategory", patientId))).getText();
-    }
-
-    public String getTreatmentStartDateText(String patientId) {
-        return webDriver.findElement(id(String.format("patient_%s_TreatmentStartDate", patientId))).getText();
     }
 
     public String getGenderText(String patientId) {
@@ -86,14 +72,6 @@ public class ListAllPatientsPage extends LoggedInUserPage {
         return webDriver.findElement(id(String.format("patient_%s_Village", patientId))).getText();
     }
 
-    public String getDistrictText(String patientId) {
-        return webDriver.findElement(id(String.format("patient_%s_District", patientId))).getText();
-    }
-
-    public boolean isPatientTreatmentPaused(String patientId) {
-        return webDriver.findElement(id(String.format("patientList_%s", patientId))).getCssValue("background-color").contains("255,182,193");
-    }
-
     public PatientDashboardPage clickOnPatientWithTherapyNotYetStarted(String patientId) {
         clickOnPatientRow(patientId);
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
@@ -102,15 +80,6 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     public TreatmentCardPage clickOnPatientWithTherapyStarted(String patientId) {
         clickOnPatientRow(patientId);
         return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
-    }
-
-    public boolean hasTbId(String tbId) {
-        for (WebElement tbIdElement : tbIds) {
-            if (tbIdElement.getText().compareToIgnoreCase(tbId) == 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public ListAllPatientsPage searchByDistrict(String district) {
@@ -130,6 +99,8 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     }
 
     private void clickOnPatientRow(String patientId) {
+        waitForElementWithCSSToLoad("patientId");
+        patientIds = webDriver.findElements(By.className("patientId"));
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {
             if (patientIds.get(i).getText().equals(patientId)) {
@@ -137,6 +108,8 @@ public class ListAllPatientsPage extends LoggedInUserPage {
                 break;
             }
         }
+        waitForElementWithCSSToLoad("link");
+        dashboardLinks = webDriver.findElements(By.className("link"));
         createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
     }
 }

@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 
 public class ProviderPage extends ListPatientsPage {
 
-    @FindBy(how = How.CLASS_NAME, using = "updateAdherenceLink")
     private List<WebElement> updateAdherenceLinks;
 
     public ProviderPage(WebDriver webDriver) {
@@ -26,6 +25,11 @@ public class ProviderPage extends ListPatientsPage {
     }
 
     public UpdateAdherencePage clickEditAdherenceLink(String patientId) {
+        waitForElementWithCSSToLoad("patientId");
+        patientIds = webDriver.findElements(By.className("patientId"));
+        waitForElementWithCSSToLoad("updateAdherenceLink");
+        updateAdherenceLinks = webDriver.findElements(By.className("updateAdherenceLink"));
+
         int index = -1;
         for (int i = 0; i < patientIds.size(); i++) {
             if (patientIds.get(i).getText().equals(patientId)) {

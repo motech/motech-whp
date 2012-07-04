@@ -26,6 +26,8 @@ public class LoginPage extends Page {
     private WebElement userName;
     @FindBy(how = How.ID, using = PASSWORD_ID)
     private WebElement password;
+    @FindBy(how = How.ID, using = "login")
+    private WebElement login;
     @FindBy(how = How.ID, using = ERROR_MESSAGE)
     private WebElement errorMessage;
 
@@ -41,6 +43,7 @@ public class LoginPage extends Page {
     public void postInitialize() {
         userName = WebDriverFactory.createWebElement(userName);
         password = WebDriverFactory.createWebElement(password);
+        login = WebDriverFactory.createWebElement(login);
         errorMessage = WebDriverFactory.createWebElement(errorMessage);
     }
 
@@ -59,9 +62,12 @@ public class LoginPage extends Page {
     }
 
     private void login(String userName, String password) {
+        System.out.println("START: Login ...................................");
         this.userName.sendKeys(userName);
         this.password.sendKeys(password);
-        this.userName.submit();
+        this.login.click();
+        System.out.println("END: Login ...................................");
+        System.out.println("***************************************************************************");
     }
 
     public String errorMessage() {

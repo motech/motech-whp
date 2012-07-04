@@ -1,6 +1,7 @@
 package org.motechproject.whp.functional.page.admin;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +22,11 @@ public class PatientDashboardPage extends Page {
 
     public PatientDashboardPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    @Override
+    public void postInitialize() {
+        adjustStartDatesLink = WebDriverFactory.createWebElement(adjustStartDatesLink);
     }
 
     @Override
