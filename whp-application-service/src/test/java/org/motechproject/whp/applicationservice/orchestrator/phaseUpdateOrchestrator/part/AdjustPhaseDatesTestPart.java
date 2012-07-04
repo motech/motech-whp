@@ -7,6 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.refdata.domain.PhaseName.*;
 
@@ -43,8 +44,8 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         patient.getCurrentTherapy().getPhase(CP).setNumberOfDosesTaken(33);
 
         phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
-        verify(patientService).updatePillTakenCount(eq(patient), eq(IP), anyInt());
-        verify(patientService).updatePillTakenCount(eq(patient), eq(EIP), anyInt());
-        verify(patientService).updatePillTakenCount(eq(patient), eq(CP), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(EIP), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(CP), anyInt());
     }
 }
