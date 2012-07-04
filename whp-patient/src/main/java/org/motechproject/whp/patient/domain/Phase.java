@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 @Data
 public class Phase {
@@ -27,6 +28,10 @@ public class Phase {
 
     public boolean hasStarted() {
         return startDate != null;
+    }
+
+    public int remainingDoses(TreatmentCategory treatmentCategory) {
+        return treatmentCategory.numberOfDosesForPhase(name) - numberOfDosesTaken;
     }
 
 }

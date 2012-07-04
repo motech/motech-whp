@@ -13,7 +13,6 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -250,7 +249,31 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public int getRemainingDosesInCurrentPhase() {
         Phase currentPhase = currentTherapy.getCurrentPhase();
-        return currentPhase != null ? currentTherapy.remainingDoses(currentPhase) : 0;
+        return currentPhase != null ? currentPhase.remainingDoses(currentTherapy.getTreatmentCategory()) : 0;
+    }
+
+    @JsonIgnore
+    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+        return getCurrentTherapy().numberOfDosesForPhase(phaseName);
+    }
+
+    @JsonIgnore
+    public Phase getLastCompletedPhase() {
+        return getCurrentTherapy().getLastCompletedPhase();
+    }
+
+    @JsonIgnore
+    public Phase getCurrentPhase() {
+        return getCurrentTherapy().getCurrentPhase();
+    }
+
+    @JsonIgnore
+    public int getRemainingDosesInLastCompletedPhase() {
+        return getLastCompletedPhase().remainingDoses(currentTherapy.getTreatmentCategory());
+    }
+
+    public boolean currentPhaseDoseComplete() {
+        return getCurrentTherapy().currentPhaseDoseComplete();
     }
 
     public void loadTherapyIntoTreatments() {
@@ -271,5 +294,9 @@ public class Patient extends MotechBaseDataObject {
 
         List<Therapy> therapyList = select(therapies, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
         return therapyList.get(0);
+    }
+
+    public void setNumberOfDosesTaken(PhaseName phaseName, int dosesTaken) {
+        getCurrentTherapy().getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
     }
 }

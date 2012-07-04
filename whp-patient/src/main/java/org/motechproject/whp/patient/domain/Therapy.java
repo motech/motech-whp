@@ -54,7 +54,7 @@ public class Therapy {
     @JsonIgnore
     public boolean isNearingPhaseTransition() {
         Phase currentPhase = phases.getCurrentPhase();
-        return currentPhase != null && remainingDoses(currentPhase) <= treatmentCategory.getDosesPerWeek();
+        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek();
     }
 
     @JsonIgnore
@@ -65,19 +65,6 @@ public class Therapy {
     @JsonIgnore
     public Phase getLastCompletedPhase() {
         return phases.getLastCompletedPhase();
-    }
-
-    @JsonIgnore
-    public Integer cumulativeNumberOfDosesSoFar() {
-        PhaseName phaseName = getCurrentPhase() == null ? getLastCompletedPhase().getName() : getCurrentPhase().getName();
-        Integer totalNumberOfDoses = 0;
-        for (Phase phase : phases.getAll()) {
-            if (phase.hasStarted()) {
-                totalNumberOfDoses = totalNumberOfDoses + treatmentCategory.numberOfDosesForPhase(phase.getName());
-            }
-            if (phaseName.equals(phase.getName())) break;
-        }
-        return totalNumberOfDoses;
     }
 
     public DateTime getCreationDate() {
@@ -91,15 +78,11 @@ public class Therapy {
 
     public boolean currentPhaseDoseComplete() {
         Phase currentPhase = phases.getCurrentPhase();
-        return currentPhase != null && remainingDoses(currentPhase) <= 0;
+        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= 0;
     }
 
     void setStartDate(LocalDate therapyStartDate) {
         startDate = therapyStartDate;
-    }
-
-    int remainingDoses(Phase phase) {
-        return treatmentCategory.numberOfDosesForPhase(phase.getName()) - phase.getNumberOfDosesTaken();
     }
 
     @JsonIgnore
@@ -123,5 +106,9 @@ public class Therapy {
         start(ipStartDate);
         phases.setEIPStartDate(eipStartDate);
         phases.setCPStartDate(cpStartDate);
+    }
+
+    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+        return treatmentCategory.numberOfDosesForPhase(phaseName);
     }
 }

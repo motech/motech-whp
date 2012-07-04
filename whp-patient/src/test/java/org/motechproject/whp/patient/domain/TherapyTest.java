@@ -57,24 +57,6 @@ public class TherapyTest {
     }
 
     @Test
-    public void shouldReturnTotalNumberOfDosesIncludingCurrentPhaseDosesForPatient() {
-        Therapy therapy = new Therapy();
-        TreatmentCategory category = new TreatmentCategory();
-        category.setNumberOfDosesInIP(24);
-        category.setNumberOfDosesInEIP(18);
-        category.setNumberOfDosesInCP(28);
-        therapy.setTreatmentCategory(category);
-        LocalDate today = today();
-
-        therapy.start(today);
-        therapy.getCurrentPhase().setEndDate(today.plusDays(2));
-        therapy.getPhases().getByPhaseName(PhaseName.CP).setStartDate(today.plusDays(3));
-        therapy.getCurrentPhase().setEndDate(today.plusDays(4));
-
-        assertEquals(Integer.valueOf(52), therapy.cumulativeNumberOfDosesSoFar());
-    }
-
-    @Test
     public void currentPhaseIsDoseCompleteIfDoseTakenCountForThatPhaseIsEqualToOrMoreThanSeededNumberOfDosesInThatPhase() {
         Therapy therapy = new Therapy();
         TreatmentCategory category = new TreatmentCategory();
@@ -88,17 +70,4 @@ public class TherapyTest {
         assertTrue(therapy.currentPhaseDoseComplete());
     }
 
-    @Test
-    public void shouldReturnRemainingDosesInPhase() {
-        Therapy therapy = new Therapy();
-        TreatmentCategory category = new TreatmentCategory();
-        category.setNumberOfDosesInIP(24);
-        therapy.setTreatmentCategory(category);
-        LocalDate today = today();
-
-        therapy.start(today);
-        therapy.getCurrentPhase().setNumberOfDosesTaken(11);
-
-        assertEquals(13, therapy.remainingDoses(therapy.getCurrentPhase()));
-    }
 }

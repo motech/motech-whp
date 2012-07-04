@@ -58,7 +58,7 @@ public class PatientService {
     }
 
     public void updatePillTakenCount(Patient patient, PhaseName name, int dosesTaken) {
-        patient.getCurrentTherapy().getPhases().getByPhaseName(name).setNumberOfDosesTaken(dosesTaken);
+        patient.setNumberOfDosesTaken(name, dosesTaken);
         allPatients.update(patient);
     }
 
@@ -68,14 +68,17 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void endCurrentPhase(String patientId, LocalDate endDate) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public void autoCompleteCurrentPhase(Patient patient, LocalDate endDate) {
         patient.endCurrentPhase(endDate);
         allPatients.update(patient);
     }
 
-    public void startNextPhase(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public void revertAutoCompleteOfLastPhase(Patient patient) {
+        patient.getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
+        allPatients.update(patient);
+    }
+
+    public void startNextPhase(Patient patient) {
         patient.startNextPhase();
         allPatients.update(patient);
     }

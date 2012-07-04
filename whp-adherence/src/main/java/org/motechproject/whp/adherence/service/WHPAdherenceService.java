@@ -117,8 +117,8 @@ public class WHPAdherenceService {
         addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
     }
 
-    public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate treatmentStartDate) {
-        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyUid, treatmentStartDate);
+    public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate startDate) {
+        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyUid, startDate);
         return adherenceRecords.get(doseNumber - 1);
     }
 }

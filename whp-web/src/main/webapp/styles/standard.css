@@ -295,3 +295,18 @@ div.buttons a, div.buttons button {
 .controls a {
     margin-right: 10px;
 }
+.thin-table{
+    width: 5%;
+}
+.fat-table {
+    width: 95%;
+}
+
+.taller-row {
+    height: 27px;
+}
+
+.no-top-border td, .no-top-border th {
+    border-top-width: 0px;
+}
+

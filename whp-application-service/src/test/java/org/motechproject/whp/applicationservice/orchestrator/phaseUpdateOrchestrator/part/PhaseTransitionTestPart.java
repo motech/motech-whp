@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.PhaseName;
 
 import static org.mockito.Matchers.any;
@@ -32,25 +33,25 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
 
         verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate);
-        verify(patientService).endCurrentPhase(patient.getPatientId(), adherenceRecord.doseDate());
-        verify(patientService, never()).startNextPhase(anyString());
+        verify(patientService).autoCompleteCurrentPhase(patient, adherenceRecord.doseDate());
+        verify(patientService, never()).startNextPhase(any(Patient.class));
     }
 
     @Test
     public void shouldStartNextPhaseWhenAttemptingToTransition_NextPhaseSet() {
-        patient.getCurrentTherapy().getPhases().setNextPhaseName(PhaseName.EIP);
-        patient.getCurrentTreatment().getTherapy().setUid(THERAPY_ID);
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
-        LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.getCurrentTherapy().getCurrentPhase().setEndDate(twentyFourthDoseTakenDate);
+        patient.setNumberOfDosesTaken(PhaseName.IP, 24);
+        patient.nextPhaseName(PhaseName.EIP);
+        LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
+        patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
         phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
 
-        verify(patientService).startNextPhase(patient.getPatientId());
+        verify(patientService).startNextPhase(patient);
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService, never()).endCurrentPhase(anyString(), any(LocalDate.class));
+        verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
     }
 }

@@ -12,7 +12,39 @@
 <@legend key1="paused" value1="Current Treatment Paused" />
 <div class="row">
     <div>
-        <table id="patientList" class="table table-bordered table-condensed">
+        <table id="notaBena" class="table table-condensed pull-left thin-table">
+            <thead>
+            <tr>
+                <th class="taller-row"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <#if patientList?size == 0>
+                <tr>
+
+                </tr>
+                <#else>
+                    <#list patientList as patient>
+                        <#if patient.nearingPhaseTransition || patient.transitioning>
+                            <tr>
+                                <td class="tall-right-row">
+                                    <img id="achtung" class="pull-left" src="<@spring.url '/resources-${applicationVersion}/img/smallwarning.png'/>"/>
+                                </td>
+                            </tr>
+                            <#else>
+                                <tr>
+                                    <td style="height: 18px; float: right">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                </tr>
+                        </#if>
+                    </#list>
+            </#if>
+            </tbody>
+        </table>
+
+        <table id="patientList" class="table table-bordered table-condensed fat-table">
             <thead>
             <tr>
                 <th>Patient ID</th>

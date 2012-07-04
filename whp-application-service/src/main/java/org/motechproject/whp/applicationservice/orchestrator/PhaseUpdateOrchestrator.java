@@ -6,7 +6,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phase;
-import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PhaseName;
@@ -54,15 +53,18 @@ public class PhaseUpdateOrchestrator {
     public void attemptPhaseTransition(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
 
-        Therapy currentTherapy = patient.getCurrentTherapy();
-        if (currentTherapy.currentPhaseDoseComplete()) {
-            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, currentTherapy.getUid(), currentTherapy.cumulativeNumberOfDosesSoFar(), currentTherapy.getStartDate());
-            patientService.endCurrentPhase(patientId, recordOfLastDoseInPhase.doseDate());
-            patient = allPatients.findByPatientId(patientId);
+        if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
+            patientService.revertAutoCompleteOfLastPhase(patient);
+        }
+
+        if (patient.currentPhaseDoseComplete()) {
+            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, patient.getCurrentTherapy().getUid(),
+                    patient.numberOfDosesForPhase(patient.getCurrentPhase().getName()), patient.getCurrentPhase().getStartDate());
+            patientService.autoCompleteCurrentPhase(patient, recordOfLastDoseInPhase.doseDate());
         }
 
         if (patient.isTransitioning() && patient.hasPhaseToTransitionTo()) {
-            patientService.startNextPhase(patientId);
+            patientService.startNextPhase(patient);
         }
 
         recomputePillCount(patientId);
