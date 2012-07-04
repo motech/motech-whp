@@ -346,7 +346,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), PhaseName.IP, 2);
 
-        assertEquals(Integer.valueOf(2), allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getNumberOfDosesTaken());
+        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getNumberOfDosesTaken());
     }
 
     @Test

@@ -17,7 +17,7 @@ public class Phase {
     3) CMF Admin startDate/endDate update: Triggered by PatientController.update() -> PhaseUpdateOrchestrator
     4) Phase transition: TODO
     */
-    private Integer numberOfDosesTaken;
+    private int numberOfDosesTaken;
 
     public Phase() {
     }
