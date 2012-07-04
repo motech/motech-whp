@@ -99,8 +99,7 @@ public class Therapy {
     }
 
     int remainingDoses(Phase phase) {
-        int numberOfDosesTaken = phase.getNumberOfDosesTaken();
-        return treatmentCategory.numberOfDosesForPhase(phase.getName()) - numberOfDosesTaken;
+        return treatmentCategory.numberOfDosesForPhase(phase.getName()) - phase.getNumberOfDosesTaken();
     }
 
     @JsonIgnore

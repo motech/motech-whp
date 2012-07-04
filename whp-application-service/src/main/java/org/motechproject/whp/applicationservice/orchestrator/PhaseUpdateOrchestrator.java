@@ -31,6 +31,7 @@ public class PhaseUpdateOrchestrator {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
         allPatients.update(patient);
+        recomputePillCount(patientId);
         attemptPhaseTransition(patientId);
     }
 
