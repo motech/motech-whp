@@ -381,7 +381,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest3);
 
-        List<Patient> patientList = patientService.searchBy(providerToBeUsedForSearch);
+        List<Patient> patientList = patientService.getAllWithActiveTreatmentForProvider(providerToBeUsedForSearch.getProviderId());
         assertPatientForRequests(asList(createPatientRequest2), patientList);
     }
 

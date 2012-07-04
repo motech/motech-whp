@@ -101,10 +101,6 @@ public class PatientService {
         return allPatients.getAllUnderActiveTreatmentWithCurrentProviders(providerIds);
     }
 
-    public List<Patient> searchBy(Provider provider) {
-        return allPatients.getAllWithActiveTreatmentFor(provider.getProviderId());
-    }
-
     boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         List<WHPErrorCode> errors = new ArrayList<>();

@@ -165,7 +165,7 @@ public class PatientControllerTest {
 
         Provider provider = new Provider(providerId, "", district, DateUtil.now());
         when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
-        when(patientService.searchBy(provider)).thenReturn(asList(patientUnderProviderA));
+        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(asList(patientUnderProviderA));
 
         patientController.filterByDistrictAndProvider(district, providerId, uiModel);
 
