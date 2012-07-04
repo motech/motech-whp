@@ -27,20 +27,35 @@ public class Phases {
 
     @JsonIgnore
     public boolean ipPhaseWasExtended() {
-        Phase eipPhase = getByPhaseName(PhaseName.EIP);
+        Phase eipPhase = eipPhase();
         return eipPhase != null && eipPhase.getStartDate() != null;
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnCp() {
-        Phase cpPhase = getByPhaseName(PhaseName.CP);
+        Phase cpPhase = cpPhase();
         return cpPhase != null && cpPhase.hasStarted();
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnIp() {
-        Phase ipPhase = getByPhaseName(PhaseName.IP);
+        Phase ipPhase = ipPhase();
         return ipPhase != null && ipPhase.hasStarted();
+    }
+
+    @JsonIgnore
+    public Phase ipPhase() {
+        return getByPhaseName(PhaseName.IP);
+    }
+
+    @JsonIgnore
+    public Phase eipPhase() {
+        return getByPhaseName(PhaseName.EIP);
+    }
+
+    @JsonIgnore
+    public Phase cpPhase() {
+        return getByPhaseName(PhaseName.CP);
     }
 
     @JsonIgnore
@@ -74,47 +89,53 @@ public class Phases {
 
     @JsonIgnore
     public LocalDate getIPStartDate() {
-        return getByPhaseName(PhaseName.IP).getStartDate();
+        return ipPhase().getStartDate();
     }
 
     @JsonIgnore
     void setIPStartDate(LocalDate IPStartDate) {
-        getByPhaseName(PhaseName.IP).setStartDate(IPStartDate);
+        ipPhase().setStartDate(IPStartDate);
     }
 
     @JsonIgnore
     public LocalDate getIPLastDate() {
-        LocalDate ipEndDate = getByPhaseName(PhaseName.IP).getEndDate();
+        LocalDate ipEndDate = ipPhase().getEndDate();
         return ipEndDate != null ? ipEndDate : today();
     }
 
     @JsonIgnore
     public void setIPEndDate(LocalDate IPEndDate) {
-        getByPhaseName(PhaseName.IP).setEndDate(IPEndDate);
+        ipPhase().setEndDate(IPEndDate);
     }
 
     @JsonIgnore
     public LocalDate getEIPStartDate() {
         if (ipPhaseWasExtended()) {
-            return getByPhaseName(PhaseName.EIP).getStartDate();
+            return eipPhase().getStartDate();
         }
         return null;
     }
 
     @JsonIgnore
-    public void setEIPStartDate(LocalDate EIPStartDate) {
-        getByPhaseName(PhaseName.EIP).setStartDate(EIPStartDate);
-        if (EIPStartDate != null) {
-            setIPEndDate(EIPStartDate.minusDays(1));
+    public void setEIPStartDate(LocalDate eipStartDate) {
+        Phase eipPhase = eipPhase();
+        eipPhase.setStartDate(eipStartDate);
+        if (eipStartDate != null) {
+            setIPEndDate(eipStartDate.minusDays(1));
         } else {
-            setIPEndDate(null);
+            if (cpPhase().hasStarted()) {
+                setIPEndDate(cpPhase().getStartDate().minusDays(1));
+            } else {
+                setIPEndDate(null);
+            }
+            setEIPEndDate(null);
         }
     }
 
     @JsonIgnore
     public LocalDate getEIPLastDate() {
         if (ipPhaseWasExtended()) {
-            LocalDate epEndDate = getByPhaseName(PhaseName.EIP).getEndDate();
+            LocalDate epEndDate = eipPhase().getEndDate();
             return epEndDate != null ? epEndDate : today();
         }
         return null;
@@ -122,21 +143,21 @@ public class Phases {
 
     @JsonIgnore
     public void setEIPEndDate(LocalDate eipEndDate) {
-        getByPhaseName(PhaseName.EIP).setEndDate(eipEndDate);
+        eipPhase().setEndDate(eipEndDate);
     }
 
     @JsonIgnore
     public LocalDate getCPStartDate() {
         if (isOrHasBeenOnCp()) {
-            return getByPhaseName(PhaseName.CP).getStartDate();
+            return cpPhase().getStartDate();
         }
         return null;
     }
 
     @JsonIgnore
     public void setCPStartDate(LocalDate cpStartDate) {
-        getByPhaseName(PhaseName.CP).setStartDate(cpStartDate);
-        Phase EIP = getByPhaseName(PhaseName.EIP);
+        cpPhase().setStartDate(cpStartDate);
+        Phase EIP = eipPhase();
         if (EIP.getStartDate() != null) {
             if (cpStartDate != null) {
                 setEIPEndDate(cpStartDate.minusDays(1));
@@ -155,7 +176,7 @@ public class Phases {
     @JsonIgnore
     public LocalDate getCPLastDate() {
         if (isOrHasBeenOnCp()) {
-            LocalDate cpEndDate = getByPhaseName(PhaseName.CP).getEndDate();
+            LocalDate cpEndDate = cpPhase().getEndDate();
             return cpEndDate != null ? cpEndDate : today();
         }
         return null;
@@ -163,7 +184,7 @@ public class Phases {
 
     @JsonIgnore
     public void setCPEndDate(LocalDate cpEndDate) {
-        getByPhaseName(PhaseName.CP).setEndDate(cpEndDate);
+        cpPhase().setEndDate(cpEndDate);
     }
 
     @JsonIgnore

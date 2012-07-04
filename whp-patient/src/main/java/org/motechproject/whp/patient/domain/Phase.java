@@ -34,5 +34,17 @@ public class Phase {
         return treatmentCategory.numberOfDosesForPhase(name) - numberOfDosesTaken;
     }
 
+    public void start(Phase previousPhase) {
+        this.startDate = previousPhase.endDate.plusDays(1);
+    }
+
+    public void stop(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void unset() {
+        this.startDate = null;
+        this.endDate = null;
+    }
 }
 

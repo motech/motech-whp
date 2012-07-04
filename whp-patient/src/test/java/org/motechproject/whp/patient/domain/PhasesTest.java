@@ -33,6 +33,32 @@ public class PhasesTest {
     }
 
     @Test
+    public void settingEIPStartDateToNullShouldSetEndDateOnIPToNull_WhenCPHasNotStarted() {
+        phases.setIPStartDate(today());
+        phases.setEIPStartDate(today().plusDays(2));
+
+        assertEquals(today().plusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+
+        phases.setEIPStartDate(null);
+
+        assertEquals(null, phases.getByPhaseName(PhaseName.IP).getEndDate());
+    }
+
+    @Test
+    public void settingEIPStartDateToNullShouldSetEndDateOnIPToOneDayBeforeCPStartDateTo_WhenCPHasStarted() {
+        phases.setIPStartDate(today());
+        phases.setEIPStartDate(today().plusDays(2));
+        phases.setCPStartDate(today().plusDays(4));
+
+        assertEquals(today().plusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+
+        phases.setEIPStartDate(null);
+
+        assertNotNull(null, phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().plusDays(3), phases.getByPhaseName(PhaseName.IP).getEndDate());
+    }
+
+    @Test
     public void settingCPStartDateShouldSetEndDateOnEIPOnlyIfEIPWasStarted() {
         phases.setEIPStartDate(today().minusDays(2));
         phases.setCPStartDate(today());
@@ -171,5 +197,4 @@ public class PhasesTest {
         patient.endCurrentPhase(today().minusMonths(1));
         assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
-
 }
