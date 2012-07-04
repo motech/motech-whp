@@ -2,7 +2,6 @@ package org.motechproject.whp.functional.page.admin;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WHPWebElement;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -29,9 +28,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     @FindBy(how = How.ID, using = "searchButton")
     private WebElement searchButton;
-
     private List<WebElement> dashboardLinks;
-
     @FindBy(how = How.ID, using = "patientList")
     private WebElement patientList;
 
@@ -91,7 +88,6 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
         districtSearchBox.sendKeys(districtName);
-        searchButton.click();
         waitForElementToBeReloadedByAjax();
         providerSearchBox.sendKeys(providerId);
         searchButton.click();
@@ -112,5 +108,9 @@ public class ListAllPatientsPage extends LoggedInUserPage {
         waitForElementWithCSSToLoad("link");
         dashboardLinks = webDriver.findElements(By.className("link"));
         createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
+    }
+
+    public WebElement getSearchButton() {
+        return searchButton;
     }
 }

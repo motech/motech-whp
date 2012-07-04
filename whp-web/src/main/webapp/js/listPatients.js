@@ -6,12 +6,24 @@ $(function() {
         initProviders();
     });
     $( "#district" ).bind( "invalid-value", function() {
+           $("#district-autocomplete").val("");
            $("#providerId-autocomplete").val("");
-           $("#providerId").html('');
+           $("#providerId").html("");
+           $("#providerId").data('combobox').destroy();
+           $("#providerId").combobox();
     });
-    $("#searchButton").click(function (event) {
-            var districtId = $("#district-autocomplete").val();
-            var providerId = $("#providerId-autocomplete").val() ? $("#providerId-autocomplete").val() : "";
+    $( "#providerId" ).bind( "invalid-value", function() {
+        $("#providerId-autocomplete").val("");
+    });
+
+    $("#searchForm").submit(function (event) {
+            event.preventDefault();
+
+            if($('#district').val()== "")
+                return;
+
+            var districtId = $("#district").val();
+            var providerId = $("#providerId").val() ? $("#providerId-autocomplete").val() : "";
             var data = {
                 "selectedDistrict":districtId,
                 "selectedProvider":providerId

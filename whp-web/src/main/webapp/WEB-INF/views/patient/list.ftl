@@ -3,11 +3,12 @@
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 <div>
     <div class="well row">
-        <form id="searchForm" action="<@spring.url '/patients/search'/>" method="POST"
+        <form id="searchForm" action="<@spring.url '/patients/search'/>"  input method="POST"
               class="offset2-fixed form-horizontal">
             <div class="control-group">
                 <label class="control-label">Provider District*</label>
