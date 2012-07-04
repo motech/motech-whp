@@ -24,23 +24,35 @@ public class TreatmentCardService {
     }
 
     public TreatmentCard treatmentCard(Patient patient) {
-        Therapy therapy = patient.getCurrentTherapy();
-
         TreatmentCard treatmentCard = new TreatmentCard(patient);
-
-        if (therapy.getPhases().isOrHasBeenOnIp()) {
-            List<Adherence> ipAndEipAdherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), therapy.getUid(),
-                    therapy.getStartDate(), treatmentCard.ipBoxAdherenceEndDate());
-            treatmentCard.initIPSection(ipAndEipAdherenceData);
-        }
-
-        if (therapy.getPhases().isOrHasBeenOnCp()) {
-            List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(patient.getPatientId(), therapy.getUid(),
-                    therapy.getStartDate(), treatmentCard.ipBoxAdherenceEndDate());
-            treatmentCard.initCPSection(cpAdherenceData);
-        }
-
+        initializeIpAndEipSection(patient, treatmentCard);
+        initializeCpSection(patient, treatmentCard);
         return treatmentCard;
     }
 
+    private void initializeIpAndEipSection(Patient patient, TreatmentCard treatmentCard) {
+        Therapy therapy = patient.getCurrentTherapy();
+        if (therapy.getPhases().isOrHasBeenOnIp()) {
+            List<Adherence> ipAndEipAdherenceData = whpAdherenceService.findLogsInRange(
+                    patient.getPatientId(),
+                    therapy.getUid(),
+                    therapy.getStartDate(),
+                    treatmentCard.ipBoxAdherenceEndDate()
+            );
+            treatmentCard.initIPSection(ipAndEipAdherenceData);
+        }
+    }
+
+    private void initializeCpSection(Patient patient, TreatmentCard treatmentCard) {
+        Therapy therapy = patient.getCurrentTherapy();
+        if (therapy.getPhases().isOrHasBeenOnCp()) {
+            List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(
+                    patient.getPatientId(),
+                    therapy.getUid(),
+                    therapy.getStartDate(),
+                    treatmentCard.ipBoxAdherenceEndDate()
+            );
+            treatmentCard.initCPSection(cpAdherenceData);
+        }
+    }
 }

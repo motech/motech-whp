@@ -8,7 +8,7 @@
     <#include "legend.ftl"/>
     </div>
 <br/>
-<@adherenceBox title="IPTreatmentCard" monthlyAdherences=treatmentCard.ipAdherenceSection.monthlyAdherences />
+<@adherenceBox title="IPTreatmentCard" monthlyAdherences=treatmentCard.ipAndEipAdherenceSection.monthlyAdherences />
 <@adherenceBox title="CPTreatmentCard" monthlyAdherences=treatmentCard.cpAdherenceSection.monthlyAdherences />
 
 <form id="treatmentCardDeltaform" action="/whp/treatmentcard/update" method="post">

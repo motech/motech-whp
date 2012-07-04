@@ -25,7 +25,8 @@ public class TreatmentCard {
 
     private Therapy therapy;
 
-    private AdherenceSection ipAdherenceSection = new AdherenceSection();
+    private AdherenceSection ipAndEipAdherenceSection = new AdherenceSection();
+
     private AdherenceSection cpAdherenceSection = new AdherenceSection();
 
     public TreatmentCard(Patient patient) {
@@ -37,7 +38,7 @@ public class TreatmentCard {
 
     public TreatmentCard initIPSection(List<Adherence> adherenceData) {
         LocalDate ipStartDate = therapy.getStartDate();
-        ipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate(), Arrays.asList(therapy.getPhase(PhaseName.IP), therapy.getPhase(PhaseName.EIP)));
+        ipAndEipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate(), Arrays.asList(therapy.getPhase(PhaseName.IP), therapy.getPhase(PhaseName.EIP)));
         return this;
     }
 
@@ -48,7 +49,7 @@ public class TreatmentCard {
     }
 
     public List<MonthlyAdherence> getMonthlyAdherences() {
-        return ipAdherenceSection.getMonthlyAdherences();
+        return ipAndEipAdherenceSection.getMonthlyAdherences();
     }
 
     public LocalDate ipBoxAdherenceEndDate() {
@@ -83,9 +84,8 @@ public class TreatmentCard {
 
     public List<String> getProviderIds() {
         Set<String> all = new HashSet<String>();
-        all.addAll(ipAdherenceSection.getProviderIds());
+        all.addAll(ipAndEipAdherenceSection.getProviderIds());
         all.addAll(cpAdherenceSection.getProviderIds());
         return new ArrayList<>(all);
     }
-
 }
