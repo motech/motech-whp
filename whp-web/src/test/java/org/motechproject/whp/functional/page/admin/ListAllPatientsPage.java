@@ -35,7 +35,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     @FindBy(how = How.ID, using = "providerId-autocomplete")
     private WebElement providerSearchBox;
 
-    @FindBy(how = How.ID, using = "searchButton")
+    @FindBy(how = How.ID, using = "searchForm")
     private WebElement searchButton;
 
     @FindBy(how = How.CLASS_NAME, using = "link")
