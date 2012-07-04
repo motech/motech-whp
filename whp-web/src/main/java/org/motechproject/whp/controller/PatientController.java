@@ -28,6 +28,7 @@ import java.util.Locale;
 import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
+import static org.motechproject.whp.common.WHPDate.date;
 
 @Controller
 @RequestMapping(value = "/patients")
@@ -103,10 +104,12 @@ public class PatientController extends BaseController {
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
     public String adjustPhaseStartDates(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
-        Patient updatedPatient = phaseStartDates.mapNewPhaseInfoToPatient(patientService.findByPatientId(patientId));
-        patientService.update(updatedPatient);
-        phaseUpdateOrchestrator.recomputePillCount(updatedPatient.getPatientId());
-        phaseUpdateOrchestrator.attemptPhaseTransition(updatedPatient.getPatientId());
+        phaseUpdateOrchestrator.adjustPhaseStartDates(
+                patientId,
+                date(phaseStartDates.getIpStartDate()).date(),
+                date(phaseStartDates.getEipStartDate()).date(),
+                date(phaseStartDates.getCpStartDate()).date()
+        );
         flashOutDateUpdatedMessage(patientId, phaseStartDates, httpServletRequest);
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }

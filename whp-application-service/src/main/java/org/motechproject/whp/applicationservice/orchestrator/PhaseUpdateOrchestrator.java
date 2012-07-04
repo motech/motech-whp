@@ -27,6 +27,13 @@ public class PhaseUpdateOrchestrator {
         this.whpAdherenceService = whpAdherenceService;
     }
 
+    public void adjustPhaseStartDates(String patientId, LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
+        allPatients.update(patient);
+        attemptPhaseTransition(patientId);
+    }
+
     public void recomputePillCount(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         for (Phase phase : patient.getCurrentTherapy().getPhases()) {

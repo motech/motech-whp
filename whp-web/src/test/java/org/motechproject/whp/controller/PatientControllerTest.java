@@ -1,7 +1,6 @@
 package org.motechproject.whp.controller;
 
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +34,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.WHPDate.date;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
@@ -128,20 +128,8 @@ public class PatientControllerTest {
         phaseStartDates.setIpStartDate("21/05/2012");
 
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
-
-        ArgumentCaptor<Patient> patientArgumentCaptor = forClass(Patient.class);
-
-        verify(patientService).update(patientArgumentCaptor.capture());
-
-        assertEquals(new LocalDate(2012, 5, 21), patientArgumentCaptor.getValue().getCurrentTherapy().getStartDate());
+        verify(phaseUpdateOrchestrator).adjustPhaseStartDates(patient.getPatientId(), date(phaseStartDates.getIpStartDate()).date(), null, null);
         assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
-    }
-
-    @Test
-    public void shouldRecomputePillCountWhenPhaseDatesAreSet() {
-        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
-        patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
-        verify(phaseUpdateOrchestrator).recomputePillCount(patient.getPatientId());
     }
 
     @Test

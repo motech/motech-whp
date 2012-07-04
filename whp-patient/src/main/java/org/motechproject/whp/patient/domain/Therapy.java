@@ -26,6 +26,7 @@ public class Therapy {
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
     private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.EIP), new Phase(PhaseName.CP)));
+
     public Therapy() {
     }
 
@@ -84,8 +85,8 @@ public class Therapy {
     }
 
     public void start(LocalDate therapyStartDate) {
-        setStartDate(therapyStartDate);
         phases.setIPStartDate(therapyStartDate);
+        setStartDate(therapyStartDate);
     }
 
     public boolean currentPhaseDoseComplete() {
@@ -109,5 +110,18 @@ public class Therapy {
     @JsonIgnore
     public String getStartDateAsString() {
         return WHPDate.date(startDate).value();
+    }
+
+    @JsonIgnore
+    public void endCurrentPhase(LocalDate endDate) {
+        Phase currentPhase = getCurrentPhase();
+        if (currentPhase != null) currentPhase.setEndDate(endDate);
+    }
+
+    @JsonIgnore
+    public void adjustPhaseStartDates(LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
+        start(ipStartDate);
+        phases.setEIPStartDate(eipStartDate);
+        phases.setCPStartDate(cpStartDate);
     }
 }

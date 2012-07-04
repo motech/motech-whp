@@ -13,6 +13,7 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,8 +212,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void endCurrentPhase(LocalDate endDate) {
-        Phase currentPhase = currentTherapy.getCurrentPhase();
-        if (currentPhase != null) currentPhase.setEndDate(endDate);
+        currentTherapy.endCurrentPhase(endDate);
     }
 
     @JsonIgnore
@@ -259,6 +259,11 @@ public class Patient extends MotechBaseDataObject {
         for (Treatment treatment : getTreatments()) {
             treatment.setTherapy(getTherapy(treatment.getTherapyUid()));
         }
+    }
+
+    @JsonIgnore
+    public void adjustPhaseDates(LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
+        getCurrentTherapy().adjustPhaseStartDates(ipStartDate, eipStartDate, cpStartDate);
     }
 
     private Therapy getTherapy(String therapyUid) {

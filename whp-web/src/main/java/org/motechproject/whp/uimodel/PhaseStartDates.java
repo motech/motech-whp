@@ -1,17 +1,15 @@
 package org.motechproject.whp.uimodel;
 
 import lombok.Data;
-import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
 
-import static org.motechproject.whp.refdata.domain.PhaseName.CP;
-import static org.motechproject.whp.refdata.domain.PhaseName.EIP;
-import static org.motechproject.whp.refdata.domain.PhaseName.IP;
+import static org.motechproject.whp.common.WHPDate.date;
+import static org.motechproject.whp.refdata.domain.PhaseName.*;
 
 @Data
 public class PhaseStartDates {
+
     private String patientId;
     private String ipStartDate;
     private String eipStartDate;
@@ -23,16 +21,13 @@ public class PhaseStartDates {
     public PhaseStartDates(Patient patient) {
         Therapy therapy = patient.getCurrentTherapy();
         this.patientId = patient.getPatientId();
-        this.ipStartDate = WHPDate.date(therapy.getPhase(IP).getStartDate()).value();
-        this.eipStartDate = WHPDate.date(therapy.getPhase(EIP).getStartDate()).value();
-        this.cpStartDate = WHPDate.date(therapy.getPhase(CP).getStartDate()).value();
+        this.ipStartDate = date(therapy.getPhase(IP).getStartDate()).value();
+        this.eipStartDate = date(therapy.getPhase(EIP).getStartDate()).value();
+        this.cpStartDate = date(therapy.getPhase(CP).getStartDate()).value();
     }
 
     public Patient mapNewPhaseInfoToPatient(Patient patient) {
-        Phases phases = patient.getCurrentTherapy().getPhases();
-        patient.startTherapy(WHPDate.date(ipStartDate).date());
-        phases.setEIPStartDate(WHPDate.date(eipStartDate).date());
-        phases.setCPStartDate(WHPDate.date(cpStartDate).date());
+        patient.adjustPhaseDates(date(ipStartDate).date(), date(eipStartDate).date(), date(cpStartDate).date());
         return patient;
     }
 }
