@@ -6,12 +6,14 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.PhaseName;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
 
 @Data
-public class Phases extends ArrayList<Phase> {
+public class Phases {
+
+    private List<Phase> all = new ArrayList<>();
 
     private PhaseName nextPhaseName = null;
 
@@ -19,8 +21,8 @@ public class Phases extends ArrayList<Phase> {
     public Phases() {
     }
 
-    public Phases(Collection<? extends Phase> phases) {
-        super(phases);
+    public Phases(List<Phase> all) {
+        this.all = all;
     }
 
     @JsonIgnore
@@ -43,7 +45,7 @@ public class Phases extends ArrayList<Phase> {
 
     @JsonIgnore
     public Phase getByPhaseName(PhaseName phaseName) {
-        for (Phase phase : this) {
+        for (Phase phase : this.all) {
             if (phase.getName().equals(phaseName)) return phase;
         }
         return null;
@@ -52,7 +54,7 @@ public class Phases extends ArrayList<Phase> {
     @JsonIgnore
     public Phase getLastCompletedPhase() {
         Phase lastCompletedPhase = null;
-        for (Phase phase : this) {
+        for (Phase phase : this.all) {
             if (phase.getStartDate() != null && phase.getEndDate() != null) {
                 lastCompletedPhase = phase;
             }
@@ -62,7 +64,7 @@ public class Phases extends ArrayList<Phase> {
 
     @JsonIgnore
     public Phase getCurrentPhase() {
-        for (Phase phase : this) {
+        for (Phase phase : all) {
             if (phase.getStartDate() != null && phase.getEndDate() == null) {
                 return phase;
             }
@@ -164,4 +166,12 @@ public class Phases extends ArrayList<Phase> {
         getByPhaseName(PhaseName.CP).setEndDate(cpEndDate);
     }
 
+    @JsonIgnore
+    public int indexOf(Phase currentPhase) {
+        return all.indexOf(currentPhase);
+    }
+
+    public List<Phase> subList(int fromIndex, int toIndex) {
+        return all.subList(fromIndex, toIndex);
+    }
 }

@@ -71,7 +71,7 @@ public class Therapy {
     public Integer cumulativeNumberOfDosesSoFar() {
         PhaseName phaseName = getCurrentPhase() == null ? getLastCompletedPhase().getName() : getCurrentPhase().getName();
         Integer totalNumberOfDoses = 0;
-        for (Phase phase : phases) {
+        for (Phase phase : phases.getAll()) {
             if (phase.hasStarted()) {
                 totalNumberOfDoses = totalNumberOfDoses + treatmentCategory.numberOfDosesForPhase(phase.getName());
             }

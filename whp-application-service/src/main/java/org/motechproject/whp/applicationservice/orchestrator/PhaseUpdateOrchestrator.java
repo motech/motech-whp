@@ -36,7 +36,7 @@ public class PhaseUpdateOrchestrator {
 
     public void recomputePillCount(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
-        for (Phase phase : patient.getCurrentTherapy().getPhases()) {
+        for (Phase phase : patient.getCurrentTherapy().getPhases().getAll()) {
             if (phase.hasStarted()) {
                 LocalDate endDate = phase.getEndDate() != null ? phase.getEndDate() : DateUtil.today();
                 int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phase.getStartDate(), endDate);
