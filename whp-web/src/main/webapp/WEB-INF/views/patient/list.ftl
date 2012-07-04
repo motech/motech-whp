@@ -29,7 +29,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" id="searchButton" class="btn btn-primary form-button-center">Search</button>
+                    <button type="button" id="searchButton" class="btn btn-primary form-button-center">Search</button>
                 </div>
             </div>
         </form>

@@ -9,8 +9,7 @@ $(function() {
            $("#providerId-autocomplete").val("");
            $("#providerId").html('');
     });
-    $("#searchForm").submit(function (event) {
-            event.preventDefault();
+    $("#searchButton").click(function (event) {
             var districtId = $("#district-autocomplete").val();
             var providerId = $("#providerId-autocomplete").val() ? $("#providerId-autocomplete").val() : "";
             var data = {
