@@ -8,7 +8,7 @@
 
 <div>
     <div class="well row">
-        <form id="searchForm" action="<@spring.url '/patients/search'/>"  input method="POST"
+        <form id="searchForm" action="<@spring.url '/patients/search'/>"  input method="POST"  submitOnEnterKey="true"
               class="offset2-fixed form-horizontal">
             <div class="control-group">
                 <label class="control-label">Provider District*</label>

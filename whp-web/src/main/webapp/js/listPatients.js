@@ -1,10 +1,26 @@
 $(function() {
+
     $( "#district" ).combobox();
     $( "#providerId" ).combobox();
     $( "#district" ).bind( "autocomplete-selected", function(event, ui) {
         $("#providerId-autocomplete").val("");
         initProviders();
     });
+    $('#district').bind('keypress',function(event,e){
+        submitOnEnter(e);
+    });
+    $('#providerId').bind('keypress',function(event,e){
+        submitOnEnter(e);
+    });
+
+    function submitOnEnter(key) {
+        if ((key.which && key.which == 13) || (key.keyCode && key.keyCode == 13)) {
+            $('#searchForm').submit();
+            return false;
+        } else {
+            return true;
+        }
+    }
     $( "#district" ).bind( "invalid-value", function() {
            $("#district-autocomplete").val("");
            $("#providerId-autocomplete").val("");
@@ -16,6 +32,9 @@ $(function() {
         $("#providerId-autocomplete").val("");
     });
 
+    $('#searchButton').click(function(){
+        $("#searchForm").submit();
+    });
     $("#searchForm").submit(function (event) {
             event.preventDefault();
 

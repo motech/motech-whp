@@ -14,6 +14,9 @@
             input = $( "<input>" )
                 .appendTo( wrapper )
                 .val( value )
+                .keypress(function(e) {
+                    $(self.element).trigger('keypress',[e]);
+                })
                 .addClass( "ui-state-default ui-combobox-input" )
                 .autocomplete({
                     delay: 0,
