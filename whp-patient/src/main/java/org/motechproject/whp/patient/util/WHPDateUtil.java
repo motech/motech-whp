@@ -1,6 +1,9 @@
 package org.motechproject.whp.patient.util;
 
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
+import org.joda.time.Weeks;
+import org.motechproject.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,5 +32,9 @@ public class WHPDateUtil {
             if (year % 4 == 0 && year % 400 != 0) return 29;
             else return 28;
         } else return 30;
+    }
+
+    public static int weeksElapsedSince(LocalDate date) {
+        return Weeks.weeksBetween(date, DateUtil.today()).getWeeks();
     }
 }

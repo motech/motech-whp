@@ -45,6 +45,7 @@
             <th>Provider District</th>
             <th>Treatment Category</th>
             <th>Treatment Start Date</th>
+            <th>Weeks Elapsed</th>
         </tr>
         </thead>
         <tbody>
@@ -84,6 +85,13 @@
                         <td id="patient_${patient.patientId}_TreatmentStartDate">
                             <#if patient.currentTreatment.therapy.startDate?? >
                                 ${patient.currentTreatment.therapy.startDateAsString}
+                            </#if>
+                        </td>
+                        <td id="patient_${patient.patientId}_WeeksElapsed">
+                            <#if patient.weeksElapsed?? >
+                                ${patient.weeksElapsed}
+                            <#else>
+                                -
                             </#if>
                         </td>
                     </tr>

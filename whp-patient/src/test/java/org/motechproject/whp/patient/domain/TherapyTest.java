@@ -7,6 +7,7 @@ import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
@@ -68,6 +69,27 @@ public class TherapyTest {
         therapy.getCurrentPhase().setNumberOfDosesTaken(27);
 
         assertTrue(therapy.currentPhaseDoseComplete());
+    }
+
+    @Test
+    public void shouldReturnNumberOfWeeksElapsed_WhenTreatmentHasBeenStarted() {
+        Therapy therapy = new Therapy();
+        TreatmentCategory category = new TreatmentCategory();
+        category.setNumberOfDosesInIP(24);
+        therapy.setTreatmentCategory(category);
+
+        therapy.start(today().minusDays(7));
+        assertEquals(Integer.valueOf(1), therapy.getWeeksElapsed());
+    }
+
+    @Test
+    public void shouldReturnNumberOfWeeksElapsed_WhenTreatmentHasNotBeenStarted() {
+        Therapy therapy = new Therapy();
+        TreatmentCategory category = new TreatmentCategory();
+        category.setNumberOfDosesInIP(24);
+        therapy.setTreatmentCategory(category);
+
+        assertNull(therapy.getWeeksElapsed());
     }
 
 }

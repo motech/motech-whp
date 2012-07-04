@@ -2,6 +2,7 @@ package org.motechproject.whp.util;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.util.WHPDateUtil;
 
 import static java.util.Arrays.asList;
@@ -75,5 +76,13 @@ public class WHPDateUtilTest {
     public void testIfDateIsOnOrBeforeAnotherDate() {
         assertTrue(WHPDateUtil.isOnOrBefore(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 4)));
         assertTrue(WHPDateUtil.isOnOrBefore(new LocalDate(2012, 6, 3), new LocalDate(2012, 6, 3)));
+    }
+
+    @Test
+    public void weeksElapsedSince() {
+        assertEquals(0, WHPDateUtil.weeksElapsedSince(DateUtil.today()));
+        assertEquals(0, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(6)));
+        assertEquals(1, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(7)));
+        assertEquals(1, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(8)));
     }
 }

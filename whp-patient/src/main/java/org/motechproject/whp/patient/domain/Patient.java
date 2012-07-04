@@ -289,6 +289,11 @@ public class Patient extends MotechBaseDataObject {
         getCurrentTherapy().adjustPhaseStartDates(ipStartDate, eipStartDate, cpStartDate);
     }
 
+    @JsonIgnore
+    public Integer getWeeksElapsed() {
+        return getCurrentTherapy().getWeeksElapsed();
+    }
+
     private Therapy getTherapy(String therapyUid) {
         if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
 

@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
@@ -110,5 +111,12 @@ public class Therapy {
 
     public Integer numberOfDosesForPhase(PhaseName phaseName) {
         return treatmentCategory.numberOfDosesForPhase(phaseName);
+    }
+
+    @JsonIgnore
+    public Integer getWeeksElapsed() {
+        if(phases.isOrHasBeenOnIp())
+            return WHPDateUtil.weeksElapsedSince(phases.getIPStartDate());
+        else return null;
     }
 }
