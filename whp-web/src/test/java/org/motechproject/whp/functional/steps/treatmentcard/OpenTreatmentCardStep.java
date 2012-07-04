@@ -10,15 +10,22 @@ import org.openqa.selenium.WebDriver;
 
 public class OpenTreatmentCardStep extends Step {
 
-    public TreatmentCardPage treatmentCardPage;
+
+    private TestPatient testPatient;
 
     public OpenTreatmentCardStep(WebDriver webDriver) {
         super(webDriver);
     }
 
-    public void execute(TestPatient testPatient) {
+    public OpenTreatmentCardStep withPatient(TestPatient testPatient) {
+        this.testPatient = testPatient;
+        return this;
+    }
+
+    @Override
+    public TreatmentCardPage execute() {
         ListAllPatientsPage listPatientsPage = loginAsCMFAdminAndListAllPatients();
-        treatmentCardPage = listPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
+        return listPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
     }
 
     private ListAllPatientsPage loginAsCMFAdminAndListAllPatients() {

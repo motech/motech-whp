@@ -36,28 +36,76 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
     @Test
     public void shouldBuildIPTreatmentCardForPatient() {
         adjustDateTime(8, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(15, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 1);
-        pauseTreatmentStep.execute(testPatient, "13/07/2012", "paws");
-        restartTreatmentStep.execute(testPatient, "19/07/2012", "swap");
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(1)
+                .execute();
+
+        pauseTreatmentStep.execute();
+
+        restartTreatmentStep
+                .withPatient(testPatient)
+                .withRestartDate("19/07/2012")
+                .withReason("swap")
+                .execute();
+
         adjustDateTime(29, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 2);
-        pauseTreatmentStep.execute(testPatient, "25/07/2012", "paws");
-        closeTreatmentStep.execute(testPatient, "28/07/2012");
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(2)
+                .execute();
+
+        pauseTreatmentStep.execute();
+
+        closeTreatmentStep
+                .withPatient(testPatient)
+                .withCloseDate("28/07/2012")
+                .execute();
 
         TestProvider newProvider = providerDataService.createProvider();
         testPatient.transferIn("newTbId", newProvider.getProviderId());
-        transferInTreatmentStep.execute(newProvider, testPatient, "29/07/2012");
-        adjustDateTime(5, 8, 2012);
-        submitAdherenceStep.execute(newProvider, testPatient, 3);
-        adjustDateTime(7, 8, 2012);
-        pauseTreatmentStep.execute(testPatient, "07/08/2012", "paws");
-        adjustDateTime(12, 8, 2012);
-        submitAdherenceStep.execute(newProvider, testPatient, 3);
 
-        openTreatmentCardStep.execute(testPatient);
-        TreatmentCardPage treatmentCardPage = openTreatmentCardStep.treatmentCardPage;
+        transferInTreatmentStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withTransferDate("29/07/2012")
+                .execute();
+
+        adjustDateTime(5, 8, 2012);
+
+        submitAdherenceStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
+        adjustDateTime(7, 8, 2012);
+
+        pauseTreatmentStep.execute();
+
+        adjustDateTime(12, 8, 2012);
+
+        submitAdherenceStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
+        TreatmentCardPage treatmentCardPage = openTreatmentCardStep
+                .withPatient(testPatient)
+                .execute();
 
         Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 2), "1", testProvider.getProviderId());
         Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 4), "1", testProvider.getProviderId());

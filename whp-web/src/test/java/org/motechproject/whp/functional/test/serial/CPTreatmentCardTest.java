@@ -31,27 +31,67 @@ public class CPTreatmentCardTest extends TreatmentUpdateTest {
     @Test
     public void shouldBuildCPTreatmentCardForPatient() {
         adjustDateTime(8, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(15, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 1);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(1)
+                .execute();
+
         adjustDateTime(29, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 2);
-        closeTreatmentStep.execute(testPatient, "28/07/2012");
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(2)
+                .execute();
+
+        closeTreatmentStep
+                .withPatient(testPatient)
+                .withCloseDate("28/07/2012")
+                .execute();
 
         TestProvider newProvider = providerDataService.createProvider();
         testPatient.transferIn("newTbId", newProvider.getProviderId());
-        transferInTreatmentStep.execute(newProvider, testPatient, "29/07/2012");
+
+        transferInTreatmentStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withTransferDate("29/07/2012");
+
         adjustDateTime(5, 8, 2012);
-        submitAdherenceStep.execute(newProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(12, 8, 2012);
-        submitAdherenceStep.execute(newProvider, testPatient, 3);
 
-        adjustPhaseDatesStep.execute(testPatient, null, null, "03/08/2012");
-        adjustPhaseDatesStep.patientDashboardPage.logout();
+        submitAdherenceStep
+                .withProvider(newProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
-        openTreatmentCardStep.execute(testPatient);
-        TreatmentCardPage treatmentCardPage = openTreatmentCardStep.treatmentCardPage;
+        adjustPhaseDatesStep
+                .withPatient(testPatient)
+                .withIpStartDate(null)
+                .withEipStartDate(null)
+                .withCpStartDate("03/08/2012");
+        adjustPhaseDatesStep
+                .execute()
+                .logout();
 
+        TreatmentCardPage treatmentCardPage = openTreatmentCardStep.withPatient(testPatient).execute();
         treatmentCardPage.logout();
     }
 

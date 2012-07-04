@@ -8,21 +8,42 @@ import org.openqa.selenium.WebDriver;
 
 public class AdjustPhaseDatesStep extends Step {
 
-    public PatientDashboardPage patientDashboardPage;
-
-    OpenPatientDashboardStep openPatientDashboardStep;
+    private OpenPatientDashboardStep openPatientDashboardStep;
+    private TestPatient patient;
+    private String ipStartDate;
+    private String eipStartDate;
+    private String cpStartDate;
 
     public AdjustPhaseDatesStep(WebDriver webDriver) {
         super(webDriver);
         openPatientDashboardStep = new OpenPatientDashboardStep(webDriver);
     }
 
-    public void execute(TestPatient testPatient, String ipStartDate, String eipStartDate, String cpStartDate) {
-        openPatientDashboardStep.execute(testPatient);
-        patientDashboardPage = openPatientDashboardStep.patientDashboardPage;
-        patientDashboardPage.clickOnChangePhaseStartDates();
-        patientDashboardPage.editStartDates(ipStartDate, eipStartDate, cpStartDate);
-        patientDashboardPage = patientDashboardPage.saveStartDates();
+    public AdjustPhaseDatesStep withPatient(TestPatient patient) {
+        this.patient = patient;
+        return this;
     }
 
+    public AdjustPhaseDatesStep withIpStartDate(String ipStartDate) {
+        this.ipStartDate = ipStartDate;
+        return this;
+    }
+
+    public AdjustPhaseDatesStep withEipStartDate(String eipStartDate) {
+        this.eipStartDate = eipStartDate;
+        return this;
+    }
+
+    public AdjustPhaseDatesStep withCpStartDate(String cpStartDate) {
+        this.cpStartDate = cpStartDate;
+        return this;
+    }
+
+    @Override
+    public PatientDashboardPage execute() {
+        PatientDashboardPage patientDashboardPage = openPatientDashboardStep.withPatient(patient).execute();
+        patientDashboardPage.clickOnChangePhaseStartDates();
+        patientDashboardPage.editStartDates(ipStartDate, eipStartDate, cpStartDate);
+        return patientDashboardPage.saveStartDates();
+    }
 }

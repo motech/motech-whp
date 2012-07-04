@@ -26,26 +26,78 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     @Test
     public void shouldTransitionPatientFromIPToEIP_When24thDoseIsCapturedAndAdminHasMadeDecisionBeforeEndOfPhase() {
         adjustDateTime(1, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(8, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(15, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(22, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(29, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(5, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(12, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         transitionPatient(testPatient, testProvider, PhaseName.EIP);
 
         assertPatientIsOnIP(testPatient);
 
         adjustDateTime(19, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         assertPatientIsOnEIP(testPatient);
     }
@@ -53,29 +105,82 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     @Test
     public void shouldTransitionPatientFromIPToCP_When27thDoseIsCapturedAndAdminHasMadeDecisionAfterEndOfPhase() {
         setupProvider();
+
         setupPatientForProvider();
 
         adjustDateTime(1, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(8, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(15, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(22, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(29, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(5, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(12, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(19, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         assertPatientIsOnNoPhase(testPatient);
 
         adjustDateTime(26, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         transitionPatient(testPatient, testProvider, PhaseName.CP);
 
@@ -88,21 +193,68 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         setupPatientForProvider();
 
         adjustDateTime(1, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(8, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(15, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(22, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(29, 7, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(5, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(12, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(19, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         assertPatientIsOnNoPhase(testPatient);
 
@@ -111,13 +263,36 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         assertPatientIsOnEIP(testPatient);
 
         adjustDateTime(26, 8, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(2, 9, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(9, 9, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
+
         adjustDateTime(16, 9, 2012);
-        submitAdherenceStep.execute(testProvider, testPatient, 3);
+
+        submitAdherenceStep
+                .withProvider(testProvider)
+                .withPatient(testPatient)
+                .withDosesTaken(3)
+                .execute();
 
         assertPatientIsOnNoPhase(testPatient);
 
