@@ -96,5 +96,38 @@ public class AllProvidersIT extends SpringIntegrationTest {
         assertTrue(providers.contains(provider2));
         assertTrue(providers.contains(provider3));
     }
+
+    @Test
+    public void providerSearchShouldBeCaseInsensitive() {
+        Provider provider1 = new Provider("ab", "984567876", "districtA",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        Provider provider2 = new Provider("aa", "984567876", "districtB",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+
+        addAndMarkForDeletion(provider1);
+        addAndMarkForDeletion(provider2);
+
+        assertEquals(provider2, allProviders.findByProviderId("Aa"));
+        assertEquals(provider2, allProviders.findByProviderId("aa"));
+    }
+
+    @Test
+    public void providerSearchShouldBeCaseInsensitive_WhenBothDistrictAndProviderIdAreGiven() {
+        Provider provider1 = new Provider("ab", "984567876", "districtA",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        Provider provider2 = new Provider("aa", "984567876", "districtB",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        Provider provider3 = new Provider("aa", "111111111", "districtB",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+
+        addAndMarkForDeletion(provider1);
+        addAndMarkForDeletion(provider2);
+        addAndMarkForDeletion(provider3);
+
+        List<Provider> providers = allProviders.findByDistrictAndProviderId("districtB", "Aa");
+        assertEquals(2, providers.size());
+        assertTrue(providers.contains(provider2));
+        assertTrue(providers.contains(provider3));
+    }
 }
 

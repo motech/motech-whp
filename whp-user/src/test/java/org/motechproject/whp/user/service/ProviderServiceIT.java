@@ -37,7 +37,7 @@ public class ProviderServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldCreateProvider() {
-        String providerId = "providerid";
+        String providerId = "providerId";
         String primaryMobile = "1234567890";
         String secondaryMobile = "0987654321";
         String tertiaryMobile = "1111111111";
