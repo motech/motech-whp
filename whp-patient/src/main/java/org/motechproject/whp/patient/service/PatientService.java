@@ -98,11 +98,11 @@ public class PatientService {
     public List<Patient> searchBy(String districtName) {
         List<Provider> providers = providerService.fetchBy(districtName);
         List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
-        return allPatients.getAllWithCurrentProviders(providerIds);
+        return allPatients.getAllUnderActiveTreatmentWithCurrentProviders(providerIds);
     }
 
     public List<Patient> searchBy(Provider provider) {
-        return allPatients.findByCurrentProvider(provider.getProviderId());
+        return allPatients.getAllWithActiveTreatmentFor(provider.getProviderId());
     }
 
     boolean canBeTransferred(String patientId) {

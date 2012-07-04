@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.repository.allPatients;
 
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -9,7 +10,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
@@ -20,12 +20,24 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient requiredPatient = createPatient("patientId1", "providerId1");
         createPatient("patientId2", "providerId2");
 
-        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.findByCurrentProvider("providerId1").toArray());
+        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
+    }
+
+    @Test
+    public void shouldFetchPatientsUnderActiveTreatmentByProvider() {
+        String providerId = "providerId1";
+        Patient requiredPatient = createPatient("patientId1", providerId);
+
+        Patient patientWithTreatmentClosed = createPatient("patientId2", providerId);
+        patientWithTreatmentClosed.closeCurrentTreatment(TreatmentOutcome.Died, DateUtil.now());
+        allPatients.update(patientWithTreatmentClosed);
+
+        assertPatientEquals(new Patient[]{requiredPatient}, allPatients.getAllWithActiveTreatmentFor(providerId).toArray());
     }
 
     @Test
     public void fetchByCurrentProviderIdShouldReturnEmptyListIfKeywordIsNull() {
-        assertEquals(new ArrayList<Patient>(), allPatients.findByCurrentProvider(null));
+        assertEquals(new ArrayList<Patient>(), allPatients.getAllWithActiveTreatmentFor(null));
     }
 
     @Test
@@ -33,7 +45,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient patient1 = createPatient("patientId1", "providerId1");
         Patient patient2 = createPatient("patientId2", "providerId1");
 
-        assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.findByCurrentProvider("providerId1").toArray());
+        assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
     }
 
     @Test
@@ -78,7 +90,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient patient2 = createPatient("patientId2", provider2);
         Patient patient3 = createPatient("patientId3", provider3);
 
-        List<Patient> patients = allPatients.getAllWithCurrentProviders(asList(provider1, provider3));
+        List<Patient> patients = allPatients.getAllUnderActiveTreatmentWithCurrentProviders(asList(provider1, provider3));
         assertPatientEquals(asList(patient1, patient3), patients);
     }
 }

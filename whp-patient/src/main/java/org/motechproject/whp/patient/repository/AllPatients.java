@@ -5,19 +5,18 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
+import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PatientComparatorByFirstName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static org.ektorp.ComplexKey.emptyObject;
-import static org.ektorp.ComplexKey.of;
 
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> {
@@ -61,36 +60,28 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patient;
     }
 
-    @View(name = "find_by_providerId", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment) {emit(doc.currentTreatment.providerId, doc._id);}}")
-    public List<Patient> findByCurrentProvider(String providerId) {
-        if (providerId == null)
-            return new ArrayList<Patient>();
-        String keyword = providerId.toLowerCase();
-        ViewQuery q = createQuery("find_by_providerId").key(keyword).includeDocs(true).inclusiveEnd(true);
-        List<Patient> patients = db.queryView(q, Patient.class);
-        loadDependencies(patients);
-        return patients;
-    }
-
-    public List<Patient> getAllWithCurrentProviders(List<String> providerIds) {
-        ViewQuery q = createQuery("find_by_providerId").keys(providerIds).includeDocs(true);
-        List<Patient> patients = db.queryView(q, Patient.class);
-        loadDependencies(patients);
-        return patients;
-    }
-
-    @View(name = "find_by_provider_having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
+    @View(name = "find_by_provider_having_active_treatment_sort_by_firstname", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
         if (providerId == null)
             return new ArrayList<Patient>();
         String keyword = providerId.toLowerCase();
         ComplexKey startKey = ComplexKey.of(keyword, null);
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment_sort_by_firstname").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         loadDependencies(patients);
         return patients;
     }
+
+    @View(name = "find_by_provider_having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTreatment.providerId, doc._id);}}")
+    public List<Patient> getAllUnderActiveTreatmentWithCurrentProviders(List<String> providerIds) {
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment").keys(providerIds).includeDocs(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        Collections.sort(patients,new PatientComparatorByFirstName());
+        loadDependencies(patients);
+        return patients;
+    }
+
 
     private void loadDependencies(List<Patient> patients) {
         for (Patient patient : patients) {

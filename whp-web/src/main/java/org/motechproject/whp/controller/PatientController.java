@@ -95,8 +95,8 @@ public class PatientController extends BaseController {
             patients = patientService.searchBy(districtName);
         else {
             Provider provider = providerService.fetchByProviderId(providerId);
+            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
             districtName = provider.getDistrict();
-            patients = patientService.searchBy(provider);
         }
         prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/patientList";
