@@ -79,6 +79,8 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     public ListAllPatientsPage searchByDistrict(String district) {
         districtSearchBox.sendKeys(district);
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
+        javascriptExecutor.executeScript("$('#district').val('" + district + "');"); // can't set select box directly as it is hidden
         searchButton.click();
         waitForElementToBeReloadedByAjax();
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
@@ -86,11 +88,17 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
         districtSearchBox.sendKeys(districtName);
-        searchButton.click();
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
+        javascriptExecutor.executeScript("$('#district').val('" + districtName + "');"); // can't set select box directly as it is hidden
         waitForElementToBeReloadedByAjax();
+        searchButton.click();
+
         providerSearchBox.sendKeys(providerId);
+        javascriptExecutor.executeScript("$('#providerId').val('" + providerId + "');"); // can't set select box directly as it is hidden
+        waitForElementToBeReloadedByAjax();
         searchButton.click();
         waitForElementToBeReloadedByAjax();
+
         return MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
     }
 
