@@ -3,9 +3,7 @@ package org.motechproject.whp.functional.page.admin;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
@@ -88,6 +86,7 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     public ListAllPatientsPage searchByDistrictAndProvider(String districtName, String providerId) {
         districtSearchBox.sendKeys(districtName);
+        searchButton.click();
         waitForElementToBeReloadedByAjax();
         providerSearchBox.sendKeys(providerId);
         searchButton.click();
@@ -108,9 +107,5 @@ public class ListAllPatientsPage extends LoggedInUserPage {
         waitForElementWithCSSToLoad("link");
         dashboardLinks = webDriver.findElements(By.className("link"));
         createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
-    }
-
-    public WebElement getSearchButton() {
-        return searchButton;
     }
 }
