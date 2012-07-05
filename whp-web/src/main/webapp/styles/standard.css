@@ -272,7 +272,7 @@ div.buttons a, div.buttons button {
     height: 25px;
 }
 
-.patient-info {
+.patient-info,.patient-info div {
     overflow: hidden;
 }
 
@@ -284,15 +284,7 @@ div.buttons a, div.buttons button {
     word-wrap: break-word;
 }
 
-.patient-info-left-table {
-    width: 400px;
-}
 
-.patient-info-right-table {
-    width: 475px;
-    max-width: 475px;
-    overflow: visible;
-}
 
 .controls a {
     margin-right: 10px;
@@ -320,3 +312,10 @@ div.buttons a, div.buttons button {
 .results {
     margin-top: 10px;
 }
+.patient-info-left-pane {
+    width: 430px;
+}
+.patient-info-right-pane {
+    width: 470px;
+}
+

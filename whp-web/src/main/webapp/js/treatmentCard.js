@@ -8,10 +8,10 @@ function setUpTreatmentCardTable() {
         }
         var currentPillStatus;
         if ($(this).hasClass('tick-icon')) {
-            currentPillStatus = "Taken."
+            currentPillStatus = "'Taken'."
         }
         else if ($(this).hasClass('round-icon')) {
-            currentPillStatus = "Not Taken."
+            currentPillStatus = "'Not Taken'."
         }
         else {
             currentPillStatus = "";
