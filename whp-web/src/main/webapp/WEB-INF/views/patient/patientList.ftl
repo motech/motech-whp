@@ -62,9 +62,8 @@
     </tr>
     <#else>
         <#list patientList as patient>
-        <tr id="patientList_${patient.patientId}" class="link"
-            redirect-url="<@spring.url '/patients/show?patientId=${patient.patientId}' />"
-            class="<#if patient.currentTreatmentPaused>paused</#if>">
+        <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if> link"
+            redirect-url="<@spring.url '/patients/show?patientId=${patient.patientId}'/>">
             <td class="patientId"><b>${patient.patientId}</b></td>
             <td class="tbId">${patient.currentTreatment.tbId}</td>
             <td class="name">${patient.firstName?cap_first}
