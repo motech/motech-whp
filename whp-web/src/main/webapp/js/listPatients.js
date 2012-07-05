@@ -1,6 +1,5 @@
-
 $(function () {
-    initializeCollapsiblePane('#search-section','#search-section-header-link',"Show Search Pane","Hide Search Pane");
+    initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
 
     $("#district").combobox();
     $("#providerId").combobox();
@@ -40,8 +39,7 @@ $(function () {
     });
     $("#searchForm").submit(function (event) {
         event.preventDefault();
-
-        if ($('#district-autocomplete').val() == "")
+        if ($('#district-autocomplete').val() == "" || $('#district').val() != $('#district-autocomplete').val())
             return;
 
         var districtId = $("#district-autocomplete").val();
