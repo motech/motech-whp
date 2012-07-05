@@ -314,4 +314,9 @@ div.buttons a, div.buttons button {
 }
 .search-section-header {
     z-index: 1;
+    font-size: 1.3em;
+}
+
+.results {
+    margin-top: 10px;
 }

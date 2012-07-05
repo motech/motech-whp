@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     $('form[submitOnEnterKey=true] input').keypress(function (e) {
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $('form[submitOnEnterKey=true]').submit();
@@ -21,12 +21,29 @@ $(function() {
 function createAutoClosingAlert(selector, delay) {
     var alert = $(selector).alert();
     window.setTimeout(
-        function() {
-            $(selector).fadeTo(500, 0).slideUp(500, function(){
+        function () {
+            $(selector).fadeTo(500, 0).slideUp(500, function () {
                 $(this).remove();
             });
         },
         delay
     );
+}
+
+function initializeCollapsiblePane(collapseSectionSelector, headerLinkSelector, showText, hideText) {
+    var icons = {
+        header:"ui-icon-circle-arrow-e",
+        headerSelected:"ui-icon-circle-arrow-s"
+    };
+    $(collapseSectionSelector).accordion({
+        collapsible:true,
+        icons:icons,
+        change:function (event, ui) {
+            if (typeof ui.options.active == "number")
+                $(headerLinkSelector).text(hideText);
+            else
+                $(headerLinkSelector).text(showText);
+        }
+    });
 }
 
