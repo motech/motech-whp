@@ -13,6 +13,7 @@ import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.adherence.criteria.TreatmentStartCriteria.shouldStartOrRestartTreatment;
-import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
 
 @Service
 public class WHPAdherenceService {
@@ -120,5 +121,11 @@ public class WHPAdherenceService {
     public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate startDate) {
         List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyUid, startDate);
         return adherenceRecords.get(doseNumber - 1);
+    }
+
+    public boolean isAdherenceRecordedForCurrentWeek(String patientId, String therapyUid) {
+        TreatmentWeek currentTreatmentWeek = currentWeekInstance();
+        AdherenceList logsForCurrentWeek = findLogsInRange(patientId, therapyUid, currentTreatmentWeek.startDate(), currentTreatmentWeek.endDate());
+        return logsForCurrentWeek.size() != 0;
     }
 }

@@ -54,4 +54,25 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
         verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
     }
+
+    @Test
+    public void shouldRevertAutoCloseOfLastPhase_AfterItHasBeenClosed_LastPhaseBecomesNotDoseComplete_NextPhaseNotSet() {
+        LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
+        LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
+        patient.startTherapy(therapyStartDate);
+        patient.setNumberOfDosesTaken(PhaseName.IP, 24);
+        patient.endCurrentPhase(twentyFourthDoseTakenDate);
+
+        //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
+        patient.setNumberOfDosesTaken(PhaseName.IP, 23);
+
+        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+
+        phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
+
+        verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
+        verify(patientService, never()).startNextPhase(patient);
+        verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
+        verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
+    }
 }

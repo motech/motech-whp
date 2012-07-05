@@ -2,7 +2,7 @@ package org.motechproject.whp.adherence.mapping;
 
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 

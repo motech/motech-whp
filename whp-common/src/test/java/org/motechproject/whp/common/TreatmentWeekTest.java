@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.domain;
+package org.motechproject.whp.common;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;

@@ -297,19 +297,17 @@ div.buttons a, div.buttons button {
 .controls a {
     margin-right: 10px;
 }
-.thin-table{
-    width: 5%;
-}
-.fat-table {
-    width: 95%;
+
+#adherenceCaptured {
+    background-color: #32F800;
+    text-align: center;
+    font-size: 18px;
+    color: #000000;
 }
 
-.taller-row {
-    height: 27px;
-}
-
-.no-top-border td, .no-top-border th {
-    border-top-width: 0px;
+#adherenceNotCaptured {
+    text-align: center;
+    font-size: 18px;
 }
 #search-pane {
     overflow: hidden;

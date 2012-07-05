@@ -23,8 +23,8 @@
                 <th>Village</th>
                 <th>Treatment Category</th>
                 <th>Treatment Start Date</th>
-                <th>Adherence</th>
                 <th>Adherence Given</th>
+                <th>Adherence</th>
             </tr>
             </thead>
             <tbody>
@@ -36,24 +36,30 @@
                     <#list patientList as patient>
                     <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if>">
                         <td class="patientId"><b>${patient.patientId}</b></td>
-                        <td class="tbId">${patient.currentTreatment.tbId}</td>
+                        <td class="tbId">${patient.tbId}</td>
                         <td class="name">${patient.firstName?cap_first} <#if patient.lastName?exists>${patient.lastName?cap_first}</#if></td>
-                        <td>${patient.currentTreatment.therapy.patientAge!}</td>
+                        <td>${patient.age!}</td>
                         <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
-                        <td id="patient_${patient.patientId}_Village">${patient.currentTreatment.patientAddress.address_village}</td>
-                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.currentTreatment.therapy.treatmentCategory.name}</td>
+                        <td id="patient_${patient.patientId}_Village">${patient.addressVillage}</td>
+                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.treatmentCategory}</td>
                         <td id="patient_${patient.patientId}_TreatmentStartDate">
-                            <#if patient.currentTreatment.therapy.startDate?? >
-                                ${patient.currentTreatment.therapy.startDateAsString }
+                            <#if patient.therapyStartDate?? >
+                                ${patient.therapyStartDate}
                             </#if>
                         </td>
+                        <#if patient.adherenceCapturedForThisWeek>
+                            <td id="adherenceCaptured">
+                                &#10004; YES
+                            </td>
+                        <#else>
+                            <td id="adherenceNotCaptured">
+                                &#10008; NO
+                            </td>
+                        </#if>
                         <td class="updateAdherenceLink">
                             <#if !patient.currentTreatmentClosed>
                                 <a href="<@spring.url '/adherence/update/${patient.patientId}' />">Edit</a>
                             </#if>
-                        </td>
-                        <td>
-
                         </td>
                     </tr>
                     </#list>

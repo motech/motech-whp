@@ -42,11 +42,25 @@ public class PatientInfo {
     private boolean transitioning;
     private int remainingDosesInCurrentPhase;
 
+    private String addressVillage;
+    private boolean adherenceCapturedForThisWeek;
+    private boolean currentTreatmentPaused;
+    private boolean currentTreatmentClosed;
+
     public PatientInfo(Patient patient, Provider provider) {
-        initialize(patient, provider);
+        initializePatientInfo(patient);
+        initializeProviderInfo(provider);
     }
 
-    private void initialize(Patient patient, Provider provider) {
+    public PatientInfo(Patient patient) {
+        initializePatientInfo(patient);
+    }
+
+    private void initializeProviderInfo(Provider provider){
+        providerMobileNumber = provider.getPrimaryMobile();
+    }
+
+    private void initializePatientInfo(Patient patient) {
         currentTreatment = patient.getCurrentTreatment();
         Therapy latestTherapy = patient.getCurrentTherapy();
         setTestResults(patient);
@@ -66,7 +80,6 @@ public class PatientInfo {
         treatmentCategory = latestTherapy.getTreatmentCategory().getName();
         address = currentTreatment.getPatientAddress().toString();
         addressState = currentTreatment.getPatientAddress().getAddress_state();
-        providerMobileNumber = provider.getPrimaryMobile();
         nextPhaseName = currentTreatment.getTherapy().getPhases().getNextPhaseName();
         phasesNotPossibleToTransitionTo = patient.getPhasesNotPossibleToTransitionTo();
         nearingPhaseTransition = patient.isNearingPhaseTransition();
@@ -74,6 +87,13 @@ public class PatientInfo {
         currentPhase = patient.getCurrentTherapy().getCurrentPhase();
         remainingDosesInCurrentPhase = patient.getRemainingDosesInCurrentPhase();
         lastCompletedPhase = patient.getCurrentTherapy().getLastCompletedPhase();
+        addressVillage = currentTreatment.getPatientAddress().getAddress_village();
+        currentTreatmentPaused = patient.isCurrentTreatmentPaused();
+        currentTreatmentClosed = patient.isCurrentTreatmentClosed();
+    }
+
+    public void setAdherenceCapturedForThisWeek(boolean adherenceCapturedForThisWeek) {
+        this.adherenceCapturedForThisWeek = adherenceCapturedForThisWeek;
     }
 
     private void setTestResults(Patient patient) {

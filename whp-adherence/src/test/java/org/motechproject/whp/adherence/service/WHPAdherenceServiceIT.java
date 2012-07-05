@@ -16,6 +16,7 @@ import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -31,8 +32,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
@@ -245,6 +245,32 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
         AdherenceRecord adherenceRecord = adherenceService.nThTakenDose(patientId, THERAPY_DOC_ID, 3, new LocalDate(2012, 1, 1));
         assertEquals(new LocalDate(2012, 3, 1), adherenceRecord.doseDate());
+    }
+
+    @Test
+    public void shouldReturnTrueIfPatientHasAdherenceInLastWeek() {
+        String patientId = "patientId";
+        //Week -> Monday to NEXT Saturday. So, DateUtil.today (which is mocked to saturday) belongs to week starting LAST Monday.
+        Adherence log1 = createLog(patientId, today.minusDays(6), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        List<Adherence> adherences = asList(log1);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, patientId);
+
+        boolean hasTakenAdherenceInLastWeek = adherenceService.isAdherenceRecordedForCurrentWeek(patientId, THERAPY_DOC_ID);
+        assertTrue(hasTakenAdherenceInLastWeek);
+    }
+
+    @Test
+    public void shouldReturnTrueIfPatientDoesNotHaveAdherenceInInLastWeek() {
+        String patientId = "patientId";
+        //Adherence log on Sunday before LAST Monday => does not belong to this week.
+        Adherence log1 = createLog(patientId, today.minusDays(13), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        List<Adherence> adherences = asList(log1);
+
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, patientId);
+
+        boolean hasTakenAdherenceInLastWeek = adherenceService.isAdherenceRecordedForCurrentWeek(patientId, THERAPY_DOC_ID);
+        assertFalse(hasTakenAdherenceInLastWeek);
     }
 
     private Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyUid, String providerId) {

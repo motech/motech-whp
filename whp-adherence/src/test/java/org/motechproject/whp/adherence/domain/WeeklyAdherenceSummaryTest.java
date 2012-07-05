@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 
@@ -11,7 +12,7 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
-import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
 
 public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
 

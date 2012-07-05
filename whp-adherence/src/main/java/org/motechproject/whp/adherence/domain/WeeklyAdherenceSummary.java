@@ -3,13 +3,14 @@ package org.motechproject.whp.adherence.domain;
 import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.motechproject.whp.adherence.domain.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
 
 public class WeeklyAdherenceSummary {
 

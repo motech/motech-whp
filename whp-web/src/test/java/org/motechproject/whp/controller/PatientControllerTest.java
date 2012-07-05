@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -31,7 +32,6 @@ import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.WHPDate.date;
@@ -53,19 +53,19 @@ public class PatientControllerTest {
     ProviderService providerService;
     @Mock
     PhaseUpdateOrchestrator phaseUpdateOrchestrator;
-
+    @Mock
+    WHPAdherenceService whpAdherenceService;
     @Mock
     AllDistricts allDistrictsCache;
-
-    List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     AbstractMessageSource messageSource;
 
     Patient patient;
-
     Provider provider;
-
     PatientController patientController;
+
+    List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
+
 
     @Before
     public void setup() {
@@ -73,7 +73,7 @@ public class PatientControllerTest {
         String providerId = "providerid";
 
         setupMessageSource();
-        patientController = new PatientController(patientService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
+        patientController = new PatientController(patientService, whpAdherenceService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -89,10 +89,16 @@ public class PatientControllerTest {
     @Test
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patient);
+        PatientInfo patientInfo = new PatientInfo(patient);
         when(patientService.getAllWithActiveTreatmentForProvider("providerId")).thenReturn(patientsForProvider);
 
         String view = patientController.listByProvider("providerId", uiModel, request);
-        verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), same(patientsForProvider));
+
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+
+        verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), captor.capture());
+
+        assertEquals(patientInfo, captor.getValue().get(0));
         assertEquals("patient/listByProvider", view);
     }
 

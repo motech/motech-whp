@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
 <@layout.defaultLayout "MoTeCH-WHP">
-<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 
     <#if message?exists && (message?length>0)>
     <div class="message-alert row text-center alert alert-info fade in">

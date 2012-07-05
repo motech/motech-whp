@@ -1,6 +1,7 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,6 +43,7 @@ public class PatientController extends BaseController {
 
     private ProviderService providerService;
     private PatientService patientService;
+    private WHPAdherenceService whpAdherenceService;
 
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
     private AbstractMessageSource messageSource;
@@ -48,6 +51,7 @@ public class PatientController extends BaseController {
 
     @Autowired
     public PatientController(PatientService patientService,
+                             WHPAdherenceService whpAdherenceService,
                              PhaseUpdateOrchestrator phaseUpdateOrchestrator,
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
@@ -55,6 +59,7 @@ public class PatientController extends BaseController {
                              AllDistricts allDistrictsCache) {
 
         this.patientService = patientService;
+        this.whpAdherenceService = whpAdherenceService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
@@ -130,7 +135,13 @@ public class PatientController extends BaseController {
     }
 
     private void prepareModelForListView(Model uiModel, List<Patient> patientsForProvider) {
-        uiModel.addAttribute(PATIENT_LIST, patientsForProvider);
+        List<PatientInfo> patientList = new ArrayList<>();
+        for (Patient patient : patientsForProvider) {
+            PatientInfo patientInfo = new PatientInfo(patient);
+            patientInfo.setAdherenceCapturedForThisWeek(whpAdherenceService.isAdherenceRecordedForCurrentWeek(patient.getPatientId(), patient.currentTherapyId()));
+            patientList.add(patientInfo);
+        }
+        uiModel.addAttribute(PATIENT_LIST, patientList);
     }
 
     private void prepareModelForListView(Model uiModel, List<Patient> patients, String districtName, String providerId) {

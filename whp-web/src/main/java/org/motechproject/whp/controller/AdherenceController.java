@@ -7,7 +7,7 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.TreatmentWeek;
+import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;

@@ -2,7 +2,8 @@
 <#import "../layout/default-cmfadmin.ftl" as layout>
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
-<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirctOnRowClick.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 <div>

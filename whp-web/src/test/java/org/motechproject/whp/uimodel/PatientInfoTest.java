@@ -13,6 +13,7 @@ import org.motechproject.whp.user.domain.Provider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientInfoTest {
@@ -141,5 +142,10 @@ public class PatientInfoTest {
         assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSampleInstance.value()));
     }
 
+    @Test
+    public void shouldSetProviderMobileNumberToNullIfProviderNotGiven() {
+        PatientInfo patientInfo = new PatientInfo(patient);
 
+        assertNull(patientInfo.getProviderMobileNumber());
+    }
 }
