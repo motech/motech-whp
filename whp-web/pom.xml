@@ -4,7 +4,7 @@
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -29,17 +29,17 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-user</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-webservice</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-webservice</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -47,17 +47,17 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-data-importer</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-treatment-card</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
             <scope>test</scope>
             <classifier>tests</classifier>
             <type>jar</type>
@@ -161,7 +161,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-application-service</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
@@ -171,7 +171,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
