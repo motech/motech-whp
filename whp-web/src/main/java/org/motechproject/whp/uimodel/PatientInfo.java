@@ -3,14 +3,12 @@ package org.motechproject.whp.uimodel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.motechproject.whp.common.WHPDate;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Phase;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.user.domain.Provider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @EqualsAndHashCode
@@ -51,7 +49,7 @@ public class PatientInfo {
     private void initialize(Patient patient, Provider provider) {
         currentTreatment = patient.getCurrentTreatment();
         Therapy latestTherapy = patient.getCurrentTherapy();
-        testResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
+        setTestResults(patient);
         patientId = patient.getPatientId();
         firstName = patient.getFirstName();
         lastName = patient.getLastName();
@@ -76,6 +74,22 @@ public class PatientInfo {
         currentPhase = patient.getCurrentTherapy().getCurrentPhase();
         remainingDosesInCurrentPhase = patient.getRemainingDosesInCurrentPhase();
         lastCompletedPhase = patient.getCurrentTherapy().getLastCompletedPhase();
+    }
+
+    private void setTestResults(Patient patient) {
+        List<Treatment> treatments = patient.getTreatments();
+        treatments.add(patient.getCurrentTreatment());
+        WeightStatistics weightStatistics = new WeightStatistics();
+        SmearTestResults smearTestResults = new SmearTestResults();
+        for (Treatment treatment : treatments) {
+            for (WeightStatisticsRecord weightStatisticsRecord : treatment.getWeightStatistics().getAll())
+                weightStatistics.add(weightStatisticsRecord);
+            for (SmearTestRecord smearTestRecord : treatment.getSmearTestResults().getAll())
+                smearTestResults.add(smearTestRecord);
+        }
+
+        testResults = new TestResults(smearTestResults, weightStatistics);
+
     }
 }
 

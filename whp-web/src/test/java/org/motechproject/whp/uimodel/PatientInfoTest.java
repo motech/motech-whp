@@ -3,6 +3,7 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -108,6 +109,36 @@ public class PatientInfoTest {
         assertThat(patientInfo.getAddress(), is("houseNo, landmark, block, village, district, state"));
         assertThat(patientInfo.getAddressState(), is("state"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
+    }
+
+    @Test
+    public void shouldMapTestResultsAcrossTreatments() {
+        patient.closeCurrentTreatment(TreatmentOutcome.TransferredOut, DateUtil.now());
+
+        SmearTestResults smearTestResults = new SmearTestResults();
+        SampleInstance newSampleInstance = SampleInstance.ExtendedIP;
+        smearTestResults.add(new SmearTestRecord(newSampleInstance, null, null, null, null));
+
+        WeightStatistics weightStatistics = new WeightStatistics();
+        weightStatistics.add(new WeightStatisticsRecord(SampleInstance.ExtendedIP, 20.0, new LocalDate(2012, 1, 1)));
+
+        Treatment treatment = new TreatmentBuilder()
+                .withStartDate(new LocalDate(2012, 2, 2))
+                .withTbId(tbId)
+                .withProviderId(providerId)
+                .withTbRegistrationNumber(tbRegistrationNo)
+                .withPatientType(patientType)
+                .withAddress(patientAddress)
+                .withSmearTestResults(smearTestResults)
+                .withWeightStatistics(weightStatistics)
+                .build();
+
+        patient.addTreatment(treatment,DateUtil.now());
+
+        PatientInfo patientInfo = new PatientInfo(patient, provider);
+        assertThat(patientInfo.getTestResults().size(),is(2));
+        assertThat(patientInfo.getTestResults().get(0).getSampleInstance(),is(SampleInstance.PreTreatment.value()));
+        assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSampleInstance.value()));
     }
 
 
