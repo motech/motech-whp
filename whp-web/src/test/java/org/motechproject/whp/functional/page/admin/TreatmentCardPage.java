@@ -1,7 +1,7 @@
 package org.motechproject.whp.functional.page.admin;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.openqa.selenium.By;
@@ -13,6 +13,8 @@ import org.openqa.selenium.support.How;
 
 import static junit.framework.Assert.fail;
 import static org.apache.commons.lang.StringUtils.trimToEmpty;
+import static org.motechproject.whp.functional.data.AdherenceValue.*;
+import static org.openqa.selenium.By.id;
 
 public class TreatmentCardPage extends PatientDashboardPage {
 
@@ -21,6 +23,10 @@ public class TreatmentCardPage extends PatientDashboardPage {
 
     @FindBy(how = How.ID, using = "patientCurrentPhase")
     WebElement patientPhaseMessage;
+
+    @FindBy(how = How.ID, using = "submitAdherence")
+    WebElement submit;
+
 
     public TreatmentCardPage(WebDriver webDriver) {
         super(webDriver);
@@ -37,30 +43,30 @@ public class TreatmentCardPage extends PatientDashboardPage {
         waitForElementWithIdToLoad("IPTreatmentCard");
     }
 
-    public String adherenceStatusOn(LocalDate localDate) {
-        return findWebElementByDate(localDate).getAttribute("currentPillStatus");
+    public String adherenceStatusOn(LocalDate localDate, String section) {
+        return findCell(localDate, section).getAttribute("currentPillStatus");
     }
 
-    public String adherenceOnProvidedBy(LocalDate localDate) {
-        return findWebElementByDate(localDate).getAttribute("providerId");
+    public String adherenceOnProvidedBy(LocalDate localDate, String section) {
+        return findCell(localDate, section).getAttribute("providerId");
     }
 
-    public boolean nonEditableAdherenceOn(LocalDate localDate) {
-        String appliedCssClasses = findWebElementByDate(localDate).getAttribute("class");
+    public boolean nonEditableAdherenceOn(LocalDate localDate, String section) {
+        String appliedCssClasses = findCell(localDate, section).getAttribute("class");
         return !appliedCssClasses.contains("editable");
     }
 
-    public boolean dateNotPresent(LocalDate localDate) {
+    public boolean dateNotPresent(LocalDate localDate, String section) {
         try {
-            findWebElementByDate(localDate);
+            findCell(localDate, section);
             return false;
         } catch (NoSuchElementException exception) {
             return true;
         }
     }
 
-    public boolean treatmentPausedOn(LocalDate localDate) {
-        String appliedCssClasses = findWebElementByDate(localDate).getAttribute("class");
+    public boolean treatmentPausedOn(LocalDate localDate, String section) {
+        String appliedCssClasses = findCell(localDate, section).getAttribute("class");
         return appliedCssClasses.contains("pausedAdherenceData");
     }
 
@@ -82,7 +88,27 @@ public class TreatmentCardPage extends PatientDashboardPage {
         return trimToEmpty(patientPhaseMessage.getText().split(":")[1]);
     }
 
-    private WebElement findWebElementByDate(LocalDate localDate) {
-        return webDriver.findElement(By.id(String.format("%s", localDate.toString("d-M-yyyy"))));
+    public void setAdherenceValue(Value adherenceValue, LocalDate on, String phase) {
+        WebElement cell = findCell(on, phase);
+        Integer distanceInNumberOfClicks = getDistanceInNumberOfClicks(getCurrentValue(cell), adherenceValue);
+        for (int i = 0; i < distanceInNumberOfClicks; i++) {
+            cell.click();
+        }
     }
+
+    public TreatmentCardPage submitAdherence() {
+        submit.click();
+        waitForElementToBeReloadedByAjax();
+        return MyPageFactory.initElements(webDriver, TreatmentCardPage.class);
+    }
+
+    private WebElement findCell(LocalDate localDate, String section) {
+        Integer day = localDate.getDayOfMonth();
+        Integer month = localDate.getMonthOfYear();
+        Integer year = localDate.getYear();
+
+        String id = String.format("%s-%s-%s-%s", section, day, month, year);
+        return webDriver.findElement(id(id));
+    }
+
 }

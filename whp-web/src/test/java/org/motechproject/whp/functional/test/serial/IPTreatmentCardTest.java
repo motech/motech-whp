@@ -16,6 +16,7 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 
 public class IPTreatmentCardTest extends TreatmentUpdateTest {
 
+    public static final String SECTION = "IPTreatmentCard";
     SubmitAdherenceStep submitAdherenceStep;
     PauseTreatmentStep pauseTreatmentStep;
     RestartTreatmentStep restartTreatmentStep;
@@ -119,58 +120,58 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
                 .withPatient(testPatient)
                 .execute();
 
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 2), "1", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 4), "1", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 6), "1", testProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 2), "1", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 4), "1", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 6), "1", testProvider.getProviderId(), SECTION);
 
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 9), "2", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 11), "2", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 13), "1", testProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 9), "2", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 11), "2", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 13), "1", testProvider.getProviderId(), SECTION);
 
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 23), "2", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 25), "1", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 27), "1", testProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 23), "2", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 25), "1", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 27), "1", testProvider.getProviderId(), SECTION);
 
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 30), "1", newProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 1), "1", newProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 3), "1", newProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 30), "1", newProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 1), "1", newProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 3), "1", newProvider.getProviderId(), SECTION);
 
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 6), "1", newProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 8), "1", newProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 10), "1", newProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 6), "1", newProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 8), "1", newProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 8, 10), "1", newProvider.getProviderId(), SECTION);
 
         /* Asserting on blank adherence data */
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 16), "0", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 18), "0", testProvider.getProviderId());
-        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 20), "0", testProvider.getProviderId());
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 16), "0", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 18), "0", testProvider.getProviderId(), SECTION);
+        Adherence.is(treatmentCardPage, new LocalDate(2012, 7, 20), "0", testProvider.getProviderId(), SECTION);
 
         /* Asserting on paused dates */
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 13));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 16));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 18));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 25));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 27));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 8, 8));
-        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 8, 10));
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 13), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 16), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 18), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 25), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 7, 27), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 8, 8), SECTION);
+        Adherence.isPaused(treatmentCardPage, new LocalDate(2012, 8, 10), SECTION);
 
         /* Asserting on dates not paused */
-        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 7, 30));
-        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 1));
-        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 3));
-        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 6));
+        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 7, 30), SECTION);
+        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 1), SECTION);
+        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 3), SECTION);
+        Adherence.isNotPaused(treatmentCardPage, new LocalDate(2012, 8, 6), SECTION);
 
         /* Asserting on dates that are not editable */
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 17));
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 19));
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 22));
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 17), SECTION);
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 19), SECTION);
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 22), SECTION);
 
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 31));
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 8, 9));
-        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 8, 21));
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 7, 31), SECTION);
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 8, 9), SECTION);
+        Adherence.isNotEditable(treatmentCardPage, new LocalDate(2012, 8, 21), SECTION);
 
         /* Asserting on dates that are not even present in the table*/
-        Adherence.isNotPresent(treatmentCardPage, new LocalDate(2012, 6, 30));
-        Adherence.isNotPresent(treatmentCardPage, new LocalDate(2013, 1, 1));
+        Adherence.isNotPresent(treatmentCardPage, new LocalDate(2012, 6, 30), SECTION);
+        Adherence.isNotPresent(treatmentCardPage, new LocalDate(2013, 1, 1), SECTION);
     }
 
 }
