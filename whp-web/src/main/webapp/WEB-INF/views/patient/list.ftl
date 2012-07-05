@@ -7,7 +7,9 @@
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 <div>
-    <div class="well row">
+    <div class="row well" id="search-section">
+        <h3 class="search-section-header"><a class="pull-right" id="search-section-header" href="#">Hide Search Pane</a></h3>
+        <div id="search-pane">
         <form id="searchForm" action="<@spring.url '/patients/search'/>"  input method="POST"  submitOnEnterKey="true"
               class="offset2-fixed form-horizontal">
             <div class="control-group">
@@ -34,6 +36,7 @@
                 </div>
             </div>
         </form>
+    </div>
     </div>
     <@legend key1="paused" value1="Current Treatment Paused" />
     <div id="patients">

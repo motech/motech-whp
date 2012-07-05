@@ -18,6 +18,8 @@
                     if(e.which&& e.which==13 || e.keyCode && e.keyCode==13)
                     {
                         //same code as change function
+                        var valid = false;
+                        if($(input).val()!="") {
                         var matcher = new RegExp( $.ui.autocomplete.escapeRegex($(input).val()), "i" );
                         valid = false;
                         select.children( "option" ).each(function() {
@@ -27,6 +29,7 @@
                                 return false;
                             }
                         });
+                        }
                         if ( !valid ) {
                             // remove invalid value, as it didn't match anything
                             $( this ).val( "" );
@@ -71,15 +74,19 @@
                     },
                     change: function( event, ui ) {
                         if ( !ui.item ) {
-                            var matcher = new RegExp( $.ui.autocomplete.escapeRegex($(input).val()), "i" ),
-                                valid = false;
+                           var valid = false;
+                           if($(input).val()!="") {
+                            var matcher = new RegExp( $.ui.autocomplete.escapeRegex($(input).val()), "i" );
                             select.children( "option" ).each(function() {
                                 if ( $( this).text().match( matcher ) ) {
                                     $(input).val($(this).text());
                                     this.selected = valid = true;
+                                    var option = $(this)
+                                    $(self.element).trigger( "autocomplete-selected", event ,{item:option});
                                     return false;
                                 }
                             });
+                           }
                             if ( !valid ) {
                                 // remove invalid value, as it didn't match anything
                                 $( this ).val( "" );

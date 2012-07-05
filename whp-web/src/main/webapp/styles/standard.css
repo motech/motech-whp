@@ -309,4 +309,9 @@ div.buttons a, div.buttons button {
 .no-top-border td, .no-top-border th {
     border-top-width: 0px;
 }
-
+#search-pane {
+    overflow: hidden;
+}
+.search-section-header {
+    z-index: 1;
+}

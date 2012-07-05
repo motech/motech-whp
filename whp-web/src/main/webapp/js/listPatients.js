@@ -1,15 +1,34 @@
-$(function() {
+function initializeSearchPane() {
+    var icons = {
+        header:"ui-icon-circle-arrow-e",
+        headerSelected:"ui-icon-circle-arrow-s"
+    };
+    $('#search-section').accordion({
+        collapsible:true,
+        icons:icons,
+        change:function (event, ui) {
+            if (ui.options.active == 0)
+                $('#search-section-header').text("Show Search Pane");
+            else
+                $('#search-section-header').text("Hide Search Pane");
+        }
+    });
+    $('#search-section').accordion("option", "active", true);
 
-    $( "#district" ).combobox();
-    $( "#providerId" ).combobox();
-    $( "#district" ).bind( "autocomplete-selected", function(event, ui) {
+}
+$(function () {
+    initializeSearchPane();
+
+    $("#district").combobox();
+    $("#providerId").combobox();
+    $("#district").bind("autocomplete-selected", function (event, ui) {
         $("#providerId-autocomplete").val("");
         initProviders();
     });
-    $('#district').bind('keypress',function(event,e){
+    $('#district').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
-    $('#providerId').bind('keypress',function(event,e){
+    $('#providerId').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
 
@@ -21,41 +40,42 @@ $(function() {
             return true;
         }
     }
-    $( "#district" ).bind( "invalid-value", function() {
-           $("#district-autocomplete").val("");
-           $("#providerId-autocomplete").val("");
-           $("#providerId").html("");
-           $("#providerId").data('combobox').destroy();
-           $("#providerId").combobox();
+
+    $("#district").bind("invalid-value", function () {
+        $("#district-autocomplete").val("");
+        $("#providerId-autocomplete").val("");
+        $("#providerId").html("");
+        $("#providerId").data('combobox').destroy();
+        $("#providerId").combobox();
     });
-    $( "#providerId" ).bind( "invalid-value", function() {
+    $("#providerId").bind("invalid-value", function () {
         $("#providerId-autocomplete").val("");
     });
 
-    $('#searchButton').click(function(){
+    $('#searchButton').click(function () {
         $("#searchForm").submit();
     });
     $("#searchForm").submit(function (event) {
-            event.preventDefault();
+        event.preventDefault();
 
-            if($('#district').val()== "")
-                return;
+        if ($('#district-autocomplete').val() == "")
+            return;
 
-            var districtId = $("#district").val();
-            var providerId = $("#providerId").val() ? $("#providerId-autocomplete").val() : "";
-            var data = {
-                "selectedDistrict":districtId,
-                "selectedProvider":providerId
-            };
-            $.post('/whp/patients/search', data, function(response) {
-                $('#patients').html(response);
-            })
+        var districtId = $("#district-autocomplete").val();
+        var providerId = $("#providerId-autocomplete").val();
+        var data = {
+            "selectedDistrict":districtId,
+            "selectedProvider":providerId
+        };
+        $.post('/whp/patients/search', data, function (response) {
+            $('#patients').html(response);
+        })
     });
 
-    var initProviders = function(){
-       $.get("/whp/providers/byDistrict/" + $("#district").val(), function(response){
-                   $("#providerId").html(response);
-       });
+    var initProviders = function () {
+        $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
+            $("#providerId").html(response);
+        });
     }
     initProviders();
 });
