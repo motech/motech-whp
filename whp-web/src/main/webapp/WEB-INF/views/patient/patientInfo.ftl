@@ -52,11 +52,16 @@
                     <th>Treatment Start Date</th>
                     <td>${patient.therapyStartDate}</td>
                 </tr>
+
+                <tr>
+                    <th>Current Phase</th>
+                    <td id="patientCurrentPhase"><#if patient.currentPhase??>${patient.currentPhase.name.toString()} (${patient.currentPhase.name.name()})</#if></td>
+                </tr>
             </table>
         </div>
 
-        <div  class="pull-right  patient-info-right-table">
-            <table class="table table-bordered default-arrow word-wrap table-striped">
+        <div class="pull-right">
+            <table class="table table-bordered default-arrow word-wrap table-striped patient-info-right-table">
                 <tr>
                    <th colspan="2">Patient Details</th>
                 </tr>
@@ -92,7 +97,7 @@
         </div>
     </div>
     <div class="pull-right">
-        <table class="table table-bordered text-center patient-info-right-table table-striped">
+        <table class="table table-bordered text-center word-wrap table-striped patient-info-right-table">
             <tr>
                 <th rowspan="2">Sample Instance</th>
                 <th colspan="4">Smear Test Results</th>

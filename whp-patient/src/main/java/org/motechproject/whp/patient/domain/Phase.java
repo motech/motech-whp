@@ -1,7 +1,9 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
@@ -45,6 +47,11 @@ public class Phase {
     public void unset() {
         this.startDate = null;
         this.endDate = null;
+    }
+
+    @JsonIgnore
+    public String getEndDateAsString(){
+        return WHPDate.date(endDate).value();
     }
 }
 

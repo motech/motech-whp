@@ -280,7 +280,7 @@ div.buttons a, div.buttons button {
     cursor: default;
 }
 
-.word-wrap {
+.word-wrap, .word-wrap tr, .word-wrap th, .word-wrap td {
     word-wrap: break-word;
 }
 
@@ -290,6 +290,8 @@ div.buttons a, div.buttons button {
 
 .patient-info-right-table {
     width: 475px;
+    max-width: 475px;
+    overflow: visible;
 }
 
 .controls a {

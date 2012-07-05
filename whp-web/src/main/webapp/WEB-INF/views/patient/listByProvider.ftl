@@ -12,39 +12,7 @@
 <@legend key1="paused" value1="Current Treatment Paused" />
 <div class="row">
     <div>
-        <table id="notaBena" class="table table-condensed pull-left thin-table">
-            <thead>
-            <tr>
-                <th class="taller-row"></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <#if patientList?size == 0>
-                <tr>
-
-                </tr>
-                <#else>
-                    <#list patientList as patient>
-                        <#if patient.nearingPhaseTransition || patient.transitioning>
-                            <tr>
-                                <td class="tall-right-row">
-                                    <img id="achtung" class="pull-left" src="<@spring.url '/resources-${applicationVersion}/img/smallwarning.png'/>"/>
-                                </td>
-                            </tr>
-                            <#else>
-                                <tr>
-                                    <td style="height: 18px; float: right">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                    </td>
-                                </tr>
-                        </#if>
-                    </#list>
-            </#if>
-            </tbody>
-        </table>
-
-        <table id="patientList" class="table table-bordered table-condensed fat-table">
+        <table id="patientList" class="table table-bordered table-condensed">
             <thead>
             <tr>
                 <th>Patient ID</th>
@@ -56,12 +24,13 @@
                 <th>Treatment Category</th>
                 <th>Treatment Start Date</th>
                 <th>Adherence</th>
+                <th>Adherence Given</th>
             </tr>
             </thead>
             <tbody>
                 <#if patientList?size == 0>
                 <tr>
-                    <td style="text-align: center" colspan="9">No patients to show</td>
+                    <td style="text-align: center" colspan="10">No patients to show</td>
                 </tr>
                 <#else>
                     <#list patientList as patient>
@@ -82,6 +51,9 @@
                             <#if !patient.currentTreatmentClosed>
                                 <a href="<@spring.url '/adherence/update/${patient.patientId}' />">Edit</a>
                             </#if>
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                     </#list>
