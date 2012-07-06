@@ -99,7 +99,7 @@ public class PatientInfoTest {
         assertThat(patientInfo.getLastName(), is(lastName));
         assertThat(patientInfo.getPhoneNumber(), is(patientNumber));
         assertThat(patientInfo.getPhi(), is(phi));
-        assertThat(patientInfo.getGender(), is(gender.name()));
+        assertThat(patientInfo.getGender(), is(gender.getValue()));
         assertThat(patientInfo.getTbId(), is(tbId));
         assertThat(patientInfo.getProviderId(), is(providerId));
         assertThat(patientInfo.getProviderMobileNumber(), is(providerMobileNumber));
