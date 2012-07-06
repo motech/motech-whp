@@ -4,8 +4,6 @@ import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 
 import java.util.List;
 
@@ -42,5 +40,11 @@ public class ProviderPage extends ListPatientsPage {
         assertTrue(updateAdherencePage.getAdherenceCaption().contains(patientId));
         return updateAdherencePage;
 
+    }
+
+    public boolean adherenceLoggedForCurrentWeek(String caseId) {
+        waitForElementWithCSSToLoad("adherenceCaptured");
+        WebElement adherenceLoggedForPatient = webDriver.findElement(By.id(String.format("patient_%s_AdherenceTaken", caseId)));
+        return adherenceLoggedForPatient.isDisplayed() && adherenceLoggedForPatient.getCssValue("background-color").equals("#32f800") && adherenceLoggedForPatient.getText().contains("YES");
     }
 }

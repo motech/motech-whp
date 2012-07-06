@@ -284,20 +284,18 @@ div.buttons a, div.buttons button {
     word-wrap: break-word;
 }
 
-
-
 .controls a {
     margin-right: 10px;
 }
 
-#adherenceCaptured {
+.adherenceCaptured {
     background-color: #32F800;
     text-align: center;
     font-size: 18px;
     color: #000000;
 }
 
-#adherenceNotCaptured {
+.adherenceNotCaptured  {
     text-align: center;
     font-size: 18px;
 }

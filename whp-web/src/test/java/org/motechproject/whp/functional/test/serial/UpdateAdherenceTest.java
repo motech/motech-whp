@@ -43,7 +43,10 @@ public class UpdateAdherenceTest extends BaseTest {
         UpdateAdherencePage updateAdherencePage = loginAsProvider().clickEditAdherenceLink(testPatient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(3);
 
-        updateAdherencePage = updateAdherencePage.submit().clickEditAdherenceLink(testPatient.getCaseId());
+        ProviderPage providerPage = updateAdherencePage.submit();
+        assertTrue(providerPage.adherenceLoggedForCurrentWeek(testPatient.getCaseId()));
+
+        updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
         boolean isTaken = updateAdherencePage.isDosesTaken(3);
         assertTrue(isTaken);
     }

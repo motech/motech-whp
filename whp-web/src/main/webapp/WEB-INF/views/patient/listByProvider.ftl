@@ -48,11 +48,11 @@
                             </#if>
                         </td>
                         <#if patient.adherenceCapturedForThisWeek>
-                            <td id="adherenceCaptured">
+                            <td id="patient_${patient.patientId}_AdherenceTaken" class="adherenceCaptured">
                                 &#10004; YES
                             </td>
                         <#else>
-                            <td id="adherenceNotCaptured">
+                            <td id="patient_${patient.patientId}_AdherenceNotTaken" class="adherenceNotCaptured">
                                 &#10008; NO
                             </td>
                         </#if>
