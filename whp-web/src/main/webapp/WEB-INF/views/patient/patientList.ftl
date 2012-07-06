@@ -9,7 +9,7 @@
             })
         });
     </script>
-    <table id="patientList" class="table table-bordered table-striped table-condensed" redirectOnRowClick="true">
+    <table id="patientList" class="table table-bordered table-condensed" redirectOnRowClick="true">
         <thead>
         <tr>
             <th>Patient ID</th>
