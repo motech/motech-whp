@@ -9,7 +9,10 @@
         <#assign message=""/>
     </div>
     </#if>
-    <@legend key1="paused" value1="Current Treatment Paused" />
+<div class="row">
+<span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>
+<@legend key1="paused" value1="Current Treatment Paused" />
+</div>
 <div class="row">
     <div>
         <table id="patientList" class="table table-bordered table-condensed">

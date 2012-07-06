@@ -109,7 +109,6 @@ public class PatientInfo {
         }
 
         testResults = new TestResults(smearTestResults, weightStatistics);
-
     }
 }
 

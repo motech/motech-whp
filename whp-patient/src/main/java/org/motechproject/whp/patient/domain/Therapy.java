@@ -120,6 +120,17 @@ public class Therapy {
     }
 
     @JsonIgnore
+    public int totalNumberOfDosesTakenTillToday(){
+        int totalDoses = 0;
+        for (Phase phase : phases.getAll()) {
+            if (phase.hasStarted()){
+                totalDoses = totalDoses + phase.getNumberOfDosesTaken();
+            }
+        }
+        return totalDoses;
+    }
+
+    @JsonIgnore
     public Integer getWeeksElapsed() {
         if (phases.isOrHasBeenOnIp())
             return WHPDateUtil.weeksElapsedSince(phases.getIPStartDate());

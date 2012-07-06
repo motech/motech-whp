@@ -6,6 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
+import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.patient.util.WHPDateUtil.numberOf_DDD_Between;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -250,6 +253,44 @@ public class Patient extends MotechBaseDataObject {
         return getLastCompletedPhase().remainingDoses(currentTherapy.getTreatmentCategory());
     }
 
+    //TODO: Extend patient to a PatientUIModel and move these UI specific methods there.
+    @JsonIgnore
+    public String getIPProgress() {
+        int totalDoseCount = 0;
+        int totalDoseTakenCount = 0;
+
+        Phase intensivePhase = currentTherapy.getPhase(PhaseName.IP);
+        Phase extendedIntensivePhase = currentTherapy.getPhase(PhaseName.EIP);
+
+        if (intensivePhase.hasStarted()) {
+            totalDoseTakenCount = totalDoseTakenCount + intensivePhase.getNumberOfDosesTaken();
+            totalDoseCount = totalDoseCount + currentTherapy.getTreatmentCategory().numberOfDosesForPhase(intensivePhase.getName());
+        }
+        if (extendedIntensivePhase.hasStarted()) {
+            totalDoseCount = totalDoseCount + extendedIntensivePhase.getNumberOfDosesTaken();
+            totalDoseCount = totalDoseCount + currentTherapy.getTreatmentCategory().numberOfDosesForPhase(extendedIntensivePhase.getName());
+        }
+
+        Float completionPercentage = (totalDoseTakenCount / (float) totalDoseCount) * 100;
+        return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, completionPercentage.equals(Float.NaN) ? 0 : completionPercentage);
+    }
+
+    @JsonIgnore
+    public String getCPProgress() {
+        int totalDoseCount = 0;
+        int totalDoseTakenCount = 0;
+
+        Phase continuationPhase = currentTherapy.getPhase(PhaseName.CP);
+
+        if (continuationPhase.hasStarted()) {
+            totalDoseTakenCount = totalDoseTakenCount + continuationPhase.getNumberOfDosesTaken();
+            totalDoseCount = totalDoseCount + currentTherapy.getTreatmentCategory().numberOfDosesForPhase(continuationPhase.getName());
+        }
+
+        Float completionPercentage = (totalDoseTakenCount / (float) totalDoseCount) * 100;
+        return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, completionPercentage.equals(Float.NaN) ? 0 : completionPercentage);
+    }
+
     public boolean currentPhaseDoseComplete() {
         return getCurrentTherapy().currentPhaseDoseComplete();
     }
@@ -262,6 +303,35 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public Integer getWeeksElapsed() {
         return getCurrentTherapy().getWeeksElapsed();
+    }
+
+    @JsonIgnore
+    public int getTotalDosesToHaveBeenTakenTillToday() {
+        if (currentTherapy.getStartDate() != null) {
+            int totalDoses = 0;
+            //pointing to sunday just past
+            LocalDate endDate = currentWeekInstance().dateOf(DayOfWeek.Sunday);
+            for (DayOfWeek dayOfWeek : currentTherapy.getTreatmentCategory().getPillDays()) {
+                totalDoses = totalDoses + numberOf_DDD_Between(currentTherapy.getStartDate(), endDate, dayOfWeek);
+            }
+            return totalDoses;
+        } else {
+            return 0;
+        }
+    }
+
+    @JsonIgnore
+    public int getTotalNumberOfDosesTakenTillToday() {
+        return getCurrentTherapy().totalNumberOfDosesTakenTillToday();
+    }
+
+    @JsonIgnore
+    public int getCumulativeDosesNotTaken() {
+        if (getTotalDosesToHaveBeenTakenTillToday() - getTotalNumberOfDosesTakenTillToday() < 0) {
+            return 0;
+        } else {
+            return getTotalDosesToHaveBeenTakenTillToday() - getTotalNumberOfDosesTakenTillToday();
+        }
     }
 
     private Therapy getTherapy(String therapyUid) {

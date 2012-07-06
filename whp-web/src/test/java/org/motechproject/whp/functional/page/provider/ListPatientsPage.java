@@ -1,15 +1,10 @@
 package org.motechproject.whp.functional.page.provider;
 
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
-import org.motechproject.whp.functional.page.admin.PatientDashboardPage;
-import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 
 import java.util.List;
 
@@ -54,7 +49,7 @@ public class ListPatientsPage extends LoggedInUserPage {
 
     public boolean isPatientTreatmentPaused(String patientId) {
         waitForElementWithIdToLoad(String.format("patientList_%s", patientId));
-        return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getCssValue("background-color").contains("#ffb6c1");
+        return webDriver.findElement(By.id(String.format("patientList_%s", patientId))).getAttribute("class").contains("paused");
     }
 
     public boolean hasTbId(String tbId) {

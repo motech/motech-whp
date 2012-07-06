@@ -7,10 +7,12 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
+import org.motechproject.whp.common.CurrentTreatmentWeek;
 import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -88,5 +90,7 @@ public class AdherenceController extends BaseController {
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("totalDoses", category.getDosesPerWeek());
         uiModel.addAttribute("readOnly", !(canUpdate(patient)));
+        uiModel.addAttribute("weekStartDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().endDate()).value());
     }
 }

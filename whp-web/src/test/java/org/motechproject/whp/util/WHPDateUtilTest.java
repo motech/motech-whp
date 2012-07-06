@@ -2,6 +2,7 @@ package org.motechproject.whp.util;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.util.WHPDateUtil;
 
@@ -84,5 +85,10 @@ public class WHPDateUtilTest {
         assertEquals(0, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(6)));
         assertEquals(1, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(7)));
         assertEquals(1, WHPDateUtil.weeksElapsedSince(DateUtil.today().minusDays(8)));
+    }
+
+    @Test
+    public void shouldReturnNumberOfMondaysBetweenGivenDates() {
+        assertEquals(4, WHPDateUtil.numberOf_DDD_Between(new LocalDate(2012, 6, 29), new LocalDate(2012, 7, 25), DayOfWeek.Monday));
     }
 }

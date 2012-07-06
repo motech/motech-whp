@@ -45,6 +45,6 @@ public class ProviderPage extends ListPatientsPage {
     public boolean adherenceLoggedForCurrentWeek(String caseId) {
         waitForElementWithCSSToLoad("adherenceCaptured");
         WebElement adherenceLoggedForPatient = webDriver.findElement(By.id(String.format("patient_%s_AdherenceTaken", caseId)));
-        return adherenceLoggedForPatient.isDisplayed() && adherenceLoggedForPatient.getCssValue("background-color").equals("#32f800") && adherenceLoggedForPatient.getText().contains("YES");
+        return adherenceLoggedForPatient.isDisplayed() && adherenceLoggedForPatient.getText().contains("YES") && adherenceLoggedForPatient.getAttribute("class").contains("adherenceCaptured");
     }
 }

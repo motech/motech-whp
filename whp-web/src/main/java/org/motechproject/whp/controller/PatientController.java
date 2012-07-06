@@ -3,7 +3,9 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.CurrentTreatmentWeek;
 import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -143,6 +145,9 @@ public class PatientController extends BaseController {
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);
+        uiModel.addAttribute("weekStartDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().endDate()).value());
+
     }
 
     private void prepareModelForListView(Model uiModel, List<Patient> patients, String districtName, String providerId) {

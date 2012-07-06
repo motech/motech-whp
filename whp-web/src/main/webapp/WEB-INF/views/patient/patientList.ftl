@@ -23,6 +23,9 @@
             <th>Treatment Category</th>
             <th>Treatment Start Date</th>
             <th>Weeks Elapsed</th>
+            <th>IP Treatment Progress</th>
+            <th>CP Treatment Progress</th>
+            <th>Cumulative Missed Doses</th>
         </tr>
         </thead>
         <tbody>
@@ -75,6 +78,15 @@
                 <#else>
                     -
                 </#if>
+            </td>
+            <td id="patient_${patient.patientId}_IPProgress">
+                ${patient.IPProgress}
+            </td>
+            <td id="patient_${patient.patientId}_CPProgress">
+                ${patient.CPProgress}
+            </td>
+           <td id="patient_${patient.patientId}_MissedDoses">
+               ${patient.cumulativeDosesNotTaken}
             </td>
         </tr>
         </#list>

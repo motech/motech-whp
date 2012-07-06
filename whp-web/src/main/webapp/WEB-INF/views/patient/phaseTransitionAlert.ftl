@@ -22,7 +22,7 @@
                 Please select the treatment decision ordered by the CMF Doctor:
             </#if>
 
-            <a id="EIP" href="/whp/patients/transitionPhase/${patient.patientId}?to=EIP" class="btn"><#if patient.nextPhaseName?exists>IP<#else>Initiate Extended IP</#if></a>
+            <a id="EIP" href="/whp/patients/transitionPhase/${patient.patientId}?to=EIP" class="btn"><#if patient.nextPhaseName?exists>EIP<#else>Initiate Extended IP</#if></a>
             <a id="CP" href="/whp/patients/transitionPhase/${patient.patientId}?to=CP" class="btn"><#if patient.nextPhaseName?exists>CP<#else>Start CP</#if></a>
             <br/>
         </div>

@@ -8,7 +8,7 @@
         ${adherence.warningMessage}
         </div>
     </#if>
-    <h4 class="page-header form-header" id="adherenceCaption">Update last week's adherence for Patient ID: ${adherence.patientId}</h4>
+    <h4 class="page-header form-header" id="adherenceCaption">Update adherence for Patient ID: ${adherence.patientId} from ${weekStartDate} to ${weekEndDate}</h4>
 </div>
 
 <div class="row">

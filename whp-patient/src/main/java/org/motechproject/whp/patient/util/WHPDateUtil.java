@@ -1,8 +1,8 @@
 package org.motechproject.whp.patient.util;
 
-import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.Weeks;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 
 import java.util.ArrayList;
@@ -36,5 +36,13 @@ public class WHPDateUtil {
 
     public static int weeksElapsedSince(LocalDate date) {
         return Weeks.weeksBetween(date, DateUtil.today()).getWeeks();
+    }
+
+    public static int numberOf_DDD_Between(LocalDate startingOn, LocalDate asOf, DayOfWeek dayOfWeek){
+        int count = 0;
+        for (LocalDate date = startingOn; isOnOrBefore(date, asOf); date = date.plusDays(1)) {
+            if (date.getDayOfWeek() == dayOfWeek.getValue()) count++;
+        }
+        return count;
     }
 }
