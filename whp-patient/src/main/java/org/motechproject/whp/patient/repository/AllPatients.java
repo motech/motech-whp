@@ -54,38 +54,27 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         if (patientId == null)
             return null;
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
-        Patient patient = singleResult(db.queryView(find_by_patientId, Patient.class));
-        if (patient != null)
-            patient.loadTherapyIntoTreatments();
-        return patient;
+        return singleResult(db.queryView(find_by_patientId, Patient.class));
     }
 
-    @View(name = "find_by_provider_having_active_treatment_sort_by_firstname", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit([doc.currentTreatment.providerId, doc.firstName], doc._id);}}")
+    @View(name = "find_by_provider_having_active_treatment_sort_by_firstname_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTreatment && doc.onActiveTreatment === true) {" +
+            "emit([doc.currentTherapy.currentTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
         if (providerId == null)
-            return new ArrayList<Patient>();
+            return new ArrayList<>();
         String keyword = providerId.toLowerCase();
         ComplexKey startKey = ComplexKey.of(keyword, null);
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment_sort_by_firstname").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
-        List<Patient> patients = db.queryView(q, Patient.class);
-        loadDependencies(patients);
-        return patients;
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment_sort_by_firstname_v1").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        return db.queryView(q, Patient.class);
     }
 
-    @View(name = "find_by_provider_having_active_treatment", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTreatment.providerId, doc._id);}}")
+    @View(name = "find_by_provider_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerId, doc._id);}}")
     public List<Patient> getAllUnderActiveTreatmentWithCurrentProviders(List<String> providerIds) {
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment").keys(providerIds).includeDocs(true);
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment_v1").keys(providerIds).includeDocs(true);
         List<Patient> patients = db.queryView(q, Patient.class);
-        Collections.sort(patients,new PatientComparatorByFirstName());
-        loadDependencies(patients);
+        Collections.sort(patients, new PatientComparatorByFirstName());
         return patients;
     }
 
-
-    private void loadDependencies(List<Patient> patients) {
-        for (Patient patient : patients) {
-            patient.loadTherapyIntoTreatments();
-        }
-    }
 }

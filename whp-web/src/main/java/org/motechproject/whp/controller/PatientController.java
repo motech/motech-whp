@@ -5,6 +5,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.repository.AllDistricts;
@@ -160,7 +161,8 @@ public class PatientController extends BaseController {
 
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
-        Provider provider = providerService.fetchByProviderId(patient.providerId());
+        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
+        Provider provider = providerService.fetchByProviderId(currentTreatment.getProviderId());
 
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);

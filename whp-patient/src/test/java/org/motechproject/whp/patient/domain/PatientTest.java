@@ -95,8 +95,6 @@ public class PatientTest {
     @Test
     public void shouldGetCurrentTreatmentIfGivenDateIsInCurrentTreatmentPeriod() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        String therapyUid = "therapyUid";
-        patient.getCurrentTreatment().setTherapyUid(therapyUid);
         LocalDate startDate = new LocalDate(2012, 1, 2);
         LocalDate endDate = new LocalDate(2012, 3, 15);
         patient.getCurrentTreatment().setStartDate(startDate);

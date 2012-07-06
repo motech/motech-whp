@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.mapping;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -28,9 +29,8 @@ public class AdherenceRecordMapperTest {
     @Before
     public void setup() {
         Therapy therapy = new Therapy(new TreatmentCategory(), DiseaseClass.E, 10);
-
         Treatment currentTreatment = new Treatment(PROVIDER_ID, TB_ID, PatientType.New);
-        currentTreatment.setTherapy(therapy);
+        therapy.addTreatment(currentTreatment, DateTime.now());
 
         patient = new PatientBuilder().withDefaults().withCurrentTreatment(currentTreatment).build();
     }
@@ -53,8 +53,9 @@ public class AdherenceRecordMapperTest {
     public void shouldSetTbIdAsMetaDataOnRequest() {
         Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.Unknown, TB_ID, PROVIDER_ID);
 
-        assertNotNull(patient.tbId());
-        assertEquals(patient.tbId(), AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.TB_ID));
+        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
+        assertNotNull(currentTreatment  .getTbId());
+        assertEquals(currentTreatment.getTbId(), AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.TB_ID));
     }
 
     @Test

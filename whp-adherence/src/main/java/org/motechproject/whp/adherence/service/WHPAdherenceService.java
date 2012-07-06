@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.adherence.criteria.TreatmentStartCriteria.shouldStartOrRestartTreatment;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
 
 @Service

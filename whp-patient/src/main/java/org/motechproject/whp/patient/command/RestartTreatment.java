@@ -26,7 +26,7 @@ public class RestartTreatment extends TreatmentUpdate {
     @Override
     public void apply(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-        List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        List<WHPErrorCode> errorCodes = new ArrayList<>();
         if (!canRestartCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }

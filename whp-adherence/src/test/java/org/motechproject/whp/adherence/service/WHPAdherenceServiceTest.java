@@ -63,7 +63,7 @@ public class WHPAdherenceServiceTest {
 
     @Test
     public void shouldSaveLogs() {
-        Patient patient = new PatientBuilder().withDefaults().withTherapyUid(THERAPY_UID).build();
+        Patient patient = new PatientBuilder().withDefaults().build();
 
         Treatment treatment0 = new TreatmentBuilder().withDefaults().withProviderId("provider0").withTbId("tb0").build();
         patient.addTreatment(treatment0, datetime(1, 10, 2011));
@@ -99,7 +99,7 @@ public class WHPAdherenceServiceTest {
     @Test
     public void shouldSaveLogWithTbIdAndProviderAsUnknownIfDoseDateDoesNotBelongToAnyTreatment() {
         String patientId = "patientId";
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(patientId).withTherapyUid(THERAPY_UID).build();
+        Patient patient = new PatientBuilder().withDefaults().withPatientId(patientId).build();
         patient.getCurrentTreatment().setStartDate(new LocalDate(2010, 11, 1));
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();
@@ -121,7 +121,7 @@ public class WHPAdherenceServiceTest {
 
     @Test
     public void saveLogShouldStoreExternalIdInLowercase() {
-        Patient patient = new PatientBuilder().withDefaults().withTherapyUid(THERAPY_UID).build();
+        Patient patient = new PatientBuilder().withDefaults().build();
         patient.getCurrentTreatment().setStartDate(new LocalDate(2010, 9, 1));
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();

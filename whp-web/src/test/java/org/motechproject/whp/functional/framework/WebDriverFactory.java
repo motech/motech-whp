@@ -81,6 +81,6 @@ public class WebDriverFactory {
     }
 
     private static String driverName() {
-        return System.getProperty(TEST_DRIVER, Driver.HTML_UNIT.toString());
+        return System.getProperty(TEST_DRIVER, Driver.FIREFOX.toString());
     }
 }

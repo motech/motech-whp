@@ -1,8 +1,10 @@
 package org.motechproject.whp.patient.builder;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
@@ -52,4 +54,10 @@ public class TherapyBuilder {
         therapy.getPhase(phaseName).setNumberOfDosesTaken(doses);
         return this;
     }
+
+    public TherapyBuilder withTreatment(Treatment treatment) {
+        therapy.addTreatment(treatment, DateTime.now());
+        return this;
+    }
+
 }

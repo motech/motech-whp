@@ -16,6 +16,7 @@ public class PatientBuilder {
     public static final String PATIENT_ID = "patientid";
     public static final String TB_ID = "tbid";
     public static final String PROVIDER_ID = "providerid";
+    public static final String THERAPY_UID = "therapyUid";
 
 
     List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
@@ -40,12 +41,6 @@ public class PatientBuilder {
         return this;
     }
 
-    public PatientBuilder withTherapyUid(String therapyUid) {
-        patient.getCurrentTherapy().setUid(therapyUid);
-        patient.getCurrentTreatment().setTherapyUid(therapyUid);
-        return this;
-    }
-
     public Patient build() {
         return patient;
     }
@@ -55,7 +50,6 @@ public class PatientBuilder {
         Treatment treatment = new Treatment();
         treatment.setTbId(TB_ID);
         treatment.setProviderId(PROVIDER_ID);
-        treatment.setTherapy(defaultTherapy());
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);
         treatment.addSmearTestResult(new SmearTestRecord(SampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
@@ -68,7 +62,7 @@ public class PatientBuilder {
         Therapy therapy = new Therapy();
         therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);
-        therapy.setUid("therapyUid");
+        therapy.setUid(THERAPY_UID);
         return therapy;
     }
 
@@ -88,6 +82,11 @@ public class PatientBuilder {
 
     public PatientBuilder onTreatmentFrom(LocalDate date) {
         patient.startTherapy(date);
+        return this;
+    }
+
+    public PatientBuilder withProviderId(String providerId) {
+        patient.getCurrentTreatment().setProviderId(providerId);
         return this;
     }
 

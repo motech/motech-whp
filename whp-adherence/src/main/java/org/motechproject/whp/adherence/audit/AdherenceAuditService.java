@@ -2,6 +2,7 @@ package org.motechproject.whp.adherence.audit;
 
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +19,15 @@ public class AdherenceAuditService {
     }
 
     public void log(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         AuditLog auditLog = new AuditLog()
                 .numberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
-                .providerId(patient.providerId())
+                .providerId(currentTreatment.getProviderId())
                 .remark(auditParams.getRemarks())
                 .user(auditParams.getUser())
                 .sourceOfChange(auditParams.getSourceOfChange().name())
                 .patientId(weeklyAdherenceSummary.getPatientId())
-                .tbId(patient.tbId());
-
+                .tbId(currentTreatment.getTbId());
         allAuditLogs.add(auditLog);
     }
 

@@ -13,9 +13,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherence.criteria.TreatmentStartCriteria.shouldStartOrRestartTreatment;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 
-public class TreatmentStartCriteriaTest {
+public class TherapyStartCriteriaTest {
 
     private static final String PATIENT_ID = "patientId";
 

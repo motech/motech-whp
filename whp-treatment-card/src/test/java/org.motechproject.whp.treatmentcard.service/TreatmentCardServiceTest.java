@@ -95,7 +95,6 @@ public class TreatmentCardServiceTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(therapyStartDate);
         patient.getCurrentTherapy().setUid(therapyUid);
-        patient.getCurrentTreatment().setTherapyUid("1");
         patient.getCurrentTreatment().setStartDate(therapyStartDate);
         return patient;
     }

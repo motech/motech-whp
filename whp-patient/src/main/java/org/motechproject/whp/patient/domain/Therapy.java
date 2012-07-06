@@ -6,13 +6,13 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.util.WHPDateUtil;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.PhaseName;
-import org.motechproject.whp.refdata.domain.TherapyStatus;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Data
 public class Therapy {
@@ -26,12 +26,18 @@ public class Therapy {
     private TherapyStatus status = TherapyStatus.Ongoing;
     private TreatmentCategory treatmentCategory;
     private DiseaseClass diseaseClass;
+
+    private Treatment currentTreatment;
+    private List<Treatment> treatments = new ArrayList<>();
+
     private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.EIP), new Phase(PhaseName.CP)));
 
     public Therapy() {
+        setUid(generateUid());
     }
 
     public Therapy(TreatmentCategory treatmentCategory, DiseaseClass diseaseClass, Integer patientAge) {
+        this();
         this.treatmentCategory = treatmentCategory;
         this.diseaseClass = diseaseClass;
         this.patientAge = patientAge;
@@ -129,4 +135,84 @@ public class Therapy {
     public boolean isOrHasBeenOnCP() {
         return phases.isOrHasBeenOnCp();
     }
+
+    public void addTreatment(Treatment treatment, DateTime dateModified) {
+        if (currentTreatment != null) {
+            treatments.add(currentTreatment);
+        }
+        currentTreatment = treatment;
+        treatment.setStartDate(dateModified.toLocalDate());
+    }
+
+    @JsonIgnore
+    public Treatment getTreatment(LocalDate date) {
+        if (currentTreatment.isDateInTreatment(date)) {
+            return currentTreatment;
+        }
+        for (int i = treatments.size() - 1; i >= 0; i--) {
+            Treatment treatment = treatments.get(i);
+            if (treatment.isDateInTreatment(date)) {
+                return treatment;
+            }
+        }
+        return null;
+    }
+
+    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
+        currentTreatment.close(treatmentOutcome, dateModified);
+        close(dateModified);
+    }
+
+    public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {
+        currentTreatment.pause(reasonForPause, dateModified);
+    }
+
+    public void restartCurrentTreatment(String reasonForResumption, DateTime dateModified) {
+        currentTreatment.resume(reasonForResumption, dateModified);
+    }
+
+    @JsonIgnore
+    public boolean hasCurrentTreatment() {
+        return currentTreatment != null;
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentClosed() {
+        return TherapyStatus.Closed == status;
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentPaused() {
+        return currentTreatment.isPaused();
+    }
+
+    @JsonIgnore
+    public TreatmentOutcome getTreatmentOutcome() {
+        return currentTreatment.getTreatmentOutcome();
+    }
+
+    @JsonIgnore
+    public TreatmentInterruptions getCurrentTreatmentInterruptions() {
+        return currentTreatment.getInterruptions();
+    }
+
+    @JsonIgnore
+    public SmearTestResults getSmearTestResults() {
+        return currentTreatment.getSmearTestResults();
+    }
+
+    @JsonIgnore
+    public WeightStatistics getWeightStatistics() {
+        return currentTreatment.getWeightStatistics();
+    }
+
+    @JsonIgnore
+    public boolean isValid(List<WHPErrorCode> errorCodes) {
+        return currentTreatment.isValid(errorCodes);
+    }
+
+    private String generateUid() {
+        return String.valueOf(DateUtil.now().getMillis());
+    }
+
 }

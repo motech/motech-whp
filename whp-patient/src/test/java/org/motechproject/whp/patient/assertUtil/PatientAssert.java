@@ -21,7 +21,7 @@ public class PatientAssert {
 
     public static void assertPatientEquals(Patient expected, Patient actual) {
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getCurrentTherapy(), actual.getCurrentTreatment().getTherapy());
+        assertEquals(expected.getCurrentTherapy(), actual.getCurrentTherapy());
     }
 
     public static void assertPatientEquals(List<Patient> expected, List<Patient> actual) {

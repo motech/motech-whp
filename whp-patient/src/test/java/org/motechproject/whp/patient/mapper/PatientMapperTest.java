@@ -55,6 +55,7 @@ public class PatientMapperTest {
                 .build();
         Patient patient = mapPatient(patientRequest);
 
+        Therapy oldTherapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
 
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
@@ -67,9 +68,7 @@ public class PatientMapperTest {
 
         PatientMapper.mapNewTreatmentForCategoryChange(openNewTreatmentUpdateRequest, patient);
 
-        Treatment newTreatment = patient.getCurrentTreatment();
-
-        assertNotSame(oldTreatment.getTherapy(), newTreatment.getTherapy());
+        assertNotSame(patient.getCurrentTherapy(), oldTherapy);
 
         assertTherapy(openNewTreatmentUpdateRequest, patient.getAge(), patient.getCurrentTherapy());
         assertTreatment(openNewTreatmentUpdateRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
@@ -83,6 +82,7 @@ public class PatientMapperTest {
                 .build();
         Patient patient = mapPatient(patientRequest);
 
+        Therapy therapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
 
         PatientRequest transferInRequest = new PatientRequestBuilder()
@@ -94,9 +94,7 @@ public class PatientMapperTest {
 
         PatientMapper.mapTreatmentForTransferIn(transferInRequest, patient);
 
-        Treatment newTreatment = patient.getCurrentTreatment();
-
-        assertSame(oldTreatment.getTherapy(), newTreatment.getTherapy());
+        assertSame(therapy, patient.getCurrentTherapy());
 
         assertTreatment(transferInRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
     }
@@ -117,13 +115,14 @@ public class PatientMapperTest {
 
         PatientMapper.mapUpdates(updateRequest, patient);
 
+        Therapy therapy = patient.getCurrentTherapy();
         Treatment treatment = patient.getCurrentTreatment();
 
         assertEquals(updateRequest.getDate_modified().toLocalDate(), treatment.getStartDate());
         assertEquals(updateRequest.getAddress(), treatment.getPatientAddress());
         assertEquals(updateRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(updateRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
-        assertEquals(updateRequest.getAge(), treatment.getTherapy().getPatientAge());
+        assertEquals(updateRequest.getAge(), therapy.getPatientAge());
 
         assertEquals(updateRequest.getSmearTestResults().size() + 1, treatment.getSmearTestResults().size());
         assertSmearTestResult(updateRequest.getSmearTestResults().get(0), treatment.getSmearTestResults().get(1));

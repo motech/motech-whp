@@ -54,7 +54,7 @@
                                          ${patient.lastName?cap_first}
                                          </#if>
                         </td>
-                <td>${patient.currentTreatment.therapy.patientAge!}</td>
+                <td>${patient.currentTherapy.patientAge!}</td>
                 <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                 <td id="patient_${patient.patientId}_ProviderId">${patient.currentTreatment.providerId}</td>
                 <td id="patient_${patient.patientId}_Village">
@@ -62,11 +62,11 @@
                 </td>
             <td id="patient_${patient.patientId}_District">${selectedDistrict}</td>
             <td id="patient_${patient.patientId}_TreatmentCategory">
-            ${patient.currentTreatment.therapy.treatmentCategory.name}
+            ${patient.currentTherapy.treatmentCategory.name}
             </td>
             <td id="patient_${patient.patientId}_TreatmentStartDate">
-                <#if patient.currentTreatment.therapy.startDate?? >
-                                ${patient.currentTreatment.therapy.startDateAsString}
+                <#if patient.currentTherapy.startDate?? >
+                                ${patient.currentTherapy.startDateAsString}
                             </#if>
             </td>
             <td id="patient_${patient.patientId}_WeeksElapsed">

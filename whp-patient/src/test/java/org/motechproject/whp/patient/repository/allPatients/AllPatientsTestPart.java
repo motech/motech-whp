@@ -43,8 +43,7 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
 
     private Therapy createTherapy() {
         TreatmentCategory treatmentCategory = new TreatmentCategory("cat1", "01", 3, 12, 36, 4, 12, 22, 66, Arrays.asList(DayOfWeek.Monday));
-        Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 200);
-        return therapy;
+        return new Therapy(treatmentCategory, DiseaseClass.P, 200);
     }
 
     private WeightStatisticsRecord weightStatistics() {

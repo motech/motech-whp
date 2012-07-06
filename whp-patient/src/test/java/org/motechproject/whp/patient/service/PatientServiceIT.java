@@ -292,7 +292,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient pausedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         assertCurrentTreatmentPaused(pausedPatient, pauseTreatmentRequest);
-        assertTrue(pausedPatient.isCurrentTreatmentPaused());
 
         PatientRequest restartTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()

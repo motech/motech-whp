@@ -129,7 +129,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     // TODO : should check what current week means
     public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
         adherenceIsRecordedForTheFirstTime();
-        LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTreatment().getTherapy().getStartDate();
+        LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate();
         assertEquals(
                 today.withDayOfWeek(DayOfWeek.Monday.getValue()).minusWeeks(1),
                 startDate
@@ -139,7 +139,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceForAnyWeekSubsequentToFirstEverAdherenceCapturedWeek() {
         adherenceIsRecordedForTheFirstTime();
-        LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTreatment().getTherapy().getStartDate();
+        LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate();
         assertNotNull(startDate);
 
         mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
@@ -147,7 +147,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
         assertEquals(
                 startDate,
-                allPatients.findByPatientId(PATIENT_ID).getCurrentTreatment().getTherapy().getStartDate()
+                allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate()
         );
     }
 
@@ -157,7 +157,7 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
         mockCurrentDate(today.plusDays(1));
 
         adherenceService.recordAdherence(new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build(), auditParams);
-        assertNull(allPatients.findByPatientId(PATIENT_ID).getCurrentTreatment().getTherapy().getStartDate());
+        assertNull(allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate());
     }
 
     @Test

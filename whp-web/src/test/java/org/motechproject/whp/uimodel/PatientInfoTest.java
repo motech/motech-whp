@@ -42,11 +42,6 @@ public class PatientInfoTest {
 
     @Before
     public void setup() {
-        Therapy therapy = new TherapyBuilder()
-                .withAge(patientAge)
-                .withDiseaseClass(diseaseClass)
-                .withTherapyUid("therapyUid")
-                .withTreatmentCategory(treatmentCategory).withStartDate(startDate).withNoOfDoesTaken(PhaseName.IP, 2).build();
 
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null));
@@ -54,18 +49,26 @@ public class PatientInfoTest {
         WeightStatistics weightStatistics = new WeightStatistics();
         weightStatistics.add(new WeightStatisticsRecord(SampleInstance.PreTreatment, 20.0, new LocalDate(2012, 1, 1)));
 
-        expectedTestResults = new TestResults(smearTestResults, weightStatistics);
-
         currentTreatment = new TreatmentBuilder()
                 .withStartDate(new LocalDate(2012, 2, 2))
                 .withTbId(tbId)
                 .withProviderId(providerId)
                 .withTbRegistrationNumber(tbRegistrationNo)
-                .withTherapy(therapy)
                 .withPatientType(patientType)
                 .withAddress(patientAddress)
                 .withSmearTestResults(smearTestResults)
                 .withWeightStatistics(weightStatistics)
+                .build();
+        expectedTestResults = new TestResults(smearTestResults, weightStatistics);
+
+        Therapy therapy = new TherapyBuilder()
+                .withAge(patientAge)
+                .withDiseaseClass(diseaseClass)
+                .withTherapyUid("therapyUid")
+                .withTreatmentCategory(treatmentCategory)
+                .withStartDate(startDate)
+                .withNoOfDoesTaken(PhaseName.IP, 2)
+                .withTreatment(currentTreatment)
                 .build();
 
         provider = newProviderBuilder()
@@ -81,7 +84,6 @@ public class PatientInfoTest {
                 .withPhi(phi)
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
-                .withCurrentTreatment(currentTreatment)
                 .withCurrentTherapy(therapy)
                 .build();
 

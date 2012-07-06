@@ -26,9 +26,6 @@ public class Treatment {
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
-    private String therapyUid;
-
-    private Therapy therapy;
 
     public Treatment() {
     }
@@ -50,7 +47,6 @@ public class Treatment {
     public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
         this.treatmentOutcome = treatmentOutcome;
-        therapy.close(dateModified);
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {
@@ -78,24 +74,8 @@ public class Treatment {
     }
 
     @JsonIgnore
-    public Therapy getTherapy() {
-        return therapy;
-    }
-
-    @JsonIgnore
-    public void setTherapy(Therapy therapy) {
-        this.therapy = therapy;
-        this.therapyUid = therapy.getUid();
-    }
-
-    @JsonIgnore
     public boolean isPaused() {
         return !CollectionUtils.isEmpty(interruptions) && interruptions.latestInterruption().isCurrentlyPaused();
-    }
-
-    @JsonIgnore
-    public boolean isClosed() {
-        return therapy.isClosed();
     }
 
     public void setProviderId(String providerId) {

@@ -26,7 +26,6 @@ public class TreatmentBuilder {
     public TreatmentBuilder withDefaults() {
         LocalDate today = DateUtil.today();
         treatment.setTbId("elevenDigit");
-        treatment.setTherapy(defaultTherapy());
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);
         treatment.addSmearTestResult(new SmearTestRecord(SampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative));
@@ -71,12 +70,6 @@ public class TreatmentBuilder {
 
     public TreatmentBuilder withTbId(String tbId) {
         treatment.setTbId(tbId);
-        return this;
-    }
-
-    public TreatmentBuilder withTherapy(Therapy therapy) {
-        treatment.setTherapy(therapy);
-        treatment.setTherapyUid(therapy.getUid());
         return this;
     }
 

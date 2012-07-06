@@ -8,7 +8,6 @@ import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 
@@ -16,25 +15,20 @@ public class TreatmentTest {
 
     @Test
     public void shouldCloseTreatment() {
-        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         Treatment treatment = new Treatment();
-        treatment.setTherapy(therapy);
         treatment.close(TreatmentOutcome.Cured, now);
 
         assertEquals(today(), treatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, treatment.getTreatmentOutcome());
-        verify(therapy, times(1)).close(now);
     }
 
     @Test
     public void shouldPauseTreatment() {
-        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         Treatment treatment = new Treatment();
-        treatment.setTherapy(therapy);
         treatment.pause("paws", now);
 
         assertTrue(treatment.isPaused());
@@ -42,11 +36,9 @@ public class TreatmentTest {
 
     @Test
     public void shouldResumeTreatment() {
-        Therapy therapy = mock(Therapy.class);
         DateTime now = now();
 
         Treatment treatment = new Treatment();
-        treatment.setTherapy(therapy);
         treatment.pause("paws", now);
         treatment.resume("swap", now);
 

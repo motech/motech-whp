@@ -90,10 +90,11 @@ public class PatientRecordValidator {
     private void validatePatientFields(Patient patient, ImportPatientRequest request, List<String> errors) {
         if (!patient.isMigrated()) errors.add("Patient not set as migrated");
 
-        checkIfEqual(request.getProvider_id(), patient.providerId(), "ProviderId", errors);
+        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
+        checkIfEqual(request.getProvider_id(), currentTreatment.getProviderId(), "ProviderId", errors);
 
-        if (allProviders.findByProviderId(patient.providerId()) == null) {
-            errors.add("Provider with Id \"" + patient.providerId() + "\" does not exist");
+        if (allProviders.findByProviderId(currentTreatment.getProviderId()) == null) {
+            errors.add("Provider with Id \"" + currentTreatment.getProviderId() + "\" does not exist");
         }
 
         checkIfEqual(Integer.parseInt(request.getAge()), patient.getAge(), "Age", errors);
@@ -132,7 +133,7 @@ public class PatientRecordValidator {
             checkIfEnumsAreEqual(request.getPatient_type(), treatment.getPatientType(), "Patient Type", errors, PatientType.class);
         }
 
-        validateTreatment(patient.getCurrentTreatment().getTherapy(), request, errors);
+        validateTreatment(patient.getCurrentTherapy(), request, errors);
         validateSmearTestResults(treatment.getSmearTestResults(), errors, request.getSmearTestResultRequest());
         validateWeightStatistics(request, errors, patient.getCurrentTreatment().getWeightStatistics());
 

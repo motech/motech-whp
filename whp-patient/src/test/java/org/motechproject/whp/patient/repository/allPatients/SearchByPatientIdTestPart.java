@@ -2,11 +2,9 @@ package org.motechproject.whp.patient.repository.allPatients;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.assertUtil.PatientAssert;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -31,8 +29,10 @@ public class SearchByPatientIdTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldLoadTherapyUponFetch() {
-        Patient patient = createPatient("Cha01100002", "providerId");
-        Patient savedPatient = allPatients.findByPatientId("chA01100002");
+        Patient patient = PatientBuilder.patient();
+        allPatients.add(patient);
+
+        Patient savedPatient = allPatients.findByPatientId(patient.getPatientId());
         PatientAssert.assertPatientEquals(patient, savedPatient);
     }
 

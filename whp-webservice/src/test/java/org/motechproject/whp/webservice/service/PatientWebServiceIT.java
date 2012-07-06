@@ -84,7 +84,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
         for (Treatment treatment : recordedPatient.getTreatments()) {
-            assertNotNull(treatment.getTherapy());
+            assertNotNull(recordedPatient.getCurrentTherapy());
         }
     }
 
@@ -156,7 +156,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
         assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
         assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-        assertEquals(patient.getCurrentTreatment().getTherapyUid(), updatedPatient.getCurrentTreatment().getTherapyUid());
+        assertEquals(patient.getCurrentTherapy().getUid(), updatedPatient.getCurrentTherapy().getUid());
 
         assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
         assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());

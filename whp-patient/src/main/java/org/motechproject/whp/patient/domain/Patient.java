@@ -30,13 +30,11 @@ public class Patient extends MotechBaseDataObject {
     private String phoneNumber;
     private String phi;
     private PatientStatus status = PatientStatus.Open;
-    private List<Treatment> treatments = new ArrayList<Treatment>();
     private DateTime lastModifiedDate;
-    private Treatment currentTreatment;
     private boolean onActiveTreatment = true;
 
-    private List<Therapy> therapies = new ArrayList<Therapy>();
     private Therapy currentTherapy;
+    private List<Therapy> therapyHistory = new ArrayList<>();
 
     private boolean migrated;
 
@@ -52,46 +50,36 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void addTreatment(Treatment treatment, DateTime dateModified) {
-        treatment.setTherapyUid(currentTherapy.getUid());
-        treatment.setTherapy(currentTherapy);
+        currentTherapy.addTreatment(treatment, dateModified);
 
-        if (currentTreatment != null) {
-            treatments.add(currentTreatment);
-        }
-        currentTreatment = treatment;
-        treatment.setStartDate(dateModified.toLocalDate());
         setLastModifiedDate(dateModified);
         onActiveTreatment = true;
     }
 
-
     public void addTreatment(Treatment treatment, Therapy therapy, DateTime dateModified) {
-        createNewTherapy(therapy);
+        addTherapy(therapy);
         addTreatment(treatment, dateModified);
     }
 
-    private void createNewTherapy(Therapy therapy) {
+    private void addTherapy(Therapy therapy) {
         if (currentTherapy != null) {
-            therapies.add(currentTherapy);
+            therapyHistory.add(currentTherapy);
         }
-        therapy.setUid(generateUid());
         currentTherapy = therapy;
     }
 
-    private String generateUid() {
-        return String.valueOf(DateUtil.now().getMillis());
+    public List<Therapy> allTherapies() {
+        ArrayList<Therapy> therapies = new ArrayList<Therapy>();
+        therapies.add(currentTherapy);
+        therapies.addAll(therapyHistory);
+        return therapies;
     }
 
     @JsonIgnore
     public Treatment getTreatment(LocalDate date) {
-        if (currentTreatment.isDateInTreatment(date)) {
-            return currentTreatment;
-        }
-        for (int i = treatments.size() - 1; i >= 0; i--) {
-            Treatment treatment = treatments.get(i);
-            if (treatment.isDateInTreatment(date)) {
-                return treatment;
-            }
+        for (Therapy therapy : allTherapies()) {
+            Treatment treatment = therapy.getTreatment(date);
+            if (treatment != null) return treatment;
         }
         return null;
     }
@@ -105,33 +93,23 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
-        setLastModifiedDate(dateModified);
-        currentTreatment.close(treatmentOutcome, dateModified);
+        currentTherapy.closeCurrentTreatment(treatmentOutcome, dateModified);
         onActiveTreatment = false;
+        setLastModifiedDate(dateModified);
     }
 
     public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {
+        currentTherapy.pauseCurrentTreatment(reasonForPause, dateModified);
         setLastModifiedDate(dateModified);
-        currentTreatment.pause(reasonForPause, dateModified);
     }
 
     public void restartCurrentTreatment(String reasonForResumption, DateTime dateModified) {
+        currentTherapy.restartCurrentTreatment(reasonForResumption, dateModified);
         setLastModifiedDate(dateModified);
-        currentTreatment.resume(reasonForResumption, dateModified);
-    }
-
-    @JsonIgnore
-    public String tbId() {
-        return currentTreatment.getTbId();
     }
 
     public void nextPhaseName(PhaseName phaseName) {
         currentTherapy.getPhases().setNextPhaseName(phaseName);
-    }
-
-    @JsonIgnore
-    public String providerId() {
-        return currentTreatment.getProviderId();
     }
 
     @JsonIgnore
@@ -163,42 +141,42 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean hasCurrentTreatment() {
-        return currentTreatment != null;
+        return currentTherapy.hasCurrentTreatment();
     }
 
     @JsonIgnore
     public boolean isCurrentTreatmentClosed() {
-        return currentTreatment.isClosed();
+        return currentTherapy.isCurrentTreatmentClosed();
     }
 
     @JsonIgnore
     public boolean isCurrentTreatmentPaused() {
-        return currentTreatment.isPaused();
+        return currentTherapy.isCurrentTreatmentPaused();
     }
 
     @JsonIgnore
     public TreatmentOutcome getTreatmentOutcome() {
-        return currentTreatment.getTreatmentOutcome();
+        return currentTherapy.getTreatmentOutcome();
     }
 
     @JsonIgnore
     public TreatmentInterruptions getCurrentTreatmentInterruptions() {
-        return currentTreatment.getInterruptions();
+        return currentTherapy.getCurrentTreatmentInterruptions();
     }
 
     @JsonIgnore
     public SmearTestResults getSmearTestResults() {
-        return currentTreatment.getSmearTestResults();
+        return currentTherapy.getSmearTestResults();
     }
 
     @JsonIgnore
     public WeightStatistics getWeightStatistics() {
-        return currentTreatment.getWeightStatistics();
+        return currentTherapy.getWeightStatistics();
     }
 
     @JsonIgnore
     public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return currentTreatment.isValid(errorCodes);
+        return currentTherapy.isValid(errorCodes);
     }
 
     public boolean isDoseDateInPausedPeriod(LocalDate doseDate) {
@@ -235,7 +213,7 @@ public class Patient extends MotechBaseDataObject {
     public ArrayList<String> getPhasesNotPossibleToTransitionTo() {
         Phases phases = currentTherapy.getPhases();
         Phase currentPhase = currentTherapy.getCurrentPhase() == null ? currentTherapy.getLastCompletedPhase() : currentTherapy.getCurrentPhase();
-        ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<String>();
+        ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<>();
         if (currentPhase == null) return namesOfPhasesNotPossibleToTransitionTo;
 
         List<Phase> phasesNotPossibleToTransitionTo = phases.subList(0, phases.indexOf(currentPhase) + 1);
@@ -276,14 +254,6 @@ public class Patient extends MotechBaseDataObject {
         return getCurrentTherapy().currentPhaseDoseComplete();
     }
 
-    public void loadTherapyIntoTreatments() {
-        currentTreatment.setTherapy(getTherapy(currentTreatment.getTherapyUid()));
-
-        for (Treatment treatment : getTreatments()) {
-            treatment.setTherapy(getTherapy(treatment.getTherapyUid()));
-        }
-    }
-
     @JsonIgnore
     public void adjustPhaseDates(LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
         getCurrentTherapy().adjustPhaseStartDates(ipStartDate, eipStartDate, cpStartDate);
@@ -297,11 +267,29 @@ public class Patient extends MotechBaseDataObject {
     private Therapy getTherapy(String therapyUid) {
         if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
 
-        List<Therapy> therapyList = select(therapies, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
+        List<Therapy> therapyList = select(therapyHistory, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
         return therapyList.get(0);
     }
 
     public void setNumberOfDosesTaken(PhaseName phaseName, int dosesTaken) {
         getCurrentTherapy().getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
     }
+
+    public Treatment getCurrentTreatment() {
+        return currentTherapy.getCurrentTreatment();
+    }
+
+    public void setCurrentTreatment(Treatment currentTreatment) {
+        currentTherapy.setCurrentTreatment(currentTreatment);
+    }
+
+    public List<Treatment> getTreatments() {
+        ArrayList<Treatment> treatments = new ArrayList<>();
+        treatments.addAll(currentTherapy.getTreatments());
+        for (Therapy therapy : therapyHistory) {
+            treatments.addAll(therapy.getTreatments());
+        }
+        return treatments;
+    }
+
 }

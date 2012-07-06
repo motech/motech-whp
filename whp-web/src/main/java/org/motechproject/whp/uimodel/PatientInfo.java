@@ -80,7 +80,7 @@ public class PatientInfo {
         treatmentCategory = latestTherapy.getTreatmentCategory().getName();
         address = currentTreatment.getPatientAddress().toString();
         addressState = currentTreatment.getPatientAddress().getAddress_state();
-        nextPhaseName = currentTreatment.getTherapy().getPhases().getNextPhaseName();
+        nextPhaseName = patient.getCurrentTherapy().getPhases().getNextPhaseName();
         phasesNotPossibleToTransitionTo = patient.getPhasesNotPossibleToTransitionTo();
         nearingPhaseTransition = patient.isNearingPhaseTransition();
         transitioning = patient.isTransitioning();
