@@ -12,7 +12,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
 import static junit.framework.Assert.fail;
-import static org.apache.commons.lang.StringUtils.trimToEmpty;
 import static org.motechproject.whp.functional.data.AdherenceValue.*;
 import static org.openqa.selenium.By.id;
 
@@ -84,8 +83,12 @@ public class TreatmentCardPage extends PatientDashboardPage {
         return patientCurrentPhase.contains(phaseName.name());
     }
 
-    public String getCurrentPhaseOfPatient() {
-        return trimToEmpty(patientPhaseMessage.getText().split(":")[1]);
+    public boolean ipTreatmentCardExists() {
+        return safeFindElement(By.id("ipTreatmentCardHeading")) != null;
+    }
+
+    public boolean cpTreatmentCardExists() {
+        return safeFindElement(By.id("cpTreatmentCardHeading")) != null;
     }
 
     public void setAdherenceValue(Value adherenceValue, LocalDate on, String phase) {

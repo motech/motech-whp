@@ -13,6 +13,7 @@ import org.motechproject.whp.functional.steps.treatmentupdate.TransferInTreatmen
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CMFAdminViewsCPTreatmentCardTest extends TreatmentUpdateTest {
 
@@ -100,7 +101,7 @@ public class CMFAdminViewsCPTreatmentCardTest extends TreatmentUpdateTest {
 
         TreatmentCardPage treatmentCardPage = openTreatmentCardStep.withPatient(testPatient).execute();
 
-        assertEquals("CP", treatmentCardPage.getCurrentPhaseOfPatient());
+        assertTrue(treatmentCardPage.cpTreatmentCardExists());
 
         treatmentCardPage.logout();
     }

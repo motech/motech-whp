@@ -3,13 +3,13 @@
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout "Patient List">
     <#if message?exists && (message?length>0)>
-        <div class="adherence-message-alert row text-center alert alert-info fade in">
-            <button class="close" data-dismiss="alert">&times;</button>
-        ${message}
+    <div class="adherence-message-alert row text-center alert alert-info fade in">
+        <button class="close" data-dismiss="alert">&times;</button>
+    ${message}
         <#assign message=""/>
-        </div>
+    </div>
     </#if>
-<@legend key1="paused" value1="Current Treatment Paused" />
+    <@legend key1="paused" value1="Current Treatment Paused" />
 <div class="row">
     <div>
         <table id="patientList" class="table table-bordered table-condensed">

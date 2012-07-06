@@ -11,13 +11,13 @@
 </div>
     <#if treatmentCard.IPAdherenceSectionValid == true>
     <div>
-        <h3>IP and EIP treatment card</h3>
+        <h3 id="ipTreatmentCardHeading">IP and EIP treatment card</h3>
         <@adherenceBox title="IPTreatmentCard" monthlyAdherences=treatmentCard.ipAndEipAdherenceSection.monthlyAdherences />
     </div>
     </#if>
     <#if treatmentCard.CPAdherenceSectionValid == true>
     <div>
-        <h3> CP treatment card </h3>
+        <h3 id="cpTreatmentCardHeading"> CP treatment card </h3>
         <@adherenceBox title="CPTreatmentCard" monthlyAdherences=treatmentCard.cpAdherenceSection.monthlyAdherences />
     </div>
     </#if>

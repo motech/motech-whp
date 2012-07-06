@@ -69,7 +69,7 @@ public class PatientInfo {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         phi = patient.getPhi();
-        gender = patient.getGender().name();
+        gender = patient.getGender().getValue();
         tbId = currentTreatment.getTbId();
         providerId = currentTreatment.getProviderId();
         therapyStartDate = WHPDate.date(latestTherapy.getStartDate()).value();
