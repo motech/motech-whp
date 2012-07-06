@@ -115,8 +115,18 @@ public class Therapy {
 
     @JsonIgnore
     public Integer getWeeksElapsed() {
-        if(phases.isOrHasBeenOnIp())
+        if (phases.isOrHasBeenOnIp())
             return WHPDateUtil.weeksElapsedSince(phases.getIPStartDate());
         else return null;
+    }
+
+    @JsonIgnore
+    public boolean isOrHasBeenOnIP() {
+        return phases.isOrHasBeenOnIp();
+    }
+
+    @JsonIgnore
+    public boolean isOrHasBeenOnCP() {
+        return phases.isOrHasBeenOnCp();
     }
 }

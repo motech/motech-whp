@@ -2,15 +2,13 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.refdata.domain.PhaseName.*;
 
 public class TherapyTest {
 
@@ -30,14 +28,14 @@ public class TherapyTest {
         therapy.start(today);
 
         assertEquals(today, therapy.getStartDate());
-        assertEquals(today, therapy.getPhases().getByPhaseName(PhaseName.IP).getStartDate());
+        assertEquals(today, therapy.getPhases().getByPhaseName(IP).getStartDate());
         assertEquals(TherapyStatus.Ongoing, therapy.getStatus());
     }
 
     @Test
     public void shouldFetchPhaseByName() {
         Therapy therapy = new Therapy();
-        assertEquals(new Phase(PhaseName.IP), therapy.getPhase(PhaseName.IP));
+        assertEquals(new Phase(IP), therapy.getPhase(IP));
     }
 
     @Test
@@ -90,6 +88,36 @@ public class TherapyTest {
         therapy.setTreatmentCategory(category);
 
         assertNull(therapy.getWeeksElapsed());
+    }
+
+    @Test
+    public void shouldHaveIPPhase() {
+        Therapy therapy = new Therapy();
+        assertNotNull(therapy.getPhase(IP));
+    }
+
+    @Test
+    public void shouldHaveEIPPhase() {
+        Therapy therapy = new Therapy();
+        assertNotNull(therapy.getPhase(EIP));
+    }
+
+    @Test
+    public void shouldHaveCPPhase() {
+        Therapy therapy = new Therapy();
+        assertNotNull(therapy.getPhase(CP));
+    }
+
+    @Test
+    public void shouldNotBeOnIPPhaseByDefault() {
+        Therapy therapy = new Therapy();
+        assertFalse(therapy.isOrHasBeenOnIP());
+    }
+
+    @Test
+    public void shouldNotBeOnCPPhaseByDefault() {
+        Therapy therapy = new Therapy();
+        assertFalse(therapy.isOrHasBeenOnCP());
     }
 
 }

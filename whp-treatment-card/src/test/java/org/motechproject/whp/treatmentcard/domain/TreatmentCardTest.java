@@ -153,4 +153,31 @@ public class TreatmentCardTest {
 
         assertTrue(new TreatmentCard(patient).isCPAdherenceSectionValid());
     }
+
+    @Test
+    public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsNull() {
+        Patient patient = patient();
+        assertFalse(new TreatmentCard(patient).isIPAdherenceSectionValid());
+    }
+
+    @Test
+    public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsInThePast() {
+        Patient patient = patient();
+        patient.startTherapy(today().minusDays(1));
+        assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
+    }
+
+    @Test
+    public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsNow() {
+        Patient patient = patient();
+        patient.startTherapy(today());
+        assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
+    }
+
+    @Test
+    public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsInTheFuture() {
+        Patient patient = patient();
+        patient.startTherapy(today().plusDays(1));
+        assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
+    }
 }

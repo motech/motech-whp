@@ -20,13 +20,10 @@ public class TreatmentCard {
     public static final int MONTHS_IN_CP_BOX = 7;
 
     private Patient patient;
-
     private boolean isSundayDoseDate;
-
     private Therapy therapy;
 
     private AdherenceSection ipAndEipAdherenceSection = new AdherenceSection();
-
     private AdherenceSection cpAdherenceSection = new AdherenceSection();
 
     public TreatmentCard(Patient patient) {
@@ -95,5 +92,9 @@ public class TreatmentCard {
 
     public boolean isCPAdherenceSectionValid() {
         return null != patient.getCurrentTherapy().getPhases().getCPStartDate();
+    }
+
+    public boolean isIPAdherenceSectionValid() {
+        return patient.getCurrentTherapy().isOrHasBeenOnIP();
     }
 }
