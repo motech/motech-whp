@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -21,9 +21,9 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
 
     @Test
     public void shouldNotEndCurrentPhaseWhenPatientHasNotTakenAllDosesForCurrentPhase() {
-        phaseUpdateOrchestrator.setNextPhase(PATIENT_ID, PhaseName.EIP);
+        phaseUpdateOrchestrator.setNextPhase(PATIENT_ID, Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), PhaseName.EIP);
+        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verifyNoMoreInteractions(patientService);
         verifyZeroInteractions(whpAdherenceService);
     }
@@ -33,14 +33,14 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(PhaseName.IP, 24);
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
 
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
-        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), PhaseName.EIP);
+        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), PhaseName.EIP);
+        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(patientService).autoCompleteCurrentPhase(patient, twentyFourthDoseTakenDate);
     }
 
@@ -50,13 +50,13 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
 
         patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(PhaseName.IP, 3);
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.setNumberOfDosesTaken(Phase.IP, 3);
+        patient.nextPhaseName(Phase.EIP);
         patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
-        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), PhaseName.EIP);
+        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), PhaseName.EIP);
+        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
         verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
         verify(patientService).startNextPhase(patient);

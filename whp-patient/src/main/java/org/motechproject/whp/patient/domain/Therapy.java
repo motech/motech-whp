@@ -34,7 +34,7 @@ public class Therapy {
     private Treatment currentTreatment;
     private List<Treatment> treatments = new ArrayList<>();
 
-    private Phases phases = new Phases(Arrays.asList(new PhaseRecord(PhaseName.IP), new PhaseRecord(PhaseName.EIP), new PhaseRecord(PhaseName.CP)));
+    private Phases phases = new Phases(Arrays.asList(new PhaseRecord(Phase.IP), new PhaseRecord(Phase.EIP), new PhaseRecord(Phase.CP)));
 
     public Therapy() {
         setUid(generateUid());
@@ -97,7 +97,7 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public PhaseRecord getPhase(PhaseName phaseName) {
+    public PhaseRecord getPhase(Phase phaseName) {
         return phases.getByPhaseName(phaseName);
     }
 
@@ -119,7 +119,7 @@ public class Therapy {
         phases.setCPStartDate(cpStartDate);
     }
 
-    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+    public Integer numberOfDosesForPhase(Phase phaseName) {
         return treatmentCategory.numberOfDosesForPhase(phaseName);
     }
 

@@ -9,7 +9,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.motechproject.whp.refdata.domain.PhaseName.*;
+import static org.motechproject.whp.refdata.domain.Phase.*;
 
 public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
 

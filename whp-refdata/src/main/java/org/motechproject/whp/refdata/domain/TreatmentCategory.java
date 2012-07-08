@@ -49,7 +49,7 @@ public class TreatmentCategory extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+    public Integer numberOfDosesForPhase(Phase phaseName) {
         switch (phaseName) {
             case IP:
                 return numberOfDosesInIP;

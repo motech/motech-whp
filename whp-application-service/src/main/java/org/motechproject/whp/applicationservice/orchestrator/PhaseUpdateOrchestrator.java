@@ -8,7 +8,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +45,7 @@ public class PhaseUpdateOrchestrator {
         }
     }
 
-    public void setNextPhase(String patientId, PhaseName phaseToTransitionTo) {
+    public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
         patientService.setNextPhaseName(patientId, phaseToTransitionTo);
         attemptPhaseTransition(patientId);
     }

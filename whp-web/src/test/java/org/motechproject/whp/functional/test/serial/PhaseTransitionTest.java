@@ -9,7 +9,7 @@ import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.motechproject.whp.functional.steps.provideradherence.SubmitAdherenceStep;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -88,7 +88,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
                 .withDosesTaken(3)
                 .execute();
 
-        transitionPatient(testPatient, testProvider, PhaseName.EIP);
+        transitionPatient(testPatient, testProvider, Phase.EIP);
 
         assertPatientIsOnIP(testPatient);
 
@@ -183,7 +183,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
                 .withDosesTaken(3)
                 .execute();
 
-        transitionPatient(testPatient, testProvider, PhaseName.CP);
+        transitionPatient(testPatient, testProvider, Phase.CP);
 
         assertPatientIsOnCP(testPatient);
     }
@@ -259,7 +259,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
 
         assertPatientIsOnNoPhase(testPatient);
 
-        transitionPatient(testPatient, testProvider, PhaseName.EIP);
+        transitionPatient(testPatient, testProvider, Phase.EIP);
 
         assertPatientIsOnEIP(testPatient);
 
@@ -297,13 +297,14 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
 
         assertPatientIsOnNoPhase(testPatient);
 
-        transitionPatient(testPatient, testProvider, PhaseName.CP);
+        transitionPatient(testPatient, testProvider, Phase.CP);
 
         assertPatientIsOnCP(testPatient);
     }
 
-    private void transitionPatient(TestPatient testPatient, TestProvider testProvider, PhaseName phaseName) {
-        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
+
+    private void transitionPatient(TestPatient testPatient, TestProvider testProvider, Phase phaseName) {
+        AdminPage adminPage = loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
@@ -316,7 +317,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
-        assertTrue(treatmentCardPage.currentPhase(PhaseName.IP));
+        assertTrue(treatmentCardPage.currentPhase(Phase.IP));
         treatmentCardPage.logout();
     }
 
@@ -325,7 +326,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
-        assertTrue(treatmentCardPage.currentPhase(PhaseName.EIP));
+        assertTrue(treatmentCardPage.currentPhase(Phase.EIP));
         treatmentCardPage.logout();
     }
 
@@ -334,7 +335,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
-        assertTrue(treatmentCardPage.currentPhase(PhaseName.CP));
+        assertTrue(treatmentCardPage.currentPhase(Phase.CP));
         treatmentCardPage.logout();
     }
 
@@ -343,9 +344,9 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
-        assertFalse(treatmentCardPage.currentPhase(PhaseName.IP));
-        assertFalse(treatmentCardPage.currentPhase(PhaseName.EIP));
-        assertFalse(treatmentCardPage.currentPhase(PhaseName.CP));
+        assertFalse(treatmentCardPage.currentPhase(Phase.IP));
+        assertFalse(treatmentCardPage.currentPhase(Phase.EIP));
+        assertFalse(treatmentCardPage.currentPhase(Phase.CP));
         treatmentCardPage.logout();
     }
 

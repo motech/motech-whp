@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.Arrays;
 
@@ -17,19 +17,19 @@ public class PhasesTest {
 
     @Before
     public void setUp() {
-        phases = new Phases(Arrays.asList(new PhaseRecord(PhaseName.IP), new PhaseRecord(PhaseName.CP), new PhaseRecord(PhaseName.EIP)));
+        phases = new Phases(Arrays.asList(new PhaseRecord(Phase.IP), new PhaseRecord(Phase.CP), new PhaseRecord(Phase.EIP)));
     }
 
     @Test
     public void shouldReturnPhaseByName() {
-        assertEquals(PhaseName.IP, phases.getByPhaseName(PhaseName.IP).getName());
+        assertEquals(Phase.IP, phases.getByPhaseName(Phase.IP).getName());
     }
 
     @Test
     public void settingEIPStartDateShouldSetEndDateOnIP() {
         phases.setEIPStartDate(today());
 
-        assertEquals(today().minusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
     }
 
     @Test
@@ -37,11 +37,11 @@ public class PhasesTest {
         phases.setIPStartDate(today());
         phases.setEIPStartDate(today().plusDays(2));
 
-        assertEquals(today().plusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().plusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
 
         phases.setEIPStartDate(null);
 
-        assertEquals(null, phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(null, phases.getByPhaseName(Phase.IP).getEndDate());
     }
 
     @Test
@@ -50,12 +50,12 @@ public class PhasesTest {
         phases.setEIPStartDate(today().plusDays(2));
         phases.setCPStartDate(today().plusDays(4));
 
-        assertEquals(today().plusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().plusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
 
         phases.setEIPStartDate(null);
 
-        assertNotNull(null, phases.getByPhaseName(PhaseName.IP).getEndDate());
-        assertEquals(today().plusDays(3), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertNotNull(null, phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().plusDays(3), phases.getByPhaseName(Phase.IP).getEndDate());
     }
 
     @Test
@@ -63,15 +63,15 @@ public class PhasesTest {
         phases.setEIPStartDate(today().minusDays(2));
         phases.setCPStartDate(today());
 
-        assertEquals(today().minusDays(1), phases.getByPhaseName(PhaseName.EIP).getEndDate());
-        assertNotSame(today().minusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.EIP).getEndDate());
+        assertNotSame(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
     }
 
     @Test
     public void settingCPStartDateShouldSetEndDateOnIPIfEIPWasNeverStarted() {
         phases.setCPStartDate(today());
 
-        assertEquals(today().minusDays(1), phases.getByPhaseName(PhaseName.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class PhasesTest {
         phases.setEIPEndDate(today().minusDays(1));
         phases.setCPStartDate(null);
 
-        assertNull(phases.getByPhaseName(PhaseName.EIP).getEndDate());
+        assertNull(phases.getByPhaseName(Phase.EIP).getEndDate());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class PhasesTest {
         phases.setIPStartDate(today());
         phases.setEIPStartDate(today().plusDays(10));
 
-        assertEquals(phases.getByPhaseName(PhaseName.EIP), phases.getCurrentPhase());
+        assertEquals(phases.getByPhaseName(Phase.EIP), phases.getCurrentPhase());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class PhasesTest {
         phases.setEIPEndDate(today().plusDays(5));
         phases.setCPStartDate(today().plusDays(6));
 
-        assertEquals(phases.getByPhaseName(PhaseName.EIP), phases.getLastCompletedPhase());
+        assertEquals(phases.getByPhaseName(Phase.EIP), phases.getLastCompletedPhase());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class PhasesTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
@@ -165,7 +165,7 @@ public class PhasesTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(2));
         assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
@@ -176,10 +176,10 @@ public class PhasesTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(2));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
@@ -189,10 +189,10 @@ public class PhasesTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(2));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(1));
         assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());

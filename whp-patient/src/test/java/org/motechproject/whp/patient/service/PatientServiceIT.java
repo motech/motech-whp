@@ -14,7 +14,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.contract.ProviderRequest;
@@ -334,7 +334,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.startTherapy(patientId, today);
 
         assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getStartDate());
-        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getStartDate());
+        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getStartDate());
     }
 
     @Test
@@ -343,9 +343,9 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.createPatient(createPatientRequest);
         String patientId = createPatientRequest.getCase_id();
 
-        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), PhaseName.IP, 2);
+        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2);
 
-        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(PhaseName.IP).getNumberOfDosesTaken());
+        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getNumberOfDosesTaken());
     }
 
     @Test

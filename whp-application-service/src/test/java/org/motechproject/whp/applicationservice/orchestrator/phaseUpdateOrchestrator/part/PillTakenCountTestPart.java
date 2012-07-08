@@ -3,7 +3,7 @@ package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchest
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +28,6 @@ public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
                 .thenReturn(numberOfDosesTakenInIP);
 
         phaseUpdateOrchestrator.recomputePillCount(patient.getPatientId());
-        verify(patientService).updatePillTakenCount(patient, PhaseName.IP, numberOfDosesTakenInIP);
+        verify(patientService).updatePillTakenCount(patient, Phase.IP, numberOfDosesTakenInIP);
     }
 }

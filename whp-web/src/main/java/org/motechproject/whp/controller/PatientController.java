@@ -9,7 +9,7 @@ import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
@@ -184,7 +184,7 @@ public class PatientController extends BaseController {
 
     @RequestMapping(value = "transitionPhase/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") String patientId, @RequestParam("to") String phaseName) {
-        phaseUpdateOrchestrator.setNextPhase(patientId, PhaseName.valueOf(phaseName));
+        phaseUpdateOrchestrator.setNextPhase(patientId, Phase.valueOf(phaseName));
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 }

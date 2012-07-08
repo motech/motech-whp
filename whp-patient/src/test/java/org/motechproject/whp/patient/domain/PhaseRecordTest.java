@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
@@ -13,7 +13,7 @@ public class PhaseRecordTest {
         TreatmentCategory category = new TreatmentCategory();
         category.setNumberOfDosesInIP(24);
 
-        PhaseRecord phase = new PhaseRecord(PhaseName.IP);
+        PhaseRecord phase = new PhaseRecord(Phase.IP);
 
         phase.setNumberOfDosesTaken(11);
 

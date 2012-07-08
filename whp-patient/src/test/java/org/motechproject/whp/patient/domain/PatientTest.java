@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.*;
@@ -119,9 +119,9 @@ public class PatientTest {
     public void shouldSetNextPhaseOnCurrentTherapy() {
         Patient patient = new PatientBuilder().withDefaults().build();
 
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
 
-        assertEquals(patient.getCurrentTherapy().getPhases().getNextPhaseName(), PhaseName.EIP);
+        assertEquals(patient.getCurrentTherapy().getPhases().getNextPhaseName(), Phase.EIP);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class PatientTest {
 
         patient.endCurrentPhase(phaseEndDate);
 
-        assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhase(PhaseName.IP).getEndDate());
+        assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhase(Phase.IP).getEndDate());
     }
 
     @Test
@@ -140,12 +140,12 @@ public class PatientTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         LocalDate phaseEndDate = new LocalDate(2012, 4, 1);
         patient.startTherapy(new LocalDate(2012, 3, 1));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
 
         patient.endCurrentPhase(phaseEndDate);
         patient.startNextPhase();
 
-        assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhase(PhaseName.EIP).getStartDate());
+        assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhase(Phase.EIP).getStartDate());
         assertNull(patient.getCurrentTherapy().getPhases().getNextPhaseName());
     }
 
@@ -161,7 +161,7 @@ public class PatientTest {
     @Test
     public void hasPhaseToTransitionToShouldReturnTrueIfNextPhaseNameIsNotNull() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
 
         assertTrue(patient.hasPhaseToTransitionTo());
     }

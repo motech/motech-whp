@@ -8,7 +8,7 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.refdata.domain.PhaseName.*;
+import static org.motechproject.whp.refdata.domain.Phase.*;
 
 public class TherapyTest {
 

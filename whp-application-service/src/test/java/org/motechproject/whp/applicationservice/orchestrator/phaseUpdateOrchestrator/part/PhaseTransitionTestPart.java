@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -41,8 +41,8 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
     public void shouldStartNextPhaseWhenAttemptingToTransition_NextPhaseSet() {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(PhaseName.IP, 24);
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
+        patient.nextPhaseName(Phase.EIP);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
@@ -60,11 +60,11 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(PhaseName.IP, 24);
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
         patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
         //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
-        patient.setNumberOfDosesTaken(PhaseName.IP, 23);
+        patient.setNumberOfDosesTaken(Phase.IP, 23);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 

@@ -3,7 +3,7 @@ package org.motechproject.whp.treatmentcard.domain;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.newDate;
@@ -34,7 +34,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
 
         assertEquals(today().minusMonths(4), new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
@@ -44,7 +44,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
         assertEquals(today(), new TreatmentCard(patient).ipBoxAdherenceEndDate());
@@ -55,7 +55,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.EIP);
+        patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(3));
 
@@ -67,7 +67,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
         assertEquals(today(), new TreatmentCard(patient).cpBoxAdherenceEndDate());
@@ -78,7 +78,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today().minusMonths(5));
         patient.endCurrentPhase(today().minusMonths(4));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         patient.endCurrentPhase(today().minusMonths(2));
 
@@ -98,7 +98,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(newDate(2012, 1, 1));
         patient.endCurrentPhase(newDate(2012, 2, 1));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         patient.endCurrentPhase(newDate(2012, 4, 1));
 
@@ -110,7 +110,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(newDate(2012, 1, 1));
         patient.endCurrentPhase(newDate(2012, 2, 1));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
 
         assertFalse(new TreatmentCard(patient).isCPAdherenceSectionValid());
     }
@@ -122,7 +122,7 @@ public class TreatmentCardTest {
 
         patient.startTherapy(fiveDaysAgo);
         patient.endCurrentPhase(fiveDaysAgo.plusDays(1));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
         assertTrue(new TreatmentCard(patient).isCPAdherenceSectionValid());
@@ -135,7 +135,7 @@ public class TreatmentCardTest {
 
         patient.startTherapy(fiveDaysFromNow);
         patient.endCurrentPhase(fiveDaysFromNow.plusDays(1));
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
         assertTrue(new TreatmentCard(patient).isCPAdherenceSectionValid());
@@ -148,7 +148,7 @@ public class TreatmentCardTest {
 
         patient.startTherapy(yesterday);
         patient.endCurrentPhase(yesterday);
-        patient.nextPhaseName(PhaseName.CP);
+        patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
         assertTrue(new TreatmentCard(patient).isCPAdherenceSectionValid());

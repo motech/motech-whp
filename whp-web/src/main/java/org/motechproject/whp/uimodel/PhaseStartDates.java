@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 
 import static org.motechproject.whp.common.WHPDate.date;
-import static org.motechproject.whp.refdata.domain.PhaseName.*;
+import static org.motechproject.whp.refdata.domain.Phase.*;
 
 @Data
 public class PhaseStartDates {

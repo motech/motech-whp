@@ -7,7 +7,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -57,12 +57,12 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void updatePillTakenCount(Patient patient, PhaseName name, int dosesTaken) {
+    public void updatePillTakenCount(Patient patient, Phase name, int dosesTaken) {
         patient.setNumberOfDosesTaken(name, dosesTaken);
         allPatients.update(patient);
     }
 
-    public void setNextPhaseName(String patientId, PhaseName nextPhase) {
+    public void setNextPhaseName(String patientId, Phase nextPhase) {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.nextPhaseName(nextPhase);
         allPatients.update(patient);

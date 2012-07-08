@@ -1,11 +1,12 @@
 package org.motechproject.whp.refdata.domain;
 
-public enum PhaseName {
+public enum Phase {
+
     IP("Intensive Phase"), CP("Continuation Phase"), EIP("Extended Intensive Phase");
 
     private String name;
 
-    PhaseName(String name) {
+    Phase(String name) {
         this.name = name;
     }
 

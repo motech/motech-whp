@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.user.domain.Provider;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class PatientInfo {
     private String providerMobileNumber;
 
     private Treatment currentTreatment;
-    private PhaseName nextPhaseName;
+    private Phase nextPhaseName;
     private PhaseRecord currentPhase;
     private PhaseRecord lastCompletedPhase;
     private ArrayList<String> phasesNotPossibleToTransitionTo;

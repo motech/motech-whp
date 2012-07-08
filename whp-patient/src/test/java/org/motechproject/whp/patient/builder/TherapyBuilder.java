@@ -6,7 +6,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import java.util.Arrays;
@@ -50,7 +50,7 @@ public class TherapyBuilder {
         return this;
     }
 
-    public TherapyBuilder withNoOfDoesTaken(PhaseName phaseName, int doses) {
+    public TherapyBuilder withNoOfDoesTaken(Phase phaseName, int doses) {
         therapy.getPhase(phaseName).setNumberOfDosesTaken(doses);
         return this;
     }

@@ -12,8 +12,8 @@ public class TreatmentCategoryTest {
         category.setNumberOfDosesInEIP(12);
         category.setNumberOfDosesInCP(28);
 
-        assertEquals(Integer.valueOf(24), category.numberOfDosesForPhase(PhaseName.IP));
-        assertEquals(Integer.valueOf(12), category.numberOfDosesForPhase(PhaseName.EIP));
-        assertEquals(Integer.valueOf(28), category.numberOfDosesForPhase(PhaseName.CP));
+        assertEquals(Integer.valueOf(24), category.numberOfDosesForPhase(Phase.IP));
+        assertEquals(Integer.valueOf(12), category.numberOfDosesForPhase(Phase.EIP));
+        assertEquals(Integer.valueOf(28), category.numberOfDosesForPhase(Phase.CP));
     }
 }

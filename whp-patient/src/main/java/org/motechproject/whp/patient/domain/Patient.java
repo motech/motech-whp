@@ -11,7 +11,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class Patient extends MotechBaseDataObject {
         setLastModifiedDate(dateModified);
     }
 
-    public void nextPhaseName(PhaseName phaseName) {
+    public void nextPhaseName(Phase phaseName) {
         currentTherapy.getPhases().setNextPhaseName(phaseName);
     }
 
@@ -231,7 +231,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public Integer numberOfDosesForPhase(PhaseName phaseName) {
+    public Integer numberOfDosesForPhase(Phase phaseName) {
         return currentTherapy.numberOfDosesForPhase(phaseName);
     }
 
@@ -310,7 +310,9 @@ public class Patient extends MotechBaseDataObject {
         return therapyList.get(0);
     }
 
-    public void setNumberOfDosesTaken(PhaseName phaseName, int dosesTaken) {
+
+    @JsonIgnore
+    public void setNumberOfDosesTaken(Phase phaseName, int dosesTaken) {
         currentTherapy.getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
     }
 

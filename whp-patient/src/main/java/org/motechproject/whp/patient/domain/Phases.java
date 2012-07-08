@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.PhaseName;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Phases {
 
     private List<PhaseRecord> all = new ArrayList<>();
 
-    private PhaseName nextPhaseName = null;
+    private Phase nextPhaseName = null;
 
     //ektorp
     public Phases() {
@@ -45,21 +45,21 @@ public class Phases {
 
     @JsonIgnore
     public PhaseRecord ipPhase() {
-        return getByPhaseName(PhaseName.IP);
+        return getByPhaseName(Phase.IP);
     }
 
     @JsonIgnore
     public PhaseRecord eipPhase() {
-        return getByPhaseName(PhaseName.EIP);
+        return getByPhaseName(Phase.EIP);
     }
 
     @JsonIgnore
     public PhaseRecord cpPhase() {
-        return getByPhaseName(PhaseName.CP);
+        return getByPhaseName(Phase.CP);
     }
 
     @JsonIgnore
-    public PhaseRecord getByPhaseName(PhaseName phaseName) {
+    public PhaseRecord getByPhaseName(Phase phaseName) {
         for (PhaseRecord phase : this.all) {
             if (phase.getName().equals(phaseName)) return phase;
         }
