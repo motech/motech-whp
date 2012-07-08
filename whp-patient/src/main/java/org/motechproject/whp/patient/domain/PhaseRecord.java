@@ -8,7 +8,7 @@ import org.motechproject.whp.refdata.domain.PhaseName;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 @Data
-public class Phase {
+public class PhaseRecord {
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -17,14 +17,14 @@ public class Phase {
     1) CMF Admin adherence update: Triggered by AdherenceController.update() -> PhaseUpdateOrchestrator
     2) Provider adherence update: Triggered by AdherenceController.update() -> PhaseUpdateOrchestrator
     3) CMF Admin startDate/endDate update: Triggered by PatientController.update() -> PhaseUpdateOrchestrator
-    4) Phase transition: TODO
+    4) PhaseRecord transition: TODO
     */
     private int numberOfDosesTaken;
 
-    public Phase() {
+    public PhaseRecord() {
     }
 
-    public Phase(PhaseName phaseName) {
+    public PhaseRecord(PhaseName phaseName) {
         this.name = phaseName;
     }
 
@@ -36,7 +36,7 @@ public class Phase {
         return treatmentCategory.numberOfDosesForPhase(name) - numberOfDosesTaken;
     }
 
-    public void start(Phase previousPhase) {
+    public void start(PhaseRecord previousPhase) {
         this.startDate = previousPhase.endDate.plusDays(1);
     }
 

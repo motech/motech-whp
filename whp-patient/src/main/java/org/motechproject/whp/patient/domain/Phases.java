@@ -13,7 +13,7 @@ import static org.motechproject.util.DateUtil.today;
 @Data
 public class Phases {
 
-    private List<Phase> all = new ArrayList<>();
+    private List<PhaseRecord> all = new ArrayList<>();
 
     private PhaseName nextPhaseName = null;
 
@@ -21,55 +21,55 @@ public class Phases {
     public Phases() {
     }
 
-    public Phases(List<Phase> all) {
+    public Phases(List<PhaseRecord> all) {
         this.all = all;
     }
 
     @JsonIgnore
     public boolean ipPhaseWasExtended() {
-        Phase eipPhase = eipPhase();
+        PhaseRecord eipPhase = eipPhase();
         return eipPhase != null && eipPhase.getStartDate() != null;
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnCp() {
-        Phase cpPhase = cpPhase();
+        PhaseRecord cpPhase = cpPhase();
         return cpPhase != null && cpPhase.hasStarted();
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnIp() {
-        Phase ipPhase = ipPhase();
+        PhaseRecord ipPhase = ipPhase();
         return ipPhase != null && ipPhase.hasStarted();
     }
 
     @JsonIgnore
-    public Phase ipPhase() {
+    public PhaseRecord ipPhase() {
         return getByPhaseName(PhaseName.IP);
     }
 
     @JsonIgnore
-    public Phase eipPhase() {
+    public PhaseRecord eipPhase() {
         return getByPhaseName(PhaseName.EIP);
     }
 
     @JsonIgnore
-    public Phase cpPhase() {
+    public PhaseRecord cpPhase() {
         return getByPhaseName(PhaseName.CP);
     }
 
     @JsonIgnore
-    public Phase getByPhaseName(PhaseName phaseName) {
-        for (Phase phase : this.all) {
+    public PhaseRecord getByPhaseName(PhaseName phaseName) {
+        for (PhaseRecord phase : this.all) {
             if (phase.getName().equals(phaseName)) return phase;
         }
         return null;
     }
 
     @JsonIgnore
-    public Phase getLastCompletedPhase() {
-        Phase lastCompletedPhase = null;
-        for (Phase phase : this.all) {
+    public PhaseRecord getLastCompletedPhase() {
+        PhaseRecord lastCompletedPhase = null;
+        for (PhaseRecord phase : this.all) {
             if (phase.getStartDate() != null && phase.getEndDate() != null) {
                 lastCompletedPhase = phase;
             }
@@ -78,8 +78,8 @@ public class Phases {
     }
 
     @JsonIgnore
-    public Phase getCurrentPhase() {
-        for (Phase phase : all) {
+    public PhaseRecord getCurrentPhase() {
+        for (PhaseRecord phase : all) {
             if (phase.getStartDate() != null && phase.getEndDate() == null) {
                 return phase;
             }
@@ -118,7 +118,7 @@ public class Phases {
 
     @JsonIgnore
     public void setEIPStartDate(LocalDate eipStartDate) {
-        Phase eipPhase = eipPhase();
+        PhaseRecord eipPhase = eipPhase();
         eipPhase.setStartDate(eipStartDate);
         if (eipStartDate != null) {
             setIPEndDate(eipStartDate.minusDays(1));
@@ -157,7 +157,7 @@ public class Phases {
     @JsonIgnore
     public void setCPStartDate(LocalDate cpStartDate) {
         cpPhase().setStartDate(cpStartDate);
-        Phase EIP = eipPhase();
+        PhaseRecord EIP = eipPhase();
         if (EIP.getStartDate() != null) {
             if (cpStartDate != null) {
                 setEIPEndDate(cpStartDate.minusDays(1));
@@ -188,11 +188,11 @@ public class Phases {
     }
 
     @JsonIgnore
-    public int indexOf(Phase currentPhase) {
+    public int indexOf(PhaseRecord currentPhase) {
         return all.indexOf(currentPhase);
     }
 
-    public List<Phase> subList(int fromIndex, int toIndex) {
+    public List<PhaseRecord> subList(int fromIndex, int toIndex) {
         return all.subList(fromIndex, toIndex);
     }
 }

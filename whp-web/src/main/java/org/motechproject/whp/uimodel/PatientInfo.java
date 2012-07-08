@@ -35,8 +35,8 @@ public class PatientInfo {
 
     private Treatment currentTreatment;
     private PhaseName nextPhaseName;
-    private Phase currentPhase;
-    private Phase lastCompletedPhase;
+    private PhaseRecord currentPhase;
+    private PhaseRecord lastCompletedPhase;
     private ArrayList<String> phasesNotPossibleToTransitionTo;
     private boolean nearingPhaseTransition;
     private boolean transitioning;

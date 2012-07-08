@@ -194,7 +194,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void startNextPhase() {
-        Phase phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getPhases().getNextPhaseName());
+        PhaseRecord phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getPhases().getNextPhaseName());
         phaseToBeStarted.setStartDate(currentTherapy.getLastCompletedPhase().getEndDate().plusDays(1));
         nextPhaseName(null);
     }
@@ -212,12 +212,12 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public ArrayList<String> getPhasesNotPossibleToTransitionTo() {
         Phases phases = currentTherapy.getPhases();
-        Phase currentPhase = currentTherapy.getCurrentPhase() == null ? currentTherapy.getLastCompletedPhase() : currentTherapy.getCurrentPhase();
+        PhaseRecord currentPhase = currentTherapy.getCurrentPhase() == null ? currentTherapy.getLastCompletedPhase() : currentTherapy.getCurrentPhase();
         ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<>();
         if (currentPhase == null) return namesOfPhasesNotPossibleToTransitionTo;
 
-        List<Phase> phasesNotPossibleToTransitionTo = phases.subList(0, phases.indexOf(currentPhase) + 1);
-        for (Phase phase : phasesNotPossibleToTransitionTo) {
+        List<PhaseRecord> phasesNotPossibleToTransitionTo = phases.subList(0, phases.indexOf(currentPhase) + 1);
+        for (PhaseRecord phase : phasesNotPossibleToTransitionTo) {
             namesOfPhasesNotPossibleToTransitionTo.add(phase.getName().name());
         }
 
@@ -226,7 +226,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public int getRemainingDosesInCurrentPhase() {
-        Phase currentPhase = currentTherapy.getCurrentPhase();
+        PhaseRecord currentPhase = currentTherapy.getCurrentPhase();
         return currentPhase != null ? currentPhase.remainingDoses(currentTherapy.getTreatmentCategory()) : 0;
     }
 
@@ -236,12 +236,12 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public Phase getLastCompletedPhase() {
+    public PhaseRecord getLastCompletedPhase() {
         return currentTherapy.getLastCompletedPhase();
     }
 
     @JsonIgnore
-    public Phase getCurrentPhase() {
+    public PhaseRecord getCurrentPhase() {
         return currentTherapy.getCurrentPhase();
     }
 

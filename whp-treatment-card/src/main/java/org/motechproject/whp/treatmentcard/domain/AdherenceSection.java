@@ -8,7 +8,7 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Phase;
+import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.util.WHPDateUtil;
@@ -26,7 +26,7 @@ public class AdherenceSection {
 
     private LocalDate sectionStartDate;
     private LocalDate sectionEndDate;
-    private List<Phase> phases = new ArrayList<>();
+    private List<PhaseRecord> phases = new ArrayList<>();
 
     private List<String> providerIds = new ArrayList<>();
     private boolean isSundayDoseDate;
@@ -34,12 +34,12 @@ public class AdherenceSection {
     public AdherenceSection() {
     }
 
-    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate, List<Phase> phases) {
+    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate, List<PhaseRecord> phases) {
         this.sectionStartDate = startDate;
         this.sectionEndDate = endDate;
         this.phases = phases;
         addMonthAdherenceForRange(sectionStartDate, sectionEndDate);
-        for (Phase phase : phases) {
+        for (PhaseRecord phase : phases) {
             if (phase.hasStarted())
                 addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, phase.getStartDate(), phase.getEndDate());
         }

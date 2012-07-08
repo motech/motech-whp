@@ -17,7 +17,7 @@ public class PhasesTest {
 
     @Before
     public void setUp() {
-        phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.CP), new Phase(PhaseName.EIP)));
+        phases = new Phases(Arrays.asList(new PhaseRecord(PhaseName.IP), new PhaseRecord(PhaseName.CP), new PhaseRecord(PhaseName.EIP)));
     }
 
     @Test

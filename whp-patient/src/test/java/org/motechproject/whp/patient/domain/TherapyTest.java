@@ -35,7 +35,7 @@ public class TherapyTest {
     @Test
     public void shouldFetchPhaseByName() {
         Therapy therapy = new Therapy();
-        assertEquals(new Phase(IP), therapy.getPhase(IP));
+        assertEquals(new PhaseRecord(IP), therapy.getPhase(IP));
     }
 
     @Test

@@ -6,14 +6,14 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
 
-public class PhaseTest {
+public class PhaseRecordTest {
 
     @Test
     public void shouldReturnRemainingDosesInPhase() {
         TreatmentCategory category = new TreatmentCategory();
         category.setNumberOfDosesInIP(24);
 
-        Phase phase = new Phase(PhaseName.IP);
+        PhaseRecord phase = new PhaseRecord(PhaseName.IP);
 
         phase.setNumberOfDosesTaken(11);
 

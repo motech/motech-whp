@@ -34,7 +34,7 @@ public class Therapy {
     private Treatment currentTreatment;
     private List<Treatment> treatments = new ArrayList<>();
 
-    private Phases phases = new Phases(Arrays.asList(new Phase(PhaseName.IP), new Phase(PhaseName.EIP), new Phase(PhaseName.CP)));
+    private Phases phases = new Phases(Arrays.asList(new PhaseRecord(PhaseName.IP), new PhaseRecord(PhaseName.EIP), new PhaseRecord(PhaseName.CP)));
 
     public Therapy() {
         setUid(generateUid());
@@ -64,17 +64,17 @@ public class Therapy {
 
     @JsonIgnore
     public boolean isNearingPhaseTransition() {
-        Phase currentPhase = phases.getCurrentPhase();
+        PhaseRecord currentPhase = phases.getCurrentPhase();
         return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek();
     }
 
     @JsonIgnore
-    public Phase getCurrentPhase() {
+    public PhaseRecord getCurrentPhase() {
         return phases.getCurrentPhase();
     }
 
     @JsonIgnore
-    public Phase getLastCompletedPhase() {
+    public PhaseRecord getLastCompletedPhase() {
         return phases.getLastCompletedPhase();
     }
 
@@ -88,7 +88,7 @@ public class Therapy {
     }
 
     public boolean currentPhaseDoseComplete() {
-        Phase currentPhase = phases.getCurrentPhase();
+        PhaseRecord currentPhase = phases.getCurrentPhase();
         return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= 0;
     }
 
@@ -97,7 +97,7 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public Phase getPhase(PhaseName phaseName) {
+    public PhaseRecord getPhase(PhaseName phaseName) {
         return phases.getByPhaseName(phaseName);
     }
 
@@ -108,7 +108,7 @@ public class Therapy {
 
     @JsonIgnore
     public void endCurrentPhase(LocalDate endDate) {
-        Phase currentPhase = getCurrentPhase();
+        PhaseRecord currentPhase = getCurrentPhase();
         if (currentPhase != null) currentPhase.setEndDate(endDate);
     }
 
@@ -126,7 +126,7 @@ public class Therapy {
     @JsonIgnore
     public int totalNumberOfDosesTakenTillToday(){
         int totalDoses = 0;
-        for (Phase phase : phases.getAll()) {
+        for (PhaseRecord phase : phases.getAll()) {
             if (phase.hasStarted()){
                 totalDoses = totalDoses + phase.getNumberOfDosesTaken();
             }
@@ -286,7 +286,7 @@ public class Therapy {
     int totalDosesTakenIn(PhaseName phaseName){
         int doseTakenCount = 0;
 
-        Phase phase = getPhase(phaseName);
+        PhaseRecord phase = getPhase(phaseName);
 
         if (phase.hasStarted()){
             doseTakenCount = phase.getNumberOfDosesTaken();
@@ -298,7 +298,7 @@ public class Therapy {
     int totalDosesIn(PhaseName phaseName){
         int doseCount = 0;
 
-        Phase phase = getPhase(phaseName);
+        PhaseRecord phase = getPhase(phaseName);
 
         if (phase.hasStarted()){
             doseCount = treatmentCategory.numberOfDosesForPhase(phase.getName());
