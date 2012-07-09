@@ -38,6 +38,8 @@ public class Patient extends MotechBaseDataObject {
 
     private boolean migrated;
 
+    private String version = "V2";
+
     public Patient() {
     }
 

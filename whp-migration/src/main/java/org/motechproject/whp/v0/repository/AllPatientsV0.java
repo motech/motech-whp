@@ -3,10 +3,10 @@ package org.motechproject.whp.v0.repository;
 import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
+import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.repository.AbstractMigrationRepository;
 import org.motechproject.whp.v0.domain.PatientV0;
 import org.motechproject.whp.v0.domain.TherapyV0;
 import org.motechproject.whp.v0.domain.TreatmentV0;
@@ -19,22 +19,38 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.constants.MigrationConstants.OLD_VERSION;
 import static org.springframework.dao.support.DataAccessUtils.singleResult;
 
 @Repository
-public class AllPatientsV0 extends AbstractMigrationRepository<PatientV0> {
+public class AllPatientsV0 extends CouchDbRepositorySupport<PatientV0> {
 
     AllTherapiesV0 allTherapies;
 
     @Autowired
     public AllPatientsV0(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTherapiesV0 allTherapies) {
         super(PatientV0.class, dbCouchDbConnector, Patient.class.getSimpleName());
+        initStandardDesignDocument();
         this.allTherapies = allTherapies;
     }
 
     @Override
+    @GenerateView
+    public List<PatientV0> getAll() {
+        return super.getAll();
+    }
+
+    @View(name = "all_with_version" + OLD_VERSION, map = "function(doc) {" +
+            "if (doc.type ==='Patient' " +
+            "&& ((doc.version && doc.version ==" + OLD_VERSION + ") " +
+            "|| doc.version == null)" +
+            ") {emit(null, doc._id)} }")
+    public List<PatientV0> getAllVersionedDocs() {
+        return queryView("all_with_version" + OLD_VERSION);
+    }
+
+    @Override
     public void add(PatientV0 patient) {
-        // TODO : migration
         PatientV0 savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient != null) {
             throw new WHPRuntimeExceptionV0(WHPErrorCodeV0.DUPLICATE_CASE_ID);

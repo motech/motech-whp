@@ -1,5 +1,6 @@
 package org.motechproject.whp.v1.migration;
 
+import org.junit.After;
 import org.junit.Test;
 import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -31,6 +32,13 @@ public class ToVersion0IT extends SpringIntegrationTest {
         toVersion0.doo();
 
         assertNotNull(allPatients.findByPatientId(patientV0.getPatientId()));
+    }
+
+    @After
+    public void tearDown() {
+        markForDeletion(allPatientsV0.getAllVersionedDocs().toArray());
+        markForDeletion(allPatients.getAll().toArray());
+        super.after();
     }
 
 }
