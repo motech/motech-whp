@@ -33,7 +33,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         if (savedPatient != null) {
             throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_CASE_ID);
         }
-        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }

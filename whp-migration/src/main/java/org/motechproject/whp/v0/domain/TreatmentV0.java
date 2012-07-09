@@ -1,8 +1,13 @@
 package org.motechproject.whp.v0.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Data
 public class TreatmentV0 {
@@ -53,6 +58,42 @@ public class TreatmentV0 {
 
     public void resume(String reasonForResumption, DateTime dateModified) {
         interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
+    }
+
+    @JsonIgnore
+    public TherapyV0 getTherapy() {
+        return therapy;
+    }
+
+    @JsonIgnore
+    public void setTherapy(TherapyV0 therapy) {
+        this.therapy = therapy;
+        this.therapyDocId = therapy.getId();
+    }
+
+    @JsonIgnore
+    public boolean isPaused() {
+        return !CollectionUtils.isEmpty(interruptions) && interruptions.latestInterruption().isCurrentlyPaused();
+    }
+
+    @JsonIgnore
+    public boolean isValid(List<WHPErrorCodeV0> errorCodes) {
+        return patientAddress.isValid(errorCodes)
+                && areSmearInstancesValid(errorCodes)
+                && areWeightInstancesValid(errorCodes);
+    }
+
+    private boolean areWeightInstancesValid(List<WHPErrorCodeV0> errorCodes) {
+        return weightStatistics.isEmpty() || weightStatistics.latestResult().isValid(errorCodes);
+    }
+
+    private boolean areSmearInstancesValid(List<WHPErrorCodeV0> errorCodes) {
+        return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
+    }
+
+    @JsonIgnore
+    public boolean isClosed() {
+        return therapy.isClosed();
     }
 
     public void addSmearTestResult(SmearTestRecordV0 smearTestRecord) {

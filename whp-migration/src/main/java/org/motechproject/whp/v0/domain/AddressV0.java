@@ -1,6 +1,10 @@
 package org.motechproject.whp.v0.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
+
+import java.util.List;
 
 @Data
 public class AddressV0 {
@@ -22,6 +26,28 @@ public class AddressV0 {
         this.address_village = village;
         this.address_district = district;
         this.address_state = state;
+    }
+
+    @JsonIgnore
+    public boolean isValid(List<WHPErrorCodeV0> validationErrors) {
+        boolean isFilled = address_location != null
+                && address_block != null
+                && address_village != null
+                && address_district != null
+                && address_state != null;
+        if (!isFilled) {
+            validationErrors.add(WHPErrorCodeV0.NULL_VALUE_IN_ADDRESS);
+        }
+        return isFilled;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return address_location == null
+                && address_block == null
+                && address_village == null
+                && address_district == null
+                && address_state == null;
     }
 
 }

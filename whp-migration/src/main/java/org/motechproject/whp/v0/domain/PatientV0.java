@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +93,24 @@ public class PatientV0 extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public boolean isValid(List<WHPErrorCodeV0> errorCodes) {
+        return currentTreatment.isValid(errorCodes);
+    }
+
+    @JsonIgnore
     public boolean hasCurrentTreatment() {
         return currentTreatment != null;
     }
 
+    @JsonIgnore
+    public boolean isCurrentTreatmentClosed() {
+        return currentTreatment.isClosed();
+    }
+
+    @JsonIgnore
+    public boolean isCurrentTreatmentPaused() {
+        return currentTreatment.isPaused();
+    }
 
     @JsonIgnore
     public TreatmentOutcomeV0 getTreatmentOutcome() {
