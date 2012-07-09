@@ -287,19 +287,21 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public void setNumberOfDosesTaken(Phase phaseName, int dosesTaken) {
-        getCurrentTherapy().setNumberOfDosesTaken(phaseName, dosesTaken);
+    public void setNumberOfDosesTaken(PhaseName phaseName, int dosesTaken) {
+        getCurrentTherapy().getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
     }
 
+    @JsonIgnore
     public Treatment getCurrentTreatment() {
         return currentTherapy.getCurrentTreatment();
     }
 
-
+    @JsonIgnore
     public void setCurrentTreatment(Treatment currentTreatment) {
         currentTherapy.setCurrentTreatment(currentTreatment);
     }
 
+    @JsonIgnore
     public List<Treatment> getTreatments() {
         ArrayList<Treatment> treatments = new ArrayList<>();
         treatments.addAll(currentTherapy.getTreatments());
@@ -317,6 +319,7 @@ public class Patient extends MotechBaseDataObject {
         }
     }
 
+    @JsonIgnore
     private Therapy getTherapy(String therapyUid) {
         if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
 
