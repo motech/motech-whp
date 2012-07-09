@@ -7,7 +7,7 @@
         Pane</a></h3>
 
     <div id="search-pane">
-        <form action="<@spring.url '/providers/search'/>" method="POST" class="form-horizontal">
+        <form action="<@spring.url '/providers/search'/>" method="GET" class="form-horizontal">
             <div class="offset1">
                 <div class="control-group">
                     <label class="control-label">District*</label>

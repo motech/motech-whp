@@ -48,7 +48,7 @@ public class ProviderController {
         return "provider/list";
     }
 
-    @RequestMapping(value = "search", method = RequestMethod.POST)
+    @RequestMapping(value = "search", method = RequestMethod.GET)
     public String searchMatchingProviders(@RequestParam("selectedDistrict") String district, String providerId, Model uiModel) {
         prepareQueryModel(uiModel, district, providerId);
         prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
