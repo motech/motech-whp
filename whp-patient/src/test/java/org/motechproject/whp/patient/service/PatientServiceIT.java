@@ -334,18 +334,19 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.startTherapy(patientId, today);
 
         assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getStartDate());
-        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getStartDate());
+        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getIPStartDate());
     }
 
     @Test
     public void shouldUpdatePillTakenCountForGivenPhase() {
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(createPatientRequest);
+        patientService.startTherapy(createPatientRequest.getCase_id(), today());
         String patientId = createPatientRequest.getCase_id();
 
         patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2);
 
-        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getNumberOfDosesTaken());
+        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
     }
 
     @Test

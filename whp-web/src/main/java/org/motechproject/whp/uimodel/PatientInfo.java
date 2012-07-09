@@ -37,7 +37,7 @@ public class PatientInfo {
     private Phase nextPhaseName;
     private PhaseRecord currentPhase;
     private PhaseRecord lastCompletedPhase;
-    private ArrayList<String> phasesNotPossibleToTransitionTo;
+    private List<String> phasesNotPossibleToTransitionTo;
     private boolean nearingPhaseTransition;
     private boolean transitioning;
     private int remainingDosesInCurrentPhase;
@@ -56,7 +56,7 @@ public class PatientInfo {
         initializePatientInfo(patient);
     }
 
-    private void initializeProviderInfo(Provider provider){
+    private void initializeProviderInfo(Provider provider) {
         providerMobileNumber = provider.getPrimaryMobile();
     }
 
@@ -80,8 +80,8 @@ public class PatientInfo {
         treatmentCategory = latestTherapy.getTreatmentCategory().getName();
         address = currentTreatment.getPatientAddress().toString();
         addressState = currentTreatment.getPatientAddress().getAddress_state();
-        nextPhaseName = patient.getCurrentTherapy().getPhases().getNextPhaseName();
-        phasesNotPossibleToTransitionTo = patient.getPhasesNotPossibleToTransitionTo();
+        nextPhaseName = patient.getCurrentTherapy().getPhases().getNextPhase();
+        phasesNotPossibleToTransitionTo = mapPhaseNameToString(patient);
         nearingPhaseTransition = patient.isNearingPhaseTransition();
         transitioning = patient.isTransitioning();
         currentPhase = patient.getCurrentTherapy().getCurrentPhase();
@@ -90,6 +90,15 @@ public class PatientInfo {
         addressVillage = currentTreatment.getPatientAddress().getAddress_village();
         currentTreatmentPaused = patient.isCurrentTreatmentPaused();
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
+    }
+
+    private List<String> mapPhaseNameToString(Patient patient) {
+        List<Phase> phases = patient.getHistoryOfPhases();
+        List<String> names = new ArrayList<>();
+        for (Phase phase : phases) {
+            names.add(phase.name());
+        }
+        return names;
     }
 
     public void setAdherenceCapturedForThisWeek(boolean adherenceCapturedForThisWeek) {

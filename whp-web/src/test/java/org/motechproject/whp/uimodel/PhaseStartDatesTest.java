@@ -22,9 +22,9 @@ public class PhaseStartDatesTest {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Therapy therapy = patient.getCurrentTherapy();
 
-        assertEquals(therapy.getPhases().getByPhaseName(Phase.IP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getIpStartDate());
-        assertEquals(therapy.getPhases().getByPhaseName(Phase.EIP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getEipStartDate());
-        assertEquals(therapy.getPhases().getByPhaseName(Phase.CP).getStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getCpStartDate());
+        assertEquals(therapy.getPhases().getIPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getIpStartDate());
+        assertEquals(therapy.getPhases().getEIPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getEipStartDate());
+        assertEquals(therapy.getPhases().getCPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getCpStartDate());
     }
 
     @Test
@@ -37,9 +37,9 @@ public class PhaseStartDatesTest {
         phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
         assertEquals(new LocalDate(2012, 5, 21), patient.getCurrentTherapy().getStartDate());
-        assertEquals(patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getStartDate(), patient.getCurrentTherapy().getStartDate());
-        assertEquals(new LocalDate(2012, 5, 22), patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.EIP).getStartDate());
-        assertEquals(new LocalDate(2012, 5, 23), patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.CP).getStartDate());
+        assertEquals(patient.getCurrentTherapy().getPhases().getIPStartDate(), patient.getCurrentTherapy().getStartDate());
+        assertEquals(new LocalDate(2012, 5, 22), patient.getCurrentTherapy().getPhases().getEIPStartDate());
+        assertEquals(new LocalDate(2012, 5, 23), patient.getCurrentTherapy().getPhases().getCPStartDate());
     }
 
     @Test
@@ -59,8 +59,8 @@ public class PhaseStartDatesTest {
     public void shouldSetPhaseStartDatesToNullIfFormDataIsEmpty() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(new LocalDate());
-        patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.EIP).setStartDate(new LocalDate());
-        patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.CP).setStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().setEIPStartDate(new LocalDate());
+        patient.getCurrentTherapy().getPhases().setCPStartDate(new LocalDate());
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         phaseStartDates.setIpStartDate("");
         phaseStartDates.setEipStartDate("");
@@ -68,9 +68,9 @@ public class PhaseStartDatesTest {
         phaseStartDates.mapNewPhaseInfoToPatient(patient);
 
         assertNull(patient.getCurrentTherapy().getStartDate());
-        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.IP).getStartDate());
-        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.EIP).getStartDate());
-        assertNull(patient.getCurrentTherapy().getPhases().getByPhaseName(Phase.CP).getStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getIPStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getEIPStartDate());
+        assertNull(patient.getCurrentTherapy().getPhases().getCPStartDate());
     }
 
 }

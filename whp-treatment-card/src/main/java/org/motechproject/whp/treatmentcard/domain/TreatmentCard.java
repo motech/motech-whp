@@ -9,8 +9,12 @@ import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.refdata.domain.Phase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import static java.util.Arrays.asList;
 import static org.motechproject.util.DateUtil.today;
 
 @Data
@@ -35,13 +39,13 @@ public class TreatmentCard {
 
     public TreatmentCard initIPSection(List<Adherence> adherenceData) {
         LocalDate ipStartDate = therapy.getStartDate();
-        ipAndEipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate(), Arrays.asList(therapy.getPhase(Phase.IP), therapy.getPhase(Phase.EIP)));
+        ipAndEipAdherenceSection.init(patient, adherenceData, therapy, ipStartDate, ipBoxLastDoseDate(), asList(Phase.IP, Phase.EIP));
         return this;
     }
 
     public TreatmentCard initCPSection(List<Adherence> adherenceData) {
         LocalDate cpStartDate = therapy.getPhases().getCPStartDate();
-        cpAdherenceSection.init(patient, adherenceData, therapy, cpStartDate, cpBoxLastDoseDate(), Arrays.asList(therapy.getPhase(Phase.CP)));
+        cpAdherenceSection.init(patient, adherenceData, therapy, cpStartDate, cpBoxLastDoseDate(), asList(Phase.CP));
         return this;
     }
 
@@ -60,8 +64,8 @@ public class TreatmentCard {
 
     public LocalDate cpBoxAdherenceEndDate() {
         Phases phases = therapy.getPhases();
-        if (phases.isOrHasBeenOnCp() && phases.getByPhaseName(Phase.CP).getEndDate() != null) {
-            return phases.getByPhaseName(Phase.CP).getEndDate();
+        if (phases.isOrHasBeenOnCp() && phases.getEndDate(Phase.CP) != null) {
+            return phases.getEndDate(Phase.CP);
         }
         return today();
     }
@@ -78,7 +82,7 @@ public class TreatmentCard {
     public LocalDate cpBoxLastDoseDate() {
         Phases phases = therapy.getPhases();
         if (phases.isOrHasBeenOnCp()) {
-            return phases.getByPhaseName(Phase.CP).getStartDate().plusMonths(MONTHS_IN_CP_BOX).minusDays(1);
+            return phases.getCPStartDate().plusMonths(MONTHS_IN_CP_BOX).minusDays(1);
         }
         return null;
     }

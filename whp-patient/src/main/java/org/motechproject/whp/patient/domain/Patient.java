@@ -109,7 +109,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void nextPhaseName(Phase phaseName) {
-        currentTherapy.getPhases().setNextPhaseName(phaseName);
+        currentTherapy.getPhases().setNextPhase(phaseName);
     }
 
     @JsonIgnore
@@ -194,9 +194,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void startNextPhase() {
-        PhaseRecord phaseToBeStarted = currentTherapy.getPhase(currentTherapy.getPhases().getNextPhaseName());
-        phaseToBeStarted.setStartDate(currentTherapy.getLastCompletedPhase().getEndDate().plusDays(1));
-        nextPhaseName(null);
+        currentTherapy.getPhases().startNextPhase();
     }
 
     @JsonIgnore
@@ -206,22 +204,12 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean hasPhaseToTransitionTo() {
-        return currentTherapy.getPhases().getNextPhaseName() != null;
+        return currentTherapy.getPhases().getNextPhase() != null;
     }
 
     @JsonIgnore
-    public ArrayList<String> getPhasesNotPossibleToTransitionTo() {
-        Phases phases = currentTherapy.getPhases();
-        PhaseRecord currentPhase = currentTherapy.getCurrentPhase() == null ? currentTherapy.getLastCompletedPhase() : currentTherapy.getCurrentPhase();
-        ArrayList<String> namesOfPhasesNotPossibleToTransitionTo = new ArrayList<>();
-        if (currentPhase == null) return namesOfPhasesNotPossibleToTransitionTo;
-
-        List<PhaseRecord> phasesNotPossibleToTransitionTo = phases.subList(0, phases.indexOf(currentPhase) + 1);
-        for (PhaseRecord phase : phasesNotPossibleToTransitionTo) {
-            namesOfPhasesNotPossibleToTransitionTo.add(phase.getName().name());
-        }
-
-        return namesOfPhasesNotPossibleToTransitionTo;
+    public List<Phase> getHistoryOfPhases() {
+        return currentTherapy.getPhases().getHistoryOfPhases();
     }
 
     @JsonIgnore
@@ -250,24 +238,19 @@ public class Patient extends MotechBaseDataObject {
         return getLastCompletedPhase().remainingDoses(currentTherapy.getTreatmentCategory());
     }
 
-    //TODO: Extend patient to a PatientUIModel and move these UI specific methods there.
     @JsonIgnore
     public String getIPProgress() {
-        int totalDoseCount = currentTherapy.totalDosesInIntensivePhases();
-        int totalDoseTakenCount = currentTherapy.totalDosesTakenInIntensivePhases();
+        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTakenInIntensivePhases();
+        int totalDoseCount = currentTherapy.getTotalDoesInIntensivePhases();
 
-        Float completionPercentage = (totalDoseTakenCount / (float) totalDoseCount) * 100;
-        return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, completionPercentage.equals(Float.NaN) ? 0 : completionPercentage);
+        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
     }
 
-    //TODO: Extend patient to a PatientUIModel and move these UI specific methods there.
     @JsonIgnore
     public String getCPProgress() {
-        int totalDoseCount = currentTherapy.totalDosesInContinuationPhase();
-        int totalDoseTakenCount = currentTherapy.totalDosesTakenInContinuationPhase();
-
-        Float completionPercentage = (totalDoseTakenCount / (float) totalDoseCount) * 100;
-        return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, completionPercentage.equals(Float.NaN) ? 0 : completionPercentage);
+        int totalDoseCount = currentTherapy.getTotalDoesIn(Phase.CP);
+        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTaken(Phase.CP);
+        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
     }
 
     public boolean currentPhaseDoseComplete() {
@@ -303,22 +286,15 @@ public class Patient extends MotechBaseDataObject {
         }
     }
 
-    private Therapy getTherapy(String therapyUid) {
-        if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
-
-        List<Therapy> therapyList = select(therapyHistory, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
-        return therapyList.get(0);
-    }
-
-
     @JsonIgnore
     public void setNumberOfDosesTaken(Phase phaseName, int dosesTaken) {
-        currentTherapy.getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
+        getCurrentTherapy().setNumberOfDosesTaken(phaseName, dosesTaken);
     }
 
     public Treatment getCurrentTreatment() {
         return currentTherapy.getCurrentTreatment();
     }
+
 
     public void setCurrentTreatment(Treatment currentTreatment) {
         currentTherapy.setCurrentTreatment(currentTreatment);
@@ -333,4 +309,18 @@ public class Patient extends MotechBaseDataObject {
         return treatments;
     }
 
+    private String doseCompletionMessage(int totalDoseCount, int totalDoseTakenCount) {
+        if (totalDoseCount == 0) {
+            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, 0.0f);
+        } else {
+            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, (totalDoseTakenCount / (float) totalDoseCount) * 100);
+        }
+    }
+
+    private Therapy getTherapy(String therapyUid) {
+        if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
+
+        List<Therapy> therapyList = select(therapyHistory, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
+        return therapyList.get(0);
+    }
 }

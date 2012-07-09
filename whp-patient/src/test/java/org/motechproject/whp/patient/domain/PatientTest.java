@@ -15,6 +15,8 @@ import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
+import static org.motechproject.whp.refdata.domain.Phase.IP;
+import static org.motechproject.whp.refdata.domain.Phase.EIP;
 
 public class PatientTest {
 
@@ -121,7 +123,7 @@ public class PatientTest {
 
         patient.nextPhaseName(Phase.EIP);
 
-        assertEquals(patient.getCurrentTherapy().getPhases().getNextPhaseName(), Phase.EIP);
+        assertEquals(patient.getCurrentTherapy().getPhases().getNextPhase(), Phase.EIP);
     }
 
     @Test
@@ -132,7 +134,7 @@ public class PatientTest {
 
         patient.endCurrentPhase(phaseEndDate);
 
-        assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhase(Phase.IP).getEndDate());
+        assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhaseEndDate(IP));
     }
 
     @Test
@@ -140,13 +142,13 @@ public class PatientTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         LocalDate phaseEndDate = new LocalDate(2012, 4, 1);
         patient.startTherapy(new LocalDate(2012, 3, 1));
-        patient.nextPhaseName(Phase.EIP);
+        patient.nextPhaseName(EIP);
 
         patient.endCurrentPhase(phaseEndDate);
         patient.startNextPhase();
 
-        assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhase(Phase.EIP).getStartDate());
-        assertNull(patient.getCurrentTherapy().getPhases().getNextPhaseName());
+        assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhaseStartDate(EIP));
+        assertNull(patient.getCurrentTherapy().getPhases().getNextPhase());
     }
 
     @Test

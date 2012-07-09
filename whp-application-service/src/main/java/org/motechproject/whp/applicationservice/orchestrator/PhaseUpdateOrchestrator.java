@@ -6,6 +6,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
+import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
@@ -36,12 +37,11 @@ public class PhaseUpdateOrchestrator {
 
     public void recomputePillCount(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
-        for (PhaseRecord phase : patient.getCurrentTherapy().getPhases().getAll()) {
-            if (phase.hasStarted()) {
-                LocalDate endDate = phase.getEndDate() != null ? phase.getEndDate() : DateUtil.today();
-                int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phase.getStartDate(), endDate);
-                patientService.updatePillTakenCount(patient, phase.getName(), dosesTaken);
-            }
+        Phases phases = patient.getCurrentTherapy().getPhases();
+        for (Phase phase : patient.getHistoryOfPhases()) {
+            LocalDate endDate = phases.getEndDate(phase) != null ? phases.getEndDate(phase) : DateUtil.today();
+            int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
+            patientService.updatePillTakenCount(patient, phase, dosesTaken);
         }
     }
 

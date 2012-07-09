@@ -19,6 +19,10 @@ public enum Phase {
         this.possibleTransitions = possibleTransitions;
     }
 
+    public boolean occursBefore(Phase phase) {
+        return possibleTransitions.contains(phase);
+    }
+
     @Override
     public String toString() {
         return name;

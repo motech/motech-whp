@@ -67,7 +67,7 @@ public class PatientInfoTest {
                 .withTherapyUid("therapyUid")
                 .withTreatmentCategory(treatmentCategory)
                 .withStartDate(startDate)
-                .withNoOfDoesTaken(Phase.IP, 2)
+                .withNoOfDosesTaken(Phase.IP, 2)
                 .withTreatment(currentTreatment)
                 .build();
 

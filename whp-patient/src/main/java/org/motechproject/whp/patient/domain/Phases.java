@@ -1,7 +1,9 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.Phase;
 
@@ -10,189 +12,169 @@ import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
 
-@Data
 public class Phases {
 
-    private List<PhaseRecord> all = new ArrayList<>();
-
-    private Phase nextPhaseName = null;
-
-    //ektorp
-    public Phases() {
-    }
-
-    public Phases(List<PhaseRecord> all) {
-        this.all = all;
-    }
+    @JsonProperty
+    private PhaseRecords phaseRecords = new PhaseRecords();
+    @JsonProperty
+    private PhaseTransitions history = new PhaseTransitions();
+    @Getter
+    @Setter
+    private Phase nextPhase = null;
 
     @JsonIgnore
     public boolean ipPhaseWasExtended() {
-        PhaseRecord eipPhase = eipPhase();
-        return eipPhase != null && eipPhase.getStartDate() != null;
+        return history.contains(Phase.EIP);
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnCp() {
-        PhaseRecord cpPhase = cpPhase();
-        return cpPhase != null && cpPhase.hasStarted();
+        return history.contains(Phase.CP);
     }
 
     @JsonIgnore
     public boolean isOrHasBeenOnIp() {
-        PhaseRecord ipPhase = ipPhase();
-        return ipPhase != null && ipPhase.hasStarted();
-    }
-
-    @JsonIgnore
-    public PhaseRecord ipPhase() {
-        return getByPhaseName(Phase.IP);
-    }
-
-    @JsonIgnore
-    public PhaseRecord eipPhase() {
-        return getByPhaseName(Phase.EIP);
-    }
-
-    @JsonIgnore
-    public PhaseRecord cpPhase() {
-        return getByPhaseName(Phase.CP);
-    }
-
-    @JsonIgnore
-    public PhaseRecord getByPhaseName(Phase phaseName) {
-        for (PhaseRecord phase : this.all) {
-            if (phase.getName().equals(phaseName)) return phase;
-        }
-        return null;
+        return history.contains(Phase.IP);
     }
 
     @JsonIgnore
     public PhaseRecord getLastCompletedPhase() {
-        PhaseRecord lastCompletedPhase = null;
-        for (PhaseRecord phase : this.all) {
-            if (phase.getStartDate() != null && phase.getEndDate() != null) {
-                lastCompletedPhase = phase;
+        PhaseRecord record = null;
+        for (Phase phase : history.allPhases()) {
+            if (null != phaseRecords.get(phase).getEndDate()) {
+                record = phaseRecords.get(phase);
             }
         }
-        return lastCompletedPhase;
+        return record;
     }
 
     @JsonIgnore
     public PhaseRecord getCurrentPhase() {
-        for (PhaseRecord phase : all) {
-            if (phase.getStartDate() != null && phase.getEndDate() == null) {
-                return phase;
-            }
+        if (!history.isEmpty() && phaseRecords.get(history.latestPhase()).getEndDate() == null) {
+            return phaseRecords.get(history.latestPhase());
         }
         return null;
     }
 
     @JsonIgnore
     public LocalDate getIPStartDate() {
-        return ipPhase().getStartDate();
+        return getStartDate(Phase.IP);
     }
 
     @JsonIgnore
-    void setIPStartDate(LocalDate IPStartDate) {
-        ipPhase().setStartDate(IPStartDate);
+    void setIPStartDate(LocalDate startDate) {
+        setPhaseStartDate(startDate, Phase.IP);
     }
 
     @JsonIgnore
     public LocalDate getIPLastDate() {
-        LocalDate ipEndDate = ipPhase().getEndDate();
-        return ipEndDate != null ? ipEndDate : today();
-    }
-
-    @JsonIgnore
-    public void setIPEndDate(LocalDate IPEndDate) {
-        ipPhase().setEndDate(IPEndDate);
+        return getPhaseLastDate(Phase.IP);
     }
 
     @JsonIgnore
     public LocalDate getEIPStartDate() {
-        if (ipPhaseWasExtended()) {
-            return eipPhase().getStartDate();
-        }
-        return null;
+        return getStartDate(Phase.EIP);
     }
 
     @JsonIgnore
     public void setEIPStartDate(LocalDate eipStartDate) {
-        PhaseRecord eipPhase = eipPhase();
-        eipPhase.setStartDate(eipStartDate);
-        if (eipStartDate != null) {
-            setIPEndDate(eipStartDate.minusDays(1));
-        } else {
-            if (cpPhase().hasStarted()) {
-                setIPEndDate(cpPhase().getStartDate().minusDays(1));
-            } else {
-                setIPEndDate(null);
-            }
-            setEIPEndDate(null);
-        }
+        setPhaseStartDate(eipStartDate, Phase.EIP);
     }
 
     @JsonIgnore
     public LocalDate getEIPLastDate() {
-        if (ipPhaseWasExtended()) {
-            LocalDate epEndDate = eipPhase().getEndDate();
-            return epEndDate != null ? epEndDate : today();
-        }
-        return null;
+        return getPhaseLastDate(Phase.EIP);
     }
 
-    @JsonIgnore
-    public void setEIPEndDate(LocalDate eipEndDate) {
-        eipPhase().setEndDate(eipEndDate);
-    }
 
     @JsonIgnore
     public LocalDate getCPStartDate() {
-        if (isOrHasBeenOnCp()) {
-            return cpPhase().getStartDate();
-        }
-        return null;
+        return getStartDate(Phase.CP);
     }
 
     @JsonIgnore
     public void setCPStartDate(LocalDate cpStartDate) {
-        cpPhase().setStartDate(cpStartDate);
-        PhaseRecord EIP = eipPhase();
-        if (EIP.getStartDate() != null) {
-            if (cpStartDate != null) {
-                setEIPEndDate(cpStartDate.minusDays(1));
-            } else {
-                setEIPEndDate(null);
-            }
-        } else {
-            if (cpStartDate != null) {
-                setIPEndDate(cpStartDate.minusDays(1));
-            } else {
-                setIPEndDate(null);
-            }
-        }
+        setPhaseStartDate(cpStartDate, Phase.CP);
     }
 
     @JsonIgnore
     public LocalDate getCPLastDate() {
-        if (isOrHasBeenOnCp()) {
-            LocalDate cpEndDate = cpPhase().getEndDate();
-            return cpEndDate != null ? cpEndDate : today();
+        return getPhaseLastDate(Phase.CP);
+    }
+
+    @JsonIgnore
+    public int getTotalDoses() {
+        int total = 0;
+        for (Phase phase : history.allPhases()) {
+            total += phaseRecords.get(phase).getNumberOfDosesTaken();
         }
-        return null;
+        return total;
+    }
+
+    // TODO: Remove this
+    @JsonIgnore
+    public List<Phase> getHistoryOfPhases() {
+        return new ArrayList<>(history.allPhases());
+    }
+
+    public void startNextPhase() {
+        PhaseRecord record = phaseRecords.get(history.latestPhase());
+        setPhaseStartDate(record.getEndDate().plusDays(1), nextPhase);
+        nextPhase = null;
     }
 
     @JsonIgnore
-    public void setCPEndDate(LocalDate cpEndDate) {
-        cpPhase().setEndDate(cpEndDate);
+    public void setNumberOfDosesIn(Phase phase, int numberOfDoses) {
+        if (history.contains(phase)) {
+            phaseRecords.get(phase).setNumberOfDosesTaken(numberOfDoses);
+        }
     }
 
     @JsonIgnore
-    public int indexOf(PhaseRecord currentPhase) {
-        return all.indexOf(currentPhase);
+    public int getNumberOfDosesTaken(Phase phase) {
+        if (history.contains(phase)) {
+            return phaseRecords.get(phase).getNumberOfDosesTaken();
+        } else {
+            return 0;
+        }
     }
 
-    public List<PhaseRecord> subList(int fromIndex, int toIndex) {
-        return all.subList(fromIndex, toIndex);
+    @JsonIgnore
+    public LocalDate getStartDate(Phase phase) {
+        if (history.contains(phase)) {
+            return phaseRecords.get(phase).getStartDate();
+        } else {
+            return null;
+        }
+    }
+
+    @JsonIgnore
+    public LocalDate getEndDate(Phase phase) {
+        if (history.contains(phase)) {
+            return phaseRecords.get(phase).getEndDate();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean hasBeenOn(Phase phase) {
+        return history.contains(phase);
+    }
+
+    private void setPhaseStartDate(LocalDate startDate, Phase phase) {
+        if (startDate != null) {
+            phaseRecords.recordTransition(history.add(phase), startDate);
+        } else {
+            phaseRecords.removeTransition(history.remove(phase));
+        }
+    }
+
+    private LocalDate getPhaseLastDate(Phase phase) {
+        if (history.contains(phase)) {
+            LocalDate lastDate = phaseRecords.get(phase).getEndDate();
+            return lastDate != null ? lastDate : today();
+        } else {
+            return null;
+        }
     }
 }

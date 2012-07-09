@@ -304,7 +304,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
 
 
     private void transitionPatient(TestPatient testPatient, TestProvider testProvider, Phase phaseName) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());

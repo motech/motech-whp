@@ -1,35 +1,29 @@
 package org.motechproject.whp.patient.domain;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.Phase;
 
-import java.util.Arrays;
-
 import static junit.framework.Assert.*;
-import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;
 
 public class PhasesTest {
 
     private Phases phases;
+    private LocalDate today = today();
 
     @Before
     public void setUp() {
-        phases = new Phases(Arrays.asList(new PhaseRecord(Phase.IP), new PhaseRecord(Phase.CP), new PhaseRecord(Phase.EIP)));
-    }
-
-    @Test
-    public void shouldReturnPhaseByName() {
-        assertEquals(Phase.IP, phases.getByPhaseName(Phase.IP).getName());
+        phases = new Phases();
+        phases.setIPStartDate(today);
     }
 
     @Test
     public void settingEIPStartDateShouldSetEndDateOnIP() {
         phases.setEIPStartDate(today());
-
-        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getEndDate(Phase.IP));
     }
 
     @Test
@@ -37,25 +31,25 @@ public class PhasesTest {
         phases.setIPStartDate(today());
         phases.setEIPStartDate(today().plusDays(2));
 
-        assertEquals(today().plusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().plusDays(1), phases.getEndDate(Phase.IP));
 
         phases.setEIPStartDate(null);
 
-        assertEquals(null, phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(null, phases.getEndDate(Phase.IP));
     }
 
     @Test
-    public void settingEIPStartDateToNullShouldSetEndDateOnIPToOneDayBeforeCPStartDateTo_WhenCPHasStarted() {
+    public void settingEIPStartDateToNullShouldSetEndDateOnIPToOneDayBeforeCPStartDate_WhenCPHasStarted() {
         phases.setIPStartDate(today());
         phases.setEIPStartDate(today().plusDays(2));
         phases.setCPStartDate(today().plusDays(4));
 
-        assertEquals(today().plusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().plusDays(1), phases.getEndDate(Phase.IP));
 
         phases.setEIPStartDate(null);
 
-        assertNotNull(null, phases.getByPhaseName(Phase.IP).getEndDate());
-        assertEquals(today().plusDays(3), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertNotNull(null, phases.getEndDate(Phase.IP));
+        assertEquals(today().plusDays(3), phases.getEndDate(Phase.IP));
     }
 
     @Test
@@ -63,24 +57,22 @@ public class PhasesTest {
         phases.setEIPStartDate(today().minusDays(2));
         phases.setCPStartDate(today());
 
-        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.EIP).getEndDate());
-        assertNotSame(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getEndDate(Phase.EIP));
+        assertNotSame(today().minusDays(1), phases.getEndDate(Phase.IP));
     }
 
     @Test
     public void settingCPStartDateShouldSetEndDateOnIPIfEIPWasNeverStarted() {
         phases.setCPStartDate(today());
-
-        assertEquals(today().minusDays(1), phases.getByPhaseName(Phase.IP).getEndDate());
+        assertEquals(today().minusDays(1), phases.getEndDate(Phase.IP));
     }
 
     @Test
     public void shouldSetPreviousPhaseEndDateToNullIfCurrentPhaseStartDateIsBeingSetToNull() {
         phases.setEIPStartDate(today().minusDays(2));
-        phases.setEIPEndDate(today().minusDays(1));
         phases.setCPStartDate(null);
 
-        assertNull(phases.getByPhaseName(Phase.EIP).getEndDate());
+        assertNull(phases.getEndDate(Phase.EIP));
     }
 
     @Test
@@ -88,22 +80,21 @@ public class PhasesTest {
         phases.setIPStartDate(today());
         phases.setEIPStartDate(today().plusDays(10));
 
-        assertEquals(phases.getByPhaseName(Phase.EIP), phases.getCurrentPhase());
+        assertEquals(Phase.EIP, phases.getCurrentPhase().getName());
     }
 
     @Test
     public void shouldGetLastCompletedPhase() {
         phases.setIPStartDate(today());
-        phases.setIPEndDate(today().plusDays(2));
         phases.setEIPStartDate(today().plusDays(3));
-        phases.setEIPEndDate(today().plusDays(5));
         phases.setCPStartDate(today().plusDays(6));
 
-        assertEquals(phases.getByPhaseName(Phase.EIP), phases.getLastCompletedPhase());
+        assertEquals(Phase.EIP, phases.getLastCompletedPhase().getName());
     }
 
     @Test
     public void shouldReturnNullIfNoPhaseHasStarted() {
+        Phases phases = new Phases();
         assertNull(phases.getCurrentPhase());
     }
 
@@ -116,7 +107,6 @@ public class PhasesTest {
     @Test
     public void shouldReturnTrueWhenCurrentPhaseIsCPAndEIPWasExtended() {
         phases.setEIPStartDate(today());
-        phases.setEIPEndDate(today().plusDays(10));
         phases.setCPStartDate(today().plusDays(100));
         assertTrue(phases.ipPhaseWasExtended());
     }
@@ -130,7 +120,6 @@ public class PhasesTest {
     @Test
     public void shouldReturnFalseWhenCurrentPhaseIsCPAndIPWasNotExtended() {
         phases.setIPStartDate(today());
-        phases.setIPEndDate(today().plusDays(1));
         phases.setCPStartDate(today().plusDays(2));
         assertFalse(phases.ipPhaseWasExtended());
     }

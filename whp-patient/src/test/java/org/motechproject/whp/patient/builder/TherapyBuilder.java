@@ -2,14 +2,14 @@ package org.motechproject.whp.patient.builder;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+import static org.motechproject.model.DayOfWeek.*;
 
 public class TherapyBuilder {
 
@@ -17,6 +17,8 @@ public class TherapyBuilder {
 
     public TherapyBuilder() {
         therapy = new Therapy();
+        TreatmentCategory treatmentCategory = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, asList(Monday, Wednesday, Friday));
+        therapy.setTreatmentCategory(treatmentCategory);
     }
 
     public TherapyBuilder withAge(int age) {
@@ -29,7 +31,7 @@ public class TherapyBuilder {
     }
 
     public TherapyBuilder withTreatmentCategory(String treatmentCategoryName) {
-        TreatmentCategory treatmentCategory = new TreatmentCategory(treatmentCategoryName, "01", 3, 12, 36, 4, 12, 22, 66, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Thursday));
+        TreatmentCategory treatmentCategory = new TreatmentCategory(treatmentCategoryName, "01", 3, 12, 36, 4, 12, 22, 66, asList(Monday, Wednesday, Thursday));
         treatmentCategory.setName(treatmentCategoryName);
         therapy.setTreatmentCategory(treatmentCategory);
         return this;
@@ -50,8 +52,8 @@ public class TherapyBuilder {
         return this;
     }
 
-    public TherapyBuilder withNoOfDoesTaken(Phase phaseName, int doses) {
-        therapy.getPhase(phaseName).setNumberOfDosesTaken(doses);
+    public TherapyBuilder withNoOfDosesTaken(Phase phaseName, int doses) {
+        therapy.setNumberOfDosesTaken(phaseName, doses);
         return this;
     }
 

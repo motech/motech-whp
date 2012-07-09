@@ -50,7 +50,7 @@ public class PhaseRecord {
     }
 
     @JsonIgnore
-    public String getEndDateAsString(){
+    public String getEndDateAsString() {
         return WHPDate.date(endDate).value();
     }
 }

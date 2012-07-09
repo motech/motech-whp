@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.util.WHPDateUtil;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,36 +35,32 @@ public class AdherenceSection {
     public AdherenceSection() {
     }
 
-    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate, List<PhaseRecord> phases) {
+    public void init(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate, List<Phase> phases) {
         this.sectionStartDate = startDate;
         this.sectionEndDate = endDate;
-        this.phases = phases;
         addMonthAdherenceForRange(sectionStartDate, sectionEndDate);
-        for (PhaseRecord phase : phases) {
-            if (phase.hasStarted())
-                addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, phase.getStartDate(), phase.getEndDate());
+        for (Phase phase : phases) {
+            if (therapy.hasBeenOn(phase)) {
+                addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, therapy.getPhaseStartDate(phase), therapy.getPhaseEndDate(phase));
+            }
         }
     }
 
     public void addAdherenceDataForGivenTherapy(Patient patient, List<Adherence> adherenceData, Therapy therapy, LocalDate startDate, LocalDate endDate) {
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
-
         List<LocalDate> providedAdherenceDates = getProvidedAdherenceDates(adherenceData);
-
         LocalDate phaseLastDate = endDate;
+
         if (phaseLastDate == null) phaseLastDate = today();
         for (LocalDate doseDate = startDate; WHPDateUtil.isOnOrBefore(doseDate, phaseLastDate); doseDate = doseDate.plusDays(1)) {
             boolean doseDateInPausedPeriod = patient.isDoseDateInPausedPeriod(doseDate);
             Treatment treatmentForDateInTherapy = patient.getTreatment(doseDate);
-            String providerIdForTreatmentToWhichDoseBelongs = "";
-            if (treatmentForDateInTherapy != null) {
-                providerIdForTreatmentToWhichDoseBelongs = treatmentForDateInTherapy.getProviderId();
-            }
             if (providedAdherenceDates.contains(doseDate)) {
                 Adherence adherence = adherenceData.get(providedAdherenceDates.indexOf(doseDate));
                 addAdherenceDatum(adherence, doseDateInPausedPeriod);
             } else {
                 if (patientPillDays.contains(DayOfWeek.getDayOfWeek(doseDate))) {
+                    String providerIdForTreatmentToWhichDoseBelongs = treatmentForDateInTherapy != null ? treatmentForDateInTherapy.getProviderId() : "";
                     addAdherenceDatum(doseDate, PillStatus.Unknown, providerIdForTreatmentToWhichDoseBelongs, doseDateInPausedPeriod);
                 }
             }

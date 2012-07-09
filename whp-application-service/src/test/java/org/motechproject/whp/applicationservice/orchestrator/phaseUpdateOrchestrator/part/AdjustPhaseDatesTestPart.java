@@ -23,14 +23,11 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate ipStartDate = new LocalDate(2011, 1, 1);
         LocalDate eipStartDate = new LocalDate(2011, 1, 2);
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
-        patient.getCurrentTherapy().getPhase(IP).setNumberOfDosesTaken(24);
-        patient.getCurrentTherapy().getPhase(EIP).setNumberOfDosesTaken(32);
-        patient.getCurrentTherapy().getPhase(CP).setNumberOfDosesTaken(32);
 
         phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
-        assertEquals(ipStartDate, patient.getCurrentTherapy().getPhase(IP).getStartDate());
-        assertEquals(eipStartDate, patient.getCurrentTherapy().getPhase(EIP).getStartDate());
-        assertEquals(cpStartDate, patient.getCurrentTherapy().getPhase(CP).getStartDate());
+        assertEquals(ipStartDate, patient.getCurrentTherapy().getPhaseStartDate(IP));
+        assertEquals(eipStartDate, patient.getCurrentTherapy().getPhaseStartDate(EIP));
+        assertEquals(cpStartDate, patient.getCurrentTherapy().getPhaseStartDate(CP));
         verify(allPatients).update(patient);
     }
 
@@ -39,9 +36,6 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate ipStartDate = new LocalDate(2011, 1, 1);
         LocalDate eipStartDate = new LocalDate(2011, 1, 2);
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
-        patient.getCurrentTherapy().getPhase(IP).setNumberOfDosesTaken(24);
-        patient.getCurrentTherapy().getPhase(EIP).setNumberOfDosesTaken(32);
-        patient.getCurrentTherapy().getPhase(CP).setNumberOfDosesTaken(33);
 
         phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
         verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt());

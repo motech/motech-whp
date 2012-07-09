@@ -12,7 +12,6 @@ import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
@@ -34,7 +33,7 @@ public class Therapy {
     private Treatment currentTreatment;
     private List<Treatment> treatments = new ArrayList<>();
 
-    private Phases phases = new Phases(Arrays.asList(new PhaseRecord(Phase.IP), new PhaseRecord(Phase.EIP), new PhaseRecord(Phase.CP)));
+    private Phases phases = new Phases();
 
     public Therapy() {
         setUid(generateUid());
@@ -97,11 +96,6 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public PhaseRecord getPhase(Phase phaseName) {
-        return phases.getByPhaseName(phaseName);
-    }
-
-    @JsonIgnore
     public String getStartDateAsString() {
         return WHPDate.date(startDate).value();
     }
@@ -124,14 +118,8 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public int totalNumberOfDosesTakenTillToday(){
-        int totalDoses = 0;
-        for (PhaseRecord phase : phases.getAll()) {
-            if (phase.hasStarted()){
-                totalDoses = totalDoses + phase.getNumberOfDosesTaken();
-            }
-        }
-        return totalDoses;
+    public int totalNumberOfDosesTakenTillToday() {
+        return phases.getTotalDoses();
     }
 
     @JsonIgnore
@@ -147,44 +135,6 @@ public class Therapy {
         } else {
             return 0;
         }
-    }
-
-    @JsonIgnore
-    public int totalDosesTakenInIntensivePhases(){
-        int totalIPDoseTakenCount = 0;
-
-        totalIPDoseTakenCount = totalIPDoseTakenCount + totalDosesTakenIn(PhaseName.IP);
-        totalIPDoseTakenCount = totalIPDoseTakenCount + totalDosesTakenIn(PhaseName.EIP);
-
-        return totalIPDoseTakenCount;
-    }
-
-    @JsonIgnore
-    public int totalDosesTakenInContinuationPhase(){
-        int totalCPDoseTakenCount = 0;
-
-        totalCPDoseTakenCount = totalCPDoseTakenCount + totalDosesTakenIn(PhaseName.CP);
-
-        return totalCPDoseTakenCount;
-    }
-
-    @JsonIgnore
-    public int totalDosesInIntensivePhases(){
-        int totalIPDoseCount = 0;
-
-        totalIPDoseCount = totalIPDoseCount + totalDosesIn(PhaseName.IP);
-        totalIPDoseCount = totalIPDoseCount + totalDosesIn(PhaseName.EIP);
-
-        return totalIPDoseCount;
-    }
-
-    @JsonIgnore
-    public int totalDosesInContinuationPhase(){
-        int totalCPDoseCount = 0;
-
-        totalCPDoseCount = totalCPDoseCount + totalDosesIn(PhaseName.CP);
-
-        return totalCPDoseCount;
     }
 
     @JsonIgnore
@@ -279,33 +229,49 @@ public class Therapy {
         return currentTreatment.isValid(errorCodes);
     }
 
+    @JsonIgnore
+    public void setNumberOfDosesTaken(Phase phase, int numberOfDoses) {
+        phases.setNumberOfDosesIn(phase, numberOfDoses);
+    }
+
+    @JsonIgnore
+    public int getNumberOfDosesTaken(Phase phase) {
+        return phases.getNumberOfDosesTaken(phase);
+    }
+
+    @JsonIgnore
+    public int getTotalDoesIn(Phase phase) {
+        if (phases.hasBeenOn(phase)) {
+            return treatmentCategory.numberOfDosesForPhase(phase);
+        }
+        return 0;
+    }
+
+    @JsonIgnore
+    public LocalDate getPhaseStartDate(Phase phase) {
+        return phases.getStartDate(phase);
+    }
+
+    @JsonIgnore
+    public LocalDate getPhaseEndDate(Phase phase) {
+        return phases.getEndDate(phase);
+    }
+
+    @JsonIgnore
+    public int getNumberOfDosesTakenInIntensivePhases() {
+        return getNumberOfDosesTaken(Phase.IP) + getNumberOfDosesTaken(Phase.EIP);
+    }
+
+    @JsonIgnore
+    public int getTotalDoesInIntensivePhases() {
+        return getTotalDoesIn(Phase.IP) + getTotalDoesIn(Phase.EIP);
+    }
+
+    public boolean hasBeenOn(Phase phase) {
+        return phases.hasBeenOn(phase);
+    }
+
     private String generateUid() {
         return String.valueOf(DateUtil.now().getMillis());
     }
-
-    int totalDosesTakenIn(PhaseName phaseName){
-        int doseTakenCount = 0;
-
-        PhaseRecord phase = getPhase(phaseName);
-
-        if (phase.hasStarted()){
-            doseTakenCount = phase.getNumberOfDosesTaken();
-        }
-
-        return doseTakenCount;
-    }
-
-    int totalDosesIn(PhaseName phaseName){
-        int doseCount = 0;
-
-        PhaseRecord phase = getPhase(phaseName);
-
-        if (phase.hasStarted()){
-            doseCount = treatmentCategory.numberOfDosesForPhase(phase.getName());
-        }
-
-        return doseCount;
-    }
-
-
 }
