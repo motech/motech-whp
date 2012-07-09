@@ -5,9 +5,8 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
-import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.repository.AbstractMigrationRepository;
 import org.motechproject.whp.v0.domain.PatientV0;
 import org.motechproject.whp.v0.domain.TherapyV0;
 import org.motechproject.whp.v0.domain.TreatmentV0;
@@ -20,22 +19,25 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.dao.support.DataAccessUtils.singleResult;
+
 @Repository
-public class AllPatientsV0 extends MotechBaseRepository<PatientV0> {
+public class AllPatientsV0 extends AbstractMigrationRepository<PatientV0> {
 
     AllTherapiesV0 allTherapies;
 
     @Autowired
     public AllPatientsV0(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, AllTherapiesV0 allTherapies) {
-        super(PatientV0.class, dbCouchDbConnector);
+        super(PatientV0.class, dbCouchDbConnector, Patient.class.getSimpleName());
         this.allTherapies = allTherapies;
     }
 
     @Override
     public void add(PatientV0 patient) {
+        // TODO : migration
         PatientV0 savedPatient = findByPatientId(patient.getPatientId());
         if (savedPatient != null) {
-            throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_CASE_ID);
+            throw new WHPRuntimeExceptionV0(WHPErrorCodeV0.DUPLICATE_CASE_ID);
         }
         ArrayList<WHPErrorCodeV0> errorCodes = new ArrayList<>();
         if (!patient.isValid(errorCodes)) {

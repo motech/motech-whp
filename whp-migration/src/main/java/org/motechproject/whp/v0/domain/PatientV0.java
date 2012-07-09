@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
 
 import java.util.ArrayList;
@@ -31,9 +32,11 @@ public class PatientV0 extends MotechBaseDataObject {
     private boolean migrated;
 
     public PatientV0() {
+        this.type = Patient.class.getSimpleName();
     }
 
     public PatientV0(String patientId, String firstName, String lastName, GenderV0 gender, String phoneNumber) {
+        this();
         setPatientId(patientId);
         this.firstName = firstName;
         this.lastName = lastName;

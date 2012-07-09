@@ -12,14 +12,14 @@ public class SmearTestRecordV0 {
 
     private SmearTestSampleInstanceV0 smear_sample_instance;
     private LocalDate smear_test_date_1;
-    private SmearTestResultsV0 smear_test_result_1;
+    private SmearTestResultV0 smear_test_result_1;
     private LocalDate smear_test_date_2;
-    private SmearTestResultsV0 smear_test_result_2;
+    private SmearTestResultV0 smear_test_result_2;
 
     public SmearTestRecordV0() {
     }
 
-    public SmearTestRecordV0(SmearTestSampleInstanceV0 smearTestSampleInstance, LocalDate testDate1, SmearTestResultsV0 result1, LocalDate testDate2, SmearTestResultsV0 result2) {
+    public SmearTestRecordV0(SmearTestSampleInstanceV0 smearTestSampleInstance, LocalDate testDate1, SmearTestResultV0 result1, LocalDate testDate2, SmearTestResultV0 result2) {
         this.smear_sample_instance = smearTestSampleInstance;
         this.smear_test_date_1 = testDate1;
         this.smear_test_result_1 = result1;
