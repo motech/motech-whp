@@ -11,6 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
+import static junit.framework.Assert.assertEquals;
+
 public class LoginPage extends Page {
     public static final String LOGIN_URL = WHPUrl.baseFor("login");
     public static final String USERNAME_ID = "j_username";
@@ -49,6 +51,12 @@ public class LoginPage extends Page {
 
     public LoginPage loginWithIncorrectAdminUserNamePassword() {
         login(INCORRECT_USERNAME, INCORRECT_PASSWORD);
+        return this;
+    }
+
+    public LoginPage loginWithInActiveProviderId(String userName, String password) {
+        login(userName, password);
+        assertEquals("The user has been registered but not activated. Please contact your local administrator.", errorMessage.getText());
         return this;
     }
 

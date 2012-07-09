@@ -94,11 +94,28 @@ public abstract class Page {
         }
     }
 
+    protected WebElement safeFindElementIn(WebElement webElement, By by) {
+        try {
+            return webElement.findElement(by);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
     protected void waitUntilElementEditable(final By by) {
         wait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
                 return webDriver.findElement(by).isEnabled() && webDriver.findElement(by).isDisplayed();
+            }
+        });
+    }
+
+    protected void waitUntilElementIsNotPresent(final By by) {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                return safeFindElement(by) == null;
             }
         });
     }
