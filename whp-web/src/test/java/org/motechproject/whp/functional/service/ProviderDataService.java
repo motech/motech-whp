@@ -25,9 +25,12 @@ public class ProviderDataService {
         ProviderCreatePage providerCreatePage = ProviderCreatePage.fetch(webDriver);
         providerCreatePage.createProviderWithLogin(testProvider);
 
-        ProviderActivatePage providerActivatePage = ProviderActivatePage.fetch(webDriver);
-        providerActivatePage.activateProvider(testProvider.getProviderId());
         return testProvider;
+    }
+
+    public void activateProvider(String providerId) {
+        ProviderActivatePage providerActivatePage = ProviderActivatePage.fetch(webDriver);
+        providerActivatePage.activateProvider(providerId);
     }
 
     private String generateId() {

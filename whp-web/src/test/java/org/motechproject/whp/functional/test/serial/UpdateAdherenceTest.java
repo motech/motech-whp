@@ -29,6 +29,7 @@ public class UpdateAdherenceTest extends BaseTest {
     public void setupProvider() {
         ProviderDataService providerDataService = new ProviderDataService(webDriver);
         provider = providerDataService.createProvider();
+        providerDataService.activateProvider(provider.getProviderId());
     }
 
     public void setupPatientForProvider() {

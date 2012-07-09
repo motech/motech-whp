@@ -18,7 +18,10 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
     @Test
     public void shouldTransferInPatientOnTransferInTreatmentUpdateRequest() {
         TestProvider provider1 = providerDataService.createProvider();
+        providerDataService.activateProvider(provider1.getProviderId());
+
         TestProvider provider2 = providerDataService.createProvider();
+        providerDataService.activateProvider(provider2.getProviderId());
 
         testPatient = patientDataService.createPatient(provider1.getProviderId(), "Foo", provider1.getDistrict());
 

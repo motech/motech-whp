@@ -32,6 +32,7 @@ public class ListAllProvidersTest extends BaseTest {
         provider1 = providerDataService.createProvider("Begusarai");
         provider2 = providerDataService.createProvider("Saharsa");
         provider3 = providerDataService.createProvider("Saharsa");
+        providerDataService.activateProvider(provider1.getProviderId());
     }
 
     @Test

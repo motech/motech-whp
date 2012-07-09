@@ -39,6 +39,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void testLoginSuccessForProvider() {
         TestProvider provider = providerDataService.createProvider();
+        providerDataService.activateProvider(provider.getProviderId());
         LoginPage loginPage = MyPageFactory.initElements(webDriver, LoginPage.class);
         ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
         assertTrue(StringUtils.containsIgnoreCase(providerPage.getWelcomeText(), provider.getProviderId()));

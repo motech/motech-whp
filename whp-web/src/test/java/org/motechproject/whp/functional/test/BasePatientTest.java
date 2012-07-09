@@ -18,6 +18,7 @@ public abstract class BasePatientTest extends BaseTest {
     public void setupTestProvider(String district) {
         ProviderDataService providerDataService = new ProviderDataService(webDriver);
         provider = providerDataService.createProvider(district);
+        providerDataService.activateProvider(provider.getProviderId());
     }
 
     public void setupTestPatientForDistrict(String districtName) {
@@ -28,6 +29,7 @@ public abstract class BasePatientTest extends BaseTest {
     public void setupProvider() {
         ProviderDataService providerDataService = new ProviderDataService(webDriver);
         provider = providerDataService.createProvider();
+        providerDataService.activateProvider(provider.getProviderId());
     }
 
     public void setupPatientForProvider() {

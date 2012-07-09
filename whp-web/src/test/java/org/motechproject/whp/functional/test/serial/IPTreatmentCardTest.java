@@ -84,6 +84,7 @@ public class IPTreatmentCardTest extends TreatmentUpdateTest {
                 .execute();
 
         TestProvider newProvider = providerDataService.createProvider();
+        providerDataService.activateProvider(newProvider.getProviderId());
         testPatient.transferIn("newTbId", newProvider.getProviderId());
 
         transferInTreatmentStep
