@@ -47,6 +47,30 @@ public class UserControllerTest {
         verify(session).setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
     }
 
+    @Test
+    public void shouldActivateAndResetPassword() {
+        String providerId = "providerId";
+        String password = "password";
+
+        when(userService.resetPassword(providerId, password)).thenReturn(true);
+
+        assertEquals("", userController.activateUser(providerId, password));
+        verify(userService,times(1)).resetPassword(providerId,password);
+        verify(userService,times(1)).activateUser(providerId);
+    }
+
+    @Test
+    public void shouldReturnErrorMessageIfActivationFails(){
+        String providerId = "providerId";
+        String password = "password";
+
+        when(userService.resetPassword(providerId, password)).thenReturn(false);
+
+        assertEquals("User Does not exist",userController.activateUser(providerId,password));
+        verify(userService,times(1)).resetPassword(providerId,password);
+        verify(userService,never()).activateUser(anyString());
+    }
+
     private void login(MotechUser authenticatedUser) {
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(authenticatedUser);
     }

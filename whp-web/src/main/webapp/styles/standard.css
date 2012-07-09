@@ -193,6 +193,10 @@ table tbody .link:hover td {
 .float-right {
     float: right;
 }
+.float-left {
+    float: left;
+}
+
 
 .warning {
     color: #b22222;
@@ -327,3 +331,10 @@ div.buttons a, div.buttons button {
     font-size: 18px;
 }
 
+.activate-link:hover,.activate-link {
+    color: green;
+}
+.reset-password-username {
+    color: darkgoldenrod;
+    font-weight: bold;
+}

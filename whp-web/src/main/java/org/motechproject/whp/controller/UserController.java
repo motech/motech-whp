@@ -2,11 +2,12 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,18 @@ public class UserController extends BaseController {
         if (authenticatedUser == null)
             return "'Current Password' you entered is incorrect";
         request.getSession().setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);
+        return "";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/activateUser")
+    @ResponseBody
+    public String activateUser(@RequestParam(value = "userName") String providerId, String newPassword) {
+        boolean hasResetPassword = userService.resetPassword(providerId, newPassword);
+        if (hasResetPassword)
+            userService.activateUser(providerId);
+        else
+            return "User Does not exist";
+
         return "";
     }
 

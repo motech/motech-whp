@@ -1,5 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
+<#include "../user/resetPassword.ftl">
 <@layout.defaultLayout "MoTeCH-WHP">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 <div id="search-section" class="row well">
@@ -47,6 +48,7 @@
             <th>Secondary Mobile Number</th>
             <th>Tertiary Mobile Number</th>
             <th>Status</th>
+            <th type="activate-provider"></th>
         </tr>
         </thead>
         <tbody>
@@ -62,7 +64,7 @@
             </tr>
             <#else>
                 <#list providerList as provider>
-                <tr class="provider-row" id="providerList_${provider.providerId}">
+                <tr class="provider-row" id="providerList_${provider.providerId}" providerId="${provider.providerId}">
                     <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId}</td>
                     <td id="provider_${provider.providerId}_District">${provider.district}</td>
                     <td id="provider_${provider.providerId}_PrimaryMobile">
@@ -80,11 +82,17 @@
                             ${provider.tertiaryMobile}
                             </#if>
                     </td>
-                    <td id="provider_${provider.providerId}_Status">
+                    <td id="provider_${provider.providerId}_Status" type="status">
                         <#if provider.active>
                             Active
                         <#else>
                             Inactive
+                        </#if>
+                    </td>
+                    <td type="activate-provider">
+                        <#if !provider.active>
+                            <a type="activate-button" data-toggle="modal" href="#resetPasswordModal" class="activate-link"
+                               userName="${provider.providerId}">Activate</a>
                         </#if>
                     </td>
                 </tr>
@@ -93,5 +101,7 @@
         </tbody>
     </table>
 </div>
+
+    <@resetPassword "/activateUser"/>
 
 </@layout.defaultLayout>
