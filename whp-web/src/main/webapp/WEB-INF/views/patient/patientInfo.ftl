@@ -4,7 +4,7 @@
 
             <table class="table table-bordered word-wrap table-striped">
                 <tr>
-                    <th colspan="2">Treatment Details</th>
+                    <th id="treatmentDetails" colspan="2">Treatment Details</th>
                 </tr>
 
                 <tr>
@@ -50,7 +50,7 @@
             </table>
             <table class="table table-bordered default-arrow word-wrap table-striped">
                 <tr>
-                    <th colspan="2">Provider Details</th>
+                    <th id="providerDetails" colspan="2">Provider Details</th>
                 </tr>
 
                 <tr>
@@ -70,7 +70,7 @@
             <div>
                 <table class="table table-bordered default-arrow word-wrap table-striped">
                     <tr>
-                        <th colspan="2">Patient Details</th>
+                        <th id="patientDetails" colspan="2">Patient Details</th>
                     </tr>
 
                     <tr>
@@ -110,9 +110,9 @@
             </div>
             <table class="table table-bordered text-center table-striped">
                 <tr>
-                    <th rowspan="2">Sample Instance</th>
-                    <th colspan="4">Smear Test Results</th>
-                    <th rowspan="2">Weight</th>
+                    <th id="sampleInstance" rowspan="2">Sample Instance</th>
+                    <th id="smearTestDetails" colspan="4">Smear Test Results</th>
+                    <th id="weight" rowspan="2">Weight</th>
                 </tr>
                 <tr>
                     <th>Date 1</th>

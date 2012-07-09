@@ -288,17 +288,6 @@ div.buttons a, div.buttons button {
     margin-right: 10px;
 }
 
-.adherenceCaptured {
-    background-color: #32F800;
-    text-align: center;
-    font-size: 18px;
-    color: #000000;
-}
-
-.adherenceNotCaptured  {
-    text-align: center;
-    font-size: 18px;
-}
 #search-pane {
     overflow: hidden;
 }
@@ -315,5 +304,26 @@ div.buttons a, div.buttons button {
 }
 .patient-info-right-pane {
     width: 470px;
+}
+
+#patientList th, #providerList th , #cmfAdminList th, #smearTestDetails, #sampleInstance, #weight, #patientDetails, #providerDetails, #treatmentDetails{
+    background-color: #43A1DA;
+    color: white;
+}
+
+#patientList td[class~=adherenceCaptured] {
+    text-align: center;
+    color: #3C7526;
+    font-size: 18px;
+}
+
+#patientList tr[class~=paused] td{
+    background-color: lightPink;
+}
+
+#patientList td[class~=adherenceNotCaptured] {
+    text-align: center;
+    color: #C7250C;
+    font-size: 18px;
 }
 

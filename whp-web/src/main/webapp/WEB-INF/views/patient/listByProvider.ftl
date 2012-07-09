@@ -15,7 +15,7 @@
 </div>
 <div class="row">
     <div>
-        <table id="patientList" class="table table-bordered table-condensed">
+        <table id="patientList" class="table table-striped table-bordered table-condensed">
             <thead>
             <tr>
                 <th>Patient ID</th>
@@ -26,7 +26,7 @@
                 <th>Village</th>
                 <th>Treatment Category</th>
                 <th>Treatment Start Date</th>
-                <th>Adherence Given</th>
+                <th>Adherence Status</th>
                 <th>Adherence</th>
             </tr>
             </thead>
