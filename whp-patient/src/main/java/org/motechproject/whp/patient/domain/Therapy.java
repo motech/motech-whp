@@ -4,6 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -13,6 +14,9 @@ import org.motechproject.whp.refdata.domain.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.patient.util.WHPDateUtil.numberOf_DDD_Between;
 
 @Data
 public class Therapy {
@@ -131,6 +135,59 @@ public class Therapy {
     }
 
     @JsonIgnore
+    public int getTotalDosesToHaveBeenTakenTillToday() {
+        if (startDate != null) {
+            int totalDoses = 0;
+            //pointing to sunday just past
+            LocalDate endDate = currentWeekInstance().dateOf(DayOfWeek.Sunday);
+            for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
+                totalDoses = totalDoses + numberOf_DDD_Between(startDate, endDate, dayOfWeek);
+            }
+            return totalDoses;
+        } else {
+            return 0;
+        }
+    }
+
+    @JsonIgnore
+    public int totalDosesTakenInIntensivePhases(){
+        int totalIPDoseTakenCount = 0;
+
+        totalIPDoseTakenCount = totalIPDoseTakenCount + totalDosesTakenIn(PhaseName.IP);
+        totalIPDoseTakenCount = totalIPDoseTakenCount + totalDosesTakenIn(PhaseName.EIP);
+
+        return totalIPDoseTakenCount;
+    }
+
+    @JsonIgnore
+    public int totalDosesTakenInContinuationPhase(){
+        int totalCPDoseTakenCount = 0;
+
+        totalCPDoseTakenCount = totalCPDoseTakenCount + totalDosesTakenIn(PhaseName.CP);
+
+        return totalCPDoseTakenCount;
+    }
+
+    @JsonIgnore
+    public int totalDosesInIntensivePhases(){
+        int totalIPDoseCount = 0;
+
+        totalIPDoseCount = totalIPDoseCount + totalDosesIn(PhaseName.IP);
+        totalIPDoseCount = totalIPDoseCount + totalDosesIn(PhaseName.EIP);
+
+        return totalIPDoseCount;
+    }
+
+    @JsonIgnore
+    public int totalDosesInContinuationPhase(){
+        int totalCPDoseCount = 0;
+
+        totalCPDoseCount = totalCPDoseCount + totalDosesIn(PhaseName.CP);
+
+        return totalCPDoseCount;
+    }
+
+    @JsonIgnore
     public Integer getWeeksElapsed() {
         if (phases.isOrHasBeenOnIp())
             return WHPDateUtil.weeksElapsedSince(phases.getIPStartDate());
@@ -225,5 +282,30 @@ public class Therapy {
     private String generateUid() {
         return String.valueOf(DateUtil.now().getMillis());
     }
+
+    int totalDosesTakenIn(PhaseName phaseName){
+        int doseTakenCount = 0;
+
+        Phase phase = getPhase(phaseName);
+
+        if (phase.hasStarted()){
+            doseTakenCount = phase.getNumberOfDosesTaken();
+        }
+
+        return doseTakenCount;
+    }
+
+    int totalDosesIn(PhaseName phaseName){
+        int doseCount = 0;
+
+        Phase phase = getPhase(phaseName);
+
+        if (phase.hasStarted()){
+            doseCount = treatmentCategory.numberOfDosesForPhase(phase.getName());
+        }
+
+        return doseCount;
+    }
+
 
 }

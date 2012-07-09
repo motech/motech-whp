@@ -38,7 +38,6 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_TB_ID;
 
-
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
