@@ -15,7 +15,6 @@ $('#changePasswordModal').submit(function(event) {
         $.post(url, $form.serialize(),
             function(data) {
                 if (data == '') {
-                    $('#userPassword').val($('#newPassword').val());
                     $('#changePasswordModal').modal('hide');
                 }
                 else {
