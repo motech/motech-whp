@@ -31,6 +31,7 @@
         <module>whp-treatment-card</module>
         <module>whp-validation</module>
         <module>whp-data-importer</module>
+        <module>whp-migration</module>
         <module>whp-webservice</module>
         <module>whp-web</module>
     </modules>
