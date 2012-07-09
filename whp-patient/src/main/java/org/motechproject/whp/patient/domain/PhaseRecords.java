@@ -54,7 +54,8 @@ public class PhaseRecords {
         if (transition.getTransitionedFrom() != null) {
             PhaseRecord phaseRecord = phaseRecords.get(transition.getPhase().toString());
             phaseRecords.get(transition.getTransitionedFrom().toString()).setEndDate(phaseRecord.getStartDate().minusDays(1));
-        } else if (transition.getTransitionedTo() != null) {
+        }
+        if (transition.getTransitionedTo() != null) {
             PhaseRecord nextPhaseRecord = phaseRecords.get(transition.getTransitionedTo().toString());
             phaseRecords.get(transition.getPhase().toString()).setEndDate(nextPhaseRecord.getStartDate().minusDays(1));
         }

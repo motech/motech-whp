@@ -54,7 +54,7 @@ public class PhaseTransitions {
 
     private boolean insert(Phase phase) {
         boolean inserted = false;
-        for (int i = transitions.size() - 1; i > 0; i--) {
+        for (int i = transitions.size() - 1; i >= 0; i--) {
             Phase transition = transitions.get(i);
             if (phase.occursBefore(transition)) {
                 transitions.add(i, phase);

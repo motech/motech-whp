@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.motechproject.whp.refdata.domain.Phase;
+import org.springframework.util.Assert;
 
 @Data
 public class PhaseTransition {
@@ -14,10 +15,10 @@ public class PhaseTransition {
     private Phase transitionedTo;
 
     public PhaseTransition() {
-
     }
 
     public PhaseTransition(Phase from, Phase phase, Phase to) {
+        Assert.notNull(phase);
         this.transitionedFrom = from;
         this.phase = phase;
         this.transitionedTo = to;
