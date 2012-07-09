@@ -31,7 +31,7 @@
         <tbody>
         <#if patientList?size == 0>
             <tr>
-                <td class="warning" style="text-align: center" colspan="11">
+                <td class="warning" style="text-align: center" colspan="14">
                     <#if providerId != "">
                         No patients found for Provider District as: '${selectedDistrict}' and Provider ID as:
                         '${providerId}'
