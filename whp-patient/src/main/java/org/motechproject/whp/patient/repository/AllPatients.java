@@ -9,13 +9,13 @@ import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PatientComparatorByFirstName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -75,6 +75,14 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         List<Patient> patients = db.queryView(q, Patient.class);
         Collections.sort(patients, new PatientComparatorByFirstName());
         return patients;
+    }
+
+
+    public class PatientComparatorByFirstName implements Comparator<Patient> {
+        @Override
+        public int compare(Patient patient1, Patient patient2) {
+            return patient1.getFirstName().compareTo(patient2.getFirstName());
+        }
     }
 
 }

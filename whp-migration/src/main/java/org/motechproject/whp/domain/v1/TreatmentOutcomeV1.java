@@ -1,11 +1,11 @@
-package org.motechproject.whp.refdata.domain;
+package org.motechproject.whp.domain.v1;
 
-public enum TreatmentOutcome {
+public enum TreatmentOutcomeV1 {
     Cured("Cured"), Died("Died"), Failure("Failure"), Defaulted("Defaulted"), TransferredOut("Transferred Out"), SwitchedOverToMDRTBTreatment("Switched Over To MDR-TB Treatment"), TreatmentCompleted("Treatment Completed");
 
     private String outcome;
 
-    TreatmentOutcome(String outcome) {
+    TreatmentOutcomeV1(String outcome) {
         this.outcome = outcome;
     }
 
