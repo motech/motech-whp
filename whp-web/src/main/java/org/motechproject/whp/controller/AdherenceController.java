@@ -12,6 +12,7 @@ import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
@@ -68,7 +69,7 @@ public class AdherenceController extends BaseController {
         adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
         phaseUpdateOrchestrator.recomputePillCount(patientId);
         phaseUpdateOrchestrator.attemptPhaseTransition(patientId);
-        Flash.out("message", "Adherence Saved For Patient : " + patientId, httpServletRequest);
+        Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }
 

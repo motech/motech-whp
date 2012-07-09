@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.security.authentication.LoginSuccessHandler;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
@@ -22,6 +24,7 @@ import org.springframework.context.support.StaticMessageSource;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +69,8 @@ public class PatientControllerTest {
 
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
+    private static final String LOGGED_IN_USER_NAME = "username";
+
 
     @Before
     public void setup() {
@@ -73,6 +78,7 @@ public class PatientControllerTest {
         String providerId = "providerid";
 
         setupMessageSource();
+        setUpLoggedInUser();
         patientController = new PatientController(patientService, whpAdherenceService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
@@ -139,6 +145,14 @@ public class PatientControllerTest {
     }
 
     @Test
+    public void shouldAddRemarkToPatientsTherapyAndShowPatient() {
+        String remark = "remark";
+        String view = patientController.addRemark(patient.getPatientId(), remark, request);
+        verify(patientService).addRemark(patient.getPatientId(), remark, LOGGED_IN_USER_NAME);
+        assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
+    }
+
+    @Test
     public void shouldListAllPatientsBelongingToTheDefaultDistrict() {
         List<Patient> patients = asList(new Patient());
         String firstDistrict = districts.get(0).getName();
@@ -186,5 +200,13 @@ public class PatientControllerTest {
 
         verify(uiModel).addAttribute(PatientController.DISTRICT_LIST, districts);
         verify(uiModel).addAttribute(PatientController.SELECTED_DISTRICT, districts.get(0).getName());
+    }
+
+    private void setUpLoggedInUser() {
+        HttpSession session = mock(HttpSession.class);
+        MotechUser loggedInUser = mock(MotechUser.class);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
+        when(loggedInUser.getUserName()).thenReturn(LOGGED_IN_USER_NAME);
     }
 }

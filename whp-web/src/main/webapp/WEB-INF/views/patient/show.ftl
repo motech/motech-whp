@@ -1,6 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default.ftl" as layout/>
 <@layout.defaultLayout "Patient Dashboard">
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/patientDashboard.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/treatmentCard.js'/>"></script>
 <script type="text/javascript">
     <#if patient.currentTreatment?? && patient.nextPhaseName??>
@@ -38,6 +39,20 @@ ${message}
     <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-primary brand">Adjust Phase Start
         Dates</a>
 </div>
+
+<br/>
+<br/>
+
+
+<form id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
+
+    <div class="well row">
+        <textarea class="float-left" id="patientRemark" name="patientRemark"></textarea>
+        <button class="btn btn-primary float-right" type="submit" id='addRemark'>Add Remark</button>
+    </div>
+
+</form>
+
 <br/>
 <script type="text/javascript">
     $('#saveTheDate').click(function () {

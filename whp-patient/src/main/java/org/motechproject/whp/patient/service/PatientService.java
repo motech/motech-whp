@@ -6,7 +6,10 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
@@ -26,15 +29,17 @@ import static org.motechproject.whp.patient.mapper.PatientMapper.mapPatient;
 public class PatientService {
 
     private AllPatients allPatients;
+    private AllTherapyRemarks allTherapyRemarks;
     private UpdateCommandFactory updateCommandFactory;
     private RequestValidator validator;
     private ProviderService providerService;
 
     @Autowired
     public PatientService(AllPatients allPatients,
-                          UpdateCommandFactory updateCommandFactory,
+                          AllTherapyRemarks allTherapyRemarks, UpdateCommandFactory updateCommandFactory,
                           RequestValidator validator, ProviderService providerService) {
         this.allPatients = allPatients;
+        this.allTherapyRemarks = allTherapyRemarks;
         this.updateCommandFactory = updateCommandFactory;
         this.validator = validator;
         this.providerService = providerService;
@@ -99,6 +104,12 @@ public class PatientService {
         List<Provider> providers = providerService.fetchBy(districtName);
         List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
         return allPatients.getAllUnderActiveTreatmentWithCurrentProviders(providerIds);
+    }
+
+    public void addRemark(String patientId, String remark, String user) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        Therapy therapy = patient.getCurrentTherapy();
+        allTherapyRemarks.add(new TherapyRemark(patientId, therapy.getUid(), remark, user));
     }
 
     boolean canBeTransferred(String patientId) {

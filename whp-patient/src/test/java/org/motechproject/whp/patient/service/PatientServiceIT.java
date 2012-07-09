@@ -14,6 +14,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
@@ -45,15 +46,20 @@ public class PatientServiceIT extends SpringIntegrationTest {
     PatientService patientService;
     @Autowired
     ProviderService providerService;
+    @Autowired
+    AllTherapyRemarks allTherapyRemarks;
 
     @Before
     public void setUp() {
         super.before();
+        allTherapyRemarks.removeAll();
+        allPatients.removeAll();
     }
 
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
+        markForDeletion(allTherapyRemarks.getAll().toArray());
         super.after();
     }
 
@@ -383,6 +389,24 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         List<Patient> patientList = patientService.getAllWithActiveTreatmentForProvider(providerToBeUsedForSearch.getProviderId());
         assertPatientForRequests(asList(createPatientRequest2), patientList);
+    }
+
+    @Test
+    public void shouldAddRemarkToTherapy() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        patientService.addRemark(PATIENT_ID, "remark", "username");
+
+        assertEquals(1, allTherapyRemarks.getAll().size());
+
+        TherapyRemark therapyRemark = allTherapyRemarks.getAll().get(0);
+        assertEquals(PATIENT_ID, therapyRemark.getPatientId());
+        assertEquals(patient.getCurrentTherapy().getUid(), therapyRemark.getTherapyUid());
+        assertEquals("remark", therapyRemark.getRemark());
+        assertEquals("username", therapyRemark.getUser());
+
     }
 
     private void createProvider(String providerId, String district) {

@@ -334,7 +334,12 @@ div.buttons a, div.buttons button {
 .activate-link:hover,.activate-link {
     color: green;
 }
+
 .reset-password-username {
     color: #369BD7;
     font-weight: bold;
+}
+
+#patientRemark {
+    width: 80%;
 }

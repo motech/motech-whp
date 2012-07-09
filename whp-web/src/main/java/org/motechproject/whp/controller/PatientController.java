@@ -1,6 +1,8 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.flash.Flash;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.CurrentTreatmentWeek;
@@ -185,6 +187,14 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "transitionPhase/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") String patientId, @RequestParam("to") String phaseName) {
         phaseUpdateOrchestrator.setNextPhase(patientId, Phase.valueOf(phaseName));
+        return String.format("redirect:/patients/show?patientId=%s", patientId);
+    }
+
+    @RequestMapping(value = "addRemark/{id}", method = RequestMethod.POST)
+    public String addRemark(@PathVariable("id") String patientId, @RequestParam("patientRemark") String remark, HttpServletRequest httpServletRequest) {
+        MotechUser authenticatedUser = loggedInUser(httpServletRequest);
+        patientService.addRemark(patientId, remark, authenticatedUser.getUserName());
+        Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Remark saved for Patient : " + patientId, httpServletRequest);
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 }
