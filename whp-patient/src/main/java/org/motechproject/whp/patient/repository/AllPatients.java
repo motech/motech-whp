@@ -57,7 +57,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return singleResult(db.queryView(find_by_patientId, Patient.class));
     }
 
-    @View(name = "find_by_provider_having_active_treatment_sort_by_firstname_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTreatment && doc.onActiveTreatment === true) {" +
+    @View(name = "find_by_provider_having_active_treatment_sort_by_firstname_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
             "emit([doc.currentTherapy.currentTreatment.providerId, doc.firstName], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
         if (providerId == null)

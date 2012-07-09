@@ -181,6 +181,7 @@ public class Patient extends MotechBaseDataObject {
         return currentTherapy.isValid(errorCodes);
     }
 
+    @JsonIgnore
     public boolean isDoseDateInPausedPeriod(LocalDate doseDate) {
         Treatment treatment = getTreatment(doseDate);
         if (treatment != null) {
@@ -289,8 +290,8 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public void setNumberOfDosesTaken(PhaseName phaseName, int dosesTaken) {
-        getCurrentTherapy().getPhase(phaseName).setNumberOfDosesTaken(dosesTaken);
+    public void setNumberOfDosesTaken(Phase phaseName, int dosesTaken) {
+        getCurrentTherapy().setNumberOfDosesTaken(phaseName, dosesTaken);
     }
 
     @JsonIgnore
