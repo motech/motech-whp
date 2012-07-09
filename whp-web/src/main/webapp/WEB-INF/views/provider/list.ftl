@@ -102,6 +102,6 @@
     </table>
 </div>
 
-    <@resetPassword "/activateUser"/>
+    <@resetPassword/>
 
 </@layout.defaultLayout>

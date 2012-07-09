@@ -19,6 +19,7 @@ $(function () {
     $('#resetPasswordModal').bind('resetPasswordSuccess', function (event, userName) {
         $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
         $('tr[providerId=' + userName + '] td[type=status]').text('Active');
+        $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
         removeActivateColumnIfAllAreActive();
     });
 });

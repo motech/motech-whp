@@ -1,8 +1,8 @@
-<#macro resetPassword resetUrl>
-<form class="modal hide fade" id="resetPasswordModal" submitOnEnterKey="true" action="<@spring.url resetUrl/>">
+<#macro resetPassword>
+<form class="modal hide" id="resetPasswordModal" submitOnEnterKey="true" action="<@spring.url "/activateUser"/>">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Reset Password</h3>
+        <h3>Activate Web User</h3>
     </div>
     <div class="modal-body">
         <div id="resetPasswordServerSideError" class="alert alert-error hide"></div>
@@ -15,14 +15,14 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="resetPasswordNewPassword">New Password *</label>
+            <label class="control-label" for="resetPasswordNewPassword">Password *</label>
 
             <div class="controls">
                 <input class="input-xlarge" type="password" name='resetPasswordNewPassword' id="resetPasswordNewPassword"/>
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="resetPasswordConfirmNewPassword">Confirm New Password *</label>
+            <label class="control-label" for="resetPasswordConfirmNewPassword">Confirm Password *</label>
 
             <div class="controls">
                 <input class="input-xlarge" type="password" name='resetPasswordConfirmNewPassword' id="resetPasswordConfirmNewPassword"/>
