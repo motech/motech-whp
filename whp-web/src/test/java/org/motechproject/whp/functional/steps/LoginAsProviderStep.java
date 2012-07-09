@@ -1,10 +1,10 @@
 package org.motechproject.whp.functional.steps;
 
 import org.motechproject.whp.functional.data.TestProvider;
-import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.WebDriver;
+
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class LoginAsProviderStep extends Step {
 
@@ -23,6 +23,6 @@ public class LoginAsProviderStep extends Step {
 
     @Override
     public ProviderPage execute() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(testProvider.getProviderId(), testProvider.getPassword());
+        return getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
     }
 }

@@ -12,6 +12,7 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class TransferInPatientTest extends TreatmentUpdateTest {
 
@@ -27,7 +28,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
 
         adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
 
-        ProviderPage providerPage = loginAsProvider(provider1);
+        ProviderPage providerPage = getLoginPage(webDriver).loginAsProvider(provider1.getProviderId(), provider1.getPassword());
 
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertTrue(providerPage.hasTbId(testPatient.getTbId()));
@@ -38,7 +39,7 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         String closeTreatmentRequest = CaseUpdate.CloseTreatmentRequest(testPatient.getCaseId(), "09/05/2012", testPatient.getTbId());
         caseDataService.updateCase(closeTreatmentRequest);
         providerPage.logout();
-        providerPage = loginAsProvider(provider1);
+        providerPage = getLoginPage(webDriver).loginAsProvider(provider1.getProviderId(), provider1.getPassword());
 
         assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
         assertFalse(providerPage.hasTbId(testPatient.getTbId()));
@@ -48,14 +49,14 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         caseDataService.updateCase(transferInPatientRequest);
 
         providerPage.logout();
-        providerPage = loginAsProvider(provider1);
+        providerPage = getLoginPage(webDriver).loginAsProvider(provider1.getProviderId(), provider1.getPassword());
 
         assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
         assertFalse(providerPage.hasTbId(testPatient.getTbId()));
         assertFalse(providerPage.hasTbId(transferInTBId));
 
         providerPage.logout();
-        providerPage = loginAsProvider(provider2);
+        providerPage = getLoginPage(webDriver).loginAsProvider(provider2.getProviderId(), provider2.getPassword());
 
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertTrue(providerPage.hasTbId(transferInTBId));

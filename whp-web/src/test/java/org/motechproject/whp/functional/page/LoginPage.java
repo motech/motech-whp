@@ -61,6 +61,25 @@ public class LoginPage extends Page {
         return MyPageFactory.initElements(webDriver, AdminPage.class);
     }
 
+    public String errorMessage() {
+        waitForElementWithIdToLoad(ERROR_MESSAGE);
+        return errorMessage.getText();
+    }
+
+    public ItAdminPage loginWithItAdminUserNamePassword(String username, String password) {
+        login(username, password);
+        return getItAdminPage(webDriver);
+    }
+
+    public ProviderPage loginAsProvider(String providerId, String password) {
+        getLoginPage(webDriver).login(providerId, password);
+        return getProviderPage(webDriver);
+    }
+
+    public AdminPage loginAsAdmin() {
+        return getLoginPage(webDriver).loginWithCorrectAdminUserNamePassword();
+    }
+
     private void login(String userName, String password) {
         System.out.println("START: Login ...................................");
         this.userName.sendKeys(userName);
@@ -70,18 +89,4 @@ public class LoginPage extends Page {
         System.out.println("***************************************************************************");
     }
 
-    public String errorMessage() {
-        waitForElementWithIdToLoad(ERROR_MESSAGE);
-        return errorMessage.getText();
-    }
-
-    public ProviderPage loginWithProviderUserNamePassword(String username, String password) {
-        login(username, password);
-        return MyPageFactory.initElements(webDriver, ProviderPage.class);
-    }
-
-    public ItAdminPage loginWithItAdminUserNamePassword(String username, String password) {
-        login(username, password);
-        return MyPageFactory.initElements(webDriver, ItAdminPage.class);
-    }
 }

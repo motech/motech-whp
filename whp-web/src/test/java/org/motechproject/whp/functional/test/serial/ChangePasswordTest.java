@@ -22,12 +22,12 @@ public class ChangePasswordTest extends BaseTest {
         verifyValidations(adminPage);
 
         String newPassword = "&\"~!@#$%^&*()_+{}|:\";<>?q';2";
-        changePassword(adminPage, LoginPage.CORRECT_PASSWORD, newPassword).logout();
+        LoginPage loginPage = changePassword(adminPage, LoginPage.CORRECT_PASSWORD, newPassword).logout();
 
-        adminPage = MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserAnd(newPassword).openChangePasswordModal();
-        changePassword(adminPage, newPassword, LoginPage.CORRECT_PASSWORD).logout();
+        adminPage = loginPage.loginWithCorrectAdminUserAnd(newPassword).openChangePasswordModal();
+        loginPage = changePassword(adminPage, newPassword, LoginPage.CORRECT_PASSWORD).logout();
 
-        MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword().logout();
+        loginPage.loginWithCorrectAdminUserNamePassword().logout();
     }
 
     private void verifyValidations(LoggedInUserPage adminPage) {

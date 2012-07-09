@@ -38,12 +38,4 @@ public abstract class TreatmentUpdateTest extends BaseTest {
         testPatient = patientDataService.createPatient(testProvider.getProviderId(), "Foo", testProvider.getDistrict());
     }
 
-    protected ProviderPage loginAsProvider(TestProvider provider) {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
-    }
-
-    protected AdminPage loginAsAdmin() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithCorrectAdminUserNamePassword();
-    }
-
 }

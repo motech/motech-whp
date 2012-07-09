@@ -41,7 +41,7 @@ public class LoginTest extends BaseTest {
         TestProvider provider = providerDataService.createProvider();
         providerDataService.activateProvider(provider.getProviderId());
         LoginPage loginPage = MyPageFactory.initElements(webDriver, LoginPage.class);
-        ProviderPage providerPage = loginPage.loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
+        ProviderPage providerPage = loginPage.loginAsProvider(provider.getProviderId(), provider.getPassword());
         assertTrue(StringUtils.containsIgnoreCase(providerPage.getWelcomeText(), provider.getProviderId()));
         providerPage.logout();
     }

@@ -5,14 +5,13 @@ import org.junit.Test;
 import org.motechproject.whp.functional.data.TestPatient;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
-import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.motechproject.whp.functional.page.provider.UpdateAdherencePage;
 import org.motechproject.whp.functional.service.PatientDataService;
 import org.motechproject.whp.functional.service.ProviderDataService;
 
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class UpdateAdherenceTest extends BaseTest {
 
@@ -74,11 +73,13 @@ public class UpdateAdherenceTest extends BaseTest {
     public void shouldNotAllowUpdateAdherenceOnWednesday() {
         adjustDateTime(DateTime.now().withDayOfWeek(3));
 
-        boolean isReadOnly = loginAsProvider().clickEditAdherenceLink(testPatient.getCaseId()).isReadOnly();
+        ProviderPage providerPage = loginAsProvider();
+        UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
+        boolean isReadOnly = updateAdherencePage.isReadOnly();
         assertTrue(isReadOnly);
     }
 
     ProviderPage loginAsProvider() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
+        return getLoginPage(webDriver).loginAsProvider(provider.getProviderId(),provider.getPassword());
     }
 }

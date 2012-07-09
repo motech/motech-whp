@@ -1,16 +1,11 @@
 package org.motechproject.whp.functional.page;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.seleniumhq.jetty7.security.SecurityHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,8 +96,4 @@ public class LoggedInUserPage extends Page {
         return changePasswordServerSideError.getText();
     }
 
-    @Override
-    public void logout() {
-        createWebElement(logoutLink).click();
-    }
 }

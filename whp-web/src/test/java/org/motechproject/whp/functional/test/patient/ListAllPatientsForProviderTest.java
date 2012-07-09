@@ -27,6 +27,6 @@ public class ListAllPatientsForProviderTest extends BasePatientTest {
     }
 
     ProviderPage loginAsProvider() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithProviderUserNamePassword(provider.getProviderId(), provider.getPassword());
+        return MyPageFactory.initElements(webDriver, LoginPage.class).loginAsProvider(provider.getProviderId(), provider.getPassword());
     }
 }

@@ -13,6 +13,7 @@ import org.motechproject.whp.refdata.domain.PhaseName;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class PhaseTransitionTest extends TreatmentUpdateTest {
 
@@ -302,7 +303,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     }
 
     private void transitionPatient(TestPatient testPatient, TestProvider testProvider, PhaseName phaseName) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
@@ -311,7 +312,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     }
 
     private void assertPatientIsOnIP(TestPatient testPatient) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
@@ -320,7 +321,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     }
 
     private void assertPatientIsOnEIP(TestPatient testPatient) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
@@ -329,7 +330,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     }
 
     private void assertPatientIsOnCP(TestPatient testPatient) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());
@@ -338,7 +339,7 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
     }
 
     private void assertPatientIsOnNoPhase(TestPatient testPatient) {
-        AdminPage adminPage = loginAsAdmin();
+        AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         TreatmentCardPage treatmentCardPage = listAllPatientsPage.clickOnPatientWithTherapyStarted(testPatient.getCaseId());

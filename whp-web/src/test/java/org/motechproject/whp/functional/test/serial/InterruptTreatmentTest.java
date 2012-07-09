@@ -10,12 +10,13 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class InterruptTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldDemarcateDaysForReportingAdherenceWhenTreatmentIsPaused() {
-        ProviderPage providerPage = loginAsProvider(testProvider);
+        ProviderPage providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
 
@@ -25,7 +26,7 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         adjustDateTime(DateUtil.newDateTime(2012, 5, 8, 0, 0, 0));
 
         providerPage.logout();
-        providerPage = loginAsProvider(testProvider);
+        providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
 
         assertTrue(providerPage.isPatientTreatmentPaused(testPatient.getCaseId()));
 
@@ -35,7 +36,7 @@ public class InterruptTreatmentTest extends TreatmentUpdateTest {
         adjustDateTime(DateUtil.newDateTime(2012, 5, 15, 0, 0, 0));
 
         providerPage.logout();
-        providerPage = loginAsProvider(testProvider);
+        providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
 
         assertFalse(providerPage.isPatientTreatmentPaused(testPatient.getCaseId()));
 

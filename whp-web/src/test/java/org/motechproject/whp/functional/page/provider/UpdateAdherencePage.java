@@ -1,6 +1,5 @@
 package org.motechproject.whp.functional.page.provider;
 
-import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPWebElement;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
@@ -54,13 +53,13 @@ public class UpdateAdherencePage extends Page {
     }
 
     public UpdateAdherencePage setNumberOfDosesTaken(int i) {
-        ((WHPWebElement)numberOfDosesTaken).select(i + "");
+        ((WHPWebElement) numberOfDosesTaken).select(i + "");
         return this;
     }
 
     public ProviderPage submit() {
         submit.click();
-        return MyPageFactory.initElements(webDriver, ProviderPage.class);
+        return getProviderPage(webDriver);
     }
 
     public String getAdherenceWarningText() {

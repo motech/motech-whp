@@ -1,6 +1,9 @@
 package org.motechproject.whp.functional.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.page.admin.ItAdminPage;
+import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -9,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.motechproject.whp.functional.framework.WebDriverFactory.createWebElement;
 import static org.openqa.selenium.By.id;
 
 public abstract class Page {
@@ -45,8 +49,10 @@ public abstract class Page {
     public void postInitialize() {
     }
 
-    public void logout() {
-        logoutLink.click();
+    public LoginPage logout() {
+        createWebElement(logoutLink).click();
+        waitUntilElementIsNotPresent(By.linkText("Logout"));
+        return getLoginPage(webDriver);
     }
 
     protected void waitForElementWithIdToLoad(final String id) {
@@ -129,5 +135,15 @@ public abstract class Page {
         System.out.println("***************************************************************************");
     }
 
+    public static LoginPage getLoginPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, LoginPage.class);
+    }
 
+    public static ProviderPage getProviderPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, ProviderPage.class);
+    }
+
+    public static ItAdminPage getItAdminPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, ItAdminPage.class);
+    }
 }

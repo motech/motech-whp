@@ -7,12 +7,13 @@ import org.motechproject.whp.functional.page.provider.ProviderPage;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
 
     @Test
     public void shouldUpdateTreatmentCategoryForPatientOnCloseOfCurrentTreatmentAndOpenOfNewTreatment() {
-        ProviderPage providerPage = loginAsProvider(testProvider);
+        ProviderPage providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
 
@@ -20,7 +21,7 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
         caseDataService.updateCase(closeTreatmentRequest);
 
         providerPage.logout();
-        providerPage = loginAsProvider(testProvider);
+        providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
 
         assertFalse(providerPage.hasPatient(testPatient.getFirstName()));
 
@@ -28,7 +29,7 @@ public class CloseAndOpenTreatmentTest extends TreatmentUpdateTest {
         caseDataService.updateCase(openNewTreatmentRequest);
 
         providerPage.logout();
-        providerPage = loginAsProvider(testProvider);
+        providerPage = getLoginPage(webDriver).loginAsProvider(testProvider.getProviderId(), testProvider.getPassword());
 
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertEquals("Commercial/Private Category 2", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
