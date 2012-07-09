@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.user.domain.WHPRole;
-import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,7 +21,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Mock
-    private ProviderService providerService;
+    private UserService userService;
     @Mock
     private HttpServletRequest request;
     @Mock
@@ -30,7 +30,7 @@ public class UserControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        userController = new UserController(providerService);
+        userController = new UserController(userService);
         when(request.getSession()).thenReturn(session);
     }
 
@@ -39,7 +39,7 @@ public class UserControllerTest {
         MotechUser authenticatedUser = authenticatedAdmin();
         login(authenticatedUser);
 
-        when(providerService.changePassword("admin","oldPassword", "newPassword")).thenReturn(authenticatedUser);
+        when(userService.changePassword("admin","oldPassword", "newPassword")).thenReturn(authenticatedUser);
 
         String responseBody = userController.changePassword("oldPassword","newPassword", request);
 

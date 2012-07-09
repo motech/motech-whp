@@ -40,14 +40,6 @@ public class ProviderService {
         }
     }
 
-    public MotechUser changePassword(String userName, String currentPassword, String newPassword) {
-        return motechAuthenticationService.changePassword(userName, currentPassword, newPassword);
-    }
-
-    public void activateUser(String userName) {
-        motechAuthenticationService.activateUser(userName);
-    }
-
     private String createProvider(ProviderRequest providerRequest) {
         Provider provider = new Provider(providerRequest.getProviderId(), providerRequest.getPrimaryMobile(), providerRequest.getDistrict(), providerRequest.getLastModifiedDate());
         provider.setSecondaryMobile(providerRequest.getSecondaryMobile());

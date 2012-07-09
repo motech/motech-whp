@@ -18,11 +18,11 @@ import java.util.Properties;
 @Controller
 public class UserController extends BaseController {
 
-    private ProviderService providerService;
+    private UserService userService;
 
     @Autowired
-    public UserController(ProviderService providerService) {
-        this.providerService = providerService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/login")
@@ -33,7 +33,7 @@ public class UserController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/changePassword")
     @ResponseBody
     public String changePassword(String currentPassword, String newPassword, HttpServletRequest request) {
-        MotechUser authenticatedUser = providerService.changePassword(loggedInUser(request).getUserName(), currentPassword, newPassword);
+        MotechUser authenticatedUser = userService.changePassword(loggedInUser(request).getUserName(), currentPassword, newPassword);
         if (authenticatedUser == null)
             return "'Current Password' you entered is incorrect";
         request.getSession().setAttribute(LoginSuccessHandler.LOGGED_IN_USER, authenticatedUser);

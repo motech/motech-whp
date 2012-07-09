@@ -12,6 +12,7 @@ import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.service.UserService;
 import org.motechproject.whp.validation.RequestValidator;
 
 import java.util.List;
@@ -31,14 +32,15 @@ public class ProviderRecordImporterUnitTest {
     @Mock
     private ProviderService providerService;
 
-
+    @Mock
+    private UserService userService;
     @Mock
     private AllProviders allProviders;
 
     @Before
     public void setup() {
         initMocks(this);
-        providerRecordImporter = new ProviderRecordImporter(allProviders, providerService, validator);
+        providerRecordImporter = new ProviderRecordImporter(allProviders, providerService, userService, validator);
     }
 
     @Test
@@ -71,8 +73,8 @@ public class ProviderRecordImporterUnitTest {
         ArgumentCaptor<ProviderRequest> providerRequestArgumentCaptor = ArgumentCaptor.forClass(ProviderRequest.class);
 
         verify(providerService, times(2)).registerProvider(providerRequestArgumentCaptor.capture());
-        verify(providerService, times(1)).activateUser(importProviderRequest1.getProviderId().toLowerCase());
-        verify(providerService, times(1)).activateUser(importProviderRequest2.getProviderId().toLowerCase()
+        verify(userService, times(1)).activateUser(importProviderRequest1.getProviderId().toLowerCase());
+        verify(userService, times(1)).activateUser(importProviderRequest2.getProviderId().toLowerCase()
         );
 
         List<ProviderRequest> providerRequests = providerRequestArgumentCaptor.getAllValues();

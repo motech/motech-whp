@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.service.UserService;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,12 +28,14 @@ public class ProviderRecordImporter {
     private ProviderService providerService;
     private RequestValidator validator;
     private AllProviders allProviders;
+    private UserService userService;
     private ImporterLogger importerLogger = new ImporterLogger();
 
     @Autowired
-    public ProviderRecordImporter(AllProviders allProviders, ProviderService providerService, RequestValidator validator) {
+    public ProviderRecordImporter(AllProviders allProviders, ProviderService providerService, UserService userService, RequestValidator validator) {
         this.allProviders = allProviders;
         this.providerService = providerService;
+        this.userService = userService;
         this.validator = validator;
     }
 
@@ -87,7 +90,7 @@ public class ProviderRecordImporter {
 
     public void registerProvider(ImportProviderRequest importProviderRequest) {
         providerService.registerProvider(mapToProviderRequest(importProviderRequest));
-        providerService.activateUser(importProviderRequest.getProviderId().toLowerCase());
+        userService.activateUser(importProviderRequest.getProviderId().toLowerCase());
     }
 
     private ProviderRequest mapToProviderRequest(ImportProviderRequest importProviderRequest) {
