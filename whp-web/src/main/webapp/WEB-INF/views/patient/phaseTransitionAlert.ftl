@@ -9,7 +9,7 @@
                     Patient is nearing the end of his ${patient.currentPhase.name.name()} and only has ${patient.remainingDosesInCurrentPhase} more doses to completion.
                 </#if>
                 <#if patient.remainingDosesInCurrentPhase lte 0 && patient.lastCompletedPhase??>
-                    Patient completed his ${patient.lastCompletedPhase.name.name()} on ${patient.lastCompletedPhase.endDateAsString} and is past the due date for transitioning to next phase.
+                    Patient completed his ${patient.lastCompletedPhase.name.name()} and is past the due date for transitioning to next phase.
                 </#if>
                 <br/>
                 Contact provider to remind him/her that patient requires a sputum retest now.  Tell provider that patient should come for a free consultation with the sputum test result.

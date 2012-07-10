@@ -16,7 +16,7 @@ function setUpTreatmentCardTable() {
         else {
             currentPillStatus = "";
         }
-        $(this).tooltip({title:providerId + " gave adherence as " + currentPillStatus});
+        $(this).tooltip({title:providerId + " gave adherence as '" + currentPillStatus + "'"});
     })
 
 //Toggle - 3 state toggling
