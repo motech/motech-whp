@@ -91,7 +91,7 @@ public class Therapy {
         return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= 0;
     }
 
-    void setStartDate(LocalDate therapyStartDate) {
+    public void setStartDate(LocalDate therapyStartDate) {
         startDate = therapyStartDate;
     }
 

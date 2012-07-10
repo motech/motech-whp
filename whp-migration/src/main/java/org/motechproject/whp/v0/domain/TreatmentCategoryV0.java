@@ -46,4 +46,5 @@ public class TreatmentCategoryV0 extends MotechBaseDataObject {
         this.numberOfDosesInCP = numberOfDosesInCP;
         this.pillDays = pillDays;
     }
+
 }

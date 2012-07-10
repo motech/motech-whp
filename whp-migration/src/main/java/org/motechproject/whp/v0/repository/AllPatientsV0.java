@@ -46,7 +46,11 @@ public class AllPatientsV0 extends CouchDbRepositorySupport<PatientV0> {
             "|| doc.version == null)" +
             ") {emit(null, doc._id)} }")
     public List<PatientV0> getAllVersionedDocs() {
-        return queryView("all_with_version" + OLD_VERSION);
+        List<PatientV0> patientV0List = queryView("all_with_version" + OLD_VERSION);
+        for (PatientV0 patientV0 : patientV0List) {
+            loadPatientDependencies(patientV0);
+        }
+        return patientV0List;
     }
 
     @Override

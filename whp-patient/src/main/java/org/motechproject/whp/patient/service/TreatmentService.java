@@ -14,12 +14,10 @@ import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatmentFor
 public class TreatmentService {
 
     private AllPatients allPatients;
-    private ProviderService providerService;
 
     @Autowired
     public TreatmentService(AllPatients allPatients, ProviderService providerService) {
         this.allPatients = allPatients;
-        this.providerService = providerService;
     }
 
     public void openTreatment(PatientRequest patientRequest) {

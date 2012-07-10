@@ -6,6 +6,6 @@ public class MigrationConstants {
 
     public static final String OLD_VERSION = "V0";
 
-    public static final String CURRENT_VERSION = "V1";
+    public static final String CURRENT_VERSION = "V2";
 
 }

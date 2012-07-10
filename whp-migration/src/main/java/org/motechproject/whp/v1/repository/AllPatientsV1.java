@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AllPatientsV1 extends MotechBaseRepository<Patient> {
 
-
     @Autowired
     public AllPatientsV1(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(Patient.class, dbCouchDbConnector);

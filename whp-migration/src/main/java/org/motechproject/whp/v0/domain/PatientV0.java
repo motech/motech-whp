@@ -154,4 +154,28 @@ public class PatientV0 extends MotechBaseDataObject {
     public void startTherapy(LocalDate firstDoseTakenDate) {
         latestTherapy().start(firstDoseTakenDate);
     }
+
+    // For migration
+    public TherapyV0 getTherapy(String therapyDocId) {
+        if (currentTreatment.getTherapy().getId().equals(therapyDocId))
+            return currentTreatment.getTherapy();
+        for (TreatmentV0 treatment : treatments) {
+            if (treatment.getTherapy().getId().equals(therapyDocId))
+                return treatment.getTherapy();
+        }
+        return null;
+    }
+
+    // For migration
+    public List<TherapyV0> getTherapyHistory() {
+        TherapyV0 currentTherapy = currentTreatment.getTherapy();
+        List<TherapyV0> therapies = new ArrayList<>();
+        for (TreatmentV0 treatmentV0 : treatments) {
+            TherapyV0 therapy = treatmentV0.getTherapy();
+            if(!therapy.getId().equals(currentTherapy.getId()))
+                therapies.add(therapy);
+        }
+        return therapies;
+    }
+
 }

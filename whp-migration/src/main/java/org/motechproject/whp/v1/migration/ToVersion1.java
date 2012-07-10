@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ToVersion0 {
+public class ToVersion1 {
 
     AllPatientsV0 allPatientsV0;
 
     AllPatientsV1 allPatientsV1;
 
     @Autowired
-    public ToVersion0(AllPatientsV0 allPatientsV0, AllPatientsV1 allPatientsV1) {
+    public ToVersion1(AllPatientsV0 allPatientsV0, AllPatientsV1 allPatientsV1) {
         this.allPatientsV0 = allPatientsV0;
         this.allPatientsV1 = allPatientsV1;
     }
 
     public void doo() {
-        List<PatientV0> patients = allPatientsV0.getAll();
+        List<PatientV0> patients = allPatientsV0.getAllVersionedDocs();
         for (PatientV0 patientV0 : patients) {
             Patient patientV1 = new PatientV1Mapper(patientV0).map();
             allPatientsV0.remove(patientV0);

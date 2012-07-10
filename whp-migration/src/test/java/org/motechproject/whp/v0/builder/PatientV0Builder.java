@@ -2,12 +2,10 @@ package org.motechproject.whp.v0.builder;
 
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.v0.domain.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class PatientV0Builder {
 
@@ -16,9 +14,6 @@ public class PatientV0Builder {
     public static final String NEW_PROVIDER_ID = "newproviderid";
     protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
     protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday));
-
-
-    List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
 
     private final PatientV0 patientV0;
 
@@ -32,36 +27,12 @@ public class PatientV0Builder {
         patientV0.setLastName("lastName");
         patientV0.setGender(GenderV0.O);
         patientV0.setPhoneNumber("1234567890");
-        patientV0.setCurrentTreatment(defaultTreatment());
+        patientV0.setCurrentTreatment(new TreatmentV0Builder().withDefaults().build());
         return this;
     }
 
     public PatientV0 build() {
         return patientV0;
-    }
-
-    private TreatmentV0 defaultTreatment() {
-        LocalDate today = DateUtil.today();
-        TreatmentV0 treatmentV0 = new TreatmentV0();
-        treatmentV0.setTbId("elevenDigit");
-        treatmentV0.setTherapy(defaultTherapy());
-        treatmentV0.setPatientAddress(defaultAddress());
-        treatmentV0.setPatientType(PatientTypeV0.New);
-        treatmentV0.addSmearTestResult(new SmearTestRecordV0(SmearTestSampleInstanceV0.PreTreatment, today, SmearTestResultV0.Negative, today, SmearTestResultV0.Negative));
-        treatmentV0.addWeightStatistics(new WeightStatisticsRecordV0(WeightInstanceV0.PreTreatment, 100.0, today));
-        treatmentV0.setTbRegistrationNumber("tbRegistrationNumber");
-        return treatmentV0;
-    }
-
-    private TherapyV0 defaultTherapy() {
-        TherapyV0 therapy = new TherapyV0();
-        therapy.setTreatmentCategory(new TreatmentCategoryV0("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
-        therapy.setDiseaseClass(DiseaseClassV0.P);
-        return therapy;
-    }
-
-    private AddressV0 defaultAddress() {
-        return new AddressV0("10", "banyan tree", "10", "chambal", "muzzrafapur", "bhiar");
     }
 
     public PatientV0Builder withType(PatientTypeV0 type) {
@@ -98,4 +69,17 @@ public class PatientV0Builder {
         patientV0.setMigrated(migrated);
         return this;
     }
+
+    public PatientV0Builder withTherapyDocId(String therapyDocId) {
+        patientV0.getCurrentTreatment().setTherapyDocId(null);
+        patientV0.getCurrentTreatment().setTherapyDocId(therapyDocId);
+        patientV0.getCurrentTreatment().getTherapy().setId(therapyDocId);
+        return this;
+    }
+
+    public PatientV0Builder withCurrentTherapy(TherapyV0 therapyV0) {
+        patientV0.getCurrentTreatment().setTherapy(therapyV0);
+        return this;
+    }
+
 }
