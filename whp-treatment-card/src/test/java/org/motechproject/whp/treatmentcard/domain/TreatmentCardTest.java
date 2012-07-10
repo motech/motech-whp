@@ -12,85 +12,78 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 
 public class TreatmentCardTest {
 
-    @Test
-    public void shouldReturnTodaysDateIfPatientIsOnIP() {
-        Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
+    private final LocalDate today = today();
 
-        assertEquals(today(), new TreatmentCard(patient).ipBoxAdherenceEndDate());
+    @Test
+    public void shouldLimitIPSectionTillTodayForPatientOnIP() {
+        Patient patient = patient();
+        patient.startTherapy(today.minusMonths(5));
+
+        assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
 
     @Test
-    public void shouldReturnIPEndDateIfPatientHasCompletedIPAndNextPhaseIsUnknown() {
+    public void shouldExtendIPSectionTillTodayWhenPatientCompletedIPAndNextPhaseIsUnknown() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
-
-        assertEquals(today().minusMonths(4), new TreatmentCard(patient).ipBoxAdherenceEndDate());
-    }
-
-    @Test
-    public void shouldReturnIPEndDateIfPatientHasCompletedIPAndNextPhaseIsKnown() {
-        Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
 
-        assertEquals(today().minusMonths(4), new TreatmentCard(patient).ipBoxAdherenceEndDate());
+        assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
 
     @Test
     public void shouldReturnTodaysDateIfPatientIsOnEIP() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        assertEquals(today(), new TreatmentCard(patient).ipBoxAdherenceEndDate());
+        assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
 
     @Test
-    public void shouldReturnEIPEnDateIfPatientHasCompletedEIP() {
+    public void shouldExtendEIPSectionTillTodayWhenEIPHasCompletedAndNextPhaseIsUnknown() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(3));
+        patient.endCurrentPhase(today.minusMonths(3));
 
-        assertEquals(today().minusMonths(3), new TreatmentCard(patient).ipBoxAdherenceEndDate());
+        assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
 
     @Test
     public void shouldReturnTodaysDateIfPatientIsStillOnCP() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
-        assertEquals(today(), new TreatmentCard(patient).cpBoxAdherenceEndDate());
+        assertEquals(today, new TreatmentCard(patient).cpBoxAdherenceEndDate());
     }
 
     @Test
     public void shouldReturnCPEndDateIfPatientHasCompletedCP() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(2));
+        patient.endCurrentPhase(today.minusMonths(2));
 
-        assertEquals(today().minusMonths(2), new TreatmentCard(patient).cpBoxAdherenceEndDate());
+        assertEquals(today.minusMonths(2), new TreatmentCard(patient).cpBoxAdherenceEndDate());
     }
 
     @Test
     public void ipBoxLastDateShouldBe5MonthsFromStartDate() {
         Patient patient = patient();
-        patient.startTherapy(today().minusMonths(5));
+        patient.startTherapy(today.minusMonths(5));
 
-        assertEquals(today().minusDays(1), new TreatmentCard(patient).ipBoxLastDoseDate());
+        assertEquals(today.minusDays(1), new TreatmentCard(patient).ipBoxLastDoseDate());
     }
 
     @Test
@@ -118,7 +111,7 @@ public class TreatmentCardTest {
     @Test
     public void shouldHaveCPAdherenceSectionIfCPStartDateIsInThePast() {
         Patient patient = patient();
-        LocalDate fiveDaysAgo = today().minusDays(5);
+        LocalDate fiveDaysAgo = today.minusDays(5);
 
         patient.startTherapy(fiveDaysAgo);
         patient.endCurrentPhase(fiveDaysAgo.plusDays(1));
@@ -131,7 +124,7 @@ public class TreatmentCardTest {
     @Test
     public void shouldHaveCPAdherenceSectionIfCPStartDateIsInTheFuture() {
         Patient patient = patient();
-        LocalDate fiveDaysFromNow = today().plusDays(5);
+        LocalDate fiveDaysFromNow = today.plusDays(5);
 
         patient.startTherapy(fiveDaysFromNow);
         patient.endCurrentPhase(fiveDaysFromNow.plusDays(1));
@@ -144,7 +137,7 @@ public class TreatmentCardTest {
     @Test
     public void shouldHaveCPAdherenceSectionIfCPStartDateIsExactlyToday() {
         Patient patient = patient();
-        LocalDate yesterday = today().minusDays(1);
+        LocalDate yesterday = today.minusDays(1);
 
         patient.startTherapy(yesterday);
         patient.endCurrentPhase(yesterday);
@@ -163,21 +156,21 @@ public class TreatmentCardTest {
     @Test
     public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsInThePast() {
         Patient patient = patient();
-        patient.startTherapy(today().minusDays(1));
+        patient.startTherapy(today.minusDays(1));
         assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
     }
 
     @Test
     public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsNow() {
         Patient patient = patient();
-        patient.startTherapy(today());
+        patient.startTherapy(today);
         assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
     }
 
     @Test
     public void shouldNotHaveIpAdherenceSectionIfStartDateOfIPIsInTheFuture() {
         Patient patient = patient();
-        patient.startTherapy(today().plusDays(1));
+        patient.startTherapy(today.plusDays(1));
         assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
     }
 }

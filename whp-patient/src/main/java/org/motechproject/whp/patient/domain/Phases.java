@@ -179,6 +179,12 @@ public class Phases {
         }
     }
 
+    @JsonIgnore
+    public LocalDate getNextPhaseStartDate(Phase phase) {
+        Phase nextPhase = history.getNextPhase(phase);
+        return (null == nextPhase) ? null : phaseRecords.get(nextPhase).getStartDate();
+    }
+
     public boolean hasBeenOn(Phase phase) {
         return history.contains(phase);
     }

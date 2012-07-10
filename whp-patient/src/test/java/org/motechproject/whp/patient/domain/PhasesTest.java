@@ -161,6 +161,34 @@ public class PhasesTest {
     }
 
     @Test
+    public void shouldReturnStartDateOfPhaseNextToGivenPhase() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        assertEquals(today.minusMonths(4).plusDays(1), patient.getCurrentTherapy().getPhases().getNextPhaseStartDate(Phase.IP));
+    }
+
+    @Test
+    public void shouldReturnNullAsStartDateOfPhaseNextToLatestPhase() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today.minusMonths(5));
+        patient.endCurrentPhase(today.minusMonths(4));
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        assertEquals(null, patient.getCurrentTherapy().getPhases().getNextPhaseStartDate(Phase.EIP));
+    }
+
+    @Test
+    public void shouldReturnNullAsStartDateOfNextPhaseWhenTherapyWasNeverOnGivenPhase() {
+        Patient patient = PatientBuilder.patient();
+        assertEquals(null, patient.getCurrentTherapy().getPhases().getNextPhaseStartDate(Phase.IP));
+    }
+
+    @Test
     public void shouldReturnTrueIfPatientHasStartedCP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
@@ -203,6 +231,6 @@ public class PhasesTest {
         patient.setNumberOfDosesTaken(Phase.EIP, 9);
         patient.setNumberOfDosesTakenAsOfLastSunday(Phase.EIP, 8);
 
-        assertEquals(24+8, patient.getTotalNumberOfDosesTakenTillLastSunday());
+        assertEquals(24 + 8, patient.getTotalNumberOfDosesTakenTillLastSunday());
     }
 }

@@ -48,6 +48,15 @@ public class PhaseTransitions {
         return null;
     }
 
+    @JsonIgnore
+    public Phase getNextPhase(Phase phase) {
+        if (transitions.contains(phase) && phase != latestPhase()) {
+            return transitions.get(transitions.indexOf(phase) + 1);
+        } else {
+            return null;
+        }
+    }
+
     public List<Phase> allPhases() {
         return new ArrayList<>(transitions);
     }

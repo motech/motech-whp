@@ -55,11 +55,11 @@ public class TreatmentCard {
 
     public LocalDate ipBoxAdherenceEndDate() {
         Phases phases = therapy.getPhases();
-        LocalDate endDate = phases.getIPLastDate();
+        LocalDate endDate = phases.getNextPhaseStartDate(Phase.IP);
         if (phases.ipPhaseWasExtended()) {
-            endDate = phases.getEIPLastDate();
+            endDate = phases.getNextPhaseStartDate(Phase.EIP);
         }
-        return endDate;
+        return (endDate == null) ? today() : endDate;
     }
 
     public LocalDate cpBoxAdherenceEndDate() {
