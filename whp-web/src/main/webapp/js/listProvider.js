@@ -1,5 +1,5 @@
 function removeActivateColumnIfAllAreActive() {
-    if ($('a[type=activate-button]').length == 0) {
+    if ($('a[type=activate-link]').length == 0) {
         $('[type=activate-provider]').remove();
     }
 }
@@ -10,9 +10,8 @@ $(function () {
 
     removeActivateColumnIfAllAreActive();
 
-    $('a[type=activate-button]').click(function () {
+    $('a[type=activate-link]').click(function () {
         var providerId = $(this).closest('tr').attr('providerId');
-        $('#activateProviderUserName').val(providerId);
         $('#activateProviderUserNameLabel').text(providerId);
     });
 

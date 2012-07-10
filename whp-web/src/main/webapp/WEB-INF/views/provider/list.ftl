@@ -91,7 +91,7 @@
                     </td>
                     <td type="activate-provider">
                         <#if !provider.active>
-                            <a type="activate-button" data-toggle="modal" href="#activateProviderModal" class="activate-link"
+                            <a type="activate-link" data-toggle="modal" href="#activateProviderModal" class="activate-link"
                                userName="${provider.providerId}">Activate</a>
                         </#if>
                     </td>

@@ -170,6 +170,6 @@ public class ListProvidersPage extends LoggedInUserPage {
     }
 
     private WebElement getActivateButton(String providerId) {
-        return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='activate-button']"));
+        return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='activate-link']"));
     }
 }

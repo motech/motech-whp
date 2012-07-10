@@ -8,11 +8,8 @@
         <div id="activateProviderServerSideError" class="alert alert-error hide"></div>
         <div id="activateProviderError" class="alert alert-error hide"></div>
         <div class="control-group">
-            <label class="float-left" for="activateProviderUserName">User Name :&nbsp;</label>
+            <label class="float-left">User Name :&nbsp;</label>
             <label id="activateProviderUserNameLabel" class="control-label activate-provider-username"></label>
-            <div class="controls">
-                <input class="input-xlarge" type="hidden" name='userName' id="activateProviderUserName"/>
-            </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="activateProviderNewPassword">Password *</label>

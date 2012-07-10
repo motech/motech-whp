@@ -14,13 +14,13 @@ $('#activateProviderModal').submit(function (event) {
         event.preventDefault();
         var $form = $(this), url = $form.attr('action');
         var formData = {
-            "userName":$('#activateProviderUserName').val(),
+            "userName":$('#activateProviderUserNameLabel').text(),
             "newPassword":$('#activateProviderNewPassword').val()
         };
         $.post(url, formData, function ( response) {
                 if (response == '') {
                     $('#activateProviderModal').modal('hide');
-                    $('#activateProviderModal').trigger('activateProviderSuccess', [$('#activateProviderUserName').val()]);
+                    $('#activateProviderModal').trigger('activateProviderSuccess', [$('#activateProviderUserNameLabel').text()]);
                 }
                 else {
                     $('#activateProviderServerSideError').text(response);
