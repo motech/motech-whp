@@ -8,7 +8,7 @@
                 <#if patient.currentPhase?exists>
                     Patient is nearing the end of his ${patient.currentPhase.name.name()} and only has ${patient.remainingDosesInCurrentPhase} more doses to completion.
                 </#if>
-                <#if patient.remainingDosesInCurrentPhase lte 0>
+                <#if patient.remainingDosesInCurrentPhase lte 0 && patient.lastCompletedPhase??>
                     Patient completed his ${patient.lastCompletedPhase.name.name()} on ${patient.lastCompletedPhase.endDateAsString} and is past the due date for transitioning to next phase.
                 </#if>
                 <br/>
