@@ -49,7 +49,7 @@ public class PhaseUpdateOrchestrator {
 
             */
 
-            LocalDate endDate = phases.getEndDate(phase) != null ? phases.getEndDate(phase) : DateUtil.today();
+            LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase) : DateUtil.today();
             LocalDate sundayBeforeEndDate = weekInstance(endDate).dateOf(DayOfWeek.Sunday);
             int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
             int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
