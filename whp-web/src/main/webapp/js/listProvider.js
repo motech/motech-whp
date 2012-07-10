@@ -12,11 +12,11 @@ $(function () {
 
     $('a[type=activate-button]').click(function () {
         var providerId = $(this).closest('tr').attr('providerId');
-        $('#resetPasswordUserName').val(providerId);
-        $('#resetPasswordUserNameLabel').text(providerId);
+        $('#activateProviderUserName').val(providerId);
+        $('#activateProviderUserNameLabel').text(providerId);
     });
 
-    $('#resetPasswordModal').bind('resetPasswordSuccess', function (event, userName) {
+    $('#activateProviderModal').bind('activateProviderSuccess', function (event, userName) {
         $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
         $('tr[providerId=' + userName + '] td[type=status]').text('Active');
         $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);

@@ -28,23 +28,23 @@ public class ListProvidersPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "warning")
     protected WebElement warning;
 
-    @FindBy(how = How.ID, using = "resetPasswordUserNameLabel")
-    protected WebElement resetPasswordUserName;
+    @FindBy(how = How.ID, using = "activateProviderUserNameLabel")
+    protected WebElement activateProviderUserName;
 
-    @FindBy(how = How.ID, using = "resetPasswordNewPassword")
+    @FindBy(how = How.ID, using = "activateProviderNewPassword")
     protected WebElement newPassword;
 
-    @FindBy(how = How.ID, using = "resetPasswordConfirmNewPassword")
+    @FindBy(how = How.ID, using = "activateProviderConfirmNewPassword")
     protected WebElement confirmNewPassword;
 
-    @FindBy(how = How.ID, using = "resetPassword")
-    protected WebElement resetPasswordButton;
+    @FindBy(how = How.ID, using = "activateProvider")
+    protected WebElement activateProviderButton;
 
-    @FindBy(how = How.ID, using = "resetPasswordError")
-    protected WebElement resetPasswordError;
+    @FindBy(how = How.ID, using = "activateProviderError")
+    protected WebElement activateProviderError;
 
-    @FindBy(how = How.ID, using = "resetPasswordClose")
-    protected WebElement resetPasswordCloseButton;
+    @FindBy(how = How.ID, using = "activateProviderClose")
+    protected WebElement activateProviderCloseButton;
 
     public ListProvidersPage(WebDriver webDriver) {
         super(webDriver);
@@ -102,65 +102,65 @@ public class ListProvidersPage extends LoggedInUserPage {
         return getActivateButton(providerId) != null;
     }
     public void activateProvider(String providerId,String password) throws InterruptedException {
-        openResetPasswordModal(providerId);
-        assertEquals(resetPasswordUserName.getText(), providerId.toLowerCase());
+        openActivateProviderModal(providerId);
+        assertEquals(activateProviderUserName.getText(), providerId.toLowerCase());
         createWebElement(newPassword).sendKeys(password);
         createWebElement(confirmNewPassword).sendKeys(password);
-        createWebElement(resetPasswordButton).click();
+        createWebElement(activateProviderButton).click();
         waitForElementToBeReloadedByAjax();
     }
 
-    public ListProvidersPage validateEmptyResetPassword() {
+    public ListProvidersPage validateEmptyPasswordOnActivation() {
         newPassword.clear();
         confirmNewPassword.clear();
-        createWebElement(resetPasswordButton).click();
-        assertEquals(asList("'New Password' cannot be empty","'Confirm New Password' cannot be empty"),getResetPasswordError());
+        createWebElement(activateProviderButton).click();
+        assertEquals(asList("'Password' cannot be empty","'Confirm Password' cannot be empty"), getActivateProviderError());
         return this;
     }
 
-    public ListProvidersPage validateForResetPasswordErrorFreeFlow(String password) {
+    public ListProvidersPage validateValidPasswordUponActivation(String password) {
         newPassword.clear();
         confirmNewPassword.clear();
         newPassword.sendKeys(password);
         confirmNewPassword.sendKeys(password);
-        assertEquals(0,getResetPasswordError().size());
+        assertEquals(0, getActivateProviderError().size());
         return this;
     }
 
-    public ListProvidersPage validateConfirmPasswordMatchWithNewPassword(String password) {
+    public ListProvidersPage validateConfirmPasswordUponActivation(String password) {
         newPassword.clear();
         confirmNewPassword.clear();
         newPassword.sendKeys(password);
         confirmNewPassword.sendKeys(password+"12");
-        resetPasswordButton.click();
-        assertEquals("'Confirm New Password' should match 'New Password'",getResetPasswordError().get(0));
+        activateProviderButton.click();
+        assertEquals("'Confirm Password' should match 'Password'", getActivateProviderError().get(0));
         return this;
     }
 
-    public ListProvidersPage validateResetPasswordLength() {
+    public ListProvidersPage validatePasswordLengthUponActivation() {
         newPassword.clear();
         confirmNewPassword.clear();
         newPassword.sendKeys("123");
-        resetPasswordButton.click();
-        assertEquals("'New Password' should be at least 4 characters long",getResetPasswordError().get(0));
+        activateProviderButton.click();
+        assertEquals("'Password' should be at least 4 characters long", getActivateProviderError().get(0));
         return this;
     }
 
-    public void closeResetPasswordDialog() throws InterruptedException {
-        resetPasswordCloseButton.click();
+    public void closeProviderActivationModal() throws InterruptedException {
+        activateProviderCloseButton.click();
         Thread.sleep(2000);
     }
 
-    public ListProvidersPage openResetPasswordModal(String providerId) throws InterruptedException {
+    public ListProvidersPage openActivateProviderModal(String providerId) throws InterruptedException {
         WebElement activateButton = getActivateButton(providerId);
         activateButton.click();
         Thread.sleep(2000);
         return this;
     }
 
-    private List<String> getResetPasswordError() {
+    private List<String> getActivateProviderError() {
 
-        List<WebElement> resetPasswordErrorElements = resetPasswordError.findElements(By.tagName("label"));
+        List<WebElement> resetPasswordErrorElements = activateProviderError.findElements(By.tagName("label"));
         List<String> errors = new ArrayList<>();
         for(WebElement error : resetPasswordErrorElements) {
             if(isNotBlank(error.getText()))

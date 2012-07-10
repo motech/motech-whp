@@ -90,12 +90,12 @@ public class ListAllProvidersTest extends BaseTest {
         listProvidersPage.searchBy("Saharsa", "", true);
         String passwordForProvider2 = "passwordForProvider2";
 
-        listProvidersPage.openResetPasswordModal(provider2.getProviderId())
-                .validateEmptyResetPassword()
-                .validateResetPasswordLength()
-                .validateConfirmPasswordMatchWithNewPassword(passwordForProvider2)
-                .validateForResetPasswordErrorFreeFlow(passwordForProvider2)
-                .closeResetPasswordDialog();
+        listProvidersPage.openActivateProviderModal(provider2.getProviderId())
+                .validateEmptyPasswordOnActivation()
+                .validatePasswordLengthUponActivation()
+                .validateConfirmPasswordUponActivation(passwordForProvider2)
+                .validateValidPasswordUponActivation(passwordForProvider2)
+                .closeProviderActivationModal();
 
         assertFalse(listProvidersPage.isProviderActive(provider2.getProviderId()));
         assertFalse(listProvidersPage.hasActiveStatus(provider2.getProviderId()));
