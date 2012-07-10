@@ -11,7 +11,7 @@
     <beans:import resource="classpath:applicationWebSecurityContext.xml"/>
 
 
-    <http auto-config="false" use-expressions="true">
+    <http auto-config="false" use-expressions="true" entry-point-ref="ajaxAwareAuthenticationProcessingFilterEntryPoint">
         <form-login login-processing-url="/security/j_spring_security_check" login-page="/login"
                     authentication-failure-handler-ref="loginFailureHandler"
                     authentication-success-handler-ref="loginSuccessHandler"/>
