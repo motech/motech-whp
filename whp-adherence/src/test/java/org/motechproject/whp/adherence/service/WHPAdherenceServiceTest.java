@@ -30,6 +30,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class WHPAdherenceServiceTest {
@@ -138,6 +139,13 @@ public class WHPAdherenceServiceTest {
         assertEquals(1, argumentCaptor.getValue().size());
         Adherence adherence = new AdherenceMapper().map((AdherenceRecord) argumentCaptor.getValue().get(0));
         assertEquals("patientid", adherence.getPatientId());
+    }
+
+    @Test
+    public void shouldReturnZeroAsTheNumberOfDosesTakenIfEndDateIsBeforeStartDate() {
+        int result = whpAdherenceService.countOfDosesTakenBetween(PATIENT_ID, THERAPY_UID, today(), today().minusDays(1));
+        assertEquals(0, result);
+        verifyZeroInteractions(adherenceService);
     }
 
     private void assertLog(AdherenceRecord adherenceRecord, String patientId, LocalDate doseDate, String therapyUid, String providerId, String tbId) {

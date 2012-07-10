@@ -87,7 +87,6 @@ public class TreatmentCardServiceTest {
 
         treatmentCardService.treatmentCard(patient);
 
-        verify(whpAdherenceService).findLogsInRange(patient.getPatientId(), therapyUid, therapyStartDate, today.minusDays(1));
         verify(whpAdherenceService).findLogsInRange(patient.getPatientId(), therapyUid, today, today);
     }
 

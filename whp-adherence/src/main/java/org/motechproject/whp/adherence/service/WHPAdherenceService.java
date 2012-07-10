@@ -91,7 +91,11 @@ public class WHPAdherenceService {
     }
 
     public int countOfDosesTakenBetween(String patientId, String therapyUid, LocalDate startDate, LocalDate endDate) {
-        return adherenceService.countOfDosesTakenBetween(patientId, therapyUid, startDate, endDate);
+        if (!endDate.isBefore(startDate)) {
+            return adherenceService.countOfDosesTakenBetween(patientId, therapyUid, startDate, endDate);
+        } else {
+            return 0;
+        }
     }
 
     public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
