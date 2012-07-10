@@ -20,10 +20,12 @@ import java.util.Properties;
 public class UserController extends BaseController {
 
     private UserService userService;
+    private Properties whpProperties;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Properties whpProperties) {
         this.userService = userService;
+        this.whpProperties = whpProperties;
     }
 
     @RequestMapping("/login")
@@ -48,8 +50,17 @@ public class UserController extends BaseController {
         if (hasResetPassword)
             userService.activateUser(providerId);
         else
-            return "User Does not exist";
+            return "User does not exist";
 
+        return "";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/resetPassword")
+    @ResponseBody
+    public String resetPassword(@RequestParam(value = "userName") String userName) {
+        boolean successful = userService.resetPassword(userName, whpProperties.get("password.default").toString());
+        if (!successful)
+            return "User does not exist";
         return "";
     }
 

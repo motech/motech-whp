@@ -11,6 +11,8 @@ import org.motechproject.whp.user.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.Properties;
+
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -22,6 +24,9 @@ public class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private Properties whpProperties;
     @Mock
     private HttpServletRequest request;
     @Mock
@@ -30,7 +35,7 @@ public class UserControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        userController = new UserController(userService);
+        userController = new UserController(userService, whpProperties);
         when(request.getSession()).thenReturn(session);
     }
 
@@ -66,9 +71,31 @@ public class UserControllerTest {
 
         when(userService.resetPassword(providerId, password)).thenReturn(false);
 
-        assertEquals("User Does not exist",userController.activateUser(providerId,password));
+        assertEquals("User does not exist",userController.activateUser(providerId,password));
         verify(userService,times(1)).resetPassword(providerId,password);
         verify(userService,never()).activateUser(anyString());
+    }
+
+    @Test
+    public void shouldResetPassword(){
+        String defaultPassword = "defaultPassword";
+        String userName = "userName";
+
+        when(whpProperties.get("password.default")).thenReturn(defaultPassword);
+        when(userService.resetPassword(userName, defaultPassword)).thenReturn(true);
+
+        assertEquals("",userController.resetPassword(userName));
+    }
+
+    @Test
+    public void shouldReturnErrorMessageIfResetPasswordFailed(){
+        String defaultPassword = "defaultPassword";
+        String userName = "userName";
+
+        when(whpProperties.get("password.default")).thenReturn(defaultPassword);
+        when(userService.resetPassword(userName, defaultPassword)).thenReturn(false);
+
+        assertEquals("User does not exist",userController.resetPassword(userName));
     }
 
     private void login(MotechUser authenticatedUser) {

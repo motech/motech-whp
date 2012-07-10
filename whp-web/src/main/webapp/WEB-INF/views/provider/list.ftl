@@ -1,6 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
 <#include "../user/activateProvider.ftl">
+<#include "../user/resetPassword.ftl">
 <@layout.defaultLayout "MoTeCH-WHP">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 <div id="search-section" class="row well">
@@ -49,6 +50,7 @@
             <th>Tertiary Mobile Number</th>
             <th>Status</th>
             <th type="activate-provider"></th>
+            <th type="reset-password">
         </tr>
         </thead>
         <tbody>
@@ -95,6 +97,12 @@
                                userName="${provider.providerId}">Activate</a>
                         </#if>
                     </td>
+                    <td type="reset-password">
+                        <#if provider.active>
+                            <a type="reset-password-link" data-toggle="modal" href="#resetPasswordModal"
+                               userName="${provider.providerId}">Reset Password</a>
+                        </#if>
+                    </td>
                 </tr>
                 </#list>
             </#if>
@@ -103,5 +111,6 @@
 </div>
 
     <@activateProvider/>
+    <@resetPassword/>
 
 </@layout.defaultLayout>

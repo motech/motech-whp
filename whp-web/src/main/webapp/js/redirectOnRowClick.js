@@ -1,6 +1,12 @@
 $(function () {
     var isDragging = false;
-    $("[ redirectOnRowClick=true] td")
+    $("[ redirectOnRowClick=true] td").not(".row-click-exclude")
+        .mouseover(function(event) {
+          $(this).closest('tr').addClass('link');
+        })
+        .mouseout(function(event) {
+            $(this).closest('tr').removeClass('link');
+        })
         .mousedown(function (event) {
             if (event.which != 1)
                 return;

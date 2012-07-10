@@ -79,7 +79,7 @@ body {
     color: black;
 }
 
-table tbody .link:hover td {
+table tbody .link:hover td:not(.row-click-exclude) {
     color: #369BD7;
     text-decoration: underline;
 }
@@ -342,4 +342,9 @@ div.buttons a, div.buttons button {
 
 #patientRemark {
     width: 80%;
+}
+.user-name {
+   display: inline-block;
+   color: #369BD7;
+    font-weight: bold;
 }
