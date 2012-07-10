@@ -46,6 +46,15 @@ public class ListProvidersPage extends LoggedInUserPage {
     @FindBy(how = How.ID, using = "activateProviderClose")
     protected WebElement activateProviderCloseButton;
 
+    @FindBy(how = How.ID, using = "resetPassword")
+    protected WebElement resetPasswordButton;
+
+    @FindBy(how = How.ID, using = "resetPasswordClose")
+    protected WebElement resetPasswordCancelButton;
+
+    @FindBy(how = How.ID, using = "resetPasswordUserName")
+    protected WebElement resetPasswordUserName;
+
     public ListProvidersPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -171,5 +180,13 @@ public class ListProvidersPage extends LoggedInUserPage {
 
     private WebElement getActivateButton(String providerId) {
         return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='activate-link']"));
+    }
+
+    public boolean hasResetPasswordButton(String providerId) {
+        return getResetPasswordButton(providerId) != null;
+    }
+
+    private WebElement getResetPasswordButton(String providerId) {
+        return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='reset-password-link']"));
     }
 }
