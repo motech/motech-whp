@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
 import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
 

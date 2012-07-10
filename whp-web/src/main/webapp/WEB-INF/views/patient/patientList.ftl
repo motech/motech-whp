@@ -25,7 +25,7 @@
             <th>Weeks Elapsed</th>
             <th>IP Treatment Progress</th>
             <th>CP Treatment Progress</th>
-            <th>Cumulative Missed Doses</th>
+            <th>Cumulative Missed Doses &#42;</th>
         </tr>
         </thead>
         <tbody>
@@ -93,3 +93,4 @@
     </#if>
     </tbody>
 </table>
+<i>&#42; Cumulative missed doses shown as of ${lastSunday}</i>

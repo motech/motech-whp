@@ -38,6 +38,13 @@ public class WHPDate {
         return date.toString(WHPConstants.DATE_FORMAT);
     }
 
+    public String lucidValue(){
+        if (null == date) {
+            return "";
+        }
+        return date.toString(WHPConstants.LUCID_DATE_FORMAT);
+    }
+
     public LocalDate date() {
         return date;
     }

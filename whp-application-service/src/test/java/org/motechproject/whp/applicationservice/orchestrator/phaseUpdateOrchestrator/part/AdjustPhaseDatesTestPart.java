@@ -38,8 +38,8 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
 
         phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt());
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(EIP), anyInt());
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(CP), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt(), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(EIP), anyInt(), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(CP), anyInt(), anyInt());
     }
 }

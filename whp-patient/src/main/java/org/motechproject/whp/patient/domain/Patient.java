@@ -271,27 +271,32 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public int getTotalDosesToHaveBeenTakenTillToday() {
-        return currentTherapy.getTotalDosesToHaveBeenTakenTillToday();
+    public int getTotalDosesToHaveBeenTakenTillLastSunday() {
+        return currentTherapy.getTotalDosesToHaveBeenTakenTillLastSunday();
     }
 
     @JsonIgnore
-    public int getTotalNumberOfDosesTakenTillToday() {
-        return currentTherapy.totalNumberOfDosesTakenTillToday();
+    public int getTotalNumberOfDosesTakenTillLastSunday() {
+        return currentTherapy.totalNumberOfDosesTakenTillLastSunday();
     }
 
     @JsonIgnore
     public int getCumulativeDosesNotTaken() {
-        if (getTotalDosesToHaveBeenTakenTillToday() - getTotalNumberOfDosesTakenTillToday() < 0) {
+        if (getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday() < 0) {
             return 0;
         } else {
-            return getTotalDosesToHaveBeenTakenTillToday() - getTotalNumberOfDosesTakenTillToday();
+            return getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday();
         }
     }
 
     @JsonIgnore
-    public void setNumberOfDosesTaken(Phase phaseName, int dosesTaken) {
-        getCurrentTherapy().setNumberOfDosesTaken(phaseName, dosesTaken);
+    public void setNumberOfDosesTaken(Phase phase, int dosesTaken) {
+        currentTherapy.setNumberOfDosesTaken(phase, dosesTaken);
+    }
+
+    @JsonIgnore
+    public void setNumberOfDosesTakenAsOfLastSunday(Phase phase, int numberOfDosesTakenAsOfLastSunday) {
+        getCurrentTherapy().setNumberOfDosesTakenAsOfLastSunday(phase, numberOfDosesTakenAsOfLastSunday);
     }
 
     @JsonIgnore

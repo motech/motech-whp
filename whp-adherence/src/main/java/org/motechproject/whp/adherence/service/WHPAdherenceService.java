@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 @Service
 public class WHPAdherenceService {

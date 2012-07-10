@@ -186,4 +186,23 @@ public class PhasesTest {
         patient.endCurrentPhase(today().minusMonths(1));
         assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
     }
+
+    @Test
+    public void shouldReturnTotalDosesTakenTillLastSunday() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 22);
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        patient.setNumberOfDosesTaken(Phase.EIP, 9);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.EIP, 8);
+
+        assertEquals(24+8, patient.getTotalNumberOfDosesTakenTillLastSunday());
+    }
 }

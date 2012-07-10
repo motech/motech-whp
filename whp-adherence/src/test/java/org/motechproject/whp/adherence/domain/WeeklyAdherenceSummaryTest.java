@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
 

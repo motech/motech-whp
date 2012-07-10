@@ -5,7 +5,7 @@ import org.motechproject.whp.common.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class WeeklyAdherenceSummaryBuilder {

@@ -10,7 +10,7 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 public class WeeklyAdherenceSummary {
 

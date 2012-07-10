@@ -2,16 +2,18 @@ package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static org.motechproject.whp.common.TreatmentWeekInstance.weekInstance;
 
 @Component
 public class PhaseUpdateOrchestrator {
@@ -39,9 +41,20 @@ public class PhaseUpdateOrchestrator {
         Patient patient = allPatients.findByPatientId(patientId);
         Phases phases = patient.getCurrentTherapy().getPhases();
         for (Phase phase : patient.getHistoryOfPhases()) {
+
+            /*This logic will say either of:
+
+             1) endDate = phases.getEndDate(phase) :- will limit number of doses to 24 as auto-transition happens on 24th dose
+             2) endDate =  phases.getStartDate(nextPhase) :- will include all doses from start to start (note: Anna Stratis wanted this)
+
+            */
+
             LocalDate endDate = phases.getEndDate(phase) != null ? phases.getEndDate(phase) : DateUtil.today();
+            LocalDate sundayBeforeEndDate = weekInstance(endDate).dateOf(DayOfWeek.Sunday);
             int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
-            patientService.updatePillTakenCount(patient, phase, dosesTaken);
+            int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
+
+            patientService.updatePillTakenCount(patient, phase, dosesTaken, dosesTakenAsOfLastSunday);
         }
     }
 

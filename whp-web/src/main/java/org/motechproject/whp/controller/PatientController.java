@@ -3,9 +3,10 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
-import org.motechproject.whp.common.CurrentTreatmentWeek;
+import org.motechproject.whp.common.TreatmentWeekInstance;
 import org.motechproject.whp.common.WHPConstants;
 import org.motechproject.whp.common.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
@@ -147,8 +148,8 @@ public class PatientController extends BaseController {
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);
-        uiModel.addAttribute("weekStartDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().startDate()).value());
-        uiModel.addAttribute("weekEndDate", WHPDate.date(CurrentTreatmentWeek.currentWeekInstance().endDate()).value());
+        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().endDate()).value());
 
     }
 
@@ -157,6 +158,7 @@ public class PatientController extends BaseController {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
         uiModel.addAttribute(SELECTED_PROVIDER_ID, providerId);
+        uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
 
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {

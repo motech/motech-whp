@@ -18,6 +18,7 @@ public class Phases {
     private PhaseRecords phaseRecords = new PhaseRecords();
     @JsonProperty
     private PhaseTransitions history = new PhaseTransitions();
+
     @Getter
     @Setter
     private Phase nextPhase = null;
@@ -103,10 +104,15 @@ public class Phases {
     }
 
     @JsonIgnore
-    public int getTotalDoses() {
+    public int getTotalDosesTakenTillLastSunday() {
         int total = 0;
         for (Phase phase : history.allPhases()) {
-            total += phaseRecords.get(phase).getNumberOfDosesTaken();
+            if (history.latestPhase().equals(phase)) {
+                total += phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday();
+            } else {
+                total += phaseRecords.get(phase).getNumberOfDosesTaken();
+            }
+
         }
         return total;
     }
@@ -131,9 +137,25 @@ public class Phases {
     }
 
     @JsonIgnore
+    public void setNumberOfDosesAsOfLastSundayIn(Phase phase, int numberOfDoses) {
+        if (history.contains(phase)) {
+            phaseRecords.get(phase).setNumberOfDosesTakenAsOfLastSunday(numberOfDoses);
+        }
+    }
+
+    @JsonIgnore
     public int getNumberOfDosesTaken(Phase phase) {
         if (history.contains(phase)) {
             return phaseRecords.get(phase).getNumberOfDosesTaken();
+        } else {
+            return 0;
+        }
+    }
+
+    @JsonIgnore
+    public int getNumberOfDosesTakenAsOfLastSunday(Phase phase) {
+        if (history.contains(phase)) {
+            return phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday();
         } else {
             return 0;
         }

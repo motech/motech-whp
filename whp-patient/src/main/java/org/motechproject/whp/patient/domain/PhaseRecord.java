@@ -20,6 +20,7 @@ public class PhaseRecord {
     4) PhaseRecord transition: TODO
     */
     private int numberOfDosesTaken;
+    private int numberOfDosesTakenAsOfLastSunday;
 
     public PhaseRecord() {
     }

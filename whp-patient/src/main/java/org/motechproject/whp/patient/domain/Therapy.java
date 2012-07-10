@@ -14,7 +14,7 @@ import org.motechproject.whp.refdata.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.common.CurrentTreatmentWeek.currentWeekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.util.WHPDateUtil.numberOf_DDD_Between;
 
 @Data
@@ -118,12 +118,12 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public int totalNumberOfDosesTakenTillToday() {
-        return phases.getTotalDoses();
+    public int totalNumberOfDosesTakenTillLastSunday() {
+        return phases.getTotalDosesTakenTillLastSunday();
     }
 
     @JsonIgnore
-    public int getTotalDosesToHaveBeenTakenTillToday() {
+    public int getTotalDosesToHaveBeenTakenTillLastSunday() {
         if (startDate != null) {
             int totalDoses = 0;
             //pointing to sunday just past
@@ -232,6 +232,11 @@ public class Therapy {
     @JsonIgnore
     public void setNumberOfDosesTaken(Phase phase, int numberOfDoses) {
         phases.setNumberOfDosesIn(phase, numberOfDoses);
+    }
+
+    @JsonIgnore
+    public void setNumberOfDosesTakenAsOfLastSunday(Phase phase, int numberOfDosesTakenAsOfLastSunday) {
+        phases.setNumberOfDosesAsOfLastSundayIn(phase, numberOfDosesTakenAsOfLastSunday);
     }
 
     @JsonIgnore

@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -13,10 +14,12 @@ import static junit.framework.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
-import static org.motechproject.whp.refdata.domain.Phase.IP;
 import static org.motechproject.whp.refdata.domain.Phase.EIP;
+import static org.motechproject.whp.refdata.domain.Phase.IP;
 
 public class PatientTest {
 
@@ -249,6 +252,150 @@ public class PatientTest {
         assertFalse(patient.isOnActiveTreatment());
     }
 
+    @Test
+    public void shouldReturnNumberOfRemainingDosesInLastCompletedPhase() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 22);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 22);
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        assertEquals(2, patient.getRemainingDosesInLastCompletedPhase());
+    }
+
+    @Test
+    public void shouldReturnNumberOfDosesForGivenPhase() {
+        assertEquals(Integer.valueOf(24), patient().numberOfDosesForPhase(Phase.IP));
+        assertEquals(Integer.valueOf(12), patient().numberOfDosesForPhase(Phase.EIP));
+        assertEquals(Integer.valueOf(54), patient().numberOfDosesForPhase(Phase.CP));
+    }
+
+    @Test
+    public void shouldReturnTrueIfCurrentPhaseIsDoseComplete() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+
+        // x >= 24.
+        patient.setNumberOfDosesTaken(Phase.IP, 25);
+
+        assertTrue(patient.currentPhaseDoseComplete());
+    }
+
+    @Test
+    public void shouldReturnFalseIfCurrentPhaseIsNotDoseComplete() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 22);
+
+        assertFalse(patient.currentPhaseDoseComplete());
+    }
+
+    @Test
+    public void shouldReturnNumberOfWeeksElapsedSinceStartOfTherapy() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusWeeks(5));
+
+        assertEquals(Integer.valueOf(5), patient.getWeeksElapsed());
+    }
+
+    @Test
+    public void shouldReturnTotalDosesToHaveBeenTakenTillLastSunday() {
+        //patient on 3 pills a day category
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().startDate());
+
+        assertEquals(3, patient.getTotalDosesToHaveBeenTakenTillLastSunday());
+    }
+
+    @Test
+    public void shouldReturnNumberOfDosesTakenTillLastSunday() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusWeeks(4));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 12);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 9);
+
+        assertEquals(9, patient.getTotalNumberOfDosesTakenTillLastSunday());
+    }
+
+    @Test
+    public void shouldReturnTheCumulativeNumberOfDosesNotTakenTillLastSunday() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 22);
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        patient.setNumberOfDosesTaken(Phase.EIP, 9);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.EIP, 8);
+
+        //20 weeks back + the current week (till "last" Sunday) * number of doses per week - (total number of taken doses till last sunday)
+        assertEquals(21*3 - 24 - 8, patient.getCumulativeDosesNotTaken());
+
+    }
+
+    @Test
+    public void shouldReturnZeroMissingDosesIfAdherenceHasBeenRecordedBeforeEndOfWeek_ByAdmin() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().dateOf(DayOfWeek.Sunday));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 3);
+        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 3);
+
+        //0 - 3 = 0 (in the NamNam field)
+        assertEquals(0, patient.getCumulativeDosesNotTaken());
+    }
+
+    @Test
+    public void shouldReturnFormattedIPProgress() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        patient.setNumberOfDosesTaken(Phase.EIP, 9);
+
+        //(24:IP + 9:EIP) / (24:IP + 12:EIP)
+        assertEquals("33/36 (91.67%)", patient.getIPProgress());
+    }
+
+    @Test
+    public void shouldReturnFormattedCPProgress() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24);
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(Phase.EIP, 9);
+
+        patient.endCurrentPhase(today().minusMonths(3));
+
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(Phase.CP, 35);
+
+        //(24:IP + 9:EIP) / (24:IP + 12:EIP)
+        assertEquals("35/54 (64.81%)", patient.getCPProgress());
+    }
 
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);
