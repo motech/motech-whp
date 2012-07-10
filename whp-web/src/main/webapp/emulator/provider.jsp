@@ -45,7 +45,7 @@
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter District:</span>
-            <input id="district" class="span2" type="text" value="Chambal"/>
+            <input id="district" class="span2" type="text" value="Begusarai"/>
         </div>
         <input type="button" id="post-button" value="Submit"/>
         <br/>
