@@ -42,9 +42,11 @@
             <name>MoTeCH Maven Repository</name>
             <url>http://nexus.motechproject.org/content/repositories/public</url>
             <releases>
+                <enabled>false</enabled>
                 <updatePolicy>daily</updatePolicy>
             </releases>
             <snapshots>
+                <enabled>false</enabled>
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
@@ -56,7 +58,7 @@
                 <updatePolicy>daily</updatePolicy>
             </releases>
             <snapshots>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
@@ -73,7 +75,6 @@
             <layout>default</layout>
         </repository>
     </repositories>
-
 
     <dependencies>
         <dependency>
