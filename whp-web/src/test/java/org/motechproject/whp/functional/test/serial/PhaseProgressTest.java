@@ -110,6 +110,7 @@ public class PhaseProgressTest extends TreatmentUpdateTest {
         ListAllPatientsPage listAllPatientsPage = loginAsCmfAdminStep.execute();
         listAllPatientsPage = listAllPatientsPage.searchByDistrictAndProvider(testPatient.getDistrict(), testProvider.getProviderId());
         String phaseProgress = listAllPatientsPage.getPhaseProgress(testPatient.getCaseId(), phase);
+        listAllPatientsPage.logout();
         assertEquals(completionPercentage, phaseProgress);
     }
 

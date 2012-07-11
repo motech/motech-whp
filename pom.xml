@@ -59,19 +59,6 @@
                 <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <id>HtmlUnitSnapshots</id>
-            <name>HtmlUnit Snapshots</name>
-            <url>http://htmlunit.sourceforge.net/m2-repo-snapshots</url>
-            <layout>default</layout>
-        </repository>
     </repositories>
 
     <dependencies>
