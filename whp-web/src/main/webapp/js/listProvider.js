@@ -10,7 +10,16 @@ function removeResetPasswordColumnIfAllAreInActive() {
     }
 }
 
+function addResetPasswordColumnIfNotPresent() {
+    if ($('a[type=reset-password-link]').length == 0) {
+        $('#providerList thead tr').append('<th type="reset-password"></th>');
+        $('#providerList tbody tr').each(function () {
+            $(this).append('<td type="reset-password"></td>');
+        });
+    }
+}
 function addResetPasswordLink(userName) {
+    addResetPasswordColumnIfNotPresent();
     $('tr[providerId=' + userName + '] td[type=reset-password]').html(
         "<a type='reset-password-link' data-toggle='modal' href='#resetPasswordModal'>Reset Password</a>");
     removeActivateColumnIfAllAreActive();
@@ -29,11 +38,11 @@ $(function () {
     removeActivateColumnIfAllAreActive();
     removeResetPasswordColumnIfAllAreInActive();
 
-    $('td').on('click', 'a[type=activate-link]', function () {
+    $('#providerList').on('click', 'a[type=activate-link]', function () {
         var providerId = $(this).closest('tr').attr('providerId');
         $('#activateProviderUserNameLabel').text(providerId);
     });
-    $('td').on('click', 'a[type=reset-password-link]', function () {
+    $('#providerList').on('click', 'a[type=reset-password-link]', function () {
         var providerId = $(this).closest('tr').attr('providerId');
         $('#resetPasswordModal .user-name').text(providerId);
     });

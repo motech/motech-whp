@@ -50,7 +50,8 @@
             <th>Tertiary Mobile Number</th>
             <th>Status</th>
             <th type="activate-provider"></th>
-            <th type="reset-password">
+            <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
+            <th type="reset-password"></th>
         </tr>
         </thead>
         <tbody>

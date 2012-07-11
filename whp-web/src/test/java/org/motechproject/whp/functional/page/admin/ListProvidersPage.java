@@ -55,6 +55,9 @@ public class ListProvidersPage extends LoggedInUserPage {
     @FindBy(how = How.ID, using = "resetPasswordUserName")
     protected WebElement resetPasswordUserName;
 
+    @FindBy(how = How.CLASS_NAME, using = "provider-row")
+    protected List<WebElement> providers;
+
     public ListProvidersPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -182,7 +185,7 @@ public class ListProvidersPage extends LoggedInUserPage {
         return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='activate-link']"));
     }
 
-    public boolean hasResetPasswordButton(String providerId) {
+    public boolean hasResetPasswordLink(String providerId) {
         return getResetPasswordLink(providerId) != null;
     }
 

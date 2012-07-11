@@ -43,12 +43,29 @@ public class ResetPasswordTest extends BaseTest {
 
     @Test
     public void shouldExposeResetPasswordLinkForActiveProvidersOnly() {
-        assertTrue(listProvidersPage.hasResetPasswordButton(activeProvider.getProviderId()));
-        assertFalse(listProvidersPage.hasResetPasswordButton(inActiveProvider.getProviderId()));
+        assertTrue(listProvidersPage.hasResetPasswordLink(activeProvider.getProviderId()));
+        assertFalse(listProvidersPage.hasResetPasswordLink(inActiveProvider.getProviderId()));
     }
 
     @Test
     public void shouldResetPasswordForProvider_uponConfirmation() throws InterruptedException {
+        assertResetPasswordForProvider(activeProvider);
+    }
+
+    @Test
+    public void shouldResetPasswordForProviderUponActivation_whenNoActiveProviderExists() throws InterruptedException {
+        //Assuming provider with district Nalanda is not created by any other tests; clean DB to run consecutively
+        listProvidersPage.searchBy("Nalanda", "", false);
+
+        TestProvider provider = providerDataService.createProvider("Nalanda");
+        loginAsItAdmin(webDriver);
+        listProvidersPage.searchBy("Nalanda", "", true);
+        assertFalse(listProvidersPage.hasResetPasswordLink(provider.getProviderId()));
+        listProvidersPage.activateProvider(provider.getProviderId(),"newPassword");
+        assertResetPasswordForProvider(provider);
+    }
+
+    private void assertResetPasswordForProvider(TestProvider activeProvider) {
         listProvidersPage.resetPassword(activeProvider.getProviderId());
         listProvidersPage.logout();
         ProviderPage providerPage = loginAsProvider(activeProvider.getProviderId(), DEFAULT_PASSWORD);
