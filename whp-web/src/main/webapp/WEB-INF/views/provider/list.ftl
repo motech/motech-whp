@@ -99,8 +99,7 @@
                     </td>
                     <td type="reset-password">
                         <#if provider.active>
-                            <a type="reset-password-link" data-toggle="modal" href="#resetPasswordModal"
-                               userName="${provider.providerId}">Reset Password</a>
+                            <a type="reset-password-link" data-toggle="modal" href="#resetPasswordModal">Reset Password</a>
                         </#if>
                     </td>
                 </tr>

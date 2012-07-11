@@ -98,7 +98,7 @@ public class ListProvidersPage extends LoggedInUserPage {
     }
 
     public boolean isProviderActive(String providerId) {
-        if (getActivateButton(providerId) == null && hasActiveStatus(providerId))
+        if (getActivateLink(providerId) == null && hasActiveStatus(providerId))
             return true;
         return false;
     }
@@ -108,7 +108,7 @@ public class ListProvidersPage extends LoggedInUserPage {
     }
 
     public boolean hasActivateButton(String providerId) {
-        return getActivateButton(providerId) != null;
+        return getActivateLink(providerId) != null;
     }
     public void activateProvider(String providerId,String password) throws InterruptedException {
         openActivateProviderModal(providerId);
@@ -161,7 +161,7 @@ public class ListProvidersPage extends LoggedInUserPage {
     }
 
     public ListProvidersPage openActivateProviderModal(String providerId) throws InterruptedException {
-        WebElement activateButton = getActivateButton(providerId);
+        WebElement activateButton = getActivateLink(providerId);
         activateButton.click();
         Thread.sleep(2000);
         return this;
@@ -178,15 +178,33 @@ public class ListProvidersPage extends LoggedInUserPage {
         return errors;
     }
 
-    private WebElement getActivateButton(String providerId) {
+    private WebElement getActivateLink(String providerId) {
         return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='activate-link']"));
     }
 
     public boolean hasResetPasswordButton(String providerId) {
-        return getResetPasswordButton(providerId) != null;
+        return getResetPasswordLink(providerId) != null;
     }
 
-    private WebElement getResetPasswordButton(String providerId) {
+    private WebElement getResetPasswordLink(String providerId) {
         return safeFindElementIn(getProviderRow(providerId), By.xpath(".//a[@type='reset-password-link']"));
+    }
+
+    public ListProvidersPage resetPassword(String providerId) {
+        openResetPasswordModal(providerId);
+        assertEquals(providerId.toLowerCase(),resetPasswordUserName.getText());
+        resetPasswordButton.click();
+        waitForElementToBeReloadedByAjax();
+        return this;
+    }
+
+    public ListProvidersPage openResetPasswordModal(String providerId) {
+        getResetPasswordLink(providerId).click();
+        return this;
+    }
+
+    public ListProvidersPage cancelResetPasswordDialog() {
+        resetPasswordCancelButton.click();
+        return this;
     }
 }

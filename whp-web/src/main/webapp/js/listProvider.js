@@ -10,6 +10,18 @@ function removeResetPasswordColumnIfAllAreInActive() {
     }
 }
 
+function addResetPasswordLink(userName) {
+    $('tr[providerId=' + userName + '] td[type=reset-password]').html(
+        "<a type='reset-password-link' data-toggle='modal' href='#resetPasswordModal'>Reset Password</a>");
+    removeActivateColumnIfAllAreActive();
+}
+
+function setProviderAsActive(userName) {
+    $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
+    $('tr[providerId=' + userName + '] td[type=status]').text('Active');
+    $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
+}
+
 $(function () {
     $("#district").combobox();
     initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
@@ -17,23 +29,22 @@ $(function () {
     removeActivateColumnIfAllAreActive();
     removeResetPasswordColumnIfAllAreInActive();
 
-    $('a[type=activate-link]').click(function () {
+    $('td').on('click', 'a[type=activate-link]', function () {
         var providerId = $(this).closest('tr').attr('providerId');
         $('#activateProviderUserNameLabel').text(providerId);
     });
-    $('a[type=reset-password-link]').click(function () {
+    $('td').on('click', 'a[type=reset-password-link]', function () {
         var providerId = $(this).closest('tr').attr('providerId');
         $('#resetPasswordModal .user-name').text(providerId);
     });
 
     $('#activateProviderModal').bind('activateProviderSuccess', function (event, userName) {
-        $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
-        $('tr[providerId=' + userName + '] td[type=status]').text('Active');
-        $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
-        removeActivateColumnIfAllAreActive();
+        setProviderAsActive(userName);
+        addResetPasswordLink(userName);
     });
     $('#resetPasswordModal').bind('resetPasswordSuccess', function (event, userName) {
         $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
         removeResetPasswordColumnIfAllAreInActive();
     });
 });
+

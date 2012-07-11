@@ -3,7 +3,6 @@ package org.motechproject.whp.functional.test.provider;
 import org.junit.Test;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
-import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.motechproject.whp.functional.page.admin.ListProvidersPage;
 import org.motechproject.whp.functional.service.ProviderDataService;
@@ -11,6 +10,7 @@ import org.motechproject.whp.functional.service.ProviderDataService;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.functional.page.LoginPage.loginAsItAdmin;
 
 public class ListAllProvidersTest extends BaseTest {
 
@@ -24,7 +24,7 @@ public class ListAllProvidersTest extends BaseTest {
     public void setUp() {
         super.setUp();
         setupProvider();
-        listProvidersPage = loginAsItAdmin();
+        listProvidersPage = loginAsItAdmin(webDriver).navigateToSearchProviders();
     }
 
     public void setupProvider() {
@@ -103,10 +103,6 @@ public class ListAllProvidersTest extends BaseTest {
 
         LoginPage loginPage = listProvidersPage.logout();
         loginPage.loginWithInActiveProviderId(provider2.getProviderId(),passwordForProvider2);
-    }
-
-    private ListProvidersPage loginAsItAdmin() {
-        return MyPageFactory.initElements(webDriver, LoginPage.class).loginWithItAdminUserNamePassword("itadmin1", "password").navigateToSearchProviders();
     }
 
 }

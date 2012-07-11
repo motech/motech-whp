@@ -74,13 +74,13 @@ public class LoginPage extends Page {
         return errorMessage.getText();
     }
 
-    public ItAdminPage loginWithItAdminUserNamePassword(String username, String password) {
-        login(username, password);
+    public static ItAdminPage loginAsItAdmin(WebDriver webDriver) {
+        LoginPage.fetch(webDriver).login("itadmin1","password");
         return getItAdminPage(webDriver);
     }
 
     public ProviderPage loginAsProvider(String providerId, String password) {
-        getLoginPage(webDriver).login(providerId, password);
+        LoginPage.fetch(webDriver).login(providerId, password);
         return getProviderPage(webDriver);
     }
 
@@ -97,4 +97,8 @@ public class LoginPage extends Page {
         System.out.println("***************************************************************************");
     }
 
+    public static LoginPage fetch(WebDriver webDriver) {
+        webDriver.get(WHPUrl.baseFor("/login"));
+        return MyPageFactory.initElements(webDriver, LoginPage.class);
+    }
 }
