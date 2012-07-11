@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -38,8 +39,8 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
 
         phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt(), anyInt());
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(EIP), anyInt(), anyInt());
-        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(CP), anyInt(), anyInt());
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(IP), anyInt(), any(LocalDate.class));
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(EIP), anyInt(), any(LocalDate.class));
+        verify(patientService, times(2)).updatePillTakenCount(eq(patient), eq(CP), anyInt(), any(LocalDate.class));
     }
 }

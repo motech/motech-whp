@@ -24,7 +24,7 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.getCurrentTherapy().getCurrentPhase().setNumberOfDosesTaken(24);
+        patient.getCurrentTherapy().getCurrentPhase().setNumberOfDosesTaken(24, twentyFourthDoseTakenDate);
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -40,10 +40,10 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
     @Test
     public void shouldStartNextPhaseWhenAttemptingToTransition_NextPhaseSet() {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
-        patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(Phase.IP, 24);
-        patient.nextPhaseName(Phase.EIP);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
+        patient.startTherapy(therapyStartDate);
+        patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
+        patient.nextPhaseName(Phase.EIP);
         patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -60,11 +60,11 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate therapyStartDate = new LocalDate(2012, 3, 1);
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
-        patient.setNumberOfDosesTaken(Phase.IP, 24);
+        patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
         patient.endCurrentPhase(twentyFourthDoseTakenDate);
 
         //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
-        patient.setNumberOfDosesTaken(Phase.IP, 23);
+        patient.setNumberOfDosesTaken(Phase.IP, 23, twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
 

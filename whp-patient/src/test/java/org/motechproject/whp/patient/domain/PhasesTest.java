@@ -3,13 +3,15 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.Phase;
 
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
-public class PhasesTest {
+public class PhasesTest extends BaseUnitTest {
 
     private Phases phases;
     private LocalDate today = today();
@@ -18,6 +20,7 @@ public class PhasesTest {
     public void setUp() {
         phases = new Phases();
         phases.setIPStartDate(today);
+        mockCurrentDate(today);
     }
 
     @Test
@@ -216,21 +219,38 @@ public class PhasesTest {
     }
 
     @Test
-    public void shouldReturnTotalDosesTakenTillLastSunday() {
+    public void shouldReturnTotalDosesTakenTillLatestSunday() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 24);
-        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.IP, 22);
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
         patient.endCurrentPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        patient.setNumberOfDosesTaken(Phase.EIP, 9);
-        patient.setNumberOfDosesTakenAsOfLastSunday(Phase.EIP, 8);
+        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentWeekInstance().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
 
-        assertEquals(24 + 8, patient.getTotalNumberOfDosesTakenTillLastSunday());
+        assertEquals(24 + 9, patient.getTotalNumberOfDosesTakenTillLastSunday(today));
+    }
+
+    @Test
+    public void shouldReturnTotalDosesTakenTillLastSunday() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(today().minusMonths(5));
+
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+
+        patient.endCurrentPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentWeekInstance().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
+
+        assertEquals(24 + 8, patient.getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().startDate()));
     }
 }

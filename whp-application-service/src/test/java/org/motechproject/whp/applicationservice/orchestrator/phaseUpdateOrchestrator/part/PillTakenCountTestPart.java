@@ -9,7 +9,7 @@ import org.motechproject.whp.refdata.domain.Phase;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.TreatmentWeekInstance.weekInstance;
+import static org.motechproject.whp.common.TreatmentWeekInstance.week;
 
 public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
 
@@ -29,10 +29,10 @@ public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
         when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, today))
                 .thenReturn(numberOfDosesTakenInIP);
-        when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, weekInstance(today).dateOf(DayOfWeek.Sunday)))
+        when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, week(today).dateOf(DayOfWeek.Sunday)))
                 .thenReturn(numberOfDosesTakenInIPTillLastSunday);
 
         phaseUpdateOrchestrator.recomputePillCount(patient.getPatientId());
-        verify(patientService).updatePillTakenCount(patient, Phase.IP, numberOfDosesTakenInIP, numberOfDosesTakenInIPTillLastSunday);
+        verify(patientService).updatePillTakenCount(patient, Phase.IP, numberOfDosesTakenInIP, today);
     }
 }

@@ -10,6 +10,7 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static java.util.Arrays.asList;
 import static org.motechproject.model.DayOfWeek.*;
+import static org.motechproject.util.DateUtil.today;
 
 public class TherapyBuilder {
 
@@ -53,7 +54,7 @@ public class TherapyBuilder {
     }
 
     public TherapyBuilder withNoOfDosesTaken(Phase phaseName, int doses) {
-        therapy.setNumberOfDosesTaken(phaseName, doses);
+        therapy.setNumberOfDosesTaken(phaseName, doses, today());
         return this;
     }
 

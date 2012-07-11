@@ -6,10 +6,10 @@ import org.motechproject.util.DateUtil;
 public class TreatmentWeekInstance {
 
     public static TreatmentWeek currentWeekInstance() {
-        return weekInstance(DateUtil.today());
+        return week(DateUtil.today());
     }
 
-    public static TreatmentWeek weekInstance(LocalDate dateInWeek){
+    public static TreatmentWeek week(LocalDate dateInWeek){
         return new TreatmentWeek(dateInWeek.minusDays(6));
     }
 

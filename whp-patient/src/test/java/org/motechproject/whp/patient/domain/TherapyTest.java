@@ -45,7 +45,7 @@ public class TherapyTest {
         therapy.start(today);
 
         //started on IP - 24 doses.
-        therapy.getCurrentPhase().setNumberOfDosesTaken(21);
+        therapy.getCurrentPhase().setNumberOfDosesTaken(21, today);
 
         assertTrue(therapy.isNearingPhaseTransition());
     }
@@ -59,7 +59,7 @@ public class TherapyTest {
         LocalDate today = today();
 
         therapy.start(today);
-        therapy.getCurrentPhase().setNumberOfDosesTaken(27);
+        therapy.getCurrentPhase().setNumberOfDosesTaken(27, today);
 
         assertTrue(therapy.currentPhaseDoseComplete());
     }
@@ -102,7 +102,7 @@ public class TherapyTest {
         Therapy therapy = new Therapy();
         therapy.getPhases().setIPStartDate(today());
 
-        therapy.setNumberOfDosesTaken(IP, 2);
+        therapy.setNumberOfDosesTaken(IP, 2, today());
         assertEquals(2, therapy.getNumberOfDosesTaken(IP));
     }
 
@@ -112,7 +112,7 @@ public class TherapyTest {
         therapy.getPhases().setIPStartDate(today());
         therapy.getPhases().setEIPStartDate(today().plusDays(1));
 
-        therapy.setNumberOfDosesTaken(EIP, 3);
+        therapy.setNumberOfDosesTaken(EIP, 3, today());
         assertEquals(3, therapy.getNumberOfDosesTaken(EIP));
     }
 
@@ -123,7 +123,7 @@ public class TherapyTest {
         therapy.getPhases().setEIPStartDate(today().plusDays(1));
         therapy.getPhases().setCPStartDate(today().plusDays(2));
 
-        therapy.setNumberOfDosesTaken(CP, 4);
+        therapy.setNumberOfDosesTaken(CP, 4, today());
         assertEquals(4, therapy.getNumberOfDosesTaken(CP));
     }
 
@@ -136,7 +136,7 @@ public class TherapyTest {
     @Test
     public void shouldNotSetTheNumberOfDosesTakenInPhaseWhenItHasNotStarted() {
         Therapy therapyWithoutIp = new Therapy();
-        therapyWithoutIp.setNumberOfDosesTaken(IP, 4);
+        therapyWithoutIp.setNumberOfDosesTaken(IP, 4, today());
         assertEquals(0, therapyWithoutIp.getNumberOfDosesTaken(IP));
     }
 

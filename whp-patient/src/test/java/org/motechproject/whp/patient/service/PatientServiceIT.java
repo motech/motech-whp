@@ -5,7 +5,9 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.utils.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -31,6 +33,7 @@ import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
@@ -350,10 +353,10 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.startTherapy(createPatientRequest.getCase_id(), today());
         String patientId = createPatientRequest.getCase_id();
 
-        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2, 2);
+        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2, currentWeekInstance().dateOf(DayOfWeek.Sunday));
 
         assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
-        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP));
+        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP, today()));
     }
 
     @Test

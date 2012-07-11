@@ -62,9 +62,8 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void updatePillTakenCount(Patient patient, Phase name, int dosesTaken, int dosesTakenAsOfLastSunday) {
-        patient.setNumberOfDosesTaken(name, dosesTaken);
-        patient.setNumberOfDosesTakenAsOfLastSunday(name, dosesTakenAsOfLastSunday);
+    public void updatePillTakenCount(Patient patient, Phase name, int dosesTaken, LocalDate asOf) {
+        patient.setNumberOfDosesTaken(name, dosesTaken, asOf);
         allPatients.update(patient);
     }
 

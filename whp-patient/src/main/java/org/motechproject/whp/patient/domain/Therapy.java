@@ -118,8 +118,8 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public int totalNumberOfDosesTakenTillLastSunday() {
-        return phases.getTotalDosesTakenTillLastSunday();
+    public int totalNumberOfDosesTakenTillLastSunday(LocalDate referenceDate) {
+        return phases.getTotalDosesTakenTillLastSunday(referenceDate);
     }
 
     @JsonIgnore
@@ -230,13 +230,8 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public void setNumberOfDosesTaken(Phase phase, int numberOfDoses) {
-        phases.setNumberOfDosesIn(phase, numberOfDoses);
-    }
-
-    @JsonIgnore
-    public void setNumberOfDosesTakenAsOfLastSunday(Phase phase, int numberOfDosesTakenAsOfLastSunday) {
-        phases.setNumberOfDosesAsOfLastSundayIn(phase, numberOfDosesTakenAsOfLastSunday);
+    public void setNumberOfDosesTaken(Phase phase, int numberOfDoses, LocalDate asOf) {
+        phases.setNumberOfDosesIn(phase, numberOfDoses, asOf);
     }
 
     @JsonIgnore

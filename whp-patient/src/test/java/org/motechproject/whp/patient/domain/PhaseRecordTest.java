@@ -5,6 +5,8 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 public class PhaseRecordTest {
 
@@ -15,7 +17,7 @@ public class PhaseRecordTest {
 
         PhaseRecord phase = new PhaseRecord(Phase.IP);
 
-        phase.setNumberOfDosesTaken(11);
+        phase.setNumberOfDosesTaken(11, today());
 
         assertEquals(13, phase.remainingDoses(category));
     }

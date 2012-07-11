@@ -19,8 +19,8 @@ public class PhaseRecord {
     3) CMF Admin startDate/endDate update: Triggered by PatientController.update() -> PhaseUpdateOrchestrator
     4) PhaseRecord transition: TODO
     */
-    private int numberOfDosesTaken;
-    private int numberOfDosesTakenAsOfLastSunday;
+
+    private PillTakenSummaries pillTakenSummaries = new PillTakenSummaries();
 
     public PhaseRecord() {
     }
@@ -34,7 +34,7 @@ public class PhaseRecord {
     }
 
     public int remainingDoses(TreatmentCategory treatmentCategory) {
-        return treatmentCategory.numberOfDosesForPhase(name) - numberOfDosesTaken;
+        return treatmentCategory.numberOfDosesForPhase(name) - pillTakenSummaries.getTotalPillsTaken();
     }
 
     public void start(PhaseRecord previousPhase) {
@@ -53,6 +53,21 @@ public class PhaseRecord {
     @JsonIgnore
     public String getEndDateAsString() {
         return WHPDate.date(endDate).value();
+    }
+
+    @JsonIgnore
+    public int getNumberOfDosesTaken() {
+        return pillTakenSummaries.getTotalPillsTaken();
+    }
+
+    @JsonIgnore
+    public int getNumberOfDosesTakenAsOfLastSunday(LocalDate referenceDate) {
+        return pillTakenSummaries.getTotalPillsTakenTillLastSunday(referenceDate);
+    }
+
+    @JsonIgnore
+    public void setNumberOfDosesTaken(int dosesTaken, LocalDate asOf) {
+        pillTakenSummaries.setPillTakenCount(dosesTaken, asOf);
     }
 }
 

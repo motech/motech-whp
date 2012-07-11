@@ -6,6 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
+import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -276,27 +278,22 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public int getTotalNumberOfDosesTakenTillLastSunday() {
-        return currentTherapy.totalNumberOfDosesTakenTillLastSunday();
+    public int getTotalNumberOfDosesTakenTillLastSunday(LocalDate referenceDate) {
+        return currentTherapy.totalNumberOfDosesTakenTillLastSunday(referenceDate);
     }
 
     @JsonIgnore
     public int getCumulativeDosesNotTaken() {
-        if (getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday() < 0) {
+        if (getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().dateOf(DayOfWeek.Sunday)) < 0) {
             return 0;
         } else {
-            return getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday();
+            return getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().dateOf(DayOfWeek.Sunday));
         }
     }
 
     @JsonIgnore
-    public void setNumberOfDosesTaken(Phase phase, int dosesTaken) {
-        currentTherapy.setNumberOfDosesTaken(phase, dosesTaken);
-    }
-
-    @JsonIgnore
-    public void setNumberOfDosesTakenAsOfLastSunday(Phase phase, int numberOfDosesTakenAsOfLastSunday) {
-        getCurrentTherapy().setNumberOfDosesTakenAsOfLastSunday(phase, numberOfDosesTakenAsOfLastSunday);
+    public void setNumberOfDosesTaken(Phase phase, int dosesTaken, LocalDate asOf) {
+        currentTherapy.setNumberOfDosesTaken(phase, dosesTaken, asOf);
     }
 
     @JsonIgnore

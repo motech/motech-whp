@@ -104,15 +104,10 @@ public class Phases {
     }
 
     @JsonIgnore
-    public int getTotalDosesTakenTillLastSunday() {
+    public int getTotalDosesTakenTillLastSunday(LocalDate referenceDate) {
         int total = 0;
         for (Phase phase : history.allPhases()) {
-            if (history.latestPhase().equals(phase)) {
-                total += phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday();
-            } else {
-                total += phaseRecords.get(phase).getNumberOfDosesTaken();
-            }
-
+            total += phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday(referenceDate);
         }
         return total;
     }
@@ -130,16 +125,9 @@ public class Phases {
     }
 
     @JsonIgnore
-    public void setNumberOfDosesIn(Phase phase, int numberOfDoses) {
+    public void setNumberOfDosesIn(Phase phase, int numberOfDoses, LocalDate asOf) {
         if (history.contains(phase)) {
-            phaseRecords.get(phase).setNumberOfDosesTaken(numberOfDoses);
-        }
-    }
-
-    @JsonIgnore
-    public void setNumberOfDosesAsOfLastSundayIn(Phase phase, int numberOfDoses) {
-        if (history.contains(phase)) {
-            phaseRecords.get(phase).setNumberOfDosesTakenAsOfLastSunday(numberOfDoses);
+            phaseRecords.get(phase).setNumberOfDosesTaken(numberOfDoses, asOf);
         }
     }
 
@@ -153,9 +141,9 @@ public class Phases {
     }
 
     @JsonIgnore
-    public int getNumberOfDosesTakenAsOfLastSunday(Phase phase) {
+    public int getNumberOfDosesTakenAsOfLastSunday(Phase phase, LocalDate referenceDate) {
         if (history.contains(phase)) {
-            return phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday();
+            return phaseRecords.get(phase).getNumberOfDosesTakenAsOfLastSunday(referenceDate);
         } else {
             return 0;
         }
