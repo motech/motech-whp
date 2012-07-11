@@ -6,7 +6,7 @@
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 
     <#if message?exists && (message?length>0)>
-    <div class="message-alert row text-center alert alert-info fade in">
+    <div id="statusMessage" class="message-alert row text-center alert alert-info fade in">
         <button class="close" data-dismiss="alert">&times;</button>
     ${message}
         <#assign message=""/>
@@ -17,7 +17,7 @@
     createAutoClosingAlert(".message-alert", 5000);
 </script>
 <div class="well float-right">
-    <a href="/whp/cmfAdmin/create">Create CMF Admin</a>
+    <a id = "createCmfAdmin-button" href="/whp/cmfAdmin/create">Create CMF Admin</a>
 </div>
 <table id="cmfAdminList" class="table table-bordered table-condensed" redirectOnRowClick="true">
     <thead>
@@ -25,7 +25,8 @@
         <th>Staff Name</th>
         <th>User Name</th>
         <th>Location</th>
-        <th></th>
+        <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
+        <th type="reset-password"></th>
     </tr>
     </thead>
     <tbody>
@@ -37,7 +38,7 @@
         </tr>
         <#else>
             <#list allCmfAdmins as cmfAdmin>
-            <tr id="cmfAdmin_${cmfAdmin.userId}" class="" rowId="${cmfAdmin.userId}"
+            <tr id="cmfAdmin_${cmfAdmin.userId}" class="cmfadmin-row" rowId="${cmfAdmin.userId}"
                 redirect-url="<@spring.url '/cmfAdmin/edit?userId=${cmfAdmin.userId}' />">
                 <td>
                 ${cmfAdmin.staffName}

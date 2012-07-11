@@ -2,7 +2,9 @@ package org.motechproject.whp.functional.page;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.page.admin.ItAdminPage;
+import org.motechproject.whp.functional.page.admin.CreateCmfAdminPage;
+import org.motechproject.whp.functional.page.admin.ListAllCmfAdminsPage;
+import org.motechproject.whp.functional.page.admin.ListProvidersPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -160,7 +162,15 @@ public abstract class Page {
         return MyPageFactory.initElements(webDriver, ProviderPage.class);
     }
 
-    public static ItAdminPage getItAdminPage(WebDriver webDriver) {
-        return MyPageFactory.initElements(webDriver, ItAdminPage.class);
+    public static CreateCmfAdminPage getCreateCmfPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, CreateCmfAdminPage.class);
     }
+
+    public static ListAllCmfAdminsPage getListAllCmfAdminsPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, ListAllCmfAdminsPage.class);
+    }
+    public static ListProvidersPage getListProvidersPage(WebDriver webDriver) {
+        return MyPageFactory.initElements(webDriver, ListProvidersPage.class);
+    }
+
 }

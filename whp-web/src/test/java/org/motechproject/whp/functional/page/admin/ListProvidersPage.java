@@ -1,5 +1,7 @@
 package org.motechproject.whp.functional.page.admin;
 
+import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
 import org.openqa.selenium.By;
@@ -58,8 +60,16 @@ public class ListProvidersPage extends LoggedInUserPage {
     @FindBy(how = How.CLASS_NAME, using = "provider-row")
     protected List<WebElement> providers;
 
+    @FindBy(how = How.ID, using = "cmf-admins")
+    private WebElement searchCmfAdminsLink;
+
     public ListProvidersPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    public static ListProvidersPage fetch(WebDriver webDriver) {
+        webDriver.get(WHPUrl.baseFor("provider/list"));
+        return MyPageFactory.initElements(webDriver, ListProvidersPage.class);
     }
 
     @Override
@@ -80,10 +90,10 @@ public class ListProvidersPage extends LoggedInUserPage {
     }
 
     private WebElement getProviderRow(String providerId) {
-        return safeFindElement(By.xpath(String.format("//tr[@providerid='%s']", providerId.toLowerCase())));
+        return safeFindElement(By.xpath(String.format("//tr[@providerId='%s']", providerId.toLowerCase())));
     }
 
-    public void searchBy(String district, String providerId, boolean expectingResult) {
+    public ListProvidersPage searchBy(String district, String providerId, boolean expectingResult) {
         this.providerId.clear();
         this.providerId.sendKeys(providerId.toLowerCase());
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
@@ -94,6 +104,7 @@ public class ListProvidersPage extends LoggedInUserPage {
         } else {
             waitForElementWithCSSToLoad("warning");
         }
+        return this;
     }
 
     public String getWarningText() {
@@ -113,13 +124,14 @@ public class ListProvidersPage extends LoggedInUserPage {
     public boolean hasActivateButton(String providerId) {
         return getActivateLink(providerId) != null;
     }
-    public void activateProvider(String providerId,String password) throws InterruptedException {
+    public ListProvidersPage activateProvider(String providerId,String password) throws InterruptedException {
         openActivateProviderModal(providerId);
         assertEquals(activateProviderUserName.getText(), providerId.toLowerCase());
         createWebElement(newPassword).sendKeys(password);
         createWebElement(confirmNewPassword).sendKeys(password);
         createWebElement(activateProviderButton).click();
         waitForElementToBeReloadedByAjax();
+        return this;
     }
 
     public ListProvidersPage validateEmptyPasswordOnActivation() {
@@ -209,5 +221,9 @@ public class ListProvidersPage extends LoggedInUserPage {
     public ListProvidersPage cancelResetPasswordDialog() {
         resetPasswordCancelButton.click();
         return this;
+    }
+    public ListAllCmfAdminsPage navigateToSearchCmfAdmins() {
+        searchCmfAdminsLink.click();
+        return getListAllCmfAdminsPage(webDriver);
     }
 }

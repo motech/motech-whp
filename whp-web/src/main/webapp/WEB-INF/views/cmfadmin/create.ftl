@@ -97,7 +97,7 @@
             <div class="control-group">
                 <div class="controls pull-right">
                     <a href="<@spring.url "/cmfAdmin/list"/>" class="btn">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create Account</button>
+                    <button id = "createCmfAdminButton" type="submit" class="btn btn-primary">Create Account</button>
                 </div>
             </div>
 

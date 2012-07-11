@@ -24,7 +24,7 @@ public class ListAllProvidersTest extends BaseTest {
     public void setUp() {
         super.setUp();
         setupProvider();
-        listProvidersPage = loginAsItAdmin(webDriver).navigateToSearchProviders();
+        listProvidersPage = loginAsItAdmin(webDriver);
     }
 
     public void setupProvider() {

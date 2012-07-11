@@ -4,7 +4,7 @@ import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.admin.AdminPage;
-import org.motechproject.whp.functional.page.admin.ItAdminPage;
+import org.motechproject.whp.functional.page.admin.ListProvidersPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -74,9 +74,9 @@ public class LoginPage extends Page {
         return errorMessage.getText();
     }
 
-    public static ItAdminPage loginAsItAdmin(WebDriver webDriver) {
+    public static ListProvidersPage loginAsItAdmin(WebDriver webDriver) {
         LoginPage.fetch(webDriver).login("itadmin1","password");
-        return getItAdminPage(webDriver);
+        return getListProvidersPage(webDriver);
     }
 
     public ProviderPage loginAsProvider(String providerId, String password) {
@@ -100,5 +100,10 @@ public class LoginPage extends Page {
     public static LoginPage fetch(WebDriver webDriver) {
         webDriver.get(WHPUrl.baseFor("/login"));
         return MyPageFactory.initElements(webDriver, LoginPage.class);
+    }
+
+    public AdminPage loginAsCmfAdminWith(String userId, String password) {
+        login(userId, password);
+        return MyPageFactory.initElements(webDriver, AdminPage.class);
     }
 }
