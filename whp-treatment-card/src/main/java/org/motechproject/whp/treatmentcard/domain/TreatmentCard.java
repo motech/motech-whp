@@ -59,7 +59,8 @@ public class TreatmentCard {
         if (phases.ipPhaseWasExtended()) {
             endDate = phases.getNextPhaseStartDate(Phase.EIP);
         }
-        return (endDate == null) ? today() : endDate;
+        //minusDays(1) so that the end of current phase does not overlap with the start of the next phase
+        return (endDate == null) ? today() : endDate.minusDays(1);
     }
 
     public LocalDate cpBoxAdherenceEndDate() {

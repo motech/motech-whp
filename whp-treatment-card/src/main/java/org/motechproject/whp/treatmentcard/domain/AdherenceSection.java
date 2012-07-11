@@ -41,8 +41,9 @@ public class AdherenceSection {
         addMonthAdherenceForRange(sectionStartDate, sectionEndDate);
         for (Phase phase : phases) {
             if (therapy.hasBeenOn(phase)) {
-                LocalDate nextPhaseStartDate = therapy.getPhases().getNextPhaseStartDate(phase) == null ? today() : therapy.getPhases().getNextPhaseStartDate(phase);
-                addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, therapy.getPhaseStartDate(phase), nextPhaseStartDate);
+                //minusDays(1) so that the end of current phase does not overlap with the start of the next phase
+                LocalDate till = therapy.getPhases().getNextPhaseStartDate(phase) == null ? today() : therapy.getPhases().getNextPhaseStartDate(phase).minusDays(1);
+                addAdherenceDataForGivenTherapy(patient, adherenceData, therapy, therapy.getPhaseStartDate(phase), till);
             }
         }
     }

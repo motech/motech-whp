@@ -40,8 +40,10 @@ public class PhaseUpdateOrchestrator {
         for (Phase phase : patient.getHistoryOfPhases()) {
             /*
              1) endDate =  phases.getStartDate(nextPhase) :- will include all doses from start to start (note: Anna Stratis wanted this)
+             2) minusDays(1) so that the end of current phase does not overlap with the start of the next phase
             */
-            LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase) : DateUtil.today();
+
+            LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
             int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
             patientService.updatePillTakenCount(patient, phase, dosesTaken, endDate);
         }
