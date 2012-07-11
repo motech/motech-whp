@@ -127,12 +127,12 @@ public class AllPatientsV0 extends CouchDbRepositorySupport<PatientV0> {
         return patients;
     }
 
-    private void loadPatientDependencies(PatientV0 patient) {
-        TreatmentV0 latestTreatment = patient.getCurrentTreatment();
+    private void loadPatientDependencies(PatientV0 patientV0) {
+        TreatmentV0 latestTreatment = patientV0.getCurrentTreatment();
         TherapyV0 latestTherapy = allTherapies.get(latestTreatment.getTherapyDocId());
         latestTreatment.setTherapy(latestTherapy);
 
-        for (TreatmentV0 treatment : patient.getTreatments()) {
+        for (TreatmentV0 treatment : patientV0.getTreatments()) {
             TherapyV0 therapy = allTherapies.get(treatment.getTherapyDocId());
             treatment.setTherapy(therapy);
         }

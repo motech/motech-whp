@@ -4,6 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
 import org.springframework.util.CollectionUtils;
 
@@ -18,7 +19,7 @@ public class TreatmentV0 {
     private LocalDate endDate;
     private AddressV0 patientAddress;
     private String therapyDocId;
-    private TreatmentOutcomeV0 treatmentOutcome;
+    private TreatmentOutcome treatmentOutcome;
     private PatientTypeV0 patientType;
     private String tbRegistrationNumber;
     private SmearTestResultsV0 smearTestResults = new SmearTestResultsV0();
@@ -46,7 +47,7 @@ public class TreatmentV0 {
         return this;
     }
 
-    public void close(TreatmentOutcomeV0 treatmentOutcome, DateTime dateModified) {
+    public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
         this.treatmentOutcome = treatmentOutcome;
         therapy.close(dateModified);

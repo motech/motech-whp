@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.v0.exception.WHPErrorCodeV0;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class PatientV0 extends MotechBaseDataObject {
         return DateUtil.setTimeZone(lastModifiedDate);
     }
 
-    public void closeCurrentTreatment(TreatmentOutcomeV0 treatmentOutcome, DateTime dateModified) {
+    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
         lastModifiedDate = dateModified;
         currentTreatment.close(treatmentOutcome, dateModified);
     }
@@ -116,7 +117,7 @@ public class PatientV0 extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public TreatmentOutcomeV0 getTreatmentOutcome() {
+    public TreatmentOutcome getTreatmentOutcome() {
         return getCurrentTreatment().getTreatmentOutcome();
     }
 
@@ -172,10 +173,28 @@ public class PatientV0 extends MotechBaseDataObject {
         List<TherapyV0> therapies = new ArrayList<>();
         for (TreatmentV0 treatmentV0 : treatments) {
             TherapyV0 therapy = treatmentV0.getTherapy();
-            if(!therapy.getId().equals(currentTherapy.getId()))
+            if (!therapy.getId().equals(currentTherapy.getId()))
                 therapies.add(therapy);
         }
         return therapies;
     }
 
+    // For migration
+    public List<TreatmentV0> getTreatments(String therapyDocId) {
+        List<TreatmentV0> treatmentV0List = new ArrayList<>();
+        if (currentTreatment.getTherapyDocId().equals(therapyDocId)) {
+            treatmentV0List.add(currentTreatment);
+        }
+
+        for (TreatmentV0 treatment : treatments) {
+            if (treatment.getTherapyDocId().equals(therapyDocId)) {
+                treatmentV0List.add(treatment);
+            }
+        }
+        return treatmentV0List;
+    }
+
+    public List<TreatmentV0> getTreatments() {
+        return treatments;
+    }
 }

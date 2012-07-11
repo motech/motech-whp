@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
-import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
@@ -14,18 +14,22 @@ public class TreatmentInterruption {
 
     @JsonProperty
     @Getter
+    @Setter
     private LocalDate pauseDate;
 
     @JsonProperty
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
+    @Setter
     private String reasonForPause;
 
     @JsonProperty
     @Getter
+    @Setter
     private LocalDate resumptionDate;
 
     @JsonProperty
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
+    @Setter
     private String reasonForResumption;
 
     //required for ektorp

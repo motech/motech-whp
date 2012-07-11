@@ -79,4 +79,6 @@ public class WeightStatistics {
     public List<WeightStatisticsRecord> getAll() {
         return Collections.unmodifiableList(weightStatisticsRecords);
     }
+
+
 }

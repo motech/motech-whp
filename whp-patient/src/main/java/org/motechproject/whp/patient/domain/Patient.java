@@ -334,4 +334,6 @@ public class Patient extends MotechBaseDataObject {
         List<Therapy> therapyList = select(therapyHistory, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
         return therapyList.get(0);
     }
+
+
 }
