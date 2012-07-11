@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#include "adherenceBox.ftl"/>
 
-<#if treatmentCard?exists>
+<#if treatmentCard.IPAdherenceSectionValid == true || treatmentCard.CPAdherenceSectionValid == true>
 
 <div class="row-fluid">
     <div id="legend-container" class="pull-right">
@@ -25,12 +25,11 @@
 <form id="treatmentCardDeltaform" action="/whp/treatmentcard/update" method="post">
     <input type="hidden" name="delta" id="delta"/>
 
-    <#if treatmentCard.IPAdherenceSectionValid == true || treatmentCard.CPAdherenceSectionValid == true>
-        <div class="controls pull-right">
-            <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
-            <button type="button" id='submitAdherence' class="btn btn-primary">Save</button>
-        </div>
-    </#if>
+
+    <div class="controls pull-right">
+        <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
+        <button type="button" id='submitAdherence' class="btn btn-primary">Save</button>
+    </div>
 </form>
 
 </#if>
