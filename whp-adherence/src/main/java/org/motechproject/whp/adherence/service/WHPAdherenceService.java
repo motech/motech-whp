@@ -19,6 +19,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.util.WHPDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +87,10 @@ public class WHPAdherenceService {
     }
 
     public AdherenceList findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
-        List<AdherenceRecord> adherenceData = adherenceService.adherence(patientId, treatmentId, start, end);
+        List<AdherenceRecord> adherenceData = new ArrayList<>();
+        if (WHPDateUtil.isOnOrBefore(start, end)) {
+            adherenceData = adherenceService.adherence(patientId, treatmentId, start, end);
+        }
         return new AdherenceMapper().map(adherenceData);
     }
 

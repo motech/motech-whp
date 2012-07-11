@@ -10,6 +10,7 @@ import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.whp.adherence.audit.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
@@ -145,6 +146,13 @@ public class WHPAdherenceServiceTest {
     public void shouldReturnZeroAsTheNumberOfDosesTakenIfEndDateIsBeforeStartDate() {
         int result = whpAdherenceService.countOfDosesTakenBetween(PATIENT_ID, THERAPY_UID, today(), today().minusDays(1));
         assertEquals(0, result);
+        verifyZeroInteractions(adherenceService);
+    }
+
+    @Test
+    public void shouldReturnEmptyListOfAdherenceRecordsIfEndDateIsBeforeStartDate() {
+        AdherenceList result = whpAdherenceService.findLogsInRange(PATIENT_ID, THERAPY_UID, today(), today().minusDays(1));
+        assertEquals(0, result.size());
         verifyZeroInteractions(adherenceService);
     }
 
