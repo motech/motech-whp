@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.motechproject.whp.common.UniqueElementList;
 import org.motechproject.whp.refdata.domain.Phase;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PhaseTransitions {
 
-    @JsonProperty
+    @Getter
     private List<Phase> transitions = new UniqueElementList<>();
 
     public PhaseTransition add(Phase phase) {
@@ -59,6 +59,11 @@ public class PhaseTransitions {
 
     public List<Phase> allPhases() {
         return new ArrayList<>(transitions);
+    }
+
+    //so that ektorp does not deserialize into ArrayList instead of UniqueElementList.
+    public void setTransitions(List<Phase> transitions){
+        this.transitions = new UniqueElementList<>(transitions);
     }
 
     private boolean insert(Phase phase) {
