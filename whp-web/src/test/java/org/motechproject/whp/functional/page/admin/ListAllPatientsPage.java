@@ -3,7 +3,11 @@ package org.motechproject.whp.functional.page.admin;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.LoggedInUserPage;
-import org.openqa.selenium.*;
+import org.motechproject.whp.refdata.domain.Phase;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
@@ -25,8 +29,11 @@ public class ListAllPatientsPage extends LoggedInUserPage {
     private WebElement providerSearchBox;
 
     @FindBy(how = How.ID, using = "searchButton")
+
     private WebElement searchButton;
+
     private List<WebElement> dashboardLinks;
+
     @FindBy(how = How.ID, using = "patientList")
     private WebElement patientList;
 
@@ -65,6 +72,14 @@ public class ListAllPatientsPage extends LoggedInUserPage {
 
     public String getVillageText(String patientId) {
         return webDriver.findElement(id(String.format("patient_%s_Village", patientId))).getText();
+    }
+
+    public String getPhaseProgress(String patientId, Phase phase) {
+        return webDriver.findElement(id(String.format("patient_%s_%sProgress", patientId, phase.name()))).getText();
+    }
+
+    public String getCumulativeMissedDoses(String patientId) {
+        return webDriver.findElement(id(String.format("patient_%s_MissedDoses", patientId))).getText();
     }
 
     public PatientDashboardPage clickOnPatientWithTherapyNotYetStarted(String patientId) {

@@ -34,12 +34,6 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
                 .withDosesTaken(3)
                 .execute();
 
-        submitAdherenceStep
-                .withProvider(testProvider)
-                .withPatient(testPatient)
-                .withDosesTaken(3)
-                .execute();
-
         adjustDateTime(8, 7, 2012);
 
         submitAdherenceStep
