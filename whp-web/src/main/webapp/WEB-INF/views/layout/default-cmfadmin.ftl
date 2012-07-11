@@ -23,7 +23,7 @@
             src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-1.7.2.js'/>"></script>
 
     <script type="text/javascript"
-                src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-ui-1.8.21.custom.js'/>"></script>
+            src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-ui-1.8.21.custom.js'/>"></script>
 
     <script type="text/javascript"
             src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery.validate.js'/>"></script>
@@ -41,13 +41,14 @@
 
 </head>
 <body>
-<div class="container-fluid">
 
-    <div class="row-fluid" id="headerContent">
-        <#setting date_format="yyyy-mm-dd"/>
+
+<div class="row-fluid" id="headerContent">
+    <#setting date_format="yyyy-mm-dd"/>
         <#include "header.ftl"/>
-    </div>
+</div>
 
+<div class="container-fluid">
     <div class="row-fluid">
         <div class="span2">
             <#include "../cmfadmin/menu.ftl"/>
@@ -58,12 +59,12 @@
             <#nested/>
         </div>
     </div>
-
-    <div class="row-fluid" id="footerContent">
-        <#include "footer.ftl"/>
-    </div>
-
 </div>
+
+<div class="row-fluid" id="footerContent">
+    <#include "footer.ftl"/>
+</div>
+
 </body>
 </html>
 </#macro>

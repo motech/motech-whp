@@ -42,13 +42,13 @@
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 </head>
 <body>
-<div class="container-fluid">
 
-    <div class="row-fluid" id="headerContent">
-        <#setting date_format="yyyy-mm-dd"/>
+
+<div class="row-fluid" id="headerContent">
+    <#setting date_format="yyyy-mm-dd"/>
         <#include "header.ftl"/>
-    </div>
-
+</div>
+<div class="container-fluid">
     <div class="row-fluid">
         <div class="span2">
             <#include "../itadmin/menu.ftl"/>
@@ -59,12 +59,13 @@
             <#nested/>
         </div>
     </div>
-
-    <div class="row-fluid" id="footerContent">
-        <#include "footer.ftl"/>
-    </div>
-
 </div>
+
+
+<div class="row-fluid" id="footerContent">
+    <#include "footer.ftl"/>
+</div>
+
 </body>
 </html>
 </#macro>

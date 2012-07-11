@@ -1,4 +1,4 @@
-<div class="navbar-fixed-bottom">
+<div>
     <div class="row white" id="footer">
         <div class="pull-left" id="footer-left-section">
             <div class="row">

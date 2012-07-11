@@ -1,10 +1,24 @@
 body {
-    margin-top: 20px;
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+#navibar {
+    position: static;
+    left: 0;
+    top: 0;
 }
 
 #mainContent {
     margin-top: 20px;
     margin-bottom: 70px;
+}
+
+#footerContent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 #footer {
@@ -193,10 +207,10 @@ table tbody .link:hover td:not(.row-click-exclude) {
 .float-right {
     float: right;
 }
+
 .float-left {
     float: left;
 }
-
 
 .warning {
     color: #b22222;
@@ -276,7 +290,7 @@ div.buttons a, div.buttons button {
     height: 25px;
 }
 
-.patient-info,.patient-info div {
+.patient-info, .patient-info div {
     overflow: hidden;
 }
 
@@ -295,6 +309,7 @@ div.buttons a, div.buttons button {
 #search-pane {
     overflow: hidden;
 }
+
 .search-section-header {
     z-index: 1;
     font-size: 1.3em;
@@ -303,14 +318,16 @@ div.buttons a, div.buttons button {
 .results {
     margin-top: 10px;
 }
+
 .patient-info-left-pane {
     width: 430px;
 }
+
 .patient-info-right-pane {
     width: 470px;
 }
 
-#patientList th, #providerList th , #cmfAdminList th, #smearTestDetails, #sampleInstance, #weight, #patientDetails, #providerDetails, #treatmentDetails{
+#patientList th, #providerList th, #cmfAdminList th, #smearTestDetails, #sampleInstance, #weight, #patientDetails, #providerDetails, #treatmentDetails {
     background-color: #43A1DA;
     color: white;
 }
@@ -321,7 +338,7 @@ div.buttons a, div.buttons button {
     font-size: 18px;
 }
 
-#patientList tr[class~=paused] td{
+#patientList tr[class~=paused] td {
     background-color: lightPink;
 }
 
@@ -331,7 +348,7 @@ div.buttons a, div.buttons button {
     font-size: 18px;
 }
 
-.activate-link:hover,.activate-link {
+.activate-link:hover, .activate-link {
     color: green;
 }
 
@@ -343,8 +360,9 @@ div.buttons a, div.buttons button {
 #patientRemark {
     width: 80%;
 }
+
 .user-name {
-   display: inline-block;
-   color: #369BD7;
+    display: inline-block;
+    color: #369BD7;
     font-weight: bold;
 }
