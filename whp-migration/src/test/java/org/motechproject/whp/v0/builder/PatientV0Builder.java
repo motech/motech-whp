@@ -2,6 +2,7 @@ package org.motechproject.whp.v0.builder;
 
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.v0.domain.*;
 
@@ -27,6 +28,9 @@ public class PatientV0Builder {
         patientV0.setLastName("lastName");
         patientV0.setGender(GenderV0.O);
         patientV0.setPhoneNumber("1234567890");
+        patientV0.setPhi("whp");
+        patientV0.setStatus(PatientStatusV0.Open);
+        patientV0.setLastModifiedDate(DateUtil.now().minusDays(10));
         patientV0.setCurrentTreatment(new TreatmentV0Builder().withDefaults().build());
         return this;
     }

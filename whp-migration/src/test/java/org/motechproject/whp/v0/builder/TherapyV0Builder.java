@@ -1,7 +1,11 @@
 package org.motechproject.whp.v0.builder;
 
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.v0.domain.*;
+import org.motechproject.util.DateUtil;
+import org.motechproject.whp.v0.domain.DiseaseClassV0;
+import org.motechproject.whp.v0.domain.TherapyStatusV0;
+import org.motechproject.whp.v0.domain.TherapyV0;
+import org.motechproject.whp.v0.domain.TreatmentCategoryV0;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +31,11 @@ public class TherapyV0Builder {
     }
 
     public TherapyV0Builder withDefaults() {
+        therapyV0.setPatientAge(100);
+        therapyV0.setCreationDate(DateUtil.now().minusDays(10));
+        therapyV0.setStartDate(DateUtil.today().minusDays(9));
+        therapyV0.setCloseDate(DateUtil.today());
+        therapyV0.setStatus(TherapyStatusV0.Closed);
         therapyV0.setTreatmentCategory(new TreatmentCategoryV0("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapyV0.setDiseaseClass(DiseaseClassV0.P);
         return this;

@@ -27,23 +27,21 @@ public class TreatmentV0Builder {
 
         LocalDate today = DateUtil.today();
         treatmentV0 = new TreatmentV0();
+        treatmentV0.setProviderId("providerId");
         treatmentV0.setTbId("elevenDigit");
-        treatmentV0.setTherapy(therapy);
+        treatmentV0.setStartDate(DateUtil.today().minusDays(10));
+        treatmentV0.setEndDate(DateUtil.today());
         treatmentV0.setPatientAddress(defaultAddress());
         treatmentV0.setPatientType(PatientTypeV0.New);
-        treatmentV0.addSmearTestResult(new SmearTestRecordV0(SmearTestSampleInstanceV0.PreTreatment, today, SmearTestResultV0.Negative, today, SmearTestResultV0.Negative));
-        treatmentV0.addWeightStatistics(new WeightStatisticsRecordV0(WeightInstanceV0.PreTreatment, 100.0, today));
         treatmentV0.setTbRegistrationNumber("tbRegistrationNumber");
 
-        return this;
-    }
+        treatmentV0.addSmearTestResult(new SmearTestRecordV0(SmearTestSampleInstanceV0.PreTreatment, today, SmearTestResultV0.Negative, today, SmearTestResultV0.Negative));
+        treatmentV0.addWeightStatistics(new WeightStatisticsRecordV0(WeightInstanceV0.PreTreatment, 100.0, today));
+        treatmentV0.pause("paws", DateUtil.now().minusDays(9));
+        treatmentV0.resume("resume", DateUtil.now().minusDays(8));
 
-    private TherapyV0 defaultTherapy(String therapyDocId) {
-        TherapyV0 therapy = new TherapyV0();
-        therapy.setId(therapyDocId);
-        therapy.setTreatmentCategory(new TreatmentCategoryV0("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
-        therapy.setDiseaseClass(DiseaseClassV0.P);
-        return therapy;
+        treatmentV0.setTherapy(therapy);
+        return this;
     }
 
     private AddressV0 defaultAddress() {
