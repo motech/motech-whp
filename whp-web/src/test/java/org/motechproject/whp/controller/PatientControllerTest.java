@@ -121,6 +121,18 @@ public class PatientControllerTest {
     }
 
     @Test
+    public void shouldReturnDashBoardPrintView() throws Exception {
+        PatientInfo patientInfo = new PatientInfo(patient, provider);
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/print/" + patient.getPatientId()))
+                .andExpect(status().isOk())
+                .andExpect(model().size(2))
+                .andExpect(model().attribute("patient", patientInfo))
+                .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
+                .andExpect(forwardedUrl("patient/print"));
+    }
+
+    @Test
     public void shouldDisplayAdherenceUpdatedMessageIfAdherenceWasUpdated() {
         when(request.getAttribute("flash.in.message")).thenReturn("message");
         patientController.show(patient.getPatientId(), uiModel, request);

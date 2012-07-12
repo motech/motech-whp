@@ -95,6 +95,13 @@ public class PatientController extends BaseController {
         return "patient/show";
     }
 
+    @RequestMapping(value = "print/{id}", method = RequestMethod.GET)
+    public String print(@PathVariable("id") String patientId, Model uiModel, HttpServletRequest request) {
+        Patient patient = patientService.findByPatientId(patientId);
+        setupDashboardModel(uiModel, request, patient);
+        return "patient/print";
+    }
+
     public static String redirectToPatientDashboardURL(String patientId) {
         return "redirect:/patients/show?patientId=" + patientId;
     }
