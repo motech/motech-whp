@@ -5,45 +5,57 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.collections.BoundPriorityQueue;
 
 import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrBefore;
 
 public class PillTakenSummaries {
 
+    public static final int SIZE = 2;
     @JsonProperty
-    private PillTakenSummary olderSummary = new PillTakenSummary();
-    @JsonProperty
-    private PillTakenSummary latestSummary = new PillTakenSummary();
+    private BoundPriorityQueue<PillTakenSummary> summaries = new BoundPriorityQueue<>(SIZE);
 
     public void setPillTakenCount(int dosesTaken, LocalDate asOf) {
-        if (latestSummary.isSummaryFor(asOf)) {
-            latestSummary.setDoseCount(dosesTaken);
-        } else {
-            insertNewSummary(dosesTaken, asOf);
-        }
+        PillTakenSummary pillTakenSummary = new PillTakenSummary(dosesTaken, new TreatmentWeek(asOf).endDate());
+        summaries.insert(pillTakenSummary);
     }
 
     @JsonIgnore
     public int getTotalPillsTaken() {
-        return latestSummary.getDoseCount();
+        return dosesInLaterSummary();
     }
 
     @JsonIgnore
     public int getTotalPillsTakenTillLastSunday(LocalDate reference) {
-        if (isOnOrBefore(latestSummary.getSundayDate(), reference)) {
-            return latestSummary.getDoseCount();
+        if (isOnOrBefore(laterSummary().getSundayDate(), reference)) {
+            return laterSummary().getDoseCount();
         } else {
-            return olderSummary.getDoseCount();
+            return dosesInOlderSummary();
         }
     }
 
-    private void insertNewSummary(int dosesTaken, LocalDate asOf) {
-        olderSummary = new PillTakenSummary(latestSummary);
-        latestSummary = new PillTakenSummary(dosesTaken, new TreatmentWeek(asOf).endDate());
+    private int dosesInOlderSummary() {
+        if (summaries.size() < SIZE) {
+            return 0;
+        } else {
+            return summaries.get(0).getDoseCount();
+        }
+    }
+
+    private int dosesInLaterSummary() {
+        if (summaries.size() == 0) {
+            return 0;
+        } else {
+            return laterSummary().getDoseCount();
+        }
+    }
+
+    private PillTakenSummary laterSummary() {
+        return summaries.peek();
     }
 
     @Data
-    private static class PillTakenSummary {
+    private static class PillTakenSummary implements Comparable<PillTakenSummary> {
 
         private int doseCount;
         private LocalDate sundayDate;
@@ -70,6 +82,21 @@ public class PillTakenSummaries {
         @JsonIgnore
         public boolean isSummaryFor(LocalDate reference) {
             return new TreatmentWeek(reference).endDate().equals(sundayDate);
+        }
+
+        @Override
+        public int compareTo(PillTakenSummary other) {
+            if (sundayDate == null) {
+                if (other.sundayDate == null) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else if (other.sundayDate == null) {
+                return 1;
+            } else {
+                return sundayDate.compareTo(other.sundayDate);
+            }
         }
     }
 }
