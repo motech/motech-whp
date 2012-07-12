@@ -177,6 +177,11 @@
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
             <version>0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-adherence</artifactId>
+            <version>0.3-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>

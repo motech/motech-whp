@@ -4,7 +4,7 @@
 
     <appender name="migration" class="org.apache.log4j.ConsoleAppender"/>
 
-    <logger name="org.motechproject.whp.logger.MigrationLogger">
+    <logger name="org.motechproject.whp.migration.logger.MigrationLogger">
         <appender-ref ref="migration"/>
         <level value="all"/>
     </logger>
