@@ -33,6 +33,7 @@
         <module>whp-data-importer</module>
         <module>whp-migration</module>
         <module>whp-webservice</module>
+        <module>whp-ivr</module>
         <module>whp-web</module>
     </modules>
 
