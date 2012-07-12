@@ -1,12 +1,10 @@
 package org.motechproject.whp.treatmentcard.domain;
 
-import lombok.Data;
+import lombok.Getter;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Phases;
-import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 import static org.motechproject.util.DateUtil.today;
 
-@Data
+@Getter
 public class TreatmentCard {
 
     public static final int MONTHS_IN_IP_BOX = 5;
@@ -26,7 +24,8 @@ public class TreatmentCard {
     private Patient patient;
     private boolean isSundayDoseDate;
     private Therapy therapy;
-
+    private List<TreatmentHistory> treatmentHistories = new ArrayList();
+    private List<TreatmentPausePeriod> treatmentPausePeriods = new ArrayList();
     private AdherenceSection ipAndEipAdherenceSection = new AdherenceSection();
     private AdherenceSection cpAdherenceSection = new AdherenceSection();
 
@@ -35,6 +34,29 @@ public class TreatmentCard {
         this.therapy = patient.getCurrentTherapy();
         List<DayOfWeek> patientPillDays = therapy.getTreatmentCategory().getPillDays();
         this.isSundayDoseDate = patientPillDays.contains(DayOfWeek.Sunday);
+        setTreatmentHistories();
+        setTreatmentPausePeriods();
+    }
+
+    private void setTreatmentPausePeriods() {
+        List<Treatment> allTreatments = new ArrayList(patient.getCurrentTherapy().getTreatments());
+        allTreatments.add(patient.getCurrentTreatment());
+        for(Treatment treatment : allTreatments) {
+            for(TreatmentInterruption treatmentInterruption : treatment.getInterruptions())
+                treatmentPausePeriods.add(new TreatmentPausePeriod(treatmentInterruption.getPauseDate(),treatmentInterruption.getResumptionDate()));
+        }
+    }
+
+    private void setTreatmentHistories() {
+
+        if(patient.getCurrentTherapy().getTreatments().isEmpty())
+            return;
+
+        List<Treatment> allTreatments = new ArrayList(patient.getCurrentTherapy().getTreatments());
+        allTreatments.add(patient.getCurrentTreatment());
+        for(Treatment treatment : allTreatments) {
+            treatmentHistories.add(new TreatmentHistory(treatment.getProviderId(),treatment.getStartDate(),treatment.getEndDate()));
+        }
     }
 
     public TreatmentCard initIPSection(List<Adherence> adherenceData) {

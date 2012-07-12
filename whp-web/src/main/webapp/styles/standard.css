@@ -382,3 +382,16 @@ div.buttons a, div.buttons button {
 .one-line {
   white-space: nowrap;
 }
+
+.tc-label {
+    font-weight: bold;
+    display: inline;
+}
+
+.tc-label:after {
+    content: ":";
+}
+
+.tc-value {
+    display: inline;
+}

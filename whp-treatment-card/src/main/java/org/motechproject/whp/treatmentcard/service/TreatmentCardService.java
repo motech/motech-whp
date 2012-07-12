@@ -25,13 +25,13 @@ public class TreatmentCardService {
 
     public TreatmentCard treatmentCard(Patient patient) {
         TreatmentCard treatmentCard = new TreatmentCard(patient);
-        initializeIpAndEipSection(patient, treatmentCard);
-        initializeCpSection(patient, treatmentCard);
+        Therapy currentTherapy = patient.getCurrentTherapy();
+        initializeIpAndEipSection(patient, treatmentCard,currentTherapy);
+        initializeCpSection(patient, treatmentCard, currentTherapy);
         return treatmentCard;
     }
 
-    private void initializeIpAndEipSection(Patient patient, TreatmentCard treatmentCard) {
-        Therapy therapy = patient.getCurrentTherapy();
+    private void initializeIpAndEipSection(Patient patient, TreatmentCard treatmentCard, Therapy therapy) {
         if (therapy.getPhases().isOrHasBeenOnIp()) {
             List<Adherence> ipAndEipAdherenceData = whpAdherenceService.findLogsInRange(
                     patient.getPatientId(),
@@ -43,8 +43,7 @@ public class TreatmentCardService {
         }
     }
 
-    private void initializeCpSection(Patient patient, TreatmentCard treatmentCard) {
-        Therapy therapy = patient.getCurrentTherapy();
+    private void initializeCpSection(Patient patient, TreatmentCard treatmentCard, Therapy therapy) {
         if (therapy.getPhases().isOrHasBeenOnCp()) {
             List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(
                     patient.getPatientId(),

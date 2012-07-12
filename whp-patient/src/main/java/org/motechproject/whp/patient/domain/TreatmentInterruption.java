@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -10,26 +11,19 @@ import java.util.List;
 
 import static org.motechproject.util.DateUtil.*;
 
+@Data
 public class TreatmentInterruption {
 
     @JsonProperty
-    @Getter
-    @Setter
     private LocalDate pauseDate;
 
     @JsonProperty
-    @Getter
-    @Setter
     private String reasonForPause;
 
     @JsonProperty
-    @Getter
-    @Setter
     private LocalDate resumptionDate;
 
     @JsonProperty
-    @Getter
-    @Setter
     private String reasonForResumption;
 
     //required for ektorp
