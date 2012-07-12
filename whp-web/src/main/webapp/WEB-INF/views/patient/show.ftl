@@ -66,14 +66,16 @@ ${message}
             });
         }
     });
-    $('#ipDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
-    $('#eipDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
-    $('#cpDatePicker').datepicker({maxDate: new Date, dateFormat:'dd/mm/yy'});
+    $(".date-dismiss").click(function(event){
+       $(event.target).closest("tr").find("input").val("");
+    });
+    $('#ipDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
+    $('#eipDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
+    $('#cpDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
     $("#clearFields").click(function () {
         $('#ipDatePicker').val('');
         $('#eipDatePicker').val('');
         $('#cpDatePicker').val('');
-        event.preventDefault();
     });
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
     $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}', function() {

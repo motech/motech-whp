@@ -22,7 +22,7 @@ public class PhaseProgressTest extends TreatmentUpdateTest {
     }
 
     @Test
-    public void shouldTransitionPatientFromIPToEIP_When24thDoseIsCapturedAndAdminHasMadeDecisionBeforeEndOfPhase() {
+    public void shouldReflectIPProgressOnPatientListPage() {
         adjustDateTime(1, 7, 2012);
 
         submitAdherenceStep
