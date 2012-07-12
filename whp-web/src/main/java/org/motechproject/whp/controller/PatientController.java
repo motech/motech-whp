@@ -36,6 +36,7 @@ import java.util.Locale;
 import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.WHPDate.date;
 
 @Controller
@@ -182,6 +183,7 @@ public class PatientController extends BaseController {
 
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
+        uiModel.addAttribute("today", WHPDate.date(today()).value());
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotEmpty(messages)) {

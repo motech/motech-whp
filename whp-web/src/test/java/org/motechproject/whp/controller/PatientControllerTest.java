@@ -114,7 +114,7 @@ public class PatientControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
@@ -126,7 +126,7 @@ public class PatientControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/print/" + patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/print"));

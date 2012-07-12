@@ -9,7 +9,7 @@
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
 <body>
-<div class="container">
+<div>
     <div class="row-fluid" id="headerContent">
     <#include "header.ftl"/>
 </div>
