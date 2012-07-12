@@ -43,6 +43,11 @@ public class ToVersion1IT extends SpringIntegrationTest {
         assertNotNull(allPatients.findByPatientId(patientV0.getPatientId()));
     }
 
+    @Test
+    public void should(){
+        toVersion0.doo();
+    }
+
     @After
     public void tearDown() {
         markForDeletion(allPatientsV0.getAllVersionedDocs().toArray());

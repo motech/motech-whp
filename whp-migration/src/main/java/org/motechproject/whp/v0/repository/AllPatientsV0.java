@@ -137,4 +137,5 @@ public class AllPatientsV0 extends CouchDbRepositorySupport<PatientV0> {
             treatment.setTherapy(therapy);
         }
     }
+
 }
