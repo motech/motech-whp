@@ -2,6 +2,7 @@ package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
@@ -11,6 +12,8 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static org.motechproject.whp.common.TreatmentWeekInstance.week;
 
 @Component
 public class PhaseUpdateOrchestrator {
@@ -42,11 +45,22 @@ public class PhaseUpdateOrchestrator {
              1) endDate =  phases.getStartDate(nextPhase) :- will include all doses from start to start (note: Anna Stratis wanted this)
              2) minusDays(1) so that the end of current phase does not overlap with the start of the next phase
             */
-
-            LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
-            int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
-            patientService.updatePillTakenCount(patient, phase, dosesTaken, endDate);
+            updateTotalDoseTakenCount(patient, phases, phase);
+            updateDoseTakenCountTillSunday(patient, phases, phase);
         }
+    }
+
+    private void updateTotalDoseTakenCount(Patient patient, Phases phases, Phase phase) {
+        LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
+        int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
+        patientService.updatePillTakenCount(patient, phase, dosesTaken, endDate);
+    }
+
+    private void updateDoseTakenCountTillSunday(Patient patient, Phases phases, Phase phase) {
+        LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
+        LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
+        int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
+        patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
     }
 
     public void setNextPhase(String patientId, Phase phaseToTransitionTo) {

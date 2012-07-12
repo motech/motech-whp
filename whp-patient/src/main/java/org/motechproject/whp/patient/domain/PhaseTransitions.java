@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.whp.common.UniqueElementList;
+import org.motechproject.whp.common.collections.UniqueElementList;
 import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.ArrayList;

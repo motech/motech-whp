@@ -1,4 +1,4 @@
-package org.motechproject.whp.common;
+package org.motechproject.whp.common.collections;
 
 import java.util.ArrayList;
 import java.util.List;
