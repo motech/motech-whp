@@ -19,21 +19,21 @@
                         <td>Intensive Phase</td>
                         <td>
                             <input class="span 2" data-date-format="dd/mm/yyyy" id="ipDatePicker" name="ipStartDate"
-                                   type="text" value="${phaseStartDates.ipStartDate}">
+                                   readonly="readonly" type="text" value="${phaseStartDates.ipStartDate}">
                         </td>
                     </tr>
                     <tr>
                         <td>Extended Intensive Phase</td>
                         <td>
                             <input class="span 2" data-date-format="dd/mm/yyyy" id="eipDatePicker" name="eipStartDate"
-                                   type="text" value="${phaseStartDates.eipStartDate}">
+                                   readonly="readonly" type="text" value="${phaseStartDates.eipStartDate}">
                         </td>
                     </tr>
                     <tr>
                         <td>Continuation Phase</td>
                         <td>
                             <input class="span 2" data-date-format="dd/mm/yyyy" id="cpDatePicker" name="cpStartDate"
-                                   type="text" value="${phaseStartDates.cpStartDate}">
+                                   readonly="readonly" type="text" value="${phaseStartDates.cpStartDate}">
                         </td>
                     </tr>
                     </tbody>

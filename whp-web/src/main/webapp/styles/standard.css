@@ -1,7 +1,11 @@
+html{
+    height: 100%;
+}
 body {
     min-height: 100%;
     position: relative;
-    padding-bottom: 20px;
+    margin:0;
+    padding:0;
 }
 
 #navibar {
@@ -13,10 +17,18 @@ body {
 #mainContent {
     margin-top: 20px;
     margin-bottom: 70px;
+    padding-bottom: 25px;
+    height: 100%;
+}
+
+#bodyContent {
+    margin-top: 20px;
+    margin-bottom: 70px;
 }
 
 #footerContent {
     position: absolute;
+    width: 100%;
     bottom: 0;
     left: 0;
 }
