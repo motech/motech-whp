@@ -107,10 +107,11 @@ public class PatientInfoTest {
         assertThat(patientInfo.getTbRegistrationNumber(), is(tbRegistrationNo));
         assertThat(patientInfo.getPatientType(), is(patientType.name()));
         assertThat(patientInfo.getAge(), is(patientAge));
-        assertThat(patientInfo.getDiseaseClass(), is(diseaseClass.name()));
+        assertThat(patientInfo.getDiseaseClass(), is(diseaseClass.value()));
         assertThat(patientInfo.getTreatmentCategory(), is(treatmentCategory));
         assertThat(patientInfo.getAddress(), is("houseNo, landmark, block, village, district, state"));
         assertThat(patientInfo.getAddressState(), is("state"));
+        assertThat(patientInfo.getAddressDistrict(), is("district"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
     }
 

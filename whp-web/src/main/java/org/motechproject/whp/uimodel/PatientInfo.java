@@ -31,6 +31,7 @@ public class PatientInfo {
     private String treatmentCategory;
     private String address;
     private String addressState;
+    private String addressDistrict;
     private String providerMobileNumber;
 
     private Treatment currentTreatment;
@@ -76,7 +77,7 @@ public class PatientInfo {
         tbRegistrationNumber = currentTreatment.getTbRegistrationNumber();
         patientType = currentTreatment.getPatientType().name();
         age = latestTherapy.getPatientAge();
-        diseaseClass = latestTherapy.getDiseaseClass().name();
+        diseaseClass = latestTherapy.getDiseaseClass().value();
         treatmentCategory = latestTherapy.getTreatmentCategory().getName();
         address = currentTreatment.getPatientAddress().toString();
         addressState = currentTreatment.getPatientAddress().getAddress_state();
@@ -88,6 +89,7 @@ public class PatientInfo {
         remainingDosesInCurrentPhase = patient.getRemainingDosesInCurrentPhase();
         lastCompletedPhase = patient.getCurrentTherapy().getLastCompletedPhase();
         addressVillage = currentTreatment.getPatientAddress().getAddress_village();
+        addressDistrict = currentTreatment.getPatientAddress().getAddress_district();
         currentTreatmentPaused = patient.isCurrentTreatmentPaused();
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
     }
