@@ -13,7 +13,7 @@ public class CmfLocationSeed {
     @Autowired
     private AllCmfLocations allCmfLocations;
 
-    @Seed(priority = 0, version = "1.0")
+    @Seed(priority = 0, version = "2.0")
     public void load() {
         allCmfLocations.add(new CmfLocation("Delhi"));
         allCmfLocations.add(new CmfLocation("Patna"));
