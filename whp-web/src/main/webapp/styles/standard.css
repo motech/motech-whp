@@ -378,3 +378,7 @@ div.buttons a, div.buttons button {
     color: #369BD7;
     font-weight: bold;
 }
+
+.one-line {
+  white-space: nowrap;
+}

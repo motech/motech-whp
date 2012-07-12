@@ -50,7 +50,7 @@
                 ${cmfAdmin.locationId}
                 </td>
                 <td type="reset-password" class="row-click-exclude">
-                    <a type="reset-password-link" data-toggle="modal" href="#resetPasswordModal"
+                    <a type="reset-password-link" class="one-line" data-toggle="modal" href="#resetPasswordModal"
                        userName="${cmfAdmin.userId}">Reset Password</a>
                 </td>
             </tr>
