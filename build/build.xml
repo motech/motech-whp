@@ -16,20 +16,6 @@
     <property file="${basedir}\build.properties"/>
     <property file="${basedir}\maven.properties"/>
 
-    <path id="lib.path">
-        <fileset dir="../whp-web/target/whp-web-${project.version}/WEB-INF/lib" includes="**/*.jar"/>
-    </path>
-
-    <target name="load.seed.data">
-        <echo message="Loading Seed Data.."/>
-        <java fork="false" classname="org.motechproject.deliverytools.seed.SetupSeedData">
-            <classpath>
-                <path location="../whp-web/target/whp-web-${project.version}/WEB-INF/classes"/>
-                <path refid="lib.path"/>
-            </classpath>
-        </java>
-    </target>
-
     <target name="drop.all.dbs">
         <for list="motech-whp,motech-web-security,motech-tb-adherence"
              param="db.name">
