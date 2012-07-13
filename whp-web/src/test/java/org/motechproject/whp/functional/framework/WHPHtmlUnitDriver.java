@@ -9,7 +9,6 @@ public class WHPHtmlUnitDriver extends HtmlUnitDriver {
         super(BrowserVersion.FIREFOX_3_6);
         getWebClient().setJavaScriptEnabled(enableJavascript);
         getWebClient().setThrowExceptionOnScriptError(throwExceptionOnScriptError);
-        getWebClient().setCssErrorHandler(new SilentCssErrorHandler());
         getWebClient().setThrowExceptionOnFailingStatusCode(false);
     }
 }
