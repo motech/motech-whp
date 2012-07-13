@@ -20,12 +20,10 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -33,12 +31,10 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>

@@ -19,7 +19,6 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -27,12 +26,10 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
@@ -40,22 +37,18 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-mapping</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-validation</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>case-service</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>openrosa-registration-service</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
     </dependencies>
     <build>
