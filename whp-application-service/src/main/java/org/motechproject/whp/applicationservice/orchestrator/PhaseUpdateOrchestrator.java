@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Phases;
@@ -13,7 +14,11 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.common.TreatmentWeekInstance.week;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Component
 public class PhaseUpdateOrchestrator {
@@ -33,11 +38,11 @@ public class PhaseUpdateOrchestrator {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
         allPatients.update(patient);
-        recomputePillCount(patientId);
+        recomputePillStatus(patientId);
         attemptPhaseTransition(patientId);
     }
 
-    public void recomputePillCount(String patientId) {
+    public void recomputePillStatus(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         Phases phases = patient.getCurrentTherapy().getPhases();
         for (Phase phase : patient.getHistoryOfPhases()) {
@@ -47,6 +52,22 @@ public class PhaseUpdateOrchestrator {
             */
             updateTotalDoseTakenCount(patient, phases, phase);
             updateDoseTakenCountTillSunday(patient, phases, phase);
+        }
+        updateDoseInterruptions(patient);
+    }
+
+    private void updateDoseInterruptions(Patient patient) {
+        HashMap<LocalDate,PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
+        List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
+
+        patientService.clearDoseInterruptionsForUpdate(patient);
+
+        for (LocalDate doseDate : allDoseDates) {
+            if (dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken)) {
+                patientService.dosesMissedSince(patient, doseDate);
+            } else {
+                patientService.dosesResumedOnAfterBeingInterrupted(patient, doseDate);
+            }
         }
     }
 
@@ -85,6 +106,6 @@ public class PhaseUpdateOrchestrator {
             patientService.startNextPhase(patient);
         }
 
-        recomputePillCount(patientId);
+        recomputePillStatus(patientId);
     }
 }

@@ -10,6 +10,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.Phase;
@@ -19,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -203,6 +205,16 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public void dosesMissedSince(LocalDate doseDate) {
+        currentTherapy.dosesMissedSince(doseDate);
+    }
+
+    @JsonIgnore
+    public void dosesResumedOnAfterBeingInterrupted(LocalDate endDate) {
+        currentTherapy.dosesResumedOnAfterBeingInterrupted(endDate);
+    }
+
+    @JsonIgnore
     public boolean isTransitioning() {
         return currentTherapy.getCurrentPhase() == null && currentTherapy.getLastCompletedPhase() != null;
     }
@@ -332,5 +344,34 @@ public class Patient extends MotechBaseDataObject {
         return therapyList.get(0);
     }
 
+    @JsonIgnore
+    public boolean isCurrentlyDoseInterrupted() {
+        return currentTherapy.isCurrentlyDoseInterrupted();
+    }
 
+    @JsonIgnore
+    public List<LocalDate> getDoseDatesTill(LocalDate tillDate) {
+        List<LocalDate> allDoseDates = new ArrayList<>();
+        for (LocalDate date = currentTherapy.getStartDate(); WHPDateUtil.isOnOrBefore(date, tillDate); date = date.plusDays(1)) {
+            if (currentTherapy.getTreatmentCategory().getPillDays().contains(DayOfWeek.getDayOfWeek(date))) {
+                allDoseDates.add(date);
+            }
+        }
+        return allDoseDates;
+    }
+
+    @JsonIgnore
+    public String getLongestDoseInterruption(){
+        DoseInterruption longestDoseInterruption = currentTherapy.getLongestDoseInterruption();
+
+        int missedDoseCount = longestDoseInterruption == null ? 0 : longestDoseInterruption.getMissedDoseCount(currentTherapy.getTreatmentCategory());
+        int dosesPerWeek = currentTherapy.getTreatmentCategory().getDosesPerWeek();
+
+        float roundedValue = roundToFirstDecimal((float)missedDoseCount / dosesPerWeek);
+        return String.valueOf(roundedValue);
+    }
+
+    public void clearDoseInterruptionsForUpdate() {
+        currentTherapy.clearDoseInterruptionsForUpdate();
+    }
 }

@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.util;
+package org.motechproject.whp.common.util;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Weeks;

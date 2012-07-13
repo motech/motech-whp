@@ -180,7 +180,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
 
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
 
-        verify(phaseUpdateOrchestrator).recomputePillCount(PATIENT_ID);
+        verify(phaseUpdateOrchestrator).recomputePillStatus(PATIENT_ID);
     }
 
     @Test

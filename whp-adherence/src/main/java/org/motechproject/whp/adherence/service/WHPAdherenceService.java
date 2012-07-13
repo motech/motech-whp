@@ -13,21 +13,23 @@ import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
-import org.motechproject.whp.common.TreatmentWeek;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.TreatmentWeek;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.util.WHPDateUtil;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 @Service
 public class WHPAdherenceService {
@@ -135,5 +137,14 @@ public class WHPAdherenceService {
         TreatmentWeek currentTreatmentWeek = currentWeekInstance();
         AdherenceList logsForCurrentWeek = findLogsInRange(patientId, therapyUid, currentTreatmentWeek.startDate(), currentTreatmentWeek.endDate());
         return logsForCurrentWeek.size() != 0;
+    }
+
+    public HashMap<LocalDate, PillStatus> getDateAdherenceMap(Patient patient) {
+        AdherenceList logs = findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), patient.getCurrentTherapy().getStartDate(), today());
+        HashMap<LocalDate, PillStatus> datePillStatusHashMap = new HashMap<>();
+        for (Adherence log : logs) {
+            datePillStatusHashMap.put(log.getPillDate(), log.getPillStatus());
+        }
+        return datePillStatusHashMap;
     }
 }

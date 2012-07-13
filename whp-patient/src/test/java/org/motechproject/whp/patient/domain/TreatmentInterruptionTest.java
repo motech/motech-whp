@@ -10,7 +10,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
+import static org.motechproject.whp.common.util.WHPDateUtil.getDatesInRange;
 
 public class TreatmentInterruptionTest {
 

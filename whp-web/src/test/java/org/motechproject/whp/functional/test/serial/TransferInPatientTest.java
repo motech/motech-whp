@@ -3,7 +3,7 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.functional.data.CaseUpdate;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.provider.ProviderPage;

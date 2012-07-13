@@ -1,4 +1,4 @@
-package org.motechproject.whp.common;
+package org.motechproject.whp.common.domain;
 
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;

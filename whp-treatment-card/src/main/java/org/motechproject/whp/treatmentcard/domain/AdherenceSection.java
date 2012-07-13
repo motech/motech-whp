@@ -6,7 +6,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Therapy;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
-import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrBefore;
+import static org.motechproject.whp.common.util.WHPDateUtil.findNumberOfDays;
+import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrBefore;
 
 @Data
 public class AdherenceSection {

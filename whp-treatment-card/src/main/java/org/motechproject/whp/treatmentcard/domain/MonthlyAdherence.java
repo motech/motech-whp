@@ -3,7 +3,7 @@ package org.motechproject.whp.treatmentcard.domain;
 import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 
 import java.util.ArrayList;
 import java.util.List;

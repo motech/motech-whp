@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
@@ -53,7 +53,7 @@ public class TreatmentCardController extends BaseController {
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
-        phaseUpdateOrchestrator.recomputePillCount(updateAdherenceRequest.getPatientId());
+        phaseUpdateOrchestrator.recomputePillStatus(updateAdherenceRequest.getPatientId());
         phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
         out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);
         return redirectToPatientDashboardURL(patient.getPatientId());

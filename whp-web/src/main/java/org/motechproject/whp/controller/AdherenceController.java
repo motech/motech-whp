@@ -7,13 +7,13 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.common.TreatmentWeekInstance;
-import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
-import org.motechproject.whp.common.WHPConstants;
-import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.domain.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -67,7 +67,7 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
         adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
-        phaseUpdateOrchestrator.recomputePillCount(patientId);
+        phaseUpdateOrchestrator.recomputePillStatus(patientId);
         phaseUpdateOrchestrator.attemptPhaseTransition(patientId);
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";

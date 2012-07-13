@@ -2,7 +2,7 @@ package org.motechproject.whp.webservice.mapper;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;

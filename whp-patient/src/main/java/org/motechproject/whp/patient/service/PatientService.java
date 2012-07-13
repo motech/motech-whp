@@ -125,4 +125,23 @@ public class PatientService {
             return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
         }
     }
+
+    public void dosesMissedSince(Patient patient, LocalDate doseDate) {
+        if (!patient.isCurrentlyDoseInterrupted()) {
+            patient.dosesMissedSince(doseDate);
+            allPatients.update(patient);
+        }
+    }
+
+    public void dosesResumedOnAfterBeingInterrupted(Patient patient, LocalDate doseDate) {
+        if (patient.isCurrentlyDoseInterrupted()) {
+            patient.dosesResumedOnAfterBeingInterrupted(doseDate.minusDays(1));
+            allPatients.update(patient);
+        }
+    }
+
+    public void clearDoseInterruptionsForUpdate(Patient patient) {
+        patient.clearDoseInterruptionsForUpdate();
+        allPatients.update(patient);
+    }
 }

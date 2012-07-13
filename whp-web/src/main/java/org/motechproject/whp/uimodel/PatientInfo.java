@@ -2,7 +2,7 @@ package org.motechproject.whp.uimodel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.common.domain.WHPDate;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.user.domain.Provider;
@@ -48,6 +48,8 @@ public class PatientInfo {
     private boolean currentTreatmentPaused;
     private boolean currentTreatmentClosed;
 
+    private String longestDoseInterruption;
+
     public PatientInfo(Patient patient, Provider provider) {
         initializePatientInfo(patient);
         initializeProviderInfo(provider);
@@ -92,6 +94,7 @@ public class PatientInfo {
         addressDistrict = currentTreatment.getPatientAddress().getAddress_district();
         currentTreatmentPaused = patient.isCurrentTreatmentPaused();
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
+        longestDoseInterruption = patient.getLongestDoseInterruption();
     }
 
     private List<String> mapPhaseNameToString(Patient patient) {
