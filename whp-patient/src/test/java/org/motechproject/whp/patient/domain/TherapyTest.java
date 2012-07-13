@@ -2,7 +2,9 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
+import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
@@ -48,6 +50,18 @@ public class TherapyTest {
         therapy.getCurrentPhase().setNumberOfDosesTaken(21, today);
 
         assertTrue(therapy.isNearingPhaseTransition());
+    }
+
+    @Test
+    public void patientShouldNotBeNearingPhaseTransitionIfOnCP() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today());
+        patient.endCurrentPhase(today().plusMonths(1));
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 51, today());
+
+        assertFalse(patient.getCurrentTherapy().isNearingPhaseTransition());
     }
 
     @Test
