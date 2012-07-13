@@ -17,14 +17,14 @@
     <property file="${basedir}\maven.properties"/>
 
     <path id="lib.path">
-        <fileset dir="../whp-web/target/whp-web-0.3-SNAPSHOT/WEB-INF/lib" includes="**/*.jar"/>
+        <fileset dir="../whp-web/target/whp-web-${project.version}/WEB-INF/lib" includes="**/*.jar"/>
     </path>
 
     <target name="load.seed.data">
         <echo message="Loading Seed Data.."/>
         <java fork="false" classname="org.motechproject.deliverytools.seed.SetupSeedData">
             <classpath>
-                <path location="../whp-web/target/whp-web-0.3-SNAPSHOT/WEB-INF/classes"/>
+                <path location="../whp-web/target/whp-web-${project.version}/WEB-INF/classes"/>
                 <path refid="lib.path"/>
             </classpath>
         </java>
