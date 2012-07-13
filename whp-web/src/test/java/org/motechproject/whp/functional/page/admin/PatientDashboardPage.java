@@ -45,18 +45,6 @@ public class PatientDashboardPage extends Page {
         javascriptExecutor.executeScript("$('#ipDatePicker').val('" + ipStartDate + "');");
         javascriptExecutor.executeScript("$('#eipDatePicker').val('" + eipStartDate + "');");
         javascriptExecutor.executeScript("$('#cpDatePicker').val('" + cpStartDate + "');");
-
-//        WebElement ipStartDateElement = webDriver.findElement(name(this.ipStartDate));
-//        if (ipStartDate != null)
-//            ipStartDateElement.sendKeys(ipStartDate);
-//
-//        WebElement eipStartDateElement = webDriver.findElement(name(this.eipStartDate));
-//        if (eipStartDate != null)
-//            eipStartDateElement.sendKeys(eipStartDate);
-//
-//        WebElement cpStartDateElement = webDriver.findElement(name(this.cpStartDate));
-//        if (cpStartDate != null)
-//            cpStartDateElement.sendKeys(cpStartDate);
     }
 
     public PatientDashboardPage saveStartDates() {
