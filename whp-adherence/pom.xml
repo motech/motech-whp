@@ -19,7 +19,6 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
             <classifier>tests</classifier>
             <type>jar</type>
@@ -27,22 +26,18 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-tb-adherence</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-bulk-export-import</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>

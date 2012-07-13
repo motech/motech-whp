@@ -62,7 +62,280 @@
         </repository>
     </repositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--Spring framework-->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.webflow</groupId>
+                <artifactId>spring-js-resources</artifactId>
+                <version>2.2.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-taglibs</artifactId>
+                <version>${spring-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test-mvc</artifactId>
+                <version>1.0.0.BUILD-SNAPSHOT</version>
+                <scope>test</scope>
+            </dependency>
+            <!--Child modules-->
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-adherence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-user</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-application-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-refdata</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-common</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-common</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-patient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-patient</artifactId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-mapping</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-webservice</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-webservice</artifactId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-adherence</artifactId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-migration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-data-importer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-treatment-card</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--Contrib and delivery-->
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-tb-adherence</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-flash-scope</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-bulk-export-import</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-web-security</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-validation</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>case-service</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>openrosa-registration-service</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-datetime-simulator</artifactId>
+                <version>0.3-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-deliverytools-common</artifactId>
+                <version>0.3-SNAPSHOT</version>
+            </dependency>
+            <!--Libs-->
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>4.1.0.Final</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>[2.3.19,)</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.1.3</version>
+            </dependency>
+            <!--Tests-->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <scope>test</scope>
+                <version>2.23.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <scope>test</scope>
+                <version>2.23.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-firefox-driver</artifactId>
+                <scope>test</scope>
+                <version>2.23.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-server</artifactId>
+                <scope>test</scope>
+                <version>2.23.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!--Platform and delivery dependencies-->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-seed</artifactId>
@@ -79,6 +352,7 @@
             <artifactId>motech-platform-common-api</artifactId>
             <version>${motech.version}</version>
         </dependency>
+        <!--Testing dependencies-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -91,12 +365,25 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.kubek2k</groupId>
+            <artifactId>springockito</artifactId>
+            <version>1.0.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kubek2k</groupId>
+            <artifactId>springockito-annotations</artifactId>
+            <version>1.0.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Bean to bean mapping framework -->
         <dependency>
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
             <version>5.3.2</version>
         </dependency>
+        <!--Logging-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -117,7 +404,6 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.1</version>
         </dependency>
-
         <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -173,6 +459,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--Libs-->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -202,18 +489,6 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kubek2k</groupId>
-            <artifactId>springockito</artifactId>
-            <version>1.0.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.kubek2k</groupId>
-            <artifactId>springockito-annotations</artifactId>
-            <version>1.0.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

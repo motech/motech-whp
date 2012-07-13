@@ -19,12 +19,10 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-validation</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-user</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

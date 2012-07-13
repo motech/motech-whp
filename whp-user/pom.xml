@@ -18,17 +18,14 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-web-security</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
             <classifier>tests</classifier>
             <type>jar</type>
@@ -36,7 +33,6 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
-            <version>0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

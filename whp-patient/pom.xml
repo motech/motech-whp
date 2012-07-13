@@ -20,27 +20,22 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-refdata</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-mapping</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-validation</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
             <classifier>tests</classifier>
             <type>jar</type>
@@ -48,32 +43,18 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-user</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>4.1.0.Final</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.xml.bind</groupId>
-                    <artifactId>jaxb-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <build>
