@@ -86,10 +86,6 @@ public class TreatmentCard {
     }
 
     public LocalDate cpBoxAdherenceEndDate() {
-        Phases phases = therapy.getPhases();
-        if (phases.isOrHasBeenOnCp() && phases.getEndDate(Phase.CP) != null) {
-            return phases.getEndDate(Phase.CP);
-        }
         return today();
     }
 
