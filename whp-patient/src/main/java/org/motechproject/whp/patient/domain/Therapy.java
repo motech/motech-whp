@@ -64,7 +64,7 @@ public class Therapy {
     @JsonIgnore
     public boolean isNearingPhaseTransition() {
         PhaseRecord currentPhase = phases.getCurrentPhase();
-        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek();
+        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek() && !phases.isOrHasBeenOnCp();
     }
 
     @JsonIgnore
