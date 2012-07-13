@@ -4,6 +4,7 @@ import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,17 +41,22 @@ public class PatientDashboardPage extends Page {
     }
 
     public void editStartDates(String ipStartDate, String eipStartDate, String cpStartDate) {
-        WebElement ipStartDateElement = webDriver.findElement(name(this.ipStartDate));
-        if (ipStartDate != null)
-            ipStartDateElement.sendKeys(ipStartDate);
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
+        javascriptExecutor.executeScript("$('#ipDatePicker').val('" + ipStartDate + "');");
+        javascriptExecutor.executeScript("$('#eipDatePicker').val('" + eipStartDate + "');");
+        javascriptExecutor.executeScript("$('#cpDatePicker').val('" + cpStartDate + "');");
 
-        WebElement eipStartDateElement = webDriver.findElement(name(this.eipStartDate));
-        if (eipStartDate != null)
-            eipStartDateElement.sendKeys(eipStartDate);
-
-        WebElement cpStartDateElement = webDriver.findElement(name(this.cpStartDate));
-        if (cpStartDate != null)
-            cpStartDateElement.sendKeys(cpStartDate);
+//        WebElement ipStartDateElement = webDriver.findElement(name(this.ipStartDate));
+//        if (ipStartDate != null)
+//            ipStartDateElement.sendKeys(ipStartDate);
+//
+//        WebElement eipStartDateElement = webDriver.findElement(name(this.eipStartDate));
+//        if (eipStartDate != null)
+//            eipStartDateElement.sendKeys(eipStartDate);
+//
+//        WebElement cpStartDateElement = webDriver.findElement(name(this.cpStartDate));
+//        if (cpStartDate != null)
+//            cpStartDateElement.sendKeys(cpStartDate);
     }
 
     public PatientDashboardPage saveStartDates() {
