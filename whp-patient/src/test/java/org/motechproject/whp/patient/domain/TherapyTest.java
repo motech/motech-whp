@@ -80,6 +80,18 @@ public class TherapyTest {
     }
 
     @Test
+    public void patientShouldNotBeInTransitioningStateWhenOnCP() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today());
+        patient.endCurrentPhase(today().plusMonths(1));
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 100, today());
+
+        assertFalse(patient.getCurrentTherapy().isTransitioning());
+    }
+
+    @Test
     public void currentPhaseIsDoseCompleteIfDoseTakenCountForThatPhaseIsEqualToOrMoreThanSeededNumberOfDosesInThatPhase() {
         Therapy therapy = new Therapy();
         TreatmentCategory category = new TreatmentCategory();
