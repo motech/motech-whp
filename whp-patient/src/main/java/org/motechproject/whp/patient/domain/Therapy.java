@@ -68,6 +68,11 @@ public class Therapy {
     }
 
     @JsonIgnore
+    public boolean isTransitioning() {
+        return getCurrentPhase() == null && getLastCompletedPhase() != null && !phases.isOrHasBeenOnCp();
+    }
+
+    @JsonIgnore
     public PhaseRecord getCurrentPhase() {
         return phases.getCurrentPhase();
     }

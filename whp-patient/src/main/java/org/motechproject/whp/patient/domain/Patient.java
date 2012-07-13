@@ -204,7 +204,7 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public boolean isTransitioning() {
-        return currentTherapy.getCurrentPhase() == null && currentTherapy.getLastCompletedPhase() != null;
+        return currentTherapy.isTransitioning();
     }
 
     @JsonIgnore
