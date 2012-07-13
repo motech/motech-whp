@@ -1,8 +1,8 @@
 package org.motechproject.whp.treatmentcard.domain;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.treatmentcard.builder.AdherenceDataBuilder;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class TreatmentCardTest {
 
         Treatment currentTreatment = new TreatmentBuilder().withStartDate(currentTreatmentStartDate).withProviderId("p1").build();
 
-        patient.addTreatment(currentTreatment, therapy,currentTreatmentStartDate.toDateTimeAtCurrentTime());
+        patient.addTreatment(currentTreatment, therapy, currentTreatmentStartDate.toDateTimeAtCurrentTime());
 
         assertTrue(new TreatmentCard(patient).getTreatmentHistories().isEmpty());
     }
@@ -105,9 +106,9 @@ public class TreatmentCardTest {
 
         TreatmentCard treatmentCard = new TreatmentCard(patient);
         assertThat(treatmentCard.getTreatmentPausePeriods(), is(asList(
-                new TreatmentPausePeriod(firstTreatmentPause1Date,firstTreatmentResume1Date),
-                new TreatmentPausePeriod(firstTreatmentPause2Date,firstTreatmentResume2Date),
-                new TreatmentPausePeriod(currentTreatmentPauseDate,currentTreatmentResumeDate)
+                new TreatmentPausePeriod(firstTreatmentPause1Date, firstTreatmentResume1Date),
+                new TreatmentPausePeriod(firstTreatmentPause2Date, firstTreatmentResume2Date),
+                new TreatmentPausePeriod(currentTreatmentPauseDate, currentTreatmentResumeDate)
         )));
     }
 
@@ -156,7 +157,7 @@ public class TreatmentCardTest {
     }
 
     @Test
-    public void shouldReturnCPEndDateIfPatientHasCompletedCP() {
+    public void shouldShowDosesTakenAfterCompletionOfCP() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
         patient.endCurrentPhase(today.minusMonths(4));
@@ -164,7 +165,7 @@ public class TreatmentCardTest {
         patient.startNextPhase();
         patient.endCurrentPhase(today.minusMonths(2));
 
-        assertEquals(today.minusMonths(2), new TreatmentCard(patient).cpBoxAdherenceEndDate());
+        assertEquals(today, new TreatmentCard(patient).cpBoxAdherenceEndDate());
     }
 
     @Test
@@ -261,5 +262,26 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today.plusDays(1));
         assertTrue(new TreatmentCard(patient).isIPAdherenceSectionValid());
+    }
+
+    @Test
+    public void shouldIgnoreAdherenceDataAfterEndDate() {
+        Patient patient = patient();
+        LocalDate yesterday = today.minusDays(1);
+
+        patient.startTherapy(yesterday);
+        patient.endCurrentPhase(yesterday);
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+
+        TreatmentCard treatmentCard = new TreatmentCard(patient);
+        List<Adherence> adherenceExtendingBeyondCP = new AdherenceDataBuilder()
+                .forPatient(patient)
+                .from(yesterday.plusDays(1))
+                .till(yesterday.plusMonths(8))
+                .build();
+
+        treatmentCard.initCPSection(adherenceExtendingBeyondCP);
+        assertTrue(treatmentCard.isCPAdherenceSectionValid());
     }
 }
