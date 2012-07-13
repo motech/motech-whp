@@ -185,4 +185,27 @@ public class TherapyTest {
         Therapy therapy = new TherapyBuilder().build();
         assertEquals(0, therapy.getTotalDoesIn(IP));
     }
+
+    @Test
+    public void shouldAddDoseInterruptionToDoseInterruptionsWhenDoseIsMissed() {
+        Therapy therapy = new TherapyBuilder().build();
+        LocalDate startDate = new LocalDate();
+        therapy.dosesMissedSince(startDate);
+
+        DoseInterruption addedDoseInterruption = therapy.getDoseInterruptions().latestInterruption();
+        assertEquals(startDate, addedDoseInterruption.startDate());
+    }
+
+    @Test
+    public void shouldSetEndDateWhenDosesAreResumedOnLastDoseInterruption() {
+        Therapy therapy = new TherapyBuilder().build();
+        LocalDate startDate = new LocalDate();
+        LocalDate endDate = startDate.plusDays(3);
+        therapy.dosesMissedSince(startDate);
+        therapy.dosesResumedOnAfterBeingInterrupted(endDate);
+
+        DoseInterruption doseInterruption = therapy.getDoseInterruptions().latestInterruption();
+
+        assertEquals(endDate, doseInterruption.endDate());
+    }
 }

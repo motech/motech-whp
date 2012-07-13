@@ -1,10 +1,9 @@
-package org.motechproject.whp.util;
+package org.motechproject.whp.common.util;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.patient.util.WHPDateUtil;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;

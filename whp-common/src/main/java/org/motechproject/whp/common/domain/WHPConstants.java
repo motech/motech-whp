@@ -1,4 +1,4 @@
-package org.motechproject.whp.common;
+package org.motechproject.whp.common.domain;
 
 public class WHPConstants {
     public static final String DATE_FORMAT = "dd/MM/yyyy";

@@ -2,7 +2,7 @@ package org.motechproject.whp.mapping;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 
 public class StringToDateTime extends WHPCustomMapper {
 

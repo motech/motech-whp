@@ -2,7 +2,7 @@ package org.motechproject.whp.webservice.mapper;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 import org.springframework.stereotype.Component;

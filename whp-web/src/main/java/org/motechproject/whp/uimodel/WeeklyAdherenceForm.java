@@ -15,9 +15,9 @@ import java.util.Set;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
-import static org.motechproject.whp.patient.util.WHPDateUtil.getDatesInRange;
+import static org.motechproject.whp.common.util.WHPDateUtil.getDatesInRange;
 
 @Data
 public class WeeklyAdherenceForm {

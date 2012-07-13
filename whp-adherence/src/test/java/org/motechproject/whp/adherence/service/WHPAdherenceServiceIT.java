@@ -16,7 +16,7 @@ import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
-import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;

@@ -24,8 +24,6 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator.setNextPhase(PATIENT_ID, Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
-        verifyNoMoreInteractions(patientService);
-        verifyZeroInteractions(whpAdherenceService);
     }
 
     @Test

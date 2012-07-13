@@ -10,6 +10,7 @@ import org.motechproject.whp.patient.service.PatientService;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.today;
 
 public abstract class PhaseUpdateOrchestratorTestPart {
 
@@ -32,6 +33,7 @@ public abstract class PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator = new PhaseUpdateOrchestrator(allPatients, patientService, whpAdherenceService);
         patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).build();
         patient.getCurrentTherapy().setUid(THERAPY_ID);
+        patient.getCurrentTherapy().setStartDate(today().minusMonths(2));
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
     }
 }

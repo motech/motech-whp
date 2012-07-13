@@ -4,10 +4,10 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.collections.BoundPriorityQueue;
 
-import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrBefore;
+import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrBefore;
 
 public class PillTakenSummaries {
 

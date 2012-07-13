@@ -6,7 +6,6 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
 
 public class PhaseRecordTest {
 

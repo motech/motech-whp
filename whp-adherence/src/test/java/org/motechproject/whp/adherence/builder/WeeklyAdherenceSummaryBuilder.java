@@ -1,11 +1,11 @@
 package org.motechproject.whp.adherence.builder;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class WeeklyAdherenceSummaryBuilder {

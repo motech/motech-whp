@@ -88,7 +88,7 @@ public class TreatmentCardControllerTest {
 
         treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
-        verify(phaseUpdateOrchestrator, times(1)).recomputePillCount(adherenceData.getPatientId());
+        verify(phaseUpdateOrchestrator, times(1)).recomputePillStatus(adherenceData.getPatientId());
         verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(adherenceData.getPatientId());
     }
 

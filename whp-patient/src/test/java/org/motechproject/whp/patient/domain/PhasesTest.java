@@ -9,7 +9,7 @@ import org.motechproject.whp.refdata.domain.Phase;
 
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 public class PhasesTest extends BaseUnitTest {
 

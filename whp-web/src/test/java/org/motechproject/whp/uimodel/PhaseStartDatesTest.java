@@ -4,9 +4,8 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.common.WHPConstants;
+import org.motechproject.whp.common.domain.WHPConstants;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

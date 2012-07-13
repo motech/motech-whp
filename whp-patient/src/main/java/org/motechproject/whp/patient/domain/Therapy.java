@@ -6,16 +6,16 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.WHPDate;
+import org.motechproject.whp.common.domain.WHPDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.patient.util.WHPDateUtil;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.common.TreatmentWeekInstance.currentWeekInstance;
-import static org.motechproject.whp.patient.util.WHPDateUtil.numberOf_DDD_Between;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
 @Data
 public class Therapy {
@@ -32,8 +32,8 @@ public class Therapy {
 
     private Treatment currentTreatment;
     private List<Treatment> treatments = new ArrayList<>();
-
     private Phases phases = new Phases();
+    private DoseInterruptions doseInterruptions = new DoseInterruptions();
 
     public Therapy() {
         setUid(generateUid());
@@ -272,11 +272,34 @@ public class Therapy {
         return getTotalDoesIn(Phase.IP) + getTotalDoesIn(Phase.EIP);
     }
 
+    @JsonIgnore
+    public boolean isCurrentlyDoseInterrupted() {
+        return doseInterruptions.isCurrentlyDoseInterrupted();
+    }
+
+    @JsonIgnore
+    public DoseInterruption getLongestDoseInterruption(){
+        return doseInterruptions.longestInterruption(treatmentCategory);
+    }
+
+    public void dosesMissedSince(LocalDate startDate) {
+        DoseInterruption doseInterruption = new DoseInterruption(startDate);
+        doseInterruptions.add(doseInterruption);
+    }
+
+    public void dosesResumedOnAfterBeingInterrupted(LocalDate endDate) {
+        doseInterruptions.latestInterruption().endMissedPeriod(endDate);
+    }
+
     public boolean hasBeenOn(Phase phase) {
         return phases.hasBeenOn(phase);
     }
 
     private String generateUid() {
         return String.valueOf(DateUtil.now().getMillis());
+    }
+
+    public void clearDoseInterruptionsForUpdate() {
+        doseInterruptions.clear();
     }
 }
