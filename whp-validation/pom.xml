@@ -17,7 +17,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>motech-validation</artifactId>
         </dependency>
         <dependency>
