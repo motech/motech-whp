@@ -15,6 +15,8 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
+import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
+import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -60,6 +62,8 @@ public class PatientControllerTest {
     WHPAdherenceService whpAdherenceService;
     @Mock
     AllDistricts allDistrictsCache;
+    @Mock
+    TreatmentCardService treatmentCardService;
 
     AbstractMessageSource messageSource;
 
@@ -79,7 +83,7 @@ public class PatientControllerTest {
 
         setupMessageSource();
         setUpLoggedInUser();
-        patientController = new PatientController(patientService, whpAdherenceService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
+        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -123,12 +127,15 @@ public class PatientControllerTest {
     @Test
     public void shouldReturnDashBoardPrintView() throws Exception {
         PatientInfo patientInfo = new PatientInfo(patient, provider);
+        TreatmentCard treatmentCard = new TreatmentCard(patient);
+        when(treatmentCardService.treatmentCard(patient)).thenReturn(treatmentCard);
         standaloneSetup(patientController).build()
                 .perform(get("/patients/print/" + patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
+                .andExpect(model().attribute("treatmentCard", treatmentCard))
                 .andExpect(forwardedUrl("patient/print"));
     }
 
