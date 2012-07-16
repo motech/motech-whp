@@ -1,5 +1,6 @@
 package org.motechproject.whp.treatmentcard.domain;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.adherence.domain.Adherence;

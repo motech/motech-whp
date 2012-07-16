@@ -19,6 +19,8 @@ import java.util.List;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.util.WHPDateUtil.findNumberOfDays;
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrBefore;
+import static org.motechproject.whp.patient.util.WHPDateUtil.findNumberOfDays;
+import static org.motechproject.whp.patient.util.WHPDateUtil.isOnOrBefore;
 
 @Data
 public class AdherenceSection {
