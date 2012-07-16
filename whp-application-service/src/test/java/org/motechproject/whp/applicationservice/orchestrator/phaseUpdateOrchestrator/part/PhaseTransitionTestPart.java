@@ -33,7 +33,7 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
 
         verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate);
-        verify(patientService).autoCompleteCurrentPhase(patient, adherenceRecord.doseDate());
+        verify(patientService).autoCompleteLatestPhase(patient, adherenceRecord.doseDate());
         verify(patientService, never()).startNextPhase(any(Patient.class));
     }
 
@@ -44,15 +44,15 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         patient.startTherapy(therapyStartDate);
         patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
         patient.nextPhaseName(Phase.EIP);
-        patient.endCurrentPhase(twentyFourthDoseTakenDate);
+        patient.endLatestPhase(twentyFourthDoseTakenDate);
+        AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
 
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
         phaseUpdateOrchestrator.attemptPhaseTransition(patient.getPatientId());
 
         verify(patientService).startNextPhase(patient);
-        verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
         patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
-        patient.endCurrentPhase(twentyFourthDoseTakenDate);
+        patient.endLatestPhase(twentyFourthDoseTakenDate);
 
         //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
         patient.setNumberOfDosesTaken(Phase.IP, 23, twentyFourthDoseTakenDate);
@@ -73,6 +73,6 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
         verify(patientService, never()).startNextPhase(patient);
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
+        verify(patientService, never()).autoCompleteLatestPhase(any(Patient.class), any(LocalDate.class));
     }
 }

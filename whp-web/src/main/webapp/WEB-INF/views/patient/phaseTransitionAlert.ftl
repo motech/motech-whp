@@ -1,4 +1,4 @@
-<#if patient.currentTreatment?? && (patient.nearingPhaseTransition || patient.transitioning)>
+<#if patient.currentTreatment?? && patient.showAlert>
     <div class="alert alert-error black" id="transitionPatientAlert">
         <#if !patient.nextPhaseName?exists>
             <img id="achtung" class="pull-left" src="<@spring.url '/resources-${applicationVersion}/img/warning.png'/>"/>

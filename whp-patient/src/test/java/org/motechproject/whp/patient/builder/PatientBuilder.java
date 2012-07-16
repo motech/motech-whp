@@ -161,7 +161,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withCurrentPhaseAsCp(LocalDate cpStartDate) {
-        patient.endCurrentPhase(cpStartDate.minusDays(1));
+        patient.endLatestPhase(cpStartDate.minusDays(1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         return this;

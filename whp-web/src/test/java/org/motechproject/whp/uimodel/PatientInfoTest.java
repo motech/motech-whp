@@ -11,9 +11,11 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.user.domain.Provider;
 
+import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientInfoTest {
@@ -154,4 +156,19 @@ public class PatientInfoTest {
 
         assertNull(patientInfo.getProviderMobileNumber());
     }
+
+
+    @Test
+    public void shouldNotShowTransitionAlertWhenPatientIsOnCP() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today());
+        patient.endLatestPhase(today().plusMonths(1));
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 51, today());
+
+        PatientInfo patientInfo = new PatientInfo(patient);
+        assertFalse(patientInfo.isShowAlert());
+    }
+
 }

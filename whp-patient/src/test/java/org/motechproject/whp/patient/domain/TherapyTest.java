@@ -68,22 +68,10 @@ public class TherapyTest {
     }
 
     @Test
-    public void patientShouldNotBeNearingPhaseTransitionIfOnCP() {
-        Patient patient = new PatientBuilder().withDefaults().build();
-        patient.startTherapy(today());
-        patient.endCurrentPhase(today().plusMonths(1));
-        patient.nextPhaseName(Phase.CP);
-        patient.startNextPhase();
-        patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 51, today());
-
-        assertFalse(patient.getCurrentTherapy().isNearingPhaseTransition());
-    }
-
-    @Test
     public void patientShouldNotBeInTransitioningStateWhenOnCP() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today());
-        patient.endCurrentPhase(today().plusMonths(1));
+        patient.endLatestPhase(today().plusMonths(1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 100, today());
@@ -135,7 +123,7 @@ public class TherapyTest {
     @Test
     public void shouldNotBeOnCPPhaseByDefault() {
         Therapy therapy = new Therapy();
-        assertFalse(therapy.isOrHasBeenOnCP());
+        assertFalse(therapy.hasBeenOnCP());
     }
 
     @Test

@@ -131,43 +131,43 @@ public class PhasesTest extends BaseUnitTest {
     public void shouldReturnFalseIfPatientIsOnIP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
     public void shouldReturnFalseIfPatientHasCompletedIP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
-        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        patient.endLatestPhase(today().minusMonths(4));
+        assertFalse(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
     public void shouldReturnFalseIfPatientIsOnEIP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        assertFalse(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
     public void shouldReturnFalseIfPatientHasCompletedEIP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(2));
-        assertFalse(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        patient.endLatestPhase(today().minusMonths(2));
+        assertFalse(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
     public void shouldReturnStartDateOfPhaseNextToGivenPhase() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
@@ -178,7 +178,7 @@ public class PhasesTest extends BaseUnitTest {
     public void shouldReturnNullAsStartDateOfPhaseNextToLatestPhase() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
@@ -195,27 +195,27 @@ public class PhasesTest extends BaseUnitTest {
     public void shouldReturnTrueIfPatientHasStartedCP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(2));
+        patient.endLatestPhase(today().minusMonths(2));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        assertTrue(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
     public void shouldReturnTrueIfPatientHasCompletedCP() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(2));
+        patient.endLatestPhase(today().minusMonths(2));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today().minusMonths(1));
-        assertTrue(patient.getCurrentTherapy().getPhases().isOrHasBeenOnCp());
+        patient.endLatestPhase(today().minusMonths(1));
+        assertTrue(patient.getCurrentTherapy().getPhases().hasBeenOnCp());
     }
 
     @Test
@@ -225,7 +225,7 @@ public class PhasesTest extends BaseUnitTest {
 
         patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
@@ -243,7 +243,7 @@ public class PhasesTest extends BaseUnitTest {
 
         patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();

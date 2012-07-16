@@ -39,7 +39,7 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
-        verify(patientService).autoCompleteCurrentPhase(patient, twentyFourthDoseTakenDate);
+        verify(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
     }
 
     @Test
@@ -50,13 +50,13 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         patient.startTherapy(therapyStartDate);
         patient.setNumberOfDosesTaken(Phase.IP, 3, twentyFourthDoseTakenDate);
         patient.nextPhaseName(Phase.EIP);
-        patient.endCurrentPhase(twentyFourthDoseTakenDate);
+        patient.endLatestPhase(twentyFourthDoseTakenDate);
 
         phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService, never()).autoCompleteCurrentPhase(any(Patient.class), any(LocalDate.class));
+        verify(patientService, never()).autoCompleteLatestPhase(any(Patient.class), any(LocalDate.class));
         verify(patientService).startNextPhase(patient);
     }
 }

@@ -51,6 +51,8 @@ public class PatientInfo {
 
     private String longestDoseInterruption;
 
+    private boolean showAlert;
+
     public PatientInfo(Patient patient, Provider provider) {
         initializePatientInfo(patient);
         initializeProviderInfo(provider);
@@ -97,6 +99,7 @@ public class PatientInfo {
         currentTreatmentPaused = patient.isCurrentTreatmentPaused();
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
         longestDoseInterruption = patient.getLongestDoseInterruption();
+        showAlert = (patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp();
     }
 
     private List<String> mapPhaseNameToString(Patient patient) {

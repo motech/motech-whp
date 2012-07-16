@@ -29,7 +29,7 @@ public class Phases {
     }
 
     @JsonIgnore
-    public boolean isOrHasBeenOnCp() {
+    public boolean hasBeenOnCp() {
         return history.contains(Phase.CP);
     }
 

@@ -141,7 +141,7 @@ public class PatientTest {
         LocalDate phaseEndDate = new LocalDate(2012, 4, 1);
         patient.startTherapy(new LocalDate(2012, 3, 1));
 
-        patient.endCurrentPhase(phaseEndDate);
+        patient.endLatestPhase(phaseEndDate);
 
         assertEquals(phaseEndDate, patient.getCurrentTherapy().getPhaseEndDate(IP));
     }
@@ -153,7 +153,7 @@ public class PatientTest {
         patient.startTherapy(new LocalDate(2012, 3, 1));
         patient.nextPhaseName(EIP);
 
-        patient.endCurrentPhase(phaseEndDate);
+        patient.endLatestPhase(phaseEndDate);
         patient.startNextPhase();
 
         assertEquals(phaseEndDate.plusDays(1), patient.getCurrentTherapy().getPhaseStartDate(EIP));
@@ -164,7 +164,7 @@ public class PatientTest {
     public void isTransitioningShouldReturnTrueIfCurrentPhaseIsNull() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(new LocalDate(2012, 3, 1));
-        patient.endCurrentPhase(new LocalDate(2012, 4, 1));
+        patient.endLatestPhase(new LocalDate(2012, 4, 1));
 
         assertTrue(patient.isTransitioning());
     }
@@ -265,7 +265,7 @@ public class PatientTest {
 
         patient.setNumberOfDosesTaken(Phase.IP, 22, today().minusMonths(5));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
@@ -336,7 +336,7 @@ public class PatientTest {
 
         patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
@@ -367,7 +367,7 @@ public class PatientTest {
 
         patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
@@ -384,13 +384,13 @@ public class PatientTest {
         patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
         patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
 
-        patient.endCurrentPhase(today().minusMonths(4));
+        patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
         patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate().minusWeeks(11));
 
-        patient.endCurrentPhase(today().minusMonths(3));
+        patient.endLatestPhase(today().minusMonths(3));
 
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();

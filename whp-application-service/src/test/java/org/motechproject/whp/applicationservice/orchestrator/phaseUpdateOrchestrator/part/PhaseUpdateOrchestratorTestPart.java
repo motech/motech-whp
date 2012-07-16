@@ -31,9 +31,8 @@ public abstract class PhaseUpdateOrchestratorTestPart {
     public void setUp() {
         initMocks(this);
         phaseUpdateOrchestrator = new PhaseUpdateOrchestrator(allPatients, patientService, whpAdherenceService);
-        patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_ID).build();
-        patient.getCurrentTherapy().setUid(THERAPY_ID);
-        patient.getCurrentTherapy().setStartDate(today().minusMonths(2));
+        patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today().minusMonths(2));
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
     }
 }
