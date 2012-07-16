@@ -1,4 +1,4 @@
-package org.motechproject.whp.criteria;
+package org.motechproject.whp.adherence.criteria;
 
 
 import org.joda.time.LocalDate;
