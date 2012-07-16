@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-cmslite-api</artifactId>
-            <version>0.12-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
     </dependencies>
 
