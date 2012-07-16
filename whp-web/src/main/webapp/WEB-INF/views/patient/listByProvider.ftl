@@ -44,7 +44,7 @@
                         <td>${patient.age!}</td>
                         <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
                         <td id="patient_${patient.patientId}_Village">${patient.addressVillage}</td>
-                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.treatmentCategory}</td>
+                        <td id="patient_${patient.patientId}_TreatmentCategory">${patient.treatmentCategoryName}</td>
                         <td id="patient_${patient.patientId}_TreatmentStartDate">
                             <#if patient.therapyStartDate?? >
                                 ${patient.therapyStartDate}
