@@ -24,6 +24,7 @@
         <module>whp-common</module>
         <module>whp-refdata</module>
         <module>whp-user</module>
+        <module>whp-tb-adherence</module>
         <module>whp-patient</module>
         <module>whp-mapping</module>
         <module>whp-adherence</module>
@@ -118,6 +119,18 @@
                 <artifactId>spring-test-mvc</artifactId>
                 <version>1.0.0.BUILD-SNAPSHOT</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--Child modules-->
             <dependency>
@@ -214,6 +227,17 @@
                 <version>${project.version}</version>
             </dependency>
             <!--Contrib and delivery-->
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-testing-utils</artifactId>
+                <version>${motech.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-platform-common-api</artifactId>
+                <version>${motech.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-tb-adherence</artifactId>
@@ -394,11 +418,6 @@
             <artifactId>motech-testing-utils</artifactId>
             <version>${motech.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-common-api</artifactId>
-            <version>${motech.version}</version>
         </dependency>
         <!--Testing dependencies-->
         <dependency>

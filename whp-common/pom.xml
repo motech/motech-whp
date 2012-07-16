@@ -13,6 +13,12 @@
     <properties>
         <build.dir>../build</build.dir>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-platform-common-api</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
