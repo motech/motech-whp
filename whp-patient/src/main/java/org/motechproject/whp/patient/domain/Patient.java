@@ -341,6 +341,7 @@ public class Patient extends MotechBaseDataObject {
         return treatments;
     }
 
+    //TODO : Should be moved to UIModel
     private String doseCompletionMessage(int totalDoseCount, int totalDoseTakenCount) {
         if (totalDoseCount == 0) {
             return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, 0.0f);
@@ -364,6 +365,11 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public List<LocalDate> getDoseDatesTill(LocalDate tillDate) {
+        Phases phases = getCurrentTherapy().getPhases();
+        if (phases.getCPEndDate() != null && phases.getCPEndDate().isBefore(tillDate)) {
+            tillDate = phases.getCPEndDate();
+        }
+
         List<LocalDate> allDoseDates = new ArrayList<>();
         if (currentTherapy.hasStarted()) {
             for (LocalDate date = currentTherapy.getStartDate(); WHPDateUtil.isOnOrBefore(date, tillDate); date = date.plusDays(1)) {
