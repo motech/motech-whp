@@ -412,6 +412,74 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     }
 
+    @Test
+    public void shouldClearDoseInterruptionsForPatient() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        patientService.dosesMissedSince(patient, new LocalDate());
+        patientService.dosesResumedOnAfterBeingInterrupted(patient, new LocalDate().plusDays(2));
+        patientService.clearDoseInterruptionsForUpdate(patient);
+
+        assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().size());
+    }
+
+    @Test
+    public void shouldAddDoseInterruptionForPatient() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        LocalDate today = today();
+        patientService.dosesMissedSince(patient, today);
+
+        assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().get(0).compareTo(new DoseInterruption(today)));
+        assertTrue(patient.getCurrentTherapy().getDoseInterruptions().get(0).isOngoing());
+    }
+
+    @Test
+    public void shouldCloseCurrentDoseInterruptionForPatient_WithEndDateAsOneDayBeforeDoseDate() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        LocalDate today = today();
+        patientService.dosesMissedSince(patient, today);
+        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(2));
+
+        assertEquals(today.plusDays(1), patient.getCurrentTherapy().getDoseInterruptions().get(0).endDate());
+        assertFalse(patient.getCurrentTherapy().getDoseInterruptions().get(0).isOngoing());
+    }
+
+    @Test
+    public void shouldNotAddDoseInterruptionForPatient_IfHeAlreadyHasAnOngoingInterruption() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        LocalDate today = today();
+        patientService.dosesMissedSince(patient, today);
+        patientService.dosesMissedSince(patient, today.plusDays(2));
+
+        assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().get(0).compareTo(new DoseInterruption(today)));
+    }
+
+    @Test
+    public void shouldNotCloseDoseInterruptionForPatient_IfHeDoseNotHaveAnOngoingInterruption() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+        Patient patient = patientService.findByPatientId(PATIENT_ID);
+
+        LocalDate today = today();
+        patientService.dosesMissedSince(patient, today);
+        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(2));
+        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(3));
+
+        assertEquals(today.plusDays(1), patient.getCurrentTherapy().getDoseInterruptions().get(0).endDate());
+    }
+
+
     private void createProvider(String providerId, String district) {
         String primaryMobile = "1234567890";
         String secondaryMobile = "0987654321";

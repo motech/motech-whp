@@ -46,11 +46,11 @@ public class DoseInterruption implements Comparable<DoseInterruption> {
         }
     }
 
-    LocalDate startDate() {
+    public LocalDate startDate() {
         return startDate;
     }
 
-    LocalDate endDate() {
+    public LocalDate endDate() {
         return endDate;
     }
 
