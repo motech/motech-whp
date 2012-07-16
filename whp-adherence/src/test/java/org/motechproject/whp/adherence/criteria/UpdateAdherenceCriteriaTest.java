@@ -1,4 +1,4 @@
-package org.motechproject.whp.criteria;
+package org.motechproject.whp.adherence.criteria;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
-import static org.motechproject.whp.criteria.UpdateAdherenceCriteria.canUpdate;
+import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.canUpdate;
 
 public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
 
