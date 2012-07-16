@@ -84,7 +84,7 @@ public class PhaseUpdateOrchestrator {
     }
 
     public void updateDoseInterruptions(Patient patient) {
-        HashMap<LocalDate,PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
+        HashMap<LocalDate, PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
         List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
 
         patientService.clearDoseInterruptionsForUpdate(patient);
