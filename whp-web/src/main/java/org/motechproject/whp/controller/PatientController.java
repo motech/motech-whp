@@ -14,6 +14,7 @@ import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.repository.AllDistricts;
+import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -55,10 +56,12 @@ public class PatientController extends BaseController {
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
+    private TreatmentCardService treatmentCardService;
 
     @Autowired
     public PatientController(PatientService patientService,
                              WHPAdherenceService whpAdherenceService,
+                             TreatmentCardService treatmentCardService,
                              PhaseUpdateOrchestrator phaseUpdateOrchestrator,
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
@@ -67,6 +70,7 @@ public class PatientController extends BaseController {
 
         this.patientService = patientService;
         this.whpAdherenceService = whpAdherenceService;
+        this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
@@ -100,6 +104,7 @@ public class PatientController extends BaseController {
     public String print(@PathVariable("id") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
         setupDashboardModel(uiModel, request, patient);
+        uiModel.addAttribute("treatmentCard", treatmentCardService.treatmentCard(patient));
         return "patient/print";
     }
 

@@ -26,6 +26,7 @@ public class PatientInfoTest {
     int patientAge = 20;
     DiseaseClass diseaseClass = DiseaseClass.E;
     String treatmentCategory = "treatmentCategory";
+    private String treatmentCategoryCode = "01";
     String patientNumber = "patientNumber";
     String providerMobileNumber = "primaryMobileNumber";
     LocalDate startDate = new LocalDate(2012, 6, 28);
@@ -61,11 +62,12 @@ public class PatientInfoTest {
                 .build();
         expectedTestResults = new TestResults(smearTestResults, weightStatistics);
 
+        treatmentCategoryCode = "01";
         Therapy therapy = new TherapyBuilder()
                 .withAge(patientAge)
                 .withDiseaseClass(diseaseClass)
                 .withTherapyUid("therapyUid")
-                .withTreatmentCategory(treatmentCategory)
+                .withTreatmentCategory(treatmentCategory, treatmentCategoryCode)
                 .withStartDate(startDate)
                 .withNoOfDosesTaken(Phase.IP, 2)
                 .withTreatment(currentTreatment)
@@ -105,10 +107,11 @@ public class PatientInfoTest {
         assertThat(patientInfo.getProviderMobileNumber(), is(providerMobileNumber));
         assertThat(patientInfo.getTherapyStartDate(), is(startDate.toString("dd/MM/yyyy")));
         assertThat(patientInfo.getTbRegistrationNumber(), is(tbRegistrationNo));
-        assertThat(patientInfo.getPatientType(), is(patientType.name()));
+        assertThat(patientInfo.getPatientType(), is(patientType.value()));
         assertThat(patientInfo.getAge(), is(patientAge));
         assertThat(patientInfo.getDiseaseClass(), is(diseaseClass.value()));
-        assertThat(patientInfo.getTreatmentCategory(), is(treatmentCategory));
+        assertThat(patientInfo.getTreatmentCategoryName(), is(treatmentCategory));
+        assertThat(patientInfo.getTreatmentCategoryCode(), is(treatmentCategoryCode));
         assertThat(patientInfo.getAddress(), is("houseNo, landmark, block, village, district, state"));
         assertThat(patientInfo.getAddressState(), is("state"));
         assertThat(patientInfo.getAddressDistrict(), is("district"));

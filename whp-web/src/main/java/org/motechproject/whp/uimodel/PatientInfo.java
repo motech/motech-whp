@@ -28,7 +28,8 @@ public class PatientInfo {
     private String patientType;
     private Integer age;
     private String diseaseClass;
-    private String treatmentCategory;
+    private String treatmentCategoryName;
+    private String treatmentCategoryCode;
     private String address;
     private String addressState;
     private String addressDistrict;
@@ -77,10 +78,11 @@ public class PatientInfo {
         providerId = currentTreatment.getProviderId();
         therapyStartDate = WHPDate.date(latestTherapy.getStartDate()).value();
         tbRegistrationNumber = currentTreatment.getTbRegistrationNumber();
-        patientType = currentTreatment.getPatientType().name();
+        patientType = currentTreatment.getPatientType().value();
         age = latestTherapy.getPatientAge();
         diseaseClass = latestTherapy.getDiseaseClass().value();
-        treatmentCategory = latestTherapy.getTreatmentCategory().getName();
+        treatmentCategoryName = latestTherapy.getTreatmentCategory().getName();
+        treatmentCategoryCode = latestTherapy.getTreatmentCategory().getCode();
         address = currentTreatment.getPatientAddress().toString();
         addressState = currentTreatment.getPatientAddress().getAddress_state();
         nextPhaseName = patient.getCurrentTherapy().getPhases().getNextPhase();

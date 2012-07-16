@@ -34,7 +34,7 @@
 
                 <tr>
                     <th>Treatment Category</th>
-                    <td>${patient.treatmentCategory}</td>
+                    <td>${patient.treatmentCategoryName}</td>
                 </tr>
 
                 <tr>

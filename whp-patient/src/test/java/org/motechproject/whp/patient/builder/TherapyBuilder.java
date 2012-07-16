@@ -31,9 +31,9 @@ public class TherapyBuilder {
         return therapy;
     }
 
-    public TherapyBuilder withTreatmentCategory(String treatmentCategoryName) {
-        TreatmentCategory treatmentCategory = new TreatmentCategory(treatmentCategoryName, "01", 3, 12, 36, 4, 12, 22, 66, asList(Monday, Wednesday, Thursday));
-        treatmentCategory.setName(treatmentCategoryName);
+    public TherapyBuilder withTreatmentCategory(String categoryName,String categoryCode) {
+        TreatmentCategory treatmentCategory = new TreatmentCategory(categoryName, categoryCode, 3, 12, 36, 4, 12, 22, 66, asList(Monday, Wednesday, Thursday));
+        treatmentCategory.setName(categoryName);
         therapy.setTreatmentCategory(treatmentCategory);
         return this;
     }
