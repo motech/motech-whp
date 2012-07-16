@@ -140,6 +140,13 @@ public class PatientControllerTest {
     }
 
     @Test
+    public void shouldUpdateDoseInterruptionsOnPatientWhenNavigatedToDashboardPage() {
+        patientController.show(patient.getPatientId(), uiModel, request);
+
+        verify(phaseUpdateOrchestrator, times(1)).updateDoseInterruptions(patient);
+    }
+
+    @Test
     public void shouldNotDisplayAdherenceUpdatedMessageIfAdherenceWasNotUpdated() {
         when(request.getAttribute(anyString())).thenReturn(null);
         patientController.show(patient.getPatientId(), uiModel, request);

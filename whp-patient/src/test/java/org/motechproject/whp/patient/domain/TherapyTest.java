@@ -36,6 +36,21 @@ public class TherapyTest {
     }
 
     @Test
+    public void shouldReturnFalseForHasStartedWhenStartDateIsNotSet() {
+        Therapy therapy = new Therapy();
+
+        assertFalse(therapy.hasStarted());
+    }
+
+    @Test
+    public void shouldReturnTrueForHasStartedWhenStartDateIsSet() {
+        Therapy therapy = new Therapy();
+        therapy.setStartDate(new LocalDate());
+
+        assertTrue(therapy.hasStarted());
+    }
+
+    @Test
     public void patientIsNearingTransitionIfRemainingDosesInCurrentPhaseIsLessThanEqualToDosesPerWeek() {
         Therapy therapy = new Therapy();
         TreatmentCategory category = new TreatmentCategory();

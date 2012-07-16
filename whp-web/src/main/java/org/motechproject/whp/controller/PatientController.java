@@ -92,6 +92,7 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "show", method = RequestMethod.GET)
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
+        phaseUpdateOrchestrator.updateDoseInterruptions(patient);
         setupDashboardModel(uiModel, request, patient);
         return "patient/show";
     }

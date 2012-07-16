@@ -90,7 +90,7 @@ public class WHPAdherenceService {
 
     public AdherenceList findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
         List<AdherenceRecord> adherenceData = new ArrayList<>();
-        if (WHPDateUtil.isOnOrBefore(start, end)) {
+        if (start != null && WHPDateUtil.isOnOrBefore(start, end)) {
             adherenceData = adherenceService.adherence(patientId, treatmentId, start, end);
         }
         return new AdherenceMapper().map(adherenceData);

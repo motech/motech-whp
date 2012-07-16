@@ -352,22 +352,24 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public List<LocalDate> getDoseDatesTill(LocalDate tillDate) {
         List<LocalDate> allDoseDates = new ArrayList<>();
-        for (LocalDate date = currentTherapy.getStartDate(); WHPDateUtil.isOnOrBefore(date, tillDate); date = date.plusDays(1)) {
-            if (currentTherapy.getTreatmentCategory().getPillDays().contains(DayOfWeek.getDayOfWeek(date))) {
-                allDoseDates.add(date);
+        if (currentTherapy.hasStarted()) {
+            for (LocalDate date = currentTherapy.getStartDate(); WHPDateUtil.isOnOrBefore(date, tillDate); date = date.plusDays(1)) {
+                if (currentTherapy.getTreatmentCategory().getPillDays().contains(DayOfWeek.getDayOfWeek(date))) {
+                    allDoseDates.add(date);
+                }
             }
         }
         return allDoseDates;
     }
 
     @JsonIgnore
-    public String getLongestDoseInterruption(){
+    public String getLongestDoseInterruption() {
         DoseInterruption longestDoseInterruption = currentTherapy.getLongestDoseInterruption();
 
         int missedDoseCount = longestDoseInterruption == null ? 0 : longestDoseInterruption.getMissedDoseCount(currentTherapy.getTreatmentCategory());
         int dosesPerWeek = currentTherapy.getTreatmentCategory().getDosesPerWeek();
 
-        float roundedValue = roundToFirstDecimal((float)missedDoseCount / dosesPerWeek);
+        float roundedValue = roundToFirstDecimal((float) missedDoseCount / dosesPerWeek);
         return String.valueOf(roundedValue);
     }
 

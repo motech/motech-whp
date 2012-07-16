@@ -302,4 +302,8 @@ public class Therapy {
     public void clearDoseInterruptionsForUpdate() {
         doseInterruptions.clear();
     }
+
+    public boolean hasStarted(){
+        return startDate != null;
+    }
 }
