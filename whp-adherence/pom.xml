@@ -28,11 +28,11 @@
             <artifactId>whp-patient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>motech-tb-adherence</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>motech-bulk-export-import</artifactId>
         </dependency>
         <dependency>

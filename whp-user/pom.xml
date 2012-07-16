@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>motech-web-security</artifactId>
         </dependency>
         <dependency>

@@ -43,11 +43,11 @@
             <artifactId>whp-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>case-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>openrosa-registration-service</artifactId>
         </dependency>
     </dependencies>

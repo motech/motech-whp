@@ -215,37 +215,37 @@
             </dependency>
             <!--Contrib and delivery-->
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-tb-adherence</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-flash-scope</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-bulk-export-import</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-web-security</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>motech-validation</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>case-service</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.contrib-whp</groupId>
                 <artifactId>openrosa-registration-service</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
