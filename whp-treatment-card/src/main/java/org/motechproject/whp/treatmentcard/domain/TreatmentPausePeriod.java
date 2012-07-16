@@ -3,16 +3,17 @@ package org.motechproject.whp.treatmentcard.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.WHPDate;
 
 @Getter
 @EqualsAndHashCode
 public class TreatmentPausePeriod {
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
 
     public TreatmentPausePeriod(LocalDate startDate, LocalDate endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = WHPDate.date(startDate).value();
+        this.endDate = WHPDate.date(endDate).value();
     }
 }

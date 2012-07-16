@@ -218,6 +218,9 @@ table tbody .link:hover td:not(.row-click-exclude) {
 .pausedAdherenceData {
     background-color: lightPink;
 }
+.printable-version .pausedAdherenceData {
+    background-color: transparent;
+}
 
 .float-right {
     float: right;
@@ -511,4 +514,25 @@ div.buttons a, div.buttons button {
 }
 #treatmentCard .drugs td{
     padding: 2px 6px;
+}
+.pause-details table {
+    width: 25%;
+}
+.inherit-font {
+    font-family: inherit;
+}
+.provider-details table {
+    width: 40%;
+}
+.relative-size {
+    overflow: auto;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+.printable-version h3 {
+    font-family: inherit;
+}
+.bordered {
+    border: 1px solid black;
 }
