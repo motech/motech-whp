@@ -8,7 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.service.AdherenceService;
-import org.motechproject.whp.adherence.audit.AdherenceAuditService;
+import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;

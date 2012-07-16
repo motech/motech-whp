@@ -4,7 +4,7 @@ import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.adherence.audit.AuditParams;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;

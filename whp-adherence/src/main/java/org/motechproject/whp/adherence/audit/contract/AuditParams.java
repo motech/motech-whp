@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.audit;
+package org.motechproject.whp.adherence.audit.contract;
 
 import lombok.Data;
 import org.motechproject.whp.adherence.domain.AdherenceSource;

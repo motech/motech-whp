@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.audit;
+package org.motechproject.whp.adherence.audit.domain;
 
 
 import org.codehaus.jackson.annotate.JsonProperty;
