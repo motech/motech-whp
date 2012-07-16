@@ -9,8 +9,7 @@ import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.*;
-import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.refdata.domain.Phase.*;
 
 public class TherapyTest {
@@ -210,5 +209,19 @@ public class TherapyTest {
         DoseInterruption doseInterruption = therapy.getDoseInterruptions().latestInterruption();
 
         assertEquals(endDate, doseInterruption.endDate());
+    }
+
+    @Test
+    public void shouldComputeTotalDosesToHaveBeenTakenOnlyTillCPEndDate() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(newDate(2012, 3, 1));
+        patient.nextPhaseName(Phase.CP);
+        patient.endLatestPhase(newDate(2012, 3, 31));
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(Phase.CP, 1, newDate(2012, 4, 30));
+        patient.endLatestPhase(newDate(2012, 4, 30));
+
+        assertEquals(newDate(2012, 4, 1), patient.getLastCompletedPhase().getStartDate());
+        assertEquals(26, patient.getCurrentTherapy().getTotalDosesToHaveBeenTakenTillLastSunday());
     }
 }

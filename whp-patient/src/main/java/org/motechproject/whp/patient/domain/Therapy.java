@@ -145,6 +145,9 @@ public class Therapy {
             int totalDoses = 0;
             //pointing to sunday just past
             LocalDate endDate = currentWeekInstance().dateOf(DayOfWeek.Sunday);
+            if (phases.getCPEndDate() != null && phases.getCPEndDate().isBefore(endDate)) {
+                endDate = phases.getCPEndDate();
+            }
             for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
                 totalDoses = totalDoses + numberOf_DDD_Between(startDate, endDate, dayOfWeek);
             }
