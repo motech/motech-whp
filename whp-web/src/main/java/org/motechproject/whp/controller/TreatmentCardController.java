@@ -1,6 +1,9 @@
 package org.motechproject.whp.controller;
 
 import com.google.gson.Gson;
+import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
@@ -50,9 +53,12 @@ public class TreatmentCardController extends BaseController {
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String update(@RequestParam("delta") String adherenceJson, HttpServletRequest request) {
+        MotechUser authenticatedUser = loggedInUser(request);
+        AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, null);
+
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
-        adherenceService.addLogsForPatient(updateAdherenceRequest, patient);
+        adherenceService.addLogsForPatient(updateAdherenceRequest, patient, auditParams);
         phaseUpdateOrchestrator.recomputePillStatus(updateAdherenceRequest.getPatientId());
         phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
         out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);

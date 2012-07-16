@@ -8,9 +8,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.service.AdherenceService;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
@@ -85,7 +87,7 @@ public class WHPAdherenceServiceTest {
         DailyAdherenceRequest dailyAdherenceRequest3 = createDailyAdherenceRequest(15, 2, 2012, PillStatus.Unknown.getStatus());
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3));
 
-        whpAdherenceService.addLogsForPatient(request, patient);
+        whpAdherenceService.addLogsForPatient(request, patient, null);
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
@@ -99,6 +101,43 @@ public class WHPAdherenceServiceTest {
     }
 
     @Test
+    public void shouldSaveDailyAdherenceAuditLogs() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+
+        Treatment treatment0 = new TreatmentBuilder().withDefaults().withProviderId("provider0").withTbId("tb0").build();
+        patient.addTreatment(treatment0, datetime(1, 10, 2011));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 12, 2011));
+
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().withProviderId("provider1").withTbId("tb1").build();
+        patient.addTreatment(treatment1, datetime(1, 1, 2012));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 2, 2012));
+
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().withProviderId("provider2").withTbId("tb2").build();
+        patient.addTreatment(treatment2, datetime(15, 2, 2012));
+
+        UpdateAdherenceRequest request = new UpdateAdherenceRequest();
+        request.setPatientId(PATIENT_ID);
+        DailyAdherenceRequest dailyAdherenceRequest1 = createDailyAdherenceRequest(1, 10, 2011, PillStatus.NotTaken.getStatus());
+        DailyAdherenceRequest dailyAdherenceRequest2 = createDailyAdherenceRequest(3, 1, 2012, PillStatus.Taken.getStatus());
+        DailyAdherenceRequest dailyAdherenceRequest3 = createDailyAdherenceRequest(15, 2, 2012, PillStatus.Unknown.getStatus());
+        request.setDailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3));
+
+        AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "");
+
+        whpAdherenceService.addLogsForPatient(request, patient, auditParams);
+
+        ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
+        verify(adherenceAuditService, times(1)).auditDailyAdherence(eq(patient), argumentCaptor.capture(), eq(auditParams));
+
+        List dataToBeStored = argumentCaptor.getValue();
+        assertEquals(3, dataToBeStored.size());
+
+        assertLog((Adherence) dataToBeStored.get(0), PATIENT_ID, date(1, 10, 2011), THERAPY_UID, "provider0", "tb0");
+        assertLog((Adherence) dataToBeStored.get(1), PATIENT_ID, date(3, 1, 2012), THERAPY_UID, "provider1", "tb1");
+        assertLog((Adherence) dataToBeStored.get(2), PATIENT_ID, date(15, 2, 2012), THERAPY_UID, "provider2", "tb2");
+    }
+
+    @Test
     public void shouldSaveLogWithTbIdAndProviderAsUnknownIfDoseDateDoesNotBelongToAnyTreatment() {
         String patientId = "patientId";
         Patient patient = new PatientBuilder().withDefaults().withPatientId(patientId).build();
@@ -109,7 +148,7 @@ public class WHPAdherenceServiceTest {
         DailyAdherenceRequest dailyAdherenceRequest = createDailyAdherenceRequest(1, 10, 2010, PillStatus.NotTaken.getStatus());
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest));
 
-        whpAdherenceService.addLogsForPatient(request, patient);
+        whpAdherenceService.addLogsForPatient(request, patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
@@ -132,7 +171,7 @@ public class WHPAdherenceServiceTest {
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest));
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
-        whpAdherenceService.addLogsForPatient(request, patient);
+        whpAdherenceService.addLogsForPatient(request, patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
@@ -166,6 +205,10 @@ public class WHPAdherenceServiceTest {
     private void assertLog(AdherenceRecord adherenceRecord, String patientId, LocalDate doseDate, String therapyUid, String providerId, String tbId) {
         Adherence adherence = new AdherenceMapper().map(adherenceRecord);
 
+        assertLog(adherence, patientId, doseDate, therapyUid, providerId, tbId);
+    }
+
+    private void assertLog(Adherence adherence, String patientId, LocalDate doseDate, String therapyUid, String providerId, String tbId) {
         assertEquals(therapyUid, adherence.getTreatmentId());
         assertEquals(tbId, adherence.getTbId());
         assertEquals(providerId, adherence.getProviderId());

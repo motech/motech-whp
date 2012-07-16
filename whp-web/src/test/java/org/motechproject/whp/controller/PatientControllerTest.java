@@ -5,11 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.service.MotechUser;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -26,7 +25,6 @@ import org.springframework.context.support.StaticMessageSource;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,13 +37,12 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.util.WHPDate.date;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class PatientControllerTest {
+public class PatientControllerTest extends BaseControllerTest {
 
     @Mock
     Model uiModel;
@@ -82,7 +79,7 @@ public class PatientControllerTest {
         String providerId = "providerid";
 
         setupMessageSource();
-        setUpLoggedInUser();
+        setupLoggedInUser(request, LOGGED_IN_USER_NAME);
         patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
@@ -166,7 +163,7 @@ public class PatientControllerTest {
         phaseStartDates.setIpStartDate("21/05/2012");
 
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
-        verify(phaseUpdateOrchestrator).adjustPhaseStartDates(patient.getPatientId(), date(phaseStartDates.getIpStartDate()).date(), null, null);
+        verify(phaseUpdateOrchestrator).adjustPhaseStartDates(patient.getPatientId(), WHPDate.date(phaseStartDates.getIpStartDate()).date(), null, null);
         assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
     }
 
@@ -228,11 +225,4 @@ public class PatientControllerTest {
         verify(uiModel).addAttribute(PatientController.SELECTED_DISTRICT, districts.get(0).getName());
     }
 
-    private void setUpLoggedInUser() {
-        HttpSession session = mock(HttpSession.class);
-        MotechUser loggedInUser = mock(MotechUser.class);
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
-        when(loggedInUser.getUserName()).thenReturn(LOGGED_IN_USER_NAME);
-    }
 }

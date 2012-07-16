@@ -8,7 +8,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
@@ -18,10 +17,10 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.refdata.domain.PatientStatus;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.ui.Model;
 
@@ -37,7 +36,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
-public class AdherenceControllerTest extends BaseUnitTest {
+public class AdherenceControllerTest extends BaseControllerTest {
 
     @Mock
     AllPatients allPatients;
@@ -70,7 +69,7 @@ public class AdherenceControllerTest extends BaseUnitTest {
         setUpMocks();
         setUpPatient();
         adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories, phaseUpdateOrchestrator);
-        setupLoggedInUser(providerUserName);
+        setupLoggedInUser(request, providerUserName);
     }
 
     private void setUpMocks() {
@@ -202,11 +201,4 @@ public class AdherenceControllerTest extends BaseUnitTest {
         private ArgumentCaptor<WeeklyAdherenceForm> adherenceForm = forClass(WeeklyAdherenceForm.class);
     }
 
-    private void setupLoggedInUser(String userName) {
-        HttpSession session = mock(HttpSession.class);
-        MotechUser loggedInUser = mock(MotechUser.class);
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
-        when(loggedInUser.getUserName()).thenReturn(userName);
-    }
 }

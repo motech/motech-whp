@@ -60,7 +60,7 @@ public class WHPAdherenceService {
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
             patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
         }
-        adherenceAuditService.log(patient, weeklyAdherenceSummary, auditParams);
+        adherenceAuditService.auditWeeklyAdherence(patient, weeklyAdherenceSummary, auditParams);
     }
 
     public WeeklyAdherenceSummary currentWeekAdherence(Patient patient) {
@@ -104,7 +104,7 @@ public class WHPAdherenceService {
         }
     }
 
-    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient) {
+    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient, AuditParams auditParams) {
         List<Adherence> adherenceData = new ArrayList<>();
 
         for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
@@ -126,6 +126,7 @@ public class WHPAdherenceService {
         }
 
         addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
+        adherenceAuditService.auditDailyAdherence(patient, adherenceData, auditParams);
     }
 
     public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate startDate) {
