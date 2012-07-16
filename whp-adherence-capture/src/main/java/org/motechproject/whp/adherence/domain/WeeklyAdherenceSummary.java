@@ -52,5 +52,4 @@ public class WeeklyAdherenceSummary {
         if(takenDays(treatmentCategory).contains(pillDay)) return PillStatus.Taken;
         return PillStatus.NotTaken;
     }
-
 }

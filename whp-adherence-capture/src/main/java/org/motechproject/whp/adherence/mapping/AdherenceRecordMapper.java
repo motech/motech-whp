@@ -15,7 +15,8 @@ public class AdherenceRecordMapper {
     public static AdherenceRecord map(Adherence adherence) {
         AdherenceRecord request = new AdherenceRecord(adherence.getPatientId(), adherence.getTreatmentId(), adherence.getPillDate());
         request.status(adherence.getPillStatus().getStatus());
-        request.meta(metaData(adherence));
+        request.tbId(adherence.getTbId());
+        request.providerId(adherence.getProviderId());
         return request;
     }
 
@@ -33,12 +34,4 @@ public class AdherenceRecordMapper {
         }
         return adherenceRecords;
     }
-
-    private static Map<String, Object> metaData(Adherence adherence) {
-        HashMap<String, Object> meta = new HashMap<>();
-        meta.put(AdherenceConstants.TB_ID, adherence.getTbId());
-        meta.put(AdherenceConstants.PROVIDER_ID, adherence.getProviderId());
-        return meta;
-    }
-
 }

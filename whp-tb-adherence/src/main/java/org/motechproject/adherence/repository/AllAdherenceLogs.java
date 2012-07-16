@@ -34,7 +34,8 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
             super.add(adherenceLog);
         } else {
             existingLog.status(adherenceLog.status());
-            existingLog.meta(adherenceLog.meta());
+            existingLog.providerId(adherenceLog.providerId());
+            existingLog.tbId(adherenceLog.tbId());
             update(existingLog);
         }
     }
@@ -60,13 +61,13 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return singleResult(db.queryView(q, AdherenceLog.class));
     }
 
-    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
+    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}")
     public List<AdherenceRecord> findLogsAsOf(LocalDate asOf, int pageNumber, int pageSize) {
         ViewQuery q = createQuery("by_dosageDate").endKey(asOf).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
     }
 
-    @View(name = "by_dateRangeExternalIdAndTherapy", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
+    @View(name = "by_dateRangeExternalIdAndTherapy", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}")
     public List<AdherenceRecord> findLogsInRange(String externalId, String treatmentId, LocalDate startDate, LocalDate endDate) {
         final ComplexKey startKey = ComplexKey.of(externalId, treatmentId, startDate);
         final ComplexKey endKey = ComplexKey.of(externalId, treatmentId, endDate);
@@ -96,7 +97,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return viewResult.getRows().get(0).getValueAsInt();
     }
 
-    @View(name = "all_taken_logs", map = "function(doc) {if (doc.type == 'AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.status, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}", reduce ="_count")
+    @View(name = "all_taken_logs", map = "function(doc) {if (doc.type == 'AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.status, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}", reduce ="_count")
     public List<AdherenceRecord> allTakenLogsFrom(String patientId, String treatmentId, LocalDate startDate) {
         int status = 1;
         ComplexKey startKey = ComplexKey.of(patientId, treatmentId, status, startDate);
@@ -125,7 +126,8 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
             } else {
                 AdherenceLog dbLog = dbLogs.get(logPos);
                 dbLog.status(log.status());
-                dbLog.meta(log.meta());
+                dbLog.providerId(log.providerId());
+                dbLog.tbId(log.tbId());
                 dbLog.treatmentId(log.treatmentId());
                 tobeStoredLogs.add(dbLog);
             }

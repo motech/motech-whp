@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>whp-adherence</name>
-    <artifactId>whp-adherence</artifactId>
+    <name>whp-adherence-capture</name>
+    <artifactId>whp-adherence-capture</artifactId>
     <groupId>org.motechproject.whp</groupId>
     <properties>
         <build.dir>../build</build.dir>
@@ -28,8 +28,8 @@
             <artifactId>whp-patient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
-            <artifactId>motech-tb-adherence</artifactId>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-tb-adherence</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.contrib-whp</groupId>

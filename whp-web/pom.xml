@@ -132,7 +132,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-adherence</artifactId>
+            <artifactId>whp-adherence-capture</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>

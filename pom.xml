@@ -24,10 +24,10 @@
         <module>whp-common</module>
         <module>whp-refdata</module>
         <module>whp-user</module>
-        <module>whp-tb-adherence</module>
+        <module>whp-adherence-capture</module>
         <module>whp-patient</module>
         <module>whp-mapping</module>
-        <module>whp-adherence</module>
+        <module>whp-tb-adherence</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
         <module>whp-validation</module>
@@ -135,7 +135,12 @@
             <!--Child modules-->
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-adherence</artifactId>
+                <artifactId>whp-tb-adherence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-adherence-capture</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

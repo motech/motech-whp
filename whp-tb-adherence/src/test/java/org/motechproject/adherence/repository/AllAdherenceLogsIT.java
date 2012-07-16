@@ -9,11 +9,11 @@ import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
@@ -28,25 +28,11 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     @Test
     public void shouldSaveAdherenceLog() {
         AdherenceLog adherenceLog = new AdherenceLog("externalId", "treatmentId", DateUtil.today());
+        adherenceLog.providerId("providerId");
+        adherenceLog.tbId("tbId");
+
         allAdherenceLogs.add(adherenceLog);
-        assertNotNull(allAdherenceLogs.get(adherenceLog.getId()));
-    }
-
-    @Test
-    public void shouldSaveMetaDataOnUpdate() {
-        AdherenceLog adherenceLog = new AdherenceLog("externalId", "treatmentId", DateUtil.today());
-        HashMap<String, Object> metaData = new HashMap<String, Object>();
-        metaData.put("key", "val");
-        adherenceLog.meta(metaData);
-        allAdherenceLogs.add(adherenceLog);
-
-        AdherenceLog updatedAdherenceLog = new AdherenceLog("externalId", "treatmentId", DateUtil.today());
-        HashMap<String, Object> newMetaData = new HashMap<String, Object>();
-        newMetaData.put("key", "newVal");
-        updatedAdherenceLog.meta(newMetaData);
-        allAdherenceLogs.add(updatedAdherenceLog);
-
-        assertEquals("newVal", allAdherenceLogs.get(adherenceLog.getId()).meta().get("key"));
+        assertEquals(adherenceLog, allAdherenceLogs.get(adherenceLog.getId()));
     }
 
     @Test
@@ -134,9 +120,9 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId", new LocalDate(2012, 5, 5));
         AdherenceLog log3 = new AdherenceLog("externalId", "treatmentId", new LocalDate(2012, 5, 5));
 
-        allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(asList(log1, log2, log3),"externalId");
+        allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(asList(log1, log2, log3), "externalId");
 
-        assertEquals(3,allAdherenceLogs.getAll().size());
+        assertEquals(3, allAdherenceLogs.getAll().size());
     }
 
     @Test
@@ -148,10 +134,10 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         AdherenceLog log3 = new AdherenceLog("externalId", "treatmentId2", new LocalDate(2012, 5, 5));
 
         allAdherenceLogs.add(log1);
-        allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(asList(log2,log3),"externalId");
+        allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(asList(log2, log3), "externalId");
 
-        assertEquals(2,allAdherenceLogs.getAll().size());
-        assertEquals(2,allAdherenceLogs.findLogBy("externalId","treatmentId2",new LocalDate(2012,1,1)).status());
+        assertEquals(2, allAdherenceLogs.getAll().size());
+        assertEquals(2, allAdherenceLogs.findLogBy("externalId", "treatmentId2", new LocalDate(2012, 1, 1)).status());
 
     }
 
@@ -213,10 +199,10 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         allAdherenceLogs.add(logAfterRange);
 
         List<AdherenceLog> result = allAdherenceLogs.findAllLogsForExternalIdInDoseDateRange("externalId1", startDate, endDate);
-        assertEquals(3,result.size());
-        assertEquals(startDate,result.get(0).doseDate());
-        assertEquals(dateInBetweenRange,result.get(1).doseDate());
-        assertEquals(endDate,result.get(2).doseDate());
+        assertEquals(3, result.size());
+        assertEquals(startDate, result.get(0).doseDate());
+        assertEquals(dateInBetweenRange, result.get(1).doseDate());
+        assertEquals(endDate, result.get(2).doseDate());
 
     }
 

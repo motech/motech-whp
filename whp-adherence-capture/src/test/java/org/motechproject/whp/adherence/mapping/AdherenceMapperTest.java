@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.PillStatus;
 
 import java.util.Arrays;
@@ -18,8 +17,8 @@ public class AdherenceMapperTest {
 
     private AdherenceRecord createAdherenceData() {
         AdherenceRecord adherenceData = new AdherenceRecord(null, null, today);
-        adherenceData.addMeta(AdherenceConstants.TB_ID, "tbId");
-        adherenceData.addMeta(AdherenceConstants.PROVIDER_ID, "providerId");
+        adherenceData.tbId("tbId");
+        adherenceData.providerId("providerId");
         return adherenceData;
     }
 

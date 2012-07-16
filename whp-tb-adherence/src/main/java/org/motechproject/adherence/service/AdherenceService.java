@@ -24,7 +24,8 @@ public class AdherenceService {
         for (AdherenceRecord adherenceRecord : record) {
             AdherenceLog adherenceLog = new AdherenceLog(adherenceRecord.externalId(), adherenceRecord.treatmentId(), adherenceRecord.doseDate());
             adherenceLog.status(adherenceRecord.status());
-            adherenceLog.meta(adherenceRecord.meta());
+            adherenceLog.tbId(adherenceRecord.tbId());
+            adherenceLog.providerId(adherenceRecord.providerId());
             allAdherenceLogs.add(adherenceLog);
         }
     }

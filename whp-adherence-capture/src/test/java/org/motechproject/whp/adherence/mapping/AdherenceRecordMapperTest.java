@@ -46,7 +46,7 @@ public class AdherenceRecordMapperTest {
     public void shouldSetProviderIdOnRequest() {
         Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
 
-        assertEquals(PROVIDER_ID, AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.PROVIDER_ID));
+        assertEquals(PROVIDER_ID, AdherenceRecordMapper.map(day).providerId());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AdherenceRecordMapperTest {
 
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         assertNotNull(currentTreatment  .getTbId());
-        assertEquals(currentTreatment.getTbId(), AdherenceRecordMapper.map(day).meta().get(AdherenceConstants.TB_ID));
+        assertEquals(currentTreatment.getTbId(), AdherenceRecordMapper.map(day).tbId());
     }
 
     @Test

@@ -4,7 +4,6 @@ import org.ektorp.CouchDbConnector;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.domain.AdherenceLog;
@@ -15,7 +14,10 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
-import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceSource;
+import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -32,6 +34,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
@@ -104,15 +108,14 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    @Ignore("Test should be moved")
     public void shouldSetLatestTbIdAndProviderIdOnAdherenceUpdate() {
         createPatient(new PatientRequestBuilder().withDefaults().build());
 
         WeeklyAdherenceSummary weeklyAdherenceSummary = recordAdherence();
         assertValidAdherence(weeklyAdherenceSummary, TB_ID, PROVIDER_ID);
 
-        patientService.update(new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().build());
-        patientService.update(new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withDateModified(DateUtil.now().minusDays(10)).build());
+        patientService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForCloseTreatment().build());
+        patientService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForTransferInTreatment().withDateModified(DateUtil.now().minusDays(10)).build());
         recordAdherence();
 
         assertValidAdherence(weeklyAdherenceSummary, NEW_TB_ID, NEW_PROVIDER_ID);
@@ -125,7 +128,6 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    // TODO : should check what current week means
     public void shouldStartPatientOnTreatmentAfterRecordingAdherenceForTheFirstTime() {
         adherenceIsRecordedForTheFirstTime();
         LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate();
@@ -175,10 +177,9 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    @Ignore("returns empty Weekly Adherence now")
-    public void shouldReturnNullWhenCurrentWeekAdherenceIsNotCaptured() {
+    public void shouldHaveZeroTakenDosesWhenCurrentWeekAdherenceIsNotCaptured() {
         Patient patient = createPatient(new PatientRequestBuilder().withDefaults().build());
-        assertNull(adherenceService.currentWeekAdherence(patient));
+        assertThat(adherenceService.currentWeekAdherence(patient).getDosesTaken(), is(0));
     }
 
     @Test

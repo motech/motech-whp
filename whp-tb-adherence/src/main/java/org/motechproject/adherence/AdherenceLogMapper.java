@@ -10,14 +10,15 @@ public class AdherenceLogMapper {
 
     public AdherenceLog map(AdherenceRecord adherenceRecord) {
         AdherenceLog log = new AdherenceLog(adherenceRecord.externalId(), adherenceRecord.treatmentId(), adherenceRecord.doseDate());
-        log.meta(adherenceRecord.meta());
+        log.providerId(adherenceRecord.providerId());
+        log.tbId(adherenceRecord.tbId());
         log.status(adherenceRecord.status());
         return log;
     }
 
     public List<AdherenceLog> map(List<AdherenceRecord> adherenceRecord) {
         List<AdherenceLog> logs = new ArrayList();
-        for(AdherenceRecord datum  : adherenceRecord) {
+        for (AdherenceRecord datum : adherenceRecord) {
             logs.add(map(datum));
         }
         return logs;
