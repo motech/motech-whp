@@ -56,7 +56,32 @@ public class PhaseUpdateOrchestrator {
         updateDoseInterruptions(patient);
     }
 
-    private void updateDoseInterruptions(Patient patient) {
+    public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
+        patientService.setNextPhaseName(patientId, phaseToTransitionTo);
+        attemptPhaseTransition(patientId);
+    }
+
+    public void attemptPhaseTransition(String patientId) {
+        Patient patient = allPatients.findByPatientId(patientId);
+
+        if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
+            patientService.revertAutoCompleteOfLastPhase(patient);
+        }
+
+        if (patient.currentPhaseDoseComplete()) {
+            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, patient.getCurrentTherapy().getUid(),
+                    patient.numberOfDosesForPhase(patient.getCurrentPhase().getName()), patient.getCurrentPhase().getStartDate());
+            patientService.autoCompleteCurrentPhase(patient, recordOfLastDoseInPhase.doseDate());
+        }
+
+        if (patient.isTransitioning() && patient.hasPhaseToTransitionTo()) {
+            patientService.startNextPhase(patient);
+        }
+
+        recomputePillStatus(patientId);
+    }
+
+    public void updateDoseInterruptions(Patient patient) {
         HashMap<LocalDate,PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
         List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
 
@@ -82,30 +107,5 @@ public class PhaseUpdateOrchestrator {
         LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
         int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
         patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
-    }
-
-    public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
-        patientService.setNextPhaseName(patientId, phaseToTransitionTo);
-        attemptPhaseTransition(patientId);
-    }
-
-    public void attemptPhaseTransition(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
-
-        if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
-            patientService.revertAutoCompleteOfLastPhase(patient);
-        }
-
-        if (patient.currentPhaseDoseComplete()) {
-            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, patient.getCurrentTherapy().getUid(),
-                    patient.numberOfDosesForPhase(patient.getCurrentPhase().getName()), patient.getCurrentPhase().getStartDate());
-            patientService.autoCompleteCurrentPhase(patient, recordOfLastDoseInPhase.doseDate());
-        }
-
-        if (patient.isTransitioning() && patient.hasPhaseToTransitionTo()) {
-            patientService.startNextPhase(patient);
-        }
-
-        recomputePillStatus(patientId);
     }
 }

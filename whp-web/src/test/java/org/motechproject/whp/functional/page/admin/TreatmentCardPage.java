@@ -26,6 +26,9 @@ public class TreatmentCardPage extends PatientDashboardPage {
     @FindBy(how = How.ID, using = "submitAdherence")
     WebElement submit;
 
+    @FindBy(how = How.ID, using = "longestTreatmentInterruption")
+    WebElement longestTreatmentInterruption;
+
 
     public TreatmentCardPage(WebDriver webDriver) {
         super(webDriver);
@@ -114,4 +117,7 @@ public class TreatmentCardPage extends PatientDashboardPage {
         return webDriver.findElement(id(id));
     }
 
+    public String getLongestTreatmentInterruption() {
+        return longestTreatmentInterruption.getText();
+    }
 }

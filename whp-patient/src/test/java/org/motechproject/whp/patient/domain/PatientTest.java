@@ -10,6 +10,7 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
@@ -395,6 +396,27 @@ public class PatientTest {
         assertEquals("35/54 (64.81%)", patient.getCPProgress());
     }
 
+    @Test
+    public void shouldReturnLongestDoseInterruption(){
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+
+        DoseInterruptions doseInterruptions = new DoseInterruptions();
+
+        DoseInterruption doseInterruption1 = new DoseInterruption(new LocalDate(2012,6,28));
+        doseInterruption1.endMissedPeriod(new LocalDate(2012,6,30));
+        DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012,7,2));
+        doseInterruption2.endMissedPeriod(new LocalDate(2012,7,6));
+        DoseInterruption doseInterruption3 = new DoseInterruption(new LocalDate(2012,7,8));
+        doseInterruption3.endMissedPeriod(new LocalDate(2012,7,14));
+
+        doseInterruptions.addAll(asList(doseInterruption1, doseInterruption2, doseInterruption3));
+
+        patient.getCurrentTherapy().setDoseInterruptions(doseInterruptions);
+
+        assertEquals(String.valueOf(1.0), patient.getLongestDoseInterruption());
+    }
+
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);
     }
@@ -402,5 +424,7 @@ public class PatientTest {
     private DateTime dateTime(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth).toDateTimeAtCurrentTime();
     }
+
+
 
 }
