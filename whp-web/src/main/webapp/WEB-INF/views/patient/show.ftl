@@ -36,7 +36,7 @@ ${message}
 <div id="treatmentCard"></div>
 <div class="controls">
     <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
-    <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-primary brand">Adjust Phase Start
+    <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand">Adjust Phase Start
         Dates</a>
     <a id="printTreatmentCard" target = "_blank" class="btn" href = "<@spring.url '/patients/print/' + patient.patientId/>" >Print</a>
 </div>
@@ -77,6 +77,9 @@ ${message}
         $('#eipDatePicker').val('');
         $('#cpDatePicker').val('');
     });
+    $('#ipDatePicker').css('cursor', 'pointer');
+    $('#eipDatePicker').css('cursor', 'pointer');
+    $('#cpDatePicker').css('cursor', 'pointer');
     createAutoClosingAlert(".dateUpdated-message-alert", 5000)
     $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}', function() {
         setUpTreatmentCardTable();
