@@ -99,8 +99,8 @@ public class Phases {
     }
 
     @JsonIgnore
-    public LocalDate getCPLastDate() {
-        return getPhaseLastDate(Phase.CP);
+    public LocalDate getCPEndDate() {
+        return getPhaseEndDate(Phase.CP);
     }
 
     @JsonIgnore
@@ -182,6 +182,14 @@ public class Phases {
             phaseRecords.recordTransition(history.add(phase), startDate);
         } else {
             phaseRecords.removeTransition(history.remove(phase));
+        }
+    }
+
+    private LocalDate getPhaseEndDate(Phase phase) {
+        if (history.contains(phase)) {
+            return phaseRecords.get(phase).getEndDate();
+        } else {
+            return null;
         }
     }
 
