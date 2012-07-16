@@ -156,6 +156,13 @@ public class WHPAdherenceServiceTest {
         verifyZeroInteractions(adherenceService);
     }
 
+    @Test
+    public void shouldReturnEmptyListOfAdherenceRecordsIfStartDateIsNull() {
+        AdherenceList result = whpAdherenceService.findLogsInRange(PATIENT_ID, THERAPY_UID, null, today().minusDays(1));
+        assertEquals(0, result.size());
+        verifyZeroInteractions(adherenceService);
+    }
+
     private void assertLog(AdherenceRecord adherenceRecord, String patientId, LocalDate doseDate, String therapyUid, String providerId, String tbId) {
         Adherence adherence = new AdherenceMapper().map(adherenceRecord);
 

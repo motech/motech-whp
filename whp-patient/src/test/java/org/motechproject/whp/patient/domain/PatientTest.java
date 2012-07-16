@@ -10,10 +10,14 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
@@ -415,6 +419,13 @@ public class PatientTest {
         patient.getCurrentTherapy().setDoseInterruptions(doseInterruptions);
 
         assertEquals(String.valueOf(1.0), patient.getLongestDoseInterruption());
+    }
+
+    @Test
+    public void shouldReturnEmptyListOfDoseDatesIfTherapyHasNotStarted() {
+        Patient patient = PatientBuilder.patient();
+        List<LocalDate> doseDates = patient.getDoseDatesTill(today());
+        assertThat(doseDates.size(), is(0));
     }
 
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
