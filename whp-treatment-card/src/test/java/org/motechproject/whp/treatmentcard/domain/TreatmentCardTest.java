@@ -116,7 +116,7 @@ public class TreatmentCardTest {
     public void shouldExtendIPSectionTillTodayWhenPatientCompletedIPAndNextPhaseIsUnknown() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
 
         assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
@@ -126,7 +126,7 @@ public class TreatmentCardTest {
     public void shouldReturnTodaysDateIfPatientIsOnEIP() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
@@ -137,10 +137,10 @@ public class TreatmentCardTest {
     public void shouldExtendEIPSectionTillTodayWhenEIPHasCompletedAndNextPhaseIsUnknown() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today.minusMonths(3));
+        patient.endLatestPhase(today.minusMonths(3));
 
         assertEquals(today, new TreatmentCard(patient).ipBoxAdherenceEndDate());
     }
@@ -149,7 +149,7 @@ public class TreatmentCardTest {
     public void shouldReturnTodaysDateIfPatientIsStillOnCP() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
@@ -160,10 +160,10 @@ public class TreatmentCardTest {
     public void shouldShowDosesTakenAfterCompletionOfCP() {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
-        patient.endCurrentPhase(today.minusMonths(4));
+        patient.endLatestPhase(today.minusMonths(4));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        patient.endCurrentPhase(today.minusMonths(2));
+        patient.endLatestPhase(today.minusMonths(2));
 
         assertEquals(today, new TreatmentCard(patient).cpBoxAdherenceEndDate());
     }
@@ -180,10 +180,10 @@ public class TreatmentCardTest {
     public void cpBoxLastDateShouldBe7MonthsFromStartDate() {
         Patient patient = patient();
         patient.startTherapy(newDate(2012, 1, 1));
-        patient.endCurrentPhase(newDate(2012, 2, 1));
+        patient.endLatestPhase(newDate(2012, 2, 1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        patient.endCurrentPhase(newDate(2012, 4, 1));
+        patient.endLatestPhase(newDate(2012, 4, 1));
 
         assertEquals(newDate(2012, 9, 1), new TreatmentCard(patient).cpBoxLastDoseDate());
     }
@@ -192,7 +192,7 @@ public class TreatmentCardTest {
     public void shouldNotHaveCPAdherenceSectionIfCPStartDateIsNull() {
         Patient patient = patient();
         patient.startTherapy(newDate(2012, 1, 1));
-        patient.endCurrentPhase(newDate(2012, 2, 1));
+        patient.endLatestPhase(newDate(2012, 2, 1));
         patient.nextPhaseName(Phase.CP);
 
         assertFalse(new TreatmentCard(patient).isCPAdherenceSectionValid());
@@ -204,7 +204,7 @@ public class TreatmentCardTest {
         LocalDate fiveDaysAgo = today.minusDays(5);
 
         patient.startTherapy(fiveDaysAgo);
-        patient.endCurrentPhase(fiveDaysAgo.plusDays(1));
+        patient.endLatestPhase(fiveDaysAgo.plusDays(1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
@@ -217,7 +217,7 @@ public class TreatmentCardTest {
         LocalDate fiveDaysFromNow = today.plusDays(5);
 
         patient.startTherapy(fiveDaysFromNow);
-        patient.endCurrentPhase(fiveDaysFromNow.plusDays(1));
+        patient.endLatestPhase(fiveDaysFromNow.plusDays(1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
@@ -230,7 +230,7 @@ public class TreatmentCardTest {
         LocalDate yesterday = today.minusDays(1);
 
         patient.startTherapy(yesterday);
-        patient.endCurrentPhase(yesterday);
+        patient.endLatestPhase(yesterday);
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 
@@ -270,7 +270,7 @@ public class TreatmentCardTest {
         LocalDate yesterday = today.minusDays(1);
 
         patient.startTherapy(yesterday);
-        patient.endCurrentPhase(yesterday);
+        patient.endLatestPhase(yesterday);
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
 

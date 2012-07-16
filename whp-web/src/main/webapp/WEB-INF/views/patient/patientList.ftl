@@ -45,7 +45,7 @@
                    <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if> link"
                         redirect-url="<@spring.url '/patients/show?patientId=${patient.patientId}' />">
                         <td class="patientId">
-                            <#if patient.nearingPhaseTransition || patient.transitioning>
+                            <#if patient.nearingPhaseTransition || patient.transitioning && !patient.orHasBeenOnCp>
                                 <img id="achtung" class="pull-left"
                                      src="<@spring.url '/resources-${applicationVersion}/img/smallwarning.png'/>"/>
                             </#if>

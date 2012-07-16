@@ -64,12 +64,12 @@ public class Therapy {
     @JsonIgnore
     public boolean isNearingPhaseTransition() {
         PhaseRecord currentPhase = phases.getCurrentPhase();
-        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek() && !phases.isOrHasBeenOnCp();
+        return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= treatmentCategory.getDosesPerWeek();
     }
 
     @JsonIgnore
     public boolean isTransitioning() {
-        return getCurrentPhase() == null && getLastCompletedPhase() != null && !phases.isOrHasBeenOnCp();
+        return getCurrentPhase() == null && getLastCompletedPhase() != null;
     }
 
     @JsonIgnore
@@ -96,6 +96,19 @@ public class Therapy {
         return currentPhase != null && currentPhase.remainingDoses(treatmentCategory) <= 0;
     }
 
+    public boolean latestPhaseDoseComplete() {
+        PhaseRecord latestPhase = latestPhaseRecord();
+        return latestPhase != null && latestPhase.remainingDoses(treatmentCategory) <= 0;
+    }
+
+    public PhaseRecord latestPhaseRecord() {
+        PhaseRecord latestPhase = phases.getCurrentPhase();
+        if (latestPhase == null) {
+            latestPhase = phases.getLastCompletedPhase();
+        }
+        return latestPhase;
+    }
+
     public void setStartDate(LocalDate therapyStartDate) {
         startDate = therapyStartDate;
     }
@@ -106,9 +119,8 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public void endCurrentPhase(LocalDate endDate) {
-        PhaseRecord currentPhase = getCurrentPhase();
-        if (currentPhase != null) currentPhase.setEndDate(endDate);
+    public void endLatestPhase(LocalDate endDate) {
+        latestPhaseRecord().setEndDate(endDate);
     }
 
     @JsonIgnore
@@ -155,8 +167,8 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public boolean isOrHasBeenOnCP() {
-        return phases.isOrHasBeenOnCp();
+    public boolean hasBeenOnCP() {
+        return phases.hasBeenOnCp();
     }
 
     public void addTreatment(Treatment treatment, DateTime dateModified) {
@@ -278,7 +290,7 @@ public class Therapy {
     }
 
     @JsonIgnore
-    public DoseInterruption getLongestDoseInterruption(){
+    public DoseInterruption getLongestDoseInterruption() {
         return doseInterruptions.longestInterruption(treatmentCategory);
     }
 
@@ -303,7 +315,7 @@ public class Therapy {
         doseInterruptions.clear();
     }
 
-    public boolean hasStarted(){
+    public boolean hasStarted() {
         return startDate != null;
     }
 }

@@ -44,7 +44,7 @@ public class TreatmentCardService {
     }
 
     private void initializeCpSection(Patient patient, TreatmentCard treatmentCard, Therapy therapy) {
-        if (therapy.getPhases().isOrHasBeenOnCp()) {
+        if (therapy.getPhases().hasBeenOnCp()) {
             List<Adherence> cpAdherenceData = whpAdherenceService.findLogsInRange(
                     patient.getPatientId(),
                     therapy.getUid(),

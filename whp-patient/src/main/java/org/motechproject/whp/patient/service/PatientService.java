@@ -73,8 +73,8 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void autoCompleteCurrentPhase(Patient patient, LocalDate endDate) {
-        patient.endCurrentPhase(endDate);
+    public void autoCompleteLatestPhase(Patient patient, LocalDate endDate) {
+        patient.endLatestPhase(endDate);
         allPatients.update(patient);
     }
 

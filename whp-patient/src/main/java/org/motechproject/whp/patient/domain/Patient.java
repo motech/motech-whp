@@ -195,8 +195,13 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public void endCurrentPhase(LocalDate endDate) {
-        currentTherapy.endCurrentPhase(endDate);
+    public boolean isOrHasBeenOnCp() {
+        return currentTherapy.getPhases().hasBeenOnCp();
+    }
+
+    @JsonIgnore
+    public void endLatestPhase(LocalDate endDate) {
+        currentTherapy.endLatestPhase(endDate);
     }
 
     @JsonIgnore
@@ -272,6 +277,14 @@ public class Patient extends MotechBaseDataObject {
 
     public boolean currentPhaseDoseComplete() {
         return currentTherapy.currentPhaseDoseComplete();
+    }
+
+    public PhaseRecord latestPhaseRecord() {
+        return currentTherapy.latestPhaseRecord();
+    }
+
+    public boolean latestPhaseDoseComplete() {
+        return currentTherapy.latestPhaseDoseComplete();
     }
 
     @JsonIgnore

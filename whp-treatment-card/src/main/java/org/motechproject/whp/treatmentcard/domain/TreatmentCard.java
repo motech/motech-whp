@@ -100,7 +100,7 @@ public class TreatmentCard {
 
     public LocalDate cpBoxLastDoseDate() {
         Phases phases = therapy.getPhases();
-        if (phases.isOrHasBeenOnCp()) {
+        if (phases.hasBeenOnCp()) {
             return phases.getCPStartDate().plusMonths(MONTHS_IN_CP_BOX).minusDays(1);
         }
         return null;
