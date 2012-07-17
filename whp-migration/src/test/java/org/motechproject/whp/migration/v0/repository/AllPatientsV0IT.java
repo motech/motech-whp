@@ -3,7 +3,7 @@ package org.motechproject.whp.migration.v0.repository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.migration.v0.builder.PatientV0Builder;
 import org.motechproject.whp.migration.v0.builder.TherapyV0Builder;
 import org.motechproject.whp.migration.v0.domain.PatientV0;

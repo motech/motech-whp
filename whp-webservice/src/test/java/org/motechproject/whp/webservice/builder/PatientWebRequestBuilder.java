@@ -1,11 +1,11 @@
 package org.motechproject.whp.webservice.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.motechproject.whp.patient.builder.PatientBuilder.TB_ID;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_TB_ID;
 
@@ -180,7 +180,7 @@ public class PatientWebRequestBuilder {
     }
 
     public PatientWebRequestBuilder withDate_Modified(DateTime date_modified) {
-        patientWebRequest.setDate_modified(date_modified.toString(WHPConstants.DATE_TIME_FORMAT));
+        patientWebRequest.setDate_modified(date_modified.toString(DATE_TIME_FORMAT));
         return this;
     }
 

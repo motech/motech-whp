@@ -4,7 +4,7 @@ import lombok.Data;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 
-import static org.motechproject.whp.common.domain.WHPDate.date;
+import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Data
 public class PhaseStartDates {

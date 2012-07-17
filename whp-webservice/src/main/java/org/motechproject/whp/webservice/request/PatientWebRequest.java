@@ -2,7 +2,6 @@ package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.*;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
@@ -14,6 +13,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
 public class PatientWebRequest {
@@ -26,7 +27,7 @@ public class PatientWebRequest {
     private String api_key;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT)
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String date_modified;
 
     private String case_type;
@@ -95,13 +96,13 @@ public class PatientWebRequest {
     @Enumeration(type = SampleInstance.class)
     private String smear_sample_instance;
 
-    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT)
     private String smear_test_date_1;
 
     @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_1;
 
-    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT)
     private String smear_test_date_2;
 
     @Enumeration(type = SmearTestResult.class)

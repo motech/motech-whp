@@ -7,12 +7,12 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -40,8 +40,8 @@ public class ImportSmearTestResultsMapperTest {
     }
 
     private void verifyMapping(ImportPatientRequest importPatientRequest, SmearTestResults smearTestResults, int smearTestResultIndex, SampleInstance type) {
-        assertEquals(importPatientRequest.getTestDate1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
-        assertEquals(importPatientRequest.getTestDate2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(importPatientRequest.getTestDate1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_1().toString(DATE_FORMAT));
+        assertEquals(importPatientRequest.getTestDate2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_date_2().toString(DATE_FORMAT));
         assertEquals(importPatientRequest.getTestResult1(type), smearTestResults.get(smearTestResultIndex).getSmear_test_result_1().name());
         assertEquals(importPatientRequest.getTestResult2(type), smearTestResults.get(smearTestResultIndex).getSmear_test_result_2().name());
     }

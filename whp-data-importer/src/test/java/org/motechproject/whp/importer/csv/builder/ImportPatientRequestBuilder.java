@@ -1,9 +1,13 @@
 package org.motechproject.whp.importer.csv.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 public class ImportPatientRequestBuilder {
 
@@ -308,7 +312,7 @@ public class ImportPatientRequestBuilder {
     }
 
     public ImportPatientRequestBuilder withLastModifiedDate(DateTime date_modified) {
-        importPatientRequest.setDate_modified(date_modified.toString(WHPConstants.DATE_TIME_FORMAT));
+        importPatientRequest.setDate_modified(date_modified.toString(DATE_TIME_FORMAT));
         return this;
     }
 

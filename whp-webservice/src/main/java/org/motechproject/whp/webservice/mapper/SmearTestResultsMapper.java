@@ -6,12 +6,12 @@ import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @Component
 public class SmearTestResultsMapper {
@@ -50,6 +50,6 @@ public class SmearTestResultsMapper {
     }
 
     private LocalDate stringToLocalDate(String string) {
-        return DateTime.parse(string, forPattern(WHPConstants.DATE_FORMAT)).toLocalDate();
+        return DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate();
     }
 }

@@ -1,18 +1,22 @@
 package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.importer.annotation.ColumnName;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.validation.ProviderIdValidator;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @Data
 public class ImportPatientRequest {
@@ -22,7 +26,7 @@ public class ImportPatientRequest {
     private String case_id;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT, validateEmptyString = false)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     @ColumnName(name = "Registration date")
     private String date_modified;
 

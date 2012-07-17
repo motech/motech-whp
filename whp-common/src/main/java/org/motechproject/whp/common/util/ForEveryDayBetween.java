@@ -1,4 +1,4 @@
-package org.motechproject.whp.common;
+package org.motechproject.whp.common.util;
 
 import org.joda.time.LocalDate;
 

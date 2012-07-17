@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.common.domain.WHPConstants;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 public class PhaseStartDatesTest {
 
@@ -21,9 +21,9 @@ public class PhaseStartDatesTest {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Therapy therapy = patient.getCurrentTherapy();
 
-        assertEquals(therapy.getPhases().getIPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getIpStartDate());
-        assertEquals(therapy.getPhases().getEIPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getEipStartDate());
-        assertEquals(therapy.getPhases().getCPStartDate().toString(WHPConstants.DATE_FORMAT), phaseStartDates.getCpStartDate());
+        assertEquals(therapy.getPhases().getIPStartDate().toString(DATE_FORMAT), phaseStartDates.getIpStartDate());
+        assertEquals(therapy.getPhases().getEIPStartDate().toString(DATE_FORMAT), phaseStartDates.getEipStartDate());
+        assertEquals(therapy.getPhases().getCPStartDate().toString(DATE_FORMAT), phaseStartDates.getCpStartDate());
     }
 
     @Test

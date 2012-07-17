@@ -1,7 +1,7 @@
 package org.motechproject.whp.uimodel;
 
 import lombok.Data;
-import org.motechproject.whp.common.domain.WHPDate;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.refdata.domain.SampleInstance;

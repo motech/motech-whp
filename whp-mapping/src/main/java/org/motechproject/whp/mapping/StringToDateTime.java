@@ -2,7 +2,9 @@ package org.motechproject.whp.mapping;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.motechproject.whp.common.domain.WHPConstants;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 public class StringToDateTime extends WHPCustomMapper {
 
@@ -16,8 +18,8 @@ public class StringToDateTime extends WHPCustomMapper {
 
     private String findFormat(String src) {
         if (src.split(" ").length == 1)
-            return WHPConstants.DATE_FORMAT;
+            return DATE_FORMAT;
         else
-            return WHPConstants.DATE_TIME_FORMAT;
+            return DATE_TIME_FORMAT;
     }
 }

@@ -39,7 +39,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.domain.WHPDate.date;
+import static org.motechproject.whp.common.util.WHPDate.date;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;

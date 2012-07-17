@@ -2,7 +2,7 @@ package org.motechproject.whp.webservice.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;

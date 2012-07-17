@@ -7,13 +7,13 @@ import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.util.StringUtils.hasText;
 
 @Data
@@ -97,7 +97,7 @@ public class SmearTestResultRequests {
     public static class SmearTestResultRequest {
 
         @NotNullOrEmpty
-        @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
+        @DateTimeFormat(pattern = DATE_FORMAT)
         private String date1;
 
         @NotNullOrEmpty
@@ -105,7 +105,7 @@ public class SmearTestResultRequests {
         private String result1;
 
         @NotNullOrEmpty
-        @DateTimeFormat(pattern = WHPConstants.DATE_FORMAT)
+        @DateTimeFormat(pattern = DATE_FORMAT)
         private String date2;
 
         @NotNullOrEmpty

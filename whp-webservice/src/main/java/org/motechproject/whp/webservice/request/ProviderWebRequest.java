@@ -4,11 +4,12 @@ import lombok.Data;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.validation.APIKeyValidator;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
 public class ProviderWebRequest {
@@ -38,6 +39,6 @@ public class ProviderWebRequest {
     private String uuid;
 
     @NotNull
-    @DateTimeFormat(pattern = WHPConstants.DATE_TIME_FORMAT)
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String date;
 }

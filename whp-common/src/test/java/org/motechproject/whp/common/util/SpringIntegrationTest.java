@@ -1,4 +1,4 @@
-package org.motechproject.whp.common.utils;
+package org.motechproject.whp.common.util;
 
 import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;

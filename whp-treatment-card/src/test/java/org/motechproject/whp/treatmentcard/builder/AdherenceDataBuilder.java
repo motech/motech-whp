@@ -3,7 +3,7 @@ package org.motechproject.whp.treatmentcard.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.common.ForEveryDayBetween;
+import org.motechproject.whp.common.util.ForEveryDayBetween;
 import org.motechproject.whp.patient.domain.Patient;
 
 import java.util.ArrayList;
