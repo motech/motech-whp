@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.audit;
+package org.motechproject.whp.adherence.audit.service;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
