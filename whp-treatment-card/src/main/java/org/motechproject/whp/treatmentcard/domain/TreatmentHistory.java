@@ -4,7 +4,7 @@ package org.motechproject.whp.treatmentcard.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.WHPDate;
+import org.motechproject.whp.common.util.WHPDate;
 
 @Getter
 @EqualsAndHashCode

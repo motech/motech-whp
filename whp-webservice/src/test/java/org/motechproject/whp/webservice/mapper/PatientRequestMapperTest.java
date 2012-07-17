@@ -3,15 +3,14 @@ package org.motechproject.whp.webservice.mapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,8 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
@@ -66,7 +67,7 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
 
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
-        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString(WHPConstants.DATE_TIME_FORMAT));
+        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString(DATE_TIME_FORMAT));
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
         assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
@@ -114,15 +115,15 @@ public class PatientRequestMapperTest extends SpringIntegrationTest {
     private void assertSmearTests(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getSmear_sample_instance(), patientRequest.getSmearTestResults().get(0).getSmear_sample_instance().name());
         assertEquals(patientWebRequest.getSmear_test_result_1(), patientRequest.getSmearTestResults().get(0).getSmear_test_result_1().name());
-        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_1().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(patientWebRequest.getSmear_test_date_1(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_1().toString(DATE_FORMAT));
         assertEquals(patientWebRequest.getSmear_test_result_2(), patientRequest.getSmearTestResults().get(0).getSmear_test_result_2().name());
-        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_2().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(patientWebRequest.getSmear_test_date_2(), patientRequest.getSmearTestResults().get(0).getSmear_test_date_2().toString(DATE_FORMAT));
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(SampleInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
         assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().get(0).getWeight(), 0.0);
-        assertEquals("10/10/2010", patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
+        assertEquals("10/10/2010", patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(DATE_FORMAT));
     }
 
     @After

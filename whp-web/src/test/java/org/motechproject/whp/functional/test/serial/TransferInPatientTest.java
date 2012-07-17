@@ -3,7 +3,6 @@ package org.motechproject.whp.functional.test.serial;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.functional.data.CaseUpdate;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
@@ -12,6 +11,7 @@ import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.functional.page.Page.getLoginPage;
 
 public class TransferInPatientTest extends TreatmentUpdateTest {
@@ -61,6 +61,6 @@ public class TransferInPatientTest extends TreatmentUpdateTest {
         assertTrue(providerPage.hasPatient(testPatient.getFirstName()));
         assertTrue(providerPage.hasTbId(transferInTBId));
         assertEquals("RNTCP Category 1", providerPage.getTreatmentCategoryText(testPatient.getCaseId()));
-        assertEquals(new LocalDate(2012, 5, 2).toString(WHPConstants.DATE_FORMAT), providerPage.getTreatmentStartDateText(testPatient.getCaseId()));
+        assertEquals(new LocalDate(2012, 5, 2).toString(DATE_FORMAT), providerPage.getTreatmentStartDateText(testPatient.getCaseId()));
     }
 }

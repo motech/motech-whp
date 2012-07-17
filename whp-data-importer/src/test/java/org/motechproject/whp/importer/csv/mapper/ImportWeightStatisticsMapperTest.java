@@ -5,13 +5,13 @@ import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -40,6 +40,6 @@ public class ImportWeightStatisticsMapperTest {
 
     private void verifyMapping(ImportPatientRequest importPatientRequest, WeightStatistics weightStatistics, int index, SampleInstance type) {
         assertEquals(importPatientRequest.getWeight(type), weightStatistics.get(index).getWeight().toString());
-        assertEquals(importPatientRequest.getWeightDate(type), weightStatistics.get(index).getMeasuringDate().toString(WHPConstants.DATE_FORMAT));
+        assertEquals(importPatientRequest.getWeightDate(type), weightStatistics.get(index).getMeasuringDate().toString(DATE_FORMAT));
     }
 }

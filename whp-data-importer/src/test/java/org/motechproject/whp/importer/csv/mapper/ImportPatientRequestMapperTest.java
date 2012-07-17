@@ -10,7 +10,6 @@ import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -42,7 +42,7 @@ public class ImportPatientRequestMapperTest {
         assertEquals(importPatientRequest.getAddress_state(), patientRequest.getAddress().getAddress_state());
         assertEquals(importPatientRequest.getAddress_village(), patientRequest.getAddress().getAddress_village());
         assertEquals(importPatientRequest.getAge(), patientRequest.getAge().toString());
-        assertEquals(importPatientRequest.getDate_modified() +" 00:00:00", patientRequest.getDate_modified().toString(WHPConstants.DATE_TIME_FORMAT));
+        assertEquals(importPatientRequest.getDate_modified() +" 00:00:00", patientRequest.getDate_modified().toString(DATE_TIME_FORMAT));
         assertEquals(importPatientRequest.getDisease_class(), patientRequest.getDisease_class().name());
         assertEquals(importPatientRequest.getFirst_name(), patientRequest.getFirst_name());
         assertEquals(importPatientRequest.getGender(), patientRequest.getGender().name());

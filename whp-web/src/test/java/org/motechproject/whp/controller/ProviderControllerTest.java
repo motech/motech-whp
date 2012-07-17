@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.uimodel.ProviderRow;
@@ -21,6 +20,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -37,11 +37,11 @@ public class ProviderControllerTest {
     private AllDistricts allDistricts;
 
     Provider provider1 = new Provider("aa", "9845678761", "districtA",
-            DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+            DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
     Provider provider2 = new Provider("ab", "9845678761", "districtB",
-            DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+            DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
     Provider provider3 = new Provider("ac", "9845678761", "districtA",
-            DateTimeFormat.forPattern(WHPConstants.DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+            DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
     private ProviderController providerController;
 
