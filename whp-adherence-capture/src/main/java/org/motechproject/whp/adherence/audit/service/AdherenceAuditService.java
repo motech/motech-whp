@@ -1,8 +1,11 @@
 package org.motechproject.whp.adherence.audit.service;
 
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
-import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
+import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -15,13 +18,15 @@ import java.util.List;
 public class AdherenceAuditService {
 
     private AllAuditLogs allAuditLogs;
+    private AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
 
     @Autowired
-    public AdherenceAuditService(AllAuditLogs allAuditLogs) {
+    public AdherenceAuditService(AllAuditLogs allAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs) {
         this.allAuditLogs = allAuditLogs;
+        this.allDailyAdherenceAuditLogs = allDailyAdherenceAuditLogs;
     }
 
-    public void log(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+    public void auditWeeklyAdherence(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         AuditLog auditLog = new AuditLog()
                 .numberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
@@ -34,7 +39,24 @@ public class AdherenceAuditService {
         allAuditLogs.add(auditLog);
     }
 
-    public List<AuditLog> fetchAuditLogs() {
+    public List<AuditLog> fetchWeeklyAuditLogs() {
         return allAuditLogs.getAll();
+    }
+
+    public void auditDailyAdherence(Patient patient, List<Adherence> adherenceData, AuditParams auditParams) {
+        for(Adherence adherence : adherenceData) {
+            DailyAdherenceAuditLog auditLog = new DailyAdherenceAuditLog();
+            auditLog.setPatientId(patient.getPatientId());
+            auditLog.setTbId(adherence.getTbId());
+            auditLog.setPillDate(adherence.getPillDate());
+            auditLog.setPillStatus(adherence.getPillStatus());
+            auditLog.setSourceOfChange(auditParams.getSourceOfChange().name());
+            auditLog.setUser(auditParams.getUser());
+            allDailyAdherenceAuditLogs.add(auditLog);
+        }
+    }
+
+    public List<DailyAdherenceAuditLog> fetchDailyAuditLogs() {
+        return allDailyAdherenceAuditLogs.getAll();
     }
 }

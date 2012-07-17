@@ -14,4 +14,14 @@ public class AdherenceDataBuilder {
         log.setProviderId(providerId);
         return log;
     }
+
+    public static Adherence createLog(LocalDate doseDate, String providerId, String tbId, PillStatus pillStatus) {
+        Adherence log = new Adherence();
+        log.setPatientId("externalid");
+        log.setPillDate(doseDate);
+        log.setPillStatus(pillStatus);
+        log.setProviderId(providerId);
+        log.setTbId(tbId);
+        return log;
+    }
 }
