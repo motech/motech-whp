@@ -40,10 +40,10 @@
             <#list allCmfAdmins as cmfAdmin>
             <tr id="cmfAdmin_${cmfAdmin.userId}" class="cmfadmin-row" rowId="${cmfAdmin.userId}"
                 redirect-url="<@spring.url '/cmfAdmin/edit?userId=${cmfAdmin.userId}' />">
-                <td>
+                <td class="staffName">
                 ${cmfAdmin.staffName}
                 </td>
-                <td>
+                <td class="userId">
                 ${cmfAdmin.userId}
                 </td>
                 <td>
