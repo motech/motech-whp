@@ -136,7 +136,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-adherence</artifactId>
+            <artifactId>whp-adherence-capture</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
