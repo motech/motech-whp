@@ -69,7 +69,7 @@
         </div>
         <div>
             <label class="tc-label">Name and designation of DOT provider & Tel No</label>
-            <label class=""><br/></label><br/>
+            <label class="">${patient.providerId}, ${patient.providerMobileNumber}<br/></label><br/>
         </div>
         <div>
             <label class="tc-label">DOT centre</label>
