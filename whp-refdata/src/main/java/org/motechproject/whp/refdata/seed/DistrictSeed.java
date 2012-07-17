@@ -1,7 +1,6 @@
 package org.motechproject.whp.refdata.seed;
 
 
-import org.ektorp.support.GenericRepository;
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
@@ -15,7 +14,7 @@ public class DistrictSeed {
     @Qualifier(value = "allDistricts")
     AllDistricts allDistricts;
 
-    @Seed(priority = 0, version = "1.0")
+    @Seed(priority = 0, version = "2.0")
     public void load() {
         allDistricts.add(new District("Begusarai"));
         allDistricts.add(new District("Bhagalpur"));
