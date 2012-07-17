@@ -36,6 +36,7 @@
         <module>whp-webservice</module>
         <module>whp-ivr</module>
         <module>whp-web</module>
+        <module>whp-reporting</module>
     </modules>
 
     <repositories>
