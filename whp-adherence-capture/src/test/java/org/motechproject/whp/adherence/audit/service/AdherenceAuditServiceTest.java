@@ -1,8 +1,11 @@
-package org.motechproject.whp.adherence.audit;
+package org.motechproject.whp.adherence.audit.service;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;

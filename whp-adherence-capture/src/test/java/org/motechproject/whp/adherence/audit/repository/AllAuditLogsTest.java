@@ -1,8 +1,10 @@
-package org.motechproject.whp.adherence.audit;
+package org.motechproject.whp.adherence.audit.repository;
 
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Test;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

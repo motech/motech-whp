@@ -10,7 +10,7 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.AuditParams;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
