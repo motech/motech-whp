@@ -3,13 +3,14 @@ package org.motechproject.whp.importer.csv.mapper;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Double.parseDouble;
 import static org.joda.time.LocalDate.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.motechproject.whp.importer.csv.request.WeightStatisticsRequests.WeightStatisticsRequest;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -31,9 +32,9 @@ public class ImportWeightStatisticsMapper {
     //TODO: Business logic in mapper - To be fixed by moving to Domain Object(s)
     private LocalDate resolveMeasuringDate(ImportPatientRequest importPatientRequest, WeightStatisticsRequest request) {
         if (hasText(request.getWeightDate())) {
-            return parse(request.getWeightDate(), forPattern(WHPConstants.DATE_FORMAT));
+            return parse(request.getWeightDate(), forPattern(DATE_FORMAT));
         } else {
-            return parse(importPatientRequest.getDate_modified(), forPattern(WHPConstants.DATE_TIME_FORMAT));
+            return parse(importPatientRequest.getDate_modified(), forPattern(DATE_TIME_FORMAT));
         }
     }
 }

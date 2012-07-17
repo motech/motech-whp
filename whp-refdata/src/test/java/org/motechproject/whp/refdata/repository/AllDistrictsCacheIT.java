@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.kubek2k.springockito.annotations.WrapWithSpy;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.District;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

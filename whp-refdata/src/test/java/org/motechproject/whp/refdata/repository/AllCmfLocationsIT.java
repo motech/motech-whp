@@ -2,7 +2,7 @@ package org.motechproject.whp.refdata.repository;
 
 import org.junit.After;
 import org.junit.Test;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.CmfLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

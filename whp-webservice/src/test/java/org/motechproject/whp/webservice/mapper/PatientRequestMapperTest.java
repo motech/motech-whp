@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice.mapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;

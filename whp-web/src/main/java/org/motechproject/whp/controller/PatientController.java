@@ -8,7 +8,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
-import org.motechproject.whp.common.domain.WHPDate;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -38,7 +38,7 @@ import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.WHPDate.date;
+import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
 @RequestMapping(value = "/patients")

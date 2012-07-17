@@ -3,10 +3,9 @@ package org.motechproject.whp.refdata.repository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

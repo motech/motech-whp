@@ -3,7 +3,6 @@ package org.motechproject.whp.importer.csv;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
@@ -25,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.util.StringUtils.hasText;
 
 @CSVImporter(entity = "patientRecordValidator", bean = ImportPatientRequest.class)
@@ -285,11 +286,11 @@ public class PatientRecordValidator {
             }
 
             if (dateClass == DateTime.class) {
-                String expectedDate = ((DateTime) stringToDateTime.convert(requestDate, dateClass)).toString(WHPConstants.DATE_TIME_FORMAT);
-                checkIfEqual(expectedDate, ((DateTime) patientDate).toString(WHPConstants.DATE_TIME_FORMAT), fieldName, errors);
+                String expectedDate = ((DateTime) stringToDateTime.convert(requestDate, dateClass)).toString(DATE_TIME_FORMAT);
+                checkIfEqual(expectedDate, ((DateTime) patientDate).toString(DATE_TIME_FORMAT), fieldName, errors);
             } else {
-                String expectedDate = ((LocalDate) stringToDateTime.convert(requestDate, dateClass)).toString(WHPConstants.DATE_FORMAT);
-                checkIfEqual(expectedDate, ((LocalDate) patientDate).toString(WHPConstants.DATE_FORMAT), fieldName, errors);
+                String expectedDate = ((LocalDate) stringToDateTime.convert(requestDate, dateClass)).toString(DATE_FORMAT);
+                checkIfEqual(expectedDate, ((LocalDate) patientDate).toString(DATE_FORMAT), fieldName, errors);
             }
         } catch (Exception e) {
             printInvalidDataError(fieldName, errors, requestDate);

@@ -2,7 +2,7 @@ package org.motechproject.whp.uimodel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.motechproject.whp.common.domain.WHPDate;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.user.domain.Provider;

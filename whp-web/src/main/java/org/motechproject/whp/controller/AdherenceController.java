@@ -13,7 +13,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.common.domain.WHPConstants;
-import org.motechproject.whp.common.domain.WHPDate;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;

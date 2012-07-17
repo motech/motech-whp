@@ -3,7 +3,7 @@ package org.motechproject.whp.importer.csv;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.importer.csv.builder.ImportProviderRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportProviderRequest;
 import org.motechproject.whp.user.repository.AllProviders;

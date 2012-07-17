@@ -1,4 +1,4 @@
-package org.motechproject.whp.common.domain;
+package org.motechproject.whp.common.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
@@ -7,7 +7,11 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class WHPDate {
 
-    private DateTimeFormatter formatter = DateTimeFormat.forPattern(WHPConstants.DATE_FORMAT);
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
+    public static final String LUCID_DATE_FORMAT = "EEEE, dd MMMM yyyy";
+    public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
+
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT);
 
     private LocalDate date;
 
@@ -35,14 +39,14 @@ public class WHPDate {
         if (null == date) {
             return "";
         }
-        return date.toString(WHPConstants.DATE_FORMAT);
+        return date.toString(DATE_FORMAT);
     }
 
     public String lucidValue(){
         if (null == date) {
             return "";
         }
-        return date.toString(WHPConstants.LUCID_DATE_FORMAT);
+        return date.toString(LUCID_DATE_FORMAT);
     }
 
     public LocalDate date() {

@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;

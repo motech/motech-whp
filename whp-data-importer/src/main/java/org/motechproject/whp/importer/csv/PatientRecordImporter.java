@@ -2,11 +2,11 @@ package org.motechproject.whp.importer.csv;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.importer.domain.ValidationResponse;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
@@ -18,7 +18,6 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.util.StringUtils.hasText;
 
 @CSVImporter(entity = "patientRecordImporter", bean = ImportPatientRequest.class)
@@ -88,7 +88,7 @@ public class PatientRecordImporter {
     private void setDefaultValuesIfEmpty(ImportPatientRequest request) {
         if (StringUtils.isBlank(request.getWeightDate(SampleInstance.PreTreatment))) {
             LocalDate registrationDate = (LocalDate) stringToDateTime.convert(request.getDate_modified(), LocalDate.class);
-            request.setPreTreatmentWeightDate(registrationDate.toString(WHPConstants.DATE_FORMAT));
+            request.setPreTreatmentWeightDate(registrationDate.toString(DATE_FORMAT));
         }
         if (StringUtils.isBlank(request.getPatient_type()))
             request.setPatient_type(PatientType.New.name());

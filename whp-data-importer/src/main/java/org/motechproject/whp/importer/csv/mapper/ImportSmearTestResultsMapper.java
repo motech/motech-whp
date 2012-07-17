@@ -7,10 +7,10 @@ import org.motechproject.whp.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.springframework.stereotype.Component;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.importer.csv.request.SmearTestResultRequests.SmearTestResultRequest;
 
 @Component
@@ -38,6 +38,6 @@ public class ImportSmearTestResultsMapper {
     }
 
     private LocalDate stringToLocalDate(String string) {
-        return DateTime.parse(string, forPattern(WHPConstants.DATE_FORMAT)).toLocalDate();
+        return DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate();
     }
 }

@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.repository.AllMotechWebUsers;
 import org.motechproject.util.DateUtil;
