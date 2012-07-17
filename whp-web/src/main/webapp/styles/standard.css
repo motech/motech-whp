@@ -415,6 +415,7 @@ div.buttons a, div.buttons button {
 #treatmentCard .sunday {
     padding-left: 4px;
 }
+
 .line-height-normal td {
     line-height: 18px;
 }
@@ -535,4 +536,13 @@ div.buttons a, div.buttons button {
 }
 .bordered {
     border: 1px solid black;
+}
+.bold {
+    font-weight: bold;
+}
+.inline {
+    display: inline;
+}
+.no-wrap {
+    white-space: nowrap;
 }

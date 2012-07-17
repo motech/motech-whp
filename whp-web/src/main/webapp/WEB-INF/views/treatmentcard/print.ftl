@@ -15,6 +15,7 @@
             <div>
                 <@treatmentCategory/>
             </div>
+            <div>(&#10004;) indicates that the pill has been swallowed under direct observation; (<label class="inline bold">O</label>) indicates a missed dose</div>
             <@adherenceBox title="IPTreatmentCard" monthlyAdherences=treatmentCard.ipAndEipAdherenceSection.monthlyAdherences isPrintVersion=true />
     </#if>
     </div>
@@ -22,7 +23,8 @@
     <#if treatmentCard.CPAdherenceSectionValid == true>
             <h3 class="text-center">II. Continuation Phase</h3>
             <@treatmentCategory isCP=true/>
-            <@adherenceBox title="CPTreatmentCard" monthlyAdherences=treatmentCard.cpAdherenceSection.monthlyAdherences isPrintVersion=true/>
+         <div>(&#10004;) indicates that the pill has been swallowed under direct observation; (<label class="inline bold">O</label>) indicates a missed dose</div>
+        <@adherenceBox title="CPTreatmentCard" monthlyAdherences=treatmentCard.cpAdherenceSection.monthlyAdherences isPrintVersion=true/>
     </#if>
     </div>
 
