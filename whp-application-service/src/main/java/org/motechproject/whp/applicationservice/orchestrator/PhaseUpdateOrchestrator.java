@@ -60,6 +60,7 @@ public class PhaseUpdateOrchestrator {
     public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
         patientService.setNextPhaseName(patientId, phaseToTransitionTo);
         attemptPhaseTransition(patientId);
+        attemptPhaseTransition(patientId);
     }
 
     public void attemptPhaseTransition(String patientId) {
