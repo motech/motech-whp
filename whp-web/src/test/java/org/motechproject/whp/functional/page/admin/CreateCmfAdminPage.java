@@ -59,8 +59,15 @@ public class CreateCmfAdminPage extends LoggedInUserPage {
         waitForSuccess("Successfully created cmf admin with user id "+cmfAdmin.getUserId().toLowerCase());
         return ListAllCmfAdminsPage.getListAllCmfAdminsPage(webDriver);
     }
+
     public TestCmfAdmin createCmfAdmin(){
         TestCmfAdmin testCmfAdmin = new TestCmfAdmin(generateId(), "password", "Patna", "a@b.com", "staff", "department");
+        this.createCmfAdmin(testCmfAdmin);
+        return testCmfAdmin;
+    }
+
+    public TestCmfAdmin createCmfAdmin(String password, String location, String email, String staffName, String department){
+        TestCmfAdmin testCmfAdmin = new TestCmfAdmin(generateId(), password, location, email, staffName, department);
         this.createCmfAdmin(testCmfAdmin);
         return testCmfAdmin;
     }
