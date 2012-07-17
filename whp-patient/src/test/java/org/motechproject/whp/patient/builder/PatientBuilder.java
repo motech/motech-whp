@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
+import static org.motechproject.util.DateUtil.today;
 
 public class PatientBuilder {
 

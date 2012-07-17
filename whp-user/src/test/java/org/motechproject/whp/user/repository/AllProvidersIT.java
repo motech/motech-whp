@@ -1,5 +1,6 @@
 package org.motechproject.whp.user.repository;
 
+import org.hamcrest.core.Is;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 @ContextConfiguration(locations = "classpath*:applicationUserContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
@@ -128,6 +131,18 @@ public class AllProvidersIT extends SpringIntegrationTest {
         assertEquals(2, providers.size());
         assertTrue(providers.contains(provider2));
         assertTrue(providers.contains(provider3));
+    }
+
+    @Test
+    public void shouldFindProviderByPrimaryMobileNumber(){
+        String primaryMobile = "984567876";
+        Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        addAndMarkForDeletion(savedProvider);
+
+        Provider actualProvider = allProviders.findByPrimaryMobileNumber(primaryMobile);
+
+        assertThat(actualProvider, is(savedProvider));
     }
 }
 

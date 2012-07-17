@@ -5,10 +5,10 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.dao.BusinessIdNotUniqueException;
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +26,7 @@ public class AllProviders extends MotechBaseRepository<Provider> {
 
     @GenerateView
     public Provider findByProviderId(String providerId) {
-        if(providerId==null)
+        if (providerId == null)
             return null;
         ViewQuery find_by_providerId = createQuery("by_providerId").key(providerId.toLowerCase()).includeDocs(true);
         return singleResult(db.queryView(find_by_providerId, Provider.class));
@@ -51,4 +51,9 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         return db.queryView(q, Provider.class);
     }
 
+    @View(name = "find_by_mobile_number", map = "function(doc) {if (doc.type ==='Provider') {emit(doc.primaryMobile, doc._id);}}")
+    public Provider findByPrimaryMobileNumber(String primaryMobile) {
+        ViewQuery q = createQuery("find_by_mobile_number").key(primaryMobile).includeDocs(true);
+        return singleResult(db.queryView(q, Provider.class));
+    }
 }

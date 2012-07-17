@@ -8,12 +8,14 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
-    <import resource="classpath*:applicationIvrKookooBundle.xml"/>
-    <import resource="classpath*:applicationCmsLiteApi.xml"/>
+    <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
+    <import resource="classpath*:applicationDecisionTree.xml"/>
+    <import resource="classpath*:ivrKookooContext.xml"/>
 
     <util:properties id="ivrProperties" location="classpath:/ivr.properties"/>
+
     <context:annotation-config/>
     <context:spring-configured/>
     <context:component-scan base-package="org.motechproject.whp.ivr"/>
-
 </beans>

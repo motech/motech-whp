@@ -3,7 +3,13 @@ package org.motechproject.adherence.contract;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AdherenceRecord {
+
+    public static final String PROVIDER_ID = "PROVIDER_ID";
+    public static final String TB_ID = "TB_ID";
 
     @JsonProperty
     private String externalId;
@@ -14,9 +20,7 @@ public class AdherenceRecord {
     @JsonProperty
     private int status;
     @JsonProperty
-    private String providerId;
-    @JsonProperty
-    private String tbId;
+    Map<String, Object> meta = new HashMap<>();
 
     public AdherenceRecord() {
     }
@@ -55,19 +59,19 @@ public class AdherenceRecord {
     }
 
     public void tbId(String tbId) {
-        this.tbId = tbId;
+        meta.put(TB_ID, tbId);
     }
 
     public String tbId() {
-        return tbId;
+        return (String) meta.get(TB_ID);
     }
 
     public void providerId(String providerId) {
-        this.providerId = providerId;
+        meta.put(PROVIDER_ID, providerId);
     }
 
     public String providerId() {
-        return providerId;
+        return (String) meta.get(PROVIDER_ID);
     }
 
     @Override
@@ -80,8 +84,8 @@ public class AdherenceRecord {
         if (status != that.status) return false;
         if (doseDate != null ? !doseDate.equals(that.doseDate) : that.doseDate != null) return false;
         if (externalId != null ? !externalId.equals(that.externalId) : that.externalId != null) return false;
-        if (providerId != null ? !providerId.equals(that.providerId) : that.providerId != null) return false;
-        if (tbId != null ? !tbId.equals(that.tbId) : that.tbId != null) return false;
+        if (providerId() != null ? !providerId().equals(that.providerId()) : that.providerId() != null) return false;
+        if (tbId() != null ? !tbId().equals(that.tbId()) : that.tbId() != null) return false;
         if (treatmentId != null ? !treatmentId.equals(that.treatmentId) : that.treatmentId != null) return false;
 
         return true;
@@ -93,8 +97,8 @@ public class AdherenceRecord {
         result = 31 * result + (treatmentId != null ? treatmentId.hashCode() : 0);
         result = 31 * result + (doseDate != null ? doseDate.hashCode() : 0);
         result = 31 * result + status;
-        result = 31 * result + (providerId != null ? providerId.hashCode() : 0);
-        result = 31 * result + (tbId != null ? tbId.hashCode() : 0);
+        result = 31 * result + (providerId() != null ? providerId().hashCode() : 0);
+        result = 31 * result + (tbId() != null ? tbId().hashCode() : 0);
         return result;
     }
 }

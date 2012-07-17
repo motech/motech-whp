@@ -2,11 +2,15 @@ package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
+import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
@@ -15,11 +19,11 @@ import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.util.WHPDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,17 +42,19 @@ public class WHPAdherenceService {
     private AdherenceService adherenceService;
     private PatientService patientService;
     private AdherenceAuditService adherenceAuditService;
+    private AllAdherenceLogs allAdherenceLogs;
 
     @Autowired
     public WHPAdherenceService(AdherenceService adherenceService,
                                AllPatients allPatients,
                                PatientService patientService,
-                               AdherenceAuditService adherenceAuditService
-    ) {
+                               AdherenceAuditService adherenceAuditService,
+                               AllAdherenceLogs allAdherenceLogs) {
         this.adherenceService = adherenceService;
         this.allPatients = allPatients;
         this.patientService = patientService;
         this.adherenceAuditService = adherenceAuditService;
+        this.allAdherenceLogs = allAdherenceLogs;
     }
 
     public void recordAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
@@ -147,5 +153,9 @@ public class WHPAdherenceService {
             datePillStatusHashMap.put(log.getPillDate(), log.getPillStatus());
         }
         return datePillStatusHashMap;
+    }
+
+    public List<String> patientsWithAdherence(String providerId, TreatmentWeek week) {
+        return allAdherenceLogs.findPatientsWithAdherence(providerId, week.startDate(), week.endDate());
     }
 }

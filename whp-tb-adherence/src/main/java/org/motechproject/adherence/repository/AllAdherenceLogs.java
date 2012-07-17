@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
@@ -61,13 +63,13 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return singleResult(db.queryView(q, AdherenceLog.class));
     }
 
-    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}")
+    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
     public List<AdherenceRecord> findLogsAsOf(LocalDate asOf, int pageNumber, int pageSize) {
         ViewQuery q = createQuery("by_dosageDate").endKey(asOf).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
     }
 
-    @View(name = "by_dateRangeExternalIdAndTherapy", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}")
+    @View(name = "by_dateRangeExternalIdAndTherapy", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
     public List<AdherenceRecord> findLogsInRange(String externalId, String treatmentId, LocalDate startDate, LocalDate endDate) {
         final ComplexKey startKey = ComplexKey.of(externalId, treatmentId, startDate);
         final ComplexKey endKey = ComplexKey.of(externalId, treatmentId, endDate);
@@ -78,7 +80,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
     @View(name = "by_externalId_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId,doc.doseDate], doc._id);}}")
     public List<AdherenceLog> findAllLogsForExternalIdInDoseDateRange(String externalId, LocalDate startDate, LocalDate endDate) {
         final ComplexKey startKey = ComplexKey.of(externalId, startDate);
-        final ComplexKey endKey = ComplexKey.of(externalId,endDate);
+        final ComplexKey endKey = ComplexKey.of(externalId, endDate);
 
         ViewQuery q = createQuery("by_externalId_dosageDate").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
         return db.queryView(q, AdherenceLog.class);
@@ -97,7 +99,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return viewResult.getRows().get(0).getValueAsInt();
     }
 
-    @View(name = "all_taken_logs", map = "function(doc) {if (doc.type == 'AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.status, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, tbId:doc.tbId, providerId:doc.providerId});}}", reduce ="_count")
+    @View(name = "all_taken_logs", map = "function(doc) {if (doc.type == 'AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.status, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}", reduce = "_count")
     public List<AdherenceRecord> allTakenLogsFrom(String patientId, String treatmentId, LocalDate startDate) {
         int status = 1;
         ComplexKey startKey = ComplexKey.of(patientId, treatmentId, status, startDate);
@@ -107,19 +109,19 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return db.queryView(q, AdherenceRecord.class);
     }
 
-    public void addOrUpdateLogsForExternalIdByDoseDate(List<AdherenceLog> adherenceLogs,String externalId){
+    public void addOrUpdateLogsForExternalIdByDoseDate(List<AdherenceLog> adherenceLogs, String externalId) {
         if (adherenceLogs.size() <= 0) {
             return;
         }
-        List<AdherenceLog> logsInDb = findAllLogsForExternalIdInDoseDateRange(externalId,adherenceLogs.get(0).doseDate(),adherenceLogs.get(adherenceLogs.size()-1).doseDate());
+        List<AdherenceLog> logsInDb = findAllLogsForExternalIdInDoseDateRange(externalId, adherenceLogs.get(0).doseDate(), adherenceLogs.get(adherenceLogs.size() - 1).doseDate());
         ArrayList<AdherenceLog> tobeStoredLogs = mapLogToDbLogsIfExists(adherenceLogs, logsInDb);
         db.executeAllOrNothing(tobeStoredLogs);
     }
 
     private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(List<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
         ArrayList<AdherenceLog> tobeStoredLogs = new ArrayList<AdherenceLog>();
-        List<LocalDate> doseDatesToBeMappedWith= extract(dbLogs,on(AdherenceLog.class).doseDate());
-        for(AdherenceLog log : logsToMap) {
+        List<LocalDate> doseDatesToBeMappedWith = extract(dbLogs, on(AdherenceLog.class).doseDate());
+        for (AdherenceLog log : logsToMap) {
             int logPos = doseDatesToBeMappedWith.indexOf(log.doseDate());
             if (logPos < 0) {
                 tobeStoredLogs.add(log);
@@ -133,5 +135,22 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
             }
         }
         return tobeStoredLogs;
+    }
+
+    @View(name = "find_patients_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && doc.status===1) {emit([doc.meta.PROVIDER_ID, doc.doseDate], doc.externalId);}}")
+    public List<String> findPatientsWithAdherence(String providerId, LocalDate startDate, LocalDate endDate) {
+        ComplexKey startKey = ComplexKey.of(providerId.toLowerCase(), startDate);
+        ComplexKey endKey = ComplexKey.of(providerId.toLowerCase(), endDate);
+        ViewQuery q = createQuery("find_patients_with_adherence").startKey(startKey).endKey(endKey).inclusiveEnd(true).includeDocs(true);
+        return getValues(q);
+    }
+
+    private List<String> getValues(ViewQuery q) {
+        Set<String> ids = new HashSet<>();
+        ViewResult result = db.queryView(q);
+        for (ViewResult.Row row : result) {
+            ids.add(row.getValue());
+        }
+        return new ArrayList<>(ids);
     }
 }

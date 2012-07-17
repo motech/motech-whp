@@ -16,15 +16,31 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-ivr-kookoo</artifactId>
-            <version>${motech.version}</version>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-cmslite-api</artifactId>
-            <version>${motech.version}</version>
+            <artifactId>motech-ivr-kookoo-v2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-platform-decisiontree-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-adherence-capture</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

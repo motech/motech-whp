@@ -77,7 +77,7 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
         List<AdherenceLog> logsInDb = allAdherenceLogs.getAll();
         assertEquals(2, logsInDb.size());
 
-        assertEquals(mapper.map(datum1),logsInDb.get(0));
-        assertEquals(mapper.map(datum2),logsInDb.get(1));
+        assertEquals(mapper.map(datum1), logsInDb.get(0));
+        assertEquals(mapper.map(datum2), logsInDb.get(1));
     }
 }

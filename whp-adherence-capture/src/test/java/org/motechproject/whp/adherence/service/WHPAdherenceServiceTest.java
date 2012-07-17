@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
@@ -44,6 +45,8 @@ public class WHPAdherenceServiceTest {
     @Mock
     AllPatients allPatients;
     @Mock
+    AllAdherenceLogs allAdherenceLogs;
+    @Mock
     private AdherenceAuditService adherenceAuditService;
     @Mock
     private PatientService patientService;
@@ -53,7 +56,7 @@ public class WHPAdherenceServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        whpAdherenceService = new WHPAdherenceService(adherenceService, allPatients, patientService, adherenceAuditService);
+        whpAdherenceService = new WHPAdherenceService(adherenceService, allPatients, patientService, adherenceAuditService, allAdherenceLogs);
     }
 
     public DailyAdherenceRequest createDailyAdherenceRequest(int day, int month, int year, int pillStatus) {

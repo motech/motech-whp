@@ -2,13 +2,10 @@ package org.motechproject.whp.adherence.mapping;
 
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceConstants;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AdherenceRecordMapper {
 
