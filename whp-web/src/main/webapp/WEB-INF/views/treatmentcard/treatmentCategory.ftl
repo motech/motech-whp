@@ -1,6 +1,6 @@
 <#macro treatmentCategory isCP = false>
     <#include "categoryDrugs.ftl"/>
-<div class="print-version-text">${patient.treatmentCategoryName}</div>
+<div class="print-version-text bold">${patient.treatmentCategoryName}</div>
 <div class="print-version-text">
     <#if patient.treatmentCategoryCode == "01">
         New Case

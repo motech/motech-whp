@@ -131,10 +131,10 @@
                 <th rowspan="2">Weight</th>
             </tr>
             <tr>
-                <th>Date 1</th>
-                <th>Result 1</th>
-                <th>Date 2</th>
-                <th>Result 2</th>
+                <th class="no-wrap">Date 1</th>
+                <th class="no-wrap">Result 1</th>
+                <th class="no-wrap">Date 2</th>
+                <th class="no-wrap">Result 2</th>
             </tr>
         <#list patient.testResults as testResult>
             <tr>
@@ -150,6 +150,9 @@
         </#list>
         </table>
     </div>
+</div>
+<div>
+    <label class="tc-label">H/O previous Anti-TB treatment with duration</label>
 </div>
 <div id="treatmentCard">
 <#include "../treatmentcard/print.ftl">
@@ -173,51 +176,19 @@
         <tr>
             <th>Date</th>
             <th>By whom</th>
+            <th>Whom contacted</th>
             <th>Reason for missed doses</th>
             <th>Outcome of retrieval action</th>
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        <#list 1..7 as i>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </#list>
     </table>
 </div>
 <div class="chemoprophylaxis">
@@ -228,26 +199,12 @@
             <th>No.</th>
             <th>Chemoprophylaxis</th>
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
+        <#list 1..5 as i>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </#list>
     </table>
 </div>
 <div class="additional-treatments">
