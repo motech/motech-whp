@@ -3,7 +3,6 @@ package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchest
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -43,7 +42,7 @@ public class DoseInterruptionsTestPart extends PhaseUpdateOrchestratorTestPart {
 
         when(whpAdherenceService.getDateAdherenceMap(patient)).thenReturn(dateAdherenceMap);
 
-        phaseUpdateOrchestrator.recomputePillStatus(PATIENT_ID);
+        phaseUpdateOrchestrator.recomputePillStatus(patient);
 
         verify(patientService, times(1)).clearDoseInterruptionsForUpdate(patient);
 

@@ -67,10 +67,11 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void setNextPhaseName(String patientId, Phase nextPhase) {
+    public Patient setNextPhaseName(String patientId, Phase nextPhase) {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.nextPhaseName(nextPhase);
         allPatients.update(patient);
+        return patient;
     }
 
     public void autoCompleteLatestPhase(Patient patient, LocalDate endDate) {
