@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.Phase;
 
 import static org.mockito.Matchers.any;
@@ -59,7 +58,7 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
-        verify(patientService, times(2)).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
+        verify(patientService, times(1)).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
     }
 
     @Test
