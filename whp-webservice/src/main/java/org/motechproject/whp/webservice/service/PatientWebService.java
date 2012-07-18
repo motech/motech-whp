@@ -5,7 +5,7 @@ import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.PatientRequestMapper;
 import org.motechproject.whp.webservice.request.PatientWebRequest;

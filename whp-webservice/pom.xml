@@ -35,10 +35,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-validation</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>case-service</artifactId>
         </dependency>

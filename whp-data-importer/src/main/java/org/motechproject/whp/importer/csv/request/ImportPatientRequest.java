@@ -10,7 +10,7 @@ import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.validation.ProviderIdValidator;
+import org.motechproject.whp.user.validation.ProviderIdValidator;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;

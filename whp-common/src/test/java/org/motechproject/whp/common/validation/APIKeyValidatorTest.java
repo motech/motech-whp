@@ -1,4 +1,4 @@
-package org.motechproject.whp.validation;
+package org.motechproject.whp.common.validation;
 
 import lombok.Data;
 import org.ektorp.CouchDbConnector;
@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.validation.constraints.NamedConstraint;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -17,7 +16,7 @@ import java.util.Properties;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationWHPValidationContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
 public class APIKeyValidatorTest extends SpringIntegrationTest {
 
     private Properties whpAPIValidationProperty;
@@ -25,8 +24,6 @@ public class APIKeyValidatorTest extends SpringIntegrationTest {
     private BeanPropertyBindingResult errors;
     private APIKeyValidator requestValidator;
 
-    @Autowired
-    private CouchDbConnector whpDbConnector;
 
     @Before
     public void setUp() {
@@ -54,7 +51,7 @@ public class APIKeyValidatorTest extends SpringIntegrationTest {
 
     @Override
     public CouchDbConnector getDBConnector() {
-        return whpDbConnector;
+        return null;
     }
 
     @Data

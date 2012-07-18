@@ -42,9 +42,5 @@
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-user</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-validation</artifactId>
-        </dependency>
     </dependencies>
 </project>

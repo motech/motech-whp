@@ -29,7 +29,6 @@
         <module>whp-tb-adherence</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
-        <module>whp-validation</module>
         <module>whp-data-importer</module>
         <module>whp-migration</module>
         <module>whp-webservice</module>
@@ -184,11 +183,6 @@
                 <classifier>tests</classifier>
                 <scope>test</scope>
                 <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-validation</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>

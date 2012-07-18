@@ -27,10 +27,6 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
             <scope>test</scope>
             <classifier>tests</classifier>
