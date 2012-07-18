@@ -12,7 +12,7 @@ import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.importer.csv.request.WeightStatisticsRequests;
-import org.motechproject.whp.mapping.StringToDateTime;
+import org.motechproject.whp.common.mapping.StringToDateTime;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.repository.AllPatients;

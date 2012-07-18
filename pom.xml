@@ -25,7 +25,6 @@
         <module>whp-refdata</module>
         <module>whp-user</module>
         <module>whp-patient</module>
-        <module>whp-mapping</module>
         <module>whp-adherence</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
@@ -165,11 +164,6 @@
                 <classifier>tests</classifier>
                 <scope>test</scope>
                 <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-mapping</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>

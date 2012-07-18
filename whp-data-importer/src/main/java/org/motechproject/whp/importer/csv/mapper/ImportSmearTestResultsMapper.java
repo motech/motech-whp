@@ -3,7 +3,7 @@ package org.motechproject.whp.importer.csv.mapper;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.mapping.StringToEnumeration;
+import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;

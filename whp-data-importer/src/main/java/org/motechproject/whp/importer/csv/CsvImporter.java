@@ -4,7 +4,7 @@ import org.motechproject.importer.CSVDataImporter;
 import org.motechproject.whp.importer.csv.exceptions.ExceptionMessages;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
-import org.motechproject.whp.mapping.StringToEnumeration;
+import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
