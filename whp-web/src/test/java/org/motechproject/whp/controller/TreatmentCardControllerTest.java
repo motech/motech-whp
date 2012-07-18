@@ -95,8 +95,8 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
 
         treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
-        verify(phaseUpdateOrchestrator, times(1)).recomputePillStatus(adherenceData.getPatientId());
-        verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(adherenceData.getPatientId());
+        verify(phaseUpdateOrchestrator, times(1)).recomputePillStatus(patient);
+        verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(patient);
     }
 
 }

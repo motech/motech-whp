@@ -32,7 +32,7 @@ public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
         when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, week(today).dateOf(DayOfWeek.Sunday)))
                 .thenReturn(numberOfDosesTakenInIPTillLastSunday);
 
-        phaseUpdateOrchestrator.recomputePillStatus(patient.getPatientId());
+        phaseUpdateOrchestrator.recomputePillStatus(patient);
         verify(patientService).updatePillTakenCount(patient, Phase.IP, numberOfDosesTakenInIP, today);
     }
 }

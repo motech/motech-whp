@@ -67,8 +67,11 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
         adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
-        phaseUpdateOrchestrator.recomputePillStatus(patientId);
-        phaseUpdateOrchestrator.attemptPhaseTransition(patientId);
+
+        Patient patient = allPatients.findByPatientId(patientId);
+
+        phaseUpdateOrchestrator.recomputePillStatus(patient);
+        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }

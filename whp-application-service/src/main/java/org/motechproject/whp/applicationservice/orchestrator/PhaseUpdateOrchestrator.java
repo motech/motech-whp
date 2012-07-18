@@ -39,12 +39,11 @@ public class PhaseUpdateOrchestrator {
         Patient patient = allPatients.findByPatientId(patientId);
         patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
         allPatients.update(patient);
-        recomputePillStatus(patientId);
-        attemptPhaseTransition(patientId);
+        recomputePillStatus(patient);
+        attemptPhaseTransition(patient);
     }
 
-    public void recomputePillStatus(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public void recomputePillStatus(Patient patient) {
         Phases phases = patient.getCurrentTherapy().getPhases();
         for (Phase phase : patient.getHistoryOfPhases()) {
             /*
@@ -58,21 +57,18 @@ public class PhaseUpdateOrchestrator {
     }
 
     public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
-        patientService.setNextPhaseName(patientId, phaseToTransitionTo);
-        attemptPhaseTransition(patientId);
-        attemptPhaseTransition(patientId);
+        Patient patient = patientService.setNextPhaseName(patientId, phaseToTransitionTo);
+        attemptPhaseTransition(patient);
     }
 
-    public void attemptPhaseTransition(String patientId) {
-        Patient patient = allPatients.findByPatientId(patientId);
-
+    public void attemptPhaseTransition(Patient patient) {
         if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
             patientService.revertAutoCompleteOfLastPhase(patient);
         }
 
         if (patient.latestPhaseDoseComplete()) {
             PhaseRecord latestPhaseRecord = patient.latestPhaseRecord();
-            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patientId, patient.getCurrentTherapy().getUid(),
+            AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patient.getPatientId(), patient.getCurrentTherapy().getUid(),
                     patient.numberOfDosesForPhase(latestPhaseRecord.getName()), latestPhaseRecord.getStartDate());
             patientService.autoCompleteLatestPhase(patient, recordOfLastDoseInPhase.doseDate());
         }
@@ -81,7 +77,11 @@ public class PhaseUpdateOrchestrator {
             patientService.startNextPhase(patient);
         }
 
-        recomputePillStatus(patientId);
+        recomputePillStatus(patient);
+
+        while (patient.currentPhaseDoseComplete()) {
+            attemptPhaseTransition(patient);
+        }
     }
 
     public void updateDoseInterruptions(Patient patient) {

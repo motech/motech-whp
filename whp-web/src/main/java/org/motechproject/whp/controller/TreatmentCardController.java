@@ -59,8 +59,8 @@ public class TreatmentCardController extends BaseController {
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient, auditParams);
-        phaseUpdateOrchestrator.recomputePillStatus(updateAdherenceRequest.getPatientId());
-        phaseUpdateOrchestrator.attemptPhaseTransition(updateAdherenceRequest.getPatientId());
+        phaseUpdateOrchestrator.recomputePillStatus(patient);
+        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
         out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);
         return redirectToPatientDashboardURL(patient.getPatientId());
     }

@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.service.MotechUser;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
@@ -25,7 +23,6 @@ import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
@@ -179,7 +176,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
 
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
 
-        verify(phaseUpdateOrchestrator).recomputePillStatus(PATIENT_ID);
+        verify(phaseUpdateOrchestrator).recomputePillStatus(patient);
     }
 
     @Test
@@ -189,7 +186,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
 
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
 
-        verify(phaseUpdateOrchestrator).attemptPhaseTransition(PATIENT_ID);
+        verify(phaseUpdateOrchestrator).attemptPhaseTransition(patient);
     }
 
     @After
