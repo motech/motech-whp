@@ -1,19 +1,32 @@
 package org.motechproject.whp.migration.v1.mapper;
 
+import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.migration.v0.domain.*;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
-import org.motechproject.whp.migration.v0.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
+import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrBefore;
+
 public class PatientV1Mapper {
+
+    private WHPAdherenceService whpAdherenceService;
 
     private PatientV0 patientV0;
     private Patient patient;
 
-    public PatientV1Mapper(PatientV0 patientV0) {
+    public PatientV1Mapper(PatientV0 patientV0, WHPAdherenceService whpAdherenceService) {
         this.patientV0 = patientV0;
+        this.whpAdherenceService = whpAdherenceService;
     }
 
     public Patient map() {
@@ -44,7 +57,41 @@ public class PatientV1Mapper {
         Therapy therapy = new Therapy();
         mapBasicTherapyInfo(therapyV0, therapy);
         mapTreatments(therapyV0, therapy);
+        mapPhases(therapy);
         return therapy;
+    }
+
+    private void mapPhases(Therapy therapy) {
+        AdherenceList adherenceList = whpAdherenceService.getAdherenceSortedByDate(patient.getPatientId(), therapy.getUid());
+        if (adherenceList.size() > 0) {
+            Phases phases = therapy.getPhases();
+            PhaseRecord ipPhaseRecord = phases.getPhaseRecords().get(Phase.IP);
+            Adherence firstLog = adherenceList.get(0);
+            ipPhaseRecord.setStartDate(firstLog.getPillDate());
+            updateTotalDoseTakenCountTillToday(ipPhaseRecord, adherenceList);
+            updateTotalDoseTakenCountTillSunday(ipPhaseRecord, adherenceList);
+
+            phases.getHistory().add(Phase.IP);
+        }
+    }
+
+    private void updateTotalDoseTakenCountTillToday(PhaseRecord phaseRecord, AdherenceList adherenceList) {
+        phaseRecord.setNumberOfDosesTaken(adherenceCount(adherenceList, today()), today());
+    }
+
+    private void updateTotalDoseTakenCountTillSunday(PhaseRecord phaseRecord, AdherenceList adherenceList) {
+        LocalDate endDate = DateUtil.today();
+        LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
+        phaseRecord.setNumberOfDosesTaken(adherenceCount(adherenceList, sundayBeforeEndDate), sundayBeforeEndDate);
+    }
+
+    private int adherenceCount(AdherenceList adherenceList, LocalDate asOfDate) {
+        ArrayList<Adherence> filteredList = new ArrayList<>();
+        for (Adherence adherence : adherenceList) {
+            if (isOnOrBefore(adherence.getPillDate(), asOfDate))
+                filteredList.add(adherence);
+        }
+        return filteredList.size();
     }
 
     private void mapTreatments(TherapyV0 therapyV0, Therapy therapy) {

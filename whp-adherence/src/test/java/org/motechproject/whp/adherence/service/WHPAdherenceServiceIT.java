@@ -12,8 +12,8 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -244,6 +244,22 @@ public class WHPAdherenceServiceIT extends SpringIntegrationTest {
 
         AdherenceRecord adherenceRecord = adherenceService.nThTakenDose(patientId, THERAPY_DOC_ID, 3, new LocalDate(2012, 1, 1));
         assertEquals(new LocalDate(2012, 3, 1), adherenceRecord.doseDate());
+    }
+
+    @Test
+    public void shouldGetSortedAdherence() {
+        String patientId = "patientId";
+        Adherence log1 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log3 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
+        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patientId);
+
+        AdherenceList adherenceSortedByDate = adherenceService.getAdherenceSortedByDate(patientId, THERAPY_DOC_ID);
+
+        assertEquals(3, adherenceSortedByDate.size());
+        assertEquals(new LocalDate(2012, 1, 1), adherenceSortedByDate.get(0).getPillDate());
+        assertEquals(new LocalDate(2012, 3, 1), adherenceSortedByDate.get(2).getPillDate());
     }
 
     @Test

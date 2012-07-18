@@ -1,24 +1,45 @@
 package org.motechproject.whp.migration.v1.mapper;
 
+import org.joda.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.mockito.Mock;
+import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.migration.v0.builder.PatientV0Builder;
 import org.motechproject.whp.migration.v0.builder.TherapyV0Builder;
 import org.motechproject.whp.migration.v0.builder.TreatmentV0Builder;
 import org.motechproject.whp.migration.v0.domain.*;
+import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import java.util.Arrays;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-public class PatientV1MapperTest {
+public class PatientV1MapperTest extends BaseUnitTest {
+
+    @Mock
+    private WHPAdherenceService whpAdherenceService;
+
+    @Before
+    public void setUp() {
+        initMocks(this);
+        when(whpAdherenceService.getAdherenceSortedByDate(anyString(), anyString())).thenReturn(new AdherenceList());
+    }
 
     @Test
     public void shouldMapBasicPatientInfo() {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().build();
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertEquals(patientV0.getPatientId(), patient.getPatientId());
         assertEquals(patientV0.getFirstName(), patient.getFirstName());
         assertEquals(patientV0.getLastName(), patient.getLastName());
@@ -35,7 +56,7 @@ public class PatientV1MapperTest {
     @Test
     public void shouldMapCurrentTherapy() {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().build();
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertTherapy(patientV0.getCurrentTreatment().getTherapy(), patient.getCurrentTherapy());
     }
 
@@ -51,7 +72,7 @@ public class PatientV1MapperTest {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().withCurrentTherapy(therapyV03).build();
         patientV0.setTreatments(Arrays.asList(treatmentV01, treatmentV02));
 
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertEquals(2, patient.getTherapyHistory().size());
         assertTherapy(therapyV01, patient.getTherapyHistory().get(0));
         assertTherapy(therapyV02, patient.getTherapyHistory().get(1));
@@ -70,7 +91,7 @@ public class PatientV1MapperTest {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().withCurrentTherapy(currentTherapy).build();
         patientV0.setTreatments(Arrays.asList(treatmentV01, treatmentV02, treatmentV03));
 
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertEquals(2, patient.getTherapyHistory().size());
         assertTherapy(therapyV01, patient.getTherapyHistory().get(0));
         assertTherapy(therapyV02, patient.getTherapyHistory().get(1));
@@ -84,7 +105,7 @@ public class PatientV1MapperTest {
 
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().withCurrentTreatment(treatmentV0).build();
 
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertNotNull(patient.getCurrentTherapy().getCurrentTreatment());
         assertTreatment(treatmentV0, patient.getCurrentTherapy().getCurrentTreatment());
         assertEquals(0, patient.getCurrentTherapy().getTreatments().size());
@@ -101,7 +122,7 @@ public class PatientV1MapperTest {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().withCurrentTreatment(treatmentV01).build();
         patientV0.setTreatments(Arrays.asList(treatmentV02, treatmentV03));
 
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
 
         assertEquals(2, patient.getCurrentTherapy().getTreatments().size());
         assertTreatment(treatmentV02, patient.getCurrentTherapy().getTreatments().get(0));
@@ -119,10 +140,31 @@ public class PatientV1MapperTest {
         PatientV0 patientV0 = new PatientV0Builder().withDefaults().withCurrentTreatment(treatmentV01).build();
         patientV0.setTreatments(Arrays.asList(treatmentV02));
 
-        Patient patient = new PatientV1Mapper(patientV0).map();
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
         assertEquals(1, patient.getTherapyHistory().size());
         assertNotNull(patient.getTherapyHistory().get(0).getCurrentTreatment());
         assertTreatment(treatmentV02, patient.getTherapyHistory().get(0).getCurrentTreatment());
+    }
+
+    @Test
+    public void shouldMapPhases() {
+        mockCurrentDate(new LocalDate(2012, 1, 10));
+
+        PatientV0 patientV0 = new PatientV0Builder().withDefaults().build();
+        AdherenceList adherence = new AdherenceList(asList(
+                new Adherence(new LocalDate(2012, 1, 1)),
+                new Adherence(new LocalDate(2012, 1, 2)),
+                new Adherence(new LocalDate(2012, 1, 9))));
+
+        when(whpAdherenceService.getAdherenceSortedByDate(patientV0.getPatientId(), patientV0.getCurrentTreatment().getTherapyDocId())).thenReturn(adherence);
+
+        Patient patient = new PatientV1Mapper(patientV0, whpAdherenceService).map();
+        Phases phases = patient.getCurrentTherapy().getPhases();
+        assertEquals(new LocalDate(2012, 1, 1), phases.getIPStartDate());
+        assertEquals(Phase.IP, phases.getHistory().latestPhase());
+        PhaseRecord ipPhaseRecord = phases.getPhaseRecords().get(Phase.IP);
+        assertEquals(3, ipPhaseRecord.getPillTakenSummaries().getTotalPillsTaken());
+        assertEquals(2, ipPhaseRecord.getPillTakenSummaries().getTotalPillsTakenTillLastSunday(new LocalDate(2012, 1, 7)));
     }
 
     private void assertTreatment(TreatmentV0 treatmentV0, Treatment treatment) {

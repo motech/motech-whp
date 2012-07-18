@@ -4,9 +4,12 @@ import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.service.AdherenceService;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
+import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
@@ -15,17 +18,15 @@ import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.util.WHPDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
@@ -148,4 +149,10 @@ public class WHPAdherenceService {
         }
         return datePillStatusHashMap;
     }
+
+    public AdherenceList getAdherenceSortedByDate(String patientId, String therapyUid) {
+        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogs(patientId, therapyUid);
+        return new AdherenceMapper().map(adherenceRecords);
+    }
+
 }
