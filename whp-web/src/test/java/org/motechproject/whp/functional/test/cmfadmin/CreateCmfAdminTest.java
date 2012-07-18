@@ -16,7 +16,8 @@ public class CreateCmfAdminTest extends BaseTest {
     public void shouldCreateCmfAdmin() throws InterruptedException {
         TestCmfAdmin cmfAdmin = loginAsItAdmin(webDriver)
                 .navigateToSearchCmfAdmins()
-                .navigateToCreateCmfAdminPage().createCmfAdmin("oldPassword", "Delhi", "oldEmail@a.com", "oldStaffName", "oldDepartment");
+                .navigateToCreateCmfAdminPage()
+                .createCmfAdmin("oldPassword", "Delhi", "oldEmail@a.com", "oldStaffName", "oldDepartment");
 
         ListAllCmfAdminsPage listAllCmfAdminsPage = Page.getListAllCmfAdminsPage(webDriver);
 
