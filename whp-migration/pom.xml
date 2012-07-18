@@ -31,6 +31,10 @@
             <classifier>tests</classifier>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-adherence-capture</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

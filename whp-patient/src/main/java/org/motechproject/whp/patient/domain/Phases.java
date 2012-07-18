@@ -15,8 +15,10 @@ import static org.motechproject.util.DateUtil.today;
 public class Phases {
 
     @JsonProperty
+    @Getter
     private PhaseRecords phaseRecords = new PhaseRecords();
     @JsonProperty
+    @Getter
     private PhaseTransitions history = new PhaseTransitions();
 
     @Getter

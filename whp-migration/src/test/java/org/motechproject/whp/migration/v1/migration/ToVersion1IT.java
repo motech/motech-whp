@@ -3,17 +3,17 @@ package org.motechproject.whp.migration.v1.migration;
 import org.junit.After;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.migration.v0.builder.PatientV0Builder;
 import org.motechproject.whp.migration.v0.builder.TherapyV0Builder;
 import org.motechproject.whp.migration.v0.domain.PatientV0;
 import org.motechproject.whp.migration.v0.domain.TherapyV0;
 import org.motechproject.whp.migration.v0.repository.AllPatientsV0;
 import org.motechproject.whp.migration.v0.repository.AllTherapiesV0;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationMigrationContext.xml")
 public class ToVersion1IT extends SpringIntegrationTest {
@@ -43,10 +43,6 @@ public class ToVersion1IT extends SpringIntegrationTest {
         assertNotNull(allPatients.findByPatientId(patientV0.getPatientId()));
     }
 
-    @Test
-    public void should(){
-        toVersion0.doo();
-    }
 
     @After
     public void tearDown() {

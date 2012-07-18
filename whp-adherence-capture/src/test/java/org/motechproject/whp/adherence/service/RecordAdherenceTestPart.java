@@ -7,6 +7,7 @@ import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -21,9 +22,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
@@ -168,6 +167,22 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
 
         AdherenceRecord adherenceRecord = adherenceService.nThTakenDose(patientId, THERAPY_DOC_ID, 3, new LocalDate(2012, 1, 1));
         assertEquals(new LocalDate(2012, 3, 1), adherenceRecord.doseDate());
+    }
+
+    @Test
+    public void shouldGetSortedAdherence() {
+        String patientId = "patientId";
+        Adherence log1 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
+        Adherence log3 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
+        Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
+        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patientId);
+
+        AdherenceList adherenceSortedByDate = adherenceService.getAdherenceSortedByDate(patientId, THERAPY_DOC_ID);
+
+        assertEquals(3, adherenceSortedByDate.size());
+        assertEquals(new LocalDate(2012, 1, 1), adherenceSortedByDate.get(0).getPillDate());
+        assertEquals(new LocalDate(2012, 3, 1), adherenceSortedByDate.get(2).getPillDate());
     }
 
     @Test

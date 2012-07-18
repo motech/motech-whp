@@ -153,4 +153,13 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         }
         return new ArrayList<>(ids);
     }
+
+     public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
+        int status = 1;
+        ComplexKey startKey = ComplexKey.of(patientId, treatmentId, status);
+        ComplexKey endKey = ComplexKey.of(patientId, treatmentId, status, ComplexKey.emptyObject());
+
+        ViewQuery q = createQuery("all_taken_logs").startKey(startKey).endKey(endKey).inclusiveEnd(true).reduce(false);
+        return db.queryView(q, AdherenceRecord.class);
+    }
 }

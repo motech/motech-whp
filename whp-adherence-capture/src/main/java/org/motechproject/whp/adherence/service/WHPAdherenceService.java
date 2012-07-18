@@ -27,9 +27,7 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
@@ -158,4 +156,10 @@ public class WHPAdherenceService {
     public List<String> patientsWithAdherence(String providerId, TreatmentWeek week) {
         return allAdherenceLogs.findPatientsWithAdherence(providerId, week.startDate(), week.endDate());
     }
+
+    public AdherenceList getAdherenceSortedByDate(String patientId, String therapyUid) {
+        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogs(patientId, therapyUid);
+        return new AdherenceMapper().map(adherenceRecords);
+    }
+
 }
