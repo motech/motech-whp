@@ -1,1 +1,15 @@
 e45dfb5 Vishal, BalajiN | #273 | Implementing the basic ivr flow
+b2b5fad BalajiN | #0 | Creating commit ignore for master
+a6ae3cb <Sri> #0 | Fixing build.
+98c186f <Balaji, Dev> resolving merge conflict
+ce87434 <Sri> #210 | Moving update adherence criteria to adherence-capture package.
+
+cb5dac3 Balaji, Vishal #0 1. Renamed "whp-adherence" to "whp-adherence-capture" 2. Moved whp-tb-adherence from contrib to this project
+7d17212 Vishal, BalajiN | #0 | Moving the adherence module to whp
+b936cb6 Vishal, BalajiN | #0 | pointing master to the development version of whp contrib
+0f64a80 Vishal, BalajiN | #0 | Preparing master for the next cycle
+3869fa4 Dheeru, Preethi | # 273 | Created WHPCallFlowController to redirect newCall. Added emulator for testing
+
+42c5059 Preethi | #208 | Created domain, repository etc packages for adherence audit package
+779852f <Preethi, Dev> #30 | print view for patient dashboard in release
+854d19c <Vishal, Dev> #30 | adding patient details to print page; adding treatment history (to get provider details) & paused treatment periods class for print page
