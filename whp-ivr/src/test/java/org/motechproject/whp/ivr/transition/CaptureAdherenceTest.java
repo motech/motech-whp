@@ -63,7 +63,7 @@ public class CaptureAdherenceTest {
 
         Node expectedNode = new Node().addPrompts(prompts);
 
-        Node node = captureAdherence.getDestinationNode("");
+        Node node = captureAdherence.getDestinationNode("", null);
 
         assertThat(node, is(expectedNode));
         verify(adherenceDataService, times(1)).getAdherenceSummary(providerId);
