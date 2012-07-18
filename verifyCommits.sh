@@ -1,9 +1,9 @@
 git checkout master
 git pull --rebase origin master
-git log --oneline > commits-master
+git log --oneline | head -n20 > commits-master
 git checkout release-0.2
 git pull --rebase origin release-0.2
-git log --oneline > commits-release
+git log --oneline | head -n20 > commits-release
 git checkout master
 MISSING_LINES=""
 FLAG=0
@@ -14,9 +14,9 @@ do
      if [ $? -eq 1 ]; then
        grep "$line" commitignore > /dev/null
        if [ $? -eq 1 ]; then
-        grep -i "commitignore" $line > /dev/null
+        echo "$line" | grep -i "commitignore" > /dev/null
         if [ $? -eq 1 ];then
-        	MISSING_LINE=$MISSING_LINES"Did not find "$line" in release\n"
+        	MISSING_LINES=$MISSING_LINES"Did not find "$line" in release\n"
 		FLAG=1
 	fi
        fi
@@ -30,9 +30,9 @@ do
      if [ $? -eq 1 ]; then
        grep "$line" commitignore > /dev/null
        if [ $? -eq 1 ]; then
-       	grep -i "commitignore" $line > /dev/null
+       	echo "$line" | grep -i "commitignore" > /dev/null
        	if [ $? -eq 1 ];then
-               MISSING_LINE=$MISSING_LINES"Did not find "$line" in master\n"
+               MISSING_LINES=$MISSING_LINES"Did not find "$line" in master\n"
                FLAG=1
        	fi
        fi
