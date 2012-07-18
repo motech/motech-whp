@@ -32,7 +32,7 @@ public class ReportingGateway  {
         try {
             restTemplate.postForLocation(url, adherenceCaptureRequest, String.class, new HashMap<String, String>());
         } catch (HttpClientErrorException ex) {
-            logger.error(String.format("Reporting subscription creation failed with errorCode: %s, error: %s", ex.getStatusCode(), ex.getResponseBodyAsString()));
+            logger.error(String.format("Reporting adherence creation failed with errorCode: %s, error: %s", ex.getStatusCode(), ex.getResponseBodyAsString()));
             throw ex;
         }
     }

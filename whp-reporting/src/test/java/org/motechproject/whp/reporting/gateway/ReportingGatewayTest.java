@@ -36,7 +36,7 @@ public class ReportingGatewayTest {
 
 
     @Test
-    public void testCaptureAdherence() throws Exception {
+    public void shouldSendAdherenceCaptureRequestToTheRightUrl() throws Exception {
 
         when(whpProperties.getProperty("reporting.service.base.url")).thenReturn("whp-reports");
         new ReportingGateway(restTemplate,whpProperties).captureAdherence(new AdherenceCaptureRequest("123456","abcd1234",4));
@@ -45,7 +45,7 @@ public class ReportingGatewayTest {
         ArgumentCaptor<AdherenceCaptureRequest> adherenceReportRequestArgumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
 
         verify(restTemplate).postForLocation(urlArgumentCaptor.capture(), adherenceReportRequestArgumentCaptor.capture(), responseTypeArgumentCaptor.capture(), urlVariablesArgumentCaptor.capture());
-        AdherenceCaptureRequest subscriptionCreationReportRequest = adherenceReportRequestArgumentCaptor.getValue();
+        AdherenceCaptureRequest adherenceCreationReportRequest = adherenceReportRequestArgumentCaptor.getValue();
 
         assertEquals("whp-reports/adherence/capture", urlArgumentCaptor.getValue());
 

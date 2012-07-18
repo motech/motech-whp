@@ -27,22 +27,20 @@ public class ReportingPublisherServiceTest {
     }
 
     @Test
-    public void testReportAdherenceCapture() throws Exception {
+    public void shouldPublishAdherenceCaptureWithTheRightSubject() throws Exception {
 
         String providerId = "123456";
         String patientId = "abc12345";
         AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureRequest(providerId,patientId,2);
         reportingPublisher.reportAdherenceCapture(adherenceCaptureRequest);
 
-        ArgumentCaptor<AdherenceCaptureRequest> subscriptionReportRequestArgumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
+        ArgumentCaptor<AdherenceCaptureRequest> adherenceCaptureRequestArgumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
         ArgumentCaptor<String> eventArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(eventContext).send(eventArgumentCaptor.capture(), subscriptionReportRequestArgumentCaptor.capture());
+        verify(eventContext).send(eventArgumentCaptor.capture(), adherenceCaptureRequestArgumentCaptor.capture());
 
-        AdherenceCaptureRequest subscriptionCreationReportRequest = subscriptionReportRequestArgumentCaptor.getValue();
         String eventName = eventArgumentCaptor.getValue();
 
         assertEquals(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, eventName);
-
 
 
     }
