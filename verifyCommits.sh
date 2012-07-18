@@ -27,7 +27,7 @@ do
      if [ $? -eq 1 ]; then
        grep "$line" commitignore > /dev/null
        if [ $? -eq 1 ]; then
-        MISSING_LINES=$MISSING_LINES"Did not find "$line" in master"
+        MISSING_LINES=$MISSING_LINES"Did not find "$line" in master\n"
         FLAG=1
        fi
      fi
