@@ -1,0 +1,7 @@
+5b4f5c0 Shruthi | #0 | Marking District seed as version 2
+90f9de0 Preethi | #208 | Create appropriate packages in adherence audit package
+
+7983507 Shruthi | #0 | Dose interruptions are only computed till CP end date if set
+5ef433c Shruthi | #0 | Cumulate doses to have taken is now computed till CP end date if set
+5c902ef Shruthi | #0 | End date is now adjusted when adherence is updated
+8fc5dfd Shruthi | #0 | Patient is never transitioning when on CP
