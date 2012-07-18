@@ -1,4 +1,4 @@
-package org.motechproject.whp.mapping;
+package org.motechproject.whp.common.mapping;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -7,11 +7,11 @@
     <mapping wildcard="true">
         <class-a>org.motechproject.whp.importer.csv.request.ImportPatientRequest</class-a>
         <class-b>org.motechproject.whp.patient.contract.PatientRequest</class-b>
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToDateTime">
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>treatmentCreationDate</b>
         </field>
@@ -20,15 +20,15 @@
             <a>treatment_category</a>
             <b>treatment_category</b>
         </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToEnumeration">
             <a>disease_class</a>
             <b>disease_class</b>
         </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToEnumeration">
             <a>gender</a>
             <b>gender</b>
         </field>
-        <field custom-converter="org.motechproject.whp.mapping.StringToEnumeration">
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToEnumeration">
             <a>patient_type</a>
             <b>patient_type</b>
         </field>

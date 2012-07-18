@@ -1,5 +1,6 @@
-package org.motechproject.whp.mapping;
+package org.motechproject.whp.refdata.mapping;
 
+import org.motechproject.whp.common.mapping.WHPCustomMapper;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

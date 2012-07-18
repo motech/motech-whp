@@ -27,10 +27,6 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-mapping</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-validation</artifactId>
         </dependency>
         <dependency>

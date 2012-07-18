@@ -7,7 +7,6 @@
 
     <context:property-placeholder location="classpath*:*.properties"/>
 
-    <import resource="classpath*:applicationMappingContext.xml"/>
     <import resource="classpath*:applicationWHPValidationContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
