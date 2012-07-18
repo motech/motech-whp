@@ -14,8 +14,11 @@ do
      if [ $? -eq 1 ]; then
        grep "$line" commitignore > /dev/null
        if [ $? -eq 1 ]; then
-        MISSING_LINE=$MISSING_LINES"Did not find "$line" in release\n"
-	FLAG=1
+        grep -i "commitignore" $line > /dev/null
+        if [ $? -eq 1 ];then
+        	MISSING_LINE=$MISSING_LINES"Did not find "$line" in release\n"
+		FLAG=1
+	fi
        fi
      fi
 done < commits-master
@@ -27,8 +30,11 @@ do
      if [ $? -eq 1 ]; then
        grep "$line" commitignore > /dev/null
        if [ $? -eq 1 ]; then
-        MISSING_LINES=$MISSING_LINES"Did not find "$line" in master\n"
-        FLAG=1
+       	grep -i "commitignore" $line > /dev/null
+       	if [ $? -eq 1 ];then
+               MISSING_LINE=$MISSING_LINES"Did not find "$line" in master\n"
+               FLAG=1
+       	fi
        fi
      fi
 done < commits-release
