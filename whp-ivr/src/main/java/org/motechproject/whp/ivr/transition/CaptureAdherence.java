@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.transition;
 
+import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.*;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
@@ -8,7 +9,8 @@ import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.ivr.WHPIVRMessage.*;
+import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED;
+import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE;
 
 @Component
 public class CaptureAdherence implements ITransition {
@@ -28,8 +30,7 @@ public class CaptureAdherence implements ITransition {
     }
 
     @Override
-    public Node getDestinationNode(String input) {
-        //TODO: get these from context when it is implemented
+    public Node getDestinationNode(String s, FlowSession flowSession) {
         String providerId = "providerId";
         String preferredLanguage = "";
 
