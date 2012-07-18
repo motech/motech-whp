@@ -14,7 +14,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;

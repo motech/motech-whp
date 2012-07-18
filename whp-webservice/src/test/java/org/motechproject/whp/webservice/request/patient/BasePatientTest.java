@@ -7,7 +7,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;

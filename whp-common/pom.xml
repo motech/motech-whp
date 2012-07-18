@@ -13,6 +13,12 @@
     <properties>
         <build.dir>../build</build.dir>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.motechproject.contrib-whp</groupId>
+            <artifactId>motech-validation</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>

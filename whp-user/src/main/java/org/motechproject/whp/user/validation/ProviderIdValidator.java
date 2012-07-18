@@ -1,4 +1,4 @@
-package org.motechproject.whp.validation;
+package org.motechproject.whp.user.validation;
 
 
 import org.motechproject.validation.validator.root.NamedConstraintValidator;

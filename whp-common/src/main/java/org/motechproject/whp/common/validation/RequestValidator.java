@@ -1,4 +1,4 @@
-package org.motechproject.whp.validation;
+package org.motechproject.whp.common.validation;
 
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.validation.validator.BeanValidator;

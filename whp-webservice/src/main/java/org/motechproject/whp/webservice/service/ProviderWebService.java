@@ -5,7 +5,7 @@ import org.motechproject.provider.registration.service.ProviderRegistrationServi
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.exception.WHPProviderException;
 import org.motechproject.whp.webservice.mapper.ProviderRequestMapper;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;

@@ -17,7 +17,7 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.mapper.PatientRequestMapper;
 import org.motechproject.whp.webservice.request.PatientWebRequest;

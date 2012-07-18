@@ -14,7 +14,7 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

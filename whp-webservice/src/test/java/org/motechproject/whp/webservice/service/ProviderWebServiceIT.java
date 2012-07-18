@@ -7,7 +7,7 @@ import org.motechproject.provider.registration.exception.OpenRosaRegistrationVal
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;

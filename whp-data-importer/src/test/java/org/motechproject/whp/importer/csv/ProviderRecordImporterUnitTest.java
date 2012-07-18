@@ -13,7 +13,7 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.user.service.UserService;
-import org.motechproject.whp.validation.RequestValidator;
+import org.motechproject.whp.common.validation.RequestValidator;
 
 import java.util.List;
 
