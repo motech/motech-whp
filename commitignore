@@ -13,3 +13,6 @@ b936cb6 Vishal, BalajiN | #0 | pointing master to the development version of whp
 42c5059 Preethi | #208 | Created domain, repository etc packages for adherence audit package
 779852f <Preethi, Dev> #30 | print view for patient dashboard in release
 854d19c <Vishal, Dev> #30 | adding patient details to print page; adding treatment history (to get provider details) & paused treatment periods class for print page
+
+9907cd1 BalajiN | #0 | Creating commit ignore for master
+d8ede64 praveen|#312|creating framework for whp report publishing
