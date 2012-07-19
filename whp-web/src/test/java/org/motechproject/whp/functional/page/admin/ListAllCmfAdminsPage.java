@@ -93,7 +93,7 @@ public class ListAllCmfAdminsPage extends LoggedInUserPage{
             }
         }
         List<WebElement> links = webDriver.findElements(By.className("cmfadmin-row"));
-        createWebElement(links.get(index).findElement(By.className("staffName"))).click();
+        createWebElement(links.get(index).findElement(By.className("staffName")).findElement(By.tagName("a"))).click();
     }
 
 

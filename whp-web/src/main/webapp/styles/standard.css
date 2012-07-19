@@ -106,7 +106,7 @@ body {
     color: black;
 }
 
-table tbody .link:hover td:not(.row-click-exclude) {
+table tbody .link:hover td:not(.row-click-exclude), .hover {
     color: #369BD7;
     text-decoration: underline;
 }
@@ -534,6 +534,10 @@ div.buttons a, div.buttons button {
 .relative-size {
     overflow: auto;
 }
+.auto-size {
+    width: auto;
+    height: auto;
+}
 .uppercase {
     text-transform: uppercase;
 }
@@ -551,4 +555,19 @@ div.buttons a, div.buttons button {
 }
 .no-wrap {
     white-space: nowrap;
+}
+.no-padding, table tr .no-padding {
+    padding: 0px;
+}
+.table-condensed-padding {
+    padding: 4px 5px;
+}
+.ui-selected {
+ background: blue;
+}
+.inherit-color {
+    color: inherit;
+}
+.reset-password, .reset-password:hover {
+    color: #d2691e;
 }
