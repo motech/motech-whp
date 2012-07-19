@@ -11,18 +11,21 @@ function removeLink(value) {
 
 $(function () {
     var isDragging = false;
-    $("[ redirectOnRowClick=true] td").not(".row-click-exclude").each(function (index, value) {
-        addLink(value);
+    $("[ redirectOnRowClick=true] tr").each(function (index, value) {
+        if($(value).attr('redirect-url') != null)
+         $(value).find('td').not('.row-click-exclude').each(function(pos, element){
+             addLink(element);
+         });
     });
 
     $("[ redirectOnRowClick=true] td").not(".row-click-exclude")
         .mouseover(function (event) {
-            $(this).closest('tr').find('td').each(function (index, value) {
+            $(this).closest('tr').find('td').not(".row-click-exclude").each(function (index, value) {
                 $(value).find('a[redirect-link=true] div').addClass('hover');
             });
         })
         .mouseout(function (event) {
-            $(this).closest('tr').find('td').each(function (index, value) {
+            $(this).closest('tr').find('td').not(".row-click-exclude").each(function (index, value) {
                 $(value).find('a[redirect-link=true] div').removeClass('hover');
             });
         })
