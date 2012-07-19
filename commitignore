@@ -1,3 +1,5 @@
+#need to check
+
 5b4f5c0 Shruthi | #0 | Marking District seed as version 2
 90f9de0 Preethi | #208 | Create appropriate packages in adherence audit package
 
@@ -5,3 +7,10 @@
 5ef433c Shruthi | #0 | Cumulate doses to have taken is now computed till CP end date if set
 5c902ef Shruthi | #0 | End date is now adjusted when adherence is updated
 8fc5dfd Shruthi | #0 | Patient is never transitioning when on CP
+
+#Valid ommissions
+40203a0 <Dheeru, Dev> #30 | formatting print dashboard page
+9d49233 <Dev> #30 | adding current provider details
+5bdd8dc Abhishek, Preethi | #159 | Audit adherence edits made by cmf admin
+30bc0fa <Sri> #0 | Moving out Date Constants to WHPDate method and moving that into util package in common.
+1725d99 Abhishek, Preethi | #0 | Wrote functional test for create/edit of cmf admin
