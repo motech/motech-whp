@@ -5,8 +5,8 @@
     <#if patient.treatmentCategoryCode == "01">
         New Case
         (Pulmonory Smear-Positive,
-        Seriously III Smear Negative, or
-        Seriously III extra pulmonory)
+        Seriously ill Smear Negative, or
+        Seriously ill extra pulmonory)
         <#if isCP>
             <@categoryDrugs/>
         <#else>
@@ -25,8 +25,8 @@
     <#elseif patient.treatmentCategoryCode == "11">
         New Case
         (Pulmonory Smear-Positive,
-        Seriously III Smear Negative, or
-        Seriously III extra pulmonory)
+        Seriously ill Smear Negative, or
+        Seriously ill extra pulmonory)
         <#if isCP>
             <@categoryDrugs dosesPerWeek=7/>
         <#else>

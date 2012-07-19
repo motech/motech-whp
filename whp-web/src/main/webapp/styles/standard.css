@@ -384,6 +384,9 @@ div.buttons a, div.buttons button {
     color: #369BD7;
     font-weight: bold;
 }
+.name {
+ text-transform: capitalize;
+}
 
 .one-line {
     white-space: nowrap;

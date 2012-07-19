@@ -9,7 +9,7 @@
 
                 <tr>
                     <th>TB ID</th>
-                    <td>${patient.tbId}</td>
+                    <td>${patient.tbId!}</td>
                 </tr>
 
                 <tr>
@@ -24,22 +24,22 @@
 
                 <tr>
                     <th>Disease Classification</th>
-                    <td>${patient.diseaseClass}</td>
+                    <td>${patient.diseaseClass!}</td>
                 </tr>
 
                 <tr>
                     <th>Type of patient</th>
-                    <td>${patient.patientType}</td>
+                    <td>${patient.patientType!}</td>
                 </tr>
 
                 <tr>
                     <th>Treatment Category</th>
-                    <td>${patient.treatmentCategoryName}</td>
+                    <td>${patient.treatmentCategoryName!}</td>
                 </tr>
 
                 <tr>
                     <th>Treatment Start Date</th>
-                    <td>${patient.therapyStartDate}</td>
+                    <td>${patient.therapyStartDate!}</td>
                 </tr>
 
                 <tr>
@@ -59,12 +59,12 @@
 
                 <tr>
                     <th>Provider ID</th>
-                    <td>${patient.providerId}</td>
+                    <td>${patient.providerId!}</td>
                 </tr>
 
                 <tr>
                     <th>Mobile Number</th>
-                    <td>${patient.providerMobileNumber}</td>
+                    <td>${patient.providerMobileNumber!}</td>
                 </tr>
 
             </table>
@@ -79,36 +79,36 @@
 
                     <tr>
                         <th>Patient ID</th>
-                        <td>${patient.patientId}</td>
+                        <td>${patient.patientId!}</td>
                     </tr>
 
                     <tr>
                         <th>Name</th>
-                        <td>${patient.firstName} ${patient.lastName!}</td>
+                        <td>${patient.firstName!} ${patient.lastName!}</td>
                     </tr>
                     <tr>
                         <th>State</th>
-                        <td>${patient.addressState}</td>
+                        <td>${patient.addressState!}</td>
                     </tr>
 
                     <tr>
                         <th>Gender</th>
-                        <td>${patient.gender}</td>
+                        <td>${patient.gender!}</td>
                     </tr>
 
                     <tr>
                         <th>Age</th>
-                        <td>${patient.age}</td>
+                        <td>${patient.age!}</td>
                     </tr>
 
                     <tr>
                         <th>Address</th>
-                        <td>${patient.address}</td>
+                        <td>${patient.address!}</td>
                     </tr>
 
                     <tr>
                         <th>Mobile Number</th>
-                        <td>${patient.phoneNumber}</td>
+                        <td>${patient.phoneNumber!}</td>
                     </tr>
                 </table>
             </div>
