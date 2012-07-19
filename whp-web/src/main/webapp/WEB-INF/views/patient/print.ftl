@@ -22,20 +22,20 @@
         <div><label class="tc-label">State</label> <label class="tc-value">${patient.addressState}</label></div>
         <div><label class="tc-label">City/District with code</label>
             <label class="tc-value">${patient.addressDistrict}&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
-        <label class="tc-label">Name</label><label class="tc-value">${patient.firstName} ${patient.lastName}</label>
+        <label class="tc-label">Name</label><label class="tc-value name">${patient.firstName!} ${patient.lastName!}</label>
 
         <div>
-            <label class="tc-label">Sex</label><label class="tc-value">${patient.gender}</label>
-            <label class="tc-label">Age</label><label class="tc-value">${patient.age}</label>
+            <label class="tc-label">Sex</label><label class="tc-value">${patient.gender!}</label>
+            <label class="tc-label">Age</label><label class="tc-value">${patient.age!}</label>
         </div>
         <div>
             <label class="tc-label">Occupation</label>
         </div>
         <div>
-            <label class="tc-label">Address</label><label class="tc-value">${patient.address}</label>
+            <label class="tc-label">Complete Address</label><label class="tc-value">${patient.address!}</label>
         </div>
         <div>
-            <label class="tc-label">Phone Number</label><label class="tc-value">${patient.phoneNumber}</label>
+            <label class="tc-label">Phone Number</label><label class="tc-value">${patient.phoneNumber!}</label>
         </div>
         <div>
             <label class="tc-label">Address and Phone Number of Contact Person</label><label
@@ -51,13 +51,13 @@
                 class="tc-value">${patient.diseaseClass}</label>
         </div>
         <div>
-            <label class="tc-label">Type of Patient</label><label class="tc-value">${patient.patientType}</label>
+            <label class="tc-label">Type of Patient</label><label class="tc-value">${patient.patientType!}</label>
         </div>
     </div>
     <div class="left-spaced tc-div">
         <div><label class="tc-label">TB Unit with code</label></div>
         <div>
-            <label class="tc-label">Patient TB Id</label><label class="tc-value">${patient.tbId}</label>
+            <label class="tc-label">Patient TB Id</label><label class="tc-value">${patient.tbId!}</label>
         </div>
         <div>
             <label class="tc-label">Patient TB No/Year</label><label
@@ -69,7 +69,7 @@
         </div>
         <div>
             <label class="tc-label">Name and designation of DOT provider & Tel No</label>
-            <label class="">${patient.providerId}, ${patient.providerMobileNumber}<br/></label><br/>
+            <label class="">${patient.providerId!}, ${patient.providerMobileNumber!}<br/></label><br/>
         </div>
         <div>
             <label class="tc-label">DOT centre</label>
@@ -94,7 +94,7 @@
                 </tr>
                 <#list treatmentCard.treatmentHistories as treatmentHistory>
                     <tr>
-                        <td>${treatmentHistory.providerId}</td>
+                        <td>${treatmentHistory.providerId!}</td>
                         <td>${treatmentHistory.startDate}</td>
                         <td>${treatmentHistory.endDate}</td>
                     </tr>
@@ -208,7 +208,7 @@
     </table>
 </div>
 <div class="additional-treatments">
-    <h4 class="tc-label text-center">Addtional Treatments</h4>
+    <h4 class="inherit-font tc-label text-center">Addtional Treatments</h4>
 
     <div>
         <label class="tc-label">HIV status</label>
@@ -221,7 +221,7 @@
 
         <div class="empty-bordered"></div>
         <label class="tc-value">Neg</label>
-        <label class="tc-value"> (date)</label>
+        <label class="tc-value">&nbsp; (date)</label>
     </div>
     <div>
         <label class="tc-label">CPT delivered on (date)</label>
@@ -242,7 +242,7 @@
         <label class="tc-value">No</label>
 
         <div class="empty-bordered"></div>
-        <label class="tc-value">Yes</label>
+        <label class="tc-value">Yes (date)</label>
     </div>
 </div>
 </div>
