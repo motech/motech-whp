@@ -181,6 +181,13 @@
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
         </dependency>
+
+        <!--for log4j smtp appender -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

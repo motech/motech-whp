@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/providers")
-public class ProviderController {
+public class ProviderController extends BaseController{
 
     private ProviderService providerService;
     private AllDistricts allDistrictsCache;
