@@ -129,6 +129,6 @@ public class ListAllPatientsPage extends LoggedInUserPage {
         }
         waitForElementWithCSSToLoad("link");
         dashboardLinks = webDriver.findElements(By.className("link"));
-        createWebElement(dashboardLinks.get(index).findElement(By.className("patientId"))).click();
+        createWebElement(dashboardLinks.get(index).findElement(By.className("patientId")).findElement(By.tagName("a"))).click();
     }
 }
