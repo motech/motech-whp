@@ -26,6 +26,11 @@
         <appender-ref ref="console"/>
     </logger>
 
+    <logger name="org.motechproject.whp.controller">
+        <level value="error"/>
+        <appender-ref ref="adminEmail"/>
+    </logger>
+
     <root>
         <priority value="warn"/>
         <appender-ref ref="console"/>
