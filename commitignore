@@ -18,3 +18,6 @@ b936cb6 Vishal, BalajiN | #0 | pointing master to the development version of whp
 d8ede64 praveen|#312|creating framework for whp report publishing
 90f2085 Vishal, Sri | #0 | Fixing build
 b62129 Vishal, Sri | #0 | Fixing build
+
+f43b32f praveen|#312|cleaning up reporting module
+2fc1158 Sri, Vishal #0 Fixing compile error
