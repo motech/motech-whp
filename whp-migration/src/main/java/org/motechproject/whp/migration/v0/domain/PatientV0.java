@@ -6,10 +6,9 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.util.DateUtil;
+import org.motechproject.whp.migration.v0.exception.WHPErrorCodeV0;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
-import org.motechproject.whp.migration.v0.exception.WHPErrorCodeV0;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +58,6 @@ public class PatientV0 extends MotechBaseDataObject {
 
     public PatientTypeV0 currentTreatmentType() {
         return getCurrentTreatment().getPatientType();
-    }
-
-    public DateTime getLastModifiedDate() {
-        return DateUtil.setTimeZone(lastModifiedDate);
     }
 
     public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {

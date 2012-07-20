@@ -6,7 +6,6 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.util.DateUtil;
 
 @Data
 @TypeDiscriminator("doc.type == 'Therapy'")
@@ -46,10 +45,6 @@ public class TherapyV0 extends MotechBaseDataObject {
     @JsonIgnore
     public boolean isClosed() {
         return TherapyStatusV0.Closed == status;
-    }
-
-    public DateTime getCreationDate() {
-        return DateUtil.setTimeZone(creationDate);
     }
 
     public void start(LocalDate therapyStartDate){
