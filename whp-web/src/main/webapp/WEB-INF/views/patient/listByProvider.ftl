@@ -52,11 +52,11 @@
                         </td>
                         <#if patient.adherenceCapturedForThisWeek>
                             <td id="patient_${patient.patientId}_AdherenceTaken" class="adherenceCaptured">
-                                &#10004; YES
+                                &#10004;
                             </td>
                         <#else>
                             <td id="patient_${patient.patientId}_AdherenceNotTaken" class="adherenceNotCaptured">
-                                &#10008; NO
+                                &#10008;
                             </td>
                         </#if>
                         <td class="updateAdherenceLink">
