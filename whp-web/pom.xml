@@ -246,7 +246,7 @@
                         </systemProperty>
                         <systemProperty>
                             <name>log4j.configuration</name>
-                            <value>file:${basedir}/src/main/resources/application-log4j.xml</value>
+                            <value>file:${basedir}/src/main/resources/log4j.xml</value>
                         </systemProperty>
                     </systemProperties>
                     <webAppConfig>
