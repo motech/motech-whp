@@ -11,14 +11,15 @@ import java.util.Properties;
 @Component
 public class WHPIVRMessage implements IVRMessage {
 
-    private Properties properties;
+    public static final String WELCOME_MESSAGE = "welcomeMessage";
+    public static final String MUSIC_ENTER = "musicEnter";
     public static final String END_OF_CALL = "endCall";
-    public static final String WELCOME = "welcome";
+
     private static final String CONTENT_LOCATION_URL = "content.location.url";
     private static final String WAV = ".wav";
 
-    public static final String NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED = "noOfPatientsWithCapturedAdherence";
-    public static final String NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE = "noOfPatientsPendingAdherenceCapture";
+    private Properties properties;
+
 
     @Autowired
     public WHPIVRMessage(@Qualifier("ivrProperties") Properties properties) {
@@ -33,6 +34,10 @@ public class WHPIVRMessage implements IVRMessage {
     public String getText(String key) {
         String text = get(key);
         return text == null ? key : text;
+    }
+
+    public String getWav(String name) {
+        return getWav(name, "en");
     }
 
     @Override

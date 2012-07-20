@@ -20,8 +20,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED;
-import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE;
+import static org.motechproject.whp.ivr.WHPIVRMessage.*;
+import static org.motechproject.whp.ivr.transition.CaptureAdherence.ADHERENCE_CAPTURE_INSTRUCTION;
+import static org.motechproject.whp.ivr.transition.CaptureAdherence.ADHERENCE_PROVIDED_FOR;
+import static org.motechproject.whp.ivr.transition.CaptureAdherence.ADHERENCE_TO_BE_PROVIDED_FOR;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class CaptureAdherenceTest {
@@ -57,10 +59,13 @@ public class CaptureAdherenceTest {
         when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(mobileNumber).build());
 
         Prompt[] prompts = new PromptBuilder(whpivrMessage)
-                .audio(NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED)
-                .audio(String.valueOf(adherenceSummary.countOfPatientsWithAdherence()))
-                .audio(NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE)
-                .audio(String.valueOf(adherenceSummary.countOfPatientsWithoutAdherence()))
+                .wav(MUSIC_ENTER)
+                .wav(WELCOME_MESSAGE)
+                .wav(ADHERENCE_PROVIDED_FOR)
+                .number(patientsWithAdherence.size())
+                .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
+                .number(adherenceSummary.countOfPatientsWithoutAdherence())
+                .wav(ADHERENCE_CAPTURE_INSTRUCTION)
                 .build();
 
 

@@ -17,7 +17,12 @@ public class PromptBuilder {
         prompts = new ArrayList<>();
     }
 
-    public PromptBuilder audio(String message) {
+    public PromptBuilder number(Integer number) {
+        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(number.toString(), "en")));
+        return this;
+    }
+
+    public PromptBuilder wav(String message) {
         prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(message, "en")));
         return this;
     }

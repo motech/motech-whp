@@ -12,13 +12,14 @@ import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
-import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED;
-import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE;
+import static org.motechproject.whp.ivr.WHPIVRMessage.*;
 
 @Component
 public class CaptureAdherence implements ITransition {
+
+    public static final String ADHERENCE_PROVIDED_FOR = "instructionalMessage1";
+    public static final String ADHERENCE_TO_BE_PROVIDED_FOR = "instructionalMessage2";
+    public static final String ADHERENCE_CAPTURE_INSTRUCTION = "instructionalMessage3";
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -43,10 +44,13 @@ public class CaptureAdherence implements ITransition {
 
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
         Prompt[] prompts = new PromptBuilder(whpivrMessage)
-                .audio(NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED)
-                .audio(String.valueOf(adherenceSummary.countOfPatientsWithAdherence()))
-                .audio(NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE)
-                .audio(String.valueOf(adherenceSummary.countOfPatientsWithoutAdherence()))
+                .wav(MUSIC_ENTER)
+                .wav(WELCOME_MESSAGE)
+                .wav(ADHERENCE_PROVIDED_FOR)
+                .number(adherenceSummary.countOfPatientsWithAdherence())
+                .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
+                .number(adherenceSummary.countOfPatientsWithoutAdherence())
+                .wav(ADHERENCE_CAPTURE_INSTRUCTION)
                 .build();
 
         return new Node().setPrompts(prompts);
