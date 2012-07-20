@@ -48,4 +48,10 @@ public class AdherenceSummaryByProviderTest {
         assertThat(summary.countOfPatientsWithoutAdherence(), is(1));
     }
 
+    @Test
+    public void shouldReturnAllPatientsWithoutAdherence() {
+        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId",asList("1","2","3","4"),asList("2","3"));
+        assertThat(adherenceSummaryByProvider.getAllPatientsWithoutAdherence(), is(asList("1","4")));
+    }
+
 }

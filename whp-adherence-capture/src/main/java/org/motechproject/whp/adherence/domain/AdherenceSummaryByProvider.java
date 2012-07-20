@@ -2,6 +2,7 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -10,6 +11,7 @@ public class AdherenceSummaryByProvider {
     private String providerId;
     private List<String> allPatients;
     private List<String> allPatientsWithAdherence;
+    private List<String> allPatientsWithoutAdherence;
 
     public AdherenceSummaryByProvider(){
 
@@ -19,6 +21,12 @@ public class AdherenceSummaryByProvider {
         this.providerId = providerId;
         this.allPatients = allPatients;
         this.allPatientsWithAdherence = allPatientsWithAdherence;
+        setAllPatientsWithoutAdherence(allPatients, allPatientsWithAdherence);
+    }
+
+    private void setAllPatientsWithoutAdherence(List<String> allPatients, List<String> allPatientsWithAdherence) {
+        this.allPatientsWithoutAdherence = new ArrayList<>(allPatients);
+        allPatientsWithoutAdherence.removeAll(allPatientsWithAdherence);
     }
 
     public int countOfAllPatients() {
