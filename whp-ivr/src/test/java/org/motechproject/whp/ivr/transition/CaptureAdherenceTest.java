@@ -3,12 +3,14 @@ package org.motechproject.whp.ivr.transition;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.List;
 import java.util.Properties;
@@ -20,29 +22,29 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED;
 import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE;
+import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class CaptureAdherenceTest {
 
     @Mock
     private AdherenceDataService adherenceDataService;
+    @Mock
+    private AllProviders allProviders;
 
-    private WHPIVRMessage whpivrMessage;
-
-    private CaptureAdherence captureAdherence;
+    private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
     private Node expectedNode;
-
+    private CaptureAdherence captureAdherence;
 
     @Before
     public void setUp() {
         initMocks(this);
-        whpivrMessage = new WHPIVRMessage(new Properties());
-        captureAdherence = new CaptureAdherence(adherenceDataService, whpivrMessage);
+        captureAdherence = new CaptureAdherence(adherenceDataService, whpivrMessage, allProviders);
     }
 
     @Test
     public void shouldReturnPromptWithPatientAdherenceInformation() {
-        String providerId = "providerId";
-        String preferredLanguage = "";
+        String providerId = "providerid";
+        String mobileNumber = "mobileNumber";
 
         List<String> allPatientsIds = asList("patient1", "patient2");
         List<String> patientsWithAdherence = asList("patient1", "patient2");
@@ -52,8 +54,9 @@ public class CaptureAdherenceTest {
                 patientsWithAdherence);
 
         when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
+        when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(mobileNumber).build());
 
-        Prompt[] prompts = new PromptBuilder(whpivrMessage, preferredLanguage)
+        Prompt[] prompts = new PromptBuilder(whpivrMessage)
                 .audio(NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED)
                 .audio(String.valueOf(adherenceSummary.countOfPatientsWithAdherence()))
                 .audio(NUMBER_OF_PATIENTS_PENDING_ADHERENCE_CAPTURE)
@@ -63,7 +66,9 @@ public class CaptureAdherenceTest {
 
         Node expectedNode = new Node().addPrompts(prompts);
 
-        Node node = captureAdherence.getDestinationNode("", null);
+        FlowSession flowSession = mock(FlowSession.class);
+
+        Node node = captureAdherence.getDestinationNode("", flowSession);
 
         assertThat(node, is(expectedNode));
         verify(adherenceDataService, times(1)).getAdherenceSummary(providerId);

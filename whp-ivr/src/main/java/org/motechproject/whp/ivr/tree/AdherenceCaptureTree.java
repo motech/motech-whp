@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 public class AdherenceCaptureTree {
 
     private AllTrees allTrees;
-
     private WHPAdherenceService whpAdherenceService;
+    private CaptureAdherence captureAdherence;
 
     @Autowired
-    public AdherenceCaptureTree(AllTrees allTrees, WHPAdherenceService whpAdherenceService) {
+    public AdherenceCaptureTree(AllTrees allTrees, WHPAdherenceService whpAdherenceService, CaptureAdherence captureAdherence) {
         this.allTrees = allTrees;
         this.whpAdherenceService = whpAdherenceService;
+        this.captureAdherence = captureAdherence;
     }
 
     @Seed(priority = 0, version = "1.0")
@@ -28,7 +29,7 @@ public class AdherenceCaptureTree {
                 .setRootNode(new Node()
                         .addPrompts(new TextToSpeechPrompt().setMessage("Press 1 to enter adherence"))
                         .addTransition(
-                                "1", new CaptureAdherence()
+                                "1", captureAdherence
                         )
                 );
         allTrees.addOrReplace(adherenceCapture);

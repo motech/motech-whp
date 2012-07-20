@@ -134,6 +134,11 @@
             <!--Child modules-->
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-ivr</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-tb-adherence</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -228,7 +233,7 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject</groupId>
-                <artifactId>motech-platform-decisiontree-common</artifactId>
+                <artifactId>motech-platform-decisiontree</artifactId>
                 <version>0.12-SNAPSHOT</version>
             </dependency>
             <!--Contrib and delivery-->
@@ -241,6 +246,11 @@
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-platform-common-api</artifactId>
+                <version>${motech.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-platform-server-api</artifactId>
                 <version>${motech.version}</version>
             </dependency>
             <dependency>

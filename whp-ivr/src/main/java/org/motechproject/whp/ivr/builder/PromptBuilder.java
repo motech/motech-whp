@@ -7,22 +7,18 @@ import org.motechproject.whp.ivr.WHPIVRMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.ivr.WHPIVRMessage.NUMBER_OF_PATIENTS_HAVING_ADHERENCE_CAPTURED;
-
 public class PromptBuilder {
 
     private List<Prompt> prompts;
     private WHPIVRMessage whpIVRMessage;
-    private String language;
 
-    public PromptBuilder(WHPIVRMessage whpIVRMessage, String language) {
+    public PromptBuilder(WHPIVRMessage whpIVRMessage) {
         this.whpIVRMessage = whpIVRMessage;
-        this.language = language;
         prompts = new ArrayList<>();
     }
 
     public PromptBuilder audio(String message) {
-        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(message, language)));
+        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(message, "en")));
         return this;
     }
 

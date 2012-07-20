@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-decisiontree-common</artifactId>
+            <artifactId>motech-platform-decisiontree</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>

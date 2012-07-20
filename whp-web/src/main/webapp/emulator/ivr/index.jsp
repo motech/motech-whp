@@ -9,22 +9,22 @@
     String appVersion = whpProperties.getProperty("application.version");
 %>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="js/Recording.js"></script>
+<%
+    String url = application.getContextPath() + "/kookoo/ivr?tree=adherenceCapture";
+%>
+
+<script src="http://localhost:8080/whp/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#missedCallButton').click(function () {
             dojo.xhrPost({
-                url:'<%=application.getContextPath() %>/ivr/reply/callback?external_id=' + $('#missedCall').val() + "&call_type=Outbox",
+                url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
                 content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
                 load:function () {
                     alert('Posted missed call');
                 }
             })
         });
-
-        window.cacheControl = new CacheControl();
-        window.recording = new Recording(window.cacheControl);
     });
 </script>
 <script type="text/javascript">
@@ -74,7 +74,7 @@
 </script>
 
 <script>
-    var contextRoot = "<%=application.getContextPath() %>/";
+    var contextRoot = "<%= url %>";
     var collectdtmf = 1;
     var dtmf = "";
     var callId;
@@ -103,15 +103,16 @@
 
     $(function () {
         setTimeout(pollCall, 500);
-    });                                            $('#missedCallButton').click(function () {
-            dojo.xhrPost({
-                url:'<%=application.getContextPath() %>/ivr/reply/callback?external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                load:function () {
-                    alert('Posted missed call');
-                }
-            })
-        });
+    });
+    $('#missedCallButton').click(function () {
+        dojo.xhrPost({
+            url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
+            content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
+            load:function () {
+                alert('Posted missed call');
+            }
+        })
+    });
 
 
     function playfile(id) {
@@ -153,24 +154,22 @@
                     $('#response').val(data);
                     if ($(data).length == 1 && $(data)[0].childElementCount == 0) {
                         send('');
-                        return;                    $('#missedCallButton').click(function () {
-            dojo.xhrPost({
-                url:'<%=application.getContextPath() %>/ivr/reply/callback?external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                load:function () {
-                    alert('Posted missed call');
-                }
-            })
-        });
+                        return;
+                        $('#missedCallButton').click(function () {
+                            dojo.xhrPost({
+                                url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
+                                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
+                                load:function () {
+                                    alert('Posted missed call');
+                                }
+                            })
+                        });
                     }
                     var html = "";//'<audio controls="controls" id="message" autoplay="autoplay">';
                     //var msg = ""
                     collectdtmf = $(data).find('collectdtmf').attr('l');
                     $(data).find('playaudio').each(function () {
                         var filename = $(this).text();//.replace(/.*\//, "");
-                        if (filename.indexOf("signature_music") === -1) {
-                            window.recording.record(filename);
-                        }
                         var text = filename;//.replace(/.wav/,"");
                         html += '<audio src="' + filename + '" autostart=false width=1 height=1 id="' + filename + '" enablejavascript="true" class="audio"/>' +
                                 '<button id="' + filename + '" onclick="play(\'' + filename + '\');">&raquo;' + text + ' </button>';
@@ -179,18 +178,22 @@
                     });
                     $(data).find('playtext').each(function () {
                         html += "<div>" + $(this).text() + "</div>"
-                    });                            $('#missedCallButton').click(function () {
-            dojo.xhrPost({
-                url:'<%=application.getContextPath() %>/ivr/reply/callback?external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                load:function () {
-                    alert('Posted missed call');
-                }
-            })
-        });
+                    });
+                    $('#missedCallButton').click(function () {
+                        dojo.xhrPost({
+                            url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
+                            content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
+                            load:function () {
+                                alert('Posted missed call');
+                            }
+                        })
+                    });
                     //html += "</audio>";
                     //html ='<button  onclick="play(\'message\');">&raquo;'+msg+' </button><span style="float:right;">&nbsp;'+ html + '</span>';
                     if ($(data).find('playaudio').length > 0 && $(data).find('collectdtmf').length == 0) html += '<button onclick="send()">Continue</button>'
+                    if($(data).find('gotourl').length > 0){
+                        contextRoot = $(data).find('gotourl').text();
+                    }
                     $('#result').html(html);
 
                     playAll();
@@ -208,13 +211,13 @@
         callId = Math.floor(Math.random() * 10000000000);
         var phone = $('#phone').val();
         var symptoms_reporting_option = ($('#symptoms_reporting').is(":checked") ? "&symptoms_reporting=true" : "");
-        call(contextRoot + 'ivr/reply?event=NewCall&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
+        call(contextRoot + '&event=NewCall&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
     }
     function endCall() {
         var phone = $('#phone').val();
         var symptoms_reporting_option = ($('#symptoms_reporting').is(":checked") ? "&symptoms_reporting=true" : "");
         deleteCookie();
-        call(contextRoot + 'ivr/reply?event=Hangup&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
+        call(contextRoot + '&event=Hangup&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
         $.cookie('current_decision_tree_position', null, {'path':'<%=application.getContextPath() %>/ivr/'});
         $.cookie('preferred_lang_code', null, {'path':'<%=application.getContextPath() %>/ivr/'});
         $.cookie('call_id', null, {'path':'<%=application.getContextPath() %>/ivr/'});
@@ -235,8 +238,9 @@
         var dataMap = "";
         if (is_outbound_call == 'true')
             dataMap = ($('#symptoms_reporting').is(":checked")) ? "" : ('&dataMap={%27dosage_id%27:%27' + dosageId + '%27, %27regimen_id%27:%27' + regimen_id + '%27, %27times_sent%27:%27' + times_sent + '%27, %27retry_interval%27:%27' + retry_interval + '%27, %27total_times_to_send%27:%27' + total + '%27, %27call_id%27:%27' + call_id + '%27, %27outbox_call%27:%27' + outbox_call + '%27, %27is_outbound_call%27:%27' + is_outbound_call + '%27}');
-        call(contextRoot + 'ivr/reply?event=GotDTMF&cid=' + phone + '&data=' + pin + '&sid=' + callId + dataMap + symptoms_reporting_option);
+        call(contextRoot + '&event=GotDTMF&cid=' + phone + '&data=' + pin + '&sid=' + callId + dataMap + symptoms_reporting_option);
     }
+
     function send(i) {
         if (i === '') dtmf = i;
         else {
@@ -252,9 +256,7 @@
         var dataMap = "";
         var event = "event=GotDTMF&";
         if (collectdtmf) event = "event=GotDTMF&" + '&data=' + dtmf + "&";
-        if (is_outbound_call == 'true')
-            dataMap = ($('#symptoms_reporting').is(":checked")) ? "" : ('&dataMap={%27dosage_id%27:%27' + dosageId + '%27, %27regimen_id%27:%27' + regimen_id + '%27, %27times_sent%27:%27' + times_sent + '%27, %27retry_interval%27:%27' + retry_interval +'%27, %27total_times_to_send%27:%27' + total + '%27, %27outbox_call%27:%27' + outbox_call + '%27, %27is_outbound_call%27:%27' + is_outbound_call + '%27}');
-        call(contextRoot + 'ivr/reply?' + event + 'cid=' + phone + 'sid=' + callId + dataMap + symptoms_reporting_option);
+        call(contextRoot + '&' + event + 'cid=' + phone + '&sid=' + callId);
         dtmf = "";
     }
     function play(i) {
@@ -313,7 +315,8 @@
                             <button onclick="send(8);">8</button>
                         </td>
                         <td>
-                            <button onclick="send(9);">9</button>                  domain
+                            <button onclick="send(9);">9</button>
+                            domain
                         </td>
                     </tr>
                     <tr>
@@ -334,7 +337,8 @@
     <button id="missedCallButton">Missed Call</button>
     <br><br>
 
-    <div><input type="checkbox" id="mute"></input> Mute audio <span><input type="checkbox" id="symptoms_reporting"></input> Symptoms Reporting call
+    <div><input type="checkbox" id="mute"></input> Mute audio <span><input type="checkbox"
+                                                                           id="symptoms_reporting"></input> Symptoms Reporting call
 <input type="checkbox" id="poll_call" checked="true"></input> Accept incoming call
 </span></div>
     <button onclick="$('.optional').toggle(600);">Show / Hide Params</button>
