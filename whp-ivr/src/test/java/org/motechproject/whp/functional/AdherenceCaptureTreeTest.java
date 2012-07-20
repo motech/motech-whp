@@ -68,28 +68,13 @@ public class AdherenceCaptureTreeTest extends SpringIntegrationTest {
     public void shouldPlayWelcomeMessage() throws IOException, SAXException {
         String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en", SERVER_URL)), new BasicResponseHandler());
         String expectedResponse =
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                        "<response>" +
-                        "                        <playtext>Press 1 to enter adherence</playtext>" +
-                        "                        <collectdtmf l=\"1\" t=\"#\"></collectdtmf>" +
-                        "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=Lw</gotourl>" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                        "<response>\n" +
+                        "                        <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnter.wav</playaudio>\n" +
+                        "                                <playaudio>http://localhost:8080/whp/wav/stream/en/welcomeMessage.wav</playaudio>\n" +
+                        "                        <collectdtmf l=\"1\" t=\"#\"></collectdtmf>\n" +
+                        "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=Lw</gotourl>\n" +
                         "    </response>";
-        assertXMLEqual(expectedResponse, response);
-    }
-
-    @Test
-    public void shouldTransitionToAdherenceSummaryMessage() throws IOException, SAXException {
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en&event=GotDTMF&data=1", SERVER_URL)), new BasicResponseHandler());
-        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream//noOfPatientsWithCapturedAdherence.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream//0.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream//noOfPatientsPendingAdherenceCapture.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream//0.wav</playaudio>\n" +
-                "                        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en</gotourl>\n" +
-                "        <hangup></hangup>\n" +
-                "    </response>";
-
         assertXMLEqual(expectedResponse, response);
     }
 

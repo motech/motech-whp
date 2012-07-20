@@ -11,6 +11,7 @@ public class PromptBuilder {
 
     private List<Prompt> prompts;
     private WHPIVRMessage whpIVRMessage;
+    private String DEFAULT_LANGUAGE_CODE = "en";
 
     public PromptBuilder(WHPIVRMessage whpIVRMessage) {
         this.whpIVRMessage = whpIVRMessage;
@@ -18,7 +19,13 @@ public class PromptBuilder {
     }
 
     public PromptBuilder number(Integer number) {
-        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(number.toString(), "en")));
+        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(number.toString(), DEFAULT_LANGUAGE_CODE)));
+        return this;
+    }
+
+    public PromptBuilder text(String text) {
+        for(Character character : text.toCharArray())
+            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(character.toString(),DEFAULT_LANGUAGE_CODE)));
         return this;
     }
 
@@ -30,4 +37,5 @@ public class PromptBuilder {
     public Prompt[] build() {
         return prompts.toArray(new Prompt[prompts.size()]);
     }
+
 }

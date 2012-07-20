@@ -1,3 +1,4 @@
+66175bb Dev | #274 | Adding transition for adherence capture; 1.) renamed CaptureAdherence to ListPatientsForProvider 2.) AdherenceCapture class will handle adherence input
 608c052 Shruthi, Dev | #273 | adding call scripts standard
 e45dfb5 Vishal, BalajiN | #273 | Implementing the basic ivr flow
 b2b5fad BalajiN | #0 | Creating commit ignore for master
