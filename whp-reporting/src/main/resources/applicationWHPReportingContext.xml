@@ -11,4 +11,14 @@
 
     <context:component-scan base-package="org.motechproject.whp"/>
 
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <util:properties id="whpProperties" location="classpath:/whp.properties"/>
+
 </beans>

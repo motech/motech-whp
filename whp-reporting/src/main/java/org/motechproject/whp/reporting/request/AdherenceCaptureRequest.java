@@ -1,7 +1,12 @@
 package org.motechproject.whp.reporting.request;
 
 
-public class AdherenceCaptureRequest {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class AdherenceCaptureRequest implements Serializable {
     private String patientId;
     private String providerId;
     private int adherence;
@@ -10,15 +15,6 @@ public class AdherenceCaptureRequest {
         this.providerId = providerId;
         this.patientId = patientId;
         this.adherence = adherence;
-    }
-
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public String getProviderId() {
-        return providerId;
     }
 }
 
