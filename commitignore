@@ -18,3 +18,6 @@ eda62a6 BalajiN | #0 | Echoing line as grep treats it as a file other wise
 cfe43c5 Vishal|Sri #323 fixing test in master
 86ea03d Sri|Vishal #322 Fixed/Refactored multiple phase transitions
 df7fda7 BalajiN, Abhishek | #0 | Fixing functional tests
+d7ead2b Vishal #0 Removed whp-validation module. Moved validators to common and user modules
+c7e571f Sri, Vishal #0 Removed whp-mapping module and moved files to common and refdata
+e9e2a5f Shruthi, dev | #0 | implemented phase migration
