@@ -1,6 +1,3 @@
-66175bb Dev | #274 | Adding transition for adherence capture; 1.) renamed CaptureAdherence to ListPatientsForProvider 2.) AdherenceCapture class will handle adherence input
-608c052 Shruthi, Dev | #273 | adding call scripts standard
-e45dfb5 Vishal, BalajiN | #273 | Implementing the basic ivr flow
 b2b5fad BalajiN | #0 | Creating commit ignore for master
 a6ae3cb <Sri> #0 | Fixing build.
 98c186f <Balaji, Dev> resolving merge conflict
@@ -10,18 +7,24 @@ cb5dac3 Balaji, Vishal #0 1. Renamed "whp-adherence" to "whp-adherence-capture" 
 7d17212 Vishal, BalajiN | #0 | Moving the adherence module to whp
 b936cb6 Vishal, BalajiN | #0 | pointing master to the development version of whp contrib
 0f64a80 Vishal, BalajiN | #0 | Preparing master for the next cycle
-3869fa4 Dheeru, Preethi | # 273 | Created WHPCallFlowController to redirect newCall. Added emulator for testing
 
 42c5059 Preethi | #208 | Created domain, repository etc packages for adherence audit package
 779852f <Preethi, Dev> #30 | print view for patient dashboard in release
 854d19c <Vishal, Dev> #30 | adding patient details to print page; adding treatment history (to get provider details) & paused treatment periods class for print page
 
 9907cd1 BalajiN | #0 | Creating commit ignore for master
-d8ede64 praveen|#312|creating framework for whp report publishing
 90f2085 Vishal, Sri | #0 | Fixing build
 b62129 Vishal, Sri | #0 | Fixing build
-
-f43b32f praveen|#312|cleaning up reporting module
 2fc1158 Sri, Vishal #0 Fixing compile error
 
+#Ignores for IVR and Reporting
+3869fa4 Dheeru, Preethi | # 273 | Created WHPCallFlowController to redirect newCall. Added emulator for testing
+d8ede64 praveen|#312|creating framework for whp report publishing
+f43b32f praveen|#312|cleaning up reporting module
 3574db7 Abhishek, BalajiN | #273 | Implementing adherence capture IVR flows in release
+3fbbccd Dev | #274 | Adding transition for adherence capture; 1.) renamed CaptureAdherence to ListPatientsForProvider 2.) AdherenceCapture class will handle adherence input
+d5db8da Dev | #274 | adding allPatientsWithoutAdherence
+70dc7ba Shruthi, Dev | #273 | adding call scripts standard
+5fdadb3 Vishal|Dheeru #0 Fixing log4j config file name
+c292133 Vishal, Dheeru | #312 | Added integration test to verify wiring of report publishing module
+e45dfb5 Vishal, BalajiN | #273 | Implementing the basic ivr flow
