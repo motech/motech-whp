@@ -32,6 +32,7 @@ public class ReportingPublisherServiceIT {
         AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureRequest(providerId,patientId,2);
         reportingPublisherService.reportAdherenceCapture(adherenceCaptureRequest);
         // Might need a Thread.sleep(1000) on fast environments
+        Thread.sleep(2000);
         verify(reportingGateway).captureAdherence(adherenceCaptureRequest);
     }
 }
