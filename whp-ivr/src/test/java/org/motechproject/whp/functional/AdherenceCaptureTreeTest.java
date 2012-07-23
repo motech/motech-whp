@@ -3,7 +3,6 @@ package org.motechproject.whp.functional;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.ektorp.CouchDbConnector;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,10 +10,9 @@ import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
-import org.motechproject.testing.utils.SpringIntegrationTest;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.ivr.tree.AdherenceCaptureTree;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.xml.sax.SAXException;
@@ -38,10 +36,6 @@ public class AdherenceCaptureTreeTest extends SpringIntegrationTest {
 
     @Autowired
     AdherenceCaptureTree adherenceCaptureTree;
-
-    @Autowired
-    @Qualifier("whpDbConnector")
-    CouchDbConnector connector;
 
     @BeforeClass
     public static void startServer() throws Exception {
@@ -83,8 +77,4 @@ public class AdherenceCaptureTreeTest extends SpringIntegrationTest {
         server.stop();
     }
 
-    @Override
-    public CouchDbConnector getDBConnector() {
-        return connector;
-    }
 }

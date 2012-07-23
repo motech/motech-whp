@@ -42,5 +42,12 @@
             <artifactId>xmlunit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-common</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

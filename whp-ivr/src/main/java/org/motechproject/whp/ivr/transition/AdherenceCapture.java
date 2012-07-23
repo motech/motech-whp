@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.transition;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
@@ -8,18 +9,20 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.builder.CaptureAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.transition.ListPatientsForProvider.CURRENT_PATIENT_POSITION;
 
 @Component
 public class AdherenceCapture implements ITransition {
+
     @Autowired
     private PatientService patientService;
 
@@ -29,15 +32,10 @@ public class AdherenceCapture implements ITransition {
     @Autowired
     private WHPIVRMessage whpivrMessage;
 
-    private static int SKIP_PATIENT_CODE = 9;
+    private static String SKIP_PATIENT_CODE = "9";
 
-    public static final String ADHERENCE_PROVIDED_FOR = "confirmMessage1";
-    public static final String HAS_TAKEN = "confirmMessage1a";
-    public static final String OUT_OF = "confirmMessage2";
-    public static final String DOSES = "confirmMessage3";
 
     public AdherenceCapture() {
-
     }
 
     public AdherenceCapture(WHPAdherenceService adherenceService, WHPIVRMessage whpivrMessage, PatientService patientService) {
@@ -48,60 +46,45 @@ public class AdherenceCapture implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-
         SerializableList patients = flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE);
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
-        try {
-            Integer adherenceInput = Integer.parseInt(input);
-            String currentPatientId = patients.get(0).toString();
+        CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder = new CaptureAdherenceNodeBuilder(whpivrMessage);
+        String currentPatientId = patients.get(0).toString();
 
-            if (adherenceInput != SKIP_PATIENT_CODE) {
-                Patient patient = patientService.findByPatientId(currentPatientId);
-                Integer dosesPerWeek = patient.getCurrentTherapy().getTreatmentCategory().getDosesPerWeek();
-
-                if (adherenceInput <= dosesPerWeek) {
-                    AuditParams auditParams = new AuditParams(patient.getCurrentTreatment().getProviderId(), AdherenceSource.IVR, "");
-                    adherenceService.recordAdherence(new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance()), auditParams);
-                    addSuccessPrompt(promptBuilder, adherenceInput, currentPatientId, dosesPerWeek);
-                }
-            }
-        } catch (NumberFormatException exception) {
-        }
+        if (!shouldSkipInput(input))
+            recordAdherenceBasedOnInput(captureAdherenceNodeBuilder, parseInt(input), currentPatientId);
 
         removeCurrentPatientFromSession(flowSession, patients);
-        return getNextNode(patients, promptBuilder,flowSession);
+        return getNextNode(captureAdherenceNodeBuilder, patients, flowSession);
     }
 
-    private void addSuccessPrompt(PromptBuilder promptBuilder, Integer adherenceInput, String currentPatientId, Integer dosesPerWeek) {
-        promptBuilder.wav(ADHERENCE_PROVIDED_FOR)
-                .id(currentPatientId)
-                .wav(HAS_TAKEN)
-                .number(adherenceInput)
-                .wav(OUT_OF)
-                .number(dosesPerWeek)
-                .wav(DOSES);
+    private void recordAdherenceBasedOnInput(CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder, Integer adherenceInput, String currentPatientId) {
+        Patient patient = patientService.findByPatientId(currentPatientId);
+        int dosesPerWeek = patient.getCurrentTherapy().getTreatmentCategory().getDosesPerWeek();
+
+        if (adherenceInput <= dosesPerWeek) {
+            AuditParams auditParams = new AuditParams(patient.getCurrentTreatment().getProviderId(), AdherenceSource.IVR, "");
+            adherenceService.recordAdherence(new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance()), auditParams);
+            captureAdherenceNodeBuilder.confirmAdherence(currentPatientId, adherenceInput, dosesPerWeek);
+        }
     }
 
-    private Node getNextNode(SerializableList patients, PromptBuilder promptBuilder, FlowSession flowSession) {
-        if (patients.size() > 0)  {
-            Integer nextPatientPosition = ((Integer)flowSession.get(CURRENT_PATIENT_POSITION)) + 1;
+    private Node getNextNode(CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder, SerializableList patients, FlowSession flowSession) {
+        if (patients.size() > 0) {
+            Integer nextPatientPosition = ((Integer) flowSession.get(CURRENT_PATIENT_POSITION)) + 1;
             String nextPatientId = patients.get(0).toString();
 
-            promptBuilder.wav(ListPatientsForProvider.PATIENT_LIST)
-                    .number(nextPatientPosition)
-                    .id(nextPatientId)
-                    .wav(ListPatientsForProvider.ENTER_ADHERENCE);
-
-            return new Node().addPrompts(promptBuilder.build())
-                    .addTransition("?", new AdherenceCapture());
+            return captureAdherenceNodeBuilder.captureAdherence(nextPatientId, nextPatientPosition).build();
         }
-
-        return new Node();
+        return captureAdherenceNodeBuilder.build();
     }
 
     private void removeCurrentPatientFromSession(FlowSession flowSession, SerializableList patients) {
         patients.remove(0);
         flowSession.set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, patients);
+    }
+
+    private boolean shouldSkipInput(String input) {
+        return !StringUtils.isNumeric(input) || input.equals(SKIP_PATIENT_CODE);
     }
 
     @Override

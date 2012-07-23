@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.transition.ListPatientsForProvider.*;
+import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class ListPatientsForProviderTest {
@@ -96,7 +96,7 @@ public class ListPatientsForProviderTest {
         when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).build());
 
         PromptBuilder promptBuilder = getPromptBuilder(patientsWithAdherence, adherenceSummary)
-                .wav(ListPatientsForProvider.PATIENT_LIST)
+                .wav(PATIENT_LIST)
                 .number(1)
                 .id("patient2")
                 .wav(ENTER_ADHERENCE);

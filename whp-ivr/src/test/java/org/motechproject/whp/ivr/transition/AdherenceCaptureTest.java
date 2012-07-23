@@ -4,10 +4,10 @@ package org.motechproject.whp.ivr.transition;
 import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -27,14 +27,14 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
-
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 @ContextConfiguration(locations = {"/applicationIVRContext.xml"})
 public class AdherenceCaptureTest extends SpringIntegrationTest {
@@ -47,9 +47,6 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
     @Autowired
     WHPIVRMessage whpivrMessage;
 
-    @Autowired
-    @Qualifier("whpDbConnector")
-    CouchDbConnector connector;
 
 
     @Mock
@@ -80,10 +77,10 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSkipCurrentPatientIfKey9IsPressed() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(ListPatientsForProvider.PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(anotherPatientId)
-                .wav(ListPatientsForProvider.ENTER_ADHERENCE);
+                .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCapture());
 
@@ -94,10 +91,10 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSkipCurrentPatientIfEnteredDoseIsGreaterThanDosesPerWeek() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(ListPatientsForProvider.PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(anotherPatientId)
-                .wav(ListPatientsForProvider.ENTER_ADHERENCE);
+                .wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCapture());
@@ -109,10 +106,10 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
     @Test
     public void shouldSkipCurrentPatientIfKeyPressedInNotNumber() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(ListPatientsForProvider.PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(anotherPatientId)
-                .wav(ListPatientsForProvider.ENTER_ADHERENCE);
+                .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCapture());
 
@@ -126,16 +123,16 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
         int dosesTaken = 2;
         int dosesPerWeek = 3;
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
-                .wav(AdherenceCapture.ADHERENCE_PROVIDED_FOR)
+                .wav(CONFIRM_ADHERENCE)
                 .id(patientId)
-                .wav(AdherenceCapture.HAS_TAKEN)
+                .wav(HAS_TAKEN)
                 .number(dosesTaken)
-                .wav(AdherenceCapture.OUT_OF)
+                .wav(OUT_OF)
                 .number(dosesPerWeek)
-                .wav(AdherenceCapture.DOSES)
-                .wav(ListPatientsForProvider.PATIENT_LIST)
+                .wav(DOSES)
+                .wav(PATIENT_LIST)
                 .number(2)
-                .id(anotherPatientId).wav(ListPatientsForProvider.ENTER_ADHERENCE);
+                .id(anotherPatientId).wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCapture());
@@ -170,8 +167,4 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
         return patient;
     }
 
-    @Override
-    public CouchDbConnector getDBConnector() {
-        return connector;
-    }
 }
