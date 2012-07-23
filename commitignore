@@ -17,6 +17,9 @@ b936cb6 Vishal, BalajiN | #0 | pointing master to the development version of whp
 b62129 Vishal, Sri | #0 | Fixing build
 2fc1158 Sri, Vishal #0 Fixing compile error
 
+3560aed BalajiN | #0 | Reflecting change made in release
+c7e571f Sri, Vishal #0 Removed whp-mapping module and moved files to common and refdata
+
 #Ignores for IVR and Reporting
 3869fa4 Dheeru, Preethi | # 273 | Created WHPCallFlowController to redirect newCall. Added emulator for testing
 d8ede64 praveen|#312|creating framework for whp report publishing
