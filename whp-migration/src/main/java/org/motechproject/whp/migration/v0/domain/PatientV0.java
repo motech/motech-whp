@@ -163,6 +163,10 @@ public class PatientV0 extends MotechBaseDataObject {
     }
 
     // For migration
+    public void setTherapy(TherapyV0 therapy) {
+    }
+
+    // For migration
     public List<TherapyV0> getTherapyHistory() {
         TherapyV0 currentTherapy = currentTreatment.getTherapy();
         List<TherapyV0> therapies = new ArrayList<>();
@@ -173,6 +177,11 @@ public class PatientV0 extends MotechBaseDataObject {
         }
         return therapies;
     }
+
+    // For migration
+    public void setTherapyHistory(List<TherapyV0> therapy) {
+    }
+
 
     // For migration
     public List<TreatmentV0> getTreatments(String therapyDocId) {
