@@ -23,9 +23,9 @@ public class PromptBuilder {
         return this;
     }
 
-    public PromptBuilder text(String text) {
-        for(Character character : text.toCharArray())
-            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(character.toString(),DEFAULT_LANGUAGE_CODE)));
+    public PromptBuilder id(String text) {
+        for (Character character : text.toCharArray())
+            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(character.toString(), DEFAULT_LANGUAGE_CODE)));
         return this;
     }
 

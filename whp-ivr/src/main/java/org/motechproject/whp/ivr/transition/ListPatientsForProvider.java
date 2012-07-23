@@ -20,6 +20,8 @@ public class ListPatientsForProvider implements ITransition {
     public static final String ADHERENCE_PROVIDED_FOR = "instructionalMessage1";
     public static final String ADHERENCE_TO_BE_PROVIDED_FOR = "instructionalMessage2";
     public static final String ADHERENCE_CAPTURE_INSTRUCTION = "instructionalMessage3";
+    public static String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
+    public static final String ENTER_ADHERENCE = "enterAdherence";
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -27,6 +29,8 @@ public class ListPatientsForProvider implements ITransition {
     private WHPIVRMessage whpivrMessage;
     @Autowired
     private AllProviders allProviders;
+    public static final String CURRENT_PATIENT_POSITION = "currentPatientPosition";
+    public static final String PATIENT_LIST = "patientList";
 
     public ListPatientsForProvider() {
     }
@@ -45,13 +49,13 @@ public class ListPatientsForProvider implements ITransition {
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
         List<String> patientsWithoutAdherence = adherenceSummary.getAllPatientsWithoutAdherence();
 
-
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
                 .wav(ADHERENCE_PROVIDED_FOR)
                 .number(adherenceSummary.countOfPatientsWithAdherence())
                 .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
                 .number(adherenceSummary.countOfPatientsWithoutAdherence())
                 .wav(ADHERENCE_CAPTURE_INSTRUCTION);
+
         Node node = new Node();
 
         handlePatientAdherence(node, flowSession, patientsWithoutAdherence, promptBuilder);
@@ -61,9 +65,11 @@ public class ListPatientsForProvider implements ITransition {
 
     private void handlePatientAdherence(Node node, FlowSession flowSession, List<String> patientsWithoutAdherence, PromptBuilder promptBuilder) {
         if (patientsWithoutAdherence.size() > 0) {
-            promptBuilder.text(patientsWithoutAdherence.get(0));
-            patientsWithoutAdherence.remove(0);
-            flowSession.set("patientsWithoutAdherence", new SerializableList(patientsWithoutAdherence));
+            promptBuilder.wav(PATIENT_LIST)
+                         .number(1)
+                         .id(patientsWithoutAdherence.get(0)).wav(ENTER_ADHERENCE);
+            flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
+            flowSession.set(CURRENT_PATIENT_POSITION, 1);
             node.addTransition("?", new AdherenceCapture());
         }
     }

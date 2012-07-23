@@ -52,4 +52,26 @@ public class WeeklyAdherenceSummary {
         if(takenDays(treatmentCategory).contains(pillDay)) return PillStatus.Taken;
         return PillStatus.NotTaken;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WeeklyAdherenceSummary)) return false;
+
+        WeeklyAdherenceSummary that = (WeeklyAdherenceSummary) o;
+
+        if (dosesTaken != that.dosesTaken) return false;
+        if (!patientId.equals(that.patientId)) return false;
+        if (!week.equals(that.week)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = week.hashCode();
+        result = 31 * result + dosesTaken;
+        result = 31 * result + patientId.hashCode();
+        return result;
+    }
 }

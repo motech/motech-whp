@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SerializableList extends ArrayList implements Serializable {
+public class SerializableList<T extends Serializable> extends ArrayList<T> implements Serializable {
 
-    public SerializableList(List object) {
-        this.addAll(object);
+    public SerializableList(List<T> object) {
+        super(object);
     }
+
 }

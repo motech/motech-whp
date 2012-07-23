@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -49,60 +48,68 @@ public class ListPatientsForProviderTest {
 
         List<String> allPatientsIds = asList("patient1", "patient2");
         List<String> patientsWithAdherence = asList("patient1", "patient2");
+        FlowSession flowSession = mock(FlowSession.class);
 
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(providerId,
                 allPatientsIds,
                 patientsWithAdherence);
 
-        when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
-        when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(mobileNumber).build());
 
-        Prompt[] prompts = new PromptBuilder(whpivrMessage)
-                .wav(ADHERENCE_PROVIDED_FOR)
-                .number(patientsWithAdherence.size())
-                .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
-                .number(adherenceSummary.countOfPatientsWithoutAdherence())
-                .wav(ADHERENCE_CAPTURE_INSTRUCTION)
-                .build();
+        when(flowSession.get("cid")).thenReturn(mobileNumber);
+        when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
+        when(allProviders.findByPrimaryMobileNumber(mobileNumber)).thenReturn(newProviderBuilder().withProviderId(providerId).build());
+
+        Prompt[] prompts = getPromptBuilder(patientsWithAdherence, adherenceSummary).build();
 
 
         Node expectedNode = new Node().addPrompts(prompts);
 
-        FlowSession flowSession = mock(FlowSession.class);
 
-        Node node = listPatientsForProvider.getDestinationNode("", flowSession);
+        Node actualNode = listPatientsForProvider.getDestinationNode("", flowSession);
 
-        assertThat(node, is(expectedNode));
+        assertThat(actualNode, is(expectedNode));
         verify(adherenceDataService, times(1)).getAdherenceSummary(providerId);
     }
 
+    private PromptBuilder getPromptBuilder(List<String> patientsWithAdherence, AdherenceSummaryByProvider adherenceSummary) {
+        return new PromptBuilder(whpivrMessage)
+                .wav(ADHERENCE_PROVIDED_FOR)
+                .number(patientsWithAdherence.size())
+                .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
+                .number(adherenceSummary.countOfPatientsWithoutAdherence())
+                .wav(ADHERENCE_CAPTURE_INSTRUCTION);
+    }
+
     @Test
-    public void shouldListPatientsWithoutAdherenceAndGetAdherence() {
+    public void shouldListPatientsAndGetAdherence() {
         String providerId = "providerid";
         String mobileNumber = "mobileNumber";
 
         List<String> allPatientsIds = asList("patient1", "patient2", "patient3");
         List<String> patientsWithAdherence = asList("patient1");
-
-        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(providerId,
-                allPatientsIds,
-                patientsWithAdherence);
-
-        when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
-        when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(mobileNumber).build());
-
-        Prompt[] prompts = new PromptBuilder(whpivrMessage).text("patient2").build();
-
-
         FlowSession flowSession = mock(FlowSession.class);
 
-        Node node = listPatientsForProvider.getDestinationNode("", flowSession);
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(providerId, allPatientsIds, patientsWithAdherence);
 
-        assertTrue(node.getPrompts().containsAll(asList(prompts)));
-        assertThat(node.getTransitions().size(), is(1));
-        assertThat(node.getTransitions().get("?"), is(AdherenceCapture.class));
+        when(flowSession.get("cid")).thenReturn(mobileNumber);
+        when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
+        when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).build());
 
-        verify(flowSession, times(1)).set("patientsWithoutAdherence", new SerializableList(asList("patient3")));
+        PromptBuilder promptBuilder = getPromptBuilder(patientsWithAdherence, adherenceSummary)
+                .wav(ListPatientsForProvider.PATIENT_LIST)
+                .number(1)
+                .id("patient2")
+                .wav(ENTER_ADHERENCE);
+
+
+        Node expectedNode = new Node().addPrompts(promptBuilder.build())
+                .addTransition("?", new AdherenceCapture());
+
+        Node actualNode = listPatientsForProvider.getDestinationNode("", flowSession);
+
+        assertThat(actualNode, is(expectedNode));
+
+        verify(flowSession, times(1)).set("patientsWithoutAdherence", new SerializableList(asList("patient2", "patient3")));
     }
 
 }
