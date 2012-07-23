@@ -14,4 +14,7 @@
 5bdd8dc Abhishek, Preethi | #159 | Audit adherence edits made by cmf admin
 30bc0fa <Sri> #0 | Moving out Date Constants to WHPDate method and moving that into util package in common.
 1725d99 Abhishek, Preethi | #0 | Wrote functional test for create/edit of cmf admin
-eda62a6 BalajiN | #0 | Echoing line as grep treats it as a file other wise in master
+eda62a6 BalajiN | #0 | Echoing line as grep treats it as a file other wise
+cfe43c5 Vishal|Sri #323 fixing test in master
+86ea03d Sri|Vishal #322 Fixed/Refactored multiple phase transitions
+df7fda7 BalajiN, Abhishek | #0 | Fixing functional tests
