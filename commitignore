@@ -21,3 +21,6 @@ df7fda7 BalajiN, Abhishek | #0 | Fixing functional tests
 d7ead2b Vishal #0 Removed whp-validation module. Moved validators to common and user modules
 c7e571f Sri, Vishal #0 Removed whp-mapping module and moved files to common and refdata
 e9e2a5f Shruthi, dev | #0 | implemented phase migration
+0eb06e8 Dev | #0 | making rows link through anchor tag(removing javascript code to handle this)
+4fcf56f Dev | #0 | fixing styling for dash on sunday
+da87d54 Dev | #30 | styling dashboard page
