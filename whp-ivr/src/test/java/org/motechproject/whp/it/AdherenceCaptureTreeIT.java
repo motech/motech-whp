@@ -49,7 +49,6 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     DefaultHttpClient decisionTreeController;
 
-    HttpContext httpContext;
     @Autowired
     AdherenceCaptureTree adherenceCaptureTree;
 
@@ -87,11 +86,6 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     public void setup() {
         setIgnoreWhitespace(true);
         decisionTreeController = new DefaultHttpClient();
-        CookieStore cookieStore = new BasicCookieStore();
-
-        httpContext = new BasicHttpContext();
-        httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-
         adherenceCaptureTree.load();
         setUpTestData();
     }
@@ -127,7 +121,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldTransitionToAdherenceSummaryNode() throws IOException, SAXException {
 
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en&event=GotDTMF&data=1&cid="+provider.getPrimaryMobile(), SERVER_URL)), new BasicResponseHandler());
+        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en&event=GotDTMF&data=1&cid=%s", SERVER_URL, provider.getPrimaryMobile())), new BasicResponseHandler());
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage1.wav</playaudio>\n" +
@@ -156,7 +150,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     @Test
     public void shouldRecordAdherenceForAPatient()  throws IOException, SAXException{
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=2&cid=" + provider.getPrimaryMobile(), SERVER_URL)), new BasicResponseHandler());
+        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=2&cid=%s" , SERVER_URL, provider.getPrimaryMobile())), new BasicResponseHandler());
         String expectedResponseForPatient1Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage1.wav</playaudio>\n" +
@@ -196,7 +190,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
-        response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=3&cid=" + provider.getPrimaryMobile(), SERVER_URL)), new BasicResponseHandler());
+        response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=3&cid=%s", SERVER_URL, provider.getPrimaryMobile())), new BasicResponseHandler());
 
         String expectedResponseForPatient2Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
@@ -231,7 +225,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     public void shouldSkipForInvalidInputs() throws IOException, SAXException{
         String sessionId = UUID.randomUUID().toString();
         HttpGet request = new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=8&flowSessionId=%s&cid=%s" , SERVER_URL, sessionId, provider.getPrimaryMobile()));
-        String response = decisionTreeController.execute(request, new BasicResponseHandler(),httpContext);
+        String response = decisionTreeController.execute(request, new BasicResponseHandler());
         String expectedResponseForPatient1Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
@@ -256,7 +250,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
 
-        response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=9&flowSessionId=%s&cid=%s", SERVER_URL,sessionId, provider.getPrimaryMobile())), new BasicResponseHandler(),httpContext);
+        response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=9&flowSessionId=%s&cid=%s", SERVER_URL,sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
         String expectedResponseForPatient2Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<vxml version=\"2.1\" xmlns=\"http://www.w3.org/2001/vxml\">\n" +
                 "    <form>\n" +
