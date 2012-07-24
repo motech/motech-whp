@@ -69,7 +69,6 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
 
         when(flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId, anotherPatientId)));
-        when(flowSession.get(ListPatientsForProvider.CURRENT_PATIENT_POSITION)).thenReturn(1);
     }
 
     @Test
@@ -83,7 +82,8 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
         Node destinationNode = adherenceCapture.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(anotherPatientId)));
+
+        when(flowSession.get("currentPatientPosition")).thenReturn(1);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
         Node destinationNode = adherenceCapture.getDestinationNode("4", flowSession);
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(anotherPatientId)));
+        verify(flowSession).set("currentPatientPosition", 1);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
         Node destinationNode = adherenceCapture.getDestinationNode("#", flowSession);
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(anotherPatientId)));
+        verify(flowSession).set("currentPatientPosition", 1);
     }
 
     @Test
@@ -139,7 +139,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
 
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
 
-        verify(adherenceService, times(1)).recordAdherence(new WeeklyAdherenceSummary(patientId, currentWeekInstance()), auditParams);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(patientId, currentWeekInstance());
+        weeklyAdherenceSummary.setDosesTaken(2);
+        verify(adherenceService, times(1)).recordAdherence(weeklyAdherenceSummary, auditParams);
     }
 
     @Test
@@ -151,7 +153,6 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
         Node destinationNode = adherenceCapture.getDestinationNode("9", flowSession);
 
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList()));
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {

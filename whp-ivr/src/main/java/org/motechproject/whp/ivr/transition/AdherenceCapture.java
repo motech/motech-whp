@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
-import static org.motechproject.whp.ivr.transition.ListPatientsForProvider.CURRENT_PATIENT_POSITION;
 
 @Component
 public class AdherenceCapture implements ITransition {
@@ -34,6 +33,8 @@ public class AdherenceCapture implements ITransition {
 
     private static String SKIP_PATIENT_CODE = "9";
 
+    private static final String CURRENT_PATIENT_POSITION = "currentPatientPosition";
+
 
     public AdherenceCapture() {
     }
@@ -48,12 +49,11 @@ public class AdherenceCapture implements ITransition {
     public Node getDestinationNode(String input, FlowSession flowSession) {
         SerializableList patients = flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE);
         CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder = new CaptureAdherenceNodeBuilder(whpivrMessage);
-        String currentPatientId = patients.get(0).toString();
+        String currentPatientId = patients.get(getCurrentPosition(flowSession)).toString();
 
         if (!shouldSkipInput(input))
             recordAdherenceBasedOnInput(captureAdherenceNodeBuilder, parseInt(input), currentPatientId);
 
-        removeCurrentPatientFromSession(flowSession, patients);
         return getNextNode(captureAdherenceNodeBuilder, patients, flowSession);
     }
 
@@ -63,24 +63,38 @@ public class AdherenceCapture implements ITransition {
 
         if (adherenceInput <= dosesPerWeek) {
             AuditParams auditParams = new AuditParams(patient.getCurrentTreatment().getProviderId(), AdherenceSource.IVR, "");
-            adherenceService.recordAdherence(new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance()), auditParams);
+            WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
+            weeklyAdherenceSummary.setDosesTaken(adherenceInput);
+            adherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
             captureAdherenceNodeBuilder.confirmAdherence(currentPatientId, adherenceInput, dosesPerWeek);
         }
     }
 
     private Node getNextNode(CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder, SerializableList patients, FlowSession flowSession) {
-        if (patients.size() > 0) {
-            Integer nextPatientPosition = ((Integer) flowSession.get(CURRENT_PATIENT_POSITION)) + 1;
-            String nextPatientId = patients.get(0).toString();
+        Integer currentNodePosition = getCurrentPosition(flowSession);
+        Integer nextPatientPosition = currentNodePosition + 1;
 
-            return captureAdherenceNodeBuilder.captureAdherence(nextPatientId, nextPatientPosition).build();
+        if (patients.size() > nextPatientPosition) {
+            setPosition(flowSession, nextPatientPosition);
+            String nextPatientId = patients.get(nextPatientPosition).toString();
+            return captureAdherenceNodeBuilder.captureAdherence(nextPatientId, nextPatientPosition + 1).build();
         }
+
         return captureAdherenceNodeBuilder.build();
     }
 
-    private void removeCurrentPatientFromSession(FlowSession flowSession, SerializableList patients) {
-        patients.remove(0);
-        flowSession.set(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE, patients);
+    private Integer getCurrentPosition(FlowSession flowSession) {
+        Integer currentNodePosition = (Integer) flowSession.get(CURRENT_PATIENT_POSITION);
+        if (currentNodePosition == null) {
+            currentNodePosition = 0;
+            flowSession.set(CURRENT_PATIENT_POSITION, currentNodePosition);
+        }
+        return currentNodePosition;
+    }
+
+
+    private void setPosition(FlowSession flowSession, int value) {
+        flowSession.set(CURRENT_PATIENT_POSITION, value);
     }
 
     private boolean shouldSkipInput(String input) {

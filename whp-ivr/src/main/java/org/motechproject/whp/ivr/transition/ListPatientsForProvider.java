@@ -19,7 +19,6 @@ import java.util.List;
 public class ListPatientsForProvider implements ITransition {
 
     public static String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
-    public static final String CURRENT_PATIENT_POSITION = "currentPatientPosition";
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -59,7 +58,6 @@ public class ListPatientsForProvider implements ITransition {
             captureAdherenceNodeBuilder.captureAdherence(patientsWithoutAdherence.get(0),1);
 
             flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
-            flowSession.set(CURRENT_PATIENT_POSITION, 1);
         }
     }
 }
