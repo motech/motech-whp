@@ -21,7 +21,7 @@ public abstract class Page {
 
     private Logger logger = LoggerFactory.getLogger(Page.class);
     protected WebDriver webDriver;
-    private static final long MaxPageLoadTime = 10;
+    private static final long MaxPageLoadTime = 30;
     private static final long RetryTimes = 5;
     private static final long RetryInterval = 5;
     protected WebDriverWait wait;
