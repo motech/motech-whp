@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.reporting.ReportingEventKeys;
 import org.motechproject.whp.reporting.request.AdherenceCaptureRequest;
@@ -15,33 +16,24 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ReportingPublisherServiceTest {
 
-    @Mock
-    private EventContext eventContext;
+    ReportingPublisherService reportingPublisher;
 
-    private ReportingPublisherService reportingPublisher;
+    @Mock
+    HttpClientService httpClientService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        reportingPublisher = new ReportingPublisherService(eventContext);
+        reportingPublisher = new ReportingPublisherService(httpClientService);
     }
 
     @Test
     public void shouldPublishAdherenceCaptureWithTheRightSubject() throws Exception {
-
         String providerId = "123456";
         String patientId = "abc12345";
         AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureRequest(providerId,patientId,2);
         reportingPublisher.reportAdherenceCapture(adherenceCaptureRequest);
 
-        ArgumentCaptor<AdherenceCaptureRequest> adherenceCaptureRequestArgumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        ArgumentCaptor<String> eventArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(eventContext).send(eventArgumentCaptor.capture(), adherenceCaptureRequestArgumentCaptor.capture());
-
-        String eventName = eventArgumentCaptor.getValue();
-
-        assertEquals(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, eventName);
-
-
+        verify(httpClientService).post(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, adherenceCaptureRequest);
     }
 }

@@ -1,5 +1,6 @@
 package org.motechproject.whp.reporting.service;
 
+import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.reporting.ReportingEventKeys;
 import org.motechproject.whp.reporting.request.AdherenceCaptureRequest;
@@ -9,17 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ReportingPublisherService {
-    @Autowired
-    private EventContext eventContext;
+
+    HttpClientService httpClientService;
 
     @Autowired
-    public ReportingPublisherService(@Qualifier("eventContext") EventContext eventContext) {
-        this.eventContext = eventContext;
+    public ReportingPublisherService(HttpClientService httpClientService) {
+        this.httpClientService = httpClientService;
     }
 
     public void reportAdherenceCapture(AdherenceCaptureRequest adherenceCaptureRequest){
-        eventContext.send(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, adherenceCaptureRequest);
-
+        httpClientService.post(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, adherenceCaptureRequest);
     }
 
 }

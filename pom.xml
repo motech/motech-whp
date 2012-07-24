@@ -85,7 +85,8 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>${spring.version}</version>
-                <scope>test</scope>                <exclusions>
+                <scope>test</scope>
+                <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
@@ -290,6 +291,11 @@
                 <version>0.12-SNAPSHOT</version>
             </dependency>
             <!--Contrib and delivery-->
+            <dependency>
+                <groupId>org.motechproject.contrib-whp</groupId>
+                <artifactId>motech-http-client</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-testing-utils</artifactId>
