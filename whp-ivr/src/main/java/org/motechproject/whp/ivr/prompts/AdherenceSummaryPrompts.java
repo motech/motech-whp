@@ -1,9 +1,10 @@
-package org.motechproject.whp.ivr.builder;
+package org.motechproject.whp.ivr.prompts;
 
 
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.builder.PromptBuilder;
 
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 

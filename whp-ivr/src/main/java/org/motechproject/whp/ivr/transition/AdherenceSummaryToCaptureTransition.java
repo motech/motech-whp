@@ -6,7 +6,7 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.builder.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.motechproject.whp.ivr.builder.AdherenceSummaryPrompts.adherenceSummary;
+import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummary;
 
 
 @Component
-public class ListPatientsForProvider implements ITransition {
+public class AdherenceSummaryToCaptureTransition implements ITransition {
 
-    public static String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
+    public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -29,10 +29,10 @@ public class ListPatientsForProvider implements ITransition {
     @Autowired
     private AllProviders allProviders;
 
-    public ListPatientsForProvider() {
+    public AdherenceSummaryToCaptureTransition() {
     }
 
-    public ListPatientsForProvider(AdherenceDataService adherenceDataService, WHPIVRMessage whpivrMessage, AllProviders allProviders) {
+    public AdherenceSummaryToCaptureTransition(AdherenceDataService adherenceDataService, WHPIVRMessage whpivrMessage, AllProviders allProviders) {
         this.adherenceDataService = adherenceDataService;
         this.whpivrMessage = whpivrMessage;
         this.allProviders = allProviders;
@@ -54,7 +54,7 @@ public class ListPatientsForProvider implements ITransition {
         }
 
         captureAdherenceNode.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, patientsWithoutAdherence.get(0), 1));
-        captureAdherenceNode.addTransition("?", new AdherenceCapture());
+        captureAdherenceNode.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
 

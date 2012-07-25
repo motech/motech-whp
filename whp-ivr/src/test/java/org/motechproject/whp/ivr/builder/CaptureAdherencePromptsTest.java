@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 
 import java.util.Properties;
 

@@ -9,7 +9,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.builder.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -18,29 +18,26 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
-import static org.motechproject.whp.ivr.builder.ConfirmAdherencePrompts.confirmAdherence;
+import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherence;
 
 @Component
-public class AdherenceCapture implements ITransition {
+public class AdherenceCaptureToCallCompleteTransition implements ITransition {
 
     @Autowired
     private PatientService patientService;
-
     @Autowired
     private WHPAdherenceService adherenceService;
-
     @Autowired
     private WHPIVRMessage whpivrMessage;
 
-    private static String SKIP_PATIENT_CODE = "9";
+    private static final String SKIP_PATIENT_CODE = "9";
 
     private static final String CURRENT_PATIENT_POSITION = "currentPatientPosition";
 
-
-    public AdherenceCapture() {
+    AdherenceCaptureToCallCompleteTransition() {
     }
 
-    public AdherenceCapture(WHPAdherenceService adherenceService, WHPIVRMessage whpivrMessage, PatientService patientService) {
+    public AdherenceCaptureToCallCompleteTransition(WHPAdherenceService adherenceService, WHPIVRMessage whpivrMessage, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
         this.patientService = patientService;
@@ -48,7 +45,7 @@ public class AdherenceCapture implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        SerializableList patients = flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE);
+        SerializableList patients = flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE);
         String currentPatientId = patients.get(getCurrentPosition(flowSession)).toString();
 
         Node nextNode = new Node();
@@ -85,7 +82,7 @@ public class AdherenceCapture implements ITransition {
             setPosition(flowSession, nextPatientPosition);
             String nextPatientId = patients.get(nextPatientPosition).toString();
             node.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, nextPatientId, nextPatientPosition + 1));
-            node.addTransition("?", new AdherenceCapture());
+            node.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
         }
     }
 
@@ -110,9 +107,9 @@ public class AdherenceCapture implements ITransition {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdherenceCapture)) return false;
+        if (!(o instanceof AdherenceCaptureToCallCompleteTransition)) return false;
 
-        AdherenceCapture that = (AdherenceCapture) o;
+        AdherenceCaptureToCallCompleteTransition that = (AdherenceCaptureToCallCompleteTransition) o;
 
         if (adherenceService != null ? !adherenceService.equals(that.adherenceService) : that.adherenceService != null)
             return false;

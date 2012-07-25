@@ -6,6 +6,7 @@ import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts;
 
 import java.util.Arrays;
 import java.util.List;

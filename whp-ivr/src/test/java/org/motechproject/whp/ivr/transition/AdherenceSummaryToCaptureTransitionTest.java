@@ -24,7 +24,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
-public class ListPatientsForProviderTest {
+public class AdherenceSummaryToCaptureTransitionTest {
 
     @Mock
     private AdherenceDataService adherenceDataService;
@@ -32,13 +32,12 @@ public class ListPatientsForProviderTest {
     private AllProviders allProviders;
 
     private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
-    private Node expectedNode;
-    private ListPatientsForProvider listPatientsForProvider;
+    private AdherenceSummaryToCaptureTransition adherenceSummaryToCaptureTransition;
 
     @Before
     public void setUp() {
         initMocks(this);
-        listPatientsForProvider = new ListPatientsForProvider(adherenceDataService, whpivrMessage, allProviders);
+        adherenceSummaryToCaptureTransition = new AdherenceSummaryToCaptureTransition(adherenceDataService, whpivrMessage, allProviders);
     }
 
     @Test
@@ -54,18 +53,13 @@ public class ListPatientsForProviderTest {
                 allPatientsIds,
                 patientsWithAdherence);
 
-
         when(flowSession.get("cid")).thenReturn(mobileNumber);
         when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
         when(allProviders.findByPrimaryMobileNumber(mobileNumber)).thenReturn(newProviderBuilder().withProviderId(providerId).build());
 
         Prompt[] prompts = getPromptBuilder(patientsWithAdherence, adherenceSummary).build();
-
-
         Node expectedNode = new Node().addPrompts(prompts);
-
-
-        Node actualNode = listPatientsForProvider.getDestinationNode("", flowSession);
+        Node actualNode = adherenceSummaryToCaptureTransition.getDestinationNode("", flowSession);
 
         assertThat(actualNode, is(expectedNode));
         verify(adherenceDataService, times(1)).getAdherenceSummary(providerId);
@@ -101,14 +95,11 @@ public class ListPatientsForProviderTest {
                 .id("patient2")
                 .wav(ENTER_ADHERENCE);
 
-
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCapture());
-
-        Node actualNode = listPatientsForProvider.getDestinationNode("", flowSession);
+                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+        Node actualNode = adherenceSummaryToCaptureTransition.getDestinationNode("", flowSession);
 
         assertThat(actualNode, is(expectedNode));
-
         verify(flowSession, times(1)).set("patientsWithoutAdherence", new SerializableList(asList("patient2", "patient3")));
     }
 

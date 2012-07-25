@@ -26,6 +26,8 @@ import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.Properties;
+
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -33,24 +35,17 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
-@ContextConfiguration(locations = {"/applicationIVRContext.xml"})
-public class AdherenceCaptureTest extends SpringIntegrationTest {
+public class AdherenceCaptureToCallCompleteTransitionTest {
     @Mock
     PatientService patientService;
-
     @Mock
     WHPAdherenceService adherenceService;
-
-    @Autowired
-    WHPIVRMessage whpivrMessage;
-
-
-
     @Mock
     FlowSession flowSession;
 
-    Patient patient;
-    AdherenceCapture adherenceCapture;
+    WHPIVRMessage whpivrMessage;
+    AdherenceCaptureToCallCompleteTransition adherenceCaptureToEndCallTransition;
+
     String patientId;
     String anotherPatientId;
     String providerId;
@@ -58,17 +53,18 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
     @Before
     public void setUp() {
         initMocks(this);
+        whpivrMessage = new WHPIVRMessage(new Properties());
+
         providerId = "providerid";
         patientId = "patientid";
         anotherPatientId = "someOtherPatientId";
 
         Patient patient = getPatientFor3DosesPerWeek(patientId);
 
-        adherenceCapture = new AdherenceCapture(adherenceService, whpivrMessage, patientService);
+        adherenceCaptureToEndCallTransition = new AdherenceCaptureToCallCompleteTransition(adherenceService, whpivrMessage, patientService);
 
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
-
-        when(flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId, anotherPatientId)));
+        when(flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId, anotherPatientId)));
     }
 
     @Test
@@ -78,9 +74,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
                 .id(anotherPatientId)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCapture());
+                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
-        Node destinationNode = adherenceCapture.getDestinationNode("9", flowSession);
+        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
 
         when(flowSession.get("currentPatientPosition")).thenReturn(1);
@@ -94,9 +90,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
                 .wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCapture());
+                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
-        Node destinationNode = adherenceCapture.getDestinationNode("4", flowSession);
+        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("4", flowSession);
         assertEquals(expectedNode, destinationNode);
         verify(flowSession).set("currentPatientPosition", 1);
     }
@@ -108,9 +104,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
                 .id(anotherPatientId)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCapture());
+                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
-        Node destinationNode = adherenceCapture.getDestinationNode("#", flowSession);
+        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("#", flowSession);
         assertEquals(expectedNode, destinationNode);
         verify(flowSession).set("currentPatientPosition", 1);
     }
@@ -132,9 +128,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
                 .id(anotherPatientId).wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCapture());
+                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
-        Node destinationNode = adherenceCapture.getDestinationNode(String.valueOf(dosesTaken), flowSession);
+        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
         assertEquals(expectedNode, destinationNode);
 
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
@@ -148,9 +144,9 @@ public class AdherenceCaptureTest extends SpringIntegrationTest {
     public void shouldHangUpIfPatientListIsEmpty() {
         Node expectedNode = new Node();
 
-        when(flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId)));
+        when(flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId)));
 
-        Node destinationNode = adherenceCapture.getDestinationNode("9", flowSession);
+        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
 
         assertEquals(expectedNode, destinationNode);
     }

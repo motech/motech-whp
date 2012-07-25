@@ -36,10 +36,6 @@ public class WHPIVRMessage implements IVRMessage {
         return text == null ? key : text;
     }
 
-    public String getWav(String name) {
-        return getWav(name, "en");
-    }
-
     @Override
     public String getWav(String key, String preferredLangCode) {
         String file = get(key) != null ? get(key) : key;
