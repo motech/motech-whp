@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                     <th>Longest Interruption</th>
-                    <td id="longestTreatmentInterruption">${patient.longestDoseInterruption}</td>
+                    <td id="longestTreatmentInterruption">${patient.longestDoseInterruption} (in weeks)</td>
                 </tr>
             </table>
             <table class="table table-bordered default-arrow word-wrap table-striped">
