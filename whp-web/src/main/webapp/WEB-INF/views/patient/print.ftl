@@ -13,7 +13,7 @@
         <img class="pull-right" src="<@spring.url '/resources-${applicationVersion}/images/whplogo.png'/>"/>
     </a>
 </div>
-<h3 class="text-center uppercase">Treatment Card</h3>
+<h3 class="text-center uppercase">TB Treatment Card</h3>
 <hr class="bordered"/>
 <div class="row-fluid" id="mainContent">
 
@@ -56,6 +56,9 @@
     </div>
     <div class="left-spaced tc-div">
         <div><label class="tc-label">TB Unit with code</label></div>
+        <div>
+            <label class="tc-label">Patient Id</label><label class="tc-value">${patient.patientId!}</label>
+        </div>
         <div>
             <label class="tc-label">Patient TB Id</label><label class="tc-value">${patient.tbId!}</label>
         </div>
