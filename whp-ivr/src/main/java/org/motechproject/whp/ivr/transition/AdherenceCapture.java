@@ -9,7 +9,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.builder.CaptureAdherenceNodeBuilder;
+import org.motechproject.whp.ivr.builder.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.ivr.builder.ConfirmAdherencePrompts.confirmAdherence;
 
 @Component
 public class AdherenceCapture implements ITransition {
@@ -48,39 +49,44 @@ public class AdherenceCapture implements ITransition {
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
         SerializableList patients = flowSession.get(ListPatientsForProvider.PATIENTS_WITHOUT_ADHERENCE);
-        CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder = new CaptureAdherenceNodeBuilder(whpivrMessage);
         String currentPatientId = patients.get(getCurrentPosition(flowSession)).toString();
 
-        if (!shouldSkipInput(input))
-            recordAdherenceBasedOnInput(captureAdherenceNodeBuilder, parseInt(input), currentPatientId);
+        Node nextNode = new Node();
+        if (!shouldSkipInput(input)) {
+            handleAdherenceCaptureForCurrentPatient(nextNode, parseInt(input), currentPatientId);
+        }
 
-        return getNextNode(captureAdherenceNodeBuilder, patients, flowSession);
+        handleAdherenceCaptureForNextPatient(nextNode, patients, flowSession);
+        return nextNode;
     }
 
-    private void recordAdherenceBasedOnInput(CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder, Integer adherenceInput, String currentPatientId) {
+    private void handleAdherenceCaptureForCurrentPatient(Node node, Integer adherenceInput, String currentPatientId) {
         Patient patient = patientService.findByPatientId(currentPatientId);
         int dosesPerWeek = patient.getCurrentTherapy().getTreatmentCategory().getDosesPerWeek();
 
         if (adherenceInput <= dosesPerWeek) {
-            AuditParams auditParams = new AuditParams(patient.getCurrentTreatment().getProviderId(), AdherenceSource.IVR, "");
-            WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
-            weeklyAdherenceSummary.setDosesTaken(adherenceInput);
-            adherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
-            captureAdherenceNodeBuilder.confirmAdherence(currentPatientId, adherenceInput, dosesPerWeek);
+            recordAdherence(adherenceInput, currentPatientId, patient);
+            node.addPrompts(confirmAdherence(whpivrMessage, currentPatientId, adherenceInput, dosesPerWeek));
         }
     }
 
-    private Node getNextNode(CaptureAdherenceNodeBuilder captureAdherenceNodeBuilder, SerializableList patients, FlowSession flowSession) {
+    private void recordAdherence(Integer adherenceInput, String currentPatientId, Patient patient) {
+        AuditParams auditParams = new AuditParams(patient.getCurrentTreatment().getProviderId(), AdherenceSource.IVR, "");
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
+        weeklyAdherenceSummary.setDosesTaken(adherenceInput);
+        adherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
+    }
+
+    private void handleAdherenceCaptureForNextPatient(Node node, SerializableList patients, FlowSession flowSession) {
         Integer currentNodePosition = getCurrentPosition(flowSession);
         Integer nextPatientPosition = currentNodePosition + 1;
 
         if (patients.size() > nextPatientPosition) {
             setPosition(flowSession, nextPatientPosition);
             String nextPatientId = patients.get(nextPatientPosition).toString();
-            return captureAdherenceNodeBuilder.captureAdherence(nextPatientId, nextPatientPosition + 1).build();
+            node.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, nextPatientId, nextPatientPosition + 1));
+            node.addTransition("?", new AdherenceCapture());
         }
-
-        return captureAdherenceNodeBuilder.build();
     }
 
     private Integer getCurrentPosition(FlowSession flowSession) {
