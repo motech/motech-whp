@@ -11,9 +11,10 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.util.FlowSessionStub;
+import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -23,8 +24,6 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Properties;
 
@@ -34,37 +33,34 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 
 public class AdherenceCaptureToCallCompleteTransitionTest {
     @Mock
     PatientService patientService;
     @Mock
     WHPAdherenceService adherenceService;
-    @Mock
-    FlowSession flowSession;
 
+    FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
     AdherenceCaptureToCallCompleteTransition adherenceCaptureToEndCallTransition;
 
-    String patientId;
-    String anotherPatientId;
-    String providerId;
+    String patientId = "patientid";
+    String anotherPatientId = "someOtherPatientId";
+    String providerId = "providerid";
 
     @Before
     public void setUp() {
         initMocks(this);
         whpivrMessage = new WHPIVRMessage(new Properties());
-
-        providerId = "providerid";
-        patientId = "patientid";
-        anotherPatientId = "someOtherPatientId";
+        flowSession = new FlowSessionStub();
+        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId, anotherPatientId)));
 
         Patient patient = getPatientFor3DosesPerWeek(patientId);
 
         adherenceCaptureToEndCallTransition = new AdherenceCaptureToCallCompleteTransition(adherenceService, whpivrMessage, patientService);
 
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
-        when(flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId, anotherPatientId)));
     }
 
     @Test
@@ -78,8 +74,6 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
-
-        when(flowSession.get("currentPatientPosition")).thenReturn(1);
     }
 
     @Test
@@ -93,8 +87,9 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
                 .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("4", flowSession);
+
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set("currentPatientPosition", 1);
+        assertEquals(1, flowSession.get(IvrSession.CURRENT_PATIENT_INDEX));
     }
 
     @Test
@@ -108,7 +103,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("#", flowSession);
         assertEquals(expectedNode, destinationNode);
-        verify(flowSession).set("currentPatientPosition", 1);
+        assertEquals(1, flowSession.get(IvrSession.CURRENT_PATIENT_INDEX));
     }
 
     @Test
@@ -142,12 +137,10 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
 
     @Test
     public void shouldHangUpIfPatientListIsEmpty() {
-        Node expectedNode = new Node();
-
-        when(flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE)).thenReturn(new SerializableList(asList(patientId)));
+        Node expectedNode = new Node().addPrompts(callCompletionPrompts(whpivrMessage));
+        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId)));
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
-
         assertEquals(expectedNode, destinationNode);
     }
 

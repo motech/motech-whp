@@ -9,8 +9,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
-import org.motechproject.whp.ivr.util.SerializableList;
+import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
+import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherence;
 
 @Component
@@ -32,8 +33,6 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
 
     private static final String SKIP_PATIENT_CODE = "9";
 
-    private static final String CURRENT_PATIENT_POSITION = "currentPatientPosition";
-
     AdherenceCaptureToCallCompleteTransition() {
     }
 
@@ -45,15 +44,15 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        SerializableList patients = flowSession.get(AdherenceSummaryToCaptureTransition.PATIENTS_WITHOUT_ADHERENCE);
-        String currentPatientId = patients.get(getCurrentPosition(flowSession)).toString();
+        IvrSession ivrSession = new IvrSession(flowSession);
+        String currentPatientId = ivrSession.currentPatient();
 
         Node nextNode = new Node();
         if (!shouldSkipInput(input)) {
             handleAdherenceCaptureForCurrentPatient(nextNode, parseInt(input), currentPatientId);
         }
 
-        handleAdherenceCaptureForNextPatient(nextNode, patients, flowSession);
+        handleAdherenceCaptureForNextPatient(nextNode, ivrSession);
         return nextNode;
     }
 
@@ -74,31 +73,18 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
         adherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
     }
 
-    private void handleAdherenceCaptureForNextPatient(Node node, SerializableList patients, FlowSession flowSession) {
-        Integer currentNodePosition = getCurrentPosition(flowSession);
-        Integer nextPatientPosition = currentNodePosition + 1;
-
-        if (patients.size() > nextPatientPosition) {
-            setPosition(flowSession, nextPatientPosition);
-            String nextPatientId = patients.get(nextPatientPosition).toString();
-            node.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, nextPatientId, nextPatientPosition + 1));
+    private void handleAdherenceCaptureForNextPatient(Node node, IvrSession ivrSession) {
+        if(ivrSession.hasNextPatient()){
+            ivrSession.nextPatient();
+            node.addPrompts(captureAdherencePrompts(whpivrMessage,
+                    ivrSession.currentPatient(),
+                    ivrSession.currentPatientNumber()));
             node.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+        } else {
+            node.addPrompts(callCompletionPrompts(whpivrMessage));
         }
     }
 
-    private Integer getCurrentPosition(FlowSession flowSession) {
-        Integer currentNodePosition = (Integer) flowSession.get(CURRENT_PATIENT_POSITION);
-        if (currentNodePosition == null) {
-            currentNodePosition = 0;
-            flowSession.set(CURRENT_PATIENT_POSITION, currentNodePosition);
-        }
-        return currentNodePosition;
-    }
-
-
-    private void setPosition(FlowSession flowSession, int value) {
-        flowSession.set(CURRENT_PATIENT_POSITION, value);
-    }
 
     private boolean shouldSkipInput(String input) {
         return !StringUtils.isNumeric(input) || input.equals(SKIP_PATIENT_CODE);

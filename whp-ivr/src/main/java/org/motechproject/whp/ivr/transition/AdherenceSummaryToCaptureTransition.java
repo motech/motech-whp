@@ -7,7 +7,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
-import org.motechproject.whp.ivr.util.SerializableList;
+import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,6 @@ import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenc
 
 @Component
 public class AdherenceSummaryToCaptureTransition implements ITransition {
-
-    public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -40,7 +38,10 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        String mobileNumber = flowSession.get("cid");
+        IvrSession ivrSession = new IvrSession(flowSession);
+
+        String mobileNumber = ivrSession.getMobileNumber();
+
         String providerId = allProviders.findByPrimaryMobileNumber(mobileNumber).getProviderId();
 
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
@@ -56,8 +57,7 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
         captureAdherenceNode.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, patientsWithoutAdherence.get(0), 1));
         captureAdherenceNode.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
 
-        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
-
+        ivrSession.setPatientsWithoutAdherence(patientsWithoutAdherence);
         return captureAdherenceNode;
     }
 
