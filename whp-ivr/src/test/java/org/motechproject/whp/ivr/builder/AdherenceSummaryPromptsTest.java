@@ -35,7 +35,7 @@ public class AdherenceSummaryPromptsTest {
                 allPatients,
                 patientsWithAdherence);
 
-        Prompt[] prompts = AdherenceSummaryPrompts.adherenceSummary(whpivrMessage, adherenceSummaryByProvider);
+        Prompt[] prompts = AdherenceSummaryPrompts.adherenceSummaryPrompts(whpivrMessage, adherenceSummaryByProvider);
 
         assertEquals(5, prompts.length);
         assertEquals(audioPrompt(ADHERENCE_PROVIDED_FOR), prompts[0]);

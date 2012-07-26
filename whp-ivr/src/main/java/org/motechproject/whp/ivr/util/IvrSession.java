@@ -2,12 +2,15 @@ package org.motechproject.whp.ivr.util;
 
 
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 
 import java.util.List;
 
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
+    public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
+    public static final String PROVIDER_ID = "providerId";
 
     private FlowSession flowSession;
 
@@ -65,6 +68,14 @@ public class IvrSession {
 
     public boolean hasNextPatient() {
         return (getPatientsWithoutAdherence().size() > nextPatientIndex());
+    }
+
+    public String getProviderId() {
+        return flowSession.get(PROVIDER_ID);
+    }
+
+    public void setProviderId(String providerId) {
+        flowSession.set(PROVIDER_ID, providerId);
     }
 }
 

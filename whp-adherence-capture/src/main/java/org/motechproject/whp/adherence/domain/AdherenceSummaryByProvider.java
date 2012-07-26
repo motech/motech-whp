@@ -2,16 +2,17 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class AdherenceSummaryByProvider {
+public class AdherenceSummaryByProvider  implements Serializable{
 
     private String providerId;
-    private List<String> allPatients;
-    private List<String> allPatientsWithAdherence;
-    private List<String> allPatientsWithoutAdherence;
+    private List<String> allPatients = new ArrayList<>();
+    private List<String> allPatientsWithAdherence = new ArrayList<>();
+    private List<String> allPatientsWithoutAdherence = new ArrayList<>();
 
     public AdherenceSummaryByProvider(){
 
@@ -25,20 +26,20 @@ public class AdherenceSummaryByProvider {
     }
 
     private void setAllPatientsWithoutAdherence(List<String> allPatients, List<String> allPatientsWithAdherence) {
-        this.allPatientsWithoutAdherence = new ArrayList<>(allPatients);
+        allPatientsWithoutAdherence.addAll(allPatients);
         allPatientsWithoutAdherence.removeAll(allPatientsWithAdherence);
     }
 
     public int countOfAllPatients() {
-        return (allPatients == null) ? 0 : allPatients.size();
+        return allPatients.size();
     }
 
     public int countOfPatientsWithAdherence() {
-        return (allPatientsWithAdherence == null) ? 0 : allPatientsWithAdherence.size();
+        return allPatientsWithAdherence.size();
     }
 
     public int countOfPatientsWithoutAdherence() {
-        return countOfAllPatients() - countOfPatientsWithAdherence();
+        return allPatientsWithoutAdherence.size();
     }
 
 }

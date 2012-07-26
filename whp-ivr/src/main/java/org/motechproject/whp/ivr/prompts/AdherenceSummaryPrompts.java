@@ -10,7 +10,7 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class AdherenceSummaryPrompts {
 
-    public static Prompt[] adherenceSummary(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummaryByProvider) {
+    public static Prompt[] adherenceSummaryPrompts(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummaryByProvider) {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
 
         promptBuilder.wav(ADHERENCE_PROVIDED_FOR)

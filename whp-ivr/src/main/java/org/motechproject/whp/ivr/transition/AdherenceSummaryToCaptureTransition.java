@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummary;
+import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 
 
 @Component
@@ -40,15 +40,18 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
     public Node getDestinationNode(String input, FlowSession flowSession) {
         IvrSession ivrSession = new IvrSession(flowSession);
 
-        String mobileNumber = ivrSession.getMobileNumber();
-
-        String providerId = allProviders.findByPrimaryMobileNumber(mobileNumber).getProviderId();
-
+        String providerId = allProviders.findByPrimaryMobileNumber(ivrSession.getMobileNumber()).getProviderId();
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
+
+        if(ivrSession.getProviderId() == null){
+            ivrSession.setProviderId(providerId);
+            ivrSession.setPatientsWithoutAdherence(adherenceSummary.getAllPatientsWithoutAdherence());
+        }
+
         List<String> patientsWithoutAdherence = adherenceSummary.getAllPatientsWithoutAdherence();
 
         Node captureAdherenceNode = new Node();
-        captureAdherenceNode.addPrompts(adherenceSummary(whpivrMessage, adherenceSummary));
+        captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpivrMessage, adherenceSummary));
 
         if (patientsWithoutAdherence.size() == 0) {
             return captureAdherenceNode;

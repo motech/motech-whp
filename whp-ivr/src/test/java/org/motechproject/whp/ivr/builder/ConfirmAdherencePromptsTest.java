@@ -23,7 +23,7 @@ public class ConfirmAdherencePromptsTest {
 
     @Test
     public void shouldBuildConfirmAdherencePrompts(){
-        Prompt[] prompts = ConfirmAdherencePrompts.confirmAdherence(whpivrMessage, "id", 2, 3);
+        Prompt[] prompts = ConfirmAdherencePrompts.confirmAdherencePrompts(whpivrMessage, "id", 2, 3);
 
         assertEquals(8, prompts.length);
         assertEquals(audioPrompt(CONFIRM_ADHERENCE), prompts[0]);

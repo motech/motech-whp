@@ -19,7 +19,7 @@ import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
-import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherence;
+import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 
 @Component
 public class AdherenceCaptureToCallCompleteTransition implements ITransition {
@@ -62,7 +62,7 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
 
         if (adherenceInput <= dosesPerWeek) {
             recordAdherence(adherenceInput, currentPatientId, patient);
-            node.addPrompts(confirmAdherence(whpivrMessage, currentPatientId, adherenceInput, dosesPerWeek));
+            node.addPrompts(confirmAdherencePrompts(whpivrMessage, currentPatientId, adherenceInput, dosesPerWeek));
         }
     }
 
