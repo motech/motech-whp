@@ -1,9 +1,9 @@
 git checkout master
 git pull --rebase origin master
-git log --oneline -n 20 | head -n20 > commits-master
+git log --oneline --date-order -n 20 | head -n20 > commits-master
 git checkout release-0.2
-git pull --rebase origin release-0.2
-git log --oneline -n 20 | head -n20 > commits-release
+git pull --rebase  origin release-0.2
+git log --oneline --date-order -n 20 | head -n20 > commits-release
 git checkout master
 MISSING_LINES=""
 FLAG=0
