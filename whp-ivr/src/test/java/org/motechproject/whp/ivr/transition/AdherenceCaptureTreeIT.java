@@ -232,6 +232,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
+        // TODO: dirty hack : Tree path is the same as previous - hack to get the test to work
         response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=3&cid=%s&sid=%s", SERVER_URL, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
 
         String expectedResponseForPatient2Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -291,7 +292,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
-
+        // TODO: dirty hack : Tree path is the same as previous - hack to get the test to work
         response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=LzE&ln=en&event=GotDTMF&data=9&sid=%s&cid=%s", SERVER_URL,sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
         String expectedResponseForPatient2Adherence = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +

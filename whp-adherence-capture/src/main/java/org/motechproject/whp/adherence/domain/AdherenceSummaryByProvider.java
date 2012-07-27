@@ -12,6 +12,7 @@ public class AdherenceSummaryByProvider implements Serializable {
 
     private String providerId;
     private List<String> allPatients = new ArrayList<>();
+    @Getter
     private List<String> allPatientsWithAdherence = new ArrayList<>();
     @Getter
     private List<String> allPatientsWithoutAdherence = new ArrayList<>();

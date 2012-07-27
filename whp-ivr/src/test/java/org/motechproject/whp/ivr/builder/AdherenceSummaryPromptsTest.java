@@ -28,14 +28,10 @@ public class AdherenceSummaryPromptsTest {
 
     @Test
     public void shouldBuildAdherenceSummaryPrompts(){
-        List<String> allPatients = Arrays.asList("patient1", "patient2", "patient3");
+        List<String> patientsWithoutAdherence = Arrays.asList("patient2", "patient3");
         List<String> patientsWithAdherence = Arrays.asList("patient1");
 
-        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId",
-                allPatients,
-                patientsWithAdherence);
-
-        Prompt[] prompts = AdherenceSummaryPrompts.adherenceSummaryPrompts(whpivrMessage, adherenceSummaryByProvider);
+        Prompt[] prompts = AdherenceSummaryPrompts.adherenceSummaryPrompts(whpivrMessage, patientsWithAdherence, patientsWithoutAdherence);
 
         assertEquals(5, prompts.length);
         assertEquals(audioPrompt(ADHERENCE_PROVIDED_FOR), prompts[0]);

@@ -37,7 +37,7 @@ public class RecordAdherenceOperationTest {
         FlowSessionStub flowSession = new FlowSessionStub();
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER);
-        ivrSession.setPatientsWithoutAdherence(Arrays.asList("patient1", PATIENT_2));
+        ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", PATIENT_2));
         ivrSession.currentPatientIndex(1);
 
         recordAdherenceOperation.perform("2", flowSession);

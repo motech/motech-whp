@@ -6,19 +6,22 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 
+import java.util.List;
+
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class AdherenceSummaryPrompts {
 
-    public static Prompt[] adherenceSummaryPrompts(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummaryByProvider) {
+    public static Prompt[] adherenceSummaryPrompts(WHPIVRMessage whpivrMessage, List patientsWithAdherence, List patientsWithoutAdherence) {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
 
         promptBuilder.wav(ADHERENCE_PROVIDED_FOR)
-                .number(adherenceSummaryByProvider.countOfPatientsWithAdherence())
+                .number(patientsWithAdherence.size())
                 .wav(ADHERENCE_TO_BE_PROVIDED_FOR)
-                .number(adherenceSummaryByProvider.countOfPatientsWithoutAdherence())
+                .number(patientsWithoutAdherence.size())
                 .wav(ADHERENCE_CAPTURE_INSTRUCTION);
         return promptBuilder.build();
     }
+
 }
 

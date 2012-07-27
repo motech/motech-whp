@@ -2,8 +2,8 @@ package org.motechproject.whp.ivr.util;
 
 
 import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class IvrSession {
@@ -22,12 +22,20 @@ public class IvrSession {
         return flowSession.get("cid");
     }
 
-    public void setPatientsWithoutAdherence(List<String> patientsWithoutAdherence) {
+    public void patientsWithoutAdherence(List<String> patientsWithoutAdherence) {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
     }
 
-    public SerializableList getPatientsWithoutAdherence() {
-        return flowSession.get(PATIENTS_WITHOUT_ADHERENCE);
+    public List<String> patientsWithoutAdherence() {
+        return (List<String>) flowSession.get(PATIENTS_WITHOUT_ADHERENCE);
+    }
+
+    public void patientsWithAdherence(List<String> patientsWithAdherence) {
+        flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList<>(patientsWithAdherence));
+    }
+
+    public List<String> patientsWithAdherence() {
+        return (List<String>) flowSession.get(PATIENTS_WITH_ADHERENCE);
     }
 
     public Integer currentPatientNumber() {
@@ -52,12 +60,12 @@ public class IvrSession {
     }
 
     public String currentPatientId() {
-        SerializableList patientsWithoutAdherence = getPatientsWithoutAdherence();
+        List<String> patientsWithoutAdherence = patientsWithoutAdherence();
         return patientsWithoutAdherence.get(currentPatientIndex()).toString();
     }
 
     public String nextPatient() {
-        SerializableList patientsWithoutAdherence = getPatientsWithoutAdherence();
+        List<String> patientsWithoutAdherence = patientsWithoutAdherence();
         incrementCurrentPatientIndex();
         return patientsWithoutAdherence.get(currentPatientIndex()).toString();
     }
@@ -67,7 +75,11 @@ public class IvrSession {
     }
 
     public boolean hasNextPatient() {
-        return (getPatientsWithoutAdherence().size() > nextPatientIndex());
+        return (patientsWithoutAdherence().size() > nextPatientIndex());
+    }
+
+    public boolean hasPatientsWithoutAdherence() {
+        return (patientsWithoutAdherence().size() > 0);
     }
 
     public String providerId() {
@@ -77,5 +89,6 @@ public class IvrSession {
     public void providerId(String providerId) {
         flowSession.set(PROVIDER_ID, providerId);
     }
+
 }
 
