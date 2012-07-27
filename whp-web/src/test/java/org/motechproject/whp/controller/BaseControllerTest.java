@@ -22,10 +22,14 @@ public class BaseControllerTest extends BaseUnitTest {
 
     protected void setupLoggedInUser(HttpServletRequest request, String username) {
         HttpSession session = mock(HttpSession.class);
-        MotechUser loggedInUser = mock(MotechUser.class);
         when(request.getSession()).thenReturn(session);
+        setupLoggedInUser(session,username);
+    }
+
+    protected void setupLoggedInUser(HttpSession session, String userName) {
+        MotechUser loggedInUser = mock(MotechUser.class);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
-        when(loggedInUser.getUserName()).thenReturn(username);
+        when(loggedInUser.getUserName()).thenReturn(userName);
     }
 
     @Test

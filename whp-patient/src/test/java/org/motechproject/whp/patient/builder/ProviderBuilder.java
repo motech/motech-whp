@@ -40,4 +40,9 @@ public class ProviderBuilder {
         provider.setPrimaryMobile(primaryMobileNumber);
         return this;
     }
+
+    public ProviderBuilder withDistrict(String districtName) {
+        provider.setDistrict(districtName);
+        return this;
+    }
 }
