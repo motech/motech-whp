@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@page import="java.util.Properties" %>
@@ -242,23 +243,14 @@
     }
 
     function send(i) {
-        if (i === '') dtmf = i;
-        else {
-            dtmf += i;
-            if (typeof collectdtmf != "undefined" && collectdtmf > dtmf.length) {
-                return;
-            }
-        }
-
-
         var phone = $('#phone').val();
         var is_outbound_call = $('#is_outbound_call').is(":checked") ? "true" : "";
         var dataMap = "";
         var event = "event=GotDTMF&";
-        if (collectdtmf) event = "event=GotDTMF&" + '&data=' + dtmf + "&";
+        if (collectdtmf) event = "event=GotDTMF&" + '&data=' + i + "&";
         call(contextRoot + '&' + event + 'cid=' + phone + '&sid=' + callId);
-        dtmf = "";
     }
+
     function play(i) {
         var el = document.getElementById(i);
         el.play();
@@ -327,6 +319,7 @@
                             <button onclick="send('');">blank</button>
                         </td>
                     </tr>
+                    <label>Enter DTMF Input</label><input type="text" id="dtmfInput"/> <button onclick="send($('#dtmfInput').val())" value="Submit"/>
                 </table>
             </td>
             <td style="width:450px;"></td>
