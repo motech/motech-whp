@@ -13,7 +13,7 @@
     String url = application.getContextPath() + "/kookoo/ivr?tree=adherenceCapture";
 %>
 
-<script src="http://localhost:8080/whp/js/jquery/jquery-1.7.2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#missedCallButton').click(function () {
