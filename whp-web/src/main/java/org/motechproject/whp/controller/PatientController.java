@@ -29,7 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -46,13 +49,13 @@ public class PatientController extends BaseController {
 
     public static final String DISTRICT_LIST = "districts";
     public static final String SELECTED_DISTRICT = "selectedDistrict";
-    public static final String SELECTED_PROVIDER_ID = "providerId";
-    public static final String PATIENT_LIST = "patientList";
+    public static final String SELECTED_PROVIDER = "selectedProvider";
 
+    public static final String PATIENT_LIST = "patientList";
     private ProviderService providerService;
     private PatientService patientService;
-    private WHPAdherenceService whpAdherenceService;
 
+    private WHPAdherenceService whpAdherenceService;
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
@@ -86,10 +89,17 @@ public class PatientController extends BaseController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String list(Model uiModel) {
-        String districtName = allDistrictsCache.getAll().get(0).getName();
-        List<Patient> patients = patientService.searchBy(districtName);
-        prepareModelForListView(uiModel, patients, districtName, "");
+    public String list(Model uiModel, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String selectedDistrict = (String) session.getAttribute(SELECTED_DISTRICT);
+        String selectedProvider = (String) session.getAttribute(SELECTED_PROVIDER);
+
+        if(StringUtils.isEmpty(selectedDistrict))
+            selectedDistrict = allDistrictsCache.getAll().get(0).getName();
+
+        List<Patient> patients = getPatientsFor(selectedDistrict,selectedProvider);
+        prepareModelForListView(uiModel, patients, selectedDistrict, "");
+
         return "patient/list";
     }
 
@@ -114,17 +124,25 @@ public class PatientController extends BaseController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam("selectedProvider") String providerId, Model uiModel) {
+    public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam(SELECTED_PROVIDER) String providerId, Model uiModel, HttpServletRequest request) {
+        List<Patient> patients = getPatientsFor(districtName, providerId);
+
+        HttpSession session = request.getSession();
+        session.setAttribute(SELECTED_DISTRICT,districtName);
+        session.setAttribute(SELECTED_PROVIDER, providerId);
+
+        prepareModelForListView(uiModel, patients, districtName, providerId);
+        return "patient/patientList";
+    }
+
+    private List<Patient> getPatientsFor(String districtName, String providerId) {
         List<Patient> patients;
         if (isEmpty(providerId))
             patients = patientService.searchBy(districtName);
-        else {
-            Provider provider = providerService.fetchByProviderId(providerId);
+        else
             patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
-            districtName = provider.getDistrict();
-        }
-        prepareModelForListView(uiModel, patients, districtName, providerId);
-        return "patient/patientList";
+
+        return patients;
     }
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
@@ -171,7 +189,7 @@ public class PatientController extends BaseController {
         uiModel.addAttribute(PATIENT_LIST, patients);
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
-        uiModel.addAttribute(SELECTED_PROVIDER_ID, providerId);
+        uiModel.addAttribute(SELECTED_PROVIDER, providerId);
         uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
 

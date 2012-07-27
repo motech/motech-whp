@@ -34,7 +34,7 @@
                 <td class="warning" style="text-align: center" colspan="14">
                     <#if providerId != "">
                         No patients found for Provider District as: '${selectedDistrict}' and Provider ID as:
-                        '${providerId}'
+                        '${selectedProvider}'
                     <#else>
                         No patients found for Provider District as: '${selectedDistrict}'
                     </#if>
