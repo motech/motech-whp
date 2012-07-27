@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.model.DayOfWeek;
@@ -12,18 +13,13 @@ import java.util.List;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
+@Data
 public class WeeklyAdherenceSummary {
 
-    @Getter
-    @Setter
     private TreatmentWeek week = currentWeekInstance();
 
-    @Getter
-    @Setter
     private int dosesTaken;
 
-    @Getter
-    @Setter
     private String patientId;
 
     public WeeklyAdherenceSummary() {
@@ -32,6 +28,12 @@ public class WeeklyAdherenceSummary {
     public WeeklyAdherenceSummary(String patientId, TreatmentWeek week) {
         this.week = week;
         this.patientId = patientId;
+    }
+
+    public WeeklyAdherenceSummary(String patientId, TreatmentWeek week, Integer dosesTaken) {
+        this.week = week;
+        this.patientId = patientId;
+        this.dosesTaken = dosesTaken;
     }
 
     public static WeeklyAdherenceSummary forFirstWeek(Patient patient) {
@@ -51,27 +53,5 @@ public class WeeklyAdherenceSummary {
     public PillStatus pillStatusOn(DayOfWeek pillDay, TreatmentCategory treatmentCategory) {
         if(takenDays(treatmentCategory).contains(pillDay)) return PillStatus.Taken;
         return PillStatus.NotTaken;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WeeklyAdherenceSummary)) return false;
-
-        WeeklyAdherenceSummary that = (WeeklyAdherenceSummary) o;
-
-        if (dosesTaken != that.dosesTaken) return false;
-        if (!patientId.equals(that.patientId)) return false;
-        if (!week.equals(that.week)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = week.hashCode();
-        result = 31 * result + dosesTaken;
-        result = 31 * result + patientId.hashCode();
-        return result;
     }
 }

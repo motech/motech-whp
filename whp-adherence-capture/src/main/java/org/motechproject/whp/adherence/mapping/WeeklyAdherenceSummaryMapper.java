@@ -2,8 +2,8 @@ package org.motechproject.whp.adherence.mapping;
 
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
 
 import java.util.List;
@@ -19,16 +19,13 @@ public class WeeklyAdherenceSummaryMapper {
     }
 
     public WeeklyAdherenceSummary map(List<Adherence> adherenceList) {
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(patientId, treatmentWeek);
         int dosesTaken = 0;
         for (Adherence adherenceRecord : adherenceList) {
-            if(PillStatus.Taken.equals(adherenceRecord.getPillStatus())) {
+            if (PillStatus.Taken.equals(adherenceRecord.getPillStatus())) {
                 dosesTaken++;
             }
-            weeklyAdherenceSummary.setDosesTaken(dosesTaken);
-            weeklyAdherenceSummary.setPatientId(patientId);
         }
-        return weeklyAdherenceSummary;
+        return new WeeklyAdherenceSummary(patientId, treatmentWeek, dosesTaken);
     }
 
 }

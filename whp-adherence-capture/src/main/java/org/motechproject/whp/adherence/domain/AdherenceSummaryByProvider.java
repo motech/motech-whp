@@ -1,27 +1,29 @@
 package org.motechproject.whp.adherence.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-public class AdherenceSummaryByProvider  implements Serializable{
+@EqualsAndHashCode
+public class AdherenceSummaryByProvider implements Serializable {
 
     private String providerId;
     private List<String> allPatients = new ArrayList<>();
     private List<String> allPatientsWithAdherence = new ArrayList<>();
+    @Getter
     private List<String> allPatientsWithoutAdherence = new ArrayList<>();
 
-    public AdherenceSummaryByProvider(){
+    public AdherenceSummaryByProvider() {
 
     }
 
     public AdherenceSummaryByProvider(String providerId, List<String> allPatients, List<String> allPatientsWithAdherence) {
         this.providerId = providerId;
         this.allPatients = allPatients;
-        this.allPatientsWithAdherence = allPatientsWithAdherence;
+        this.allPatientsWithAdherence.addAll(allPatientsWithAdherence);
         setAllPatientsWithoutAdherence(allPatients, allPatientsWithAdherence);
     }
 

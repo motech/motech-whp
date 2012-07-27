@@ -47,11 +47,11 @@ public class IvrSession {
         return currentPatientIndex() + 1;
     }
 
-    private void currentPatientIndex(int value) {
+    public void currentPatientIndex(int value) {
         flowSession.set(CURRENT_PATIENT_INDEX, value);
     }
 
-    public String currentPatient() {
+    public String currentPatientId() {
         SerializableList patientsWithoutAdherence = getPatientsWithoutAdherence();
         return patientsWithoutAdherence.get(currentPatientIndex()).toString();
     }
@@ -70,11 +70,11 @@ public class IvrSession {
         return (getPatientsWithoutAdherence().size() > nextPatientIndex());
     }
 
-    public String getProviderId() {
+    public String providerId() {
         return flowSession.get(PROVIDER_ID);
     }
 
-    public void setProviderId(String providerId) {
+    public void providerId(String providerId) {
         flowSession.set(PROVIDER_ID, providerId);
     }
 }

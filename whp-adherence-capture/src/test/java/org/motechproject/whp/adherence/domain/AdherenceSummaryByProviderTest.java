@@ -2,11 +2,17 @@ package org.motechproject.whp.adherence.domain;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class AdherenceSummaryByProviderTest {
+
+    public static final List<String> ALL_PATIENTS = asList("patientId1", "patientId2");
+    public static final String PROVIDER_ID = "providerId";
+    public static final List<String> PATIENTS_WITH_ADHERENCE = asList("patientId1", "patientId2");
 
     @Test
     public void shouldReturnZeroAsCountOfAllPatientsByDefault() {
@@ -16,8 +22,7 @@ public class AdherenceSummaryByProviderTest {
 
     @Test
     public void shouldCountAllPatientsUnderProvider() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider();
-        summary.setAllPatients(asList("patientId1", "patientId2"));
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, ALL_PATIENTS, PATIENTS_WITH_ADHERENCE);
         assertThat(summary.countOfAllPatients(), is(2));
     }
 
@@ -29,8 +34,7 @@ public class AdherenceSummaryByProviderTest {
 
     @Test
     public void shouldCountAllPatientsWithAdherence() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider();
-        summary.setAllPatientsWithAdherence(asList("patientId1", "patientId2"));
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, ALL_PATIENTS, PATIENTS_WITH_ADHERENCE);
         assertThat(summary.countOfPatientsWithAdherence(), is(2));
     }
 
@@ -41,10 +45,8 @@ public class AdherenceSummaryByProviderTest {
     }
 
     @Test
-    public void shouldReturnDifferenceOfAllPatientsAndAllPatientsWithAdherenceAsAllPatientsWithoutAdherence() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider();
-        summary.setAllPatients(asList("patientId1", "patientId2"));
-        summary.setAllPatientsWithAdherence(asList("patientId1"));
+    public void shouldReturnCountOfPatientsWithoutAdherence() {
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, ALL_PATIENTS, asList("patientId1"));
         assertThat(summary.countOfPatientsWithoutAdherence(), is(1));
     }
 

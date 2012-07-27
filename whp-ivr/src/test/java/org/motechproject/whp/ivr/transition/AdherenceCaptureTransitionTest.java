@@ -35,7 +35,7 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentW
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 
-public class AdherenceCaptureToCallCompleteTransitionTest {
+public class AdherenceCaptureTransitionTest {
     @Mock
     PatientService patientService;
     @Mock
@@ -43,7 +43,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
-    AdherenceCaptureToCallCompleteTransition adherenceCaptureToEndCallTransition;
+    AdherenceCaptureTransition adherenceCaptureToEndCallTransition;
 
     String patientId = "patientid";
     String anotherPatientId = "someOtherPatientId";
@@ -58,7 +58,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId);
 
-        adherenceCaptureToEndCallTransition = new AdherenceCaptureToCallCompleteTransition(adherenceService, whpivrMessage, patientService);
+        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(adherenceService, whpivrMessage, patientService);
 
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
     }
@@ -70,7 +70,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
                 .id(anotherPatientId)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+                .addTransition("?", new AdherenceCaptureTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
@@ -84,7 +84,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
                 .wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+                .addTransition("?", new AdherenceCaptureTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("4", flowSession);
 
@@ -99,7 +99,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
                 .id(anotherPatientId)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+                .addTransition("?", new AdherenceCaptureTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("#", flowSession);
         assertEquals(expectedNode, destinationNode);
@@ -123,7 +123,7 @@ public class AdherenceCaptureToCallCompleteTransitionTest {
                 .id(anotherPatientId).wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+                .addTransition("?", new AdherenceCaptureTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
         assertEquals(expectedNode, destinationNode);

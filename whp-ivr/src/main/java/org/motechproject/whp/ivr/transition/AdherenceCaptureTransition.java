@@ -22,7 +22,7 @@ import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureA
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 
 @Component
-public class AdherenceCaptureToCallCompleteTransition implements ITransition {
+public class AdherenceCaptureTransition implements ITransition {
 
     @Autowired
     private PatientService patientService;
@@ -33,10 +33,10 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
 
     private static final String SKIP_PATIENT_CODE = "9";
 
-    AdherenceCaptureToCallCompleteTransition() {
+    AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureToCallCompleteTransition(WHPAdherenceService adherenceService, WHPIVRMessage whpivrMessage, PatientService patientService) {
+    public AdherenceCaptureTransition(WHPAdherenceService adherenceService, WHPIVRMessage whpivrMessage, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
         this.patientService = patientService;
@@ -45,7 +45,7 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
         IvrSession ivrSession = new IvrSession(flowSession);
-        String currentPatientId = ivrSession.currentPatient();
+        String currentPatientId = ivrSession.currentPatientId();
 
         Node nextNode = new Node();
         if (!shouldSkipInput(input)) {
@@ -77,9 +77,9 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
         if(ivrSession.hasNextPatient()){
             ivrSession.nextPatient();
             node.addPrompts(captureAdherencePrompts(whpivrMessage,
-                    ivrSession.currentPatient(),
+                    ivrSession.currentPatientId(),
                     ivrSession.currentPatientNumber()));
-            node.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+            node.addTransition("?", new AdherenceCaptureTransition());
         } else {
             node.addPrompts(callCompletionPrompts(whpivrMessage));
         }
@@ -93,9 +93,9 @@ public class AdherenceCaptureToCallCompleteTransition implements ITransition {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdherenceCaptureToCallCompleteTransition)) return false;
+        if (!(o instanceof AdherenceCaptureTransition)) return false;
 
-        AdherenceCaptureToCallCompleteTransition that = (AdherenceCaptureToCallCompleteTransition) o;
+        AdherenceCaptureTransition that = (AdherenceCaptureTransition) o;
 
         if (adherenceService != null ? !adherenceService.equals(that.adherenceService) : that.adherenceService != null)
             return false;

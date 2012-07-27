@@ -10,6 +10,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.user.repository.AllProviders;
 
@@ -24,7 +25,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
-public class AdherenceSummaryToCaptureTransitionTest {
+public class AdherenceSummaryTransitionTest {
 
     @Mock
     private AdherenceDataService adherenceDataService;
@@ -32,12 +33,12 @@ public class AdherenceSummaryToCaptureTransitionTest {
     private AllProviders allProviders;
 
     private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
-    private AdherenceSummaryToCaptureTransition adherenceSummaryToCaptureTransition;
+    private AdherenceSummaryTransition adherenceSummaryTransition;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceSummaryToCaptureTransition = new AdherenceSummaryToCaptureTransition(adherenceDataService, whpivrMessage, allProviders);
+        adherenceSummaryTransition = new AdherenceSummaryTransition(adherenceDataService, whpivrMessage, allProviders);
     }
 
     @Test
@@ -59,7 +60,7 @@ public class AdherenceSummaryToCaptureTransitionTest {
 
         Prompt[] prompts = getPromptBuilder(patientsWithAdherence, adherenceSummary).build();
         Node expectedNode = new Node().addPrompts(prompts);
-        Node actualNode = adherenceSummaryToCaptureTransition.getDestinationNode("", flowSession);
+        Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
 
         assertThat(actualNode, is(expectedNode));
         verify(adherenceDataService, times(1)).getAdherenceSummary(providerId);
@@ -81,11 +82,10 @@ public class AdherenceSummaryToCaptureTransitionTest {
 
         List<String> allPatientsIds = asList("patient1", "patient2", "patient3");
         List<String> patientsWithAdherence = asList("patient1");
-        FlowSession flowSession = mock(FlowSession.class);
-
+        FlowSession flowSession = new FlowSessionStub();
+        flowSession.set("cid", mobileNumber);
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(providerId, allPatientsIds, patientsWithAdherence);
 
-        when(flowSession.get("cid")).thenReturn(mobileNumber);
         when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(adherenceSummary);
         when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(providerId).build());
 
@@ -96,11 +96,10 @@ public class AdherenceSummaryToCaptureTransitionTest {
                 .wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureToCallCompleteTransition());
-        Node actualNode = adherenceSummaryToCaptureTransition.getDestinationNode("", flowSession);
+                .addTransition("?", new AdherenceCaptureTransition());
+        Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
 
         assertThat(actualNode, is(expectedNode));
-        verify(flowSession, times(1)).set("patientsWithoutAdherence", new SerializableList(asList("patient2", "patient3")));
     }
 
 }

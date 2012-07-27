@@ -18,7 +18,7 @@ import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenc
 
 
 @Component
-public class AdherenceSummaryToCaptureTransition implements ITransition {
+public class AdherenceSummaryTransition implements ITransition {
 
     @Autowired
     private AdherenceDataService adherenceDataService;
@@ -27,10 +27,10 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
     @Autowired
     private AllProviders allProviders;
 
-    public AdherenceSummaryToCaptureTransition() {
+    public AdherenceSummaryTransition() {
     }
 
-    public AdherenceSummaryToCaptureTransition(AdherenceDataService adherenceDataService, WHPIVRMessage whpivrMessage, AllProviders allProviders) {
+    public AdherenceSummaryTransition(AdherenceDataService adherenceDataService, WHPIVRMessage whpivrMessage, AllProviders allProviders) {
         this.adherenceDataService = adherenceDataService;
         this.whpivrMessage = whpivrMessage;
         this.allProviders = allProviders;
@@ -43,8 +43,8 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
         String providerId = allProviders.findByPrimaryMobileNumber(ivrSession.getMobileNumber()).getProviderId();
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
 
-        if(ivrSession.getProviderId() == null){
-            ivrSession.setProviderId(providerId);
+        if(ivrSession.providerId() == null){
+            ivrSession.providerId(providerId);
             ivrSession.setPatientsWithoutAdherence(adherenceSummary.getAllPatientsWithoutAdherence());
         }
 
@@ -58,7 +58,7 @@ public class AdherenceSummaryToCaptureTransition implements ITransition {
         }
 
         captureAdherenceNode.addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, patientsWithoutAdherence.get(0), 1));
-        captureAdherenceNode.addTransition("?", new AdherenceCaptureToCallCompleteTransition());
+        captureAdherenceNode.addTransition("?", new AdherenceCaptureTransition());
 
         ivrSession.setPatientsWithoutAdherence(patientsWithoutAdherence);
         return captureAdherenceNode;
