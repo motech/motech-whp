@@ -7,12 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FlowSessionStub implements FlowSession {
-    
+
     private Map<String, Object> sessionAttributes = new HashMap<>();
-    
+
     @Override
     public String getSessionId() {
         return "test-session-id";
+    }
+
+    @Override
+    public String getLanguage() {
+        return "en";
+    }
+
+    @Override
+    public void setLanguage(String s) {
     }
 
     public <T extends Serializable> void set(String key, T value) {
