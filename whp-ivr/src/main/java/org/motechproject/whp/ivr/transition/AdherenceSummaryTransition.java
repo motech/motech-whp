@@ -55,6 +55,7 @@ public class AdherenceSummaryTransition implements ITransition {
         if (ivrSession.hasPatientsWithoutAdherence()) {
             captureAdherenceNode.addPrompts(captureAdherencePrompts(whpivrMessage, ivrSession.currentPatientId(), ivrSession.currentPatientNumber()));
             captureAdherenceNode.addTransition("?", new AdherenceCaptureTransition());
+
             return captureAdherenceNode;
         } else {
             captureAdherenceNode.addPrompts(callCompletionPrompts(whpivrMessage));

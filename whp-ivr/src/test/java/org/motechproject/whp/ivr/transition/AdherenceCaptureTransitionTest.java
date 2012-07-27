@@ -7,9 +7,6 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
@@ -29,13 +26,13 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 
 public class AdherenceCaptureTransitionTest {
+
     @Mock
     PatientService patientService;
     @Mock
@@ -58,7 +55,7 @@ public class AdherenceCaptureTransitionTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId);
 
-        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(adherenceService, whpivrMessage, patientService);
+        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, patientService);
 
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
     }
@@ -127,13 +124,8 @@ public class AdherenceCaptureTransitionTest {
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
         assertEquals(expectedNode, destinationNode);
-
-        AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
-
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(patientId, currentWeekInstance());
-        weeklyAdherenceSummary.setDosesTaken(2);
-        verify(adherenceService, times(1)).recordAdherence(weeklyAdherenceSummary, auditParams);
     }
+
 
     @Test
     public void shouldHangUpIfPatientListIsEmpty() {

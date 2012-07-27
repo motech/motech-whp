@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.SavedAdherencePrompts;
 
 import java.util.Properties;
 
@@ -23,7 +23,7 @@ public class ConfirmAdherencePromptsTest {
 
     @Test
     public void shouldBuildConfirmAdherencePrompts(){
-        Prompt[] prompts = ConfirmAdherencePrompts.confirmAdherencePrompts(whpivrMessage, "id", 2, 3);
+        Prompt[] prompts = SavedAdherencePrompts.savedAdherencePrompts(whpivrMessage, "id", 2, 3);
 
         assertEquals(8, prompts.length);
         assertEquals(audioPrompt(CONFIRM_ADHERENCE), prompts[0]);

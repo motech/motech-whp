@@ -395,4 +395,12 @@ public class Patient extends MotechBaseDataObject {
     public void clearDoseInterruptionsForUpdate() {
         currentTherapy.clearDoseInterruptionsForUpdate();
     }
+
+    public Integer dosesPerWeek(){
+        return getCurrentTherapy().getTreatmentCategory().getDosesPerWeek();
+    }
+
+    public boolean isValidDose(int doseTaken) {
+        return doseTaken <= dosesPerWeek();
+    }
 }

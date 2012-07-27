@@ -7,32 +7,48 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.ivr.util.IvrSession;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 public class RecordAdherenceOperation implements INodeOperation {
 
-    @Autowired
     private WHPAdherenceService whpAdherenceService;
 
-    public RecordAdherenceOperation() {
-    }
+    private String currentPatientId;
 
-    public RecordAdherenceOperation(WHPAdherenceService whpAdherenceService) {
+    public RecordAdherenceOperation(WHPAdherenceService whpAdherenceService, String currentPatientId) {
         this.whpAdherenceService = whpAdherenceService;
+        this.currentPatientId = currentPatientId;
     }
 
     @Override
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
-        recordAdherence(userInput, ivrSession.currentPatientId(), ivrSession.providerId());
+        recordAdherence(userInput, ivrSession.providerId());
     }
 
-    private void recordAdherence(String adherenceInput, String currentPatientId, String providerId) {
+    private void recordAdherence(String adherenceInput, String providerId) {
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
         weeklyAdherenceSummary.setDosesTaken(Integer.parseInt(adherenceInput));
         whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RecordAdherenceOperation that = (RecordAdherenceOperation) o;
+
+        if (currentPatientId != null ? !currentPatientId.equals(that.currentPatientId) : that.currentPatientId != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return currentPatientId != null ? currentPatientId.hashCode() : 0;
     }
 }
