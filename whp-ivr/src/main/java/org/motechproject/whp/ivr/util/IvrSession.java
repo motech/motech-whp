@@ -90,5 +90,8 @@ public class IvrSession {
         flowSession.set(PROVIDER_ID, providerId);
     }
 
+    public void resetCurrentPatientIndex() {
+        flowSession.set(CURRENT_PATIENT_INDEX, null);
+    }
 }
 

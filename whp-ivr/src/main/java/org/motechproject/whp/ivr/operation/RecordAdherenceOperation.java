@@ -25,6 +25,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
         recordAdherence(userInput, ivrSession.providerId());
+        ivrSession.resetCurrentPatientIndex();
     }
 
     private void recordAdherence(String adherenceInput, String providerId) {
