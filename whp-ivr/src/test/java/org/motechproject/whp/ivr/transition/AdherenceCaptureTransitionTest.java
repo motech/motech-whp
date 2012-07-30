@@ -8,6 +8,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -37,6 +38,8 @@ public class AdherenceCaptureTransitionTest {
     PatientService patientService;
     @Mock
     WHPAdherenceService adherenceService;
+    @Mock
+    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
@@ -55,7 +58,7 @@ public class AdherenceCaptureTransitionTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId);
 
-        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, patientService);
+        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, phaseUpdateOrchestrator, patientService);
 
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
     }

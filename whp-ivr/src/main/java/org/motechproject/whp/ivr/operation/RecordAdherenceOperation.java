@@ -6,7 +6,10 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.service.PatientService;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
@@ -15,9 +18,13 @@ public class RecordAdherenceOperation implements INodeOperation {
     private WHPAdherenceService whpAdherenceService;
 
     private String currentPatientId;
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private PatientService patientService;
 
-    public RecordAdherenceOperation(WHPAdherenceService whpAdherenceService, String currentPatientId) {
+    public RecordAdherenceOperation(WHPAdherenceService whpAdherenceService, PatientService patientService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, String currentPatientId) {
         this.whpAdherenceService = whpAdherenceService;
+        this.patientService = patientService;
+        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
         this.currentPatientId = currentPatientId;
     }
 
@@ -33,6 +40,10 @@ public class RecordAdherenceOperation implements INodeOperation {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
         weeklyAdherenceSummary.setDosesTaken(Integer.parseInt(adherenceInput));
         whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
+        Patient patient = patientService.findByPatientId(currentPatientId);
+
+        phaseUpdateOrchestrator.recomputePillStatus(patient);
+        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
     }
 
     @Override

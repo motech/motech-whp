@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.prompts.CallCompletionPrompts;
@@ -39,6 +40,8 @@ public class AnotherAdherenceCaptureTransitionTest {
     PatientService patientService;
     @Mock
     WHPAdherenceService adherenceService;
+    @Mock
+    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -52,14 +55,14 @@ public class AnotherAdherenceCaptureTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, phaseUpdateOrchestrator, patientService);
     }
 
     @Test
     public void shouldAddRecordAdherenceOperation_ForValidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("3", flowSession);
         assertThat(node.getOperations().size(), is(1));
-        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(adherenceService, PATIENT_1)));
+        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(adherenceService, patientService, phaseUpdateOrchestrator, PATIENT_1)));
     }
 
     @Test

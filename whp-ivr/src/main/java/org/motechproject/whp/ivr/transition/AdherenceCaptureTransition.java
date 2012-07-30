@@ -5,6 +5,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.util.IvrSession;
@@ -22,9 +23,11 @@ import static org.motechproject.whp.ivr.prompts.SavedAdherencePrompts.savedAdher
 public class AdherenceCaptureTransition implements ITransition {
 
     @Autowired
-    private PatientService patientService;
-    @Autowired
     private WHPAdherenceService adherenceService;
+    @Autowired
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    @Autowired
+    private PatientService patientService;
     @Autowired
     private WHPIVRMessage whpivrMessage;
 
@@ -33,9 +36,10 @@ public class AdherenceCaptureTransition implements ITransition {
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, PatientService patientService) {
+    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
+        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
         this.patientService = patientService;
     }
 
@@ -63,7 +67,7 @@ public class AdherenceCaptureTransition implements ITransition {
         Patient patient = patientService.findByPatientId(currentPatientId);
         if (patient.isValidDose(adherenceInput)) {
             node.addPrompts(savedAdherencePrompts(whpivrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
-            node.addOperations(new RecordAdherenceOperation(adherenceService, currentPatientId));
+            node.addOperations(new RecordAdherenceOperation(adherenceService, patientService, phaseUpdateOrchestrator, currentPatientId));
         }
     }
 

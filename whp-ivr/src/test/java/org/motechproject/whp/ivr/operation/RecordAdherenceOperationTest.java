@@ -8,8 +8,10 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.patient.service.PatientService;
 
 import java.util.Arrays;
 
@@ -25,13 +27,17 @@ public class RecordAdherenceOperationTest {
 
     @Mock
     private WHPAdherenceService whpAdherenceService;
+    @Mock
+    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    @Mock
+    private PatientService patientService;
 
     private RecordAdherenceOperation recordAdherenceOperation;
 
     @Before
     public void setUp() {
         initMocks(this);
-        recordAdherenceOperation = new RecordAdherenceOperation(whpAdherenceService, CURRENT_PATIENT);
+        recordAdherenceOperation = new RecordAdherenceOperation(whpAdherenceService, patientService, phaseUpdateOrchestrator, CURRENT_PATIENT);
     }
 
     @Test
