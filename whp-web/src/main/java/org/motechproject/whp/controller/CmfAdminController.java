@@ -36,7 +36,6 @@ public class CmfAdminController extends BaseController{
 
     AllCmfLocations allCmfLocations;
     AllCmfAdmins allCmfAdmins;
-    AllProviders allProviders;
     MotechAuthenticationService motechAuthenticationService;
     CmfAdminService cmfAdminService;
 
@@ -46,9 +45,8 @@ public class CmfAdminController extends BaseController{
     private static final String ALL_CMF_ADMINS = "allCmfAdmins";
 
     @Autowired
-    public CmfAdminController(AllCmfLocations allCmfLocations, AllProviders allProviders, AllCmfAdmins allCmfAdmins, CmfAdminService cmfAdminService, MotechAuthenticationService motechAuthenticationService) {
+    public CmfAdminController(AllCmfLocations allCmfLocations, AllCmfAdmins allCmfAdmins, CmfAdminService cmfAdminService, MotechAuthenticationService motechAuthenticationService) {
         this.allCmfLocations = allCmfLocations;
-        this.allProviders = allProviders;
         this.allCmfAdmins = allCmfAdmins;
         this.cmfAdminService = cmfAdminService;
         this.motechAuthenticationService = motechAuthenticationService;

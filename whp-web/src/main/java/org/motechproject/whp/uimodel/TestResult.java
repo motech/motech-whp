@@ -14,7 +14,7 @@ public class TestResult {
     private String smearTestDate2;
     private String weight;
     private String sampleInstance;
-    private final String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
     public TestResult(SampleInstance sampleInstance, SmearTestRecord smearTestRecord, WeightStatisticsRecord weightStatisticsRecord) {
         this.sampleInstance = sampleInstance.value();
         if (smearTestRecord == null) {

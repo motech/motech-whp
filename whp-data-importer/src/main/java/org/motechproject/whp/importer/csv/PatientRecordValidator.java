@@ -67,10 +67,12 @@ public class PatientRecordValidator {
                 validatePatient(patient, request, errors);
 
                 if (errors.size() > 0) {
-                    String errorMessage = String.format("Row %d: Patient with case_id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getCase_id());
-                    for (String error : errors)
-                        errorMessage += error + "\n";
-                    importerLogger.error(errorMessage);
+                    StringBuilder errorMessage = new StringBuilder(String.format("Row %d: Patient with case_id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getCase_id()));
+                    for (String error : errors)   {
+                        errorMessage.append(error);
+                        errorMessage.append("\n");
+                    }
+                    importerLogger.error(errorMessage.toString());
                 } else {
                     importerLogger.info(String.format("Row %d: Patient with case_id \"%s\" has been imported properly", i + 1, request.getCase_id()));
                 }
@@ -199,33 +201,34 @@ public class PatientRecordValidator {
     }
 
     private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SampleInstance instanceType, List<String> errors) {
+        if (expectedRecord == null && actualRecord == null)
+            return;
+
+        if (actualRecord == null) {
+            errors.add("expected smear test result of type " + instanceType.name() + " not found");
+            return;
+        }
+
+        if (expectedRecord == null || isBlank(expectedRecord.getDate1()) && isBlank(expectedRecord.getDate2()) && isBlank(expectedRecord.getResult1()) && isBlank(expectedRecord.getResult2())) {
+            errors.add("found smear test result of type " + instanceType.name() + " that does not exist");
+            return;
+        }
+
         String date1FieldName = "Date1 of SmearTestResult type " + instanceType.name();
         String date2FieldName = "Date2 of SmearTestResult type " + instanceType.name();
         String result1FieldName = "Result1 of SmearTestResult typ;e " + instanceType.name();
         String result2FieldName = "Result2 of SmearTestResult type " + instanceType.name();
 
-        if (expectedRecord == null) {
-            if (isBlank(expectedRecord.getDate1()) && isBlank(expectedRecord.getDate2()) && isBlank(expectedRecord.getResult1()) && isBlank(expectedRecord.getResult2()))
-                return;
-            else {
-                checkIfEqual(expectedRecord.getDate1(), null, date1FieldName, errors);
-                checkIfEqual(expectedRecord.getDate2(), null, date2FieldName, errors);
-                checkIfEqual(expectedRecord.getResult1(), null, result1FieldName, errors);
-                checkIfEqual(expectedRecord.getResult2(), null, result2FieldName, errors);
-            }
-        }
 
-        if (hasText(expectedRecord.getDate1()))
-            checkIfDatesAreEqual(expectedRecord.getDate1(), actualRecord.getSmear_test_date_1(), date1FieldName, errors, LocalDate.class);
+        checkIfEqual(expectedRecord.getDate1(), null, date1FieldName, errors);
+        checkIfEqual(expectedRecord.getDate2(), null, date2FieldName, errors);
+        checkIfEqual(expectedRecord.getResult1(), null, result1FieldName, errors);
+        checkIfEqual(expectedRecord.getResult2(), null, result2FieldName, errors);
 
-        if (hasText(expectedRecord.getDate2()))
-            checkIfDatesAreEqual(expectedRecord.getDate2(), actualRecord.getSmear_test_date_2(), date2FieldName, errors, LocalDate.class);
-
-        if (hasText(expectedRecord.getResult1()))
-            checkIfEnumsAreEqual(expectedRecord.getResult1(), actualRecord.getSmear_test_result_1(), result1FieldName, errors, SmearTestResult.class);
-
-        if (hasText(expectedRecord.getResult2()))
-            checkIfEnumsAreEqual(expectedRecord.getResult2(), actualRecord.getSmear_test_result_2(), result2FieldName, errors, SmearTestResult.class);
+        checkIfDatesAreEqual(expectedRecord.getDate1(), actualRecord.getSmear_test_date_1(), date1FieldName, errors, LocalDate.class);
+        checkIfDatesAreEqual(expectedRecord.getDate2(), actualRecord.getSmear_test_date_2(), date2FieldName, errors, LocalDate.class);
+        checkIfEnumsAreEqual(expectedRecord.getResult1(), actualRecord.getSmear_test_result_1(), result1FieldName, errors, SmearTestResult.class);
+        checkIfEnumsAreEqual(expectedRecord.getResult2(), actualRecord.getSmear_test_result_2(), result2FieldName, errors, SmearTestResult.class);
     }
 
     private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, SampleInstance instanceType, List<String> errors) {

@@ -49,10 +49,12 @@ public class ProviderRecordValidator {
                 validateProviderFields(provider, request, errors);
 
                 if (errors.size() > 0) {
-                    String errorMessage = String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId());
-                    for (String error : errors)
-                        errorMessage += error + "\n";
-                    importerLogger.error(errorMessage);
+                    StringBuilder errorMessage = new StringBuilder(String.format("Row %d: Provider with provider id \"%s\" has not been imported properly. These are the errors:\n", i + 1, request.getProviderId()));
+                    for (String error : errors){
+                        errorMessage.append(error);
+                        errorMessage.append("\n");
+                    }
+                    importerLogger.error(errorMessage.toString());
                 } else {
                     importerLogger.info(String.format("Row %d: Provider with provider id \"%s\" has been imported properly", i + 1, request.getProviderId()));
                 }

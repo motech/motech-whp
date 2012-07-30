@@ -24,15 +24,13 @@ public class TreatmentCardServiceTest {
 
     @Mock
     WHPAdherenceService whpAdherenceService;
-    @Mock
-    AllPatients allPatients;
 
     TreatmentCardService treatmentCardService;
 
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardService = new TreatmentCardService(allPatients, whpAdherenceService);
+        treatmentCardService = new TreatmentCardService(whpAdherenceService);
     }
 
     @Test
