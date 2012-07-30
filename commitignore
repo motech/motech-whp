@@ -15,7 +15,7 @@
 30bc0fa <Sri> #0 | Moving out Date Constants to WHPDate method and moving that into util package in common.
 1725d99 Abhishek, Preethi | #0 | Wrote functional test for create/edit of cmf admin
 eda62a6 BalajiN | #0 | Echoing line as grep treats it as a file other wise
-cfe43c5 Vishal|Sri #323 fixing test in master
+cfe43c5 Vishal|Sri #323 fixing test
 86ea03d Sri|Vishal #322 Fixed/Refactored multiple phase transitions
 df7fda7 BalajiN, Abhishek | #0 | Fixing functional tests
 d7ead2b Vishal #0 Removed whp-validation module. Moved validators to common and user modules
@@ -24,3 +24,10 @@ e9e2a5f Shruthi, dev | #0 | implemented phase migration
 0eb06e8 Dev | #0 | making rows link through anchor tag(removing javascript code to handle this)
 4fcf56f Dev | #0 | fixing styling for dash on sunday
 da87d54 Dev | #30 | styling dashboard page
+40786c1 Preethi | #000 | Fixing bug where alert is shown in list page even when patient is ending CP.
+6212ab4 BalajiN | #0 | Increasing timeout for page waits because of slow ci
+a63fbd8 BalajiN | #0 | Fixing NullPointerException when deserializing PatientV0
+7f53eac Shruthi, Dev | #0 | fixing timestamp bug in migration
+8d023cd <Sri> #0 | Removing the "YES" and "NO" text for indicating adherence captured fields on listByProvider page.
+3c4d27b Vishal|Deva #0 Added exception error page and logging on controllers. Added javax.mail dependency for SMTPAppender in log4j.
+8df657e Dev | #0 | fixing bug in redirectRowclick js
