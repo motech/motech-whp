@@ -34,4 +34,9 @@ public class TreatmentWeek {
 
         return !(startDate() != null ? !startDate().equals(that.startDate()) : that.startDate() != null);
     }
+
+    @Override
+    public int hashCode() {
+        return startDate().hashCode();
+    }
 }

@@ -7,13 +7,12 @@ import org.mockito.Mock;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.whp.builder.CmfAdminWebRequestBuilder;
-import org.motechproject.whp.request.CreateCMFAdminRequest;
 import org.motechproject.whp.refdata.domain.CmfLocation;
 import org.motechproject.whp.refdata.repository.AllCmfLocations;
-import org.motechproject.whp.user.service.CmfAdminService;
+import org.motechproject.whp.request.CreateCMFAdminRequest;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.repository.AllCmfAdmins;
-import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.CmfAdminService;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
@@ -33,8 +32,6 @@ public class CmfAdminControllerTest {
     @Mock
     Model uiModel;
     @Mock
-    AllProviders allProviders;
-    @Mock
     CmfAdminService cmfAdminService;
     @Mock
     AllCmfLocations allCmfLocations;
@@ -52,7 +49,7 @@ public class CmfAdminControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        itAdminController = new CmfAdminController(allCmfLocations, allProviders, allCmfAdmins, cmfAdminService, motechAuthenticationService);
+        itAdminController = new CmfAdminController(allCmfLocations, allCmfAdmins, cmfAdminService, motechAuthenticationService);
     }
 
     @Test

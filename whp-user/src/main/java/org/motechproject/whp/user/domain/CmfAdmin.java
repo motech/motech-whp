@@ -32,7 +32,8 @@ public class CmfAdmin extends MotechBaseDataObject {
     private void setUserId(String userId) {
         if(userId==null)
             this.userId = null;
-        this.userId = userId.toLowerCase();
+        else
+            this.userId = userId.toLowerCase();
     }
 
 }
