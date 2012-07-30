@@ -174,7 +174,7 @@ public class TreatmentCardTest {
         Patient patient = patient();
         patient.startTherapy(today.minusMonths(5));
 
-        assertEquals(today.minusDays(1), new TreatmentCard(patient).ipBoxLastDoseDate());
+        assertEquals(today.minusMonths(5).plusMonths(5).minusDays(1), new TreatmentCard(patient).ipBoxLastDoseDate());
     }
 
     @Test

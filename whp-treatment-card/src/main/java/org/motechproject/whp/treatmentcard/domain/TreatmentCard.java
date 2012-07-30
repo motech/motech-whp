@@ -41,21 +41,21 @@ public class TreatmentCard {
     private void setTreatmentPausePeriods() {
         List<Treatment> allTreatments = new ArrayList(patient.getCurrentTherapy().getTreatments());
         allTreatments.add(patient.getCurrentTreatment());
-        for(Treatment treatment : allTreatments) {
-            for(TreatmentInterruption treatmentInterruption : treatment.getInterruptions())
-                treatmentPausePeriods.add(new TreatmentPausePeriod(treatmentInterruption.getPauseDate(),treatmentInterruption.getResumptionDate()));
+        for (Treatment treatment : allTreatments) {
+            for (TreatmentInterruption treatmentInterruption : treatment.getInterruptions())
+                treatmentPausePeriods.add(new TreatmentPausePeriod(treatmentInterruption.getPauseDate(), treatmentInterruption.getResumptionDate()));
         }
     }
 
     private void setTreatmentHistories() {
 
-        if(patient.getCurrentTherapy().getTreatments().isEmpty())
+        if (patient.getCurrentTherapy().getTreatments().isEmpty())
             return;
 
         List<Treatment> allTreatments = new ArrayList(patient.getCurrentTherapy().getTreatments());
         allTreatments.add(patient.getCurrentTreatment());
-        for(Treatment treatment : allTreatments) {
-            treatmentHistories.add(new TreatmentHistory(treatment.getProviderId(),treatment.getStartDate(),treatment.getEndDate()));
+        for (Treatment treatment : allTreatments) {
+            treatmentHistories.add(new TreatmentHistory(treatment.getProviderId(), treatment.getStartDate(), treatment.getEndDate()));
         }
     }
 
@@ -81,7 +81,6 @@ public class TreatmentCard {
         if (phases.ipPhaseWasExtended()) {
             endDate = phases.getNextPhaseStartDate(Phase.EIP);
         }
-        //minusDays(1) so that the end of current phase does not overlap with the start of the next phase
         return (endDate == null) ? today() : endDate.minusDays(1);
     }
 
