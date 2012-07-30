@@ -52,7 +52,7 @@ public class AdherenceDataServiceTest {
         );
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(primaryMobile).build();
 
-        when(allProviders.findByPrimaryMobileNumber(primaryMobile)).thenReturn(provider);
+        when(allProviders.findByMobileNumber(primaryMobile)).thenReturn(provider);
         when(allPatients.getAllWithActiveTreatmentFor(providerId)).thenReturn(patients);
         when(whpAdherenceService.patientsWithAdherence(eq(providerId), any(TreatmentWeek.class))).thenReturn(asList(patientId1, patientId2));
 

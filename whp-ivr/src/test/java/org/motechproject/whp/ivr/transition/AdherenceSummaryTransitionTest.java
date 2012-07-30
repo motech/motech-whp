@@ -47,7 +47,7 @@ public class AdherenceSummaryTransitionTest {
     @Before
     public void setUp() {
         initMocks(this);
-        when(allProviders.findByPrimaryMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
+        when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
         adherenceSummaryTransition = new AdherenceSummaryTransition(adherenceDataService, whpivrMessage, allProviders);
         flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);

@@ -1,6 +1,5 @@
 package org.motechproject.whp.user.repository;
 
-import org.hamcrest.core.Is;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
@@ -140,8 +139,40 @@ public class AllProvidersIT extends SpringIntegrationTest {
                 DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         addAndMarkForDeletion(savedProvider);
 
-        Provider actualProvider = allProviders.findByPrimaryMobileNumber(primaryMobile);
+        Provider actualProvider = allProviders.findByMobileNumber(primaryMobile);
 
+        assertThat(actualProvider, is(savedProvider));
+    }
+
+    @Test
+    public void shouldFindProviderBySecondaryMobileNumber(){
+        String primaryMobile = "primary";
+        String secondaryMobile = "secondary";
+        String tertiaryMobile = "tertiary";
+        Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        savedProvider.setSecondaryMobile(secondaryMobile);
+        savedProvider.setTertiaryMobile(tertiaryMobile);
+
+        addAndMarkForDeletion(savedProvider);
+
+        Provider actualProvider = allProviders.findByMobileNumber(secondaryMobile);
+        assertThat(actualProvider, is(savedProvider));
+    }
+
+    @Test
+    public void shouldFindProviderByTertiaryMobileNumber(){
+        String primaryMobile = "primary";
+        String secondaryMobile = "secondary";
+        String tertiaryMobile = "tertiary";
+        Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
+                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        savedProvider.setSecondaryMobile(secondaryMobile);
+        savedProvider.setTertiaryMobile(tertiaryMobile);
+
+        addAndMarkForDeletion(savedProvider);
+
+        Provider actualProvider = allProviders.findByMobileNumber(tertiaryMobile);
         assertThat(actualProvider, is(savedProvider));
     }
 }

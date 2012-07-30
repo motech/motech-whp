@@ -381,7 +381,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         allPatients.remove(allPatients.findByPatientId(patient2.getPatientId()));
         allPatients.remove(allPatients.findByPatientId(patient3.getPatientId()));
 
-        allProviders.remove(allProviders.findByPrimaryMobileNumber("123456"));
+        allProviders.remove(allProviders.findByMobileNumber("123456"));
 
         allAdherenceLogs.removeAll();
     }

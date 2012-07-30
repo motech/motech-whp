@@ -51,9 +51,9 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         return db.queryView(q, Provider.class);
     }
 
-    @View(name = "find_by_mobile_number", map = "function(doc) {if (doc.type ==='Provider') {emit(doc.primaryMobile, doc._id);}}")
-    public Provider findByPrimaryMobileNumber(String primaryMobile) {
-        ViewQuery q = createQuery("find_by_mobile_number").key(primaryMobile).includeDocs(true);
+    @View(name = "find_by_mobile_number", map = "function(doc) {if (doc.type ==='Provider') {emit(doc.primaryMobile, doc._id);emit(doc.secondaryMobile, doc._id);emit(doc.tertiaryMobile, doc._id);}}")
+    public Provider findByMobileNumber(String mobileNumber) {
+        ViewQuery q = createQuery("find_by_mobile_number").key(mobileNumber).includeDocs(true);
         return singleResult(db.queryView(q, Provider.class));
     }
 }

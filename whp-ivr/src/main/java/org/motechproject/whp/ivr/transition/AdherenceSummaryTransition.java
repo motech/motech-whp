@@ -40,7 +40,7 @@ public class AdherenceSummaryTransition implements ITransition {
         IvrSession ivrSession = new IvrSession(flowSession);
 
         if(ivrSession.providerId() == null){
-            String providerId = allProviders.findByPrimaryMobileNumber(ivrSession.getMobileNumber()).getProviderId();
+            String providerId = allProviders.findByMobileNumber(ivrSession.getMobileNumber()).getProviderId();
             AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
 
             ivrSession.providerId(providerId);
