@@ -23,13 +23,14 @@
     </#if>
 
 <form id="treatmentCardDeltaform" action="/whp/treatmentcard/update" method="post">
+
     <input type="hidden" name="delta" id="delta"/>
 
-
     <div class="controls pull-right">
-        <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear</a>
+        <a href="/whp/patients/show?patientId=${patientId}" class="btn">Clear Current Changes</a>
         <button type="button" id='submitAdherence' class="btn btn-primary">Save</button>
     </div>
+
 </form>
 
 </#if>
