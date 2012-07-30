@@ -126,7 +126,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage1.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/0.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage3.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/1.wav</playaudio>\n" +
