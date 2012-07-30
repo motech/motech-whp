@@ -28,7 +28,7 @@
 
     <logger name="org.motechproject.whp.controller">
         <level value="error"/>
-        <appender-ref ref="adminEmail"/>
+        <appender-ref ref="console"/>
     </logger>
 
     <root>
