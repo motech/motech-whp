@@ -9,6 +9,7 @@
 
 
     <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:applicationServiceContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
     <import resource="classpath*:applicationDecisionTree.xml"/>
     <import resource="classpath*:ivrKookooContext.xml"/>
