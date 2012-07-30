@@ -120,7 +120,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     @Test
     public void shouldTransitionToAdherenceSummaryNode() throws IOException, SAXException {
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile())), new BasicResponseHandler());
+        String sessionId = UUID.randomUUID().toString();
+        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage1.wav</playaudio>\n" +
