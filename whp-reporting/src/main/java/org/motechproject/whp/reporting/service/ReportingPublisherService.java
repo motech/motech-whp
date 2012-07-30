@@ -1,25 +1,25 @@
 package org.motechproject.whp.reporting.service;
 
 import org.motechproject.http.client.service.HttpClientService;
-import org.motechproject.scheduler.context.EventContext;
-import org.motechproject.whp.reporting.ReportingEventKeys;
+import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reporting.request.AdherenceCaptureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReportingPublisherService {
 
     HttpClientService httpClientService;
+    private ReportingEventURLs reportingEventURLs;
 
     @Autowired
-    public ReportingPublisherService(HttpClientService httpClientService) {
+    public ReportingPublisherService(HttpClientService httpClientService, ReportingEventURLs reportingEventURLs) {
         this.httpClientService = httpClientService;
+        this.reportingEventURLs = reportingEventURLs;
     }
 
     public void reportAdherenceCapture(AdherenceCaptureRequest adherenceCaptureRequest){
-        httpClientService.post(ReportingEventKeys.REPORT_ADHERENCE_CAPTURE, adherenceCaptureRequest);
+        httpClientService.post(reportingEventURLs.getAdherenceCallLogURL(), adherenceCaptureRequest);
     }
 
 }
