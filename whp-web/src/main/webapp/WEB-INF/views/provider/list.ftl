@@ -58,7 +58,7 @@
             <#if providerList?size == 0>
             <tr>
                 <td class="warning" style="text-align: center" colspan="6">
-                    <#if providerId != "">
+                    <#if selectedProvider != "">
                         No providers found for District: '${selectedDistrict}' with provider ID: '${selectedProvider}'
                     <#else>
                         No providers found for District: '${selectedDistrict}'

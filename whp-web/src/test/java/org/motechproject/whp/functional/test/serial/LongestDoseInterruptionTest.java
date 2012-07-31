@@ -32,7 +32,7 @@ public class LongestDoseInterruptionTest extends TreatmentUpdateTest {
     public void shouldBuildCPTreatmentCardForPatient() {
         provideAdherence();
 
-        assertLongestTreatmentInterruption("4.7");
+        assertLongestTreatmentInterruption("4.7 (in weeks)");
 
         TreatmentCardPage treatmentCardPage = openTreatmentCardStep.withPatient(testPatient).execute();
 
@@ -45,7 +45,7 @@ public class LongestDoseInterruptionTest extends TreatmentUpdateTest {
 
         treatmentCardPage.logout();
 
-        assertLongestTreatmentInterruption("3.3");
+        assertLongestTreatmentInterruption("3.3 (in weeks)");
     }
 
     private void assertLongestTreatmentInterruption(String duration) {

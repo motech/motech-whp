@@ -27,7 +27,7 @@ public class ProviderController extends BaseController{
 
     public static final String PROVIDER_LIST = "providerList";
     private static final String DISTRICT_LIST = "districts";
-    private static final String PROVIDER_ID = "providerId";
+    private static final String PROVIDER_ID = "selectedProvider";
     private static final String SELECTED_DISTRICT = "selectedDistrict";
 
     @Autowired
