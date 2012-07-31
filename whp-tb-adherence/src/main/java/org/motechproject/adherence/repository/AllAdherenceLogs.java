@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
@@ -110,15 +107,16 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
     }
 
     public void addOrUpdateLogsForExternalIdByDoseDate(List<AdherenceLog> adherenceLogs, String externalId) {
-        if (adherenceLogs.size() <= 0) {
+        if (null != adherenceLogs && adherenceLogs.isEmpty()) {
             return;
         }
+        Set<AdherenceLog> logs = new LinkedHashSet<>(adherenceLogs);
         List<AdherenceLog> logsInDb = findAllLogsForExternalIdInDoseDateRange(externalId, adherenceLogs.get(0).doseDate(), adherenceLogs.get(adherenceLogs.size() - 1).doseDate());
-        ArrayList<AdherenceLog> tobeStoredLogs = mapLogToDbLogsIfExists(adherenceLogs, logsInDb);
+        ArrayList<AdherenceLog> tobeStoredLogs = mapLogToDbLogsIfExists(logs, logsInDb);
         db.executeAllOrNothing(tobeStoredLogs);
     }
 
-    private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(List<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
+    private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(Set<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
         ArrayList<AdherenceLog> tobeStoredLogs = new ArrayList<AdherenceLog>();
         List<LocalDate> doseDatesToBeMappedWith = extract(dbLogs, on(AdherenceLog.class).doseDate());
         for (AdherenceLog log : logsToMap) {
@@ -154,7 +152,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return new ArrayList<>(ids);
     }
 
-     public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
+    public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
         int status = 1;
         ComplexKey startKey = ComplexKey.of(patientId, treatmentId, status);
         ComplexKey endKey = ComplexKey.of(patientId, treatmentId, status, ComplexKey.emptyObject());
