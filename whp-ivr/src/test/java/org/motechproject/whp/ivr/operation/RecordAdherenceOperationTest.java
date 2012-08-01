@@ -27,18 +27,18 @@ public class RecordAdherenceOperationTest {
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     private RecordAdherenceOperation recordAdherenceOperation;
-    private int adherenceInput;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceInput = 3;
-        recordAdherenceOperation = new RecordAdherenceOperation(adherenceInput, CURRENT_PATIENT, treatmentUpdateOrchestrator);
+        recordAdherenceOperation = new RecordAdherenceOperation(CURRENT_PATIENT, treatmentUpdateOrchestrator);
     }
 
     @Test
     public void shouldSaveAdherenceForCurrentPatient() {
+        int adherenceInput = 3;
         FlowSessionStub flowSession = new FlowSessionStub();
+        flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, "3");
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER);
         ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", CURRENT_PATIENT));

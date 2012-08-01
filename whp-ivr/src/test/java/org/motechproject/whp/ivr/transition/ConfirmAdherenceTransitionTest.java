@@ -67,7 +67,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, "3");
         Node node = confirmAdherenceTransition.getDestinationNode("1", flowSession);
         assertThat(node.getOperations().size(), is(2));
-        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(3, PATIENT_1, treatmentUpdateOrchestrator)));
+        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(PATIENT_1, treatmentUpdateOrchestrator)));
         assertThat(node.getOperations().get(1), instanceOf(ResetPatientIndexOperation.class));
     }
 

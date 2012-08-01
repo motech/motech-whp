@@ -48,7 +48,7 @@ public class ConfirmAdherenceTransition implements ITransition {
         } else {
             if (input.equals("1")) {
                 Integer adherenceInput = ivrSession.adherenceInputForCurrentPatient();
-                nextNode.addOperations(new RecordAdherenceOperation(adherenceInput, currentPatientId, treatmentUpdateOrchestrator));
+                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator));
             }
             if (ivrSession.hasNextPatient()) {
                 ivrSession.nextPatient();

@@ -17,23 +17,23 @@ public class RecordAdherenceOperation implements INodeOperation {
 
     private String currentPatientId;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-    private Integer adherenceInput;
-    public RecordAdherenceOperation(Integer adherenceInput, String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
+    public RecordAdherenceOperation(String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.currentPatientId = currentPatientId;
-        this.adherenceInput = adherenceInput;
     }
 
     @Override
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
-        recordAdherence(ivrSession.providerId());
+        recordAdherence(ivrSession.providerId(), ivrSession.adherenceInputForCurrentPatient());
     }
 
-    private void recordAdherence(String providerId) {
+    private void recordAdherence(String providerId , Integer adherenceValue) {
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
-        weeklyAdherenceSummary.setDosesTaken(adherenceInput);
+        weeklyAdherenceSummary.setDosesTaken(adherenceValue);
+        treatmentUpdateOrchestrator.recordAdherence(currentPatientId, weeklyAdherenceSummary, auditParams);
+        weeklyAdherenceSummary.setDosesTaken(adherenceValue);
         treatmentUpdateOrchestrator.recordAdherence(currentPatientId, weeklyAdherenceSummary, auditParams);
     }
 
