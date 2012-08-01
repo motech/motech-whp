@@ -11,10 +11,11 @@ import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
@@ -36,22 +37,22 @@ import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.c
 @ExcelDataSource(name = "adherence")
 public class AdherenceController extends BaseController {
 
-    private AllPatients allPatients;
+    private PatientService patientService;
     private WHPAdherenceService adherenceService;
     private AllTreatmentCategories allTreatmentCategories;
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     @Autowired
-    public AdherenceController(AllPatients allPatients, WHPAdherenceService adherenceService, AllTreatmentCategories allTreatmentCategories, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
-        this.allPatients = allPatients;
+    public AdherenceController(PatientService patientService, WHPAdherenceService adherenceService, AllTreatmentCategories allTreatmentCategories, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
+        this.patientService = patientService;
         this.adherenceService = adherenceService;
         this.allTreatmentCategories = allTreatmentCategories;
-        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/update/{patientId}")
     public String update(@PathVariable("patientId") String patientId, Model uiModel) {
-        Patient patient = allPatients.findByPatientId(patientId);
+        Patient patient = patientService.findByPatientId(patientId);
         WeeklyAdherenceSummary adherenceSummary = adherenceService.currentWeekAdherence(patient);
         prepareModel(patient, uiModel, adherenceSummary);
         return "adherence/update";
@@ -67,7 +68,7 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
 
-        phaseUpdateOrchestrator.recordAdherence(patientId,weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
+        treatmentUpdateOrchestrator.recordAdherence(patientId,weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
 
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";

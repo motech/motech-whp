@@ -29,10 +29,10 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         patient.getCurrentTherapy().getCurrentPhase().setNumberOfDosesTaken(24, twentyFourthDoseTakenDate);
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
 
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
 
         verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate);
         verify(patientService).autoCompleteLatestPhase(patient, adherenceRecord.doseDate());
@@ -49,10 +49,10 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         patient.endLatestPhase(twentyFourthDoseTakenDate);
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
 
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
 
         verify(patientService).startNextPhase(patient);
     }
@@ -68,9 +68,9 @@ public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
         //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
         patient.setNumberOfDosesTaken(Phase.IP, 23, twentyFourthDoseTakenDate);
 
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
 
         verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
         verify(patientService, never()).startNextPhase(patient);

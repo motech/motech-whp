@@ -23,7 +23,7 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
     @Test
     public void shouldNotEndCurrentPhaseWhenPatientHasNotTakenAllDosesForCurrentPhase() {
         when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
-        phaseUpdateOrchestrator.setNextPhase(PATIENT_ID, Phase.EIP);
+        treatmentUpdateOrchestrator.setNextPhase(PATIENT_ID, Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
     }
@@ -55,7 +55,7 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
         }).when(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
 
 
-        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
+        treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(patientService, times(1)).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
@@ -83,7 +83,7 @@ public class SetNextPhaseTestPart extends PhaseUpdateOrchestratorTestPart {
             }
         }).when(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
 
-        phaseUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
+        treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(whpAdherenceService, times(1)).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));

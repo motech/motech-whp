@@ -9,7 +9,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -39,7 +39,7 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
-    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     private Patient patient;
     private static final String USER_NAME = "username";
@@ -52,7 +52,7 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients, phaseUpdateOrchestrator);
+        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients, treatmentUpdateOrchestrator);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
         setupLoggedInUser(request, USER_NAME);
@@ -95,8 +95,8 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
 
         treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
-        verify(phaseUpdateOrchestrator, times(1)).recomputePillStatus(patient);
-        verify(phaseUpdateOrchestrator, times(1)).attemptPhaseTransition(patient);
+        verify(treatmentUpdateOrchestrator, times(1)).recomputePillStatus(patient);
+        verify(treatmentUpdateOrchestrator, times(1)).attemptPhaseTransition(patient);
     }
 
 }

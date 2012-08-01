@@ -7,7 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -56,7 +56,7 @@ public class PatientControllerTest extends BaseControllerTest {
     @Mock
     ProviderService providerService;
     @Mock
-    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
     WHPAdherenceService whpAdherenceService;
     @Mock
@@ -86,7 +86,7 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, phaseUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
+        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -153,7 +153,7 @@ public class PatientControllerTest extends BaseControllerTest {
     public void shouldUpdateDoseInterruptionsOnPatientWhenNavigatedToDashboardPage() {
         patientController.show(patient.getPatientId(), uiModel, request);
 
-        verify(phaseUpdateOrchestrator, times(1)).updateDoseInterruptions(patient);
+        verify(treatmentUpdateOrchestrator, times(1)).updateDoseInterruptions(patient);
     }
 
     @Test
@@ -169,7 +169,7 @@ public class PatientControllerTest extends BaseControllerTest {
         phaseStartDates.setIpStartDate("21/05/2012");
 
         String view = patientController.adjustPhaseStartDates(patient.getPatientId(), phaseStartDates, request);
-        verify(phaseUpdateOrchestrator).adjustPhaseStartDates(patient.getPatientId(), WHPDate.date(phaseStartDates.getIpStartDate()).date(), null, null);
+        verify(treatmentUpdateOrchestrator).adjustPhaseStartDates(patient.getPatientId(), WHPDate.date(phaseStartDates.getIpStartDate()).date(), null, null);
         assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
     }
 

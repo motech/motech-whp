@@ -42,7 +42,7 @@ public class DoseInterruptionsTestPart extends PhaseUpdateOrchestratorTestPart {
 
         when(whpAdherenceService.getDateAdherenceMap(patient)).thenReturn(dateAdherenceMap);
 
-        phaseUpdateOrchestrator.recomputePillStatus(patient);
+        treatmentUpdateOrchestrator.recomputePillStatus(patient);
 
         verify(patientService, times(1)).clearDoseInterruptionsForUpdate(patient);
 

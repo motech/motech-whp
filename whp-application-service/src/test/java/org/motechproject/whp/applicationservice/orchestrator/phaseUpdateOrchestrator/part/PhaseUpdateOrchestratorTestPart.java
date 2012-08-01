@@ -2,7 +2,7 @@ package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchest
 
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -18,21 +18,19 @@ public abstract class PhaseUpdateOrchestratorTestPart {
     public static final String PATIENT_ID = "patientid";
 
     @Mock
-    protected AllPatients allPatients;
-    @Mock
     protected WHPAdherenceService whpAdherenceService;
     @Mock
     protected PatientService patientService;
 
     protected Patient patient;
 
-    protected PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    protected TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     public void setUp() {
         initMocks(this);
-        phaseUpdateOrchestrator = new PhaseUpdateOrchestrator(allPatients, patientService, whpAdherenceService);
+        treatmentUpdateOrchestrator = new TreatmentUpdateOrchestrator(patientService, whpAdherenceService);
         patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today().minusMonths(2));
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
     }
 }

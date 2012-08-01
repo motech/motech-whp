@@ -24,23 +24,21 @@ import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Component
-public class PhaseUpdateOrchestrator {
+public class TreatmentUpdateOrchestrator {
 
-    private AllPatients allPatients;
     private PatientService patientService;
     private WHPAdherenceService whpAdherenceService;
 
     @Autowired
-    public PhaseUpdateOrchestrator(AllPatients allPatients, PatientService patientService, WHPAdherenceService whpAdherenceService) {
-        this.allPatients = allPatients;
+    public TreatmentUpdateOrchestrator(PatientService patientService, WHPAdherenceService whpAdherenceService) {
         this.patientService = patientService;
         this.whpAdherenceService = whpAdherenceService;
     }
 
     public void adjustPhaseStartDates(String patientId, LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
-        Patient patient = allPatients.findByPatientId(patientId);
+        Patient patient = patientService.findByPatientId(patientId);
         patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
-        allPatients.update(patient);
+        patientService.update(patient);
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
     }
@@ -117,7 +115,7 @@ public class PhaseUpdateOrchestrator {
     public void recordAdherence(String patientId,WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
 
-        Patient patient = allPatients.findByPatientId(patientId);
+        Patient patient = patientService.findByPatientId(patientId);
 
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);

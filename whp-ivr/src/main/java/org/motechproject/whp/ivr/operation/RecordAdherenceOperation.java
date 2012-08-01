@@ -6,7 +6,7 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -15,16 +15,11 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentW
 
 public class RecordAdherenceOperation implements INodeOperation {
 
-    private WHPAdherenceService whpAdherenceService;
-
     private String currentPatientId;
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
-    private PatientService patientService;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private Integer adherenceInput;
-    public RecordAdherenceOperation(Integer adherenceInput, String currentPatientId, WHPAdherenceService whpAdherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
-        this.whpAdherenceService = whpAdherenceService;
-        this.patientService = patientService;
-        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+    public RecordAdherenceOperation(Integer adherenceInput, String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
+        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.currentPatientId = currentPatientId;
         this.adherenceInput = adherenceInput;
     }
@@ -39,11 +34,7 @@ public class RecordAdherenceOperation implements INodeOperation {
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
         weeklyAdherenceSummary.setDosesTaken(adherenceInput);
-        whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
-        Patient patient = patientService.findByPatientId(currentPatientId);
-
-        phaseUpdateOrchestrator.recomputePillStatus(patient);
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.recordAdherence(currentPatientId, weeklyAdherenceSummary, auditParams);
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
@@ -26,7 +26,7 @@ public class AdherenceCaptureTransition implements ITransition {
     @Autowired
     private WHPAdherenceService adherenceService;
     @Autowired
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Autowired
     private PatientService patientService;
     @Autowired
@@ -37,10 +37,10 @@ public class AdherenceCaptureTransition implements ITransition {
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
+    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
-        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.patientService = patientService;
     }
 

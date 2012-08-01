@@ -25,11 +25,11 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate eipStartDate = new LocalDate(2011, 1, 2);
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
 
-        phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
+        treatmentUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
         assertEquals(ipStartDate, patient.getCurrentTherapy().getPhaseStartDate(IP));
         assertEquals(eipStartDate, patient.getCurrentTherapy().getPhaseStartDate(EIP));
         assertEquals(cpStartDate, patient.getCurrentTherapy().getPhaseStartDate(CP));
-        verify(allPatients).update(patient);
+        verify(patientService).update(patient);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         LocalDate eipStartDate = new LocalDate(2011, 1, 2);
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
 
-        phaseUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
+        treatmentUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
         verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(IP), anyInt(), any(LocalDate.class));
         verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(EIP), anyInt(), any(LocalDate.class));
         verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(CP), anyInt(), any(LocalDate.class));

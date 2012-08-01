@@ -6,8 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.service.PatientService;
@@ -25,11 +24,7 @@ public class RecordAdherenceOperationTest {
     public static final String PROVIDER = "provider";
 
     @Mock
-    private WHPAdherenceService whpAdherenceService;
-    @Mock
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
-    @Mock
-    private PatientService patientService;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     private RecordAdherenceOperation recordAdherenceOperation;
     private int adherenceInput;
@@ -38,7 +33,7 @@ public class RecordAdherenceOperationTest {
     public void setUp() {
         initMocks(this);
         adherenceInput = 3;
-        recordAdherenceOperation = new RecordAdherenceOperation(adherenceInput, CURRENT_PATIENT, whpAdherenceService, phaseUpdateOrchestrator, patientService);
+        recordAdherenceOperation = new RecordAdherenceOperation(adherenceInput, CURRENT_PATIENT, treatmentUpdateOrchestrator);
     }
 
     @Test
@@ -53,6 +48,6 @@ public class RecordAdherenceOperationTest {
 
         AuditParams auditParams = new AuditParams(PROVIDER, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), adherenceInput);
-        verify(whpAdherenceService).recordAdherence(weeklyAdherenceSummary, auditParams);
+        verify(treatmentUpdateOrchestrator).recordAdherence(CURRENT_PATIENT, weeklyAdherenceSummary, auditParams);
     }
 }

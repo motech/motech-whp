@@ -26,13 +26,13 @@ public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
         int numberOfDosesTakenInIPTillLastSunday = 7;
         patient.startTherapy(startDate);
 
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
         when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, today))
                 .thenReturn(numberOfDosesTakenInIP);
         when(whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), THERAPY_ID, startDate, week(today).dateOf(DayOfWeek.Sunday)))
                 .thenReturn(numberOfDosesTakenInIPTillLastSunday);
 
-        phaseUpdateOrchestrator.recomputePillStatus(patient);
+        treatmentUpdateOrchestrator.recomputePillStatus(patient);
         verify(patientService).updatePillTakenCount(patient, Phase.IP, numberOfDosesTakenInIP, today);
     }
 }

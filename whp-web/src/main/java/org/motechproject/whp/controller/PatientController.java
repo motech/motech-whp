@@ -5,7 +5,7 @@ import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
@@ -29,9 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,7 @@ public class PatientController extends BaseController {
     private PatientService patientService;
 
     private WHPAdherenceService whpAdherenceService;
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
     private TreatmentCardService treatmentCardService;
@@ -65,7 +63,7 @@ public class PatientController extends BaseController {
     public PatientController(PatientService patientService,
                              WHPAdherenceService whpAdherenceService,
                              TreatmentCardService treatmentCardService,
-                             PhaseUpdateOrchestrator phaseUpdateOrchestrator,
+                             TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
@@ -76,7 +74,7 @@ public class PatientController extends BaseController {
         this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
-        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.messageSource = messageSource;
     }
 
@@ -106,7 +104,7 @@ public class PatientController extends BaseController {
     @RequestMapping(value = "show", method = RequestMethod.GET)
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
-        phaseUpdateOrchestrator.updateDoseInterruptions(patient);
+        treatmentUpdateOrchestrator.updateDoseInterruptions(patient);
         setupDashboardModel(uiModel, request, patient);
         return "patient/show";
     }
@@ -147,7 +145,7 @@ public class PatientController extends BaseController {
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
     public String adjustPhaseStartDates(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
-        phaseUpdateOrchestrator.adjustPhaseStartDates(
+        treatmentUpdateOrchestrator.adjustPhaseStartDates(
                 patientId,
                 date(phaseStartDates.getIpStartDate()).date(),
                 date(phaseStartDates.getEipStartDate()).date(),
@@ -221,7 +219,7 @@ public class PatientController extends BaseController {
 
     @RequestMapping(value = "transitionPhase/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") String patientId, @RequestParam("to") String phaseName) {
-        phaseUpdateOrchestrator.setNextPhase(patientId, Phase.valueOf(phaseName));
+        treatmentUpdateOrchestrator.setNextPhase(patientId, Phase.valueOf(phaseName));
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 

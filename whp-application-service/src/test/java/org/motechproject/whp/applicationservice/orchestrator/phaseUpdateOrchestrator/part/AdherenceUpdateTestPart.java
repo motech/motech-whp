@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -30,7 +30,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
     @Before
     public void setUp() {
         initMocks(this);
-        phaseUpdateOrchestrator = new PhaseUpdateOrchestrator(allPatients, patientService, whpAdherenceService);
+        treatmentUpdateOrchestrator = new TreatmentUpdateOrchestrator(patientService, whpAdherenceService);
 
     }
 
@@ -38,14 +38,14 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
     public void shouldRecomputePillCountAfterCapturingAdherence() {
         patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today().minusMonths(2));
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
 
         WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
         when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        phaseUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
+        treatmentUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
 
         int dosesTaken =0;
         LocalDate endDate = new LocalDate();
@@ -58,13 +58,13 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
 
         patientStub = new PatientStub();
         patientStub.startTherapy(today().minusMonths(2));
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
 
         WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
         when(whpAdherenceService.currentWeekAdherence(patientStub)).thenReturn(adherence);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        phaseUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
+        treatmentUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
 
         verify(patientService).startNextPhase(patientStub);
 

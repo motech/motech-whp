@@ -12,11 +12,12 @@ import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
@@ -37,7 +38,7 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 public class AdherenceControllerTest extends BaseControllerTest {
 
     @Mock
-    AllPatients allPatients;
+    PatientService patientService;
     @Mock
     AllTreatmentCategories allTreatmentCategories;
     @Mock
@@ -47,7 +48,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
-    private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     private Patient patient;
 
@@ -66,7 +67,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
     public void setUp() {
         setUpMocks();
         setUpPatient();
-        adherenceController = new AdherenceController(allPatients, adherenceService, allTreatmentCategories, phaseUpdateOrchestrator);
+        adherenceController = new AdherenceController(patientService, adherenceService, allTreatmentCategories, treatmentUpdateOrchestrator);
         setupLoggedInUser(request, providerUserName);
     }
 
@@ -85,7 +86,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
 
     private void setUpPatient() {
         patient = new PatientBuilder().withDefaults().withStatus(PatientStatus.Open).build();
-        when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         setupTreatmentCategory();
     }
 
@@ -117,7 +118,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
-        verify(phaseUpdateOrchestrator).recordAdherence(eq(PATIENT_ID),captor.capture(), eq(auditParams));
+        verify(treatmentUpdateOrchestrator).recordAdherence(eq(PATIENT_ID),captor.capture(), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getDosesTaken());
     }
 
@@ -181,7 +182,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
         weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
 
-        verify(phaseUpdateOrchestrator).recordAdherence(patient.getPatientId(),weeklyAdherenceSummary,auditParams);
+        verify(treatmentUpdateOrchestrator).recordAdherence(patient.getPatientId(), weeklyAdherenceSummary, auditParams);
     }
 
 

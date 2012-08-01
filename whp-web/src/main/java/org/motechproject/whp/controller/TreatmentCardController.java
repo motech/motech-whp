@@ -6,7 +6,7 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -33,14 +33,14 @@ public class TreatmentCardController extends BaseController {
 
     WHPAdherenceService adherenceService;
 
-    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     @Autowired
-    public TreatmentCardController(WHPAdherenceService adherenceService, TreatmentCardService treatmentCardService, AllPatients allPatients, PhaseUpdateOrchestrator phaseUpdateOrchestrator) {
+    public TreatmentCardController(WHPAdherenceService adherenceService, TreatmentCardService treatmentCardService, AllPatients allPatients, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
         this.allPatients = allPatients;
         this.adherenceService = adherenceService;
         this.treatmentCardService = treatmentCardService;
-        this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
+        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
     }
 
     @RequestMapping(value = "show", method = RequestMethod.GET)
@@ -59,8 +59,8 @@ public class TreatmentCardController extends BaseController {
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
         adherenceService.addLogsForPatient(updateAdherenceRequest, patient, auditParams);
-        phaseUpdateOrchestrator.recomputePillStatus(patient);
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.recomputePillStatus(patient);
+        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
         out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);
         return redirectToPatientDashboardURL(patient.getPatientId());
     }

@@ -7,12 +7,11 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
-import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -40,7 +39,7 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Mock
     WHPAdherenceService adherenceService;
     @Mock
-    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -54,7 +53,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, phaseUpdateOrchestrator, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService);
     }
 
     @Test

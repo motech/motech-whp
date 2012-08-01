@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
@@ -45,7 +45,7 @@ public class ConfirmAdherenceTransitionTest {
     @Mock
     WHPAdherenceService adherenceService;
     @Mock
-    PhaseUpdateOrchestrator phaseUpdateOrchestrator;
+    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -59,7 +59,7 @@ public class ConfirmAdherenceTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, phaseUpdateOrchestrator, patientService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, "3");
         Node node = confirmAdherenceTransition.getDestinationNode("1", flowSession);
         assertThat(node.getOperations().size(), is(2));
-        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(3, PATIENT_1, adherenceService, phaseUpdateOrchestrator, patientService)));
+        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(3, PATIENT_1, treatmentUpdateOrchestrator)));
         assertThat(node.getOperations().get(1), instanceOf(ResetPatientIndexOperation.class));
     }
 
