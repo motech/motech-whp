@@ -20,25 +20,25 @@ public class RecordAdherenceOperation implements INodeOperation {
     private String currentPatientId;
     private PhaseUpdateOrchestrator phaseUpdateOrchestrator;
     private PatientService patientService;
-
-    public RecordAdherenceOperation(WHPAdherenceService whpAdherenceService, PatientService patientService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, String currentPatientId) {
+    private Integer adherenceInput;
+    public RecordAdherenceOperation(Integer adherenceInput, String currentPatientId, WHPAdherenceService whpAdherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
         this.whpAdherenceService = whpAdherenceService;
         this.patientService = patientService;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
         this.currentPatientId = currentPatientId;
+        this.adherenceInput = adherenceInput;
     }
 
     @Override
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
-        recordAdherence(userInput, ivrSession.providerId());
-        ivrSession.resetCurrentPatientIndex();
+        recordAdherence(ivrSession.providerId());
     }
 
-    private void recordAdherence(String adherenceInput, String providerId) {
+    private void recordAdherence(String providerId) {
         AuditParams auditParams = new AuditParams(providerId, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
-        weeklyAdherenceSummary.setDosesTaken(Integer.parseInt(adherenceInput));
+        weeklyAdherenceSummary.setDosesTaken(adherenceInput);
         whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
         Patient patient = patientService.findByPatientId(currentPatientId);
 

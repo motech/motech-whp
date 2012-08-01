@@ -11,6 +11,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -111,19 +112,17 @@ public class AdherenceCaptureTransitionTest {
         int dosesTaken = 2;
         int dosesPerWeek = 3;
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
-                .wav(CONFIRM_ADHERENCE)
+                .wav(PATIENT)
                 .id(patientId)
                 .wav(HAS_TAKEN)
                 .number(dosesTaken)
                 .wav(OUT_OF)
                 .number(dosesPerWeek)
                 .wav(DOSES)
-                .wav(PATIENT_LIST)
-                .number(2)
-                .id(anotherPatientId).wav(ENTER_ADHERENCE);
+                .wav(CONFIRM_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureTransition());
+                .addTransition("?", new ConfirmAdherenceTransition());
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
         assertEquals(expectedNode, destinationNode);

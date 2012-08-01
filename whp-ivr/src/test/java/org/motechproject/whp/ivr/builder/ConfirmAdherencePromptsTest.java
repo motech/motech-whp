@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.prompts.SavedAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts;
 
 import java.util.Properties;
 
@@ -23,10 +23,10 @@ public class ConfirmAdherencePromptsTest {
 
     @Test
     public void shouldBuildConfirmAdherencePrompts(){
-        Prompt[] prompts = SavedAdherencePrompts.savedAdherencePrompts(whpivrMessage, "id", 2, 3);
+        Prompt[] prompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpivrMessage, "id", 2, 3);
 
-        assertEquals(8, prompts.length);
-        assertEquals(audioPrompt(CONFIRM_ADHERENCE), prompts[0]);
+        assertEquals(9, prompts.length);
+        assertEquals(audioPrompt(PATIENT), prompts[0]);
         assertEquals(audioPrompt("i"), prompts[1]);
         assertEquals(audioPrompt("d"), prompts[2]);
         assertEquals(audioPrompt(HAS_TAKEN), prompts[3]);
@@ -34,6 +34,7 @@ public class ConfirmAdherencePromptsTest {
         assertEquals(audioPrompt(OUT_OF), prompts[5]);
         assertEquals(audioPrompt("3"), prompts[6]);
         assertEquals(audioPrompt(DOSES), prompts[7]);
+        assertEquals(audioPrompt(CONFIRM_ADHERENCE), prompts[8]);
     }
 
     private AudioPrompt audioPrompt(String audioFileUrl) {

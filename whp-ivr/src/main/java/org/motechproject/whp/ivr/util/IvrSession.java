@@ -11,6 +11,7 @@ public class IvrSession {
     public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
     public static final String PROVIDER_ID = "providerId";
+    public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
 
     private FlowSession flowSession;
 
@@ -92,6 +93,13 @@ public class IvrSession {
 
     public void resetCurrentPatientIndex() {
         flowSession.set(CURRENT_PATIENT_INDEX, null);
+    }
+
+    public Integer adherenceInputForCurrentPatient() {
+        return Integer.valueOf(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
+    }
+    public void adherenceInputForCurrentPatient(String input) {
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, input);
     }
 }
 

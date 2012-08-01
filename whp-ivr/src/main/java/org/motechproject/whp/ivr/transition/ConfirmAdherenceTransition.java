@@ -1,27 +1,22 @@
 package org.motechproject.whp.ivr.transition;
 
-import org.apache.commons.lang.StringUtils;
+
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
+import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.IvrSession;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
-import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 
-@Component
-public class AdherenceCaptureTransition implements ITransition {
+public class ConfirmAdherenceTransition implements ITransition {
 
     @Autowired
     private WHPAdherenceService adherenceService;
@@ -32,12 +27,10 @@ public class AdherenceCaptureTransition implements ITransition {
     @Autowired
     private WHPIVRMessage whpivrMessage;
 
-    private static final String SKIP_PATIENT_CODE = "9";
-
-    AdherenceCaptureTransition() {
+    ConfirmAdherenceTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
+    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, PhaseUpdateOrchestrator phaseUpdateOrchestrator, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
         this.phaseUpdateOrchestrator = phaseUpdateOrchestrator;
@@ -50,16 +43,16 @@ public class AdherenceCaptureTransition implements ITransition {
         String currentPatientId = ivrSession.currentPatientId();
 
         Node nextNode = new Node();
-        boolean isValidInput = false;
-        if (!shouldSkipInput(input)) {
-            isValidInput = confirmAdherenceForCurrentPatient(nextNode, parseInt(input), currentPatientId);
-        }
-        if (isValidInput) {
-            nextNode.addTransition("?", new ConfirmAdherenceTransition());
+        if (input.equals("2")) {
+            addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
+            if (input.equals("1")) {
+                Integer adherenceInput = ivrSession.adherenceInputForCurrentPatient();
+                nextNode.addOperations(new RecordAdherenceOperation(adherenceInput, currentPatientId, adherenceService, phaseUpdateOrchestrator, patientService));
+            }
             if (ivrSession.hasNextPatient()) {
                 ivrSession.nextPatient();
-                addNextPatientPromptsAndTransition(nextNode, ivrSession);
+                addPatientPromptsAndTransitions(nextNode, ivrSession);
             } else {
                 nextNode.addPrompts(callCompletionPrompts(whpivrMessage));
             }
@@ -68,38 +61,25 @@ public class AdherenceCaptureTransition implements ITransition {
         return nextNode.addOperations(new ResetPatientIndexOperation());
     }
 
-    private boolean confirmAdherenceForCurrentPatient(Node node, Integer adherenceInput, String currentPatientId) {
-        Patient patient = patientService.findByPatientId(currentPatientId);
-        if (patient.isValidDose(adherenceInput)) {
-            node.addPrompts(providedAdherencePrompts(whpivrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
-            node.addOperations(new GetAdherenceOperation());
-            return true;
-        }
-        return false;
-    }
-
-    private void addNextPatientPromptsAndTransition(Node node, IvrSession ivrSession) {
+    private void addPatientPromptsAndTransitions(Node node, IvrSession ivrSession) {
         node.addPrompts(captureAdherencePrompts(whpivrMessage,
                 ivrSession.currentPatientId(),
                 ivrSession.currentPatientNumber()));
         node.addTransition("?", new AdherenceCaptureTransition());
     }
 
-
-    private boolean shouldSkipInput(String input) {
-        return !StringUtils.isNumeric(input) || input.equals(SKIP_PATIENT_CODE);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdherenceCaptureTransition)) return false;
+        if (!(o instanceof ConfirmAdherenceTransition)) return false;
 
-        AdherenceCaptureTransition that = (AdherenceCaptureTransition) o;
+        ConfirmAdherenceTransition that = (ConfirmAdherenceTransition) o;
 
         if (adherenceService != null ? !adherenceService.equals(that.adherenceService) : that.adherenceService != null)
             return false;
         if (patientService != null ? !patientService.equals(that.patientService) : that.patientService != null)
+            return false;
+        if (phaseUpdateOrchestrator != null ? !phaseUpdateOrchestrator.equals(that.phaseUpdateOrchestrator) : that.phaseUpdateOrchestrator != null)
             return false;
         if (whpivrMessage != null ? !whpivrMessage.equals(that.whpivrMessage) : that.whpivrMessage != null)
             return false;
@@ -109,8 +89,9 @@ public class AdherenceCaptureTransition implements ITransition {
 
     @Override
     public int hashCode() {
-        int result = patientService != null ? patientService.hashCode() : 0;
-        result = 31 * result + (adherenceService != null ? adherenceService.hashCode() : 0);
+        int result = adherenceService != null ? adherenceService.hashCode() : 0;
+        result = 31 * result + (phaseUpdateOrchestrator != null ? phaseUpdateOrchestrator.hashCode() : 0);
+        result = 31 * result + (patientService != null ? patientService.hashCode() : 0);
         result = 31 * result + (whpivrMessage != null ? whpivrMessage.hashCode() : 0);
         return result;
     }

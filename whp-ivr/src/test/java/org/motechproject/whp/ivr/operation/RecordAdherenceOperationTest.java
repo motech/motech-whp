@@ -1,6 +1,5 @@
 package org.motechproject.whp.ivr.operation;
 
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,26 +32,27 @@ public class RecordAdherenceOperationTest {
     private PatientService patientService;
 
     private RecordAdherenceOperation recordAdherenceOperation;
+    private int adherenceInput;
 
     @Before
     public void setUp() {
         initMocks(this);
-        recordAdherenceOperation = new RecordAdherenceOperation(whpAdherenceService, patientService, phaseUpdateOrchestrator, CURRENT_PATIENT);
+        adherenceInput = 3;
+        recordAdherenceOperation = new RecordAdherenceOperation(adherenceInput, CURRENT_PATIENT, whpAdherenceService, phaseUpdateOrchestrator, patientService);
     }
 
     @Test
-    public void shouldSaveAdherenceForCurrentPatientAndResetCurrentPatientIndex() {
+    public void shouldSaveAdherenceForCurrentPatient() {
         FlowSessionStub flowSession = new FlowSessionStub();
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER);
         ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", CURRENT_PATIENT));
         ivrSession.currentPatientIndex(1);
 
-        recordAdherenceOperation.perform("2", flowSession);
+        recordAdherenceOperation.perform("whatever", flowSession);
 
         AuditParams auditParams = new AuditParams(PROVIDER, AdherenceSource.IVR, "");
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), 2);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), adherenceInput);
         verify(whpAdherenceService).recordAdherence(weeklyAdherenceSummary, auditParams);
-        assertThat(ivrSession.currentPatientNumber(), Is.is(1));
     }
 }
