@@ -9,11 +9,9 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
-import org.motechproject.whp.patient.service.PatientService;
 
 import java.util.Arrays;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
@@ -38,7 +36,7 @@ public class RecordAdherenceOperationTest {
     public void shouldSaveAdherenceForCurrentPatient() {
         int adherenceInput = 3;
         FlowSessionStub flowSession = new FlowSessionStub();
-        flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, "3");
+        flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER);
         ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", CURRENT_PATIENT));

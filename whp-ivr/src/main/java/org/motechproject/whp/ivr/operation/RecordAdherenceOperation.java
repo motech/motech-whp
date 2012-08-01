@@ -33,8 +33,6 @@ public class RecordAdherenceOperation implements INodeOperation {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
         weeklyAdherenceSummary.setDosesTaken(adherenceValue);
         treatmentUpdateOrchestrator.recordAdherence(currentPatientId, weeklyAdherenceSummary, auditParams);
-        weeklyAdherenceSummary.setDosesTaken(adherenceValue);
-        treatmentUpdateOrchestrator.recordAdherence(currentPatientId, weeklyAdherenceSummary, auditParams);
     }
 
     @Override
