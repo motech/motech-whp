@@ -28,7 +28,7 @@ public class AdherenceCaptureTree {
         this.whpivrMessage = whpivrMessage;
     }
 
-    @Seed(priority = 0, version = "1.0")
+    @Seed(priority = 0, version = "3.0")
     public void load() {
         Tree adherenceCapture = new Tree()
                 .setName("adherenceCapture")
