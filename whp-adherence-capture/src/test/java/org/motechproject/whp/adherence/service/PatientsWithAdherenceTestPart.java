@@ -30,7 +30,7 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
             Patient patient2 = new PatientBuilder().withDefaults().withProviderId(providerId).withPatientId("patient2").build();
 
             WeeklyAdherenceSummary summaryForPatient1 = new WeeklyAdherenceSummaryBuilder().forPatient(patient1).forWeek(new LocalDate(2012, 7, 16)).withDosesTaken(3).build();
-            WeeklyAdherenceSummary summaryForPatient2 = new WeeklyAdherenceSummaryBuilder().forPatient(patient2).forWeek(new LocalDate(2012, 7, 18)).withDosesTaken(3).build();
+            WeeklyAdherenceSummary summaryForPatient2 = new WeeklyAdherenceSummaryBuilder().forPatient(patient2).forWeek(new LocalDate(2012, 7, 18)).withDosesTaken(0).build();
 
             allPatients.add(patient1);
             allPatients.add(patient2);
