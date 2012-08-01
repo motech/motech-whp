@@ -19,7 +19,7 @@ public class ProviderSeed {
     private UserService userService;
 
     // Need not have this, till we create logins for acutal providers
-    @Seed(priority = 1, version = "1.0")
+    @Seed(priority = 0, version = "1.0")
     public void load() {
         providerService.registerProvider(new ProviderRequest("raj", "Begusarai", "1234567890", DateUtil.now()));
         userService.activateUser("raj");

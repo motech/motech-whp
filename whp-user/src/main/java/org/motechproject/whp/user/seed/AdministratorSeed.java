@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 public class AdministratorSeed {
 
     @Autowired
-    private MotechAuthenticationService authenticationService;
-    @Autowired
     private CmfAdminService cmfAdminService;
 
     @Seed(priority = 0, version = "1.0")
