@@ -9,9 +9,12 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
 
 import java.util.Arrays;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
@@ -23,13 +26,14 @@ public class RecordAdherenceOperationTest {
 
     @Mock
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-
+    @Mock
+    private ReportingPublisherService reportingService;
     private RecordAdherenceOperation recordAdherenceOperation;
 
     @Before
     public void setUp() {
         initMocks(this);
-        recordAdherenceOperation = new RecordAdherenceOperation(CURRENT_PATIENT, treatmentUpdateOrchestrator);
+        recordAdherenceOperation = new RecordAdherenceOperation(CURRENT_PATIENT, treatmentUpdateOrchestrator, reportingService);
     }
 
     @Test
@@ -38,14 +42,27 @@ public class RecordAdherenceOperationTest {
         FlowSessionStub flowSession = new FlowSessionStub();
         flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         IvrSession ivrSession = new IvrSession(flowSession);
+        ivrSession.callId("callId");
         ivrSession.providerId(PROVIDER);
         ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", CURRENT_PATIENT));
         ivrSession.currentPatientIndex(1);
 
-        recordAdherenceOperation.perform("whatever", flowSession);
+        recordAdherenceOperation.perform("1", flowSession);
 
         AuditParams auditParams = new AuditParams(PROVIDER, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), adherenceInput);
         verify(treatmentUpdateOrchestrator).recordAdherence(CURRENT_PATIENT, weeklyAdherenceSummary, auditParams);
+    }
+
+    @Test
+    public void shouldPublishAdherenceSubmissionEventForReporting() {
+        FlowSessionStub flowSession = new FlowSessionStub();
+        int adherenceInput = 3;
+        flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+        IvrSession ivrSession = new IvrSession(flowSession);
+        ivrSession.callId("callId");
+
+        recordAdherenceOperation.perform("2", flowSession);
+        verify(reportingService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 }

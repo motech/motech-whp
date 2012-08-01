@@ -19,6 +19,7 @@ import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.Properties;
 
@@ -46,6 +47,9 @@ public class ConfirmAdherenceTransitionTest {
     WHPAdherenceService adherenceService;
     @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
+    @Mock
+    ReportingPublisherService reportingService;
+
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -59,7 +63,7 @@ public class ConfirmAdherenceTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService, reportingService);
     }
 
     @Test
@@ -67,7 +71,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, "3");
         Node node = confirmAdherenceTransition.getDestinationNode("1", flowSession);
         assertThat(node.getOperations().size(), is(2));
-        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(PATIENT_1, treatmentUpdateOrchestrator)));
+        assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(PATIENT_1, treatmentUpdateOrchestrator, reportingService)));
         assertThat(node.getOperations().get(1), instanceOf(ResetPatientIndexOperation.class));
     }
 

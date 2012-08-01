@@ -11,6 +11,7 @@ import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
@@ -26,15 +27,18 @@ public class ConfirmAdherenceTransition implements ITransition {
     private PatientService patientService;
     @Autowired
     private WHPIVRMessage whpivrMessage;
+    @Autowired
+    private ReportingPublisherService reportingService;
 
     ConfirmAdherenceTransition() {
     }
 
-    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService) {
+    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService, ReportingPublisherService reportingService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.patientService = patientService;
+        this.reportingService = reportingService;
     }
 
     @Override
@@ -47,8 +51,7 @@ public class ConfirmAdherenceTransition implements ITransition {
             addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
             if (input.equals("1")) {
-                Integer adherenceInput = ivrSession.adherenceInputForCurrentPatient();
-                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator));
+                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingService));
             }
             if (ivrSession.hasNextPatient()) {
                 ivrSession.nextPatient();

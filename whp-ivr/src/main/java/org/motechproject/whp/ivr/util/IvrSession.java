@@ -3,7 +3,6 @@ package org.motechproject.whp.ivr.util;
 
 import org.motechproject.decisiontree.FlowSession;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class IvrSession {
@@ -41,6 +40,14 @@ public class IvrSession {
 
     public Integer currentPatientNumber() {
         return currentPatientIndex() + 1;
+    }
+
+    public String callId() {
+        return flowSession.get("sid").toString();
+    }
+
+    public void callId(String callId) {
+        flowSession.set("sid", callId);
     }
 
     private Integer currentPatientIndex() {

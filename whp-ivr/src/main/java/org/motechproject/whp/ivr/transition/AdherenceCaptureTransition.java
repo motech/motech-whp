@@ -12,6 +12,7 @@ import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,8 @@ public class AdherenceCaptureTransition implements ITransition {
     private PatientService patientService;
     @Autowired
     private WHPIVRMessage whpivrMessage;
+    @Autowired
+    private ReportingPublisherService reportingService;
 
     private static final String SKIP_PATIENT_CODE = "9";
 

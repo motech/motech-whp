@@ -10,5 +10,5 @@
 
     <import resource="classpath*:applicationContextHttpClient.xml"/>
 
-    <context:component-scan base-package="org.motechproject.whp"/>
+    <context:component-scan base-package="org.motechproject.whp.reporting"/>
 </beans>
