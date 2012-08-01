@@ -13,6 +13,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -116,7 +117,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
-        verify(adherenceService).recordAdherence(captor.capture(), eq(auditParams));
+        verify(phaseUpdateOrchestrator).recordAdherence(eq(PATIENT_ID),captor.capture(), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getDosesTaken());
     }
 
@@ -170,24 +171,19 @@ public class AdherenceControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void shouldRecomputePillCountAfterCapturingAdherence() {
+    public void shouldCaptureAdherenceWithRightValues() {
         WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
         when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
-        adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
+        WeeklyAdherenceForm weeklyAdherenceForm = new WeeklyAdherenceForm(adherence, patient);
+        adherenceController.update(PATIENT_ID, remarks, weeklyAdherenceForm, request);
 
-        verify(phaseUpdateOrchestrator).recomputePillStatus(patient);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
+        weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
+
+        verify(phaseUpdateOrchestrator).recordAdherence(patient.getPatientId(),weeklyAdherenceSummary,auditParams);
     }
 
-    @Test
-    public void shouldAttemptPhaseTransitionAfterCapturingAdherence() {
-        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
-        when(adherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
-
-        adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherence, patient), request);
-
-        verify(phaseUpdateOrchestrator).attemptPhaseTransition(patient);
-    }
 
     @After
     public void tearDown() {

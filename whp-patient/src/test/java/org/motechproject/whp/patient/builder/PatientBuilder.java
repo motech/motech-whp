@@ -46,7 +46,7 @@ public class PatientBuilder {
         return patient;
     }
 
-    private Treatment defaultTreatment() {
+    public Treatment defaultTreatment() {
         LocalDate today = DateUtil.today();
         Treatment treatment = new Treatment();
         treatment.setTbId(TB_ID);
@@ -59,7 +59,7 @@ public class PatientBuilder {
         return treatment;
     }
 
-    private Therapy defaultTherapy() {
+    public Therapy defaultTherapy() {
         Therapy therapy = new Therapy();
         therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);

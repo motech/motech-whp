@@ -66,12 +66,9 @@ public class AdherenceController extends BaseController {
         MotechUser authenticatedUser = loggedInUser(httpServletRequest);
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
-        adherenceService.recordAdherence(weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
 
-        Patient patient = allPatients.findByPatientId(patientId);
+        phaseUpdateOrchestrator.recordAdherence(patientId,weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
 
-        phaseUpdateOrchestrator.recomputePillStatus(patient);
-        phaseUpdateOrchestrator.attemptPhaseTransition(patient);
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
     }

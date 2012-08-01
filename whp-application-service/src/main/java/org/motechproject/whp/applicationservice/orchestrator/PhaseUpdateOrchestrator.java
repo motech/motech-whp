@@ -4,7 +4,9 @@ import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
@@ -110,5 +112,14 @@ public class PhaseUpdateOrchestrator {
         LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
         int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
         patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
+    }
+
+    public void recordAdherence(String patientId,WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+        whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
+
+        Patient patient = allPatients.findByPatientId(patientId);
+
+        recomputePillStatus(patient);
+        attemptPhaseTransition(patient);
     }
 }

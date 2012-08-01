@@ -6,6 +6,7 @@ import org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchestr
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        AdherenceUpdateTestPart.class,
         PillTakenCountTestPart.class,
         SetNextPhaseTestPart.class,
         PhaseTransitionTestPart.class,
