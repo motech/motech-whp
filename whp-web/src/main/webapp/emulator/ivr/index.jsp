@@ -29,15 +29,6 @@
     });
 </script>
 <script type="text/javascript">
-    /**
-     * jQuery Cookie plugin
-     *
-     * Copyright (c) 2010 Klaus Hartl (stilbuero.de)
-     * Dual licensed under the MIT and GPL licenses:
-     * http://www.opensource.org/licenses/mit-license.php
-     * http://www.gnu.org/licenses/gpl.html
-     *
-     */
     jQuery.cookie = function (key, value, options) {
 
         // key and at least value given, set cookie...
@@ -143,7 +134,6 @@
 
     function call(path) {
         try {
-
             $.ajax({url:path,
                 crossDomain:true,
                 beforeSend:function (xhr) {
@@ -156,15 +146,6 @@
                     if ($(data).length == 1 && $(data)[0].childElementCount == 0) {
                         send('');
                         return;
-                        $('#missedCallButton').click(function () {
-                            dojo.xhrPost({
-                                url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                                load:function () {
-                                    alert('Posted missed call');
-                                }
-                            })
-                        });
                     }
                     var html = "";//'<audio controls="controls" id="message" autoplay="autoplay">';
                     //var msg = ""
@@ -180,15 +161,6 @@
                     $(data).find('playtext').each(function () {
                         html += "<div>" + $(this).text() + "</div>"
                     });
-                    $('#missedCallButton').click(function () {
-                        dojo.xhrPost({
-                            url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                            content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                            load:function () {
-                                alert('Posted missed call');
-                            }
-                        })
-                    });
                     //html += "</audio>";
                     //html ='<button  onclick="play(\'message\');">&raquo;'+msg+' </button><span style="float:right;">&nbsp;'+ html + '</span>';
                     if ($(data).find('playaudio').length > 0 && $(data).find('collectdtmf').length == 0) html += '<button onclick="send()">Continue</button>'
@@ -196,7 +168,6 @@
                         contextRoot = $(data).find('gotourl').text();
                     }
                     $('#result').html(html);
-
                     playAll();
                 },
                 error:function (x, status, err) {
@@ -211,14 +182,12 @@
     function newCall() {
         callId = Math.floor(Math.random() * 10000000000);
         var phone = $('#phone').val();
-        var symptoms_reporting_option = ($('#symptoms_reporting').is(":checked") ? "&symptoms_reporting=true" : "");
-        call(contextRoot + '&event=NewCall&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
+        call(contextRoot + '&event=NewCall&cid=' + phone + '&sid=' + callId);
     }
     function endCall() {
         var phone = $('#phone').val();
-        var symptoms_reporting_option = ($('#symptoms_reporting').is(":checked") ? "&symptoms_reporting=true" : "");
         deleteCookie();
-        call(contextRoot + '&event=Hangup&cid=' + phone + '&sid=' + callId + symptoms_reporting_option);
+        call(contextRoot + '&event=Disconnect&cid=' + phone + '&sid=' + callId);
         $.cookie('current_decision_tree_position', null, {'path':'<%=application.getContextPath() %>/ivr/'});
         $.cookie('preferred_lang_code', null, {'path':'<%=application.getContextPath() %>/ivr/'});
         $.cookie('call_id', null, {'path':'<%=application.getContextPath() %>/ivr/'});
@@ -232,23 +201,18 @@
         $.cookie('number_of_clinicians_called', null, {'path':'<%=application.getContextPath() %>/ivr/'});
     }
 
-    function login() {
-        var phone = $('#phone').val();
-        var call_id = $('#call_id').val();
-        var is_outbound_call = $('#is_outbound_call').is(":checked") ? "true" : "";
-        var dataMap = "";
-        if (is_outbound_call == 'true')
-            dataMap = ($('#symptoms_reporting').is(":checked")) ? "" : ('&dataMap={%27dosage_id%27:%27' + dosageId + '%27, %27regimen_id%27:%27' + regimen_id + '%27, %27times_sent%27:%27' + times_sent + '%27, %27retry_interval%27:%27' + retry_interval + '%27, %27total_times_to_send%27:%27' + total + '%27, %27call_id%27:%27' + call_id + '%27, %27outbox_call%27:%27' + outbox_call + '%27, %27is_outbound_call%27:%27' + is_outbound_call + '%27}');
-        call(contextRoot + '&event=GotDTMF&cid=' + phone + '&data=' + pin + '&sid=' + callId + dataMap + symptoms_reporting_option);
-    }
-
     function send(i) {
+         if (i === '') dtmf = i;
+        else {
+            dtmf += i;
+        }
         var phone = $('#phone').val();
         var is_outbound_call = $('#is_outbound_call').is(":checked") ? "true" : "";
         var dataMap = "";
         var event = "event=GotDTMF&";
-        if (collectdtmf) event = "event=GotDTMF&" + '&data=' + i + "&";
+        if (collectdtmf) event = "event=GotDTMF&" + '&data=' + dtmf + "&";
         call(contextRoot + '&' + event + 'cid=' + phone + '&sid=' + callId);
+        dtmf = "";
     }
 
     function play(i) {
@@ -264,15 +228,25 @@
 </style>
 </head>
 <body>
+    <div id="result"></div>
+    <table id="params">
+        <tr>
+            <td>Phone Number</td>
+            <td><input type="text" id="phone" value="1234567890"/></td>
+        </tr>
+        <!--tr class="optional">
+            <td>call id</td>
+            <td><input type="text" id="call_id" value=""/></td>
+        </tr>
+        <tr class="optional">
+            <td>outbound call?</td>
+            <td><input type="checkbox" id="is_outbound_call" value="false"/></td>
+        </tr-->
+    </table>
 <div>
-    <div id="result">
-
-    </div>
     <br/>
     <button onclick="newCall();">New Call</button>
-    <button onclick="login();">Login</button>
     <button onclick="endCall();">End Call</button>
-    <a href="playFiles.jsp">Play Files</a>
     <table>
         <tr>
             <td>
@@ -308,7 +282,6 @@
                         </td>
                         <td>
                             <button onclick="send(9);">9</button>
-                            domain
                         </td>
                     </tr>
                     <tr>
@@ -319,36 +292,13 @@
                             <button onclick="send('');">blank</button>
                         </td>
                     </tr>
-                    <label>Enter DTMF Input</label><input type="text" id="dtmfInput"/> <button onclick="send($('#dtmfInput').val())" value="Submit"/>
+                    <!--<label>Enter DTMF Input</label><input type="text" id="dtmfInput"/> <button onclick="send($('#dtmfInput').val())" value="Submit"/>-->
                 </table>
             </td>
             <td style="width:450px;"></td>
         </tr>
     </table>
-    <br><br>
-    <label for="missedCall">Patient Doc Id </label><input id="missedCall" type="text"/>
-    <button id="missedCallButton">Missed Call</button>
-    <br><br>
-
-    <div><input type="checkbox" id="mute"></input> Mute audio <span><input type="checkbox"
-                                                                           id="symptoms_reporting"></input> Symptoms Reporting call
-<input type="checkbox" id="poll_call" checked="true"></input> Accept incoming call
-</span></div>
-    <button onclick="$('.optional').toggle(600);">Show / Hide Params</button>
-    <table id="params">
-        <tr>
-            <td>Phone Number</td>
-            <td><input type="text" id="phone" value="1234567899"/></td>
-            <td>(From Tama patient profile)</td>
-        </tr>
-        <tr class="optional">
-            <td>call id</td>
-            <td><input type="text" id="call_id" value=""/></td>
-        </tr>
-        <tr class="optional">
-            <td>outbound call?</td>
-            <td><input type="checkbox" id="is_outbound_call" value="false"/></td>
-        </tr>
+    <table>
         <tr>
             <td colspan="2"><textarea rows="10" cols="100" id="response"></textarea></td>
         </tr>
