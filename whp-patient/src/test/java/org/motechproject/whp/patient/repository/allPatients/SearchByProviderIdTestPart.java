@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository.allPatients;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
@@ -67,15 +68,19 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldFetchPatientsForProvider_sortByFirstName() {
+    public void shouldFetchPatientsForProvider_sortByTreatmentStartDate() {
         String providerId = "providerId1";
 
-        Patient withGreatestFirstNameButCreatedFirst = createPatientOnActiveTreatment("patientId1", "c", providerId);
-        Patient createdSecond = createPatientOnActiveTreatment("patientId2", "b", providerId);
-        Patient withSmallestFirstNameButCreatedLast = createPatientOnActiveTreatment("patientId3", "a", providerId);
+        DateTime oldestTreatmentStartDate = now().minusDays(5);
+        DateTime olderTreatmentStartDate = now().minusDays(2);
+        DateTime newerTreatmentStartDate = now();
+
+        Patient withOldestStartDate = createPatientOnActiveTreatment("patientId1", "c", providerId, oldestTreatmentStartDate);
+        Patient withNewerStartDate = createPatientOnActiveTreatment("patientId2", "b", providerId, newerTreatmentStartDate);
+        Patient withOlderStartDate = createPatientOnActiveTreatment("patientId3", "a", providerId, olderTreatmentStartDate);
 
         assertPatientEquals(
-                asList(withSmallestFirstNameButCreatedLast, createdSecond, withGreatestFirstNameButCreatedFirst),
+                asList(withOldestStartDate, withOlderStartDate, withNewerStartDate),
                 allPatients.getAllWithActiveTreatmentFor(providerId)
         );
     }

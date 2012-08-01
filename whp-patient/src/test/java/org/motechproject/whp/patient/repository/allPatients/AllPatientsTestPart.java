@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.repository.allPatients;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
@@ -21,14 +22,14 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     AllPatients allPatients;
 
     public Patient createPatient(String patientId, String providerId) {
-        return createPatientOnActiveTreatment(patientId, "Raju", providerId);
+        return createPatientOnActiveTreatment(patientId, "Raju", providerId, now());
     }
 
-    public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId) {
+    public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId, DateTime dateModified) {
         Therapy therapy = createTherapy();
         Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
         Treatment treatment = createTreatment(providerId);
-        patient.addTreatment(treatment, therapy, now());
+        patient.addTreatment(treatment, therapy, dateModified);
         allPatients.add(patient);
         return patient;
     }
