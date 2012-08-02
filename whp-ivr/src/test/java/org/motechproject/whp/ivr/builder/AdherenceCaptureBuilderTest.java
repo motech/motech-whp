@@ -1,14 +1,16 @@
 package org.motechproject.whp.ivr.builder;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class AdherenceCaptureBuilderTest {
+public class AdherenceCaptureBuilderTest extends BaseUnitTest {
 
     private static final String CHANNEL = "IVR";
     private static final boolean VALID = true;
@@ -20,17 +22,27 @@ public class AdherenceCaptureBuilderTest {
     private static final String ADHERENCE_VALUE = "TAKEN";
     private static final String MOBILE_NUMBER = "mobileNumber";
 
-    public static final String CALL_ID = "callId";
+    private static final String CALL_ID = "callId";
+
+    private static final DateTime LAST_SUBMISSION_TIME = new DateTime(2011, 1, 1, 1, 1, 0, 0);
+    private static final DateTime NOW = new DateTime(2011, 1, 1, 1, 1, 10, 0);
+    private static final Long DIFFERENCE_IN_SECONDS = 10l;
 
     private IvrSession ivrSession;
 
     @Before
     public void setup() {
+        mockCurrentDate(NOW);
+        setupSession();
+    }
+
+    private void setupSession() {
         FlowSessionStub flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);
 
         ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER_ID);
+        ivrSession.lastAdherenceSubmissionTime(LAST_SUBMISSION_TIME);
         ivrSession.adherenceInputForCurrentPatient(INPUT_FOR_CURRENT_PATIENT);
         ivrSession.callId(CALL_ID);
     }
@@ -75,5 +87,10 @@ public class AdherenceCaptureBuilderTest {
     @Test
     public void shouldSetCallId() {
         assertEquals(CALL_ID, new AdherenceCaptureBuilder().forSession(ivrSession).build().getCallId());
+    }
+
+    @Test
+    public void shouldSetDurationOfSubmissionInSeconds() {
+        assertEquals(DIFFERENCE_IN_SECONDS, new AdherenceCaptureBuilder().forSession(ivrSession).build().getTimeTaken());
     }
 }

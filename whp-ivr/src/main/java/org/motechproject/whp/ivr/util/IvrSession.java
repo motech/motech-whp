@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.util;
 
 
+import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class IvrSession {
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
     public static final String PROVIDER_ID = "providerId";
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
+    public static final String LAST_ADHERENCE_SUBMISSION = "lastAdherenceSubmission";
 
     private FlowSession flowSession;
 
@@ -105,8 +107,17 @@ public class IvrSession {
     public Integer adherenceInputForCurrentPatient() {
         return Integer.valueOf(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
     }
+
     public void adherenceInputForCurrentPatient(String input) {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, input);
+    }
+
+    public void lastAdherenceSubmissionTime(DateTime time) {
+        flowSession.set(LAST_ADHERENCE_SUBMISSION, time);
+    }
+
+    public DateTime lastAdherenceSubmissionTime() {
+        return flowSession.get(LAST_ADHERENCE_SUBMISSION);
     }
 }
 
