@@ -4,20 +4,19 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 
@@ -25,25 +24,20 @@ import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.provide
 public class AdherenceCaptureTransition implements ITransition {
 
     @Autowired
-    private WHPAdherenceService adherenceService;
-    @Autowired
-    private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-    @Autowired
     private PatientService patientService;
     @Autowired
     private WHPIVRMessage whpivrMessage;
     @Autowired
-    private ReportingPublisherService reportingService;
+    private AdherenceDataService adherenceDataService;
 
     private static final String SKIP_PATIENT_CODE = "9";
 
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService) {
-        this.adherenceService = adherenceService;
+    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, AdherenceDataService adherenceDataService, PatientService patientService) {
         this.whpivrMessage = whpivrMessage;
-        this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
+        this.adherenceDataService = adherenceDataService;
         this.patientService = patientService;
     }
 
@@ -64,7 +58,8 @@ public class AdherenceCaptureTransition implements ITransition {
                 ivrSession.nextPatient();
                 addNextPatientPromptsAndTransition(nextNode, ivrSession);
             } else {
-                nextNode.addPrompts(callCompletionPrompts(whpivrMessage));
+                AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(ivrSession.providerId());
+                nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
             }
         }
 
@@ -96,25 +91,6 @@ public class AdherenceCaptureTransition implements ITransition {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdherenceCaptureTransition)) return false;
-
-        AdherenceCaptureTransition that = (AdherenceCaptureTransition) o;
-
-        if (adherenceService != null ? !adherenceService.equals(that.adherenceService) : that.adherenceService != null)
-            return false;
-        if (patientService != null ? !patientService.equals(that.patientService) : that.patientService != null)
-            return false;
-        if (whpivrMessage != null ? !whpivrMessage.equals(that.whpivrMessage) : that.whpivrMessage != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = patientService != null ? patientService.hashCode() : 0;
-        result = 31 * result + (adherenceService != null ? adherenceService.hashCode() : 0);
-        result = 31 * result + (whpivrMessage != null ? whpivrMessage.hashCode() : 0);
-        return result;
+        return this.getClass().equals(o.getClass());
     }
 }

@@ -4,6 +4,8 @@ package org.motechproject.whp.ivr.transition;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
@@ -14,7 +16,7 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 
 public class ConfirmAdherenceTransition implements ITransition {
@@ -29,16 +31,19 @@ public class ConfirmAdherenceTransition implements ITransition {
     private WHPIVRMessage whpivrMessage;
     @Autowired
     private ReportingPublisherService reportingService;
+    @Autowired
+    private AdherenceDataService adherenceDataService;
 
     ConfirmAdherenceTransition() {
     }
 
-    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService, ReportingPublisherService reportingService) {
+    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService, ReportingPublisherService reportingService, AdherenceDataService adherenceDataService) {
         this.adherenceService = adherenceService;
         this.whpivrMessage = whpivrMessage;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.patientService = patientService;
         this.reportingService = reportingService;
+        this.adherenceDataService = adherenceDataService;
     }
 
     @Override
@@ -57,7 +62,8 @@ public class ConfirmAdherenceTransition implements ITransition {
                 ivrSession.nextPatient();
                 addPatientPromptsAndTransitions(nextNode, ivrSession);
             } else {
-                nextNode.addPrompts(callCompletionPrompts(whpivrMessage));
+                AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(ivrSession.providerId());
+                nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
             }
         }
 

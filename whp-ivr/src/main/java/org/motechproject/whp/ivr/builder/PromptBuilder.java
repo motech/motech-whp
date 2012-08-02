@@ -5,7 +5,10 @@ import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class PromptBuilder {
 
@@ -33,6 +36,11 @@ public class PromptBuilder {
 
     public PromptBuilder wav(String message) {
         prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(message, "en")));
+        return this;
+    }
+
+    public PromptBuilder addAll(Prompt[] prompts) {
+        this.prompts.addAll(asList(prompts));
         return this;
     }
 

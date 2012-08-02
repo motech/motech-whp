@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
@@ -33,9 +35,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.util.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
 import static org.motechproject.whp.ivr.util.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
+import static org.motechproject.whp.ivr.util.IvrSession.PROVIDER_ID;
 
 public class ConfirmAdherenceTransitionTest {
 
@@ -49,21 +53,29 @@ public class ConfirmAdherenceTransitionTest {
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
     ReportingPublisherService reportingService;
+    @Mock
+    AdherenceDataService adherenceDataService;
 
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
     ConfirmAdherenceTransition confirmAdherenceTransition;
+    private AdherenceSummaryByProvider adherenceSummary;
 
     @Before
     public void setUp() {
         initMocks(this);
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1, PATIENT_2)));
+        flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService, reportingService);
+        adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList("patient1"), asList("patient1"));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
+                .thenReturn(adherenceSummary);
+
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService, reportingService, adherenceDataService);
     }
 
     @Test
@@ -103,7 +115,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPrompts(whpivrMessage));
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 

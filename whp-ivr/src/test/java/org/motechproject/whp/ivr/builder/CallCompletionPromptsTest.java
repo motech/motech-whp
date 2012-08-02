@@ -5,8 +5,12 @@ import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts;
 import org.motechproject.whp.ivr.prompts.CallCompletionPrompts;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
@@ -25,10 +29,44 @@ public class CallCompletionPromptsTest {
     public void shouldCreateCallCompletionPrompts(){
         Prompt[] prompts = CallCompletionPrompts.callCompletionPrompts(whpivrMessage);
 
-        assertEquals(3, prompts.length);
-        assertEquals(audioPrompt(CALL_BACK_MESSAGE), prompts[0]);
-        assertEquals(audioPrompt(COMPLETION_MESSAGE), prompts[1]);
-        assertEquals(audioPrompt(MUSIC_END_NOTE), prompts[2]);
+        assertEquals(2, prompts.length);
+        assertEquals(audioPrompt(COMPLETION_MESSAGE), prompts[0]);
+        assertEquals(audioPrompt(MUSIC_END_NOTE), prompts[1]);
+    }
+
+    @Test
+    public void shouldCreateCallCompletionPromptsWithAdherenceSummaryAndCallbackMessage_whenThereArePatientsWithoutAdherence(){
+        List<String> patientsWithoutAdherence = Arrays.asList("patient2", "patient3");
+        List<String> patientsWithAdherence = Arrays.asList("patient1");
+
+        Prompt[] prompts = CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary(whpivrMessage, patientsWithAdherence, patientsWithoutAdherence);
+
+        assertEquals(8, prompts.length);
+        assertEquals(audioPrompt(ADHERENCE_PROVIDED_FOR), prompts[0]);
+        assertEquals(audioPrompt("1"), prompts[1]);
+        assertEquals(audioPrompt(ADHERENCE_TO_BE_PROVIDED_FOR), prompts[2]);
+        assertEquals(audioPrompt("2"), prompts[3]);
+        assertEquals(audioPrompt(ADHERENCE_CAPTURE_INSTRUCTION), prompts[4]);
+        assertEquals(audioPrompt(CALL_BACK_MESSAGE), prompts[5]);
+        assertEquals(audioPrompt(COMPLETION_MESSAGE), prompts[6]);
+        assertEquals(audioPrompt(MUSIC_END_NOTE), prompts[7]);
+    }
+
+    @Test
+    public void shouldCreateCallCompletionPromptsWithAdherenceSummary_whenThereAreNoPatientsWithoutAdherence(){
+        List<String> patientsWithoutAdherence = new ArrayList();
+        List<String> patientsWithAdherence = Arrays.asList("patient1");
+
+        Prompt[] prompts = CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary(whpivrMessage, patientsWithAdherence, patientsWithoutAdherence);
+
+        assertEquals(7, prompts.length);
+        assertEquals(audioPrompt(ADHERENCE_PROVIDED_FOR), prompts[0]);
+        assertEquals(audioPrompt("1"), prompts[1]);
+        assertEquals(audioPrompt(ADHERENCE_TO_BE_PROVIDED_FOR), prompts[2]);
+        assertEquals(audioPrompt("0"), prompts[3]);
+        assertEquals(audioPrompt(ADHERENCE_CAPTURE_INSTRUCTION), prompts[4]);
+        assertEquals(audioPrompt(COMPLETION_MESSAGE), prompts[5]);
+        assertEquals(audioPrompt(MUSIC_END_NOTE), prompts[6]);
     }
 
     private AudioPrompt audioPrompt(String audioFileUrl) {

@@ -6,18 +6,19 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
-import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
+import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.Properties;
 
@@ -27,10 +28,11 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 import static org.motechproject.whp.ivr.util.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
+import static org.motechproject.whp.ivr.util.IvrSession.PROVIDER_ID;
 
 public class AnotherAdherenceCaptureTransitionTest {
 
@@ -40,6 +42,8 @@ public class AnotherAdherenceCaptureTransitionTest {
     PatientService patientService;
     @Mock
     WHPAdherenceService adherenceService;
+    @Mock
+    AdherenceDataService adherenceDataService;
     @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
@@ -52,10 +56,11 @@ public class AnotherAdherenceCaptureTransitionTest {
         initMocks(this);
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1, PATIENT_2)));
+        flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
     }
 
     @Test
@@ -94,10 +99,14 @@ public class AnotherAdherenceCaptureTransitionTest {
     public void shouldNotAddConfirmationPrompts_ForSkippedInput() {
         String adherenceInput = "7";
 
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList("patient1", "patient2", "patient3"), asList("patient3"));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
+                .thenReturn(adherenceSummary);
+
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1)));
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(callCompletionPrompts(whpivrMessage)));
+        assertThat(node.getPrompts(), hasItems(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence())));
         assertThat(node.getPrompts(), not(hasItems(providedAdherencePrompts(whpivrMessage, PATIENT_1, Integer.parseInt(adherenceInput), 3))));
     }
 
