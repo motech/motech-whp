@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.util.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
@@ -75,7 +74,7 @@ public class ConfirmAdherenceTransitionTest {
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                 .thenReturn(adherenceSummary);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, patientService, reportingService, adherenceDataService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, reportingService, adherenceDataService);
     }
 
     @Test

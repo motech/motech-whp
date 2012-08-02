@@ -1,10 +1,9 @@
 package org.motechproject.whp.ivr.transition;
 
 
+import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
@@ -16,34 +15,29 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
-import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
-
-public class ConfirmAdherenceTransition implements ITransition {
+@EqualsAndHashCode
+public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdherence {
 
     @Autowired
     private WHPAdherenceService adherenceService;
     @Autowired
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Autowired
-    private PatientService patientService;
-    @Autowired
-    private WHPIVRMessage whpivrMessage;
-    @Autowired
     private ReportingPublisherService reportingService;
-    @Autowired
-    private AdherenceDataService adherenceDataService;
 
     public ConfirmAdherenceTransition() {
     }
 
-    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService, ReportingPublisherService reportingService, AdherenceDataService adherenceDataService) {
+    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage,
+                                      WHPAdherenceService adherenceService,
+                                      TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
+                                      ReportingPublisherService reportingService,
+                                      AdherenceDataService adherenceDataService) {
+
+        super(whpivrMessage, adherenceDataService);
         this.adherenceService = adherenceService;
-        this.whpivrMessage = whpivrMessage;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
-        this.patientService = patientService;
         this.reportingService = reportingService;
-        this.adherenceDataService = adherenceDataService;
     }
 
     @Override
@@ -58,50 +52,8 @@ public class ConfirmAdherenceTransition implements ITransition {
             if (input.equals("1")) {
                 nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingService));
             }
-            if (ivrSession.hasNextPatient()) {
-                ivrSession.nextPatient();
-                addPatientPromptsAndTransitions(nextNode, ivrSession);
-            } else {
-                AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(ivrSession.providerId());
-                nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
-            }
+            addTransitionsToNextPatients(ivrSession, nextNode);
         }
-
         return nextNode.addOperations(new ResetPatientIndexOperation());
-    }
-
-    private void addPatientPromptsAndTransitions(Node node, IvrSession ivrSession) {
-        node.addPrompts(captureAdherencePrompts(whpivrMessage,
-                ivrSession.currentPatientId(),
-                ivrSession.currentPatientNumber()));
-        node.addTransition("?", new AdherenceCaptureTransition());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ConfirmAdherenceTransition)) return false;
-
-        ConfirmAdherenceTransition that = (ConfirmAdherenceTransition) o;
-
-        if (adherenceService != null ? !adherenceService.equals(that.adherenceService) : that.adherenceService != null)
-            return false;
-        if (patientService != null ? !patientService.equals(that.patientService) : that.patientService != null)
-            return false;
-        if (treatmentUpdateOrchestrator != null ? !treatmentUpdateOrchestrator.equals(that.treatmentUpdateOrchestrator) : that.treatmentUpdateOrchestrator != null)
-            return false;
-        if (whpivrMessage != null ? !whpivrMessage.equals(that.whpivrMessage) : that.whpivrMessage != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = adherenceService != null ? adherenceService.hashCode() : 0;
-        result = 31 * result + (treatmentUpdateOrchestrator != null ? treatmentUpdateOrchestrator.hashCode() : 0);
-        result = 31 * result + (patientService != null ? patientService.hashCode() : 0);
-        result = 31 * result + (whpivrMessage != null ? whpivrMessage.hashCode() : 0);
-        return result;
     }
 }
