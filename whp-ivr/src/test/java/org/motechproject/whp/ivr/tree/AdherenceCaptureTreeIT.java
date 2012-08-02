@@ -14,7 +14,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
-import org.motechproject.whp.ivr.tree.AdherenceCaptureTree;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -34,6 +33,7 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 
 @ContextConfiguration(locations = {"/applicationIVRContext.xml"})
+@Ignore
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     static Server server;
