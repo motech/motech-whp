@@ -1,55 +1,79 @@
 package org.motechproject.whp.ivr.builder;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.ivr.util.FlowSessionStub;
+import org.motechproject.whp.ivr.util.IvrSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class AdherenceCaptureBuilderTest {
 
+    private static final String CHANNEL = "IVR";
+    private static final boolean VALID = true;
+
+    private static final String PROVIDER_ID = "providerId";
+    private static final String PATIENT_ID = "patientId";
+
+    private static final String INPUT_FOR_CURRENT_PATIENT = "1";
+    private static final String ADHERENCE_VALUE = "TAKEN";
+    private static final String MOBILE_NUMBER = "mobileNumber";
+
+    public static final String CALL_ID = "callId";
+
+    private IvrSession ivrSession;
+
+    @Before
+    public void setup() {
+        FlowSessionStub flowSession = new FlowSessionStub();
+        flowSession.set("cid", MOBILE_NUMBER);
+
+        ivrSession = new IvrSession(flowSession);
+        ivrSession.providerId(PROVIDER_ID);
+        ivrSession.adherenceInputForCurrentPatient(INPUT_FOR_CURRENT_PATIENT);
+        ivrSession.callId(CALL_ID);
+    }
+
     @Test
     public void shouldSetChannelToIVRByDefault() {
-        assertEquals("IVR", new AdherenceCaptureBuilder().build().getChannelId());
+        assertEquals(CHANNEL, new AdherenceCaptureBuilder().build().getChannelId());
     }
 
     @Test
     public void shouldSetCaptureToValidByDefault() {
-        assertEquals(true, new AdherenceCaptureBuilder().build().isValid());
+        assertEquals(VALID, new AdherenceCaptureBuilder().build().isValid());
     }
 
     @Test
     public void shouldSetPatientId() {
-        String patientId = "patientId";
-        assertEquals(patientId, new AdherenceCaptureBuilder().forPatient(patientId).build().getPatientId());
+        assertEquals(PATIENT_ID, new AdherenceCaptureBuilder().forPatient(PATIENT_ID).build().getPatientId());
     }
 
     @Test
     public void shouldSetProviderId() {
-        String providerId = "providerId";
-        assertEquals(providerId, new AdherenceCaptureBuilder().byProvider(providerId).build().getProviderId());
+        assertEquals(PROVIDER_ID, new AdherenceCaptureBuilder().forSession(ivrSession).build().getProviderId());
     }
 
     @Test
     public void shouldSetAdherenceValue() {
         assertNull(new AdherenceCaptureBuilder().build().getStatus());
-        assertEquals("TAKEN", new AdherenceCaptureBuilder().withInput(1).build().getStatus());
+        assertEquals(ADHERENCE_VALUE, new AdherenceCaptureBuilder().forSession(ivrSession).build().getStatus());
     }
 
     @Test
     public void shouldSetEnteredInput() {
         assertNull(new AdherenceCaptureBuilder().build().getStatus());
-        assertEquals(new Integer(1), new AdherenceCaptureBuilder().withInput(1).build().getSubmittedValue());
+        assertEquals(new Integer(1), new AdherenceCaptureBuilder().forSession(ivrSession).build().getSubmittedValue());
     }
 
     @Test
     public void shouldSetMobileNumber() {
-        String mobileNumber = "mobileNumber";
-        assertEquals(mobileNumber, new AdherenceCaptureBuilder().throughMobile(mobileNumber).build().getSubmittedBy());
+        assertEquals(MOBILE_NUMBER, new AdherenceCaptureBuilder().forSession(ivrSession).build().getSubmittedBy());
     }
 
     @Test
     public void shouldSetCallId() {
-        String callId = "callId";
-        assertEquals(callId, new AdherenceCaptureBuilder().onCall(callId).build().getCallId());
+        assertEquals(CALL_ID, new AdherenceCaptureBuilder().forSession(ivrSession).build().getCallId());
     }
 }

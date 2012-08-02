@@ -36,7 +36,7 @@ public class RecordAdherenceOperation implements INodeOperation {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
         weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient());
         treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
-        publishAdherenceSubmissionEvent(ivrSession.providerId(), ivrSession.getMobileNumber(), ivrSession.adherenceInputForCurrentPatient(), ivrSession.callId());
+        publishAdherenceSubmissionEvent(ivrSession);
     }
 
     @Override
@@ -57,13 +57,10 @@ public class RecordAdherenceOperation implements INodeOperation {
         return currentPatientId != null ? currentPatientId.hashCode() : 0;
     }
 
-    private void publishAdherenceSubmissionEvent(String providerId, String mobileNumber, Integer userInput, String callId) {
+    private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
         AdherenceCaptureRequest request = adherenceCapture()
-                .withInput(userInput)
-                .byProvider(providerId)
                 .forPatient(currentPatientId)
-                .throughMobile(mobileNumber)
-                .onCall(callId)
+                .forSession(ivrSession)
                 .build();
         reportingService.reportAdherenceCapture(request);
     }
