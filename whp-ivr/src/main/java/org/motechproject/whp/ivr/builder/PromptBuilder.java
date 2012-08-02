@@ -19,13 +19,15 @@ public class PromptBuilder {
     }
 
     public PromptBuilder number(Integer number) {
-        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(number.toString(), DEFAULT_LANGUAGE_CODE)));
+        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav("temp/" + number.toString(), DEFAULT_LANGUAGE_CODE)));
         return this;
     }
 
     public PromptBuilder id(String text) {
-        for (Character character : text.toCharArray())
-            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(character.toString(), DEFAULT_LANGUAGE_CODE)));
+        text = text.toLowerCase();
+        for (Character character : text.toCharArray()) {
+            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav("temp/" + character.toString(), DEFAULT_LANGUAGE_CODE)));
+        }
         return this;
     }
 

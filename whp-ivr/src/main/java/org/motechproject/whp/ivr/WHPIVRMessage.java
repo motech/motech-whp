@@ -15,7 +15,7 @@ public class WHPIVRMessage implements IVRMessage {
     public static final String MUSIC_ENTER = "musicEnter";
     public static final String END_OF_CALL = "endCall";
 
-    private static final String CONTENT_LOCATION_URL = "content.location.url";
+    public static final String CONTENT_LOCATION_URL = "content.location.url";
     private static final String WAV = ".wav";
 
     private Properties properties;
