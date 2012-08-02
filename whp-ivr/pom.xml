@@ -57,5 +57,9 @@
             <classifier>tests</classifier>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+        </dependency>
     </dependencies>
 </project>
