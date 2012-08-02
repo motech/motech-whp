@@ -1,11 +1,13 @@
-package org.motechproject.whp.ivr.service;
+package org.motechproject.whp.ivr.session;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -24,13 +26,13 @@ import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderB
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AdherenceRecordingServiceTest.WhenProviderReportsAdherence.class,
-        AdherenceRecordingServiceTest.WhenProviderReportsAdherenceForSecondPatient.class,
-        AdherenceRecordingServiceTest.WhenAnotherProviderReportsAdherence.class
+        AdherenceRecordingSessionTest.WhenProviderReportsAdherence.class,
+        AdherenceRecordingSessionTest.WhenProviderReportsAdherenceForSecondPatient.class,
+        AdherenceRecordingSessionTest.WhenAnotherProviderReportsAdherence.class
 })
-public class AdherenceRecordingServiceTest {
+public class AdherenceRecordingSessionTest {
 
-    public static class AdherenceRecordingServiceCase {
+    public static class AdherenceRecordingSessionTestCase extends BaseUnitTest {
         @Mock
         protected AdherenceDataService adherenceDataService;
         @Mock
@@ -38,7 +40,7 @@ public class AdherenceRecordingServiceTest {
 
         protected FlowSession flowSession;
 
-        protected AdherenceRecordingService adherenceRecordingService;
+        protected AdherenceRecordingSession adherenceRecordingSession;
 
         protected AdherenceSummaryByProvider adherenceSummary(List<String> patientsWithAdherence, List<String> patientsWithoutAdherence, String providerId) {
             AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(providerId, sum(patientsWithAdherence, patientsWithoutAdherence), patientsWithAdherence);
@@ -47,13 +49,14 @@ public class AdherenceRecordingServiceTest {
         }
     }
 
-    public static class WhenProviderReportsAdherence extends AdherenceRecordingServiceCase {
+    public static class WhenProviderReportsAdherence extends AdherenceRecordingSessionTestCase {
 
         protected static final String PROVIDER_ID = "providerid";
         protected static final String MOBILE_NUMBER = "mobileNumber";
         protected static final String CALL_ID = "call_id1";
         private List<String> patientsWithAdherence = asList("patient1", "patient2");
         private List<String> patientsWithoutAdherence = asList("patient3", "patient4");
+        protected DateTime now = new DateTime(2011, 1, 1, 10, 0, 0, 0);
 
         @Before
         public void setup() {
@@ -61,7 +64,8 @@ public class AdherenceRecordingServiceTest {
             setupSession();
             when(allProviders.findByMobileNumber(MOBILE_NUMBER)).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
-            adherenceRecordingService = new AdherenceRecordingService(allProviders, adherenceDataService);
+            mockCurrentDate(now);
+            adherenceRecordingSession = new AdherenceRecordingSession(allProviders, adherenceDataService);
         }
 
         private void setupSession() {
@@ -76,35 +80,39 @@ public class AdherenceRecordingServiceTest {
 
         @Test
         public void shouldInitializeSessionWithPatientsWithAdherence() {
-            assertEquals(asList("patient1", "patient2"), adherenceRecordingService.prepareSession(flowSession).patientsWithAdherence());
+            assertEquals(asList("patient1", "patient2"), adherenceRecordingSession.initialize(flowSession).patientsWithAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithPatientsWithoutAdherence() {
-            assertEquals(asList("patient3", "patient4"), adherenceRecordingService.prepareSession(flowSession).patientsWithoutAdherence());
+            assertEquals(asList("patient3", "patient4"), adherenceRecordingSession.initialize(flowSession).patientsWithoutAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithProviderId() {
-            assertEquals(PROVIDER_ID, adherenceRecordingService.prepareSession(flowSession).providerId());
+            assertEquals(PROVIDER_ID, adherenceRecordingSession.initialize(flowSession).providerId());
         }
 
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
-            assertEquals(MOBILE_NUMBER, adherenceRecordingService.prepareSession(flowSession).getMobileNumber());
+            assertEquals(MOBILE_NUMBER, adherenceRecordingSession.initialize(flowSession).getMobileNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
-            assertEquals(CALL_ID, adherenceRecordingService.prepareSession(flowSession).callId());
+            assertEquals(CALL_ID, adherenceRecordingSession.initialize(flowSession).callId());
+        }
+
+        @Test
+        public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
+            assertEquals(now, adherenceRecordingSession.collectingAdherenceInput("patientId1", flowSession).startOfAdherenceSubmission());
         }
     }
 
-    public static class WhenProviderReportsAdherenceForSecondPatient extends AdherenceRecordingServiceCase {
+    public static class WhenProviderReportsAdherenceForSecondPatient extends AdherenceRecordingSessionTestCase {
 
         protected static final String PROVIDER_ID = "providerid";
         protected static final String MOBILE_NUMBER = "mobileNumber";
-        protected static final String CALL_ID = "call_id1";
 
         private List<String> patientsWithAdherence = asList("patient1");
         private List<String> patientsWithoutAdherence = asList("patient2", "patient3");
@@ -117,7 +125,7 @@ public class AdherenceRecordingServiceTest {
             setupSession();
             when(allProviders.findByMobileNumber(MOBILE_NUMBER)).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
-            adherenceRecordingService = new AdherenceRecordingService(allProviders, adherenceDataService);
+            adherenceRecordingSession = new AdherenceRecordingSession(allProviders, adherenceDataService);
         }
 
         private void setupSummary() {
@@ -143,26 +151,27 @@ public class AdherenceRecordingServiceTest {
 
         @Test
         public void shouldNotReinitializeSessionWithPatientsWithAdherence() {
-            adherenceRecordingService.prepareSession(flowSession);
-            IvrSession session = adherenceRecordingService.prepareSession(flowSession);
+            adherenceRecordingSession.initialize(flowSession);
+            IvrSession session = adherenceRecordingSession.initialize(flowSession);
             assertEquals(asList("patient1"), session.patientsWithAdherence());
         }
 
         @Test
         public void shouldNotReinitializeSessionWithPatientsWithoutAdherence() {
-            adherenceRecordingService.prepareSession(flowSession);
-            IvrSession session = adherenceRecordingService.prepareSession(flowSession);
+            adherenceRecordingSession.initialize(flowSession);
+            IvrSession session = adherenceRecordingSession.initialize(flowSession);
             assertEquals(asList("patient2", "patient3"), session.patientsWithoutAdherence());
         }
     }
 
-    public static class WhenAnotherProviderReportsAdherence extends AdherenceRecordingServiceCase {
+    public static class WhenAnotherProviderReportsAdherence extends AdherenceRecordingSessionTestCase {
 
         public static final String PROVIDER_ID = "providerid2";
         public static final String MOBILE_NUMBER = "mobileNumber2";
         private List<String> patientsWithAdherence = asList("patient4");
         private List<String> patientsWithoutAdherence = asList("patient5", "patient6");
         private static final String CALL_ID = "call_id2";
+        protected DateTime now = new DateTime(2011, 1, 1, 10, 10, 0, 0);
 
         @Before
         public void setup() {
@@ -170,7 +179,8 @@ public class AdherenceRecordingServiceTest {
             setupSession();
             when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
-            adherenceRecordingService = new AdherenceRecordingService(allProviders, adherenceDataService);
+            mockCurrentDate(now);
+            adherenceRecordingSession = new AdherenceRecordingSession(allProviders, adherenceDataService);
         }
 
         private void setupSession() {
@@ -185,27 +195,32 @@ public class AdherenceRecordingServiceTest {
 
         @Test
         public void shouldSetPWhenPreparingSession() {
-            assertEquals(asList("patient4"), adherenceRecordingService.prepareSession(flowSession).patientsWithAdherence());
+            assertEquals(asList("patient4"), adherenceRecordingSession.initialize(flowSession).patientsWithAdherence());
         }
 
         @Test
         public void shouldSetAdherenceSummaryWhenPreparingSession() {
-            assertEquals(asList("patient5", "patient6"), adherenceRecordingService.prepareSession(flowSession).patientsWithoutAdherence());
+            assertEquals(asList("patient5", "patient6"), adherenceRecordingSession.initialize(flowSession).patientsWithoutAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithProviderId() {
-            assertEquals(PROVIDER_ID, adherenceRecordingService.prepareSession(flowSession).providerId());
+            assertEquals(PROVIDER_ID, adherenceRecordingSession.initialize(flowSession).providerId());
         }
 
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
-            assertEquals(MOBILE_NUMBER, adherenceRecordingService.prepareSession(flowSession).getMobileNumber());
+            assertEquals(MOBILE_NUMBER, adherenceRecordingSession.initialize(flowSession).getMobileNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
-            assertEquals(CALL_ID, adherenceRecordingService.prepareSession(flowSession).callId());
+            assertEquals(CALL_ID, adherenceRecordingSession.initialize(flowSession).callId());
+        }
+
+        @Test
+        public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
+            assertEquals(now, adherenceRecordingSession.collectingAdherenceInput("patientId4", flowSession).startOfAdherenceSubmission());
         }
     }
 }

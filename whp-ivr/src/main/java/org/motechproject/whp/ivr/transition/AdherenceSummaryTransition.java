@@ -4,7 +4,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.service.AdherenceRecordingService;
+import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,31 +20,39 @@ public class AdherenceSummaryTransition implements ITransition {
     @Autowired
     private WHPIVRMessage whpivrMessage;
     @Autowired
-    private AdherenceRecordingService recordingService;
+    private AdherenceRecordingSession recordingSession;
 
     /*Required for platform autowiring*/
     public AdherenceSummaryTransition() {
     }
 
-    public AdherenceSummaryTransition(WHPIVRMessage whpivrMessage, AdherenceRecordingService recordingService) {
+    public AdherenceSummaryTransition(WHPIVRMessage whpivrMessage, AdherenceRecordingSession recordingSession) {
         this.whpivrMessage = whpivrMessage;
-        this.recordingService = recordingService;
+        this.recordingSession = recordingSession;
     }
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        IvrSession ivrSession = recordingService.prepareSession(flowSession);
+        IvrSession ivrSession = recordingSession.initialize(flowSession);
 
         Node captureAdherenceNode = new Node();
         captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpivrMessage, ivrSession.patientsWithAdherence(), ivrSession.patientsWithoutAdherence()));
         if (ivrSession.hasPatientsWithoutAdherence()) {
-            captureAdherenceNode.addPrompts(captureAdherencePrompts(whpivrMessage, ivrSession.currentPatientId(), ivrSession.currentPatientNumber()));
-            captureAdherenceNode.addTransition("?", new AdherenceCaptureTransition());
-            return captureAdherenceNode;
+            return addAdherenceCaptureTransitions(ivrSession, captureAdherenceNode);
         } else {
-            captureAdherenceNode.addPrompts(callCompletionPrompts(whpivrMessage));
-            return captureAdherenceNode;
+            return addTransitionToTerminateCall(captureAdherenceNode);
         }
+    }
+
+    private Node addAdherenceCaptureTransitions(IvrSession ivrSession, Node captureAdherenceNode) {
+        captureAdherenceNode.addPrompts(captureAdherencePrompts(whpivrMessage, ivrSession.currentPatientId(), ivrSession.currentPatientNumber()));
+        captureAdherenceNode.addTransition("?", new AdherenceCaptureTransition());
+        return captureAdherenceNode;
+    }
+
+    private Node addTransitionToTerminateCall(Node captureAdherenceNode) {
+        captureAdherenceNode.addPrompts(callCompletionPrompts(whpivrMessage));
+        return captureAdherenceNode;
     }
 
 }

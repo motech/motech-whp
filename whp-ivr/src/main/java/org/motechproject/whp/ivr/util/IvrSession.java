@@ -12,7 +12,7 @@ public class IvrSession {
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
     public static final String PROVIDER_ID = "providerId";
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
-    public static final String LAST_ADHERENCE_SUBMISSION = "lastAdherenceSubmission";
+    public static final String START_OF_ADHERENCE_SUBMISSION = "startOfAdherenceSubmission";
 
     private FlowSession flowSession;
 
@@ -112,12 +112,12 @@ public class IvrSession {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, input);
     }
 
-    public void lastAdherenceSubmissionTime(DateTime time) {
-        flowSession.set(LAST_ADHERENCE_SUBMISSION, time);
+    public void startOfAdherenceSubmission(DateTime time) {
+        flowSession.set(START_OF_ADHERENCE_SUBMISSION, time);
     }
 
-    public DateTime lastAdherenceSubmissionTime() {
-        return flowSession.get(LAST_ADHERENCE_SUBMISSION);
+    public DateTime startOfAdherenceSubmission() {
+        return flowSession.get(START_OF_ADHERENCE_SUBMISSION);
     }
 }
 

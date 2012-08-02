@@ -42,7 +42,7 @@ public class AdherenceCaptureBuilderTest extends BaseUnitTest {
 
         ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER_ID);
-        ivrSession.lastAdherenceSubmissionTime(LAST_SUBMISSION_TIME);
+        ivrSession.startOfAdherenceSubmission(LAST_SUBMISSION_TIME);
         ivrSession.adherenceInputForCurrentPatient(INPUT_FOR_CURRENT_PATIENT);
         ivrSession.callId(CALL_ID);
     }

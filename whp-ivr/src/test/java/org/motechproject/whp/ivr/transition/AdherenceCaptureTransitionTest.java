@@ -133,7 +133,6 @@ public class AdherenceCaptureTransitionTest {
         assertEquals(expectedNode, destinationNode);
     }
 
-
     @Test
     public void shouldHangUpWithCallCompletionSummaryIfPatientListIsEmpty() {
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList("patient1"), asList("patient1"));

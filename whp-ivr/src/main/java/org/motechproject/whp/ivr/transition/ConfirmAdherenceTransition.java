@@ -34,7 +34,7 @@ public class ConfirmAdherenceTransition implements ITransition {
     @Autowired
     private AdherenceDataService adherenceDataService;
 
-    ConfirmAdherenceTransition() {
+    public ConfirmAdherenceTransition() {
     }
 
     public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage, WHPAdherenceService adherenceService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, PatientService patientService, ReportingPublisherService reportingService, AdherenceDataService adherenceDataService) {

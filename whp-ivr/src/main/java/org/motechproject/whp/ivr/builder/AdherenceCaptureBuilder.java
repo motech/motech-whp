@@ -31,7 +31,7 @@ public class AdherenceCaptureBuilder {
                 .byProvider(ivrSession.providerId())
                 .throughMobile(ivrSession.getMobileNumber())
                 .onCall(ivrSession.callId())
-                .withLastSubmissionTime(ivrSession.lastAdherenceSubmissionTime())
+                .withLastSubmissionTime(ivrSession.startOfAdherenceSubmission())
                 .build();
         return this;
     }

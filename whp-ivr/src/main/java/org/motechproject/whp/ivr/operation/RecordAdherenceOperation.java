@@ -2,6 +2,7 @@ package org.motechproject.whp.ivr.operation;
 
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
@@ -29,14 +30,8 @@ public class RecordAdherenceOperation implements INodeOperation {
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
         recordAdherence(ivrSession);
-    }
-
-    private void recordAdherence(IvrSession ivrSession) {
-        AuditParams auditParams = new AuditParams(ivrSession.providerId(), AdherenceSource.IVR, "");
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
-        weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient());
-        treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
         publishAdherenceSubmissionEvent(ivrSession);
+        updateAdherenceCapturedTime(ivrSession);
     }
 
     @Override
@@ -57,11 +52,22 @@ public class RecordAdherenceOperation implements INodeOperation {
         return currentPatientId != null ? currentPatientId.hashCode() : 0;
     }
 
+    private void recordAdherence(IvrSession ivrSession) {
+        AuditParams auditParams = new AuditParams(ivrSession.providerId(), AdherenceSource.IVR, "");
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
+        weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient());
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
+    }
+
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
         AdherenceCaptureRequest request = adherenceCapture()
                 .forPatient(currentPatientId)
                 .forSession(ivrSession)
                 .build();
         reportingService.reportAdherenceCapture(request);
+    }
+
+    private void updateAdherenceCapturedTime(IvrSession ivrSession) {
+        ivrSession.startOfAdherenceSubmission(DateUtil.now());
     }
 }
