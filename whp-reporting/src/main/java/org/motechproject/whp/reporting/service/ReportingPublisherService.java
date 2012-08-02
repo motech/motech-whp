@@ -2,7 +2,7 @@ package org.motechproject.whp.reporting.service;
 
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

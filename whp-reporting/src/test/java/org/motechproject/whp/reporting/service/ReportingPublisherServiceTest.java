@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;

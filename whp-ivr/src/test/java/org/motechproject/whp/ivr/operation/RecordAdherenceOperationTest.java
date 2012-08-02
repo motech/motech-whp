@@ -10,7 +10,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 import java.util.Arrays;
 

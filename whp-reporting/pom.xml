@@ -31,8 +31,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp.reports</groupId>
-            <artifactId>whp-reports-web</artifactId>
-            <classifier>classes</classifier>
+            <artifactId>whp-reports-contract</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

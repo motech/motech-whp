@@ -8,7 +8,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.builder.AdherenceCaptureBuilder.adherenceCapture;

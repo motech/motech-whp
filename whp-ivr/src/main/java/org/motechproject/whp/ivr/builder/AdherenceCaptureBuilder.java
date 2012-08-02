@@ -1,9 +1,7 @@
 package org.motechproject.whp.ivr.builder;
 
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.reports.webservice.request.AdherenceCaptureRequest;
-
-import static java.lang.Integer.parseInt;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 public class AdherenceCaptureBuilder {
 
