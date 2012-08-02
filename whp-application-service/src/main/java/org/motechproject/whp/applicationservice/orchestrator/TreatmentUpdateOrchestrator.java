@@ -117,6 +117,9 @@ public class TreatmentUpdateOrchestrator {
 
         Patient patient = patientService.findByPatientId(patientId);
 
+        patient.setLastAdherenceWeekStartDate(weeklyAdherenceSummary.getWeek().startDate());
+        patientService.update(patient);
+
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
     }

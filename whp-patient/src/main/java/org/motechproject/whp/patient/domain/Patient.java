@@ -40,6 +40,7 @@ public class Patient extends MotechBaseDataObject {
     private Therapy currentTherapy;
     private List<Therapy> therapyHistory = new ArrayList<>();
 
+    private LocalDate lastAdherenceWeekStartDate;
     private boolean migrated;
 
     private String version = "V2";

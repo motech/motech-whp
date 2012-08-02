@@ -1,3 +1,4 @@
+687ee20 Dev, Abhi | #0 | Added lastAdherenceWeekStartDate to Patient (for now updating this field only for adherence given by provider)
 bbcce87 Abhishek , Dev | #279 | fixing bug in adherence module (patientWithAdherence was returning only Patients with Taken logs)
 e6cfa6c Dev, Dheeru | #313 | adding confirm adherence feature(should fix IT test for multiple patients)
 42e7818 Abhishek, Dev | #274, #275 | moving audio File strings to seperate class; extracting out node construction to builder

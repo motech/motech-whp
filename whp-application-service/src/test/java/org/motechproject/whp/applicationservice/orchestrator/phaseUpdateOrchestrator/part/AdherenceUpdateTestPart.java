@@ -15,10 +15,13 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.joda.time.DateTime.now;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
 
@@ -67,6 +70,23 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         treatmentUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
 
         verify(patientService).startNextPhase(patientStub);
+
+    }
+
+    @Test
+    public void shouldSetLastAdherenceProvidedWeekStartDateToPatientOnCaptureAdherence() {
+        patientStub = new PatientStub();
+        patientStub.startTherapy(today().minusMonths(2));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+
+        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        when(whpAdherenceService.currentWeekAdherence(patientStub)).thenReturn(adherence);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
+        treatmentUpdateOrchestrator.recordAdherence(PATIENT_ID, adherence, auditParams);
+
+        assertThat(patientStub.getLastAdherenceWeekStartDate(),is(currentWeekInstance().startDate()));
+        verify(patientService).update(patientStub);
 
     }
 
