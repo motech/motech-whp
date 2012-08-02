@@ -27,7 +27,7 @@ public class StartPatientOnTreatmentTestPart extends WHPAdherenceServiceTestPart
         assertNotNull(startDate);
 
         mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
-        adherenceService.recordAdherence(new WeeklyAdherenceSummaryBuilder().build(), auditParams);
+        adherenceService.recordWeeklyAdherence(new WeeklyAdherenceSummaryBuilder().build(), auditParams);
 
         assertEquals(
                 startDate,

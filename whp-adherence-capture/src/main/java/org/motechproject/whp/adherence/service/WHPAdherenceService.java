@@ -55,7 +55,7 @@ public class WHPAdherenceService {
         this.allAdherenceLogs = allAdherenceLogs;
     }
 
-    public void recordAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         Patient patient = allPatients.findByPatientId(weeklyAdherenceSummary.getPatientId());
 
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
@@ -87,9 +87,10 @@ public class WHPAdherenceService {
         return new AdherenceMapper().map(adherenceData);
     }
 
-    public void addOrUpdateLogsByDoseDate(List<Adherence> adherenceList, String patientId) {
+    public void addOrUpdateLogsByDoseDate(List<Adherence> adherenceList, Patient patient, AuditParams auditParams) {
         List<AdherenceRecord> adherenceData = AdherenceRecordMapper.map(adherenceList);
-        adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patientId);
+        adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
+        adherenceAuditService.auditDailyAdherence(patient, adherenceList, auditParams);
     }
 
     public AdherenceList findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
@@ -108,10 +109,10 @@ public class WHPAdherenceService {
         }
     }
 
-    public void addLogsForPatient(UpdateAdherenceRequest updateAdherenceRequest, Patient patient, AuditParams auditParams) {
+    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
         List<Adherence> adherenceData = new ArrayList<>();
 
-        for (DailyAdherenceRequest request : updateAdherenceRequest.getDailyAdherenceRequests()) {
+        for (DailyAdherenceRequest request : dailyAdherenceRequests) {
             Adherence datum = new Adherence();
             datum.setPatientId(patient.getPatientId());
             datum.setTreatmentId(patient.currentTherapyId());
@@ -129,8 +130,7 @@ public class WHPAdherenceService {
             }
         }
 
-        addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
-        adherenceAuditService.auditDailyAdherence(patient, adherenceData, auditParams);
+        addOrUpdateLogsByDoseDate(adherenceData, patient, auditParams);
     }
 
     public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate startDate) {

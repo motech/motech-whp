@@ -90,7 +90,7 @@ public class WHPAdherenceServiceTest {
         DailyAdherenceRequest dailyAdherenceRequest3 = createDailyAdherenceRequest(15, 2, 2012, PillStatus.Unknown.getStatus());
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3));
 
-        whpAdherenceService.addLogsForPatient(request, patient, null);
+        whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
@@ -127,7 +127,7 @@ public class WHPAdherenceServiceTest {
 
         AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "");
 
-        whpAdherenceService.addLogsForPatient(request, patient, auditParams);
+        whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, auditParams);
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(adherenceAuditService, times(1)).auditDailyAdherence(eq(patient), argumentCaptor.capture(), eq(auditParams));
@@ -151,7 +151,7 @@ public class WHPAdherenceServiceTest {
         DailyAdherenceRequest dailyAdherenceRequest = createDailyAdherenceRequest(1, 10, 2010, PillStatus.NotTaken.getStatus());
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest));
 
-        whpAdherenceService.addLogsForPatient(request, patient, null);
+        whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
@@ -174,7 +174,7 @@ public class WHPAdherenceServiceTest {
         request.setDailyAdherenceRequests(asList(dailyAdherenceRequest));
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
-        whpAdherenceService.addLogsForPatient(request, patient, null);
+        whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));

@@ -30,9 +30,6 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
     @Mock
     TreatmentCardService treatmentCardService;
     @Mock
-    WHPAdherenceService adherenceService;
-
-    @Mock
     AllPatients allPatients;
     @Mock
     Model uiModel;
@@ -52,7 +49,7 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        treatmentCardController = new TreatmentCardController(adherenceService, treatmentCardService, allPatients, treatmentUpdateOrchestrator);
+        treatmentCardController = new TreatmentCardController(treatmentCardService, allPatients, treatmentUpdateOrchestrator);
         patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(patient.getPatientId())).thenReturn(patient);
         setupLoggedInUser(request, USER_NAME);
@@ -83,20 +80,7 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
         String view = treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
         assertEquals("redirect:/patients/show?patientId=patientid", view);
-        verify(adherenceService, times(1)).addLogsForPatient(adherenceData, patient, auditParams);
-    }
-
-    @Test
-    public void shouldRecomputePillCountAndAttemptTransitionWhenSavingAdherenceData() {
-        UpdateAdherenceRequest adherenceData = new UpdateAdherenceRequest();
-        adherenceData.setPatientId("test");
-
-        when(allPatients.findByPatientId(adherenceData.getPatientId())).thenReturn(patient);
-
-        treatmentCardController.update(new Gson().toJson(adherenceData), request);
-
-        verify(treatmentUpdateOrchestrator, times(1)).recomputePillStatus(patient);
-        verify(treatmentUpdateOrchestrator, times(1)).attemptPhaseTransition(patient);
+        verify(treatmentUpdateOrchestrator).recordDailyAdherence(adherenceData.getDailyAdherenceRequests(), patient, auditParams);
     }
 
 }

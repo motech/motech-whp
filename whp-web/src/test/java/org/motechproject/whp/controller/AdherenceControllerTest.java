@@ -16,7 +16,6 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.PatientStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
@@ -118,7 +117,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
-        verify(treatmentUpdateOrchestrator).recordAdherence(eq(PATIENT_ID),captor.capture(), eq(auditParams));
+        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(eq(PATIENT_ID), captor.capture(), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getDosesTaken());
     }
 
@@ -182,7 +181,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
         weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
 
-        verify(treatmentUpdateOrchestrator).recordAdherence(patient.getPatientId(), weeklyAdherenceSummary, auditParams);
+        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(patient.getPatientId(), weeklyAdherenceSummary, auditParams);
     }
 
 

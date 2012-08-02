@@ -35,8 +35,8 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
             allPatients.add(patient1);
             allPatients.add(patient2);
 
-            adherenceService.recordAdherence(summaryForPatient1, auditParams);
-            adherenceService.recordAdherence(summaryForPatient2, auditParams);
+            adherenceService.recordWeeklyAdherence(summaryForPatient1, auditParams);
+            adherenceService.recordWeeklyAdherence(summaryForPatient2, auditParams);
 
 
             assertArrayEquals(
@@ -68,7 +68,7 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
 
             allPatients.add(patient1);
 
-            adherenceService.recordAdherence(summaryForPatient1, auditParams);
+            adherenceService.recordWeeklyAdherence(summaryForPatient1, auditParams);
 
             assertTrue(adherenceService.patientsWithAdherence("providerId2", summaryForPatient1.getWeek()).isEmpty());
         }

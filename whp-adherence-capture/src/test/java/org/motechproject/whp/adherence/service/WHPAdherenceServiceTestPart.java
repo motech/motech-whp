@@ -9,6 +9,7 @@ import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -40,6 +41,9 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
     @Qualifier(value = "adherenceDbConnector")
     CouchDbConnector adherenceDbConnector;
     @Autowired
+    @Qualifier(value = "whpDbConnector")
+    CouchDbConnector dailyAdherenceDbConnector;
+    @Autowired
     WHPAdherenceService adherenceService;
 
     @Autowired
@@ -51,6 +55,8 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
     @Autowired
     AllAuditLogs allAuditLogs;
 
+    @Autowired
+    AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
     final AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
     final String THERAPY_DOC_ID = "THERAPY_DOC_ID";
 
@@ -76,6 +82,9 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         for (Object log : allAdherenceLogs.getAll().toArray()) {
             adherenceDbConnector.delete(log);
         }
+
+        for (Object log : allDailyAdherenceAuditLogs.getAll().toArray())
+            dailyAdherenceDbConnector.delete(log);
     }
 
     protected Adherence createLog(String patientId, LocalDate pillDate, PillStatus pillStatus, String tbId, String therapyUid, String providerId) {
@@ -97,7 +106,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
     protected WeeklyAdherenceSummary recordAdherence() {
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(1).forPatient(patient).build();
-        adherenceService.recordAdherence(adherenceSummary, auditParams);
+        adherenceService.recordWeeklyAdherence(adherenceSummary, auditParams);
         return adherenceSummary;
     }
 
@@ -109,7 +118,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
                 .build();
 
         patientService.createPatient(patientRequest);
-        adherenceService.recordAdherence(adherenceSummary, auditParams);
+        adherenceService.recordWeeklyAdherence(adherenceSummary, auditParams);
     }
 
     protected void assertTbAndProviderId(Adherence adherence, String expectedTbId, String expectedProviderId) {

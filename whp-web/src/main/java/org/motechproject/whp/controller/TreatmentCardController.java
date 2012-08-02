@@ -31,14 +31,12 @@ public class TreatmentCardController extends BaseController {
 
     TreatmentCardService treatmentCardService;
 
-    WHPAdherenceService adherenceService;
 
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     @Autowired
-    public TreatmentCardController(WHPAdherenceService adherenceService, TreatmentCardService treatmentCardService, AllPatients allPatients, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
+    public TreatmentCardController(TreatmentCardService treatmentCardService, AllPatients allPatients, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator) {
         this.allPatients = allPatients;
-        this.adherenceService = adherenceService;
         this.treatmentCardService = treatmentCardService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
     }
@@ -58,9 +56,8 @@ public class TreatmentCardController extends BaseController {
 
         UpdateAdherenceRequest updateAdherenceRequest = new Gson().fromJson(adherenceJson, UpdateAdherenceRequest.class);
         Patient patient = allPatients.findByPatientId(updateAdherenceRequest.getPatientId());
-        adherenceService.addLogsForPatient(updateAdherenceRequest, patient, auditParams);
-        treatmentUpdateOrchestrator.recomputePillStatus(patient);
-        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.recordDailyAdherence(updateAdherenceRequest.getDailyAdherenceRequests(), patient, auditParams);
+
         out(WHPConstants.NOTIFICATION_MESSAGE, "Treatment Card saved successfully", request);
         return redirectToPatientDashboardURL(patient.getPatientId());
     }

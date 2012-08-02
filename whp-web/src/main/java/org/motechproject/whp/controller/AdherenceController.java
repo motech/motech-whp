@@ -17,7 +17,6 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +67,7 @@ public class AdherenceController extends BaseController {
 
         AuditParams auditParams = new AuditParams(authenticatedUser.getUserName(), AdherenceSource.WEB, remarks);
 
-        treatmentUpdateOrchestrator.recordAdherence(patientId,weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(patientId, weeklyAdherenceSummary(weeklyAdherenceForm), auditParams);
 
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";

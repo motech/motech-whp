@@ -51,7 +51,7 @@ public class RecordAdherenceOperationTest {
 
         AuditParams auditParams = new AuditParams(PROVIDER, AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), adherenceInput);
-        verify(treatmentUpdateOrchestrator).recordAdherence(CURRENT_PATIENT, weeklyAdherenceSummary, auditParams);
+        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(CURRENT_PATIENT, weeklyAdherenceSummary, auditParams);
     }
 
     @Test

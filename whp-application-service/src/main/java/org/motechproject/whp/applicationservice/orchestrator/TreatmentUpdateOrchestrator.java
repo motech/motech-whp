@@ -7,19 +7,24 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Phases;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.extract;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
@@ -112,12 +117,27 @@ public class TreatmentUpdateOrchestrator {
         patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
     }
 
-    public void recordAdherence(String patientId,WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
-        whpAdherenceService.recordAdherence(weeklyAdherenceSummary, auditParams);
-
+    public void recordWeeklyAdherence(String patientId,WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
+        whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, auditParams);
         Patient patient = patientService.findByPatientId(patientId);
+        refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
+    }
 
-        patient.setLastAdherenceWeekStartDate(weeklyAdherenceSummary.getWeek().startDate());
+
+    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
+        whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests,patient,auditParams);
+        refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
+    }
+
+    private LocalDate getLastAdherenceProvidedWeekStartDate(List<DailyAdherenceRequest> dailyAdherenceRequests) {
+        List<LocalDate> doseDates = extract(dailyAdherenceRequests, on(DailyAdherenceRequest.class).getDoseDate());
+        Collections.sort(doseDates);
+        LocalDate lastAdherenceProvidedDate =  doseDates.get(doseDates.size() - 1);
+        return new TreatmentWeek(lastAdherenceProvidedDate).startDate();
+    }
+
+    private void refreshPatient(Patient patient, LocalDate lastAdherenceWeekStartDate) {
+        patient.setLastAdherenceWeekStartDate(lastAdherenceWeekStartDate);
         patientService.update(patient);
 
         recomputePillStatus(patient);
