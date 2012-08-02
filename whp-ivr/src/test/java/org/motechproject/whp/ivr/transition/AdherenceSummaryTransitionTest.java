@@ -9,6 +9,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.service.AdherenceRecordingService;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -38,6 +39,7 @@ public class AdherenceSummaryTransitionTest {
     private AdherenceDataService adherenceDataService;
     @Mock
     private AllProviders allProviders;
+    private AdherenceRecordingService recordingService;
 
     private AdherenceSummaryTransition adherenceSummaryTransition;
 
@@ -48,7 +50,7 @@ public class AdherenceSummaryTransitionTest {
     public void setUp() {
         initMocks(this);
         when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
-        adherenceSummaryTransition = new AdherenceSummaryTransition(adherenceDataService, whpivrMessage, allProviders);
+        adherenceSummaryTransition = new AdherenceSummaryTransition(whpivrMessage, new AdherenceRecordingService(allProviders, adherenceDataService));
         flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);
     }
