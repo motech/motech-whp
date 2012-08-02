@@ -51,11 +51,26 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        treatmentUpdateOrchestrator.recordWeeklyAdherence(PATIENT_ID, adherence, auditParams);
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patient, auditParams);
 
         int dosesTaken = 0;
         LocalDate endDate = new LocalDate();
         verify(patientService, times(2)).updatePillTakenCount(patient, Phase.IP, dosesTaken, endDate);
+
+    }
+
+    @Test
+    public void shouldRecordWeeklyAdherence() {
+        patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today().minusMonths(2));
+        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
+
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence , patient , auditParams);
+        verify(whpAdherenceService).recordWeeklyAdherence(adherence, patient, auditParams);
 
     }
 
@@ -101,7 +116,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         when(whpAdherenceService.currentWeekAdherence(patientStub)).thenReturn(adherence);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        treatmentUpdateOrchestrator.recordWeeklyAdherence(PATIENT_ID, adherence, auditParams);
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patientStub, auditParams);
 
         verify(patientService).startNextPhase(patientStub);
 
@@ -117,7 +132,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         when(whpAdherenceService.currentWeekAdherence(patientStub)).thenReturn(adherence);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        treatmentUpdateOrchestrator.recordWeeklyAdherence(PATIENT_ID, adherence, auditParams);
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patientStub, auditParams);
 
         assertThat(patientStub.getLastAdherenceWeekStartDate(), is(currentWeekInstance().startDate()));
         verify(patientService).update(patientStub);

@@ -4,6 +4,8 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
+import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,11 +25,13 @@ public class StartPatientOnTreatmentTestPart extends WHPAdherenceServiceTestPart
     @Test
     public void shouldNotStartPatientOnTreatmentWhenRecordingAdherenceForAnyWeekSubsequentToFirstEverAdherenceCapturedWeek() {
         adherenceIsRecordedForTheFirstTime();
-        LocalDate startDate = allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate();
+        Patient patient = allPatients.findByPatientId(PATIENT_ID);
+        LocalDate startDate = patient.getCurrentTherapy().getStartDate();
         assertNotNull(startDate);
 
         mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
-        adherenceService.recordWeeklyAdherence(new WeeklyAdherenceSummaryBuilder().build(), auditParams);
+        final WeeklyAdherenceSummary build = new WeeklyAdherenceSummaryBuilder().build();
+        adherenceService.recordWeeklyAdherence(build, patient, auditParams);
 
         assertEquals(
                 startDate,

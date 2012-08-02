@@ -18,7 +18,6 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -117,10 +116,10 @@ public class TreatmentUpdateOrchestrator {
         patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
     }
 
-    public void recordWeeklyAdherence(String patientId,WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
-        whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, auditParams);
-        Patient patient = patientService.findByPatientId(patientId);
-        refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
+        whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, patient, auditParams);
+        //TODO should remove db calls; patient object should be saved only once
+        refreshPatient(patientService.findByPatientId(patient.getPatientId()), weeklyAdherenceSummary.getWeek().startDate());
     }
 
 
@@ -142,5 +141,9 @@ public class TreatmentUpdateOrchestrator {
 
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
+    }
+
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
+        recordWeeklyAdherence(weeklyAdherenceSummary, patientService.findByPatientId(patientId), auditParams);
     }
 }

@@ -27,6 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
+import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest {
@@ -106,7 +107,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
     protected WeeklyAdherenceSummary recordAdherence() {
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(1).forPatient(patient).build();
-        adherenceService.recordWeeklyAdherence(adherenceSummary, auditParams);
+        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
         return adherenceSummary;
     }
 
@@ -116,9 +117,8 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
                 .withPatientType(PatientType.New)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-
-        patientService.createPatient(patientRequest);
-        adherenceService.recordWeeklyAdherence(adherenceSummary, auditParams);
+        Patient patient = createPatient(patientRequest);
+        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
     }
 
     protected void assertTbAndProviderId(Adherence adherence, String expectedTbId, String expectedProviderId) {

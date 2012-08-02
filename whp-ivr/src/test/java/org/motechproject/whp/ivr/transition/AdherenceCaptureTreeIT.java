@@ -322,7 +322,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/enterAdherence.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP="+ nextTreePath +"</gotourl>\n" +
+                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
     }
 
@@ -368,7 +368,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage3.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage4.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP="+ nextTreePath +"</gotourl>\n" +
+                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
     }
 
@@ -394,7 +394,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/1.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/enterAdherence.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP="+ nextTreePath +"</gotourl>\n" +
+                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
     }
 
@@ -404,7 +404,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnter.wav</playaudio>\n" +
                 "                                <playaudio>http://localhost:8080/whp/wav/stream/en/welcomeMessage.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"1\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP="+TREE_PATH_START+"</gotourl>\n" +
+                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + TREE_PATH_START + "</gotourl>\n" +
                 "    </response>";
     }
 

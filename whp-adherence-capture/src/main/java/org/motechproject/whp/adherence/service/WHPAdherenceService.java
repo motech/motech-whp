@@ -16,7 +16,6 @@ import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
-import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDateUtil;
@@ -55,8 +54,7 @@ public class WHPAdherenceService {
         this.allAdherenceLogs = allAdherenceLogs;
     }
 
-    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
-        Patient patient = allPatients.findByPatientId(weeklyAdherenceSummary.getPatientId());
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
 
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         adherenceService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));

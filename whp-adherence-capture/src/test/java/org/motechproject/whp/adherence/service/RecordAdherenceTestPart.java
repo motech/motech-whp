@@ -46,7 +46,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
 
-        adherenceService.recordWeeklyAdherence(adherenceSummary, auditParams);
+        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
 
         TreatmentWeek treatmentWeek = adherenceSummary.getWeek();
         List<Adherence> adherenceList = adherenceService.findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), treatmentWeek.startDate(), treatmentWeek.endDate());
@@ -57,15 +57,15 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
 
     @Test
     public void shouldOverwritePillStatusForAdherenceUpdate() {
-        patientService.createPatient(new PatientRequestBuilder().withDefaults().build());
+        Patient patient = createPatient(new PatientRequestBuilder().withDefaults().build());
 
         WeeklyAdherenceSummary threeDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
-        adherenceService.recordWeeklyAdherence(threeDosesTaken, auditParams);
+        adherenceService.recordWeeklyAdherence(threeDosesTaken, patient, auditParams);
 
         WeeklyAdherenceSummary zeroDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
-        adherenceService.recordWeeklyAdherence(zeroDosesTaken, auditParams);
+        adherenceService.recordWeeklyAdherence(zeroDosesTaken, patient, auditParams);
 
-        Patient patient = allPatients.findByPatientId(PATIENT_ID);
+        patient = allPatients.findByPatientId(PATIENT_ID);
         WeeklyAdherenceSummary currentWeekAdherence = adherenceService.currentWeekAdherence(patient);
         assertEquals(0, currentWeekAdherence.getDosesTaken());
     }
@@ -95,8 +95,13 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         adherenceIsRecordedForTheFirstTime();
         mockCurrentDate(today.plusDays(1));
 
-        adherenceService.recordWeeklyAdherence(new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build(), auditParams);
-        assertNull(allPatients.findByPatientId(PATIENT_ID).getCurrentTherapy().getStartDate());
+        final WeeklyAdherenceSummary build = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
+        Patient patient = allPatients.findByPatientId(PATIENT_ID);
+
+        adherenceService.recordWeeklyAdherence(build, patient, auditParams);
+
+        patient = allPatients.findByPatientId(PATIENT_ID);
+        assertNull(patient.getCurrentTherapy().getStartDate());
     }
 
     @Test
@@ -108,7 +113,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         WeeklyAdherenceSummary expectedAdherenceSummary = new WeeklyAdherenceSummaryBuilder()
                 .forPatient(patient)
                 .build();
-        adherenceService.recordWeeklyAdherence(expectedAdherenceSummary, auditParams);
+        adherenceService.recordWeeklyAdherence(expectedAdherenceSummary, patient, auditParams);
 
         WeeklyAdherenceSummary adherenceSummary = adherenceService.currentWeekAdherence(patient);
         areSame(expectedAdherenceSummary, adherenceSummary);

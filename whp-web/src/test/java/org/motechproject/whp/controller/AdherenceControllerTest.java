@@ -117,7 +117,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         adherenceController.update(PATIENT_ID, remarks, new WeeklyAdherenceForm(adherenceSummary, patient), request);
 
         ArgumentCaptor<WeeklyAdherenceSummary> captor = forClass(WeeklyAdherenceSummary.class);
-        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(eq(PATIENT_ID), captor.capture(), eq(auditParams));
+        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(captor.capture(), eq(patient), eq(auditParams));
         assertEquals(category.getPillDays().size(), captor.getValue().getDosesTaken());
     }
 
@@ -181,7 +181,7 @@ public class AdherenceControllerTest extends BaseControllerTest {
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(weeklyAdherenceForm.getPatientId(), new TreatmentWeek(weeklyAdherenceForm.getReferenceDate()));
         weeklyAdherenceSummary.setDosesTaken(weeklyAdherenceForm.getNumberOfDosesTaken());
 
-        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(patient.getPatientId(), weeklyAdherenceSummary, auditParams);
+        verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(weeklyAdherenceSummary, patient, auditParams);
     }
 
 
