@@ -4,6 +4,7 @@ package org.motechproject.whp.ivr.session;
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
 
 import java.util.List;
@@ -90,8 +91,8 @@ public class IvrSession {
         return (patientsWithoutAdherence().size() > 0);
     }
 
-    public Integer adherenceInputForCurrentPatient() {
-        return Integer.valueOf(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
+    public IVRInput adherenceInputForCurrentPatient() {
+        return new IVRInput(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
     }
 
     public void resetCurrentPatientIndex() {

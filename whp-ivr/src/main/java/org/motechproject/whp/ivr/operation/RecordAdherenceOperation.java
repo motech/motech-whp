@@ -55,7 +55,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     private void recordAdherence(IvrSession ivrSession) {
         AuditParams auditParams = new AuditParams(ivrSession.providerId(), AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
-        weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient());
+        weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient().input());
         treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
     }
 

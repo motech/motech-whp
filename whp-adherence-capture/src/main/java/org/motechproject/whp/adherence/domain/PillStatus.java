@@ -28,16 +28,5 @@ public enum PillStatus {
                 return null;
         }
     }
-
-    public static PillStatus getFromIVRInput(int input) {
-        switch (input) {
-            case 1:
-                return Taken;
-            case 2:
-                return NotTaken;
-            default:
-                return Unknown;
-        }
-    }
 }
 

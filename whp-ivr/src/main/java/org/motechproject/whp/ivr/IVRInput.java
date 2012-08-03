@@ -24,4 +24,19 @@ public class IVRInput {
     public int input() {
         return parseInt(key);
     }
+
+    public String status() {
+        if (isNotSkipInput()) {
+            if (inputWithinDoseRange()) {
+                return "Taken";
+            } else if (input() == 0) {
+                return "NotTaken";
+            }
+        }
+        return "Unknown";
+    }
+
+    private boolean inputWithinDoseRange() {
+        return input() >= 1 && input() <= 7;
+    }
 }

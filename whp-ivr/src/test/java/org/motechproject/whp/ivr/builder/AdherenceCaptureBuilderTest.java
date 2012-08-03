@@ -19,7 +19,7 @@ public class AdherenceCaptureBuilderTest extends BaseUnitTest {
     private static final String PATIENT_ID = "patientId";
 
     private static final String INPUT_FOR_CURRENT_PATIENT = "1";
-    private static final String ADHERENCE_VALUE = "TAKEN";
+    private static final String ADHERENCE_VALUE = "Taken";
     private static final String MOBILE_NUMBER = "mobileNumber";
 
     private static final String CALL_ID = "callId";

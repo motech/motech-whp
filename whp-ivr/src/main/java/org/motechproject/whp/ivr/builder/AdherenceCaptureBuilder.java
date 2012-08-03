@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
@@ -47,9 +48,9 @@ public class AdherenceCaptureBuilder {
         return this;
     }
 
-    private AdherenceCaptureBuilder withInput(Integer userInput) {
-        request.setStatus(PillStatus.getFromIVRInput(userInput).name().toUpperCase());
-        request.setSubmittedValue(userInput);
+    private AdherenceCaptureBuilder withInput(IVRInput userInput) {
+        request.setStatus(userInput.status());
+        request.setSubmittedValue(userInput.input());
         return this;
     }
 
