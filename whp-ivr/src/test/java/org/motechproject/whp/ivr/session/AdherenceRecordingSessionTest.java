@@ -121,13 +121,6 @@ public class AdherenceRecordingSessionTest {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
             assertEquals(CALL_ID, session.callId());
         }
-
-        @Test
-        @Ignore
-        public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
-            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
-            assertEquals(now, session.startOfAdherenceSubmission());
-        }
     }
 
     public static class WhenProviderReportsAdherenceForSecondPatient extends AdherenceRecordingSessionTestCase {
@@ -253,13 +246,6 @@ public class AdherenceRecordingSessionTest {
         public void shouldInitializeSessionWithCallId() {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
             assertEquals(CALL_ID, session.callId());
-        }
-
-        @Test
-        @Ignore
-        public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
-            IvrSession session = new IvrSession(adherenceRecordingSession.collectingAdherenceInput(flowSession));
-            assertEquals(now, session.startOfAdherenceSubmission());
         }
     }
 }

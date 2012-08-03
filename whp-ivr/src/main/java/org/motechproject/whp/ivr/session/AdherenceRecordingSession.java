@@ -1,7 +1,6 @@
 package org.motechproject.whp.ivr.session;
 
 import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -30,12 +29,6 @@ public class AdherenceRecordingSession {
             ivrSession.patientsWithoutAdherence(adherenceSummary.getAllPatientsWithoutAdherence());
             ivrSession.patientsWithAdherence(adherenceSummary.getAllPatientsWithAdherence());
         }
-        return session;
-    }
-
-    public FlowSession collectingAdherenceInput(FlowSession session) {
-        IvrSession ivrSession = new IvrSession(session);
-        ivrSession.startOfAdherenceSubmission(DateUtil.now());
         return session;
     }
 }

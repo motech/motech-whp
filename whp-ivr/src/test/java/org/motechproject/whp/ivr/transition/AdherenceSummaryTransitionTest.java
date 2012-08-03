@@ -1,10 +1,12 @@
 package org.motechproject.whp.ivr.transition;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
@@ -32,7 +34,7 @@ import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenc
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
-public class AdherenceSummaryTransitionTest {
+public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
     public static final String PROVIDER_ID = "providerid";
     public static final String MOBILE_NUMBER = "mobileNumber";
@@ -105,30 +107,15 @@ public class AdherenceSummaryTransitionTest {
     }
 
     @Test
-    public void shouldInitFlowSession() {
-        setAdherenceProvided(patient1);
-        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
-                .thenReturn(adherenceSummary(asList(patient1, patient2, patient3)));
-        FlowSessionStub flowSession = new FlowSessionStub();
+    public void shouldCaptureTimeTakenToEnterAdherenceForEachPatient() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
 
         adherenceSummaryTransition.getDestinationNode("", flowSession);
-
-        assertEquals(asList(patient2.getPatientId(), patient3.getPatientId()), flowSession.get(IvrSession.PATIENTS_WITHOUT_ADHERENCE));
-        assertEquals(PROVIDER_ID, flowSession.get(IvrSession.PROVIDER_ID));
-    }
-
-    @Test
-    public void shouldInitFlowSession_OnlyOnce() {
-        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
-                .thenReturn(adherenceSummary(asList(setAdherenceProvided(patient1), patient2, patient3)))
-                .thenReturn(adherenceSummary(asList(patient1, setAdherenceProvided(patient2), patient3)));
-        FlowSessionStub flowSession = new FlowSessionStub();
-
-        adherenceSummaryTransition.getDestinationNode("", flowSession);
-        adherenceSummaryTransition.getDestinationNode("", flowSession);
-
-        assertEquals(asList(patient2.getPatientId(), patient3.getPatientId()), flowSession.get(IvrSession.PATIENTS_WITHOUT_ADHERENCE));
-        assertEquals(PROVIDER_ID, flowSession.get(IvrSession.PROVIDER_ID));
+        assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
     private AdherenceSummaryByProvider adherenceSummary(List<Patient> patients) {

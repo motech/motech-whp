@@ -1,18 +1,21 @@
 package org.motechproject.whp.ivr.transition;
 
 
+import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
-import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.session.IvrSession;
+import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -34,7 +37,7 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
 
-public class AdherenceCaptureTransitionTest {
+public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
     @Mock
     PatientService patientService;
@@ -44,7 +47,7 @@ public class AdherenceCaptureTransitionTest {
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
-    AdherenceCaptureTransition adherenceCaptureToEndCallTransition;
+    AdherenceCaptureTransition adherenceCaptureTransition;
 
     String providerId = "providerid";
 
@@ -61,7 +64,7 @@ public class AdherenceCaptureTransitionTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }
@@ -75,7 +78,7 @@ public class AdherenceCaptureTransitionTest {
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCaptureTransition());
 
-        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
     }
 
@@ -89,7 +92,7 @@ public class AdherenceCaptureTransitionTest {
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCaptureTransition());
 
-        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("4", flowSession);
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("4", flowSession);
 
         assertEquals(expectedNode, destinationNode);
         assertEquals(1, flowSession.get(IvrSession.CURRENT_PATIENT_INDEX));
@@ -104,7 +107,7 @@ public class AdherenceCaptureTransitionTest {
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCaptureTransition());
 
-        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("#", flowSession);
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("#", flowSession);
         assertEquals(expectedNode, destinationNode);
         assertEquals(1, flowSession.get(IvrSession.CURRENT_PATIENT_INDEX));
     }
@@ -126,7 +129,7 @@ public class AdherenceCaptureTransitionTest {
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new ConfirmAdherenceTransition());
 
-        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode(String.valueOf(dosesTaken), flowSession);
         assertEquals(expectedNode, destinationNode);
     }
 
@@ -142,8 +145,36 @@ public class AdherenceCaptureTransitionTest {
 
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
 
-        Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
+    }
+
+    @Test
+    public void shouldCaptureStartOfAdherenceCaptureTimeIfInputIsSkipped() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        adherenceCaptureTransition.getDestinationNode("9", flowSession);
+        Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldCaptureStartOfAdherenceCaptureTimeIfPatientDoseIsInvalid() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        adherenceCaptureTransition.getDestinationNode("8", flowSession);
+        Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldNotCaptureStartOfAdherenceCaptureTimeIfPatientDoseIsValid() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
+        adherenceCaptureTransition.getDestinationNode("1", flowSession);
+        Assert.assertEquals(now.minusDays(5), new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {

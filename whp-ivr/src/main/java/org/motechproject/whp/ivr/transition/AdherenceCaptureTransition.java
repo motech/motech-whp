@@ -3,6 +3,7 @@ package org.motechproject.whp.ivr.transition;
 import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
+import static org.motechproject.util.DateUtil.now;
 
 @Component
 @EqualsAndHashCode
@@ -41,6 +43,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         if (ivrInput.isNotSkipInput() && patient.isValidDose(ivrInput.input())) {
             nextNode = new ConfirmAdherenceNode(whpivrMessage).with(patient, parseInt(input)).node();
         } else {
+            ivrSession.startOfAdherenceSubmission(now());
             addTransitionsToNextPatients(ivrSession, nextNode);
         }
         return nextNode.addOperations(new ResetPatientIndexOperation());
