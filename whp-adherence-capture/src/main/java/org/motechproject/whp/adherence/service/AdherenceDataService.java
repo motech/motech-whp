@@ -1,5 +1,8 @@
 package org.motechproject.whp.adherence.service;
 
+import org.hamcrest.Matchers;
+import org.hamcrest.number.OrderingComparison;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.domain.Patient;
@@ -10,8 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.*;
+import static org.hamcrest.Matchers.is;
+
 
 @Component
 public class AdherenceDataService {
@@ -27,8 +31,6 @@ public class AdherenceDataService {
 
     public AdherenceSummaryByProvider getAdherenceSummary(String providerId) {
         List<Patient> patients = allPatients.getAllWithActiveTreatmentFor(providerId);
-        List<String> patientIds = extract(patients, on(Patient.class).getPatientId());
-        List<String> patientsWithAdherence = whpAdherenceService.patientsWithAdherence(providerId, TreatmentWeekInstance.currentWeekInstance());
-        return new AdherenceSummaryByProvider(providerId, patientIds, patientsWithAdherence);
+        return new AdherenceSummaryByProvider(providerId, patients);
     }
 }

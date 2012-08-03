@@ -172,4 +172,9 @@ public class PatientBuilder {
         patient.getCurrentTherapy().start(therapyStartDate);
         return this;
     }
+
+    public PatientBuilder withLastAdherenceProvidedWeekStartDate(LocalDate date) {
+        patient.setLastAdherenceWeekStartDate(date);
+        return this;
+    }
 }

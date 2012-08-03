@@ -11,6 +11,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
@@ -50,7 +51,7 @@ public class RecordAdherenceOperationTest extends BaseUnitTest {
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.callId("callId");
         ivrSession.providerId(PROVIDER);
-        ivrSession.patientsWithoutAdherence(Arrays.asList("patient1", CURRENT_PATIENT));
+        ivrSession.patientsWithoutAdherence(Arrays.asList(new PatientBuilder().withPatientId("patient1").build(), new PatientBuilder().withPatientId(CURRENT_PATIENT).build()));
         ivrSession.currentPatientIndex(1);
 
         recordAdherenceOperation.perform("1", flowSession);

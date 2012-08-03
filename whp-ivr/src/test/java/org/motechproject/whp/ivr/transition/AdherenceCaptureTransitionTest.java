@@ -9,13 +9,13 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
@@ -39,41 +39,39 @@ public class AdherenceCaptureTransitionTest {
 
     @Mock
     PatientService patientService;
-    @Mock
-    WHPAdherenceService adherenceService;
+
     @Mock
     AdherenceDataService adherenceDataService;
-    @Mock
-    TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
     AdherenceCaptureTransition adherenceCaptureToEndCallTransition;
 
-    String patientId = "patientid";
-    String anotherPatientId = "someOtherPatientId";
     String providerId = "providerid";
+
+    String patientId1 = "patientid";
+    String patientId2 = "someOtherPatientId";
 
     @Before
     public void setUp() {
         initMocks(this);
         whpivrMessage = new WHPIVRMessage(new Properties());
         flowSession = new FlowSessionStub();
-        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId, anotherPatientId)));
+        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1, patientId2)));
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
 
-        Patient patient = getPatientFor3DosesPerWeek(patientId);
+        Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
         adherenceCaptureToEndCallTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
 
-        when(patientService.findByPatientId(patientId)).thenReturn(patient);
+        when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }
 
     @Test
     public void shouldSkipCurrentPatientIfKey9IsPressed() {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
-                .id(anotherPatientId)
+                .id(patientId2)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCaptureTransition());
@@ -86,7 +84,7 @@ public class AdherenceCaptureTransitionTest {
     public void shouldSkipCurrentPatientIfEnteredDoseIsGreaterThanDosesPerWeek() {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
-                .id(anotherPatientId)
+                .id(patientId2)
                 .wav(ENTER_ADHERENCE);
 
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
@@ -102,7 +100,7 @@ public class AdherenceCaptureTransitionTest {
     public void shouldSkipCurrentPatientIfKeyPressedInNotNumber() {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
-                .id(anotherPatientId)
+                .id(patientId2)
                 .wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build())
                 .addTransition("?", new AdherenceCaptureTransition());
@@ -118,7 +116,7 @@ public class AdherenceCaptureTransitionTest {
         int dosesPerWeek = 3;
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
                 .wav(PATIENT)
-                .id(patientId)
+                .id(patientId1)
                 .wav(HAS_TAKEN)
                 .number(dosesTaken)
                 .wav(OUT_OF)
@@ -135,7 +133,8 @@ public class AdherenceCaptureTransitionTest {
 
     @Test
     public void shouldHangUpWithCallCompletionSummaryIfPatientListIsEmpty() {
-        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList("patient1"), asList("patient1"));
+        Patient patient = new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(TreatmentWeekInstance.currentWeekInstance().startDate()).build();
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patient));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                 .thenReturn(adherenceSummary);
 
@@ -143,7 +142,7 @@ public class AdherenceCaptureTransitionTest {
                 adherenceSummary.getAllPatientsWithAdherence(),
                 adherenceSummary.getAllPatientsWithoutAdherence()));
 
-        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId)));
+        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
 
         Node destinationNode = adherenceCaptureToEndCallTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);

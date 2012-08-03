@@ -1,10 +1,12 @@
 package org.motechproject.whp.adherence.service;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.common.domain.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -21,6 +23,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 public class AdherenceDataServiceTest {
 
@@ -42,22 +45,18 @@ public class AdherenceDataServiceTest {
 
     @Test
     public void shouldReturnAdherenceSummaryByProviderId() {
-        String primaryMobile = "primaryMobile";
         String providerId = "providerId";
         String patientId1 = "patient1";
         String patientId2 = "patient2";
-        List<Patient> patients = asList(
-                new PatientBuilder().withDefaults().withPatientId(patientId1).withProviderId(providerId).build(),
-                new PatientBuilder().withDefaults().withPatientId(patientId2).withProviderId(providerId).build()
-        );
-        Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(primaryMobile).build();
+        LocalDate currentAdherenceReportWeekStartDate = currentWeekInstance().startDate();
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId(patientId1).withProviderId(providerId).withLastAdherenceProvidedWeekStartDate(currentAdherenceReportWeekStartDate).build();
+        Patient patient2 = new PatientBuilder().withDefaults().withPatientId(patientId2).withProviderId(providerId).withLastAdherenceProvidedWeekStartDate(currentAdherenceReportWeekStartDate).build();
+        List<Patient> patients = asList(patient1,patient2);
 
-        when(allProviders.findByMobileNumber(primaryMobile)).thenReturn(provider);
         when(allPatients.getAllWithActiveTreatmentFor(providerId)).thenReturn(patients);
-        when(whpAdherenceService.patientsWithAdherence(eq(providerId), any(TreatmentWeek.class))).thenReturn(asList(patientId1, patientId2));
 
         AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(providerId);
-        AdherenceSummaryByProvider expectedSummary = new AdherenceSummaryByProvider(providerId, asList(patientId1, patientId2), asList(patientId1, patientId2));
+        AdherenceSummaryByProvider expectedSummary = new AdherenceSummaryByProvider(providerId, asList(patient1, patient2));
         assertThat(adherenceSummary, is(expectedSummary));
     }
 }

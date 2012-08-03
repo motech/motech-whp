@@ -3,8 +3,12 @@ package org.motechproject.whp.ivr.util;
 
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.whp.patient.domain.Patient;
 
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.extract;
 
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
@@ -24,16 +28,18 @@ public class IvrSession {
         return flowSession.get("cid");
     }
 
-    public void patientsWithoutAdherence(List<String> patientsWithoutAdherence) {
-        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientsWithoutAdherence));
+    public void patientsWithoutAdherence(List<Patient> patientsWithoutAdherence) {
+        List<String> patientIds = extract(patientsWithoutAdherence, on(Patient.class).getPatientId());
+        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientIds));
     }
 
     public List<String> patientsWithoutAdherence() {
         return (List<String>) flowSession.get(PATIENTS_WITHOUT_ADHERENCE);
     }
 
-    public void patientsWithAdherence(List<String> patientsWithAdherence) {
-        flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList<>(patientsWithAdherence));
+    public void patientsWithAdherence(List<Patient> patientsWithAdherence) {
+        List<String> patientIds = extract(patientsWithAdherence, on(Patient.class).getPatientId());
+        flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList<>(patientIds));
     }
 
     public List<String> patientsWithAdherence() {
@@ -71,13 +77,13 @@ public class IvrSession {
 
     public String currentPatientId() {
         List<String> patientsWithoutAdherence = patientsWithoutAdherence();
-        return patientsWithoutAdherence.get(currentPatientIndex()).toString();
+        return patientsWithoutAdherence.get(currentPatientIndex());
     }
 
     public String nextPatient() {
         List<String> patientsWithoutAdherence = patientsWithoutAdherence();
         incrementCurrentPatientIndex();
-        return patientsWithoutAdherence.get(currentPatientIndex()).toString();
+        return patientsWithoutAdherence.get(currentPatientIndex());
     }
 
     private void incrementCurrentPatientIndex() {

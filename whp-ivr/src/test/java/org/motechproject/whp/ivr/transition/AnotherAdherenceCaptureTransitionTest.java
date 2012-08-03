@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.transition;
 
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -10,6 +11,7 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
@@ -38,6 +40,8 @@ public class AnotherAdherenceCaptureTransitionTest {
 
     public static final String PATIENT_1 = "patient1";
     public static final String PATIENT_2 = "patient2";
+    Patient patient1;
+    Patient patient2;
     @Mock
     PatientService patientService;
     @Mock
@@ -54,6 +58,9 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Before
     public void setUp() {
         initMocks(this);
+        patient1 = new PatientBuilder().withPatientId(PATIENT_1).build();
+        patient2 = new PatientBuilder().withPatientId(PATIENT_2).build();
+
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1, PATIENT_2)));
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
@@ -98,8 +105,13 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Test
     public void shouldNotAddConfirmationPrompts_ForSkippedInput() {
         String adherenceInput = "7";
+        LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
 
-        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList("patient1", "patient2", "patient3"), asList("patient3"));
+        Patient patientWithAdherence = new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build();
+        Patient patientWithoutAdherence1 = new PatientBuilder().withPatientId("patient2").build();
+        Patient patientWithoutAdherence2 = new PatientBuilder().withPatientId("patient2").build();
+
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patientWithAdherence, patientWithoutAdherence1, patientWithoutAdherence2));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                 .thenReturn(adherenceSummary);
 

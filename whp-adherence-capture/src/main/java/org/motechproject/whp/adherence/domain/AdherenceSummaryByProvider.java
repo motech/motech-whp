@@ -2,39 +2,47 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
+import org.motechproject.whp.patient.domain.Patient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
 @EqualsAndHashCode
 public class AdherenceSummaryByProvider implements Serializable {
 
     private String providerId;
-    private List<String> allPatients = new ArrayList<>();
+    private List<Patient> patients;
     @Getter
-    private List<String> allPatientsWithAdherence = new ArrayList<>();
+    private List<Patient> allPatientsWithAdherence = new ArrayList<>();
     @Getter
-    private List<String> allPatientsWithoutAdherence = new ArrayList<>();
+    private List<Patient> allPatientsWithoutAdherence = new ArrayList<>();
 
-    public AdherenceSummaryByProvider() {
-
-    }
-
-    public AdherenceSummaryByProvider(String providerId, List<String> allPatients, List<String> allPatientsWithAdherence) {
+    public AdherenceSummaryByProvider(String providerId, List<Patient> patients) {
+        this.patients = patients;
         this.providerId = providerId;
-        this.allPatients = allPatients;
-        this.allPatientsWithAdherence.addAll(allPatientsWithAdherence);
-        setAllPatientsWithoutAdherence(allPatients, allPatientsWithAdherence);
+        setAllPatientsWithAdherence();
+        setAllPatientsWithoutAdherence();
     }
 
-    private void setAllPatientsWithoutAdherence(List<String> allPatients, List<String> allPatientsWithAdherence) {
-        allPatientsWithoutAdherence.addAll(allPatients);
-        allPatientsWithoutAdherence.removeAll(allPatientsWithAdherence);
+    public void setAllPatientsWithAdherence() {
+        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        allPatientsWithAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), is(currentWeekStartDate)), patients);
+    }
+
+    public void setAllPatientsWithoutAdherence() {
+        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        allPatientsWithoutAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), not(currentWeekStartDate)), patients);
     }
 
     public int countOfAllPatients() {
-        return allPatients.size();
+        return patients.size();
     }
 
     public int countOfPatientsWithAdherence() {
