@@ -16,6 +16,9 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import java.util.Collections;
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -89,6 +92,30 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         int dosesTaken = 0;
         LocalDate endDate = new LocalDate();
         verify(patientService, times(2)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, endDate);
+    }
+
+    @Test
+    public void shouldNotGenerateAuditLogs_forEmptyDailyAdherence(){
+        patientStub = new PatientStub();
+        patientStub.startTherapy(new LocalDate(2011, 7, 1));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
+        treatmentUpdateOrchestrator.recordDailyAdherence(Collections.<DailyAdherenceRequest>emptyList(), patientStub, auditParams);
+
+        verifyNoMoreInteractions(whpAdherenceService);
+    }
+
+    @Test
+    public void shouldNotUpdatePatient_forEmptyDailyAdherence(){
+        patientStub = new PatientStub();
+        patientStub.startTherapy(new LocalDate(2011, 7, 1));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
+        treatmentUpdateOrchestrator.recordDailyAdherence(Collections.<DailyAdherenceRequest>emptyList(), patientStub, auditParams);
+
+        verifyNoMoreInteractions(patientService);
     }
 
     @Test

@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.extract;
+import static ch.lambdaj.Lambda.on;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
@@ -122,16 +122,17 @@ public class TreatmentUpdateOrchestrator {
         refreshPatient(patientService.findByPatientId(patient.getPatientId()), weeklyAdherenceSummary.getWeek().startDate());
     }
 
-
     public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
-        whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests,patient,auditParams);
-        refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
+        if (!dailyAdherenceRequests.isEmpty()) {
+            whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
+            refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
+        }
     }
 
     private LocalDate getLastAdherenceProvidedWeekStartDate(List<DailyAdherenceRequest> dailyAdherenceRequests) {
         List<LocalDate> doseDates = extract(dailyAdherenceRequests, on(DailyAdherenceRequest.class).getDoseDate());
         Collections.sort(doseDates);
-        LocalDate lastAdherenceProvidedDate =  doseDates.get(doseDates.size() - 1);
+        LocalDate lastAdherenceProvidedDate = doseDates.get(doseDates.size() - 1);
         return new TreatmentWeek(lastAdherenceProvidedDate).startDate();
     }
 
