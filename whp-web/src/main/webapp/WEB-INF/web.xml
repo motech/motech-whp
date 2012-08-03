@@ -80,7 +80,7 @@
 
     <servlet-mapping>
         <servlet-name>motech-whp-ivr</servlet-name>
-        <url-pattern>/kookoo/ivr/*</url-pattern>
+        <url-pattern>/whpivr/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
