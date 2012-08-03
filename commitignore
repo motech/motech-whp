@@ -31,3 +31,11 @@ a63fbd8 BalajiN | #0 | Fixing NullPointerException when deserializing PatientV0
 8d023cd <Sri> #0 | Removing the "YES" and "NO" text for indicating adherence captured fields on listByProvider page.
 3c4d27b Vishal|Deva #0 Added exception error page and logging on controllers. Added javax.mail dependency for SMTPAppender in log4j.
 8df657e Dev | #0 | fixing bug in redirectRowclick js
+09b656e Dheeru | #000 | Fixing failing functional tests on the build machine
+9fbbdfc Dheeru | #000 | Fixed defect - With no patients, PatientsList page was throwing an exception upon CMF-Admin login
+9592281 <Dev> #0 | fixing issues found through findbugs plugin
+d7d7d79 BalajiN | #0 | Not checking commits on msater to release
+32bd775 BalajiN | #0 | ipBoxEndDate test fails on july 30th, since minus 5 months is feb 29th.
+dfd70b6 BalajiN | #0 | Renaming the clear button the the treatment card page.
+e9ff433 Abhishek, Dev | Back To Patients List will take you to previous search filter now
+9a9b894 Dheeru, Abhishek | #000 | Incorporating cosmetic changes in Treatment Card and TC-Printable View after UX discussion
