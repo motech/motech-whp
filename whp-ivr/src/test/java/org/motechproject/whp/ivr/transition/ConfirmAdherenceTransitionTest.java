@@ -121,7 +121,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 

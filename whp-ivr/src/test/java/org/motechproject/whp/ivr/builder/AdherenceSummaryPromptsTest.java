@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts;
 
@@ -13,9 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
-import static org.motechproject.whp.ivr.IvrAudioFiles.ADHERENCE_CAPTURE_INSTRUCTION;
-import static org.motechproject.whp.ivr.IvrAudioFiles.ADHERENCE_PROVIDED_FOR;
-import static org.motechproject.whp.ivr.IvrAudioFiles.ADHERENCE_TO_BE_PROVIDED_FOR;
+import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class AdherenceSummaryPromptsTest {
 

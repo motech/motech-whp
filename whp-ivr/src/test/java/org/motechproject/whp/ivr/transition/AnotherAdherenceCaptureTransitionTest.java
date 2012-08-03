@@ -118,7 +118,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1)));
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence())));
+        assertThat(node.getPrompts(), hasItems(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary)));
         assertThat(node.getPrompts(), not(hasItems(providedAdherencePrompts(whpivrMessage, PATIENT_1, Integer.parseInt(adherenceInput), 3))));
     }
 

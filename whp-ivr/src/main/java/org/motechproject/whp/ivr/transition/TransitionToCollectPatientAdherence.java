@@ -34,7 +34,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
             addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
             AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(ivrSession.providerId());
-            nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary.getAllPatientsWithAdherence(), adherenceSummary.getAllPatientsWithoutAdherence()));
+            nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary));
         }
     }
 

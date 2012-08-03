@@ -53,4 +53,7 @@ public class AdherenceSummaryByProvider implements Serializable {
         return allPatientsWithoutAdherence.size();
     }
 
+    public boolean hasPatientsWithoutAdherence() {
+        return allPatientsWithoutAdherence.size() > 0;
+    }
 }

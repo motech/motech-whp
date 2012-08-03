@@ -139,8 +139,7 @@ public class AdherenceCaptureTransitionTest {
                 .thenReturn(adherenceSummary);
 
         Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage,
-                adherenceSummary.getAllPatientsWithAdherence(),
-                adherenceSummary.getAllPatientsWithoutAdherence()));
+                adherenceSummary));
 
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
 
