@@ -5,13 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.common.domain.TreatmentWeek;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.ProviderBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.List;
@@ -49,8 +45,8 @@ public class AdherenceDataServiceTest {
         String patientId1 = "patient1";
         String patientId2 = "patient2";
         LocalDate currentAdherenceReportWeekStartDate = currentWeekInstance().startDate();
-        Patient patient1 = new PatientBuilder().withDefaults().withPatientId(patientId1).withProviderId(providerId).withLastAdherenceProvidedWeekStartDate(currentAdherenceReportWeekStartDate).build();
-        Patient patient2 = new PatientBuilder().withDefaults().withPatientId(patientId2).withProviderId(providerId).withLastAdherenceProvidedWeekStartDate(currentAdherenceReportWeekStartDate).build();
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId(patientId1).withProviderId(providerId).withAdherenceProvidedForLastWeek().build();
+        Patient patient2 = new PatientBuilder().withDefaults().withPatientId(patientId2).withProviderId(providerId).withAdherenceProvidedForLastWeek().build();
         List<Patient> patients = asList(patient1,patient2);
 
         when(allPatients.getAllWithActiveTreatmentFor(providerId)).thenReturn(patients);

@@ -9,7 +9,6 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -133,7 +132,7 @@ public class AdherenceCaptureTransitionTest {
 
     @Test
     public void shouldHangUpWithCallCompletionSummaryIfPatientListIsEmpty() {
-        Patient patient = new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(TreatmentWeekInstance.currentWeekInstance().startDate()).build();
+        Patient patient = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patient));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                 .thenReturn(adherenceSummary);

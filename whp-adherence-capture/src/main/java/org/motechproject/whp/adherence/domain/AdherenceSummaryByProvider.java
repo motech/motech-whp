@@ -31,16 +31,6 @@ public class AdherenceSummaryByProvider implements Serializable {
         setAllPatientsWithoutAdherence();
     }
 
-    public void setAllPatientsWithAdherence() {
-        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        allPatientsWithAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), is(currentWeekStartDate)), patients);
-    }
-
-    public void setAllPatientsWithoutAdherence() {
-        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        allPatientsWithoutAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), not(currentWeekStartDate)), patients);
-    }
-
     public int countOfAllPatients() {
         return patients.size();
     }
@@ -55,5 +45,15 @@ public class AdherenceSummaryByProvider implements Serializable {
 
     public boolean hasPatientsWithoutAdherence() {
         return allPatientsWithoutAdherence.size() > 0;
+    }
+
+    private void setAllPatientsWithAdherence() {
+        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        allPatientsWithAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), is(currentWeekStartDate)), patients);
+    }
+
+    private void setAllPatientsWithoutAdherence() {
+        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        allPatientsWithoutAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), not(currentWeekStartDate)), patients);
     }
 }

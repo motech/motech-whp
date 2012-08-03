@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
@@ -74,7 +73,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID, PATIENT2_ID)));
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withLastAdherenceProvidedWeekStartDate(currentWeekInstance().startDate()).build();
+        Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
         adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patient));

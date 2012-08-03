@@ -107,7 +107,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         String adherenceInput = "7";
         LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
 
-        Patient patientWithAdherence = new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build();
+        Patient patientWithAdherence = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
         Patient patientWithoutAdherence1 = new PatientBuilder().withPatientId("patient2").build();
         Patient patientWithoutAdherence2 = new PatientBuilder().withPatientId("patient2").build();
 

@@ -3,11 +3,9 @@ package org.motechproject.whp.adherence.domain;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +26,8 @@ public class AdherenceSummaryByProviderTest {
     @Before
     public void setUp() {
         LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        Patient patientWithAdherence1 = new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build();
-        Patient patientWithAdherence2 = new PatientBuilder().withPatientId("patient2").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build();
+        Patient patientWithAdherence1 = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
+        Patient patientWithAdherence2 = new PatientBuilder().withPatientId("patient2").withAdherenceProvidedForLastWeek().build();
 
         patientsWithAdherence = asList(patientWithAdherence1, patientWithAdherence2);
 

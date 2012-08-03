@@ -3,7 +3,6 @@ package org.motechproject.whp.ivr.builder;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
@@ -32,7 +31,7 @@ public class AdherenceCaptureBuilder {
                 .byProvider(ivrSession.providerId())
                 .throughMobile(ivrSession.mobileNumber())
                 .onCall(ivrSession.callId())
-                .withLastSubmissionTime(ivrSession.startOfAdherenceSubmission())
+                .withStartOfAdherenceSubmission(ivrSession.startOfAdherenceSubmission())
                 .build();
         return this;
     }
@@ -41,7 +40,7 @@ public class AdherenceCaptureBuilder {
         return request;
     }
 
-    private AdherenceCaptureBuilder withLastSubmissionTime(DateTime time) {
+    private AdherenceCaptureBuilder withStartOfAdherenceSubmission(DateTime time) {
         DateTime now = DateUtil.now();
         Period period = new Period(time, now);
         request.setTimeTaken(new Long(period.getSeconds()));
