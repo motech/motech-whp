@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.session;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +11,11 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.List;
@@ -20,8 +24,10 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.collections.ListUtils.sum;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 @RunWith(Suite.class)
@@ -42,8 +48,8 @@ public class AdherenceRecordingSessionTest {
 
         protected AdherenceRecordingSession adherenceRecordingSession;
 
-        protected AdherenceSummaryByProvider adherenceSummary(List<String> patientsWithAdherence, List<String> patientsWithoutAdherence, String providerId) {
-            AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(providerId, sum(patientsWithAdherence, patientsWithoutAdherence), patientsWithAdherence);
+        protected AdherenceSummaryByProvider adherenceSummary(List<Patient> patientsWithAdherence, List<Patient> patientsWithoutAdherence, String providerId) {
+            AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(providerId, sum(patientsWithAdherence, patientsWithoutAdherence));
             when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(summary);
             return summary;
         }
@@ -54,14 +60,24 @@ public class AdherenceRecordingSessionTest {
         protected static final String PROVIDER_ID = "providerid";
         protected static final String MOBILE_NUMBER = "mobileNumber";
         protected static final String CALL_ID = "call_id1";
-        private List<String> patientsWithAdherence = asList("patient1", "patient2");
-        private List<String> patientsWithoutAdherence = asList("patient3", "patient4");
+        private List<Patient> patientsWithAdherence;
+        private List<Patient> patientsWithoutAdherence;
         protected DateTime now = new DateTime(2011, 1, 1, 10, 0, 0, 0);
 
         @Before
         public void setup() {
             initMocks(this);
             setupSession();
+
+            LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+            patientsWithAdherence = asList(
+                    new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build(),
+                    new PatientBuilder().withPatientId("patient2").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build());
+
+            patientsWithoutAdherence = asList(
+                    new PatientBuilder().withPatientId("patient3").build(),
+                    new PatientBuilder().withPatientId("patient4").build());
+
             when(allProviders.findByMobileNumber(MOBILE_NUMBER)).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
             mockCurrentDate(now);
@@ -113,15 +129,26 @@ public class AdherenceRecordingSessionTest {
 
         protected static final String PROVIDER_ID = "providerid";
         protected static final String MOBILE_NUMBER = "mobileNumber";
-
-        private List<String> patientsWithAdherence = asList("patient1");
-        private List<String> patientsWithoutAdherence = asList("patient2", "patient3");
-        private List<String> patientsWithAdherenceAfterFirstInput = asList("patient1", "patient2");
-        private List<String> patientsWithoutAdherenceAfterFirstInput = asList("patient3");
+        private LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        private List<Patient> patientsWithAdherence;
+        private List<Patient> patientsWithoutAdherence;
+        private List<Patient> patientsWithAdherenceAfterFirstInput;
+        private List<Patient> patientsWithoutAdherenceAfterFirstInput;
 
         @Before
         public void setup() {
             initMocks(this);
+            patientsWithAdherence = asList(new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build());
+            patientsWithoutAdherence = asList(
+                    new PatientBuilder().withPatientId("patient2").build(),
+                    new PatientBuilder().withPatientId("patient3").build());
+
+            patientsWithAdherenceAfterFirstInput = asList(
+                    new PatientBuilder().withPatientId("patient1").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build(),
+                    new PatientBuilder().withPatientId("patient2").withLastAdherenceProvidedWeekStartDate(lastWeekStartDate).build());
+
+            patientsWithoutAdherenceAfterFirstInput = asList(new PatientBuilder().withPatientId("patient3").build());
+
             setupSession();
             when(allProviders.findByMobileNumber(MOBILE_NUMBER)).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
@@ -131,13 +158,11 @@ public class AdherenceRecordingSessionTest {
         private void setupSummary() {
             AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(
                     PROVIDER_ID,
-                    sum(patientsWithAdherence, patientsWithoutAdherence),
-                    patientsWithAdherence
+                    sum(patientsWithAdherence, patientsWithoutAdherence)
             );
             AdherenceSummaryByProvider summaryAfterFirstInput = new AdherenceSummaryByProvider(
                     PROVIDER_ID,
-                    sum(patientsWithAdherenceAfterFirstInput, patientsWithoutAdherenceAfterFirstInput),
-                    patientsWithAdherenceAfterFirstInput
+                    sum(patientsWithAdherenceAfterFirstInput, patientsWithoutAdherenceAfterFirstInput)
             );
             when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                     .thenReturn(summary)
@@ -168,14 +193,16 @@ public class AdherenceRecordingSessionTest {
 
         public static final String PROVIDER_ID = "providerid2";
         public static final String MOBILE_NUMBER = "mobileNumber2";
-        private List<String> patientsWithAdherence = asList("patient4");
-        private List<String> patientsWithoutAdherence = asList("patient5", "patient6");
+        private List<Patient> patientsWithAdherence;
+        private List<Patient> patientsWithoutAdherence;
         private static final String CALL_ID = "call_id2";
         protected DateTime now = new DateTime(2011, 1, 1, 10, 10, 0, 0);
 
         @Before
         public void setup() {
             initMocks(this);
+            patientsWithAdherence = asList(new PatientBuilder().withPatientId("patient4").withLastAdherenceProvidedWeekStartDate(currentWeekInstance().startDate()).build());
+            patientsWithoutAdherence = asList(new PatientBuilder().withPatientId("patient5").build(), new PatientBuilder().withPatientId("patient6").build());
             setupSession();
             when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
             setupSummary();
