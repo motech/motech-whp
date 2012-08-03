@@ -6,7 +6,7 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;

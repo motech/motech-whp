@@ -1,9 +1,10 @@
-package org.motechproject.whp.ivr.util;
+package org.motechproject.whp.ivr.session;
 
 
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.ivr.util.SerializableList;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class IvrSession {
         this.flowSession = flowSession;
     }
 
-    public String getMobileNumber() {
+    public String mobileNumber() {
         return flowSession.get("cid");
     }
 
@@ -58,19 +59,6 @@ public class IvrSession {
         flowSession.set("sid", callId);
     }
 
-    private Integer currentPatientIndex() {
-        Integer currentNodePosition = (Integer) flowSession.get(CURRENT_PATIENT_INDEX);
-        if (currentNodePosition == null) {
-            currentNodePosition = 0;
-            flowSession.set(CURRENT_PATIENT_INDEX, currentNodePosition);
-        }
-        return currentNodePosition;
-    }
-
-    private Integer nextPatientIndex() {
-        return currentPatientIndex() + 1;
-    }
-
     public void currentPatientIndex(int value) {
         flowSession.set(CURRENT_PATIENT_INDEX, value);
     }
@@ -86,16 +74,8 @@ public class IvrSession {
         return patientsWithoutAdherence.get(currentPatientIndex());
     }
 
-    private void incrementCurrentPatientIndex() {
-        currentPatientIndex(nextPatientIndex());
-    }
-
     public boolean hasNextPatient() {
         return (patientsWithoutAdherence().size() > nextPatientIndex());
-    }
-
-    public boolean hasPatientsWithoutAdherence() {
-        return (patientsWithoutAdherence().size() > 0);
     }
 
     public String providerId() {
@@ -106,12 +86,16 @@ public class IvrSession {
         flowSession.set(PROVIDER_ID, providerId);
     }
 
-    public void resetCurrentPatientIndex() {
-        flowSession.set(CURRENT_PATIENT_INDEX, null);
+    public boolean hasPatientsWithoutAdherence() {
+        return (patientsWithoutAdherence().size() > 0);
     }
 
     public Integer adherenceInputForCurrentPatient() {
         return Integer.valueOf(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
+    }
+
+    public void resetCurrentPatientIndex() {
+        flowSession.set(CURRENT_PATIENT_INDEX, null);
     }
 
     public void adherenceInputForCurrentPatient(String input) {
@@ -124,6 +108,23 @@ public class IvrSession {
 
     public DateTime startOfAdherenceSubmission() {
         return flowSession.get(START_OF_ADHERENCE_SUBMISSION);
+    }
+
+    private Integer currentPatientIndex() {
+        Integer currentNodePosition = (Integer) flowSession.get(CURRENT_PATIENT_INDEX);
+        if (currentNodePosition == null) {
+            currentNodePosition = 0;
+            flowSession.set(CURRENT_PATIENT_INDEX, currentNodePosition);
+        }
+        return currentNodePosition;
+    }
+
+    private Integer nextPatientIndex() {
+        return currentPatientIndex() + 1;
+    }
+
+    private void incrementCurrentPatientIndex() {
+        currentPatientIndex(nextPatientIndex());
     }
 }
 

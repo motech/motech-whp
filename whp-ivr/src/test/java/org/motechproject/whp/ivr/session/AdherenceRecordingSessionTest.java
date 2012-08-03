@@ -13,7 +13,6 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
-import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -96,32 +95,38 @@ public class AdherenceRecordingSessionTest {
 
         @Test
         public void shouldInitializeSessionWithPatientsWithAdherence() {
-            assertEquals(asList("patient1", "patient2"), adherenceRecordingSession.initialize(flowSession).patientsWithAdherence());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(asList("patient1", "patient2"), session.patientsWithAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithPatientsWithoutAdherence() {
-            assertEquals(asList("patient3", "patient4"), adherenceRecordingSession.initialize(flowSession).patientsWithoutAdherence());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(asList("patient3", "patient4"), session.patientsWithoutAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithProviderId() {
-            assertEquals(PROVIDER_ID, adherenceRecordingSession.initialize(flowSession).providerId());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(PROVIDER_ID, session.providerId());
         }
 
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
-            assertEquals(MOBILE_NUMBER, adherenceRecordingSession.initialize(flowSession).getMobileNumber());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(MOBILE_NUMBER, session.mobileNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
-            assertEquals(CALL_ID, adherenceRecordingSession.initialize(flowSession).callId());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(CALL_ID, session.callId());
         }
 
         @Test
         public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
-            assertEquals(now, adherenceRecordingSession.collectingAdherenceInput("patientId1", flowSession).startOfAdherenceSubmission());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(now, session.startOfAdherenceSubmission());
         }
     }
 
@@ -177,14 +182,14 @@ public class AdherenceRecordingSessionTest {
         @Test
         public void shouldNotReinitializeSessionWithPatientsWithAdherence() {
             adherenceRecordingSession.initialize(flowSession);
-            IvrSession session = adherenceRecordingSession.initialize(flowSession);
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
             assertEquals(asList("patient1"), session.patientsWithAdherence());
         }
 
         @Test
         public void shouldNotReinitializeSessionWithPatientsWithoutAdherence() {
             adherenceRecordingSession.initialize(flowSession);
-            IvrSession session = adherenceRecordingSession.initialize(flowSession);
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
             assertEquals(asList("patient2", "patient3"), session.patientsWithoutAdherence());
         }
     }
@@ -221,33 +226,39 @@ public class AdherenceRecordingSessionTest {
         }
 
         @Test
-        public void shouldSetPWhenPreparingSession() {
-            assertEquals(asList("patient4"), adherenceRecordingSession.initialize(flowSession).patientsWithAdherence());
+        public void shouldInitializeSessionWithPatientsWithAdherence() {
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(asList("patient4"), session.patientsWithAdherence());
         }
 
         @Test
-        public void shouldSetAdherenceSummaryWhenPreparingSession() {
-            assertEquals(asList("patient5", "patient6"), adherenceRecordingSession.initialize(flowSession).patientsWithoutAdherence());
+        public void shouldInitializeSessionWithPatientsWithoutAdherence() {
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(asList("patient5", "patient6"), session.patientsWithoutAdherence());
         }
 
         @Test
         public void shouldInitializeSessionWithProviderId() {
-            assertEquals(PROVIDER_ID, adherenceRecordingSession.initialize(flowSession).providerId());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(PROVIDER_ID, session.providerId());
         }
 
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
-            assertEquals(MOBILE_NUMBER, adherenceRecordingSession.initialize(flowSession).getMobileNumber());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(MOBILE_NUMBER, session.mobileNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
-            assertEquals(CALL_ID, adherenceRecordingSession.initialize(flowSession).callId());
+            IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
+            assertEquals(CALL_ID, session.callId());
         }
 
         @Test
         public void shouldSetCurrentTimeInSessionWhenCollectingAdherenceInput() {
-            assertEquals(now, adherenceRecordingSession.collectingAdherenceInput("patientId4", flowSession).startOfAdherenceSubmission());
+            IvrSession session = new IvrSession(adherenceRecordingSession.collectingAdherenceInput(flowSession));
+            assertEquals(now, session.startOfAdherenceSubmission());
         }
     }
 }

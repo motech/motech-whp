@@ -3,7 +3,7 @@ package org.motechproject.whp.ivr.operation;
 
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 
 public class GetAdherenceOperation implements INodeOperation{
 

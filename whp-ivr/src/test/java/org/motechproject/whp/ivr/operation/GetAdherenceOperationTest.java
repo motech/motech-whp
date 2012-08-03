@@ -9,7 +9,7 @@ import org.motechproject.decisiontree.FlowSession;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.util.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
+import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
 
 public class GetAdherenceOperationTest {
     @Mock

@@ -16,7 +16,7 @@ import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -33,8 +33,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
-import static org.motechproject.whp.ivr.util.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
-import static org.motechproject.whp.ivr.util.IvrSession.PROVIDER_ID;
+import static org.motechproject.whp.ivr.session.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
+import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
 
 public class AnotherAdherenceCaptureTransitionTest {
 

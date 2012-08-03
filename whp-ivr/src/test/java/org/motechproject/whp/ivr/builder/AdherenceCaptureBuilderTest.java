@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

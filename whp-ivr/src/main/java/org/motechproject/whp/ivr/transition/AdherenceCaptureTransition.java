@@ -8,7 +8,7 @@ import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.node.ConfirmAdherenceNode;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;

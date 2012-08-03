@@ -4,7 +4,6 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.ivr.util.IvrSession;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,22 +20,22 @@ public class AdherenceRecordingSession {
         this.dataService = dataService;
     }
 
-    public IvrSession initialize(FlowSession session) {
+    public FlowSession initialize(FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
         if (ivrSession.providerId() == null) {
-            String providerId = allProviders.findByMobileNumber(ivrSession.getMobileNumber()).getProviderId();
+            String providerId = allProviders.findByMobileNumber(ivrSession.mobileNumber()).getProviderId();
             AdherenceSummaryByProvider adherenceSummary = dataService.getAdherenceSummary(providerId);
 
             ivrSession.providerId(providerId);
             ivrSession.patientsWithoutAdherence(adherenceSummary.getAllPatientsWithoutAdherence());
             ivrSession.patientsWithAdherence(adherenceSummary.getAllPatientsWithAdherence());
         }
-        return ivrSession;
+        return session;
     }
 
-    public IvrSession collectingAdherenceInput(String forPatient, FlowSession session) {
+    public FlowSession collectingAdherenceInput(FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
         ivrSession.startOfAdherenceSubmission(DateUtil.now());
-        return ivrSession;
+        return session;
     }
 }

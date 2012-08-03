@@ -8,8 +8,8 @@ import org.motechproject.whp.ivr.util.FlowSessionStub;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.motechproject.whp.ivr.util.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
-import static org.motechproject.whp.ivr.util.IvrSession.CURRENT_PATIENT_INDEX;
+import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
+import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_PATIENT_INDEX;
 
 public class ResetPatientIndexOperationTest {
 

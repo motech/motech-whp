@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 public class AdherenceCaptureBuilder {
@@ -29,7 +29,7 @@ public class AdherenceCaptureBuilder {
     public AdherenceCaptureBuilder forSession(IvrSession ivrSession) {
         request = this.withInput(ivrSession.adherenceInputForCurrentPatient())
                 .byProvider(ivrSession.providerId())
-                .throughMobile(ivrSession.getMobileNumber())
+                .throughMobile(ivrSession.mobileNumber())
                 .onCall(ivrSession.callId())
                 .withLastSubmissionTime(ivrSession.startOfAdherenceSubmission())
                 .build();

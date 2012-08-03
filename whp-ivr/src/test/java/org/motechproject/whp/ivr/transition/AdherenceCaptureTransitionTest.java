@@ -13,7 +13,7 @@ import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
-import static org.motechproject.whp.ivr.util.IvrSession.PROVIDER_ID;
+import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
 
 public class AdherenceCaptureTransitionTest {
 

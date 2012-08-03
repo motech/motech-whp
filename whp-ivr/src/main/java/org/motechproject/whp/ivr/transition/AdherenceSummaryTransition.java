@@ -5,7 +5,7 @@ import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
-import org.motechproject.whp.ivr.util.IvrSession;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ public class AdherenceSummaryTransition implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        IvrSession ivrSession = recordingSession.initialize(flowSession);
+        IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
 
         Node captureAdherenceNode = new Node();
         captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpivrMessage, ivrSession.patientsWithAdherence(), ivrSession.patientsWithoutAdherence()));
