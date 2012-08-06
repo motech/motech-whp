@@ -139,6 +139,9 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldRecordAdherenceForAPatient() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
+
+        navigateToAdherenceSummary(sessionId);
+
         enterAdherenceForPatient(sessionId, 2, TREE_PATH_ADHERENCE_CAPTURE);
 
         String confirmAdherenceTreePath = new String(Base64.encodeBase64URLSafe("/1/2".getBytes()));
@@ -152,9 +155,16 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
     }
 
+    private void navigateToAdherenceSummary(String sessionId) throws IOException {
+        decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
+    }
+
     @Test
     public void shouldRecordAdherenceForMultiplePatients() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
+
+        navigateToAdherenceSummary(sessionId);
+
         int adherenceCapturedForFirstPatient = 2;
 
         String treePath = "/1";
