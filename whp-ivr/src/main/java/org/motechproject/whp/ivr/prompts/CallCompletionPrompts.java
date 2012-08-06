@@ -6,8 +6,6 @@ import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 
-import java.util.List;
-
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class CallCompletionPrompts {
@@ -20,15 +18,26 @@ public class CallCompletionPrompts {
         return promptBuilder.build();
     }
 
-    public static Prompt[] callCompletionPromptsWithAdherenceSummary(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummary) {
+    public static Prompt[] callCompletionPromptsAfterCapturingAdherence(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummary) {
+        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
+        promptBuilder.wav(THANK_YOU);
+        promptBuilder.addAll(
+                adherenceSummaryWithCallCompletionPrompts(
+                        whpivrMessage,
+                        adherenceSummary.countOfAllPatients(),
+                        adherenceSummary.countOfPatientsWithAdherence()));
+        return promptBuilder.build();
+    }
+
+    public static Prompt[] adherenceSummaryWithCallCompletionPrompts(WHPIVRMessage whpivrMessage, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
         promptBuilder.wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR)
-                .number(adherenceSummary.countOfPatientsWithAdherence())
+                .number(countOfPatientsWithAdherence)
                 .wav(END_OF_CALL_ADHERENCE_OUT_OF)
-                .number(adherenceSummary.countOfAllPatients())
+                .number(countOfAllPatients)
                 .wav(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS);
 
-        if(adherenceSummary.hasPatientsWithoutAdherence()){
+        if(countOfAllPatients > countOfPatientsWithAdherence){
             promptBuilder.wav(CALL_BACK_MESSAGE);
         }
 

@@ -9,7 +9,7 @@ import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 
 public abstract class TransitionToCollectPatientAdherence implements ITransition {
@@ -34,7 +34,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
             addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
             AdherenceSummaryByProvider adherenceSummary = adherenceDataService.getAdherenceSummary(ivrSession.providerId());
-            nextNode.addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary));
+            nextNode.addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary));
         }
     }
 

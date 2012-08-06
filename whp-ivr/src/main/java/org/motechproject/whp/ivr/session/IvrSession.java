@@ -28,10 +28,6 @@ public class IvrSession {
         return flowSession.get("cid");
     }
 
-    public void patientsWithoutAdherence(List<Patient> patientsWithoutAdherence) {
-        List<String> patientIds = getPatientIds(patientsWithoutAdherence);
-        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientIds));
-    }
 
     private List<String> getPatientIds(List<Patient> patients) {
         List<String> patientIds = new ArrayList<>();
@@ -40,10 +36,14 @@ public class IvrSession {
         return patientIds;
     }
 
+    public void patientsWithoutAdherence(List<Patient> patientsWithoutAdherence) {
+        List<String> patientIds = getPatientIds(patientsWithoutAdherence);
+        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientIds));
+    }
+
     public List<String> patientsWithoutAdherence() {
         return (List<String>) flowSession.get(PATIENTS_WITHOUT_ADHERENCE);
     }
-
 
     public void patientsWithAdherence(List<Patient> patientsWithAdherence) {
         List<String> patientIds = getPatientIds(patientsWithAdherence);
@@ -82,7 +82,7 @@ public class IvrSession {
     }
 
     public boolean hasNextPatient() {
-        return (patientsWithoutAdherence().size() > nextPatientIndex());
+        return (countOfPatientsWithoutAdherence() > nextPatientIndex());
     }
 
     public String providerId() {
@@ -94,7 +94,7 @@ public class IvrSession {
     }
 
     public boolean hasPatientsWithoutAdherence() {
-        return (patientsWithoutAdherence().size() > 0);
+        return (countOfPatientsWithoutAdherence() > 0);
     }
 
     public IVRInput adherenceInputForCurrentPatient() {
@@ -132,6 +132,18 @@ public class IvrSession {
 
     private void incrementCurrentPatientIndex() {
         currentPatientIndex(nextPatientIndex());
+    }
+
+    public Integer countOfAllPatients(){
+        return countOfPatientsWithAdherence() + countOfPatientsWithoutAdherence();
+    }
+
+    private int countOfPatientsWithoutAdherence() {
+        return patientsWithoutAdherence().size();
+    }
+
+    public int countOfPatientsWithAdherence() {
+        return patientsWithAdherence().size();
     }
 }
 

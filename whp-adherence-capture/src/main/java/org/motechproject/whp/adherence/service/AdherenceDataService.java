@@ -1,20 +1,12 @@
 package org.motechproject.whp.adherence.service;
 
-import org.hamcrest.Matchers;
-import org.hamcrest.number.OrderingComparison;
-import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.is;
 
 
 @Component

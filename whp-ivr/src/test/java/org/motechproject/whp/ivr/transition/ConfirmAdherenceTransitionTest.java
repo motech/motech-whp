@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT;
 import static org.motechproject.whp.ivr.session.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
@@ -120,7 +120,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary));
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 

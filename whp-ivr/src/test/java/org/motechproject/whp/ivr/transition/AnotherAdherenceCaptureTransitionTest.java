@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
@@ -118,7 +118,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1)));
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(callCompletionPromptsWithAdherenceSummary(whpivrMessage, adherenceSummary)));
+        assertThat(node.getPrompts(), hasItems(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary)));
         assertThat(node.getPrompts(), not(hasItems(providedAdherencePrompts(whpivrMessage, PATIENT_1, Integer.parseInt(adherenceInput), 3))));
     }
 

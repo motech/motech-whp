@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsWithAdherenceSummary;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
 
 public class AdherenceCaptureTransitionTest extends BaseUnitTest {
@@ -140,7 +140,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
                 .thenReturn(adherenceSummary);
 
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsWithAdherenceSummary(whpivrMessage,
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
                 adherenceSummary));
 
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));

@@ -10,6 +10,7 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.prompts.CallCompletionPrompts;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
+import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
@@ -99,8 +101,9 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
 
         Node expectedNode = new Node()
-                .addPrompts(adherenceSummaryPrompts(whpivrMessage, asList(patient1, patient2), emptyList()))
-                .addPrompts(callCompletionPrompts(whpivrMessage));
+                .addPrompts(adherenceSummaryWithCallCompletionPrompts(whpivrMessage,
+                        adherenceSummary.countOfAllPatients(),
+                        adherenceSummary.countOfPatientsWithAdherence()));
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
         assertThat(actualNode, is(expectedNode));
