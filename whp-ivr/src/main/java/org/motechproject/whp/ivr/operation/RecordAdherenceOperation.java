@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.operation;
 
+import org.apache.log4j.Logger;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.util.DateUtil;
@@ -19,6 +20,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     private String currentPatientId;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private ReportingPublisherService reportingService;
+    private static Logger logger = Logger.getLogger(RecordAdherenceOperation.class);
 
     public RecordAdherenceOperation(String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, ReportingPublisherService reportingService) {
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
@@ -60,10 +62,12 @@ public class RecordAdherenceOperation implements INodeOperation {
     }
 
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
+        logger.info("Building adherence submission request");
         AdherenceCaptureRequest request = adherenceCapture()
                 .forPatient(currentPatientId)
                 .forSession(ivrSession)
                 .build();
+        logger.info("Publishing adherence submission request");
         reportingService.reportAdherenceCapture(request);
     }
 
