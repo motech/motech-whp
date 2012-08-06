@@ -3,11 +3,11 @@ package org.motechproject.whp.ivr.transition;
 import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.node.ConfirmAdherenceNode;
+import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
@@ -40,11 +40,15 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         Patient patient = patientService.findByPatientId(ivrSession.currentPatientId());
 
         Node nextNode = new Node();
-        if (ivrInput.isNotSkipInput() && patient.isValidDose(ivrInput.input())) {
-            nextNode = new ConfirmAdherenceNode(whpivrMessage).with(patient, parseInt(input)).node();
-        } else {
-            ivrSession.startOfAdherenceSubmission(now());
+        if (ivrInput.isSkipInput()) {
+            nextNode.addOperations(new CaptureAdherenceSubmissionTimeOperation(now()));
             addTransitionsToNextPatients(ivrSession, nextNode);
+        } else {
+            if (patient.isValidDose(ivrInput.input())) {
+                nextNode = new ConfirmAdherenceNode(whpivrMessage).with(patient, parseInt(input)).node();
+            } else {
+                addTransitionsToNextPatients(ivrSession, nextNode);
+            }
         }
         return nextNode.addOperations(new ResetPatientIndexOperation());
     }

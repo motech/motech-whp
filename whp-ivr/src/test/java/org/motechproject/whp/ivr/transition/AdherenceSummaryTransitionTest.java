@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
@@ -110,14 +111,17 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldCaptureTimeTakenToEnterAdherenceForEachPatient() {
+    public void shouldBuildNodeWhichCapturesTimeOfAdherenceSubmission() {
         DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
         mockCurrentDate(now);
 
         AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
 
-        adherenceSummaryTransition.getDestinationNode("", flowSession);
+        List<INodeOperation> operations = adherenceSummaryTransition.getDestinationNode("", flowSession).getOperations();
+        for (INodeOperation operation : operations) {
+            operation.perform("", flowSession);
+        }
         assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 

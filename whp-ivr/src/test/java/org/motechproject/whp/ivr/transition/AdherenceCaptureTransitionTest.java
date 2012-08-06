@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
@@ -150,30 +151,38 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldCaptureStartOfAdherenceCaptureTimeIfInputIsSkipped() {
-        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
-        mockCurrentDate(now);
-
-        adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
-    }
-
-    @Test
-    public void shouldCaptureStartOfAdherenceCaptureTimeIfPatientDoseIsInvalid() {
-        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
-        mockCurrentDate(now);
-
-        adherenceCaptureTransition.getDestinationNode("8", flowSession);
-        Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
-    }
-
-    @Test
-    public void shouldNotCaptureStartOfAdherenceCaptureTimeIfPatientDoseIsValid() {
+    public void shouldBuildNodeThatResetsAdherenceSubmissionTimeIfPatientDoseIsSkipped() {
         DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
         mockCurrentDate(now);
 
         new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
-        adherenceCaptureTransition.getDestinationNode("1", flowSession);
+        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("9", flowSession).getOperations()) {
+            operation.perform("9", flowSession);
+        }
+        Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldBuildNodeThatDoesNotResetAdherenceSubmissionTimeIfPatientDoseIsInvalid() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
+        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("8", flowSession).getOperations()) {
+            operation.perform("8", flowSession);
+        }
+        Assert.assertEquals(now.minusDays(5), new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldBuildNodeThatDoesNotResetAdherenceSubmissionTimeIfPatientDoseIsValid() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
+        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("1", flowSession).getOperations()) {
+            operation.perform("1", flowSession);
+        }
         Assert.assertEquals(now.minusDays(5), new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
