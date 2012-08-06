@@ -8,14 +8,15 @@
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.motechproject.whp</groupId>
+    <name>whp-reporting</name>
+    <artifactId>whp-reporting</artifactId>
 
     <properties>
         <build.dir>../build</build.dir>
     </properties>
-
-    <artifactId>whp-reporting</artifactId>
 
     <dependencies>
         <dependency>
