@@ -84,6 +84,26 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldPlayEndOfCallPromptsIfAdherenceIsSkippedForTheLastPatient() {
+        new IvrSession(flowSession).currentPatientIndex(1);
+        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
+                .wav(THANK_YOU)
+                .wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR)
+                .number(2)
+                .wav(END_OF_CALL_ADHERENCE_OUT_OF)
+                .number(0)
+                .wav(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS)
+                .wav(CALL_BACK_MESSAGE)
+                .wav(COMPLETION_MESSAGE)
+                .wav(MUSIC_END_NOTE);
+
+        Node expectedNode = new Node().addPrompts(promptBuilder.build());
+
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
+        assertEquals(expectedNode, destinationNode);
+    }
+
+    @Test
     public void shouldSkipCurrentPatientIfEnteredDoseIsGreaterThanDosesPerWeek() {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
                 .number(2)
