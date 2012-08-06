@@ -15,9 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-
 @Repository
 public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
 
@@ -118,7 +115,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
 
     private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(Set<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
         ArrayList<AdherenceLog> tobeStoredLogs = new ArrayList<AdherenceLog>();
-        List<LocalDate> doseDatesToBeMappedWith = extract(dbLogs, on(AdherenceLog.class).doseDate());
+        List<LocalDate> doseDatesToBeMappedWith = getDoseDates(dbLogs);
         for (AdherenceLog log : logsToMap) {
             int logPos = doseDatesToBeMappedWith.indexOf(log.doseDate());
             if (logPos < 0) {
@@ -133,6 +130,13 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
             }
         }
         return tobeStoredLogs;
+    }
+
+    private List<LocalDate> getDoseDates(List<AdherenceLog> logs) {
+        List<LocalDate> doseDates = new ArrayList<>();
+        for(AdherenceLog log : logs)
+            doseDates.add(log.doseDate());
+        return doseDates;
     }
 
     @View(name = "find_patients_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2)) {emit([doc.meta.PROVIDER_ID, doc.doseDate], doc.externalId);}}")

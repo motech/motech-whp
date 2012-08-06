@@ -18,12 +18,11 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
@@ -130,10 +129,17 @@ public class TreatmentUpdateOrchestrator {
     }
 
     private LocalDate getLastAdherenceProvidedWeekStartDate(List<DailyAdherenceRequest> dailyAdherenceRequests) {
-        List<LocalDate> doseDates = extract(dailyAdherenceRequests, on(DailyAdherenceRequest.class).getDoseDate());
+        List<LocalDate> doseDates = getDoseDates(dailyAdherenceRequests);
         Collections.sort(doseDates);
         LocalDate lastAdherenceProvidedDate = doseDates.get(doseDates.size() - 1);
         return new TreatmentWeek(lastAdherenceProvidedDate).startDate();
+    }
+    private List<LocalDate> getDoseDates(List<DailyAdherenceRequest> dailyAdherenceRequests) {
+        List<LocalDate> doseDates = new ArrayList<>();
+        for(DailyAdherenceRequest dailyAdherenceRequest : dailyAdherenceRequests) {
+            doseDates.add(dailyAdherenceRequest.getDoseDate());
+        }
+        return doseDates;
     }
 
     private void refreshPatient(Patient patient, LocalDate lastAdherenceWeekStartDate) {

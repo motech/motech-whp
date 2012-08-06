@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -14,15 +15,12 @@ import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.common.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static org.motechproject.whp.patient.mapper.PatientMapper.mapPatient;
 
 @Service
@@ -103,8 +101,16 @@ public class PatientService {
 
     public List<Patient> searchBy(String districtName) {
         List<Provider> providers = providerService.fetchBy(districtName);
-        List<String> providerIds = extract(providers, on(Provider.class).getProviderId());
+        List<String> providerIds = getProviderIds(providers);
         return allPatients.getAllUnderActiveTreatmentWithCurrentProviders(providerIds);
+    }
+
+    private List<String> getProviderIds(List<Provider> providers) {
+        List<String> providerIds = new ArrayList<>();
+        for (Provider provider : providers) {
+            providerIds.add(provider.getProviderId());
+        }
+        return providerIds;
     }
 
     public void addRemark(String patientId, String remark, String user) {

@@ -10,10 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 @EqualsAndHashCode
 public class AdherenceSummaryByProvider implements Serializable {
 
@@ -49,11 +45,16 @@ public class AdherenceSummaryByProvider implements Serializable {
 
     private void setAllPatientsWithAdherence() {
         LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        allPatientsWithAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), is(currentWeekStartDate)), patients);
+
+        allPatientsWithAdherence = new ArrayList<>();
+        for (Patient patient : patients) {
+            if (patient.getLastAdherenceWeekStartDate() != null && patient.getLastAdherenceWeekStartDate().isEqual(currentWeekStartDate))
+                allPatientsWithAdherence.add(patient);
+        }
     }
 
     private void setAllPatientsWithoutAdherence() {
-        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        allPatientsWithoutAdherence = filter(having(on(Patient.class).getLastAdherenceWeekStartDate(), not(currentWeekStartDate)), patients);
+        allPatientsWithoutAdherence = new ArrayList<>(patients);
+        allPatientsWithoutAdherence.removeAll(allPatientsWithAdherence);
     }
 }

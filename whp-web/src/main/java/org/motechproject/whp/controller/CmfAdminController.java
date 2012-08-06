@@ -10,7 +10,6 @@ import org.motechproject.whp.refdata.repository.AllCmfLocations;
 import org.motechproject.whp.user.service.CmfAdminService;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.repository.AllCmfAdmins;
-import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static org.springframework.util.StringUtils.hasText;
 
 @Controller
@@ -115,7 +113,15 @@ public class CmfAdminController extends BaseController{
 
     private void addAllCmfLocationToUIModel(Model uiModel) {
         List<CmfLocation> cmfLocations = allCmfLocations.getAll();
-        uiModel.addAttribute(LOCATION_LIST, extract(cmfLocations, on(CmfLocation.class).getLocation()));
+        uiModel.addAttribute(LOCATION_LIST, getLocations(cmfLocations));
+    }
+
+    private List<String> getLocations(List<CmfLocation> cmfLocations) {
+        List<String> locations = new ArrayList<>();
+        for(CmfLocation cmfLocation : cmfLocations) {
+            locations.add(cmfLocation.getLocation());
+        }
+        return locations;
     }
 
     private void queryAndPopulateAllCmfAdminsInModel(Model uiModel) {

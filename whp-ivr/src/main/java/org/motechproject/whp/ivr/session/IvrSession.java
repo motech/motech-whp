@@ -3,14 +3,12 @@ package org.motechproject.whp.ivr.session;
 
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
+import org.motechproject.whp.patient.domain.Patient;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.extract;
 
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
@@ -31,16 +29,24 @@ public class IvrSession {
     }
 
     public void patientsWithoutAdherence(List<Patient> patientsWithoutAdherence) {
-        List<String> patientIds = extract(patientsWithoutAdherence, on(Patient.class).getPatientId());
+        List<String> patientIds = getPatientIds(patientsWithoutAdherence);
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList<>(patientIds));
+    }
+
+    private List<String> getPatientIds(List<Patient> patients) {
+        List<String> patientIds = new ArrayList<>();
+        for (Patient patient : patients)
+            patientIds.add(patient.getPatientId());
+        return patientIds;
     }
 
     public List<String> patientsWithoutAdherence() {
         return (List<String>) flowSession.get(PATIENTS_WITHOUT_ADHERENCE);
     }
 
+
     public void patientsWithAdherence(List<Patient> patientsWithAdherence) {
-        List<String> patientIds = extract(patientsWithAdherence, on(Patient.class).getPatientId());
+        List<String> patientIds = getPatientIds(patientsWithAdherence);
         flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList<>(patientIds));
     }
 
