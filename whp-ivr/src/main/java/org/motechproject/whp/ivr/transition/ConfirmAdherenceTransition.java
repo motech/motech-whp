@@ -4,12 +4,11 @@ package org.motechproject.whp.ivr.transition;
 import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
+import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage,
                                       WHPAdherenceService adherenceService,
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
-                                      ReportingPublisherService reportingService,
-                                      AdherenceDataService adherenceDataService) {
+                                      ReportingPublisherService reportingService) {
 
         super(whpivrMessage);
         this.adherenceService = adherenceService;
@@ -49,10 +47,11 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
             addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
             if (input.equals("1")) {
+                ivrSession.recordAdherenceForCurrentPatient();
                 nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingService));
             }
             addTransitionsToNextPatients(ivrSession, nextNode);
         }
-        return nextNode.addOperations(new ResetPatientIndexOperation());
+        return nextNode.addOperations(new ResetFlowSessionOperation());
     }
 }

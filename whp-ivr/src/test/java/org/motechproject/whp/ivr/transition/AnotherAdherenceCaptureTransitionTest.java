@@ -12,7 +12,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
+import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -24,9 +24,9 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
@@ -65,7 +65,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService);
     }
 
     @Test
@@ -74,20 +74,20 @@ public class AnotherAdherenceCaptureTransitionTest {
 
         assertThat(node.getOperations().size(), is(2));
         assertThat(node.getOperations().get(0), instanceOf(GetAdherenceOperation.class));
-        assertThat(node.getOperations().get(1), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations().get(1), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test
     public void shouldNotAddConfirmAdherenceOperation_ForInvalidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
         assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test
     public void shouldNotAddConfirmAdherenceOperation_ForSkipInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        assertThat(node.getOperations(), hasItem(isA(ResetPatientIndexOperation.class)));
+        assertThat(node.getOperations(), hasItem(isA(ResetFlowSessionOperation.class)));
     }
 
     @Test

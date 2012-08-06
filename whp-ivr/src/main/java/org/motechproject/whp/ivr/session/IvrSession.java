@@ -16,12 +16,12 @@ import static org.motechproject.util.DateUtil.setTimeZone;
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
     public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
+    public static final String PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION = "patientsWithAdherenceRecordedInThisSession";
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
     public static final String PROVIDER_ID = "providerId";
-    public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
     public static final String START_OF_ADHERENCE_SUBMISSION = "startOfAdherenceSubmission";
-
     private FlowSession flowSession;
+    public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
 
     public IvrSession(FlowSession flowSession) {
         this.flowSession = flowSession;
@@ -108,6 +108,10 @@ public class IvrSession {
         flowSession.set(CURRENT_PATIENT_INDEX, null);
     }
 
+    public void resetPatientsWithAdherenceRecordedInSession() {
+        flowSession.set(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION, null);
+    }
+
     public void adherenceInputForCurrentPatient(String input) {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, input);
     }
@@ -147,6 +151,26 @@ public class IvrSession {
 
     public int countOfPatientsWithAdherence() {
         return patientsWithAdherence() != null ? patientsWithAdherence().size() : 0;
+    }
+
+    public int countOfCurrentPatientsWithAdherence() {
+        int countOfPatientsWithAdherenceRecordedInThisSession = patientsWithAdherenceRecordedInThisSession().size();
+        return countOfPatientsWithAdherence() + countOfPatientsWithAdherenceRecordedInThisSession;
+    }
+
+    public void recordAdherenceForCurrentPatient() {
+        List<String> patientsWithAdherenceRecordedInThisSession = patientsWithAdherenceRecordedInThisSession();
+        patientsWithAdherenceRecordedInThisSession.add(currentPatientId());
+    }
+
+    private List<String> patientsWithAdherenceRecordedInThisSession() {
+        List<String> patientsWithAdherenceRecordedInThisSession = (List<String>) flowSession.get(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION);
+        if(patientsWithAdherenceRecordedInThisSession == null) {
+            patientsWithAdherenceRecordedInThisSession = new SerializableList(new ArrayList<String>());
+            flowSession.set(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION, (SerializableList) patientsWithAdherenceRecordedInThisSession);
+        }
+
+        return patientsWithAdherenceRecordedInThisSession;
     }
 }
 

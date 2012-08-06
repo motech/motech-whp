@@ -10,7 +10,6 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
@@ -66,7 +65,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, adherenceDataService, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }

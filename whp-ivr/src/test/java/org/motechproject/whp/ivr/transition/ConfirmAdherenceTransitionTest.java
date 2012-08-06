@@ -6,14 +6,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
+import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -74,7 +73,7 @@ public class ConfirmAdherenceTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, reportingService, adherenceDataService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, reportingService);
     }
 
     @Test
@@ -83,21 +82,21 @@ public class ConfirmAdherenceTransitionTest {
         Node node = confirmAdherenceTransition.getDestinationNode("1", flowSession);
         assertThat(node.getOperations().size(), is(2));
         assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(PATIENT1_ID, treatmentUpdateOrchestrator, reportingService)));
-        assertThat(node.getOperations().get(1), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations().get(1), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test
     public void shouldNotAddRecordAdherenceOperation_ForInvalidInput() {
         Node node = confirmAdherenceTransition.getDestinationNode("8", flowSession);
         assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test
     public void shouldNotAddRecordAdherenceOperation_ForSkipInput() {
         Node node = confirmAdherenceTransition.getDestinationNode("9", flowSession);
         assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test

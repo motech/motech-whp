@@ -3,12 +3,11 @@ package org.motechproject.whp.ivr.transition;
 import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
-import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
+import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -28,7 +27,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, AdherenceDataService adherenceDataService, PatientService patientService) {
+    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, PatientService patientService) {
         super(whpivrMessage);
         this.patientService = patientService;
     }
@@ -50,6 +49,6 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
                 addTransitionsToNextPatients(ivrSession, nextNode);
             }
         }
-        return nextNode.addOperations(new ResetPatientIndexOperation());
+        return nextNode.addOperations(new ResetFlowSessionOperation());
     }
 }
