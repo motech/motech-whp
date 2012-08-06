@@ -100,6 +100,7 @@ public class PatientInfo {
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
         longestDoseInterruption = patient.getLongestDoseInterruption();
         showAlert = (patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp();
+        adherenceCapturedForThisWeek = patient.hasAdherenceForLastReportingWeekForCurrentTherapy();
     }
 
     private List<String> mapPhaseNameToString(Patient patient) {
@@ -109,10 +110,6 @@ public class PatientInfo {
             names.add(phase.name());
         }
         return names;
-    }
-
-    public void setAdherenceCapturedForThisWeek(boolean adherenceCapturedForThisWeek) {
-        this.adherenceCapturedForThisWeek = adherenceCapturedForThisWeek;
     }
 
     private void setTestResults(Patient patient) {

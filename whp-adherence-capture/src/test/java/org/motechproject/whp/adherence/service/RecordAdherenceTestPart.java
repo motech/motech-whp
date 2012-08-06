@@ -202,27 +202,4 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         assertEquals(new LocalDate(2012, 3, 1), adherenceSortedByDate.get(2).getPillDate());
     }
 
-    @Test
-    public void shouldReturnTrueIfPatientHasAdherenceInLastWeek() {
-        //Week -> Monday to NEXT Saturday. So, DateUtil.today (which is mocked to saturday) belongs to week starting LAST Monday.
-        Adherence log1 = createLog(patientId, today.minusDays(6), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
-        List<Adherence> adherences = asList(log1);
-
-        adherenceService.addOrUpdateLogsByDoseDate(adherences, patient, auditParams);
-
-        boolean hasTakenAdherenceInLastWeek = adherenceService.isAdherenceRecordedForCurrentWeek(patientId, THERAPY_DOC_ID);
-        assertTrue(hasTakenAdherenceInLastWeek);
-    }
-
-    @Test
-    public void shouldReturnFalseIfPatientDoesNotHaveAdherenceInLastWeek() {
-        //Adherence log on Sunday before LAST Monday => does not belong to this week.
-        Adherence log1 = createLog(patientId, today.minusDays(13), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
-        List<Adherence> adherences = asList(log1);
-
-        adherenceService.addOrUpdateLogsByDoseDate(adherences, patient, auditParams);
-
-        boolean hasTakenAdherenceInLastWeek = adherenceService.isAdherenceRecordedForCurrentWeek(patientId, THERAPY_DOC_ID);
-        assertFalse(hasTakenAdherenceInLastWeek);
-    }
 }

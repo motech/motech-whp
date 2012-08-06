@@ -174,7 +174,6 @@ public class PatientController extends BaseController {
         List<PatientInfo> patientList = new ArrayList<>();
         for (Patient patient : patientsForProvider) {
             PatientInfo patientInfo = new PatientInfo(patient);
-            patientInfo.setAdherenceCapturedForThisWeek(whpAdherenceService.isAdherenceRecordedForCurrentWeek(patient.getPatientId(), patient.currentTherapyId()));
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);

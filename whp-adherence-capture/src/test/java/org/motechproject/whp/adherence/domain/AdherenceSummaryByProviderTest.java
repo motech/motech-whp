@@ -13,6 +13,8 @@ import java.util.List;
 import static ch.lambdaj.Lambda.sum;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
 public class AdherenceSummaryByProviderTest {
@@ -26,13 +28,13 @@ public class AdherenceSummaryByProviderTest {
     @Before
     public void setUp() {
         LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
-        Patient patientWithAdherence1 = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
-        Patient patientWithAdherence2 = new PatientBuilder().withPatientId("patient2").withAdherenceProvidedForLastWeek().build();
+        Patient patientWithAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
+        Patient patientWithAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient2").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
 
         patientsWithAdherence = asList(patientWithAdherence1, patientWithAdherence2);
 
-        Patient patientWithoutAdherence1 = new PatientBuilder().withPatientId("patient3").build();
-        Patient patientWithoutAdherence2 = new PatientBuilder().withPatientId("patient4").build();
+        Patient patientWithoutAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient3").build();
+        Patient patientWithoutAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient4").build();
         patientsWithoutAdherence = asList(patientWithoutAdherence1, patientWithoutAdherence2);
 
         patients = new ArrayList<>();
@@ -85,6 +87,14 @@ public class AdherenceSummaryByProviderTest {
     public void shouldReturnAllPatientsWithAdherence() {
         AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId",patients);
         assertThat(adherenceSummaryByProvider.getAllPatientsWithAdherence(), is(patientsWithAdherence));
+    }
+
+    @Test
+    public void shouldReturnAllPatientsWithAdherenceForCurrentTherapyOnly() {
+        Patient patientWithAdherenceForPreviousTherapy = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
+        patients.add(patientWithAdherenceForPreviousTherapy);
+        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId", patients);
+        assertThat(adherenceSummaryByProvider.getAllPatientsWithAdherence(), hasItem(not(patientWithAdherenceForPreviousTherapy)));
     }
 
 }

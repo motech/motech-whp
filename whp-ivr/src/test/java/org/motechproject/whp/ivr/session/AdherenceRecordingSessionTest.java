@@ -3,7 +3,6 @@ package org.motechproject.whp.ivr.session;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -69,8 +68,8 @@ public class AdherenceRecordingSessionTest {
 
             LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
             patientsWithAdherence = asList(
-                    new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build(),
-                    new PatientBuilder().withPatientId("patient2").withAdherenceProvidedForLastWeek().build());
+                    new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient1").withAdherenceProvidedForLastWeek().build(),
+                    new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient2").withAdherenceProvidedForLastWeek().build());
 
             patientsWithoutAdherence = asList(
                     new PatientBuilder().withPatientId("patient3").build(),
@@ -136,14 +135,16 @@ public class AdherenceRecordingSessionTest {
         @Before
         public void setup() {
             initMocks(this);
-            patientsWithAdherence = asList(new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build());
+            Patient patient1WithAdherence = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012, 7, 7)).withAdherenceProvidedForLastWeek().build();
+
+            patientsWithAdherence = asList(patient1WithAdherence);
             patientsWithoutAdherence = asList(
                     new PatientBuilder().withPatientId("patient2").build(),
                     new PatientBuilder().withPatientId("patient3").build());
 
             patientsWithAdherenceAfterFirstInput = asList(
-                    new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build(),
-                    new PatientBuilder().withPatientId("patient2").withAdherenceProvidedForLastWeek().build());
+                    patient1WithAdherence,
+                    new PatientBuilder().withPatientId("patient2").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withAdherenceProvidedForLastWeek().build());
 
             patientsWithoutAdherenceAfterFirstInput = asList(new PatientBuilder().withPatientId("patient3").build());
 
@@ -199,7 +200,7 @@ public class AdherenceRecordingSessionTest {
         @Before
         public void setup() {
             initMocks(this);
-            patientsWithAdherence = asList(new PatientBuilder().withPatientId("patient4").withAdherenceProvidedForLastWeek().build());
+            patientsWithAdherence = asList(new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient4").withAdherenceProvidedForLastWeek().build());
             patientsWithoutAdherence = asList(new PatientBuilder().withPatientId("patient5").build(), new PatientBuilder().withPatientId("patient6").build());
             setupSession();
             when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());

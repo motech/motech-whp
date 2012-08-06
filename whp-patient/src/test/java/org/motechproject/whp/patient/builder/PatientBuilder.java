@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 
@@ -11,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 public class PatientBuilder {

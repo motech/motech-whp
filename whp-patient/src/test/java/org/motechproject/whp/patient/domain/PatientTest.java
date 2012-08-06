@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -13,11 +14,8 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
@@ -428,6 +426,31 @@ public class PatientTest {
         assertThat(doseDates.size(), is(0));
     }
 
+    @Test
+    public void shouldReturnTrueIfHasAdherenceForLastWeek() {
+        Patient patient = new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
+        assertTrue(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
+    }
+
+    @Test
+    public void shouldReturnFalseIfHasAdherenceForLastWeekForOldTherapy() {
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(null).withAdherenceProvidedForLastWeek().build();
+        assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
+    }
+
+    @Test
+    public void shouldReturnFalseIfAdherenceNotProvidedForLastWeek() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
+    }
+
+    @Test
+    public void shouldReturnFalseIfHasCurrentTherapyAndAdherenceProvidedForOldTherapy() {
+        Patient patient = new PatientBuilder().withDefaults().withAdherenceProvidedForLastWeek().build();
+        patient.addTreatment(new Treatment(), new Therapy(), DateUtil.now());
+        assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
+    }
+
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);
     }
@@ -435,7 +458,5 @@ public class PatientTest {
     private DateTime dateTime(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth).toDateTimeAtCurrentTime();
     }
-
-
 
 }

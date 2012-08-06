@@ -136,12 +136,6 @@ public class WHPAdherenceService {
         return adherenceRecords.get(doseNumber - 1);
     }
 
-    public boolean isAdherenceRecordedForCurrentWeek(String patientId, String therapyUid) {
-        TreatmentWeek currentTreatmentWeek = currentWeekInstance();
-        AdherenceList logsForCurrentWeek = findLogsInRange(patientId, therapyUid, currentTreatmentWeek.startDate(), currentTreatmentWeek.endDate());
-        return logsForCurrentWeek.size() != 0;
-    }
-
     public HashMap<LocalDate, PillStatus> getDateAdherenceMap(Patient patient) {
         AdherenceList logs = findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), patient.getCurrentTherapy().getStartDate(), today());
         HashMap<LocalDate, PillStatus> datePillStatusHashMap = new HashMap<>();

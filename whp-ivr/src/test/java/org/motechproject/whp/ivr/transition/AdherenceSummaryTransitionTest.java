@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.transition;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,7 +12,6 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.prompts.CallCompletionPrompts;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
@@ -34,7 +33,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPrompts;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class AdherenceSummaryTransitionTest extends BaseUnitTest {
@@ -65,10 +63,10 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);
 
-        patient1 = new PatientBuilder().withPatientId("patient1").build();
-        patient2 = new PatientBuilder().withPatientId("patient2").build();
-        patient3 = new PatientBuilder().withPatientId("patient3").build();
-        patient4 = new PatientBuilder().withPatientId("patient4").build();
+        patient1 = new PatientBuilder().withPatientId("patient1").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
+        patient2 = new PatientBuilder().withPatientId("patient2").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
+        patient3 = new PatientBuilder().withPatientId("patient3").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
+        patient4 = new PatientBuilder().withPatientId("patient4").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
     }
 
     @Test

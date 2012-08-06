@@ -48,7 +48,7 @@ public class AdherenceSummaryByProvider implements Serializable {
 
         allPatientsWithAdherence = new ArrayList<>();
         for (Patient patient : patients) {
-            if (patient.getLastAdherenceWeekStartDate() != null && patient.getLastAdherenceWeekStartDate().isEqual(currentWeekStartDate))
+            if (patient.hasAdherenceForLastReportingWeekForCurrentTherapy())
                 allPatientsWithAdherence.add(patient);
         }
     }

@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.Gender;
@@ -103,6 +104,14 @@ public class Patient extends MotechBaseDataObject {
         currentTherapy.closeCurrentTreatment(treatmentOutcome, dateModified);
         onActiveTreatment = false;
         setLastModifiedDate(dateModified);
+    }
+
+    public boolean hasAdherenceForLastReportingWeekForCurrentTherapy() {
+        LocalDate lastAdherenceReportWeek = TreatmentWeekInstance.currentWeekInstance().startDate();
+        if (currentTherapy==null || currentTherapy.getStartDate() == null ||
+                lastAdherenceWeekStartDate == null || lastAdherenceWeekStartDate.isBefore(lastAdherenceReportWeek))
+            return false;
+        return true;
     }
 
     public void pauseCurrentTreatment(String reasonForPause, DateTime dateModified) {
@@ -397,7 +406,7 @@ public class Patient extends MotechBaseDataObject {
         currentTherapy.clearDoseInterruptionsForUpdate();
     }
 
-    public Integer dosesPerWeek(){
+    public Integer dosesPerWeek() {
         return getCurrentTherapy().getTreatmentCategory().getDosesPerWeek();
     }
 

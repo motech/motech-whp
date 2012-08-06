@@ -12,6 +12,7 @@ import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.user.domain.Provider;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
@@ -89,6 +90,7 @@ public class PatientInfoTest {
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
+                .withAdherenceProvidedForLastWeek()
                 .build();
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
@@ -118,6 +120,7 @@ public class PatientInfoTest {
         assertThat(patientInfo.getAddressState(), is("state"));
         assertThat(patientInfo.getAddressDistrict(), is("district"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
+        assertTrue(patientInfo.isAdherenceCapturedForThisWeek());
     }
 
     @Test
