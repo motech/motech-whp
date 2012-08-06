@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.joda.time.DateTime.parse;
+import static org.motechproject.util.DateUtil.setTimeZone;
 
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
@@ -116,7 +117,7 @@ public class IvrSession {
     }
 
     public DateTime startOfAdherenceSubmission() {
-        return parse(flowSession.get(START_OF_ADHERENCE_SUBMISSION).toString());
+        return setTimeZone(parse(flowSession.get(START_OF_ADHERENCE_SUBMISSION).toString()));
     }
 
     private Integer currentPatientIndex() {
