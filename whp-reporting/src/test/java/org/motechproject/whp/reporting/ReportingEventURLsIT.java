@@ -1,6 +1,5 @@
 package org.motechproject.whp.reporting;
 
-import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,11 @@ public class ReportingEventURLsIT {
     @Test
     public void shouldGetAdherenceCaptureURL(){
         assertThat(reportingEventURLs.getAdherenceCallLogURL(), is("http://localhost:8080/whp-reports/adherence/callLogs"));
+    }
+
+    @Test
+    public void shouldGetCallLogMeasureURL(){
+        assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost:8080/whp-reports/callLog/measure"));
     }
 
 }

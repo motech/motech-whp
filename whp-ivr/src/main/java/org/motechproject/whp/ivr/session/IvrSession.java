@@ -177,5 +177,9 @@ public class IvrSession {
     public void recordCallStartTime(DateTime dateTime) {
         flowSession.set(CALL_START_TIME, dateTime);
     }
+
+    public DateTime callStartTime(){
+        return flowSession.get(CALL_START_TIME);
+    }
 }
 

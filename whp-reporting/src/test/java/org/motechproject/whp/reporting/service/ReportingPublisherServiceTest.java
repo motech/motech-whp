@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
+import org.motechproject.whp.reports.contract.CallLogRequest;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -37,5 +39,20 @@ public class ReportingPublisherServiceTest {
 
         reportingPublisher.reportAdherenceCapture(adherenceCaptureRequest);
         verify(httpClientService).post(reportingEventURLs.getAdherenceCallLogURL(), adherenceCaptureRequest);
+    }
+
+    @Test
+    public void shouldPublishCallLog() throws Exception {
+        String providerId = "123456";
+
+        CallLogRequest callLog = new CallLogRequest();
+        callLog.setStartTime(DateUtil.now().toDate());
+        callLog.setEndTime(DateUtil.now().toDate());
+        callLog.setCalledBy(providerId);
+        callLog.setProviderId(providerId);
+
+        reportingPublisher.reportCallLog(callLog);
+
+        verify(httpClientService).post(reportingEventURLs.getCallLogURL(), callLog);
     }
 }
