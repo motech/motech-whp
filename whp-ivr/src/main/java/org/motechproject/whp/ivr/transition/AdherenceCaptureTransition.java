@@ -29,7 +29,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     }
 
     public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, AdherenceDataService adherenceDataService, PatientService patientService) {
-        super(whpivrMessage, adherenceDataService);
+        super(whpivrMessage);
         this.patientService = patientService;
     }
 

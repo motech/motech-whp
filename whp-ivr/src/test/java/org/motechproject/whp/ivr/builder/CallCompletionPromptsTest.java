@@ -92,7 +92,9 @@ public class CallCompletionPromptsTest {
         List<Patient> allPatients = createPatientsWithAdherence();
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider("provider", allPatients);
 
-        Prompt[] prompts = CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary);
+        Prompt[] prompts = CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
+                adherenceSummary.countOfAllPatients(),
+                adherenceSummary.countOfPatientsWithAdherence());
 
         assertEquals(audioPrompt(THANK_YOU), prompts[0]);
         assertThat(asList(prompts), hasItems(adherenceSummaryWithCallCompletionPrompts(whpivrMessage, allPatients.size(), allPatients.size())));

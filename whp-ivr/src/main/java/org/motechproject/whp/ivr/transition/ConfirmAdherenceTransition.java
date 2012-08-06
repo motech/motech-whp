@@ -33,7 +33,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                                       ReportingPublisherService reportingService,
                                       AdherenceDataService adherenceDataService) {
 
-        super(whpivrMessage, adherenceDataService);
+        super(whpivrMessage);
         this.adherenceService = adherenceService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.reportingService = reportingService;

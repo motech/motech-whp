@@ -146,7 +146,7 @@ public class IvrSession {
     }
 
     public int countOfPatientsWithAdherence() {
-        return patientsWithAdherence().size();
+        return patientsWithAdherence() != null ? patientsWithAdherence().size() : 0;
     }
 }
 

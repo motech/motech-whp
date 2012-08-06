@@ -1,17 +1,15 @@
 package org.motechproject.whp.ivr.transition;
 
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
@@ -26,15 +24,15 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
-import static org.motechproject.whp.ivr.session.IvrSession.PATIENTS_WITHOUT_ADHERENCE;
-import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
+import static org.motechproject.whp.ivr.session.IvrSession.*;
 
 public class AnotherAdherenceCaptureTransitionTest {
 
@@ -104,21 +102,16 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Test
     public void shouldNotAddConfirmationPrompts_ForSkippedInput() {
         String adherenceInput = "7";
-        LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
 
         Patient patientWithAdherence = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
-        Patient patientWithoutAdherence1 = new PatientBuilder().withPatientId("patient2").build();
-        Patient patientWithoutAdherence2 = new PatientBuilder().withPatientId("patient2").build();
-
-        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patientWithAdherence, patientWithoutAdherence1, patientWithoutAdherence2));
-        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
-                .thenReturn(adherenceSummary);
 
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1)));
+        flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patientWithAdherence.getPatientId())));
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary)));
-        assertThat(node.getPrompts(), not(hasItems(providedAdherencePrompts(whpivrMessage, PATIENT_1, Integer.parseInt(adherenceInput), 3))));
+        Prompt[] expectedPrompts = callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 2, 1);
+        assertThat(node.getPrompts().size(), is(expectedPrompts.length));
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
     }
 
     @Test

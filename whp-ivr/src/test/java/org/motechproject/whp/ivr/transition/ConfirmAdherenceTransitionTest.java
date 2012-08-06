@@ -58,11 +58,9 @@ public class ConfirmAdherenceTransitionTest {
     @Mock
     AdherenceDataService adherenceDataService;
 
-
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
     ConfirmAdherenceTransition confirmAdherenceTransition;
-    private AdherenceSummaryByProvider adherenceSummary;
 
     @Before
     public void setUp() {
@@ -75,10 +73,6 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
-
-        adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patient));
-        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
-                .thenReturn(adherenceSummary);
 
         confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, reportingService, adherenceDataService);
     }
@@ -120,7 +114,7 @@ public class ConfirmAdherenceTransitionTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, adherenceSummary));
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 1, 0));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 

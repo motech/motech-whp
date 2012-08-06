@@ -18,14 +18,14 @@ public class CallCompletionPrompts {
         return promptBuilder.build();
     }
 
-    public static Prompt[] callCompletionPromptsAfterCapturingAdherence(WHPIVRMessage whpivrMessage, AdherenceSummaryByProvider adherenceSummary) {
+    public static Prompt[] callCompletionPromptsAfterCapturingAdherence(WHPIVRMessage whpivrMessage, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
         promptBuilder.wav(THANK_YOU);
         promptBuilder.addAll(
                 adherenceSummaryWithCallCompletionPrompts(
                         whpivrMessage,
-                        adherenceSummary.countOfAllPatients(),
-                        adherenceSummary.countOfPatientsWithAdherence()));
+                        countOfAllPatients,
+                        countOfPatientsWithAdherence));
         return promptBuilder.build();
     }
 

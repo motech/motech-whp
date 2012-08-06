@@ -138,14 +138,12 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     @Test
     public void shouldHangUpWithCallCompletionSummaryIfPatientListIsEmpty() {
         Patient patient = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
-        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(PROVIDER_ID, asList(patient));
-        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID))
-                .thenReturn(adherenceSummary);
-
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
-                adherenceSummary));
 
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
+        flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patient.getPatientId())));
+
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
+                2, 1));
 
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
