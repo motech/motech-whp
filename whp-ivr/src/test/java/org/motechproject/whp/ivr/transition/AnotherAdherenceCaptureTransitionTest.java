@@ -15,8 +15,8 @@ import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
-import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.session.IvrSession;
+import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -89,8 +89,7 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Test
     public void shouldNotAddConfirmAdherenceOperation_ForSkipInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetPatientIndexOperation.class));
+        assertThat(node.getOperations(), hasItem(isA(ResetPatientIndexOperation.class)));
     }
 
     @Test

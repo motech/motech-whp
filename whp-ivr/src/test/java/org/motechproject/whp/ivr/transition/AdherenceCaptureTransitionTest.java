@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
@@ -37,6 +36,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
+import static org.motechproject.whp.ivr.util.PlatformStub.play;
+import static org.motechproject.whp.ivr.util.PlatformStub.replay;
 
 public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
@@ -156,9 +157,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         mockCurrentDate(now);
 
         new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
-        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("9", flowSession).getOperations()) {
-            operation.perform("9", flowSession);
-        }
+        play(adherenceCaptureTransition, flowSession, "9");
         Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
@@ -167,11 +166,10 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
         mockCurrentDate(now);
 
-        new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
-        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("8", flowSession).getOperations()) {
-            operation.perform("8", flowSession);
-        }
-        Assert.assertEquals(now.minusDays(5), new IvrSession(flowSession).startOfAdherenceSubmission());
+        DateTime oldTime = now.minusDays(5);
+        new IvrSession(flowSession).startOfAdherenceSubmission(oldTime);
+        play(adherenceCaptureTransition, flowSession, "8");
+        Assert.assertEquals(oldTime, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
     @Test
@@ -179,11 +177,21 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
         mockCurrentDate(now);
 
-        new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
-        for (INodeOperation operation : adherenceCaptureTransition.getDestinationNode("1", flowSession).getOperations()) {
-            operation.perform("1", flowSession);
-        }
-        Assert.assertEquals(now.minusDays(5), new IvrSession(flowSession).startOfAdherenceSubmission());
+        DateTime oldTime = now.minusDays(5);
+        new IvrSession(flowSession).startOfAdherenceSubmission(oldTime);
+        play(adherenceCaptureTransition, flowSession, "1");
+        Assert.assertEquals(oldTime, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldNotResetAdherenceSubmissionTimeWhenReplayed() {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        DateTime oldTime = now.minusDays(5);
+        new IvrSession(flowSession).startOfAdherenceSubmission(oldTime);
+        replay(adherenceCaptureTransition, flowSession, "1");
+        Assert.assertEquals(oldTime, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {
