@@ -10,6 +10,8 @@ import org.motechproject.whp.patient.domain.Patient;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.joda.time.DateTime.parse;
+
 public class IvrSession {
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
     public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
@@ -114,7 +116,7 @@ public class IvrSession {
     }
 
     public DateTime startOfAdherenceSubmission() {
-        return flowSession.get(START_OF_ADHERENCE_SUBMISSION);
+        return parse(flowSession.get(START_OF_ADHERENCE_SUBMISSION).toString());
     }
 
     private Integer currentPatientIndex() {
@@ -134,7 +136,7 @@ public class IvrSession {
         currentPatientIndex(nextPatientIndex());
     }
 
-    public Integer countOfAllPatients(){
+    public Integer countOfAllPatients() {
         return countOfPatientsWithAdherence() + countOfPatientsWithoutAdherence();
     }
 
