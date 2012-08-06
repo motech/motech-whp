@@ -12,6 +12,7 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -25,6 +26,8 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.anyString;
@@ -121,6 +124,18 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
             operation.perform("", flowSession);
         }
         assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldAddRecordCallStartTime() throws Exception {
+        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+
+        List<INodeOperation> operations = adherenceSummaryTransition.getDestinationNode("", flowSession).getOperations();
+        assertThat(operations, hasItem(new RecordCallStartTimeOperation(now)));
     }
 
     private AdherenceSummaryByProvider adherenceSummary(List<Patient> patients) {

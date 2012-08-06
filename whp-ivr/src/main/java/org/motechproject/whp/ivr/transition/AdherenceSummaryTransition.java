@@ -5,6 +5,7 @@ import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
+import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class AdherenceSummaryTransition implements ITransition {
         IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
 
         Node captureAdherenceNode = new Node();
+        captureAdherenceNode.addOperations(new RecordCallStartTimeOperation(now()));
+
         if (ivrSession.hasPatientsWithoutAdherence()) {
             captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpivrMessage, ivrSession.patientsWithAdherence(), ivrSession.patientsWithoutAdherence()));
             return addAdherenceCaptureTransitions(ivrSession, captureAdherenceNode);
@@ -57,5 +60,4 @@ public class AdherenceSummaryTransition implements ITransition {
         captureAdherenceNode.addPrompts(adherenceSummaryWithCallCompletionPrompts(whpivrMessage, countOfAllPatients, countOfPatientsWithAdherence));
         return captureAdherenceNode;
     }
-
 }

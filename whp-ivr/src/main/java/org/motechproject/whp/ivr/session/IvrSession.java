@@ -20,6 +20,7 @@ public class IvrSession {
     public static final String CURRENT_PATIENT_INDEX = "currentPatientPosition";
     public static final String PROVIDER_ID = "providerId";
     public static final String START_OF_ADHERENCE_SUBMISSION = "startOfAdherenceSubmission";
+    public static final String CALL_START_TIME = "CALL_START_TIME";
     private FlowSession flowSession;
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
 
@@ -171,6 +172,10 @@ public class IvrSession {
         }
 
         return patientsWithAdherenceRecordedInThisSession;
+    }
+
+    public void recordCallStartTime(DateTime dateTime) {
+        flowSession.set(CALL_START_TIME, dateTime);
     }
 }
 
