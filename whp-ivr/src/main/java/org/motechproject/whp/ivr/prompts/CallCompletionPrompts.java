@@ -32,9 +32,9 @@ public class CallCompletionPrompts {
     public static Prompt[] adherenceSummaryWithCallCompletionPrompts(WHPIVRMessage whpivrMessage, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
         PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
         promptBuilder.wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR)
-                .number(countOfPatientsWithAdherence)
-                .wav(END_OF_CALL_ADHERENCE_OUT_OF)
                 .number(countOfAllPatients)
+                .wav(END_OF_CALL_ADHERENCE_OUT_OF)
+                .number(countOfPatientsWithAdherence)
                 .wav(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS);
 
         if(countOfAllPatients > countOfPatientsWithAdherence){

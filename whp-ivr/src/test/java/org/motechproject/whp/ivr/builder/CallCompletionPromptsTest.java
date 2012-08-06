@@ -56,9 +56,9 @@ public class CallCompletionPromptsTest {
 
         assertEquals(8, prompts.length);
         assertEquals(audioPrompt(END_OF_CALL_ADHERENCE_PROVIDED_FOR), prompts[0]);
-        assertEquals(audioPrompt(countOfPatientsWithAdherence.toString()), prompts[1]);
+        assertEquals(audioPrompt(countOfAllPatients.toString()), prompts[1]);
         assertEquals(audioPrompt(END_OF_CALL_ADHERENCE_OUT_OF), prompts[2]);
-        assertEquals(audioPrompt(countOfAllPatients.toString()), prompts[3]);
+        assertEquals(audioPrompt(countOfPatientsWithAdherence.toString()), prompts[3]);
         assertEquals(audioPrompt(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS), prompts[4]);
         assertEquals(audioPrompt(CALL_BACK_MESSAGE), prompts[5]);
         assertEquals(audioPrompt(COMPLETION_MESSAGE), prompts[6]);
