@@ -5,7 +5,6 @@ import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;

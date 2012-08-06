@@ -1,4 +1,4 @@
-package org.motechproject.whp.ivr.builder;
+package org.motechproject.whp.ivr.builder.request;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;

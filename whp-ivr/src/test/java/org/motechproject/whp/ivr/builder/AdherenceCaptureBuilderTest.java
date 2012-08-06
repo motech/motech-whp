@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.session.IvrSession;
 

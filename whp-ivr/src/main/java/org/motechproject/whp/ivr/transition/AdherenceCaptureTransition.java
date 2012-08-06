@@ -6,7 +6,7 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
-import org.motechproject.whp.ivr.node.ConfirmAdherenceNode;
+import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
 import org.motechproject.whp.ivr.operation.ResetPatientIndexOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -45,7 +45,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             addTransitionsToNextPatients(ivrSession, nextNode);
         } else {
             if (patient.isValidDose(ivrInput.input())) {
-                nextNode = new ConfirmAdherenceNode(whpivrMessage).with(patient, parseInt(input)).node();
+                nextNode = new ConfirmAdherenceNodeBuilder(whpivrMessage).with(patient, parseInt(input)).node();
             } else {
                 addTransitionsToNextPatients(ivrSession, nextNode);
             }
