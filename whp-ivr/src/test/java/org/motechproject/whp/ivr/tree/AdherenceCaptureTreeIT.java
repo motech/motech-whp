@@ -167,12 +167,12 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
-    private void navigateToAdherenceSummary(String sessionId) throws IOException {
-        decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
+    private String navigateToAdherenceSummary(String sessionId) throws IOException {
+        return decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
     }
 
     @Test
-    public void shouldRecordAdherenceForMultiplePatients() throws IOException, SAXException {
+    public void shouldRecordAdherenceForAllPatients() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
 
         navigateToAdherenceSummary(sessionId);
@@ -240,6 +240,28 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         CallLogRequest callLogRequest = argumentCaptor.getValue();
 
         assertThat(callLogRequest.getProviderId(), Is.is(provider.getProviderId()));
+    }
+
+    @Test
+    public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() throws IOException, SAXException {
+        shouldRecordAdherenceForAllPatients();
+        String sessionId = UUID.randomUUID().toString();
+
+        String response = navigateToAdherenceSummary(sessionId);
+
+        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<response>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/completionMessage.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnd-note.wav</playaudio>\n" +
+                "                        <hangup></hangup>\n" +
+                "    </response>";
+
+        assertThat(response, is(expectedResponse));
     }
 
     private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {

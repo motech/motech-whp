@@ -27,6 +27,7 @@ public class AdherenceSummaryTransition implements ITransition {
     private WHPIVRMessage whpivrMessage;
     @Autowired
     private AdherenceRecordingSession recordingSession;
+    @Autowired
     private ReportingPublisherService reportingPublisherService;
 
     /*Required for platform autowiring*/
