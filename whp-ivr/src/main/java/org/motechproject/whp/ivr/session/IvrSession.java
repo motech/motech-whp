@@ -179,7 +179,7 @@ public class IvrSession {
     }
 
     public DateTime callStartTime(){
-        return flowSession.get(CALL_START_TIME);
+        return setTimeZone(parse(flowSession.get(CALL_START_TIME).toString()));
     }
 }
 

@@ -17,6 +17,8 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +35,10 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
-@ContextConfiguration(locations = {"/applicationIVRContext.xml"})
+@ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     static Server server;
@@ -66,14 +70,15 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     Patient patient1;
     Patient patient2;
     Patient patient3;
+    private static DispatcherServlet dispatcherServlet;
 
     @BeforeClass
     public static void startServer() throws Exception {
         server = new Server(7080);
         Context context = new Context(server, CONTEXT_PATH);
 
-        DispatcherServlet dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setContextConfigLocation("classpath:applicationIVRContext.xml");
+        dispatcherServlet = new DispatcherServlet();
+        dispatcherServlet.setContextConfigLocation("classpath:test-applicationIVRContext.xml");
 
         ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
         context.addServlet(servletHolder, "/*");
@@ -204,6 +209,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         WeeklyAdherenceSummary adherenceSummaryPatient3 = adherenceService.currentWeekAdherence(patient3);
         assertEquals(adherenceCapturedForThirdPatient, adherenceSummaryPatient3.getDosesTaken());
 
+        ReportingPublisherService reportingPublisherService = getMockedReportingPublisherService();
 
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
@@ -219,8 +225,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
 
         assertThat(responseAfterGivingAdherenceForLastPatient, is(expectedResponse));
+        verify(reportingPublisherService).reportCallLog(any(CallLogRequest.class));
     }
-
 
     private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {
         String confirmAdherenceUrl = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, confirmAdherenceTreePath, provider.getPrimaryMobile(), sessionId);
@@ -363,6 +369,10 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
     }
 
+    private ReportingPublisherService getMockedReportingPublisherService() {
+        return (ReportingPublisherService) dispatcherServlet.getWebApplicationContext().getBean("reportingPublisherService");
+    }
+
     @After
     public void tearDown() {
         allPatients.remove(allPatients.findByPatientId(patient1.getPatientId()));
@@ -376,7 +386,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     @AfterClass
     public static void stopServer() throws Exception {
+        dispatcherServlet = null;
         server.stop();
     }
-
 }
