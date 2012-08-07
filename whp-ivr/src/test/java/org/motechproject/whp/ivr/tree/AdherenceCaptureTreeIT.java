@@ -4,8 +4,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.hamcrest.core.Is;
 import org.joda.time.LocalDate;
 import org.junit.*;
+import org.mockito.ArgumentCaptor;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
@@ -18,6 +20,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -27,6 +30,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static java.lang.String.format;
@@ -36,7 +40,9 @@ import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
@@ -71,6 +77,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     Patient patient2;
     Patient patient3;
     private static DispatcherServlet dispatcherServlet;
+    private ReportingPublisherService reportingPublisherService;
 
     @BeforeClass
     public static void startServer() throws Exception {
@@ -91,6 +98,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         setIgnoreWhitespace(true);
         decisionTreeController = new DefaultHttpClient();
         adherenceCaptureTree.load();
+        reportingPublisherService = getMockedReportingPublisherService();
         setUpTestData();
     }
 
@@ -158,6 +166,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         assertEquals(2, adherenceSummaryPatient1.getDosesTaken());
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
+        verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     private void navigateToAdherenceSummary(String sessionId) throws IOException {
@@ -181,6 +190,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         //confirm adherence for first patient
         confirmAdherence(sessionId, encodeBase64(treePath));
 
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
         assertEquals(adherenceCapturedForFirstPatient, adherenceSummaryPatient1.getDosesTaken());
 
@@ -195,6 +205,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
         assertEquals(adherenceCapturedForSecondPatient, adherenceSummaryPatient2.getDosesTaken());
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+
 
         //enter adherence for 3rd patient
         int adherenceCapturedForThirdPatient = 2;
@@ -208,8 +220,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         WeeklyAdherenceSummary adherenceSummaryPatient3 = adherenceService.currentWeekAdherence(patient3);
         assertEquals(adherenceCapturedForThirdPatient, adherenceSummaryPatient3.getDosesTaken());
-
-        ReportingPublisherService reportingPublisherService = getMockedReportingPublisherService();
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
 
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
@@ -225,7 +236,12 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
 
         assertThat(responseAfterGivingAdherenceForLastPatient, is(expectedResponse));
-        verify(reportingPublisherService).reportCallLog(any(CallLogRequest.class));
+
+        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
+        verify(reportingPublisherService, times(1)).reportCallLog(argumentCaptor.capture());
+        CallLogRequest callLogRequest = argumentCaptor.getValue();
+
+        assertThat(callLogRequest.getProviderId(), Is.is(provider.getProviderId()));
     }
 
     private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {
@@ -378,9 +394,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         allPatients.remove(allPatients.findByPatientId(patient1.getPatientId()));
         allPatients.remove(allPatients.findByPatientId(patient2.getPatientId()));
         allPatients.remove(allPatients.findByPatientId(patient3.getPatientId()));
-
         allProviders.remove(allProviders.findByMobileNumber("123456"));
-
         allAdherenceLogs.removeAll();
     }
 
