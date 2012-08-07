@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.operation;
 
+import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
@@ -7,6 +8,7 @@ import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 
+@EqualsAndHashCode
 public class PublishCallLogOperation implements INodeOperation{
 
     private ReportingPublisherService reportingPublisherService;

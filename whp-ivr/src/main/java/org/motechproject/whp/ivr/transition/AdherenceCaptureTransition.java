@@ -11,6 +11,7 @@ import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +21,14 @@ import static org.motechproject.util.DateUtil.now;
 @Component
 @EqualsAndHashCode
 public class AdherenceCaptureTransition extends TransitionToCollectPatientAdherence {
-
     @Autowired
     private PatientService patientService;
 
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, PatientService patientService) {
-        super(whpivrMessage);
+    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, PatientService patientService, ReportingPublisherService reportingPublisherService) {
+        super(whpivrMessage, reportingPublisherService);
         this.patientService = patientService;
     }
 

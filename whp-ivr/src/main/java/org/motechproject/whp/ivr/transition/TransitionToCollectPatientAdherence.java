@@ -2,8 +2,11 @@ package org.motechproject.whp.ivr.transition;
 
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
@@ -14,12 +17,16 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     @Autowired
     protected WHPIVRMessage whpivrMessage;
 
+    @Autowired
+    protected ReportingPublisherService reportingPublisherService;
+
     TransitionToCollectPatientAdherence() {
 
     }
 
-    public TransitionToCollectPatientAdherence(WHPIVRMessage whpivrMessage) {
+    public TransitionToCollectPatientAdherence(WHPIVRMessage whpivrMessage, ReportingPublisherService reportingPublisherService) {
         this.whpivrMessage = whpivrMessage;
+        this.reportingPublisherService = reportingPublisherService;
     }
 
     protected void addTransitionsToNextPatients(IvrSession ivrSession, Node nextNode) {
@@ -28,6 +35,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
             addPatientPromptsAndTransitions(nextNode, ivrSession);
         } else {
             nextNode.addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, ivrSession.countOfAllPatients(), ivrSession.countOfCurrentPatientsWithAdherence()));
+            nextNode.addOperations(new PublishCallLogOperation(reportingPublisherService, DateUtil.now()));
         }
     }
 

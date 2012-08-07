@@ -15,13 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @EqualsAndHashCode
 public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdherence {
-
     @Autowired
     private WHPAdherenceService adherenceService;
     @Autowired
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-    @Autowired
-    private ReportingPublisherService reportingService;
 
     public ConfirmAdherenceTransition() {
     }
@@ -29,12 +26,13 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage,
                                       WHPAdherenceService adherenceService,
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
-                                      ReportingPublisherService reportingService) {
+                                      ReportingPublisherService reportingPublisherService) {
 
-        super(whpivrMessage);
+        super(whpivrMessage, reportingPublisherService);
+
         this.adherenceService = adherenceService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
-        this.reportingService = reportingService;
+        this.reportingPublisherService = reportingPublisherService;
     }
 
     @Override
@@ -48,7 +46,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
         } else {
             if (input.equals("1")) {
                 ivrSession.recordAdherenceForCurrentPatient();
-                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingService));
+                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
             }
             addTransitionsToNextPatients(ivrSession, nextNode);
         }

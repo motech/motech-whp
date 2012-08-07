@@ -19,6 +19,7 @@ import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.Properties;
 
@@ -48,6 +49,8 @@ public class AnotherAdherenceCaptureTransitionTest {
     AdherenceDataService adherenceDataService;
     @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -65,7 +68,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService, reportingPublisherService);
     }
 
     @Test

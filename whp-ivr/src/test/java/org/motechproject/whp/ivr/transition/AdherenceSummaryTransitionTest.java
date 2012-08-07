@@ -9,9 +9,11 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
@@ -19,6 +21,8 @@ import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.List;
@@ -26,13 +30,14 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
@@ -47,10 +52,12 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     private AdherenceDataService adherenceDataService;
     @Mock
     private AllProviders allProviders;
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
+
     private AdherenceRecordingSession recordingSession;
 
     private AdherenceSummaryTransition adherenceSummaryTransition;
-
     private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
     private FlowSession flowSession;
     private Patient patient1;
@@ -62,7 +69,8 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
-        adherenceSummaryTransition = new AdherenceSummaryTransition(whpivrMessage, new AdherenceRecordingSession(allProviders, adherenceDataService));
+        adherenceSummaryTransition = new AdherenceSummaryTransition(whpivrMessage, new AdherenceRecordingSession(allProviders, adherenceDataService), reportingPublisherService);
+
         flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);
 
@@ -101,14 +109,18 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
         AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+        mockCurrentDate(DateUtil.now());
 
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, now());
         Node expectedNode = new Node()
                 .addPrompts(adherenceSummaryWithCallCompletionPrompts(whpivrMessage,
                         adherenceSummary.countOfAllPatients(),
-                        adherenceSummary.countOfPatientsWithAdherence()));
+                        adherenceSummary.countOfPatientsWithAdherence()))
+                .addOperations(publishCallLogOperation);
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
         assertThat(actualNode, is(expectedNode));
+        assertThat(actualNode.getOperations(),  hasItem(publishCallLogOperation));
     }
 
     @Test

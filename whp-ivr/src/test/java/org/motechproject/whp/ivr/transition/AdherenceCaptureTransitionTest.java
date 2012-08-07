@@ -13,6 +13,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -25,11 +26,14 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
@@ -42,16 +46,16 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
     @Mock
     PatientService patientService;
-
     @Mock
     AdherenceDataService adherenceDataService;
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
     WHPIVRMessage whpivrMessage;
     AdherenceCaptureTransition adherenceCaptureTransition;
 
     String providerId = "providerid";
-
     String patientId1 = "patientid";
     String patientId2 = "someOtherPatientId";
 
@@ -65,7 +69,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService,reportingPublisherService);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }
@@ -161,11 +165,27 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
         flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patient.getPatientId())));
 
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
-                2, 1));
+        Node expectedNode = new Node()
+                .addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 2, 1));
 
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);
+    }
+
+    @Test
+    public void shouldAddPublishCallLogOperationAtEndOfCall() {
+        Patient patient = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
+
+        flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
+        flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patient.getPatientId())));
+
+        mockCurrentDate(DateUtil.now());
+
+        DateTime now = DateUtil.now();
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, now);
+
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
+        assertThat(destinationNode.getOperations(), hasItem(publishCallLogOperation));
     }
 
     @Test

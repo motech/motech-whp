@@ -3,11 +3,14 @@ package org.motechproject.whp.ivr.transition;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
+import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,14 +27,16 @@ public class AdherenceSummaryTransition implements ITransition {
     private WHPIVRMessage whpivrMessage;
     @Autowired
     private AdherenceRecordingSession recordingSession;
+    private ReportingPublisherService reportingPublisherService;
 
     /*Required for platform autowiring*/
     public AdherenceSummaryTransition() {
     }
 
-    public AdherenceSummaryTransition(WHPIVRMessage whpivrMessage, AdherenceRecordingSession recordingSession) {
+    public AdherenceSummaryTransition(WHPIVRMessage whpivrMessage, AdherenceRecordingSession recordingSession, ReportingPublisherService reportingPublisherService) {
         this.whpivrMessage = whpivrMessage;
         this.recordingSession = recordingSession;
+        this.reportingPublisherService = reportingPublisherService;
     }
 
     @Override
@@ -58,6 +63,7 @@ public class AdherenceSummaryTransition implements ITransition {
 
     private Node addTransitionToTerminateCall(Node captureAdherenceNode, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
         captureAdherenceNode.addPrompts(adherenceSummaryWithCallCompletionPrompts(whpivrMessage, countOfAllPatients, countOfPatientsWithAdherence));
+        captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, DateUtil.now()));
         return captureAdherenceNode;
     }
 }
