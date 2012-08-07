@@ -5,7 +5,7 @@ import org.motechproject.util.DateUtil;
 
 public class TreatmentWeekInstance {
 
-    public static TreatmentWeek currentWeekInstance() {
+    public static TreatmentWeek currentAdherenceCaptureWeek() {
         return week(DateUtil.today());
     }
 

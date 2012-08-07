@@ -32,7 +32,7 @@ import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
@@ -352,7 +352,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.startTherapy(createPatientRequest.getCase_id(), today());
         String patientId = createPatientRequest.getCase_id();
 
-        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2, currentWeekInstance().dateOf(DayOfWeek.Sunday));
+        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2, currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
 
         assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
         assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP, today()));

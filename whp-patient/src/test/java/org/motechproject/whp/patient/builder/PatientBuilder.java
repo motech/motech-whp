@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PatientBuilder {
 
@@ -174,7 +174,7 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withAdherenceProvidedForLastWeek() {
-        patient.setLastAdherenceWeekStartDate(currentWeekInstance().startDate());
+        patient.setLastAdherenceWeekStartDate(currentAdherenceCaptureWeek().startDate());
         return this;
     }
 }

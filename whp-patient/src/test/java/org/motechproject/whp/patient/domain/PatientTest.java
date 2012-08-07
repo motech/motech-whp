@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
@@ -311,7 +311,7 @@ public class PatientTest {
     public void shouldReturnTotalDosesToHaveBeenTakenTillLastSunday() {
         //patient on 3 pills a day category
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().startDate());
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate());
 
         assertEquals(3, patient.getTotalDosesToHaveBeenTakenTillLastSunday());
     }
@@ -330,17 +330,17 @@ public class PatientTest {
     @Test
     public void shouldReturnTheCumulativeNumberOfDosesNotTakenTillLastSunday() {
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentWeekInstance().startDate().minusWeeks(1));
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
+        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate());
 
         //20 weeks back + the current week (till "last" Sunday) * number of doses per week - (total number of taken doses till last sunday)
         assertEquals(21 * 3 - 24 - 9, patient.getCumulativeDosesNotTaken());
@@ -350,9 +350,9 @@ public class PatientTest {
     @Test
     public void shouldReturnZero_AndNotNegative_MissingDosesEvenIfAdherenceHasBeenRecordedBeforeEndOfWeek_ByAdmin() {
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().dateOf(DayOfWeek.Sunday));
+        patient.startTherapy(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 3, currentWeekInstance().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.IP, 3, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
 
         //0 - 3 = 0 (in the NamNam field)
         assertEquals(0, patient.getCumulativeDosesNotTaken());
@@ -361,16 +361,16 @@ public class PatientTest {
     @Test
     public void shouldReturnFormattedIPProgress() {
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
 
         //(24:IP + 9:EIP) / (24:IP + 12:EIP)
         assertEquals("33/36 (91.67%)", patient.getIPProgress());
@@ -379,20 +379,20 @@ public class PatientTest {
     @Test
     public void shouldReturnFormattedCPProgress() {
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate().minusWeeks(11));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(11));
 
         patient.endLatestPhase(today().minusMonths(3));
 
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
-        patient.setNumberOfDosesTaken(Phase.CP, 35, currentWeekInstance().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.CP, 35, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
 
         //(24:IP + 9:EIP) / (24:IP + 12:EIP)
         assertEquals("35/54 (64.81%)", patient.getCPProgress());
@@ -401,7 +401,7 @@ public class PatientTest {
     @Test
     public void shouldReturnLongestDoseInterruption() {
         Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         DoseInterruptions doseInterruptions = new DoseInterruptions();
 

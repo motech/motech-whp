@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.canUpdate;
 import static org.motechproject.whp.common.util.WHPDateUtil.getDatesInRange;
 
@@ -39,7 +39,7 @@ public class WeeklyAdherenceForm {
         patientId = weeklyAdherenceSummary.getPatientId();
         numberOfDosesTaken = weeklyAdherenceSummary.getDosesTaken();
         this.patient = patient;
-        populatePauseRestartData(currentWeekInstance().startDate());
+        populatePauseRestartData(currentAdherenceCaptureWeek().startDate());
     }
 
     private void populatePauseRestartData(LocalDate weekStartDate) {

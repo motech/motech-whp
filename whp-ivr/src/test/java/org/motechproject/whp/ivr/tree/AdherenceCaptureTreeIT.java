@@ -39,7 +39,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
@@ -100,7 +100,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         setIgnoreWhitespace(true);
         httpClient = new DefaultHttpClient();
         adherenceCaptureTree.load();
-        LocalDate lastMonday = currentWeekInstance().startDate();
+        LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
         httpClient.execute(new HttpGet(format(FAKETIME_URL, lastMonday.toString())), new BasicResponseHandler());
         reportingPublisherService = getMockedReportingPublisherService();
         setUpTestData();
@@ -289,7 +289,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldPlayWindowClosedPrompt_ifNotAdherenceCaptureDay() throws IOException {
         String sessionId = UUID.randomUUID().toString();
-        LocalDate thursday = currentWeekInstance().startDate().plusDays(10);
+        LocalDate thursday = currentAdherenceCaptureWeek().startDate().plusDays(10);
         httpClient.execute(new HttpGet(format(FAKETIME_URL, thursday)), new BasicResponseHandler());
 
         String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s",SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId )), new BasicResponseHandler());

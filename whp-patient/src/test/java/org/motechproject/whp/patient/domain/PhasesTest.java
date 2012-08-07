@@ -9,7 +9,7 @@ import org.motechproject.whp.refdata.domain.Phase;
 
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PhasesTest extends BaseUnitTest {
 
@@ -223,15 +223,15 @@ public class PhasesTest extends BaseUnitTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentWeekInstance().startDate().minusWeeks(1));
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
+        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate());
 
         assertEquals(24 + 9, patient.getTotalNumberOfDosesTakenTillLastSunday(today));
     }
@@ -241,16 +241,16 @@ public class PhasesTest extends BaseUnitTest {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(today().minusMonths(5));
 
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentWeekInstance().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
 
         patient.endLatestPhase(today().minusMonths(4));
 
         patient.nextPhaseName(Phase.EIP);
         patient.startNextPhase();
 
-        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentWeekInstance().startDate().minusWeeks(1));
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
+        patient.setNumberOfDosesTaken(Phase.EIP, 8, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate());
 
-        assertEquals(24 + 8, patient.getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().startDate()));
+        assertEquals(24 + 8, patient.getTotalNumberOfDosesTakenTillLastSunday(currentAdherenceCaptureWeek().startDate()));
     }
 }

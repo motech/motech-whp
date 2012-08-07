@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
@@ -108,7 +108,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public boolean hasAdherenceForLastReportingWeekForCurrentTherapy() {
-        LocalDate lastAdherenceReportWeek = TreatmentWeekInstance.currentWeekInstance().startDate();
+        LocalDate lastAdherenceReportWeek = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
         if (lastAdherenceWeekStartDate == null || lastAdherenceWeekStartDate.isBefore(lastAdherenceReportWeek))
             return false;
         return true;
@@ -319,10 +319,10 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public int getCumulativeDosesNotTaken() {
-        if (getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().dateOf(DayOfWeek.Sunday)) < 0) {
+        if (getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)) < 0) {
             return 0;
         } else {
-            return getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentWeekInstance().dateOf(DayOfWeek.Sunday));
+            return getTotalDosesToHaveBeenTakenTillLastSunday() - getTotalNumberOfDosesTakenTillLastSunday(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
         }
     }
 

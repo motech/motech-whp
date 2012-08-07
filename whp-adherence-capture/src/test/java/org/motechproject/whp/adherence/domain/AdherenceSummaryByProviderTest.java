@@ -27,7 +27,7 @@ public class AdherenceSummaryByProviderTest {
 
     @Before
     public void setUp() {
-        LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
         Patient patientWithAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
         Patient patientWithAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient2").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
 

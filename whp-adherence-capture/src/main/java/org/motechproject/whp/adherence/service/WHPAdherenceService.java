@@ -30,7 +30,7 @@ import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 @Service
 public class WHPAdherenceService {
@@ -66,7 +66,7 @@ public class WHPAdherenceService {
     }
 
     public WeeklyAdherenceSummary currentWeekAdherence(Patient patient) {
-        TreatmentWeek treatmentWeek = currentWeekInstance();
+        TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
         List<AdherenceRecord> adherenceRecords = adherenceService.adherence(
                 patient.getPatientId(),
                 patient.currentTherapyId(),

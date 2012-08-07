@@ -66,7 +66,7 @@ public class AdherenceRecordingSessionTest {
             initMocks(this);
             setupSession();
 
-            LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+            LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
             patientsWithAdherence = asList(
                     new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient1").withAdherenceProvidedForLastWeek().build(),
                     new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient2").withAdherenceProvidedForLastWeek().build());
@@ -126,7 +126,7 @@ public class AdherenceRecordingSessionTest {
 
         protected static final String PROVIDER_ID = "providerid";
         protected static final String MOBILE_NUMBER = "mobileNumber";
-        private LocalDate lastWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        private LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
         private List<Patient> patientsWithAdherence;
         private List<Patient> patientsWithoutAdherence;
         private List<Patient> patientsWithAdherenceAfterFirstInput;

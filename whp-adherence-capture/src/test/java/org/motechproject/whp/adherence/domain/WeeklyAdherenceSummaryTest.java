@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.model.DayOfWeek.*;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
 
@@ -22,7 +22,7 @@ public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
         WeeklyAdherenceSummary adherenceSummary = WeeklyAdherenceSummary.forFirstWeek(patient);
         assertEquals(patient.getPatientId(), adherenceSummary.getPatientId());
         assertEquals(0, adherenceSummary.getDosesTaken());
-        assertEquals(currentWeekInstance(), adherenceSummary.getWeek());
+        assertEquals(currentAdherenceCaptureWeek(), adherenceSummary.getWeek());
         assertEquals(0, adherenceSummary.takenDays(patient.getCurrentTherapy().getTreatmentCategory()).size());
     }
 
@@ -32,7 +32,7 @@ public class WeeklyAdherenceSummaryTest extends BaseUnitTest {
         WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
         assertEquals(patient.getPatientId(), adherenceSummary.getPatientId());
         assertEquals(3, adherenceSummary.getDosesTaken());
-        assertEquals(currentWeekInstance(), adherenceSummary.getWeek());
+        assertEquals(currentAdherenceCaptureWeek(), adherenceSummary.getWeek());
         assertEquals(Arrays.asList(Monday, Wednesday, Friday), adherenceSummary.takenDays(patient.getCurrentTherapy().getTreatmentCategory()));
     }
 

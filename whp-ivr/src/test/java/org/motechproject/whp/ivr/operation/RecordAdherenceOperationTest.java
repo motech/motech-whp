@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
@@ -23,7 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.setTimeZone;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class RecordAdherenceOperationTest extends BaseUnitTest {
 
@@ -60,7 +59,7 @@ public class RecordAdherenceOperationTest extends BaseUnitTest {
         recordAdherenceOperation.perform("1", flowSession);
 
         AuditParams auditParams = new AuditParams(PROVIDER, AdherenceSource.IVR, "");
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentWeekInstance(), adherenceInput);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(CURRENT_PATIENT, currentAdherenceCaptureWeek(), adherenceInput);
         verify(treatmentUpdateOrchestrator).recordWeeklyAdherence(weeklyAdherenceSummary, CURRENT_PATIENT, auditParams);
     }
 

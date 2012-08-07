@@ -178,8 +178,8 @@ public class PatientController extends BaseController {
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);
-        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().startDate()).value());
-        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().endDate()).value());
+        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().endDate()).value());
 
     }
 
@@ -188,7 +188,7 @@ public class PatientController extends BaseController {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
         uiModel.addAttribute(SELECTED_PROVIDER, providerId);
-        uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().dateOf(DayOfWeek.Sunday)).lucidValue());
+        uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
 
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {

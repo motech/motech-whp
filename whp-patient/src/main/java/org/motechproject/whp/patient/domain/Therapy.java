@@ -14,7 +14,7 @@ import org.motechproject.whp.refdata.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
 @Data
@@ -144,7 +144,7 @@ public class Therapy {
         if (startDate != null) {
             int totalDoses = 0;
             //pointing to sunday just past
-            LocalDate endDate = currentWeekInstance().dateOf(DayOfWeek.Sunday);
+            LocalDate endDate = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
             if (phases.getCPEndDate() != null && phases.getCPEndDate().isBefore(endDate)) {
                 endDate = phases.getCPEndDate();
             }

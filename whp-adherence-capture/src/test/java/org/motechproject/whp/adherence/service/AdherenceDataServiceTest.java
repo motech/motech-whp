@@ -19,7 +19,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class AdherenceDataServiceTest {
 
@@ -44,7 +44,7 @@ public class AdherenceDataServiceTest {
         String providerId = "providerId";
         String patientId1 = "patient1";
         String patientId2 = "patient2";
-        LocalDate currentAdherenceReportWeekStartDate = currentWeekInstance().startDate();
+        LocalDate currentAdherenceReportWeekStartDate = currentAdherenceCaptureWeek().startDate();
         Patient patient1 = new PatientBuilder().withDefaults().withPatientId(patientId1).withProviderId(providerId).withAdherenceProvidedForLastWeek().build();
         Patient patient2 = new PatientBuilder().withDefaults().withPatientId(patientId2).withProviderId(providerId).withAdherenceProvidedForLastWeek().build();
         List<Patient> patients = asList(patient1,patient2);

@@ -92,7 +92,7 @@ public class AdherenceController extends BaseController {
         uiModel.addAttribute("adherence", weeklyAdherenceForm);
         uiModel.addAttribute("totalDoses", category.getDosesPerWeek());
         uiModel.addAttribute("readOnly", !(canUpdate(patient)));
-        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().startDate()).value());
-        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentWeekInstance().endDate()).value());
+        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().endDate()).value());
     }
 }

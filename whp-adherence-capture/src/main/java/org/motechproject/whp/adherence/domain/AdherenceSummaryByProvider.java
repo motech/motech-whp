@@ -44,7 +44,7 @@ public class AdherenceSummaryByProvider implements Serializable {
     }
 
     private void setAllPatientsWithAdherence() {
-        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentWeekInstance().startDate();
+        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
 
         allPatientsWithAdherence = new ArrayList<>();
         for (Patient patient : patients) {

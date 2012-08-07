@@ -17,7 +17,6 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
 
 import java.util.Collections;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +25,7 @@ import static org.joda.time.DateTime.now;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
 
@@ -161,7 +160,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patientStub, auditParams);
 
-        assertThat(patientStub.getLastAdherenceWeekStartDate(), is(currentWeekInstance().startDate()));
+        assertThat(patientStub.getLastAdherenceWeekStartDate(), is(currentAdherenceCaptureWeek().startDate()));
         verify(patientService).update(patientStub);
 
     }

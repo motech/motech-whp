@@ -12,7 +12,7 @@ import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
 
 public class RecordAdherenceOperation implements INodeOperation {
@@ -56,7 +56,7 @@ public class RecordAdherenceOperation implements INodeOperation {
 
     private void recordAdherence(IvrSession ivrSession) {
         AuditParams auditParams = new AuditParams(ivrSession.providerId(), AdherenceSource.IVR, "");
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentWeekInstance());
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentAdherenceCaptureWeek());
         weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient().input());
         treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
     }

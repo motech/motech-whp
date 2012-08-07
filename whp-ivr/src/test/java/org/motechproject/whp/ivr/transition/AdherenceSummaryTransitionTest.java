@@ -15,7 +15,6 @@ import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
-import org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -23,7 +22,6 @@ import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.List;
@@ -41,7 +39,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts.adherenceCaptureWindowClosedPrompts;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
@@ -100,7 +98,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     }
 
     private Patient setAdherenceProvided(Patient patient) {
-        patient.setLastAdherenceWeekStartDate(currentWeekInstance().startDate());
+        patient.setLastAdherenceWeekStartDate(currentAdherenceCaptureWeek().startDate());
         return patient;
     }
 
