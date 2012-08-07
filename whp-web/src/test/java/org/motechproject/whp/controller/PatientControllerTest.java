@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.PhaseUpdateOrchestrator;
@@ -103,9 +104,8 @@ public class PatientControllerTest extends BaseControllerTest {
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patient);
         PatientInfo patientInfo = new PatientInfo(patient);
-        when(patientService.getAllWithActiveTreatmentForProvider("providerId")).thenReturn(patientsForProvider);
-
-        String view = patientController.listByProvider("providerId", uiModel, request);
+        when(patientService.getAllWithActiveTreatmentForProvider(LOGGED_IN_USER_NAME)).thenReturn(patientsForProvider);
+        String view = patientController.listByProvider(uiModel, request);
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
 

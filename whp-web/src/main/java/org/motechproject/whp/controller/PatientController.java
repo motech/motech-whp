@@ -81,8 +81,9 @@ public class PatientController extends BaseController {
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
-    public String listByProvider(@RequestParam("provider") String providerId, Model uiModel, HttpServletRequest request) {
-        List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(providerId);
+    public String listByProvider( Model uiModel, HttpServletRequest request) {
+        String idOfLoggedInProvider = loggedInUser(request).getUserName();
+        List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(idOfLoggedInProvider);
         prepareModelForListView(uiModel, patientsForProvider);
         passAdherenceSavedMessageToListView(uiModel, request);
         return "patient/listByProvider";

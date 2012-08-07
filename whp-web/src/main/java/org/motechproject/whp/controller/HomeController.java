@@ -37,7 +37,7 @@ public class HomeController extends BaseController {
             if (StringUtils.isNotEmpty(message)) {
                 Flash.out("message", message, request);
             }
-            return "redirect:/patients/listByProvider?provider=" + allProviders.get(user.getExternalId()).getProviderId();
+            return "redirect:/patients/listByProvider";
         }
     }
 
