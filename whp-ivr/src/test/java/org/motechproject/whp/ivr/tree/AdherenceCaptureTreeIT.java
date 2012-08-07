@@ -20,7 +20,6 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -39,6 +38,7 @@ import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -76,6 +76,9 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     Patient patient3;
     private static DispatcherServlet dispatcherServlet;
     private ReportingPublisherService reportingPublisherService;
+    private int adherenceCapturedForFirstPatient;
+    private int adherenceCapturedForSecondPatient;
+    private int adherenceCapturedForThirdPatient;
 
     @BeforeClass
     public static void startServer() throws Exception {
@@ -164,20 +167,19 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         assertEquals(2, adherenceSummaryPatient1.getDosesTaken());
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
-        verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     private String navigateToAdherenceSummary(String sessionId) throws IOException {
         return decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
     }
 
-    @Test
-    public void shouldRecordAdherenceForAllPatients() throws IOException, SAXException {
+    public String recordAdherenceForAllPatients() throws IOException {
         String sessionId = UUID.randomUUID().toString();
 
         navigateToAdherenceSummary(sessionId);
 
-        int adherenceCapturedForFirstPatient = 2;
+        adherenceCapturedForFirstPatient = 2;
 
         String treePath = "/1";
         //enter adherence for first patient
@@ -188,12 +190,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         //confirm adherence for first patient
         confirmAdherence(sessionId, encodeBase64(treePath));
 
-        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
-        WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
-        assertEquals(adherenceCapturedForFirstPatient, adherenceSummaryPatient1.getDosesTaken());
-
         //enter adherence for second patient
-        int adherenceCapturedForSecondPatient = 3;
+        adherenceCapturedForSecondPatient = 3;
         String treePathAfterConfirmingAdherenceForFirstPatient = treePath + "/1";
         enterAdherenceForPatient(sessionId, adherenceCapturedForSecondPatient, encodeBase64(treePathAfterConfirmingAdherenceForFirstPatient));
 
@@ -201,20 +199,28 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         String treePathAfterEnteringAdherenceForSecondPatient = treePathAfterConfirmingAdherenceForFirstPatient + "/" + adherenceCapturedForSecondPatient;
         confirmAdherence(sessionId, encodeBase64(treePathAfterEnteringAdherenceForSecondPatient));
 
-        WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
-        assertEquals(adherenceCapturedForSecondPatient, adherenceSummaryPatient2.getDosesTaken());
-        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
-
-
         //enter adherence for 3rd patient
-        int adherenceCapturedForThirdPatient = 2;
+        adherenceCapturedForThirdPatient = 2;
         String treePathAfterConfirmingAdherenceForSecondPatient = treePathAfterEnteringAdherenceForSecondPatient + "/1";
         enterAdherenceForPatient(sessionId, adherenceCapturedForThirdPatient, encodeBase64(treePathAfterConfirmingAdherenceForSecondPatient));
 
-
         //confirm adherence for 3rd patient
         String treePathAfterEnteringAdherenceForThirdPatient = treePathAfterConfirmingAdherenceForSecondPatient + "/" + adherenceCapturedForThirdPatient;
-        String responseAfterGivingAdherenceForLastPatient = confirmAdherence(sessionId, encodeBase64(treePathAfterEnteringAdherenceForThirdPatient));
+        return confirmAdherence(sessionId, encodeBase64(treePathAfterEnteringAdherenceForThirdPatient));
+    }
+
+    @Test
+    public void shouldRecordAdherenceForAllPatients() throws IOException, SAXException {
+
+        String responseAfterGivingAdherenceForLastPatient = recordAdherenceForAllPatients();
+
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+        WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
+        assertEquals(adherenceCapturedForFirstPatient, adherenceSummaryPatient1.getDosesTaken());
+
+        WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
+        assertEquals(adherenceCapturedForSecondPatient, adherenceSummaryPatient2.getDosesTaken());
+        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
 
         WeeklyAdherenceSummary adherenceSummaryPatient3 = adherenceService.currentWeekAdherence(patient3);
         assertEquals(adherenceCapturedForThirdPatient, adherenceSummaryPatient3.getDosesTaken());
@@ -236,7 +242,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertThat(responseAfterGivingAdherenceForLastPatient, is(expectedResponse));
 
         ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
-        verify(reportingPublisherService, times(1)).reportCallLog(argumentCaptor.capture());
+        verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
         CallLogRequest callLogRequest = argumentCaptor.getValue();
 
         assertThat(callLogRequest.getProviderId(), Is.is(provider.getProviderId()));
@@ -244,7 +250,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     @Test
     public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() throws IOException, SAXException {
-        shouldRecordAdherenceForAllPatients();
+        recordAdherenceForAllPatients();
         String sessionId = UUID.randomUUID().toString();
 
         String response = navigateToAdherenceSummary(sessionId);
@@ -262,6 +268,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
 
         assertThat(response, is(expectedResponse));
+        verify(reportingPublisherService, times(2)).reportCallLog(any(CallLogRequest.class));
     }
 
     private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {
@@ -416,6 +423,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         allPatients.remove(allPatients.findByPatientId(patient3.getPatientId()));
         allProviders.remove(allProviders.findByMobileNumber("123456"));
         allAdherenceLogs.removeAll();
+        reset(reportingPublisherService);
     }
 
     @AfterClass
