@@ -33,6 +33,9 @@ public class PublishCallLogOperation implements INodeOperation{
         callLogRequest.setProviderId(ivrSession.providerId());
         callLogRequest.setStartTime(ivrSession.callStartTime().toDate());
         callLogRequest.setEndTime(callEndTime.toDate());
+        callLogRequest.setTotalPatients(ivrSession.countOfAllPatients());
+        callLogRequest.setAdherenceCaptured(ivrSession.countOfPatientsWithAdherenceRecordedInThisSession());
+        callLogRequest.setAdherenceNotCaptured(ivrSession.countOfCurrentPatientsWithoutAdherence());
         return callLogRequest;
     }
 }

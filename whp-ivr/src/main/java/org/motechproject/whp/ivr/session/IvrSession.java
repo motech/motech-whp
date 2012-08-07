@@ -159,6 +159,14 @@ public class IvrSession {
         return countOfPatientsWithAdherence() + countOfPatientsWithAdherenceRecordedInThisSession;
     }
 
+    public int countOfCurrentPatientsWithoutAdherence() {
+        return countOfAllPatients() - countOfCurrentPatientsWithAdherence();
+    }
+
+    public int countOfPatientsWithAdherenceRecordedInThisSession() {
+        return patientsWithAdherenceRecordedInThisSession().size();
+    }
+
     public void recordAdherenceForCurrentPatient() {
         List<String> patientsWithAdherenceRecordedInThisSession = patientsWithAdherenceRecordedInThisSession();
         patientsWithAdherenceRecordedInThisSession.add(currentPatientId());
@@ -173,6 +181,8 @@ public class IvrSession {
 
         return patientsWithAdherenceRecordedInThisSession;
     }
+
+
 
     public void recordCallStartTime(DateTime dateTime) {
         flowSession.set(CALL_START_TIME, dateTime);
