@@ -97,7 +97,7 @@ public class PatientController extends BaseController {
             selectedDistrict = allDistrictsCache.getAll().get(0).getName();
 
         List<Patient> patients = getPatientsFor(selectedDistrict,selectedProvider);
-        prepareModelForListView(uiModel, patients, selectedDistrict, "");
+        prepareModelForListView(uiModel, patients, selectedDistrict, selectedProvider);
 
         return "patient/list";
     }

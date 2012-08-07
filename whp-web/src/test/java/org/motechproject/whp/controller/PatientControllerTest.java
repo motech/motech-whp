@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
@@ -208,6 +207,25 @@ public class PatientControllerTest extends BaseControllerTest {
         ArgumentCaptor<List> patientsCaptor = forClass(List.class);
         verify(uiModel).addAttribute(eq(PatientController.PATIENT_LIST), patientsCaptor.capture());
         assertArrayEquals(new Patient[]{patientUnderProviderA, patientUnderProviderB}, patientsCaptor.getValue().toArray());
+    }
+
+    @Test
+    public void shouldSetUpUiModelForListAllPatients() {
+        String districtName = "Vaishali";
+        String provider = "provider1";
+        Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(provider).withTreatmentUnderDistrict(districtName).build();
+        Patient patientUnderProviderB = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("provider2").withTreatmentUnderDistrict(districtName).build();
+
+        when(session.getAttribute(PatientController.SELECTED_DISTRICT)).thenReturn(districtName);
+        when(session.getAttribute(PatientController.SELECTED_PROVIDER)).thenReturn(provider);
+        when(request.getSession()).thenReturn(session);
+
+        when(patientService.searchBy(districtName)).thenReturn(asList(patientUnderProviderA, patientUnderProviderB));
+
+        patientController.list(uiModel, request);
+
+        verify(uiModel).addAttribute(eq(PatientController.SELECTED_DISTRICT), eq(districtName));
+        verify(uiModel).addAttribute(eq(PatientController.SELECTED_PROVIDER), eq(provider));
     }
 
     @Test

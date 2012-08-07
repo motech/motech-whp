@@ -29,7 +29,9 @@
                     <label class="control-label">Provider ID</label>
 
                     <div class="controls">
-                        <select id="providerId" name="selectedProvider">
+                        <select id="providerId" name="selectedProvider"
+                                <#if selectedProvider??>selectedProviderInSession=${selectedProvider}</#if>
+                                >
                             <!-- AJAX Fetch Provider IDs -->
                         </select>
                     </div>
