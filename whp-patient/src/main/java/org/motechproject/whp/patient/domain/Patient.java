@@ -70,6 +70,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     private void addTherapy(Therapy therapy) {
+        lastAdherenceWeekStartDate = null;
         if (currentTherapy != null) {
             therapyHistory.add(currentTherapy);
         }
@@ -108,8 +109,7 @@ public class Patient extends MotechBaseDataObject {
 
     public boolean hasAdherenceForLastReportingWeekForCurrentTherapy() {
         LocalDate lastAdherenceReportWeek = TreatmentWeekInstance.currentWeekInstance().startDate();
-        if (currentTherapy==null || currentTherapy.getStartDate() == null ||
-                lastAdherenceWeekStartDate == null || lastAdherenceWeekStartDate.isBefore(lastAdherenceReportWeek))
+        if (lastAdherenceWeekStartDate == null || lastAdherenceWeekStartDate.isBefore(lastAdherenceReportWeek))
             return false;
         return true;
     }

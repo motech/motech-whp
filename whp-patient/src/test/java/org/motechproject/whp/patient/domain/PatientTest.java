@@ -343,7 +343,7 @@ public class PatientTest {
         patient.setNumberOfDosesTaken(Phase.EIP, 9, currentWeekInstance().startDate());
 
         //20 weeks back + the current week (till "last" Sunday) * number of doses per week - (total number of taken doses till last sunday)
-        assertEquals(21*3 - 24 - 9, patient.getCumulativeDosesNotTaken());
+        assertEquals(21 * 3 - 24 - 9, patient.getCumulativeDosesNotTaken());
 
     }
 
@@ -399,18 +399,18 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldReturnLongestDoseInterruption(){
+    public void shouldReturnLongestDoseInterruption() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(currentWeekInstance().startDate().minusWeeks(20));
 
         DoseInterruptions doseInterruptions = new DoseInterruptions();
 
-        DoseInterruption doseInterruption1 = new DoseInterruption(new LocalDate(2012,6,28));
-        doseInterruption1.endMissedPeriod(new LocalDate(2012,6,30));
-        DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012,7,2));
-        doseInterruption2.endMissedPeriod(new LocalDate(2012,7,6));
-        DoseInterruption doseInterruption3 = new DoseInterruption(new LocalDate(2012,7,8));
-        doseInterruption3.endMissedPeriod(new LocalDate(2012,7,14));
+        DoseInterruption doseInterruption1 = new DoseInterruption(new LocalDate(2012, 6, 28));
+        doseInterruption1.endMissedPeriod(new LocalDate(2012, 6, 30));
+        DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012, 7, 2));
+        doseInterruption2.endMissedPeriod(new LocalDate(2012, 7, 6));
+        DoseInterruption doseInterruption3 = new DoseInterruption(new LocalDate(2012, 7, 8));
+        doseInterruption3.endMissedPeriod(new LocalDate(2012, 7, 14));
 
         doseInterruptions.addAll(asList(doseInterruption1, doseInterruption2, doseInterruption3));
 
@@ -426,17 +426,6 @@ public class PatientTest {
         assertThat(doseDates.size(), is(0));
     }
 
-    @Test
-    public void shouldReturnTrueIfHasAdherenceForLastWeek() {
-        Patient patient = new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
-        assertTrue(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
-    }
-
-    @Test
-    public void shouldReturnFalseIfHasAdherenceForLastWeekForOldTherapy() {
-        Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(null).withAdherenceProvidedForLastWeek().build();
-        assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
-    }
 
     @Test
     public void shouldReturnFalseIfAdherenceNotProvidedForLastWeek() {
@@ -449,6 +438,14 @@ public class PatientTest {
         Patient patient = new PatientBuilder().withDefaults().withAdherenceProvidedForLastWeek().build();
         patient.addTreatment(new Treatment(), new Therapy(), DateUtil.now());
         assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
+    }
+
+    @Test
+    public void addingNewTherapyShouldResetLastAdherenceProvidedWeekStartDate() {
+        Patient patient = patient();
+        patient.setLastAdherenceWeekStartDate(new LocalDate(2012, 7, 7));
+        patient.addTreatment(new Treatment(), new Therapy(), now());
+        assertNull(patient.getLastAdherenceWeekStartDate());
     }
 
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
