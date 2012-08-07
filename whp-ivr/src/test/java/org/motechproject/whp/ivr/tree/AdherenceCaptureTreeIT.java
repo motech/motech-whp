@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.*;
 import org.mockito.ArgumentCaptor;
@@ -14,7 +15,9 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.ivr.transition.AdherenceSummaryTransition;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -289,7 +292,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldPlayWindowClosedPrompt_ifNotAdherenceCaptureDay() throws IOException {
         String sessionId = UUID.randomUUID().toString();
-        LocalDate thursday = currentAdherenceCaptureWeek().startDate().plusDays(10);
+        LocalDate thursday = currentAdherenceCaptureWeek().startDate().plusDays(3);
         httpClient.execute(new HttpGet(format(FAKETIME_URL, thursday)), new BasicResponseHandler());
 
         String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s",SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId )), new BasicResponseHandler());
