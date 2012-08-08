@@ -1,6 +1,5 @@
 package org.motechproject.whp.ivr.operation;
 
-import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -30,6 +28,9 @@ public class PublishCallLogOperationTest {
     private List<String> patientsWithAdherence;
     private List<String> patientsWithoutAdherence;
     private List<String> patientsWithAdherenceRecordedInThisSession;
+    private String callId = "callId";
+    private String providerId = "providerId";
+    private DateTime startTime = now();
 
     @Before
     public void setUp()  {
@@ -38,17 +39,15 @@ public class PublishCallLogOperationTest {
 
     @Test
     public void shouldPublishCallLog(){
-        String providerId = "providerId";
-        DateTime startTime = now();
         DateTime endTime = now();
 
-        FlowSession flowSession = setUpFlowSession(providerId, startTime);
+        FlowSession flowSession = setUpFlowSession();
 
         int totalPatients = patientsWithAdherence.size() + patientsWithoutAdherence.size();
         int adherenceCapturedInThisSession = patientsWithAdherenceRecordedInThisSession.size();
         int remainingPatientsWithoutAdherence = patientsWithoutAdherence.size() - patientsWithAdherenceRecordedInThisSession.size();
 
-        CallLogRequest expectedCallLogRequest = createCallLogRequest(providerId, startTime, endTime, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence);
+        CallLogRequest expectedCallLogRequest = createCallLogRequest(providerId, startTime, endTime, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence, callId);
 
         PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, endTime);
 
@@ -62,10 +61,11 @@ public class PublishCallLogOperationTest {
         assertThat(callLogRequest, is(expectedCallLogRequest));
     }
 
-    private FlowSession setUpFlowSession(String providerId, DateTime startTime) {
+    private FlowSession setUpFlowSession() {
         FlowSession flowSession = new FlowSessionStub();
         flowSession.set(IvrSession.PROVIDER_ID, providerId);
         flowSession.set(IvrSession.CALL_START_TIME, startTime);
+        flowSession.set(IvrSession.SID, callId);
 
         patientsWithAdherence = asList("patient1");
         flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(patientsWithAdherence));
@@ -76,8 +76,9 @@ public class PublishCallLogOperationTest {
         return flowSession;
     }
 
-    private CallLogRequest createCallLogRequest(String providerId, DateTime startTime, DateTime endTime, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence) {
+    private CallLogRequest createCallLogRequest(String providerId, DateTime startTime, DateTime endTime, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence, String callId) {
         CallLogRequest callLogRequest = new CallLogRequest();
+        callLogRequest.setCallId(callId);
         callLogRequest.setEndTime(endTime.toDate());
         callLogRequest.setStartTime(startTime.toDate());
         callLogRequest.setCalledBy(providerId);

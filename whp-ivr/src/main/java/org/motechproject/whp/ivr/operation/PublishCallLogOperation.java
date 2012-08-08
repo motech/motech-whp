@@ -29,6 +29,7 @@ public class PublishCallLogOperation implements INodeOperation{
 
     private CallLogRequest buildCallLog(IvrSession ivrSession) {
         CallLogRequest callLogRequest = new CallLogRequest();
+        callLogRequest.setCallId(ivrSession.callId());
         callLogRequest.setCalledBy(ivrSession.providerId());
         callLogRequest.setProviderId(ivrSession.providerId());
         callLogRequest.setStartTime(ivrSession.callStartTime().toDate());

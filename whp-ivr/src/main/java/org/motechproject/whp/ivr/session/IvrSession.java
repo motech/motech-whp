@@ -21,6 +21,7 @@ public class IvrSession {
     public static final String PROVIDER_ID = "providerId";
     public static final String START_OF_ADHERENCE_SUBMISSION = "startOfAdherenceSubmission";
     public static final String CALL_START_TIME = "CALL_START_TIME";
+    public static final String SID = "sid";
     private FlowSession flowSession;
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
 
@@ -63,11 +64,11 @@ public class IvrSession {
     }
 
     public String callId() {
-        return flowSession.get("sid").toString();
+        return flowSession.get(SID).toString();
     }
 
     public void callId(String callId) {
-        flowSession.set("sid", callId);
+        flowSession.set(SID, callId);
     }
 
     public void currentPatientIndex(int value) {
