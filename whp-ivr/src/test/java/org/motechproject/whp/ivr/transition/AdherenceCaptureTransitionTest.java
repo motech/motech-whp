@@ -148,9 +148,9 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
                 .wav(PATIENT)
                 .id(patientId1)
                 .wav(HAS_TAKEN)
-                .number(dosesTaken)
-                .wav(OUT_OF)
                 .number(dosesPerWeek)
+                .wav(OUT_OF)
+                .number(dosesTaken)
                 .wav(DOSES)
                 .wav(CONFIRM_ADHERENCE);
 
