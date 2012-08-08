@@ -11,9 +11,13 @@ import static java.util.Arrays.asList;
 
 public class PromptBuilder {
 
+    private static final String ALPHANUMERIC_DIR = "alphanumeric";
+    private static final String MESSAGES_DIR = "messages";
+
     private List<Prompt> prompts;
     private WHPIVRMessage whpIVRMessage;
     private String DEFAULT_LANGUAGE_CODE = "en";
+    private static final String PATH_SEPARATOR = "/";
 
     public PromptBuilder(WHPIVRMessage whpIVRMessage) {
         this.whpIVRMessage = whpIVRMessage;
@@ -21,20 +25,20 @@ public class PromptBuilder {
     }
 
     public PromptBuilder number(Integer number) {
-        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(number.toString(), DEFAULT_LANGUAGE_CODE)));
+        prompts.add(newAudioPrompt(withFileURLFor(number)));
         return this;
     }
 
     public PromptBuilder id(String text) {
         text = text.toLowerCase();
         for (Character character : text.toCharArray()) {
-            prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(character.toString(), DEFAULT_LANGUAGE_CODE)));
+            prompts.add(newAudioPrompt(withFileUrlFor(character)));
         }
         return this;
     }
 
     public PromptBuilder wav(String message) {
-        prompts.add(new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(message, "en")));
+        prompts.add(newAudioPrompt(withFileUrlFor(message)));
         return this;
     }
 
@@ -47,4 +51,19 @@ public class PromptBuilder {
         return prompts.toArray(new Prompt[prompts.size()]);
     }
 
+    private String withFileURLFor(Integer number) {
+        return ALPHANUMERIC_DIR + PATH_SEPARATOR + number.toString();
+    }
+
+    private String withFileUrlFor(Character character) {
+        return ALPHANUMERIC_DIR + PATH_SEPARATOR + character.toString();
+    }
+
+    private String withFileUrlFor(String message) {
+        return MESSAGES_DIR + PATH_SEPARATOR + message;
+    }
+
+    private AudioPrompt newAudioPrompt(String fileName) {
+        return new AudioPrompt().setAudioFileUrl(whpIVRMessage.getWav(fileName, DEFAULT_LANGUAGE_CODE));
+    }
 }

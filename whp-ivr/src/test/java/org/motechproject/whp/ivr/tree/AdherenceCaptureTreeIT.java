@@ -244,14 +244,14 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/thankYou.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/completionMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnd-note.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/thankYou.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/completionMessage.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnd-note.wav</playaudio>\n" +
                 "                        <hangup></hangup>\n" +
                 "    </response>";
 
@@ -277,13 +277,13 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/summaryMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/completionMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnd-note.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/completionMessage.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnd-note.wav</playaudio>\n" +
                 "                        <hangup></hangup>\n" +
                 "    </response>";
 
@@ -309,8 +309,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
         String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/windowOverMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/thankYou.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/windowOverMessage.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/thankYou.wav</playaudio>\n" +
                 "                        <hangup></hangup>\n" +
                 "    </response>";
         assertThat(response, is(expectedResponse));
@@ -358,19 +358,19 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     private String thirdPatient_ProvideAdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/enterAdherence.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
                 "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
@@ -379,19 +379,19 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     private String secondPatient_ProvideAdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/enterAdherence.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
                 "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
@@ -400,23 +400,23 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     private String confirmPatient1_AdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage1a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage4.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage1a.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage4.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
                 "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
@@ -425,24 +425,24 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     private String adherenceSummaryResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/0.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/instructionalMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/enterAdherence.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/0.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage2.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage3.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
                 "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
                 "    </response>";
@@ -451,8 +451,8 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     private String welcomeMessageResponse() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/musicEnter.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/welcomeMessage.wav</playaudio>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnter.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/welcomeMessage.wav</playaudio>\n" +
                 "                        <collectdtmf l=\"1\" t=\"#\"></collectdtmf>\n" +
                 "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + TREE_PATH_START + "</gotourl>\n" +
                 "    </response>";

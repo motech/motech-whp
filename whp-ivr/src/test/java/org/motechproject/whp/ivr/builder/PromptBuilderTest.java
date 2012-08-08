@@ -14,6 +14,7 @@ import static junit.framework.Assert.assertEquals;
 public class PromptBuilderTest {
 
     private Properties properties;
+    private static final String ALPHANUMERIC_AUDIOFILES_DIRECTORY = "http://content-url/en/alphanumeric/";
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +25,7 @@ public class PromptBuilderTest {
     @Test
     public void shouldBuildAudioPromptsWithNumber() {
         PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
-        assertEquals("http://content-url/en/1.wav", ((AudioPrompt) promptBuilder.number(1).build()[0]).getAudioFileUrl());
+        assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) promptBuilder.number(1).build()[0]).getAudioFileUrl());
     }
 
     @Test
@@ -32,8 +33,8 @@ public class PromptBuilderTest {
         PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
         Prompt[] prompts = promptBuilder.id("1a").build();
         assertEquals(2, prompts.length);
-        assertEquals("http://content-url/en/1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());
-        assertEquals("http://content-url/en/a.wav", ((AudioPrompt) prompts[1]).getAudioFileUrl());
+        assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());
+        assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "a.wav", ((AudioPrompt) prompts[1]).getAudioFileUrl());
     }
 
     @Test
@@ -41,9 +42,7 @@ public class PromptBuilderTest {
         PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
         Prompt[] prompts = promptBuilder.id("1A").build();
         assertEquals(2, prompts.length);
-        assertEquals("http://content-url/en/1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());
-        assertEquals("http://content-url/en/a.wav", ((AudioPrompt) prompts[1]).getAudioFileUrl());
+        assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());
+        assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "a.wav", ((AudioPrompt) prompts[1]).getAudioFileUrl());
     }
-
-
 }
