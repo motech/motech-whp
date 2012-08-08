@@ -14,9 +14,9 @@ public class ProvidedAdherencePrompts {
         promptBuilder.wav(PATIENT)
                 .id(patientId)
                 .wav(HAS_TAKEN)
-                .number(adherenceInput)
-                .wav(OUT_OF)
                 .number(dosesPerWeek)
+                .wav(OUT_OF)
+                .number(adherenceInput)
                 .wav(DOSES)
                 .wav(CONFIRM_ADHERENCE);
         return promptBuilder.build();
