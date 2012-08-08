@@ -10,34 +10,75 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 public class AdherenceCaptureBuilder {
 
     private AdherenceCaptureRequest request;
+    private final static String UNKNOWN = "Unknown";
+    private final static String SKIPPED = "Skipped";
+    private final static String TAKEN = "Taken";
 
     public AdherenceCaptureBuilder() {
-        request = new AdherenceCaptureRequest();
-        request.setValid(true);
-        request.setChannelId("IVR");
+
     }
 
     public static AdherenceCaptureBuilder adherenceCapture() {
         return new AdherenceCaptureBuilder();
     }
 
-    public AdherenceCaptureBuilder forPatient(String patientId) {
+    public AdherenceCaptureRequest validAdherence(String patientId, IvrSession ivrSession) {
+        initRequest(patientId, ivrSession);
+        this.validInput(ivrSession.adherenceInputForCurrentPatient().input());
+        return request;
+    }
+
+    public AdherenceCaptureRequest skipAdherence(String patientId, IvrSession ivrSession) {
+        initRequest(patientId, ivrSession);
+        this.skipInput();
+        return request;
+    }
+
+    public AdherenceCaptureRequest invalidAdherence(String patientId, IvrSession ivrSession, String input) {
+        initRequest(patientId, ivrSession);
+        this.invalidInput(Integer.parseInt(input));
+        return request;
+    }
+
+    private AdherenceCaptureBuilder validInput(Integer input) {
+        request.setValid(true);
+        request.setStatus(TAKEN);
+        request.setSubmittedValue(input);
+        return this;
+    }
+
+    private AdherenceCaptureBuilder invalidInput(Integer input) {
+       request.setValid(false);
+       request.setStatus(UNKNOWN);
+        request.setSubmittedValue(input);
+        return this;
+    }
+
+    private AdherenceCaptureBuilder skipInput() {
+        request.setValid(true);
+        request.setStatus(SKIPPED);
+        request.setSubmittedValue(Integer.valueOf(IVRInput.SKIP_PATIENT_CODE));
+        return this;
+    }
+
+    private void initRequest(String patientId, IvrSession ivrSession) {
+        request = new AdherenceCaptureRequest();
+        request.setChannelId("IVR");
+        this.forPatient(patientId).forSession(ivrSession);
+
+    }
+
+    private AdherenceCaptureBuilder forPatient(String patientId) {
         request.setPatientId(patientId);
         return this;
     }
 
-    public AdherenceCaptureBuilder forSession(IvrSession ivrSession) {
-        request = this.withInput(ivrSession.adherenceInputForCurrentPatient())
-                .byProvider(ivrSession.providerId())
+    private AdherenceCaptureBuilder forSession(IvrSession ivrSession) {
+        this.byProvider(ivrSession.providerId())
                 .throughMobile(ivrSession.mobileNumber())
                 .onCall(ivrSession.callId())
-                .withStartOfAdherenceSubmission(ivrSession.startOfAdherenceSubmission())
-                .build();
+                .withStartOfAdherenceSubmission(ivrSession.startOfAdherenceSubmission());
         return this;
-    }
-
-    public AdherenceCaptureRequest build() {
-        return request;
     }
 
     private AdherenceCaptureBuilder withStartOfAdherenceSubmission(DateTime time) {
@@ -47,11 +88,6 @@ public class AdherenceCaptureBuilder {
         return this;
     }
 
-    private AdherenceCaptureBuilder withInput(IVRInput userInput) {
-        request.setStatus(userInput.status());
-        request.setSubmittedValue(userInput.input());
-        return this;
-    }
 
     private AdherenceCaptureBuilder byProvider(String providerId) {
         request.setProviderId(providerId);

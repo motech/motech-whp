@@ -4,23 +4,23 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.session.IvrSession;
+import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class AdherenceCaptureBuilderTest extends BaseUnitTest {
 
     private static final String CHANNEL = "IVR";
-    private static final boolean VALID = true;
 
     private static final String PROVIDER_ID = "providerId";
     private static final String PATIENT_ID = "patientId";
 
     private static final String INPUT_FOR_CURRENT_PATIENT = "1";
-    private static final String ADHERENCE_VALUE = "Taken";
+    private static final String DOSE_TAKEN = "Taken";
     private static final String MOBILE_NUMBER = "mobileNumber";
 
     private static final String CALL_ID = "callId";
@@ -30,6 +30,8 @@ public class AdherenceCaptureBuilderTest extends BaseUnitTest {
     private static final Long DIFFERENCE_IN_SECONDS = 10l;
 
     private IvrSession ivrSession;
+    private static final String SKIPPED = "Skipped";
+    private static final String UNKNOWN = "Unknown";
 
     @Before
     public void setup() {
@@ -50,48 +52,54 @@ public class AdherenceCaptureBuilderTest extends BaseUnitTest {
 
     @Test
     public void shouldSetChannelToIVRByDefault() {
-        assertEquals(CHANNEL, new AdherenceCaptureBuilder().build().getChannelId());
+        assertEquals(CHANNEL, new AdherenceCaptureBuilder().validAdherence("any", ivrSession).getChannelId());
     }
 
     @Test
-    public void shouldSetCaptureToValidByDefault() {
-        assertEquals(VALID, new AdherenceCaptureBuilder().build().isValid());
+    public void shouldBuildRequestForValidAdherence(){
+        AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureBuilder().validAdherence(PATIENT_ID, ivrSession);
+
+        assertTrue(adherenceCaptureRequest.isValid());
+        assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
+        assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
+        assertEquals(DOSE_TAKEN, adherenceCaptureRequest.getStatus());
+        assertEquals(Integer.valueOf(INPUT_FOR_CURRENT_PATIENT), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
     }
 
     @Test
-    public void shouldSetPatientId() {
-        assertEquals(PATIENT_ID, new AdherenceCaptureBuilder().forPatient(PATIENT_ID).build().getPatientId());
+    public void shouldBuildRequestForSkipAdherence(){
+        AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureBuilder().skipAdherence(PATIENT_ID, ivrSession);
+
+        assertTrue(adherenceCaptureRequest.isValid());
+        assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
+        assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
+        assertEquals(SKIPPED, adherenceCaptureRequest.getStatus());
+        assertEquals(Integer.valueOf(IVRInput.SKIP_PATIENT_CODE), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
+
     }
 
     @Test
-    public void shouldSetProviderId() {
-        assertEquals(PROVIDER_ID, new AdherenceCaptureBuilder().forSession(ivrSession).build().getProviderId());
+    public void shouldBuildRequestForInvalidAdherence(){
+        String adherenceInput = "8";
+        ivrSession.adherenceInputForCurrentPatient(adherenceInput);
+
+        AdherenceCaptureRequest adherenceCaptureRequest = new AdherenceCaptureBuilder().invalidAdherence(PATIENT_ID, ivrSession, adherenceInput);
+
+        assertFalse(adherenceCaptureRequest.isValid());
+        assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
+        assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
+        assertEquals(UNKNOWN, adherenceCaptureRequest.getStatus());
+        assertEquals(Integer.valueOf(adherenceInput), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
+
     }
 
-    @Test
-    public void shouldSetAdherenceValue() {
-        assertNull(new AdherenceCaptureBuilder().build().getStatus());
-        assertEquals(ADHERENCE_VALUE, new AdherenceCaptureBuilder().forSession(ivrSession).build().getStatus());
-    }
-
-    @Test
-    public void shouldSetEnteredInput() {
-        assertNull(new AdherenceCaptureBuilder().build().getStatus());
-        assertEquals(new Integer(1), new AdherenceCaptureBuilder().forSession(ivrSession).build().getSubmittedValue());
-    }
-
-    @Test
-    public void shouldSetMobileNumber() {
-        assertEquals(MOBILE_NUMBER, new AdherenceCaptureBuilder().forSession(ivrSession).build().getSubmittedBy());
-    }
-
-    @Test
-    public void shouldSetCallId() {
-        assertEquals(CALL_ID, new AdherenceCaptureBuilder().forSession(ivrSession).build().getCallId());
-    }
-
-    @Test
-    public void shouldSetDurationOfSubmissionInSeconds() {
-        assertEquals(DIFFERENCE_IN_SECONDS, new AdherenceCaptureBuilder().forSession(ivrSession).build().getTimeTaken());
-    }
 }

@@ -148,7 +148,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
 
         String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/2".getBytes()));
-        String expectedResponse = confirmPatient1AdherenceResponse(nextTreePath);
+        String expectedResponse = confirmPatient1_AdherenceResponse(nextTreePath);
         assertXMLEqual(expectedResponse, response);
     }
 
@@ -165,11 +165,24 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         String response = confirmAdherence(sessionId, confirmAdherenceTreePath);
 
         String transitionPath = new String(Base64.encodeBase64URLSafe("/1/2/1".getBytes()));
-        String expectedResponseForPatient1Adherence = secondPatientProvideAdherenceResponse(transitionPath);
+        String expectedResponseForPatient1Adherence = secondPatient_ProvideAdherenceResponse(transitionPath);
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
 
         assertEquals(2, adherenceSummaryPatient1.getDosesTaken());
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
+        verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+    }
+
+    @Test
+    public void shouldSkipOnPatient_OnSkipCode() throws IOException, SAXException {
+        String sessionId = UUID.randomUUID().toString();
+
+        navigateToAdherenceSummary(sessionId);
+
+        String response = enterAdherenceForPatient(sessionId, 9, TREE_PATH_ADHERENCE_CAPTURE);
+        String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/9".getBytes()));
+        assertThat(response, is(secondPatient_ProvideAdherenceResponse(nextTreePath)));
+
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
@@ -320,19 +333,20 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldSkipForInvalidInputs() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
-        HttpGet request = new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=8&sid=%s&cid=%s", SERVER_URL, TREE_PATH_ADHERENCE_CAPTURE, sessionId, provider.getPrimaryMobile()));
-        String response = httpClient.execute(request, new BasicResponseHandler());
-        String expectedResponseForPatient1Adherence = secondPatientProvideAdherenceResponse("LzEvOA");
+
+        navigateToAdherenceSummary(sessionId);
+        String response = enterAdherenceForPatient(sessionId, 8, TREE_PATH_ADHERENCE_CAPTURE);
+        String treePathForSecondPatient = new String(Base64.encodeBase64URLSafe("/1/8".getBytes()));
+        String expectedResponseForPatient1Adherence = secondPatient_ProvideAdherenceResponse(treePathForSecondPatient);
 
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
         assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
-        String treePathForSecondPatient = new String(Base64.encodeBase64URLSafe("/1/8".getBytes()));
         response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=9&sid=%s&cid=%s", SERVER_URL, treePathForSecondPatient, sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
 
         String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/8/9".getBytes()));
-        String expectedResponseForPatient2Adherence = thirdPatientProvideAdherenceResponse(nextTreePath);
+        String expectedResponseForPatient2Adherence = thirdPatient_ProvideAdherenceResponse(nextTreePath);
 
         WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
         assertEquals(0, adherenceSummaryPatient2.getDosesTaken());
@@ -341,7 +355,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     }
 
-    private String thirdPatientProvideAdherenceResponse(String nextTreePath) {
+    private String thirdPatient_ProvideAdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
@@ -362,7 +376,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
     }
 
-    private String secondPatientProvideAdherenceResponse(String nextTreePath) {
+    private String secondPatient_ProvideAdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/patientList.wav</playaudio>\n" +
@@ -383,7 +397,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
                 "    </response>";
     }
 
-    private String confirmPatient1AdherenceResponse(String nextTreePath) {
+    private String confirmPatient1_AdherenceResponse(String nextTreePath) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<response>\n" +
                 "                        <playaudio>http://localhost:8080/whp/wav/stream/en/confirmMessage1.wav</playaudio>\n" +

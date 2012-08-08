@@ -6,7 +6,7 @@ import static java.lang.Integer.parseInt;
 
 public class IVRInput {
 
-    private static final String SKIP_PATIENT_CODE = "9";
+    public static final String SKIP_PATIENT_CODE = "9";
     private String key;
 
     public IVRInput(String key) {
@@ -25,18 +25,4 @@ public class IVRInput {
         return parseInt(key);
     }
 
-    public String status() {
-        if (isNotSkipInput()) {
-            if (inputWithinDoseRange()) {
-                return "Taken";
-            } else if (input() == 0) {
-                return "NotTaken";
-            }
-        }
-        return "Unknown";
-    }
-
-    private boolean inputWithinDoseRange() {
-        return input() >= 1 && input() <= 7;
-    }
 }

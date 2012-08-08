@@ -63,10 +63,7 @@ public class RecordAdherenceOperation implements INodeOperation {
 
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
         logger.info("Building adherence submission request");
-        AdherenceCaptureRequest request = adherenceCapture()
-                .forPatient(currentPatientId)
-                .forSession(ivrSession)
-                .build();
+        AdherenceCaptureRequest request = adherenceCapture().validAdherence(currentPatientId, ivrSession);
         logger.info("Publishing adherence submission request");
         reportingService.reportAdherenceCapture(request);
     }

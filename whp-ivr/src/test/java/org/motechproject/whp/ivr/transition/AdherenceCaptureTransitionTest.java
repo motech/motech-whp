@@ -14,6 +14,7 @@ import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
+import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -33,7 +34,7 @@ import java.util.Properties;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
@@ -64,12 +65,14 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         initMocks(this);
         whpivrMessage = new WHPIVRMessage(new Properties());
         flowSession = new FlowSessionStub();
+        IvrSession ivrSession = new IvrSession(flowSession);
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1, patientId2)));
-        flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
+        ivrSession.providerId(PROVIDER_ID);
+        ivrSession.callId("callId");
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService,reportingPublisherService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService, reportingPublisherService);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }
@@ -196,6 +199,11 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         new IvrSession(flowSession).startOfAdherenceSubmission(now.minusDays(5));
         play(adherenceCaptureTransition, flowSession, "9");
         Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+    @Test
+    public void shouldReportWhenOnSkipAdherence() {
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
+        assertThat(destinationNode.getOperations(),hasItem(isA(SkipAdherenceOperation.class)));
     }
 
     @Test
