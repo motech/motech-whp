@@ -68,6 +68,8 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
+        LocalDate sunday = new LocalDate(2012, 7, 15);
+        mockCurrentDate(sunday);
         when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
         adherenceSummaryTransition = new AdherenceSummaryTransition(whpivrMessage, new AdherenceRecordingSession(allProviders, adherenceDataService), reportingPublisherService);
 
