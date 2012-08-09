@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-ivr-kookoo-v2</artifactId>
+            <artifactId>motech-ivr-kookoo</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
