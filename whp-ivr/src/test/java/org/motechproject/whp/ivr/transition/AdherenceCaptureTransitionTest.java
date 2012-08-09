@@ -48,8 +48,6 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     @Mock
     PatientService patientService;
     @Mock
-    AdherenceDataService adherenceDataService;
-    @Mock
     private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
