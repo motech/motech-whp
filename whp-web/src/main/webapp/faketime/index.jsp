@@ -43,7 +43,7 @@
     <script type="text/javascript">
             $('#post-button').click(function () {
             var host = window.location.host;
-            var urlString = "/whp/motech-delivery-tools/datetime/update?date=" + $("#date").val() + "&hour=" + $("#hour").val() + "&minute=" + $("#minute").val();
+            var urlString = "/whp/motech-delivery-tools/datetime/update?type=flow&date=" + $("#date").val() + "&hour=" + $("#hour").val() + "&minute=" + $("#minute").val();
             $.ajax({
                 type:'GET',
                 url:"http://" + host + urlString,

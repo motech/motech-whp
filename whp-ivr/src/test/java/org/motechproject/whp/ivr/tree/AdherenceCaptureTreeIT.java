@@ -44,7 +44,7 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentA
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
-    public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?date=%s&hour=0&minute=0";
+    public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?type=flow&date=%s&hour=0&minute=0";
 
     static Server server;
     static String CONTEXT_PATH = "/whp";
@@ -96,12 +96,13 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     }
 
     @Before
-    public void setup() throws IOException {
+    public void setup() throws IOException, InterruptedException {
         setIgnoreWhitespace(true);
         httpClient = new DefaultHttpClient();
         adherenceCaptureTree.load();
         LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
         httpClient.execute(new HttpGet(format(FAKETIME_URL, lastMonday.toString())), new BasicResponseHandler());
+
         reportingPublisherService = getMockedReportingPublisherService();
         setUpTestData();
     }
