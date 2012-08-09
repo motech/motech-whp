@@ -43,7 +43,9 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
     }
 
     @Test
-    public void shouldRecomputePillCountAfterCapturingWeeklyAdherence() {
+    public void shouldRecomputePillCountAfterCapturingWeeklyAdherence_onWeekdays() {
+        LocalDate tuesday = new LocalDate(2012, 8, 7);
+        mockCurrentDate(tuesday);
         patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today().minusMonths(2));
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
@@ -56,9 +58,64 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patient, auditParams);
 
         int dosesTaken = 0;
-        LocalDate endDate = new LocalDate();
-        verify(patientService, times(2)).updatePillTakenCount(patient, Phase.IP, dosesTaken, endDate);
+        verify(patientService, times(2)).updatePillTakenCount(patient, Phase.IP, dosesTaken, today());
+    }
 
+    @Test
+    public void shouldRecomputePillCountAfterCapturingWeeklyAdherence_onSunday() {
+        LocalDate sunday = new LocalDate(2012, 8, 5);
+        mockCurrentDate(sunday);
+        patient = new PatientBuilder().withDefaults().build();
+        patient.startTherapy(today().minusMonths(2));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
+
+
+        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patient, auditParams);
+
+        int dosesTaken = 0;
+        verify(patientService, times(4)).updatePillTakenCount(patient, Phase.IP, dosesTaken, today());
+    }
+
+    @Test
+    public void shouldRecomputePillCountAfterCapturingDailyAdherence_onWeekdays() {
+        LocalDate tuesday = new LocalDate(2012, 8, 7);
+        mockCurrentDate(tuesday);
+        patientStub = new PatientStub();
+        patientStub.startTherapy(today().minusMonths(2));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+
+
+        DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
+        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+
+        int dosesTaken = 0;
+        LocalDate endDate = new LocalDate();
+        verify(patientService, times(2)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, today());
+    }
+
+    @Test
+    public void shouldRecomputePillCountAfterCapturingDailyAdherence_onSunday() {
+        LocalDate tuesday = new LocalDate(2012, 8, 5);
+        mockCurrentDate(tuesday);
+        patientStub = new PatientStub();
+        patientStub.startTherapy(today().minusMonths(2));
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
+
+
+        DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
+
+        AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
+        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+
+        int dosesTaken = 0;
+        LocalDate endDate = new LocalDate();
+        verify(patientService, times(4)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, today());
     }
 
     @Test
@@ -74,23 +131,6 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence , patient , auditParams);
         verify(whpAdherenceService).recordWeeklyAdherence(adherence, patient, auditParams);
 
-    }
-
-    @Test
-    public void shouldRecomputePillCountAfterCapturingDailyAdherence() {
-        patientStub = new PatientStub();
-        patientStub.startTherapy(today().minusMonths(2));
-        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
-
-
-        DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
-
-        AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
-
-        int dosesTaken = 0;
-        LocalDate endDate = new LocalDate();
-        verify(patientService, times(2)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, endDate);
     }
 
     @Test
@@ -214,9 +254,5 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         public int getRemainingDosesInLastCompletedPhase() {
             return 0;
         }
-
-
     }
-
-
 }
