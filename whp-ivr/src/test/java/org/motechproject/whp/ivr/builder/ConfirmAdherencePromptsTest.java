@@ -3,7 +3,7 @@ package org.motechproject.whp.ivr.builder;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.decisiontree.model.Prompt;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts;
 
 import java.util.Properties;
@@ -13,18 +13,18 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class ConfirmAdherencePromptsTest {
 
-    private WHPIVRMessage whpivrMessage;
+    private WhpIvrMessage whpIvrMessage;
     private PromptBuilder promptBuilder;
 
     @Before
     public void setUp() throws Exception {
-        whpivrMessage = new WHPIVRMessage(new Properties());
-        promptBuilder = (new PromptBuilder(whpivrMessage));
+        whpIvrMessage = new WhpIvrMessage(new Properties());
+        promptBuilder = (new PromptBuilder(whpIvrMessage));
     }
 
     @Test
     public void shouldBuildConfirmAdherencePrompts(){
-        Prompt[] builtPrompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpivrMessage, "id", 2, 3);
+        Prompt[] builtPrompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, "id", 2, 3);
         Prompt[] expectedPrompts = promptBuilder.wav(PATIENT).id("i").id("d")
                 .wav(HAS_TAKEN).number(3)
                 .wav(OUT_OF).number(2)

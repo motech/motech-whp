@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 
 import java.util.Properties;
 
@@ -19,18 +19,18 @@ public class PromptBuilderTest {
     @Before
     public void setUp() throws Exception {
         properties = new Properties();
-        properties.setProperty(WHPIVRMessage.CONTENT_LOCATION_URL, "http://content-url/");
+        properties.setProperty(WhpIvrMessage.CONTENT_LOCATION_URL, "http://content-url/");
     }
 
     @Test
     public void shouldBuildAudioPromptsWithNumber() {
-        PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
+        PromptBuilder promptBuilder = new PromptBuilder(new WhpIvrMessage(properties));
         assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) promptBuilder.number(1).build()[0]).getAudioFileUrl());
     }
 
     @Test
     public void shouldBuildAudioPromptsWithId() {
-        PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
+        PromptBuilder promptBuilder = new PromptBuilder(new WhpIvrMessage(properties));
         Prompt[] prompts = promptBuilder.id("1a").build();
         assertEquals(2, prompts.length);
         assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());
@@ -39,7 +39,7 @@ public class PromptBuilderTest {
 
     @Test
     public void shouldBuildAudioPromptsWithIdInUppercase() {
-        PromptBuilder promptBuilder = new PromptBuilder(new WHPIVRMessage(properties));
+        PromptBuilder promptBuilder = new PromptBuilder(new WhpIvrMessage(properties));
         Prompt[] prompts = promptBuilder.id("1A").build();
         assertEquals(2, prompts.length);
         assertEquals(ALPHANUMERIC_AUDIOFILES_DIRECTORY + "1.wav", ((AudioPrompt) prompts[0]).getAudioFileUrl());

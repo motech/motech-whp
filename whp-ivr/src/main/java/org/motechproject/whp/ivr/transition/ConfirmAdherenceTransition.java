@@ -6,7 +6,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -23,12 +23,12 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     public ConfirmAdherenceTransition() {
     }
 
-    public ConfirmAdherenceTransition(WHPIVRMessage whpivrMessage,
+    public ConfirmAdherenceTransition(WhpIvrMessage whpIvrMessage,
                                       WHPAdherenceService adherenceService,
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                                       ReportingPublisherService reportingPublisherService) {
 
-        super(whpivrMessage, reportingPublisherService);
+        super(whpIvrMessage, reportingPublisherService);
 
         this.adherenceService = adherenceService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;

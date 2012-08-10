@@ -13,7 +13,7 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
+import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
 public class RecordAdherenceOperation implements INodeOperation {
 
@@ -63,7 +63,7 @@ public class RecordAdherenceOperation implements INodeOperation {
 
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
         logger.info("Building adherence submission request");
-        AdherenceCaptureRequest request = adherenceCapture().validAdherence(currentPatientId, ivrSession);
+        AdherenceCaptureRequest request = adherenceCaptureRequest().validAdherence(currentPatientId, ivrSession);
         logger.info("Publishing adherence submission request");
         reportingService.reportAdherenceCapture(request);
     }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 @Component
-public class WHPIVRMessage implements IVRMessage {
+public class WhpIvrMessage implements IVRMessage {
 
     public static final String CONTENT_LOCATION_URL = "content.location.url";
     private static final String WAV = ".wav";
@@ -18,7 +18,7 @@ public class WHPIVRMessage implements IVRMessage {
 
 
     @Autowired
-    public WHPIVRMessage(@Qualifier("ivrProperties") Properties properties) {
+    public WhpIvrMessage(@Qualifier("ivrProperties") Properties properties) {
         this.properties = properties;
     }
 

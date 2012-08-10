@@ -12,7 +12,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
@@ -59,7 +59,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
-    WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
+    WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
     ConfirmAdherenceTransition confirmAdherenceTransition;
 
     @Before
@@ -74,7 +74,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpivrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         String adherenceInput = "1";
 
         Node node = confirmAdherenceTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpivrMessage, PATIENT2_ID, 2)));
+        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpIvrMessage, PATIENT2_ID, 2)));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 1, 0));
+        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, 1, 0));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 
@@ -123,7 +123,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID, PATIENT2_ID)));
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, PATIENT2_ID, 2));
+        Node expectedNode = new Node().addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, PATIENT2_ID, 2));
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 
@@ -131,7 +131,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     public void shouldReplayCurrentPatient_ForReEnterInput() {
         Node node = confirmAdherenceTransition.getDestinationNode("2", flowSession);
 
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage);
         promptBuilder.wav(PATIENT_LIST).number(1).id(PATIENT1_ID).wav(ENTER_ADHERENCE);
         Node expectedNode = new Node().addPrompts(promptBuilder.build());
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
@@ -153,7 +153,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         String adherenceInput = "1";
         Node node = confirmAdherenceTransition.getDestinationNode(adherenceInput, flowSession);
 
-        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpivrMessage, PATIENT2_ID, 2)));
+        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpIvrMessage, PATIENT2_ID, 2)));
         assertThat(node.getTransitions().size(), is(1));
         assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
     }

@@ -2,7 +2,7 @@ package org.motechproject.whp.ivr.builder;
 
 import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,11 @@ public class PromptBuilder {
     private static final String MESSAGES_DIR = "messages";
 
     private List<Prompt> prompts;
-    private WHPIVRMessage whpIVRMessage;
+    private WhpIvrMessage whpIVRMessage;
     private String DEFAULT_LANGUAGE_CODE = "en";
     private static final String PATH_SEPARATOR = "/";
 
-    public PromptBuilder(WHPIVRMessage whpIVRMessage) {
+    public PromptBuilder(WhpIvrMessage whpIVRMessage) {
         this.whpIVRMessage = whpIVRMessage;
         prompts = new ArrayList<>();
     }

@@ -1,20 +1,17 @@
 package org.motechproject.whp.ivr.tree;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.LocalDate;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.ivr.WhpIvrMessage;
+import org.motechproject.whp.ivr.util.KooKooIvrResponse;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -24,93 +21,60 @@ import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
-import static java.lang.String.format;
-import static junit.framework.Assert.assertEquals;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.contains;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
+import static org.motechproject.whp.ivr.matcher.IvrResponseAudioMatcher.audioList;
 
-@ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
-public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
-
-    public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?type=flow&date=%s&hour=0&minute=0";
-
-    static Server server;
-    static String CONTEXT_PATH = "/whp";
-    public static final String TREE_PATH_START = new String(Base64.encodeBase64URLSafe("/".getBytes()));
-    public static final String TREE_PATH_ADHERENCE_CAPTURE = new String(Base64.encodeBase64URLSafe("/1".getBytes()));
-
-    String KOOKOO_CALLBACK_URL = "/kookoo/ivr";
-    String SERVER_URL = "http://localhost:7080" + CONTEXT_PATH + KOOKOO_CALLBACK_URL;
-
-    DefaultHttpClient httpClient;
+@Ignore
+public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Autowired
     AdherenceCaptureTree adherenceCaptureTree;
-
     @Autowired
     AllProviders allProviders;
-
     @Autowired
     AllPatients allPatients;
-
     @Autowired
     WHPAdherenceService adherenceService;
-
     @Autowired
     AllAdherenceLogs allAdherenceLogs;
+    @Autowired
+    WhpIvrMessage whpIvrMessage;
 
     Provider provider;
+
     Patient patient1;
     Patient patient2;
     Patient patient3;
-    private static DispatcherServlet dispatcherServlet;
+
     private ReportingPublisherService reportingPublisherService;
-    private int adherenceCapturedForFirstPatient;
-    private int adherenceCapturedForSecondPatient;
-    private int adherenceCapturedForThirdPatient;
-
-    @BeforeClass
-    public static void startServer() throws Exception {
-        server = new Server(7080);
-        Context context = new Context(server, CONTEXT_PATH);
-
-        dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setContextConfigLocation("classpath:test-applicationIVRContext.xml");
-
-        ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
-        context.addServlet(servletHolder, "/*");
-        server.setHandler(context);
-        server.start();
-    }
 
     @Before
     public void setup() throws IOException, InterruptedException {
-        setIgnoreWhitespace(true);
-        httpClient = new DefaultHttpClient();
+        super.setup();
         adherenceCaptureTree.load();
-        LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
-        httpClient.execute(new HttpGet(format(FAKETIME_URL, lastMonday.toString())), new BasicResponseHandler());
 
-        reportingPublisherService = getMockedReportingPublisherService();
+        LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
+        adjustDateTime(lastMonday);
+
+        reportingPublisherService = (ReportingPublisherService) getBean("reportingPublisherService");
         setUpTestData();
     }
 
     private void setUpTestData() {
         String providerId = "provider1";
         provider = new Provider(providerId, "123456", "Vaishali", DateUtil.now());
-
         allProviders.add(provider);
 
         LocalDate treatmentStartDate = DateUtil.today().minusDays(10);
@@ -124,140 +88,98 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldPlayWelcomeMessage() throws IOException, SAXException {
-        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en", SERVER_URL)), new BasicResponseHandler());
-        String expectedResponse = welcomeMessageResponse();
-        assertXMLEqual(expectedResponse, response);
+    public void shouldPlayWelcomeMessage() {
+        String sessionId = UUID.randomUUID().toString();
+        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
+        List<String> playAudioList = ivrResponse.getPlayAudio();
+        assertThat(playAudioList, is(audioList(wav("musicEnter", "welcomeMessage"))));
     }
 
     @Test
-    public void shouldTransitionToAdherenceSummaryNode() throws IOException, SAXException {
+    public void shouldPlayAdherenceSummary() {
         String sessionId = UUID.randomUUID().toString();
-        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
-        String expectedResponse = adherenceSummaryResponse(TREE_PATH_ADHERENCE_CAPTURE);
-        assertXMLEqual(expectedResponse, response);
+        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
+        assertThat(ivrResponse.getPlayAudio(),
+                is(audioList(
+                        wav("instructionalMessage1", "0", "instructionalMessage2", "3", "patientList.wav", "1"),
+                        wav(id("patientid1")),
+                        wav("enterAdherence.wav"))));
     }
 
-
     @Test
-    public void shouldAskForConfirmation_uponEnteringValidAdherenceValue() throws IOException, SAXException {
+    public void shouldAskForConfirmation_UponEnteringValidAdherenceValue() {
         String sessionId = UUID.randomUUID().toString();
-        String format = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=2&cid=%s&sid=%s", SERVER_URL, TREE_PATH_ADHERENCE_CAPTURE, provider.getPrimaryMobile(), sessionId);
-        String response = httpClient.execute(new HttpGet(format), new BasicResponseHandler());
+        startCall(sessionId, provider.getProviderId());
+
+        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "2");
+
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
+        assertThat(adherenceSummaryPatient1.getDosesTaken(), is(0));
 
-        assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
+        assertThat(ivrResponse.getPlayAudio(),
+                is(audioList(
+                        wav("confirmMessage1"),
+                        wav(id(patient1.getPatientId())),
+                        wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
-        String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/2".getBytes()));
-        String expectedResponse = confirmPatient1_AdherenceResponse(nextTreePath);
-        assertXMLEqual(expectedResponse, response);
+        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + base64("/1/2")));
     }
 
-
     @Test
-    public void shouldRecordAdherenceForAPatient() throws IOException, SAXException {
+    public void shouldRecordAdherenceForPatient() {
         String sessionId = UUID.randomUUID().toString();
+        startCall(sessionId, provider.getProviderId());
+        sendDtmf(sessionId, "2");
 
-        navigateToAdherenceSummary(sessionId);
+        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "1");
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+                wav("patientList", "2"),
+                wav(id("patientid2")),
+                wav("enterAdherence"))));
 
-        enterAdherenceForPatient(sessionId, 2, TREE_PATH_ADHERENCE_CAPTURE);
-
-        String confirmAdherenceTreePath = new String(Base64.encodeBase64URLSafe("/1/2".getBytes()));
-        String response = confirmAdherence(sessionId, confirmAdherenceTreePath);
-
-        String transitionPath = new String(Base64.encodeBase64URLSafe("/1/2/1".getBytes()));
-        String expectedResponseForPatient1Adherence = secondPatient_ProvideAdherenceResponse(transitionPath);
-        WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
-
-        assertEquals(2, adherenceSummaryPatient1.getDosesTaken());
-        assertXMLEqual(expectedResponseForPatient1Adherence, response);
+        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/2/1"))));
+        assertThat(adherenceService.currentWeekAdherence(patient1).getDosesTaken(), is(2));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     @Test
-    public void shouldSkipOnPatient_OnSkipCode() throws IOException, SAXException {
+    public void shouldSkipSavingAdherence_OnPressing9() {
         String sessionId = UUID.randomUUID().toString();
+        startCall(sessionId, provider.getPrimaryMobile());
 
-        navigateToAdherenceSummary(sessionId);
+        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "9");
 
-        String response = enterAdherenceForPatient(sessionId, 9, TREE_PATH_ADHERENCE_CAPTURE);
-        String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/9".getBytes()));
-        assertThat(response, is(secondPatient_ProvideAdherenceResponse(nextTreePath)));
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+                wav("patientList", "2"),
+                wav(id("patientid2")),
+                wav("enterAdherence"))));
 
+        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/9"))));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
-    private String navigateToAdherenceSummary(String sessionId) throws IOException {
-        return httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
-    }
-
-    public String recordAdherenceForAllPatients() throws IOException {
-        String sessionId = UUID.randomUUID().toString();
-
-        navigateToAdherenceSummary(sessionId);
-
-        adherenceCapturedForFirstPatient = 2;
-
-        String treePath = "/1";
-        //enter adherence for first patient
-        enterAdherenceForPatient(sessionId, adherenceCapturedForFirstPatient, encodeBase64(treePath));
-
-        treePath = treePath + "/" + adherenceCapturedForFirstPatient;
-
-        //confirm adherence for first patient
-        confirmAdherence(sessionId, encodeBase64(treePath));
-
-        //enter adherence for second patient
-        adherenceCapturedForSecondPatient = 3;
-        String treePathAfterConfirmingAdherenceForFirstPatient = treePath + "/1";
-        enterAdherenceForPatient(sessionId, adherenceCapturedForSecondPatient, encodeBase64(treePathAfterConfirmingAdherenceForFirstPatient));
-
-        //capture adherence for second patient
-        String treePathAfterEnteringAdherenceForSecondPatient = treePathAfterConfirmingAdherenceForFirstPatient + "/" + adherenceCapturedForSecondPatient;
-        confirmAdherence(sessionId, encodeBase64(treePathAfterEnteringAdherenceForSecondPatient));
-
-        //enter adherence for 3rd patient
-        adherenceCapturedForThirdPatient = 2;
-        String treePathAfterConfirmingAdherenceForSecondPatient = treePathAfterEnteringAdherenceForSecondPatient + "/1";
-        enterAdherenceForPatient(sessionId, adherenceCapturedForThirdPatient, encodeBase64(treePathAfterConfirmingAdherenceForSecondPatient));
-
-        //confirm adherence for 3rd patient
-        String treePathAfterEnteringAdherenceForThirdPatient = treePathAfterConfirmingAdherenceForSecondPatient + "/" + adherenceCapturedForThirdPatient;
-        return confirmAdherence(sessionId, encodeBase64(treePathAfterEnteringAdherenceForThirdPatient));
-    }
-
     @Test
-    public void shouldRecordAdherenceForAllPatients() throws IOException, SAXException {
+    public void shouldRecordAdherenceForMultiplePatients() {
+        String sessionId = UUID.randomUUID().toString();
+        startCall(sessionId, provider.getPrimaryMobile());
 
-        String responseAfterGivingAdherenceForLastPatient = recordAdherenceForAllPatients();
+        String adherenceCapturedForFirstPatient = "2";
+        recordAdherence(sessionId, adherenceCapturedForFirstPatient);
 
-        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
-        WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
-        assertEquals(adherenceCapturedForFirstPatient, adherenceSummaryPatient1.getDosesTaken());
+        String adherenceCapturedForSecondPatient = "3";
+        recordAdherence(sessionId, adherenceCapturedForSecondPatient);
 
-        WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
-        assertEquals(adherenceCapturedForSecondPatient, adherenceSummaryPatient2.getDosesTaken());
-        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+        String adherenceCapturedForThirdPatient = "2";
+        sendDtmf(sessionId, adherenceCapturedForThirdPatient);
+        KooKooIvrResponse ivrResponse = recordAdherence(sessionId, adherenceCapturedForThirdPatient);
 
-        WeeklyAdherenceSummary adherenceSummaryPatient3 = adherenceService.currentWeekAdherence(patient3);
-        assertEquals(adherenceCapturedForThirdPatient, adherenceSummaryPatient3.getDosesTaken());
-        //verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+                wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
 
-        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/thankYou.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/completionMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnd-note.wav</playaudio>\n" +
-                "                        <hangup></hangup>\n" +
-                "    </response>";
+        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/9"))));
+        assertThat(ivrResponse.callEnded(), is(true));
 
-        assertThat(responseAfterGivingAdherenceForLastPatient, is(expectedResponse));
-
+        // TODO : should be a separate test
         ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
         verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
         CallLogRequest callLogRequest = argumentCaptor.getValue();
@@ -269,198 +191,38 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() throws IOException, SAXException {
-        recordAdherenceForAllPatients();
+    public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() {
+        String sessionId1 = UUID.randomUUID().toString();
+        startCall(sessionId1, provider.getPrimaryMobile());
 
-        String sessionId = UUID.randomUUID().toString();
+        String adherenceCapturedForFirstPatient = "2";
+        recordAdherence(sessionId1, adherenceCapturedForFirstPatient);
 
-        String response = navigateToAdherenceSummary(sessionId);
+        String adherenceCapturedForSecondPatient = "3";
+        recordAdherence(sessionId1, adherenceCapturedForSecondPatient);
 
-        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/summaryMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/completionMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnd-note.wav</playaudio>\n" +
-                "                        <hangup></hangup>\n" +
-                "    </response>";
+        String adherenceCapturedForThirdPatient = "2";
+        sendDtmf(sessionId1, adherenceCapturedForThirdPatient);
+        recordAdherence(sessionId1, adherenceCapturedForThirdPatient);
 
-        assertThat(response, is(expectedResponse));
+        String sessionId2 = UUID.randomUUID().toString();
+        KooKooIvrResponse ivrResponse = startCall(sessionId2, provider.getPrimaryMobile());
 
-        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
-        verify(reportingPublisherService, times(2)).reportCallLog(argumentCaptor.capture());
-        CallLogRequest callLogRequest = argumentCaptor.getValue();
-
-        assertThat(callLogRequest.getProviderId(), is(provider.getProviderId()));
-        assertThat(callLogRequest.getTotalPatients(), is(3));
-        assertThat(callLogRequest.getAdherenceCaptured(), is(0));
-        assertThat(callLogRequest.getAdherenceNotCaptured(), is(0));
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+                wav("summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
+        assertThat(ivrResponse.callEnded(), is(true));
     }
 
     @Test
-    public void shouldPlayWindowClosedPrompt_ifNotAdherenceCaptureDay() throws IOException {
+    public void shouldPlayWindowClosedPrompt_IfNotInAdherenceCaptureWindow() throws IOException {
         String sessionId = UUID.randomUUID().toString();
         LocalDate thursday = currentAdherenceCaptureWeek().startDate().plusDays(3);
-        httpClient.execute(new HttpGet(format(FAKETIME_URL, thursday)), new BasicResponseHandler());
+        adjustDateTime(thursday);
 
-        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s",SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId )), new BasicResponseHandler());
+        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
 
-        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/windowOverMessage.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/thankYou.wav</playaudio>\n" +
-                "                        <hangup></hangup>\n" +
-                "    </response>";
-        assertThat(response, is(expectedResponse));
-    }
-
-    private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {
-        String confirmAdherenceUrl = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, confirmAdherenceTreePath, provider.getPrimaryMobile(), sessionId);
-        return httpClient.execute(new HttpGet(confirmAdherenceUrl), new BasicResponseHandler());
-    }
-
-    private String enterAdherenceForPatient(String sessionId, int adherence, String treePath) throws IOException {
-        String adherenceCaptureUrl = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s", SERVER_URL, treePath, adherence, provider.getPrimaryMobile(), sessionId);
-        return httpClient.execute(new HttpGet(adherenceCaptureUrl), new BasicResponseHandler());
-    }
-
-    private String encodeBase64(String treePath) {
-        return new String(Base64.encodeBase64URLSafe(treePath.getBytes()));
-    }
-
-    @Test
-    public void shouldSkipForInvalidInputs() throws IOException, SAXException {
-        String sessionId = UUID.randomUUID().toString();
-
-        navigateToAdherenceSummary(sessionId);
-        String response = enterAdherenceForPatient(sessionId, 8, TREE_PATH_ADHERENCE_CAPTURE);
-        String treePathForSecondPatient = new String(Base64.encodeBase64URLSafe("/1/8".getBytes()));
-        String expectedResponseForPatient1Adherence = secondPatient_ProvideAdherenceResponse(treePathForSecondPatient);
-
-        WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
-        assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
-        assertXMLEqual(expectedResponseForPatient1Adherence, response);
-
-        response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=9&sid=%s&cid=%s", SERVER_URL, treePathForSecondPatient, sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
-
-        String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/8/9".getBytes()));
-        String expectedResponseForPatient2Adherence = thirdPatient_ProvideAdherenceResponse(nextTreePath);
-
-        WeeklyAdherenceSummary adherenceSummaryPatient2 = adherenceService.currentWeekAdherence(patient2);
-        assertEquals(0, adherenceSummaryPatient2.getDosesTaken());
-
-        assertXMLEqual(expectedResponseForPatient2Adherence, response);
-
-    }
-
-    private String thirdPatient_ProvideAdherenceResponse(String nextTreePath) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
-                "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
-                "    </response>";
-    }
-
-    private String secondPatient_ProvideAdherenceResponse(String nextTreePath) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
-                "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
-                "    </response>";
-    }
-
-    private String confirmPatient1_AdherenceResponse(String nextTreePath) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage1a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/confirmMessage4.wav</playaudio>\n" +
-                "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
-                "    </response>";
-    }
-
-    private String adherenceSummaryResponse(String nextTreePath) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/0.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage2.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/instructionalMessage3.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/patientList.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/p.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/a.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/e.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/n.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/t.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/i.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/d.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/alphanumeric/1.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/enterAdherence.wav</playaudio>\n" +
-                "                        <collectdtmf l=\"50\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + nextTreePath + "</gotourl>\n" +
-                "    </response>";
-    }
-
-    private String welcomeMessageResponse() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<response>\n" +
-                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/messages/musicEnter.wav</playaudio>\n" +
-                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/messages/welcomeMessage.wav</playaudio>\n" +
-                "                        <collectdtmf l=\"1\" t=\"#\"></collectdtmf>\n" +
-                "        <gotourl>http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + TREE_PATH_START + "</gotourl>\n" +
-                "    </response>";
-    }
-
-    private ReportingPublisherService getMockedReportingPublisherService() {
-        return (ReportingPublisherService) dispatcherServlet.getWebApplicationContext().getBean("reportingPublisherService");
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(wav("windowOverMessage", "thankYou"))));
+        assertThat(ivrResponse.callEnded(), is(true));
     }
 
     @After
@@ -473,9 +235,9 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         reset(reportingPublisherService);
     }
 
-    @AfterClass
-    public static void stopServer() throws Exception {
-        dispatcherServlet = null;
-        server.stop();
+    private KooKooIvrResponse recordAdherence(String sessionId, String adherenceCapturedForFirstPatient) {
+        sendDtmf(sessionId, adherenceCapturedForFirstPatient);
+        return sendDtmf(sessionId, "1");
     }
+
 }

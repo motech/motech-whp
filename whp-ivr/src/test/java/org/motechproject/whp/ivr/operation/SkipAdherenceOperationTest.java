@@ -2,10 +2,12 @@ package org.motechproject.whp.ivr.operation;
 
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
@@ -16,35 +18,36 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
+import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
 public class SkipAdherenceOperationTest extends BaseUnitTest {
 
     @Mock
     ReportingPublisherService reportingPublisherService;
-    FlowSessionStub flowSessionStub;
 
+    FlowSessionStub flowSessionStub;
     IvrSession ivrSession;
     DateTime adherenceStartTime;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         initMocks(this);
+        adherenceStartTime = new DateTime(2012, 7, 8, 0, 0, 0);
+        mockCurrentDate(adherenceStartTime);
         flowSessionStub = new FlowSessionStub();
         ivrSession = new IvrSession(flowSessionStub);
         ivrSession.callId("callId");
-        adherenceStartTime = new DateTime(2012,7,8,0,0,0);
         ivrSession.startOfAdherenceSubmission(adherenceStartTime);
         ivrSession.adherenceInputForCurrentPatient("9");
-
     }
 
     @Test
-    public void shouldReportSkipAdherence(){
+    public void shouldReportSkipAdherence() {
         String patientID = "patientID";
-        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCapture().skipAdherence(patientID, ivrSession);
 
         new SkipAdherenceOperation(patientID, reportingPublisherService).perform("9", flowSessionStub);
 
+        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCaptureRequest().skipAdherence(patientID, ivrSession);
         verify(reportingPublisherService).reportAdherenceCapture(adherenceCaptureRequest);
     }
 
@@ -53,7 +56,6 @@ public class SkipAdherenceOperationTest extends BaseUnitTest {
         DateTime now = now();
         mockCurrentDate(now);
         String patientID = "patientID";
-        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCapture().skipAdherence(patientID, ivrSession);
 
         new SkipAdherenceOperation(patientID, reportingPublisherService).perform("9", flowSessionStub);
 
