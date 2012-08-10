@@ -14,6 +14,7 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
+import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -60,8 +61,8 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patient1 = new PatientBuilder().withPatientId(PATIENT_1).build();
-        patient2 = new PatientBuilder().withPatientId(PATIENT_2).build();
+        patient1 = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
+        patient2 = new PatientBuilder().withDefaults().withPatientId(PATIENT_2).build();
 
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT_1, PATIENT_2)));
@@ -86,6 +87,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
         assertThat(node.getOperations(), hasItem(not(isA(ResetFlowSessionOperation.class))));
     }
+
     @Test
     public void shouldAddInvalidAdherenceOperation_ForInvalidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
@@ -109,7 +111,7 @@ public class AnotherAdherenceCaptureTransitionTest {
 
     @Test
     public void shouldNotAddConfirmationPrompts_ForSkippedInput() {
-        String adherenceInput = "7";
+        String adherenceInput = "9";
 
         Patient patientWithAdherence = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
 
@@ -123,22 +125,37 @@ public class AnotherAdherenceCaptureTransitionTest {
     }
 
     @Test
-    public void shouldAddCaptureAdherencePromptsAndTransitionForNextPatientOnInValidInput() {
-        String adherenceInput = "7";
-        Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-
-        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpIvrMessage, PATIENT_2, 2)));
-        assertThat(node.getTransitions().size(), is(1));
-        assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
-    }
-
-    @Test
     public void shouldAddTransitionForConfirmAdherenceOnValidInput() {
         String adherenceInput = "3";
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
 
         assertThat(node.getTransitions().size(), is(1));
         assertThat(node.getTransitions().get("?"), instanceOf(ConfirmAdherenceTransition.class));
+    }
+
+    @Test
+    public void shouldAddInvalidAdherencePrompts_OnWrongInput() {
+
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+    }
+
+    @Test
+    public void shouldAddCaptureAdherencePromptsAndTransitionForCurrentPatient_OnWrongInput() {
+        flowSession.set(CURRENT_PATIENT_INDEX, 0);
+        Prompt[] expectedPrompts = captureAdherencePrompts(whpIvrMessage, new IvrSession(flowSession));
+
+        Node node = adherenceCaptureTransition.getDestinationNode("4", flowSession);
+
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
+        assertThat((Integer)flowSession.get(CURRENT_PATIENT_INDEX), is(0));
     }
 
 }

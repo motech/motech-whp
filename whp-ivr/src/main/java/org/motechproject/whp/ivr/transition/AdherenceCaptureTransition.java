@@ -9,6 +9,7 @@ import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
+import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
+import static org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts.invalidAdherencePrompts;
 
 @Component
 @EqualsAndHashCode
@@ -47,10 +49,12 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             if (patient.isValidDose(ivrInput.input())) {
                 nextNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt(input)).node();
             } else {
+                nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
                 nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
-                addTransitionsToNextPatients(ivrSession, nextNode);
+                addPatientPromptsAndTransitions(nextNode, ivrSession);
             }
         }
         return nextNode.addOperations(new ResetFlowSessionOperation());
     }
+
 }
