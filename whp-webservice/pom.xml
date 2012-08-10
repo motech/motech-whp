@@ -29,6 +29,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-ivr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
@@ -46,6 +50,14 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test-mvc</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.contrib-whp</groupId>
+            <artifactId>motech-http-client</artifactId>
         </dependency>
     </dependencies>
     <build>

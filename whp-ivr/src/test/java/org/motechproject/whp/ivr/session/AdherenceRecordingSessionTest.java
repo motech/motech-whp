@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
+import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

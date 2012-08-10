@@ -53,7 +53,6 @@ public class SkipAdherenceOperationTest extends BaseUnitTest {
         DateTime now = now();
         mockCurrentDate(now);
         String patientID = "patientID";
-        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCapture().skipAdherence(patientID, ivrSession);
 
         new SkipAdherenceOperation(patientID, reportingPublisherService).perform("9", flowSessionStub);
 

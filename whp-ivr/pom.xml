@@ -26,6 +26,10 @@
             <artifactId>whp-reporting</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp.reports</groupId>
+            <artifactId>whp-reports-contract</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-ivr-kookoo</artifactId>
         </dependency>
@@ -46,6 +50,13 @@
             <artifactId>whp-patient</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-user</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>xmlunit</groupId>

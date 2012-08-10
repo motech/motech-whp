@@ -2,16 +2,20 @@ package org.motechproject.whp.ivr;
 
 import org.motechproject.ivr.service.CallRequest;
 import org.motechproject.ivr.service.IVRService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class IvrCallService {
 
     private IVRService ivrService;
     private String ivrCallBackURL;
 
+    @Autowired
     public IvrCallService(IVRService ivrService, @Value("${application.url}") String ivrCallBackURL) {
         this.ivrService = ivrService;
         this.ivrCallBackURL = ivrCallBackURL;

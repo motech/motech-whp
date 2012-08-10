@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
+import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientInfoTest {
 

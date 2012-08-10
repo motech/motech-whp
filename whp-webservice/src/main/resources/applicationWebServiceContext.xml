@@ -11,6 +11,7 @@
     <import resource="classpath*:applicationPatientContext.xml"/>
     <import resource="classpath*:applicationMappingContext.xml"/>
     <import resource="classpath*:applicationWHPValidationContext.xml"/>
+    <import resource="classpath*:applicationIVRContext.xml"/>
     <import resource="classpath*:applicationContext-registration-service.xml"/>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>

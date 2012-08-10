@@ -20,7 +20,6 @@ public class RecordAdherenceOperation implements INodeOperation {
     private String currentPatientId;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private ReportingPublisherService reportingService;
-    private static Logger logger = Logger.getLogger(RecordAdherenceOperation.class);
 
     public RecordAdherenceOperation(String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, ReportingPublisherService reportingService) {
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
@@ -62,9 +61,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     }
 
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
-        logger.info("Building adherence submission request");
         AdherenceCaptureRequest request = adherenceCapture().validAdherence(currentPatientId, ivrSession);
-        logger.info("Publishing adherence submission request");
         reportingService.reportAdherenceCapture(request);
     }
 

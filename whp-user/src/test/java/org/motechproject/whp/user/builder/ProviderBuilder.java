@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.builder;
+package org.motechproject.whp.user.builder;
 
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.user.domain.Provider;

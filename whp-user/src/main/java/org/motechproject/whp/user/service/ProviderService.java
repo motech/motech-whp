@@ -71,4 +71,8 @@ public class ProviderService {
     public Provider fetchByProviderId(String providerId){
         return allProviders.findByProviderId(providerId);
     }
+
+    public boolean isRegisteredMobileNumber(String mobileNumber) {
+        return allProviders.findByMobileNumber(mobileNumber) != null;
+    }
 }

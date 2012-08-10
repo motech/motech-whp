@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProviderServiceTest {
@@ -76,6 +78,27 @@ public class ProviderServiceTest {
         Provider provider = providerService.fetchByProviderId(providerId);
         assertEquals(expectedProvider, provider);
         verify(allProviders).findByProviderId(providerId);
+    }
+
+    @Test
+    public void shouldReturnTrueIfProviderExists_forGivenMobileNumber() {
+        String mobileNumber = "1234567890";
+        Provider provider = newProviderBuilder().withDefaults().withPrimaryMobileNumber(mobileNumber).build();
+        when(allProviders.findByMobileNumber(mobileNumber)).thenReturn(provider);
+
+        boolean isRegisteredMobileNumber = providerService.isRegisteredMobileNumber(mobileNumber);
+        verify(allProviders).findByMobileNumber(mobileNumber);
+        assertTrue(isRegisteredMobileNumber);
+    }
+
+    @Test
+    public void shouldReturnFalseIfProviderDoesNotExists_forGivenMobileNumber() {
+        String mobileNumber = "1234567899";
+        when(allProviders.findByMobileNumber(mobileNumber)).thenReturn(null);
+
+        boolean isRegisteredMobileNumber = providerService.isRegisteredMobileNumber(mobileNumber);
+        verify(allProviders).findByMobileNumber(mobileNumber);
+        assertFalse(isRegisteredMobileNumber);
     }
 
     @After

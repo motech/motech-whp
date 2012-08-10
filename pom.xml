@@ -237,6 +237,14 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-user</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-patient</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -316,11 +324,6 @@
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-platform-common-api</artifactId>
-                <version>${motech.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject</groupId>
-                <artifactId>motech-platform-server-api</artifactId>
                 <version>${motech.version}</version>
             </dependency>
             <dependency>
