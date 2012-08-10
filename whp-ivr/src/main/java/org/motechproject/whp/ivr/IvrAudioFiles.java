@@ -2,6 +2,9 @@ package org.motechproject.whp.ivr;
 
 
 public class IvrAudioFiles {
+
+    public static final String WELCOME_MESSAGE = "welcomeMessage";
+    public static final String MUSIC_ENTER = "musicEnter";
     public static final String ADHERENCE_PROVIDED_FOR = "instructionalMessage1";
     public static final String ADHERENCE_TO_BE_PROVIDED_FOR = "instructionalMessage2";
     public static final String ADHERENCE_CAPTURE_INSTRUCTION = "instructionalMessage3";
@@ -19,4 +22,5 @@ public class IvrAudioFiles {
     public static final String COMPLETION_MESSAGE = "completionMessage";
     public static final String MUSIC_END_NOTE = "musicEnd-note";
     public static final String THANK_YOU = "thankYou";
+    public static final String WINDOW_OVER = "windowOverMessage";
 }

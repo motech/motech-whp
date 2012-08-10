@@ -22,4 +22,8 @@ public class UpdateAdherenceCriteria {
     private static boolean isPatientOpen(Patient patient) {
         return patient.getStatus() == PatientStatus.Open;
     }
+
+    public static boolean isWindowClosedToday() {
+        return !isCorrectDayOfWeek();
+    }
 }

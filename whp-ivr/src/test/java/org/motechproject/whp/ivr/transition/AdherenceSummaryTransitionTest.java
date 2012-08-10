@@ -15,6 +15,7 @@ import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
+import org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -30,15 +31,18 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
+import static org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts.adherenceCaptureWindowClosedPrompts;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
 import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
@@ -54,8 +58,6 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     private AllProviders allProviders;
     @Mock
     private ReportingPublisherService reportingPublisherService;
-
-    private AdherenceRecordingSession recordingSession;
 
     private AdherenceSummaryTransition adherenceSummaryTransition;
     private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
@@ -125,7 +127,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
     @Test
     public void shouldBuildNodeWhichCapturesTimeOfAdherenceSubmission() {
-        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        DateTime now = new DateTime(2011, 1, 2, 1, 1, 1, 1);
         mockCurrentDate(now);
 
         AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
@@ -140,7 +142,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
     @Test
     public void shouldAddRecordCallStartTime() throws Exception {
-        DateTime now = new DateTime(2011, 1, 1, 1, 1, 1, 1);
+        DateTime now = new DateTime(2011, 1, 2, 1, 1, 1, 1);
         mockCurrentDate(now);
 
         AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
@@ -148,6 +150,16 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
         List<INodeOperation> operations = adherenceSummaryTransition.getDestinationNode("", flowSession).getOperations();
         assertThat(operations, hasItem(new RecordCallStartTimeOperation(now)));
+    }
+    
+    @Test
+    public void shouldPlayWindowClosedPrompts_whenCalledBetweenWedToSat() {
+        DateTime now = new DateTime(2012, 8, 8, 1, 1, 1, 1);
+        mockCurrentDate(now);
+
+        Node destinationNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
+        assertEquals(asList(adherenceCaptureWindowClosedPrompts(whpivrMessage)), destinationNode.getPrompts());
+        assertThat(destinationNode.getTransitions().keySet(), is(empty()));
     }
 
     private AdherenceSummaryByProvider adherenceSummary(List<Patient> patients) {

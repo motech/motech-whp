@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.isWindowClosedToday;
+import static org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts.adherenceCaptureWindowClosedPrompts;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
@@ -42,17 +44,21 @@ public class AdherenceSummaryTransition implements ITransition {
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
-        IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
-
         Node captureAdherenceNode = new Node();
+        if (isWindowClosedToday()) {
+            captureAdherenceNode.addPrompts(adherenceCaptureWindowClosedPrompts(whpivrMessage));
+            return captureAdherenceNode;
+        }
+
+        IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
         captureAdherenceNode.addOperations(new RecordCallStartTimeOperation(now()));
 
         if (ivrSession.hasPatientsWithoutAdherence()) {
             captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpivrMessage, ivrSession.patientsWithAdherence(), ivrSession.patientsWithoutAdherence()));
             return addAdherenceCaptureTransitions(ivrSession, captureAdherenceNode);
-        } else {
-            return addTransitionToTerminateCall(captureAdherenceNode, ivrSession.countOfAllPatients(), ivrSession.countOfPatientsWithAdherence());
         }
+
+        return addTransitionToTerminateCall(captureAdherenceNode, ivrSession.countOfAllPatients(), ivrSession.countOfPatientsWithAdherence());
     }
 
     private Node addAdherenceCaptureTransitions(final IvrSession ivrSession, Node captureAdherenceNode) {

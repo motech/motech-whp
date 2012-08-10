@@ -10,8 +10,8 @@ import org.motechproject.whp.ivr.transition.AdherenceSummaryTransition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.ivr.WHPIVRMessage.MUSIC_ENTER;
-import static org.motechproject.whp.ivr.WHPIVRMessage.WELCOME_MESSAGE;
+import static org.motechproject.whp.ivr.IvrAudioFiles.MUSIC_ENTER;
+import static org.motechproject.whp.ivr.IvrAudioFiles.WELCOME_MESSAGE;
 
 @Component
 public class AdherenceCaptureTree {

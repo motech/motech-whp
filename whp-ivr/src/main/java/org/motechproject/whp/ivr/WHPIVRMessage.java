@@ -11,10 +11,6 @@ import java.util.Properties;
 @Component
 public class WHPIVRMessage implements IVRMessage {
 
-    public static final String WELCOME_MESSAGE = "welcomeMessage";
-    public static final String MUSIC_ENTER = "musicEnter";
-    public static final String END_OF_CALL = "endCall";
-
     public static final String CONTENT_LOCATION_URL = "content.location.url";
     private static final String WAV = ".wav";
 

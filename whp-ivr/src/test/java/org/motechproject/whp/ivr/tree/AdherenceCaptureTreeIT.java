@@ -37,10 +37,14 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentWeekInstance;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
+
+    public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?date=%s&hour=0&minute=0";
 
     static Server server;
     static String CONTEXT_PATH = "/whp";
@@ -50,7 +54,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     String KOOKOO_CALLBACK_URL = "/kookoo/ivr";
     String SERVER_URL = "http://localhost:7080" + CONTEXT_PATH + KOOKOO_CALLBACK_URL;
 
-    DefaultHttpClient decisionTreeController;
+    DefaultHttpClient httpClient;
 
     @Autowired
     AdherenceCaptureTree adherenceCaptureTree;
@@ -92,10 +96,12 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws IOException {
         setIgnoreWhitespace(true);
-        decisionTreeController = new DefaultHttpClient();
+        httpClient = new DefaultHttpClient();
         adherenceCaptureTree.load();
+        LocalDate lastMonday = currentWeekInstance().startDate();
+        httpClient.execute(new HttpGet(format(FAKETIME_URL, lastMonday.toString())), new BasicResponseHandler());
         reportingPublisherService = getMockedReportingPublisherService();
         setUpTestData();
     }
@@ -118,7 +124,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     @Test
     public void shouldPlayWelcomeMessage() throws IOException, SAXException {
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en", SERVER_URL)), new BasicResponseHandler());
+        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=Lw&ln=en", SERVER_URL)), new BasicResponseHandler());
         String expectedResponse = welcomeMessageResponse();
         assertXMLEqual(expectedResponse, response);
     }
@@ -126,7 +132,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     @Test
     public void shouldTransitionToAdherenceSummaryNode() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
-        String response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
+        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
         String expectedResponse = adherenceSummaryResponse(TREE_PATH_ADHERENCE_CAPTURE);
         assertXMLEqual(expectedResponse, response);
     }
@@ -136,7 +142,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     public void shouldAskForConfirmation_uponEnteringValidAdherenceValue() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
         String format = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=2&cid=%s&sid=%s", SERVER_URL, TREE_PATH_ADHERENCE_CAPTURE, provider.getPrimaryMobile(), sessionId);
-        String response = decisionTreeController.execute(new HttpGet(format), new BasicResponseHandler());
+        String response = httpClient.execute(new HttpGet(format), new BasicResponseHandler());
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
 
         assertEquals(0, adherenceSummaryPatient1.getDosesTaken());
@@ -168,7 +174,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     }
 
     private String navigateToAdherenceSummary(String sessionId) throws IOException {
-        return decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
+        return httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId)), new BasicResponseHandler());
     }
 
     public String recordAdherenceForAllPatients() throws IOException {
@@ -280,14 +286,31 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertThat(callLogRequest.getAdherenceNotCaptured(), is(0));
     }
 
+    @Test
+    public void shouldPlayWindowClosedPrompt_ifNotAdherenceCaptureDay() throws IOException {
+        String sessionId = UUID.randomUUID().toString();
+        LocalDate thursday = currentWeekInstance().startDate().plusDays(10);
+        httpClient.execute(new HttpGet(format(FAKETIME_URL, thursday)), new BasicResponseHandler());
+
+        String response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s",SERVER_URL, TREE_PATH_START, provider.getPrimaryMobile(), sessionId )), new BasicResponseHandler());
+
+        String expectedResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<response>\n" +
+                "                        <playaudio>http://localhost:8080/whp/wav/stream/en/windowOverMessage.wav</playaudio>\n" +
+                "                                <playaudio>http://localhost:8080/whp/wav/stream/en/thankYou.wav</playaudio>\n" +
+                "                        <hangup></hangup>\n" +
+                "    </response>";
+        assertThat(response, is(expectedResponse));
+    }
+
     private String confirmAdherence(String sessionId, String confirmAdherenceTreePath) throws IOException {
         String confirmAdherenceUrl = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=1&cid=%s&sid=%s", SERVER_URL, confirmAdherenceTreePath, provider.getPrimaryMobile(), sessionId);
-        return decisionTreeController.execute(new HttpGet(confirmAdherenceUrl), new BasicResponseHandler());
+        return httpClient.execute(new HttpGet(confirmAdherenceUrl), new BasicResponseHandler());
     }
 
     private String enterAdherenceForPatient(String sessionId, int adherence, String treePath) throws IOException {
         String adherenceCaptureUrl = format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s", SERVER_URL, treePath, adherence, provider.getPrimaryMobile(), sessionId);
-        return decisionTreeController.execute(new HttpGet(adherenceCaptureUrl), new BasicResponseHandler());
+        return httpClient.execute(new HttpGet(adherenceCaptureUrl), new BasicResponseHandler());
     }
 
     private String encodeBase64(String treePath) {
@@ -298,7 +321,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
     public void shouldSkipForInvalidInputs() throws IOException, SAXException {
         String sessionId = UUID.randomUUID().toString();
         HttpGet request = new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=8&sid=%s&cid=%s", SERVER_URL, TREE_PATH_ADHERENCE_CAPTURE, sessionId, provider.getPrimaryMobile()));
-        String response = decisionTreeController.execute(request, new BasicResponseHandler());
+        String response = httpClient.execute(request, new BasicResponseHandler());
         String expectedResponseForPatient1Adherence = secondPatientProvideAdherenceResponse("LzEvOA");
 
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
@@ -306,7 +329,7 @@ public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
         assertXMLEqual(expectedResponseForPatient1Adherence, response);
 
         String treePathForSecondPatient = new String(Base64.encodeBase64URLSafe("/1/8".getBytes()));
-        response = decisionTreeController.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=9&sid=%s&cid=%s", SERVER_URL, treePathForSecondPatient, sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
+        response = httpClient.execute(new HttpGet(format("%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=9&sid=%s&cid=%s", SERVER_URL, treePathForSecondPatient, sessionId, provider.getPrimaryMobile())), new BasicResponseHandler());
 
         String nextTreePath = new String(Base64.encodeBase64URLSafe("/1/8/9".getBytes()));
         String expectedResponseForPatient2Adherence = thirdPatientProvideAdherenceResponse(nextTreePath);
