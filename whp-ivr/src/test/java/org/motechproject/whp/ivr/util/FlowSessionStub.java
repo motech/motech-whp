@@ -33,11 +33,9 @@ public class FlowSessionStub implements FlowSession {
         return (T) sessionAttributes.get(key);
     }
 
-    @Override
     public void setCurrentNode(Node node) {
     }
 
-    @Override
     public Node getCurrentNode() {
         return null;
     }
