@@ -21,7 +21,6 @@ import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +34,6 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.matcher.IvrResponseAudioMatcher.audioList;
-
 @Ignore
 public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
@@ -92,7 +90,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         String sessionId = UUID.randomUUID().toString();
         KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
         List<String> playAudioList = ivrResponse.getPlayAudio();
-        assertThat(playAudioList, is(audioList(wav("musicEnter", "welcomeMessage"))));
+        assertThat(playAudioList, audioList(wav("musicEnter", "welcomeMessage")));
     }
 
     @Test
@@ -101,9 +99,15 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
         assertThat(ivrResponse.getPlayAudio(),
                 is(audioList(
-                        wav("instructionalMessage1", "0", "instructionalMessage2", "3", "patientList.wav", "1"),
-                        wav(id("patientid1")),
-                        wav("enterAdherence.wav"))));
+                        wav("instructionalMessage1"),
+                        alphaNumeric("0"),
+                        wav("instructionalMessage2"),
+                        alphaNumeric("3"),
+                        wav("instructionalMessage3"),
+                        wav("patientList"),
+                        alphaNumeric("1"),
+                        alphaNumeric(id("patientid1")),
+                        wav("enterAdherence"))));
     }
 
     @Test

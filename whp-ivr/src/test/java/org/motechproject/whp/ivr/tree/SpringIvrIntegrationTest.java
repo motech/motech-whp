@@ -116,6 +116,14 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         return audioFileUrls;
     }
 
+    protected List<String> alphaNumeric(String... numbers) {
+        ArrayList<String> numberFileUrls = new ArrayList<>();
+        for (String number : numbers) {
+            numberFileUrls.add(String.format("http://localhost:8080/whp/wav/stream/en/alphanumeric/%s.wav", number));
+        }
+        return numberFileUrls;
+    }
+
     protected Object getBean(String name) {
         return dispatcherServlet.getWebApplicationContext().getBean(name);
     }
@@ -127,7 +135,10 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     }
 
     protected String[] id(String patientId) {
-        return patientId.split("");
+        String[] charStrings = new String[patientId.length()];
+        for(int i=0; i<patientId.length(); i++)
+            charStrings[i] = String.valueOf(patientId.charAt(i));
+        return charStrings;
     }
 
 }
