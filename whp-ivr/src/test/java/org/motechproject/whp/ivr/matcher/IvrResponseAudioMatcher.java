@@ -8,7 +8,6 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -27,14 +26,12 @@ public class IvrResponseAudioMatcher extends TypeSafeMatcher<List<String>> {
 
     @Override
     protected boolean matchesSafely(List<String> actualPrompts) {
-        assertThat(actualPrompts.size(), is(expectedAudioList.size()));
         assertPrompts(actualPrompts);
         return true;
     }
 
     @Override
     public void describeTo(Description description) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private static List<String> merge(List<String>... list) {
@@ -46,9 +43,9 @@ public class IvrResponseAudioMatcher extends TypeSafeMatcher<List<String>> {
     }
 
     protected void assertPrompts(List<String> actualPrompts) {
-        int index = asList(actualPrompts).indexOf(expectedAudioList.get(0));
+        int index = actualPrompts.indexOf(expectedAudioList.get(0));
         for (int i = index; i < index + expectedAudioList.size(); i++) {
-            assertThat(actualPrompts.get(i), is(expectedAudioList.get(i)));
+            assertThat(actualPrompts.get(i), is(expectedAudioList.get(i - index)));
         }
     }
 
