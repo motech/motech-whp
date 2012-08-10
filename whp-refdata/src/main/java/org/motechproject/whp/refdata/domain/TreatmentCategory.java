@@ -49,6 +49,11 @@ public class TreatmentCategory extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public boolean isGovernmentCategory() {
+        return dosesPerWeek == 3;
+    }
+
+    @JsonIgnore
     public Integer numberOfDosesForPhase(Phase phaseName) {
         switch (phaseName) {
             case IP:

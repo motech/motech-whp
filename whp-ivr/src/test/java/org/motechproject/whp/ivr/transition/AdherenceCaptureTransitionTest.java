@@ -109,22 +109,6 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldSkipCurrentPatientIfEnteredDoseIsGreaterThanDosesPerWeek() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage).wav(PATIENT_LIST)
-                .number(2)
-                .id(patientId2)
-                .wav(ENTER_ADHERENCE);
-
-        Node expectedNode = new Node().addPrompts(promptBuilder.build())
-                .addTransition("?", new AdherenceCaptureTransition());
-
-        Node destinationNode = adherenceCaptureTransition.getDestinationNode("4", flowSession);
-
-        assertEquals(expectedNode, destinationNode);
-        assertEquals(1, flowSession.get(IvrSession.CURRENT_PATIENT_INDEX));
-    }
-
-    @Test
     public void shouldSkipCurrentPatientIfKeyPressedInNotNumber() {
         PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage).wav(PATIENT_LIST)
                 .number(2)

@@ -14,6 +14,7 @@ import static org.joda.time.DateTime.parse;
 import static org.motechproject.util.DateUtil.setTimeZone;
 
 public class IvrSession {
+
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
     public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
     public static final String PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION = "patientsWithAdherenceRecordedInThisSession";
@@ -22,8 +23,9 @@ public class IvrSession {
     public static final String START_OF_ADHERENCE_SUBMISSION = "startOfAdherenceSubmission";
     public static final String CALL_START_TIME = "CALL_START_TIME";
     public static final String SID = "sid";
-    private FlowSession flowSession;
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
+
+    private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
         this.flowSession = flowSession;
