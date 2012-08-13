@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.transition;
 
+import org.apache.commons.collections.ListUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -8,14 +9,16 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.WelcomeMessagePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -27,6 +30,8 @@ import org.motechproject.whp.user.repository.AllProviders;
 import java.util.List;
 import java.util.Properties;
 
+import static org.apache.commons.collections.ListUtils.sum;
+import static org.hamcrest.Matchers.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -41,8 +46,8 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentA
 import static org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedPrompts.adherenceCaptureWindowClosedPrompts;
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
-import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
-
+import static org.motechproject.whp.ivr.prompts.WelcomeMessagePrompts.welcomeMessagePrompts;
+import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
 
 public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
@@ -57,12 +62,11 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     private ReportingPublisherService reportingPublisherService;
 
     private AdherenceSummaryTransition adherenceSummaryTransition;
-    private WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
+    private WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
     private FlowSession flowSession;
     private Patient patient1;
     private Patient patient2;
     private Patient patient3;
-    private Patient patient4;
 
     @Before
     public void setUp() {
@@ -70,7 +74,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         LocalDate sunday = new LocalDate(2012, 7, 15);
         mockCurrentDate(sunday);
         when(allProviders.findByMobileNumber(anyString())).thenReturn(newProviderBuilder().withProviderId(PROVIDER_ID).build());
-        adherenceSummaryTransition = new AdherenceSummaryTransition(whpivrMessage, new AdherenceRecordingSession(allProviders, adherenceDataService), reportingPublisherService);
+        adherenceSummaryTransition = new AdherenceSummaryTransition(whpIvrMessage, new AdherenceRecordingSession(allProviders, adherenceDataService), reportingPublisherService);
 
         flowSession = new FlowSessionStub();
         flowSession.set("cid", MOBILE_NUMBER);
@@ -78,11 +82,10 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         patient1 = new PatientBuilder().withPatientId("patient1").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
         patient2 = new PatientBuilder().withPatientId("patient2").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
         patient3 = new PatientBuilder().withPatientId("patient3").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
-        patient4 = new PatientBuilder().withPatientId("patient4").withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).build();
     }
 
     @Test
-    public void shouldAddPromptsForBothAdherenceSummaryAndAdherenceCapture_WhenThereArePatientsRemaining() {
+    public void shouldAddPromptsForWelcomeMessage_AdherenceSummary_AndAdherenceCapture_ForFirstPatient() {
         final List<String> patientsWithAdherence = asList(patient1.getPatientId());
         final List<String> patientsWithoutAdherence = asList(patient2.getPatientId(), patient3.getPatientId());
         setAdherenceProvided(patient1);
@@ -90,8 +93,9 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
 
         Node expectedNode = new Node()
-                .addPrompts(adherenceSummaryPrompts(whpivrMessage, patientsWithAdherence, patientsWithoutAdherence))
-                .addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpivrMessage, patient2.getPatientId(), 1))
+                .addPrompts(welcomeMessagePrompts(whpIvrMessage))
+                .addPrompts(adherenceSummaryPrompts(whpIvrMessage, patientsWithAdherence, patientsWithoutAdherence))
+                .addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patient2.getPatientId(), 1))
                 .addTransition("?", new AdherenceCaptureTransition());
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
@@ -104,7 +108,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldAddPromptsForBothAdherenceSummaryAndCompletion_WhenThereAreNoPatientsRemaining() {
+    public void shouldAddPromptsForWelcomeMessage_AdherenceSummary_AndCompletion_WhenThereAreNoPatientsRemaining() {
         setAdherenceProvided(patient1);
         setAdherenceProvided(patient2);
 
@@ -114,7 +118,8 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
         PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, now());
         Node expectedNode = new Node()
-                .addPrompts(adherenceSummaryWithCallCompletionPrompts(whpivrMessage,
+                .addPrompts(welcomeMessagePrompts(whpIvrMessage))
+                .addPrompts(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage,
                         adherenceSummary.countOfAllPatients(),
                         adherenceSummary.countOfPatientsWithAdherence()))
                 .addOperations(publishCallLogOperation);
@@ -157,8 +162,23 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         mockCurrentDate(now);
 
         Node destinationNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
-        assertEquals(asList(adherenceCaptureWindowClosedPrompts(whpivrMessage)), destinationNode.getPrompts());
+
+        Node expectedNode = new Node()
+                .addPrompts(welcomeMessagePrompts(whpIvrMessage))
+                .addPrompts(adherenceCaptureWindowClosedPrompts(whpIvrMessage));
+
+        assertThat(expectedNode.getPrompts(), is(destinationNode.getPrompts()));
         assertThat(destinationNode.getTransitions().keySet(), is(empty()));
+    }
+
+    @Test
+    public void shouldPlayWelcomeMessagePrompts()  {
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+
+        Node destinationNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getPrompts(), hasItems(welcomeMessagePrompts(whpIvrMessage)));
     }
 
     private AdherenceSummaryByProvider adherenceSummary(List<Patient> patients) {

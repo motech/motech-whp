@@ -5,15 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
+import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
 public class InvalidAdherenceOperationTest extends BaseUnitTest {
     @Mock
@@ -41,6 +39,6 @@ public class InvalidAdherenceOperationTest extends BaseUnitTest {
         String input = "7";
         new InvalidAdherenceOperation(patientId, reportingPublisherService).perform(input, flowSessionStub);
 
-        verify(reportingPublisherService).reportAdherenceCapture(adherenceCapture().invalidAdherence(patientId,ivrSession, input));
+        verify(reportingPublisherService).reportAdherenceCapture(adherenceCaptureRequest().invalidAdherence(patientId,ivrSession, input));
     }
 }

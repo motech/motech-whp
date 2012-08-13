@@ -1,25 +1,23 @@
 package org.motechproject.whp.ivr.builder.request;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
-public class AdherenceCaptureBuilder {
+public class AdherenceCaptureRequestBuilder {
 
     private AdherenceCaptureRequest request;
     private final static String INVALID = "Invalid";
     private final static String SKIPPED = "Skipped";
     private final static String ADHERENCE_PROVIDED = "Given";
 
-    public AdherenceCaptureBuilder() {
-
+    public AdherenceCaptureRequestBuilder() {
     }
 
-    public static AdherenceCaptureBuilder adherenceCapture() {
-        return new AdherenceCaptureBuilder();
+    public static AdherenceCaptureRequestBuilder adherenceCaptureRequest() {
+        return new AdherenceCaptureRequestBuilder();
     }
 
     public AdherenceCaptureRequest validAdherence(String patientId, IvrSession ivrSession) {
@@ -40,21 +38,21 @@ public class AdherenceCaptureBuilder {
         return request;
     }
 
-    private AdherenceCaptureBuilder validInput(Integer input) {
+    private AdherenceCaptureRequestBuilder validInput(Integer input) {
         request.setValid(true);
         request.setStatus(ADHERENCE_PROVIDED);
         request.setSubmittedValue(input);
         return this;
     }
 
-    private AdherenceCaptureBuilder invalidInput(Integer input) {
-       request.setValid(false);
-       request.setStatus(INVALID);
+    private AdherenceCaptureRequestBuilder invalidInput(Integer input) {
+        request.setValid(false);
+        request.setStatus(INVALID);
         request.setSubmittedValue(input);
         return this;
     }
 
-    private AdherenceCaptureBuilder skipInput() {
+    private AdherenceCaptureRequestBuilder skipInput() {
         request.setValid(true);
         request.setStatus(SKIPPED);
         request.setSubmittedValue(Integer.valueOf(IVRInput.SKIP_PATIENT_CODE));
@@ -65,15 +63,14 @@ public class AdherenceCaptureBuilder {
         request = new AdherenceCaptureRequest();
         request.setChannelId("IVR");
         this.forPatient(patientId).forSession(ivrSession);
-
     }
 
-    private AdherenceCaptureBuilder forPatient(String patientId) {
+    private AdherenceCaptureRequestBuilder forPatient(String patientId) {
         request.setPatientId(patientId);
         return this;
     }
 
-    private AdherenceCaptureBuilder forSession(IvrSession ivrSession) {
+    private AdherenceCaptureRequestBuilder forSession(IvrSession ivrSession) {
         this.byProvider(ivrSession.providerId())
                 .throughMobile(ivrSession.mobileNumber())
                 .onCall(ivrSession.callId())
@@ -81,25 +78,24 @@ public class AdherenceCaptureBuilder {
         return this;
     }
 
-    private AdherenceCaptureBuilder withStartOfAdherenceSubmission(DateTime time) {
+    private AdherenceCaptureRequestBuilder withStartOfAdherenceSubmission(DateTime time) {
         DateTime now = DateUtil.now();
-        Period period = new Period(time, now);
-        request.setTimeTaken(new Long(period.getSeconds()));
+        request.setTimeTaken(now.minus(time.getMillis()).getMillis());
         return this;
     }
 
 
-    private AdherenceCaptureBuilder byProvider(String providerId) {
+    private AdherenceCaptureRequestBuilder byProvider(String providerId) {
         request.setProviderId(providerId);
         return this;
     }
 
-    private AdherenceCaptureBuilder throughMobile(String mobileNumber) {
+    private AdherenceCaptureRequestBuilder throughMobile(String mobileNumber) {
         request.setSubmittedBy(mobileNumber);
         return this;
     }
 
-    private AdherenceCaptureBuilder onCall(String callId) {
+    private AdherenceCaptureRequestBuilder onCall(String callId) {
         request.setCallId(callId);
         return this;
     }

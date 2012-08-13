@@ -1,6 +1,5 @@
 package org.motechproject.whp.ivr.operation;
 
-import org.apache.log4j.Logger;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.util.DateUtil;
@@ -13,7 +12,7 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
+import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
 public class RecordAdherenceOperation implements INodeOperation {
 
@@ -61,7 +60,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     }
 
     private void publishAdherenceSubmissionEvent(IvrSession ivrSession) {
-        AdherenceCaptureRequest request = adherenceCapture().validAdherence(currentPatientId, ivrSession);
+        AdherenceCaptureRequest request = adherenceCaptureRequest().validAdherence(currentPatientId, ivrSession);
         reportingService.reportAdherenceCapture(request);
     }
 

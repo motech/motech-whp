@@ -10,7 +10,7 @@ import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
@@ -54,7 +54,7 @@ public class AnotherAdherenceCaptureTransitionTest {
     private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
-    WHPIVRMessage whpivrMessage = new WHPIVRMessage(new Properties());
+    WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
     AdherenceCaptureTransition adherenceCaptureTransition;
 
     @Before
@@ -69,7 +69,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService, reportingPublisherService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         int dosesPerWeek = 3;
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(providedAdherencePrompts(whpivrMessage, PATIENT_1, Integer.parseInt(adherenceInput), dosesPerWeek)));
+        assertThat(node.getPrompts(), hasItems(providedAdherencePrompts(whpIvrMessage, PATIENT_1, Integer.parseInt(adherenceInput), dosesPerWeek)));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         flowSession.set(PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patientWithAdherence.getPatientId())));
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        Prompt[] expectedPrompts = callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 2, 1);
+        Prompt[] expectedPrompts = callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, 2, 1);
         assertThat(node.getPrompts().size(), is(expectedPrompts.length));
         assertThat(node.getPrompts(), hasItems(expectedPrompts));
     }
@@ -127,7 +127,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         String adherenceInput = "7";
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
 
-        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpivrMessage, PATIENT_2, 2)));
+        assertThat(node.getPrompts(), hasItems(captureAdherencePrompts(whpIvrMessage, PATIENT_2, 2)));
         assertThat(node.getTransitions().size(), is(1));
         assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
     }

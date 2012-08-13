@@ -2,10 +2,9 @@ package org.motechproject.whp.ivr.builder;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.decisiontree.model.AudioPrompt;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.prompts.CallCompletionPrompts;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -24,18 +23,18 @@ import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceS
 
 public class CallCompletionPromptsTest {
 
-    private WHPIVRMessage whpivrMessage;
+    private WhpIvrMessage whpIvrMessage;
     private PromptBuilder promptBuilder;
 
     @Before
     public void setUp() throws Exception {
-        whpivrMessage = new WHPIVRMessage(new Properties());
-        promptBuilder = (new PromptBuilder(whpivrMessage));
+        whpIvrMessage = new WhpIvrMessage(new Properties());
+        promptBuilder = (new PromptBuilder(whpIvrMessage));
     }
 
     @Test
     public void shouldCreateCallCompletionPrompts() {
-        Prompt[] builtPrompts = CallCompletionPrompts.callCompletionPrompts(whpivrMessage);
+        Prompt[] builtPrompts = CallCompletionPrompts.callCompletionPrompts(whpIvrMessage);
         Prompt[] expectedPrompts = promptBuilder.wav(COMPLETION_MESSAGE).wav(MUSIC_END_NOTE).build();
         assertArrayEquals(expectedPrompts, builtPrompts);
     }
@@ -53,7 +52,7 @@ public class CallCompletionPromptsTest {
         Integer countOfAllPatients = allPatients.size();
         Integer countOfPatientsWithAdherence = allPatients.size() - 1;
 
-        Prompt[] builtPrompts = adherenceSummaryWithCallCompletionPrompts(whpivrMessage, countOfAllPatients, countOfPatientsWithAdherence);
+        Prompt[] builtPrompts = adherenceSummaryWithCallCompletionPrompts(whpIvrMessage, countOfAllPatients, countOfPatientsWithAdherence);
         Prompt[] expectedPrompts = promptBuilder.wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR).number(countOfAllPatients)
                 .wav(END_OF_CALL_ADHERENCE_OUT_OF).number(countOfPatientsWithAdherence)
                 .wav(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS)
@@ -68,7 +67,7 @@ public class CallCompletionPromptsTest {
     public void shouldCreateCallCompletionPromptsWithAdherenceSummary_whenThereAreNoPatientsWithoutAdherence() {
         List<Patient> allPatients = createPatientsWithAdherence();
 
-        Prompt[] builtPrompts = adherenceSummaryWithCallCompletionPrompts(whpivrMessage, allPatients.size(), allPatients.size());
+        Prompt[] builtPrompts = adherenceSummaryWithCallCompletionPrompts(whpIvrMessage, allPatients.size(), allPatients.size());
         Prompt[] expectedPrompts = promptBuilder.wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR).number(allPatients.size())
                 .wav(END_OF_CALL_ADHERENCE_OUT_OF).number(allPatients.size())
                 .wav(END_OF_CALL_ADHERENCE_TOTAL_PATIENTS)
@@ -84,7 +83,7 @@ public class CallCompletionPromptsTest {
         List<Patient> allPatients = createPatientsWithAdherence();
         AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider("provider", allPatients);
 
-        Prompt[] builtPrompts = CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence(whpivrMessage,
+        Prompt[] builtPrompts = CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence(whpIvrMessage,
                 adherenceSummary.countOfAllPatients(),
                 adherenceSummary.countOfPatientsWithAdherence());
         Prompt[] expectedPrompts = promptBuilder.wav(THANK_YOU).wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR).number(allPatients.size())

@@ -11,7 +11,7 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
@@ -51,7 +51,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     private ReportingPublisherService reportingPublisherService;
 
     FlowSession flowSession;
-    WHPIVRMessage whpivrMessage;
+    WhpIvrMessage whpIvrMessage;
     AdherenceCaptureTransition adherenceCaptureTransition;
 
     String providerId = "providerid";
@@ -61,7 +61,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        whpivrMessage = new WHPIVRMessage(new Properties());
+        whpIvrMessage = new WhpIvrMessage(new Properties());
         flowSession = new FlowSessionStub();
         IvrSession ivrSession = new IvrSession(flowSession);
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1, patientId2)));
@@ -70,14 +70,14 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpivrMessage, patientService, reportingPublisherService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
     }
 
     @Test
     public void shouldSkipCurrentPatientIfKey9IsPressed() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(patientId2)
                 .wav(ENTER_ADHERENCE);
@@ -91,7 +91,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     @Test
     public void shouldPlayEndOfCallPromptsIfAdherenceIsSkippedForTheLastPatient() {
         new IvrSession(flowSession).currentPatientIndex(1);
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage)
                 .wav(THANK_YOU)
                 .wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR)
                 .number(2)
@@ -110,7 +110,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
     @Test
     public void shouldSkipCurrentPatientIfEnteredDoseIsGreaterThanDosesPerWeek() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(patientId2)
                 .wav(ENTER_ADHERENCE);
@@ -126,7 +126,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
     @Test
     public void shouldSkipCurrentPatientIfKeyPressedInNotNumber() {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage).wav(PATIENT_LIST)
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage).wav(PATIENT_LIST)
                 .number(2)
                 .id(patientId2)
                 .wav(ENTER_ADHERENCE);
@@ -142,7 +142,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     public void shouldRecordAdherenceForValidInput() {
         int dosesTaken = 2;
         int dosesPerWeek = 3;
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage)
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage)
                 .wav(PATIENT)
                 .id(patientId1)
                 .wav(HAS_TAKEN)
@@ -167,7 +167,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patient.getPatientId())));
 
         Node expectedNode = new Node()
-                .addPrompts(callCompletionPromptsAfterCapturingAdherence(whpivrMessage, 2, 1));
+                .addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, 2, 1));
 
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertEquals(expectedNode, destinationNode);

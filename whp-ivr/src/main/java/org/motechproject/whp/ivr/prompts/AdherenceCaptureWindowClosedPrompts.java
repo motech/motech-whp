@@ -2,15 +2,15 @@ package org.motechproject.whp.ivr.prompts;
 
 
 import org.motechproject.decisiontree.model.Prompt;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class AdherenceCaptureWindowClosedPrompts {
 
-    public static Prompt[] adherenceCaptureWindowClosedPrompts(WHPIVRMessage whpivrMessage) {
-        PromptBuilder promptBuilder = new PromptBuilder(whpivrMessage);
+    public static Prompt[] adherenceCaptureWindowClosedPrompts(WhpIvrMessage whpIvrMessage) {
+        PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage);
         promptBuilder.wav(WINDOW_OVER)
         .wav(THANK_YOU);
 

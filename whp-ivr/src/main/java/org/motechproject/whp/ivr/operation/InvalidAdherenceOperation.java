@@ -7,10 +7,9 @@ import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
-import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureBuilder.adherenceCapture;
+import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
-public class InvalidAdherenceOperation  implements INodeOperation{
+public class InvalidAdherenceOperation implements INodeOperation {
 
     private String currentPatientId;
     private ReportingPublisherService reportingService;
@@ -21,14 +20,16 @@ public class InvalidAdherenceOperation  implements INodeOperation{
         this.currentPatientId = currentPatientId;
         this.reportingService = reportingService;
     }
+
     @Override
     public void perform(String input, FlowSession flowSession) {
         IvrSession ivrSession = new IvrSession(flowSession);
-        publishAdherenceInputEvent(input,ivrSession);
+        publishAdherenceInputEvent(input, ivrSession);
     }
+
     private void publishAdherenceInputEvent(String input, IvrSession ivrSession) {
         logger.info("Building invalid adherence request");
-        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCapture().invalidAdherence(currentPatientId, ivrSession, input);
+        AdherenceCaptureRequest adherenceCaptureRequest = adherenceCaptureRequest().invalidAdherence(currentPatientId, ivrSession, input);
         logger.info("Publishing invalid adherence request");
         reportingService.reportAdherenceCapture(adherenceCaptureRequest);
     }

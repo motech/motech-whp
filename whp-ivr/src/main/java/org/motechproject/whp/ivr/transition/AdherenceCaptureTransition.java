@@ -4,9 +4,8 @@ import lombok.EqualsAndHashCode;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.ivr.IVRInput;
-import org.motechproject.whp.ivr.WHPIVRMessage;
+import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
-import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
@@ -18,19 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
-import static org.motechproject.util.DateUtil.now;
 
 @Component
 @EqualsAndHashCode
 public class AdherenceCaptureTransition extends TransitionToCollectPatientAdherence {
+
     @Autowired
     private PatientService patientService;
 
     AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WHPIVRMessage whpivrMessage, PatientService patientService, ReportingPublisherService reportingPublisherService) {
-        super(whpivrMessage, reportingPublisherService);
+    public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage, PatientService patientService, ReportingPublisherService reportingPublisherService) {
+        super(whpIvrMessage, reportingPublisherService);
         this.patientService = patientService;
     }
 
@@ -46,7 +45,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             addTransitionsToNextPatients(ivrSession, nextNode);
         } else {
             if (patient.isValidDose(ivrInput.input())) {
-                nextNode = new ConfirmAdherenceNodeBuilder(whpivrMessage).with(patient, parseInt(input)).node();
+                nextNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt(input)).node();
             } else {
                 nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
                 addTransitionsToNextPatients(ivrSession, nextNode);
