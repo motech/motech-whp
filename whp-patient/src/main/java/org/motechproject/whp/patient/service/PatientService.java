@@ -82,11 +82,6 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public void startNextPhase(Patient patient) {
-        patient.startNextPhase();
-        allPatients.update(patient);
-    }
-
     public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
         return allPatients.getAllWithActiveTreatmentFor(providerId);
     }

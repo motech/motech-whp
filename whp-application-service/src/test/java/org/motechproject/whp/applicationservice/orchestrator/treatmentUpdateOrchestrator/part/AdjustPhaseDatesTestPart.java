@@ -1,4 +1,4 @@
-package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchestrator.part;
+package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchestrator.part;
+package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
@@ -6,7 +6,6 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 
 import static org.mockito.Mockito.when;

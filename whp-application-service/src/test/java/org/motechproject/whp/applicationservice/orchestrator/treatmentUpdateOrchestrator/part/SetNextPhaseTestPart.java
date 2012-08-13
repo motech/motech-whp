@@ -1,4 +1,4 @@
-package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchestrator.part;
+package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -6,8 +6,10 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -83,10 +85,12 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
             }
         }).when(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
 
+        PhaseRecord previousPhase = patient.getCurrentPhase();
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(whpAdherenceService, times(1)).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService).startNextPhase(patient);
+        //verify(patientService).startNextPhase(patient);
+        assertFalse(previousPhase.equals(patient.getCurrentPhase()));
     }
 }

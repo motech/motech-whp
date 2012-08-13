@@ -1,4 +1,4 @@
-package org.motechproject.whp.applicationservice.orchestrator.phaseUpdateOrchestrator.part;
+package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -6,8 +6,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -31,12 +35,14 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
 
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
-
-        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
+        PhaseRecord previousPhase = patient.getCurrentPhase();
+        //treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.adjustPhaseStartDates(patient.getPatientId(), therapyStartDate.minusDays(1), null, null);
 
         verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate);
         verify(patientService).autoCompleteLatestPhase(patient, adherenceRecord.doseDate());
-        verify(patientService, never()).startNextPhase(any(Patient.class));
+        //verify(patientService, never()).startNextPhase(any(Patient.class));
+        assertTrue(previousPhase.equals(patient.getCurrentPhase()));
     }
 
     @Test
@@ -46,15 +52,16 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         patient.startTherapy(therapyStartDate);
         patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
         patient.nextPhaseName(Phase.EIP);
+        PhaseRecord previousPhase = patient.getCurrentPhase();
         patient.endLatestPhase(twentyFourthDoseTakenDate);
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
 
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
+        when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
+        treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
-        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
-
-        verify(patientService).startNextPhase(patient);
+        assertFalse(previousPhase.equals(patient.getCurrentPhase()));
     }
 
     @Test
@@ -69,11 +76,10 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         patient.setNumberOfDosesTaken(Phase.IP, 23, twentyFourthDoseTakenDate);
 
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
-
-        treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
+        treatmentUpdateOrchestrator.adjustPhaseStartDates(patient.getPatientId(), therapyStartDate.minusDays(1), null, null);
 
         verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
-        verify(patientService, never()).startNextPhase(patient);
+        assertNull(patient.getCurrentPhase()); // Current phase is closed, and next phase is not started
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
         verify(patientService, never()).autoCompleteLatestPhase(any(Patient.class), any(LocalDate.class));
     }

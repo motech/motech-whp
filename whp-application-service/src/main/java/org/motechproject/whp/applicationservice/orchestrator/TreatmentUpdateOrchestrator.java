@@ -46,7 +46,7 @@ public class TreatmentUpdateOrchestrator {
         attemptPhaseTransition(patient);
     }
 
-    public void recomputePillStatus(Patient patient) {
+    private void recomputePillStatus(Patient patient) {
         Phases phases = patient.getCurrentTherapy().getPhases();
         for (Phase phase : patient.getHistoryOfPhases()) {
             /*
@@ -64,7 +64,7 @@ public class TreatmentUpdateOrchestrator {
         attemptPhaseTransition(patient);
     }
 
-    public void attemptPhaseTransition(Patient patient) {
+    private void attemptPhaseTransition(Patient patient) {
         if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
             patientService.revertAutoCompleteOfLastPhase(patient);
         }
@@ -77,7 +77,7 @@ public class TreatmentUpdateOrchestrator {
         }
 
         if (patient.isTransitioning() && !patient.isOrHasBeenOnCp() && patient.hasPhaseToTransitionTo()) {
-            patientService.startNextPhase(patient);
+            patient.startNextPhase();
         }
 
         recomputePillStatus(patient);
@@ -115,7 +115,8 @@ public class TreatmentUpdateOrchestrator {
         patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
     }
 
-    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
+        Patient patient = patientService.findByPatientId(patientId);
         whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, patient, auditParams);
         refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
     }
@@ -143,13 +144,7 @@ public class TreatmentUpdateOrchestrator {
 
     private void refreshPatient(Patient patient, LocalDate lastAdherenceWeekStartDate) {
         patient.setLastAdherenceWeekStartDate(lastAdherenceWeekStartDate);
-        patientService.update(patient);
-
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
-    }
-
-    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
-        recordWeeklyAdherence(weeklyAdherenceSummary, patientService.findByPatientId(patientId), auditParams);
     }
 }
