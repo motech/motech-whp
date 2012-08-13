@@ -68,11 +68,11 @@ public class ProviderService {
         return allWebUsers;
     }
 
-    public Provider fetchByProviderId(String providerId){
+    public Provider findByProviderId(String providerId){
         return allProviders.findByProviderId(providerId);
     }
 
-    public boolean isRegisteredMobileNumber(String mobileNumber) {
-        return allProviders.findByMobileNumber(mobileNumber) != null;
+    public Provider findByMobileNumber(String mobileNumber) {
+        return allProviders.findByMobileNumber(mobileNumber);
     }
 }

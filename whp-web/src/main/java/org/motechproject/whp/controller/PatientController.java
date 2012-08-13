@@ -201,7 +201,7 @@ public class PatientController extends BaseController {
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
-        Provider provider = providerService.fetchByProviderId(currentTreatment.getProviderId());
+        Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
 
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);

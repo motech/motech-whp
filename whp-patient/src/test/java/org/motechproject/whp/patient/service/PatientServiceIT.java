@@ -381,7 +381,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         createProvider("provider1", "Vaishali");
         createProvider(searchProviderId, "Vaishali");
         createProvider("provider3", "Begusarai");
-        Provider providerToBeUsedForSearch = providerService.fetchByProviderId(searchProviderId);
+        Provider providerToBeUsedForSearch = providerService.findByProviderId(searchProviderId);
 
         PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
         patientService.createPatient(createPatientRequest1);

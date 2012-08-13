@@ -90,7 +90,7 @@ public class PatientControllerTest extends BaseControllerTest {
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
-        when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
+        when(providerService.findByProviderId(providerId)).thenReturn(provider);
         when(allDistrictsCache.getAll()).thenReturn(districts);
     }
 
@@ -271,7 +271,7 @@ public class PatientControllerTest extends BaseControllerTest {
         Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).withTreatmentUnderDistrict("some other district").build();
 
         Provider provider = new Provider(providerId, "", district, DateUtil.now());
-        when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
+        when(providerService.findByProviderId(providerId)).thenReturn(provider);
         when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(asList(patientUnderProviderA));
 
         String viewName = patientController.filterByDistrictAndProvider(district, providerId, uiModel, request);
@@ -287,7 +287,7 @@ public class PatientControllerTest extends BaseControllerTest {
         String district = "Vaishali";
 
         Provider provider = new Provider(providerId, "", district, DateUtil.now());
-        when(providerService.fetchByProviderId(providerId)).thenReturn(provider);
+        when(providerService.findByProviderId(providerId)).thenReturn(provider);
         when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(new ArrayList<Patient>());
 
         String viewName = patientController.filterByDistrictAndProvider(district, providerId, uiModel, request);

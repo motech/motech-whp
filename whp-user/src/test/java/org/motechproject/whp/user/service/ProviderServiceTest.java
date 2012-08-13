@@ -1,5 +1,6 @@
 package org.motechproject.whp.user.service;
 
+import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.*;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
@@ -75,7 +77,7 @@ public class ProviderServiceTest {
         String providerId = "providerId";
         Provider expectedProvider = new Provider();
         when(allProviders.findByProviderId(providerId)).thenReturn(expectedProvider);
-        Provider provider = providerService.fetchByProviderId(providerId);
+        Provider provider = providerService.findByProviderId(providerId);
         assertEquals(expectedProvider, provider);
         verify(allProviders).findByProviderId(providerId);
     }
@@ -86,19 +88,23 @@ public class ProviderServiceTest {
         Provider provider = newProviderBuilder().withDefaults().withPrimaryMobileNumber(mobileNumber).build();
         when(allProviders.findByMobileNumber(mobileNumber)).thenReturn(provider);
 
-        boolean isRegisteredMobileNumber = providerService.isRegisteredMobileNumber(mobileNumber);
+        Provider returnedProvider = providerService.findByMobileNumber(mobileNumber);
+
+        assertThat(returnedProvider, Is.is(provider));
         verify(allProviders).findByMobileNumber(mobileNumber);
-        assertTrue(isRegisteredMobileNumber);
     }
+
+
 
     @Test
     public void shouldReturnFalseIfProviderDoesNotExists_forGivenMobileNumber() {
         String mobileNumber = "1234567899";
         when(allProviders.findByMobileNumber(mobileNumber)).thenReturn(null);
 
-        boolean isRegisteredMobileNumber = providerService.isRegisteredMobileNumber(mobileNumber);
+        Provider returnedProvider = providerService.findByMobileNumber(mobileNumber);
+
         verify(allProviders).findByMobileNumber(mobileNumber);
-        assertFalse(isRegisteredMobileNumber);
+        assertThat(returnedProvider, nullValue());
     }
 
     @After
