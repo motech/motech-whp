@@ -12,7 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.refdata.domain.Phase.*;
 
-public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
+public class AdjustPhaseDatesTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     @Before
     public void setUp() {
@@ -29,7 +29,7 @@ public class AdjustPhaseDatesTestPart extends PhaseUpdateOrchestratorTestPart {
         assertEquals(ipStartDate, patient.getCurrentTherapy().getPhaseStartDate(IP));
         assertEquals(eipStartDate, patient.getCurrentTherapy().getPhaseStartDate(EIP));
         assertEquals(cpStartDate, patient.getCurrentTherapy().getPhaseStartDate(CP));
-        verify(patientService).update(patient);
+        verify(patientService, times(3)).update(patient);
     }
 
     @Test

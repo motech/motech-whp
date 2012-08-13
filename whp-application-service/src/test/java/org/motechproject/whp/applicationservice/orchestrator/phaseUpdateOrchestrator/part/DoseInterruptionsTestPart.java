@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.newDate;
 import static org.motechproject.util.DateUtil.today;
 
-public class DoseInterruptionsTestPart extends PhaseUpdateOrchestratorTestPart {
+public class DoseInterruptionsTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     @Before
     public void setUp() {
@@ -44,15 +45,7 @@ public class DoseInterruptionsTestPart extends PhaseUpdateOrchestratorTestPart {
 
         treatmentUpdateOrchestrator.recomputePillStatus(patient);
 
-        verify(patientService, times(1)).clearDoseInterruptionsForUpdate(patient);
-
-        for (LocalDate date : doseDates) {
-            verify(patientService).dosesMissedSince(patient, date);
-        }
-
-        for (LocalDate date : remainingDoseDates) {
-            verify(patientService).dosesResumedOnAfterBeingInterrupted(patient, date);
-        }
+        assertFalse(patient.getCurrentTherapy().getDoseInterruptions().isEmpty());
     }
 
     @Test

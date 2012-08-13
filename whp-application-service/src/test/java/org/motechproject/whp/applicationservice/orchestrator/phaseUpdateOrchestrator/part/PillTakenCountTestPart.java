@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
-public class PillTakenCountTestPart extends PhaseUpdateOrchestratorTestPart {
+public class PillTakenCountTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     @Before
     public void setUp() {

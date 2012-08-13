@@ -13,7 +13,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class PhaseTransitionTestPart extends PhaseUpdateOrchestratorTestPart {
+public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     @Before
     public void setUp() {

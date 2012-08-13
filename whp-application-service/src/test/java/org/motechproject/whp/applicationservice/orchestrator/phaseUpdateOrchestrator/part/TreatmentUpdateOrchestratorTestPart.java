@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 
-public abstract class PhaseUpdateOrchestratorTestPart extends BaseUnitTest {
+public abstract class TreatmentUpdateOrchestratorTestPart extends BaseUnitTest {
 
     public static final String THERAPY_ID = "therapyUid";
     public static final String PATIENT_ID = "patientid";

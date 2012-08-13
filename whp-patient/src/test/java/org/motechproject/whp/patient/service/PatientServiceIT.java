@@ -417,10 +417,9 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(patientRequest);
         Patient patient = patientService.findByPatientId(PATIENT_ID);
-
-        patientService.dosesMissedSince(patient, new LocalDate());
-        patientService.dosesResumedOnAfterBeingInterrupted(patient, new LocalDate().plusDays(2));
-        patientService.clearDoseInterruptionsForUpdate(patient);
+        patient.dosesMissedSince(new LocalDate());
+        patient.dosesResumedOnAfterBeingInterrupted(new LocalDate().plusDays(1));
+        patient.clearDoseInterruptionsForUpdate();
 
         assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().size());
     }
@@ -432,8 +431,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = patientService.findByPatientId(PATIENT_ID);
 
         LocalDate today = today();
-        patientService.dosesMissedSince(patient, today);
-
+        patient.dosesMissedSince(today);
         assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().get(0).compareTo(new DoseInterruption(today)));
         assertTrue(patient.getCurrentTherapy().getDoseInterruptions().get(0).isOngoing());
     }
@@ -445,8 +443,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = patientService.findByPatientId(PATIENT_ID);
 
         LocalDate today = today();
-        patientService.dosesMissedSince(patient, today);
-        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(2));
+        patient.dosesMissedSince(today);
+        patient.dosesResumedOnAfterBeingInterrupted(today.plusDays(1));
 
         assertEquals(today.plusDays(1), patient.getCurrentTherapy().getDoseInterruptions().get(0).endDate());
         assertFalse(patient.getCurrentTherapy().getDoseInterruptions().get(0).isOngoing());
@@ -459,8 +457,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = patientService.findByPatientId(PATIENT_ID);
 
         LocalDate today = today();
-        patientService.dosesMissedSince(patient, today);
-        patientService.dosesMissedSince(patient, today.plusDays(2));
+        patient.dosesMissedSince(today);
+        patient.dosesMissedSince(today.plusDays(2));
 
         assertEquals(0, patient.getCurrentTherapy().getDoseInterruptions().get(0).compareTo(new DoseInterruption(today)));
     }
@@ -472,9 +470,9 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = patientService.findByPatientId(PATIENT_ID);
 
         LocalDate today = today();
-        patientService.dosesMissedSince(patient, today);
-        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(2));
-        patientService.dosesResumedOnAfterBeingInterrupted(patient, today.plusDays(3));
+        patient.dosesMissedSince(today);
+        patient.dosesResumedOnAfterBeingInterrupted(today.plusDays(1));
+        patient.dosesResumedOnAfterBeingInterrupted(today.plusDays(2));
 
         assertEquals(today.plusDays(1), patient.getCurrentTherapy().getDoseInterruptions().get(0).endDate());
     }

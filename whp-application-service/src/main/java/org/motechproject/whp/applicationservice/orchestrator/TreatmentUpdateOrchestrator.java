@@ -91,15 +91,15 @@ public class TreatmentUpdateOrchestrator {
         HashMap<LocalDate, PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
         List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
 
-        patientService.clearDoseInterruptionsForUpdate(patient);
-
+        patient.clearDoseInterruptionsForUpdate();
         for (LocalDate doseDate : allDoseDates) {
-            if (dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken)) {
-                patientService.dosesMissedSince(patient, doseDate);
+            if ((dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken))) {
+                patient.dosesMissedSince(doseDate);
             } else {
-                patientService.dosesResumedOnAfterBeingInterrupted(patient, doseDate);
+                patient.dosesResumedOnAfterBeingInterrupted(doseDate.minusDays(1));
             }
         }
+        patientService.update(patient);
     }
 
     private void updateTotalDoseTakenCount(Patient patient, Phases phases, Phase phase) {
@@ -117,8 +117,7 @@ public class TreatmentUpdateOrchestrator {
 
     public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
         whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, patient, auditParams);
-        //TODO should remove db calls; patient object should be saved only once
-        refreshPatient(patientService.findByPatientId(patient.getPatientId()), weeklyAdherenceSummary.getWeek().startDate());
+        refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
     }
 
     public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {

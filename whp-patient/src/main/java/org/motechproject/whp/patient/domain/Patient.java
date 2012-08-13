@@ -221,12 +221,16 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public void dosesMissedSince(LocalDate doseDate) {
-        currentTherapy.dosesMissedSince(doseDate);
+        if (!isCurrentlyDoseInterrupted()) {
+            currentTherapy.dosesMissedSince(doseDate);
+        }
     }
 
     @JsonIgnore
     public void dosesResumedOnAfterBeingInterrupted(LocalDate endDate) {
-        currentTherapy.dosesResumedOnAfterBeingInterrupted(endDate);
+        if (isCurrentlyDoseInterrupted()) {
+            currentTherapy.dosesResumedOnAfterBeingInterrupted(endDate);
+        }
     }
 
     @JsonIgnore

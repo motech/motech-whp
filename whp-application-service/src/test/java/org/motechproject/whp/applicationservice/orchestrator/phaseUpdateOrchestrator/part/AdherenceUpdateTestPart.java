@@ -27,7 +27,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
-public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
+public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     PatientStub patientStub;
     @Mock
@@ -201,7 +201,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patientStub, auditParams);
 
         assertThat(patientStub.getLastAdherenceWeekStartDate(), is(currentAdherenceCaptureWeek().startDate()));
-        verify(patientService).update(patientStub);
+        verify(patientService, times(3)).update(patientStub);
 
     }
 
@@ -219,7 +219,7 @@ public class AdherenceUpdateTestPart extends PhaseUpdateOrchestratorTestPart {
         treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3), patientStub, auditParams);
 
         assertThat(patientStub.getLastAdherenceWeekStartDate(), is(new LocalDate(2012, 5, 14)));
-        verify(patientService).update(patientStub);
+        verify(patientService, times(3)).update(patientStub);
 
     }
 
