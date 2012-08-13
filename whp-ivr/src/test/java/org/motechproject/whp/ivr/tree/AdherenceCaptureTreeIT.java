@@ -42,6 +42,7 @@ import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
+@Ignore
 public class AdherenceCaptureTreeIT extends SpringIntegrationTest {
 
     public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?type=flow&date=%s&hour=0&minute=0";
