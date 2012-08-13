@@ -35,7 +35,6 @@ public class IvrSession {
         return flowSession.get("cid");
     }
 
-
     private List<String> getPatientIds(List<Patient> patients) {
         List<String> patientIds = new ArrayList<>();
         for (Patient patient : patients)

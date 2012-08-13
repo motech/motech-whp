@@ -3,7 +3,6 @@ package org.motechproject.whp.ivr.tree;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.matcher.IvrResponseAudioMatcher.audioList;
-@Ignore
+
 public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Autowired
@@ -113,7 +112,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     @Test
     public void shouldAskForConfirmation_UponEnteringValidAdherenceValue() {
         String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getProviderId());
+        startCall(sessionId, provider.getPrimaryMobile());
 
         KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "2");
 
@@ -123,16 +122,16 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         assertThat(ivrResponse.getPlayAudio(),
                 is(audioList(
                         wav("confirmMessage1"),
-                        wav(id(patient1.getPatientId())),
+                        alphaNumeric(id(patient1.getPatientId())),
                         wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + base64("/1/2")));
+        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));
     }
 
     @Test
     public void shouldRecordAdherenceForPatient() {
         String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getProviderId());
+        startCall(sessionId, provider.getPrimaryMobile());
         sendDtmf(sessionId, "2");
 
         KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "1");

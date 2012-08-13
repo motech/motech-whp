@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.util;
 
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.Node;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 public class FlowSessionStub implements FlowSession {
 
+    public static final String CURRENT_NODE = "CURRENT_NODE";
     private Map<String, Object> sessionAttributes = new HashMap<>();
 
     @Override
@@ -31,4 +33,15 @@ public class FlowSessionStub implements FlowSession {
     public <T extends Serializable> T get(String key) {
         return (T) sessionAttributes.get(key);
     }
+
+    @Override
+    public void setCurrentNode(Node node) {
+        set(CURRENT_NODE, node);
+    }
+
+    @Override
+    public Node getCurrentNode() {
+        return get(CURRENT_NODE);
+    }
+
 }

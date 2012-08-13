@@ -20,8 +20,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     @Autowired
     protected ReportingPublisherService reportingPublisherService;
 
-    TransitionToCollectPatientAdherence() {
-
+    public TransitionToCollectPatientAdherence() {
     }
 
     public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService) {

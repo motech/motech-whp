@@ -33,7 +33,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     static Server server;
     static String CONTEXT_PATH = "/whp";
-    public static final String TREE_START_PATH = "/";
+    public static final String TREE_START_PATH = "";
     public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?date=%s&hour=0&minute=0";
 
     String KOOKOO_CALLBACK_URL = "/kookoo/ivr";
@@ -43,14 +43,14 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     private static DispatcherServlet dispatcherServlet;
     protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s";
-    protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&sid=%s";
+    protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s&";
 
     private String currentPath;
+    private String callerId;
 
     @Before
     public void setup() throws IOException, InterruptedException {
         setIgnoreWhitespace(true);
-        currentPath = base64(TREE_START_PATH);
 
         httpClient = new DefaultHttpClient();
         LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
@@ -94,12 +94,14 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     }
 
     protected KooKooIvrResponse startCall(String sessionId, String callerId) {
+        this.currentPath = TREE_START_PATH;
+        this.callerId = callerId;
         return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, base64(TREE_START_PATH), callerId, sessionId));
     }
 
     protected KooKooIvrResponse sendDtmf(String sessionId, String dtmf) {
         String encodedTreePath = base64(currentPath);
-        KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, encodedTreePath, dtmf, sessionId));
+        KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, encodedTreePath, dtmf, callerId, sessionId));
         currentPath = currentPath + "/" + dtmf;
         return ivrResponse;
     }
@@ -111,7 +113,13 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     protected List<String> wav(String... fileNames) {
         ArrayList<String> audioFileUrls = new ArrayList<>();
         for (String fileName : fileNames) {
-            audioFileUrls.add(String.format("http://localhost:8080/whp/wav/stream/en/messages/%s.wav", fileName));
+            try {
+                if (Integer.parseInt(fileName) > -1) {
+                    audioFileUrls.addAll(alphaNumeric(fileName));
+                }
+            } catch (Exception e) {
+                audioFileUrls.add(String.format("http://localhost:8080/whp/wav/stream/en/messages/%s.wav", fileName));
+            }
         }
         return audioFileUrls;
     }
@@ -136,7 +144,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     protected String[] id(String patientId) {
         String[] charStrings = new String[patientId.length()];
-        for(int i=0; i<patientId.length(); i++)
+        for (int i = 0; i < patientId.length(); i++)
             charStrings[i] = String.valueOf(patientId.charAt(i));
         return charStrings;
     }

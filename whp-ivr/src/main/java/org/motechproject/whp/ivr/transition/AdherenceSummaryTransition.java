@@ -8,7 +8,6 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
-import org.motechproject.whp.ivr.prompts.WelcomeMessagePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
@@ -37,8 +36,6 @@ public class AdherenceSummaryTransition implements ITransition {
     /*Required for platform autowiring*/
     public AdherenceSummaryTransition() {
     }
-
-
 
     public AdherenceSummaryTransition(WhpIvrMessage whpIvrMessage, AdherenceRecordingSession recordingSession, ReportingPublisherService reportingPublisherService) {
         this.whpIvrMessage = whpIvrMessage;
