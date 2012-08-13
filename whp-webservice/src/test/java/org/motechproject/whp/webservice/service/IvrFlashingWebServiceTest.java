@@ -14,9 +14,9 @@ import static org.springframework.test.web.server.request.MockMvcRequestBuilders
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class IvrCallbackWebServiceTest {
+public class IvrFlashingWebServiceTest {
 
-    private IvrCallbackWebService ivrCallbackWebService;
+    private IvrFlashingWebService ivrFlashingWebService;
 
     @Mock
     private IvrCallService ivrCallService;
@@ -27,7 +27,7 @@ public class IvrCallbackWebServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        ivrCallbackWebService = new IvrCallbackWebService(ivrCallService, providerService);
+        ivrFlashingWebService = new IvrFlashingWebService(ivrCallService, providerService);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class IvrCallbackWebServiceTest {
                 "<time>14/08/2012 11:20:59</time>\n" +
                 "</missed_call>";
 
-        standaloneSetup(ivrCallbackWebService).build()
+        standaloneSetup(ivrFlashingWebService).build()
                 .perform(post("/ivr/callback").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk());
     }
@@ -50,7 +50,7 @@ public class IvrCallbackWebServiceTest {
 
         when(providerService.isRegisteredMobileNumber(trimmedMobileNumber)).thenReturn(true);
 
-        ivrCallbackWebService.doCallBack(getFlashingRequest(mobileNumber));
+        ivrFlashingWebService.callBack(getFlashingRequest(mobileNumber));
         verify(ivrCallService).initiateCall(trimmedMobileNumber);
     }
 
@@ -64,7 +64,7 @@ public class IvrCallbackWebServiceTest {
     public void shouldNotInitiateOutGoingCallToProvider_forUnregisteredMobileNumbers() {
         String unregisteredMobileNumber = "8888";
         when(providerService.isRegisteredMobileNumber(unregisteredMobileNumber)).thenReturn(false);
-        ivrCallbackWebService.doCallBack(getFlashingRequest(unregisteredMobileNumber));
+        ivrFlashingWebService.callBack(getFlashingRequest(unregisteredMobileNumber));
 
         verify(ivrCallService, never()).initiateCall(anyString());
     }
@@ -73,7 +73,7 @@ public class IvrCallbackWebServiceTest {
     public void shouldInitiateOutGoingCallToProvider_forRegisteredMobileNumbersOnly() {
         String mobileNumber = "1234567890";
         when(providerService.isRegisteredMobileNumber(mobileNumber)).thenReturn(true);
-        ivrCallbackWebService.doCallBack(getFlashingRequest(mobileNumber));
+        ivrFlashingWebService.callBack(getFlashingRequest(mobileNumber));
 
         verify(ivrCallService).initiateCall(mobileNumber);
     }

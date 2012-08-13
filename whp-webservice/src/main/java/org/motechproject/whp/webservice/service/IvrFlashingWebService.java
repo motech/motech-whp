@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // Restful API to enable third party application to post an IVR callback request to provider for adherence capture
 @Controller
 @RequestMapping("/ivr/callback")
-public class IvrCallbackWebService {
+public class IvrFlashingWebService {
     private IvrCallService ivrCallService;
     private ProviderService providerService;
 
     @Autowired
-    public IvrCallbackWebService(IvrCallService ivrCallService, ProviderService providerService) {
+    public IvrFlashingWebService(IvrCallService ivrCallService, ProviderService providerService) {
         this.ivrCallService = ivrCallService;
         this.providerService = providerService;
     }
 
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/xml")
     @ResponseStatus(value = HttpStatus.OK)
-    public void doCallBack(@RequestBody FlashingRequest flashingRequest) {
+    public void callBack(@RequestBody FlashingRequest flashingRequest) {
         String trimmedMobileNumber = extractMobileNumber(flashingRequest.getMobileNumber());
 
         if(providerService.isRegisteredMobileNumber(trimmedMobileNumber))
