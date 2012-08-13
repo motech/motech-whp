@@ -17,7 +17,7 @@
         <build.dir>build</build.dir>
         <motech.version>0.11</motech.version>
         <motech.contrib.version>0.13-SNAPSHOT</motech.contrib.version>
-        <motech.delivery.version>0.3-SNAPSHOT</motech.delivery.version>
+        <motech.delivery.version>0.11-SNAPSHOT</motech.delivery.version>
     </properties>
 
     <modules>
@@ -369,12 +369,12 @@
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-datetime-simulator</artifactId>
-                <version>0.3-SNAPSHOT</version>
+                <version>${motech.delivery.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-deliverytools-common</artifactId>
-                <version>0.3-SNAPSHOT</version>
+                <version>${motech.delivery.version}</version>
             </dependency>
             <!--Libs-->
             <dependency>
