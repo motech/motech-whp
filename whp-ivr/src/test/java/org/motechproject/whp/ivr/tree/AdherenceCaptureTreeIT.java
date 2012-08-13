@@ -3,7 +3,6 @@ package org.motechproject.whp.ivr.tree;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
@@ -28,13 +27,14 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.matcher.IvrResponseAudioMatcher.audioList;
-@Ignore
+
 public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Autowired
@@ -113,7 +113,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     @Test
     public void shouldAskForConfirmation_UponEnteringValidAdherenceValue() {
         String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getProviderId());
+        startCall(sessionId, provider.getPrimaryMobile());
 
         KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "2");
 
@@ -123,25 +123,25 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         assertThat(ivrResponse.getPlayAudio(),
                 is(audioList(
                         wav("confirmMessage1"),
-                        wav(id(patient1.getPatientId())),
+                        alphaNumeric(id(patient1.getPatientId())),
                         wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&amp;ln=en&amp;tree=adherenceCapture&amp;trP=" + base64("/1/2")));
+        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));
     }
 
     @Test
     public void shouldRecordAdherenceForPatient() {
         String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getProviderId());
+        startCall(sessionId, provider.getPrimaryMobile());
         sendDtmf(sessionId, "2");
 
         KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "1");
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("patientList", "2"),
-                wav(id("patientid2")),
+                alphaNumeric(id("patientid2")),
                 wav("enterAdherence"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/2/1"))));
+        assertTrue(ivrResponse.getGotoUrl().contains(base64("/2/1")));
         assertThat(adherenceService.currentWeekAdherence(patient1).getDosesTaken(), is(2));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
@@ -155,10 +155,10 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("patientList", "2"),
-                wav(id("patientid2")),
+                alphaNumeric(id("patientid2")),
                 wav("enterAdherence"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/9"))));
+        assertTrue(ivrResponse.getGotoUrl().contains((base64("/9"))));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
@@ -174,13 +174,12 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         recordAdherence(sessionId, adherenceCapturedForSecondPatient);
 
         String adherenceCapturedForThirdPatient = "2";
-        sendDtmf(sessionId, adherenceCapturedForThirdPatient);
         KooKooIvrResponse ivrResponse = recordAdherence(sessionId, adherenceCapturedForThirdPatient);
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is(contains(base64("/9"))));
+        assertNull(ivrResponse.getGotoUrl());
         assertThat(ivrResponse.callEnded(), is(true));
 
         // TODO : should be a separate test
@@ -206,7 +205,6 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         recordAdherence(sessionId1, adherenceCapturedForSecondPatient);
 
         String adherenceCapturedForThirdPatient = "2";
-        sendDtmf(sessionId1, adherenceCapturedForThirdPatient);
         recordAdherence(sessionId1, adherenceCapturedForThirdPatient);
 
         String sessionId2 = UUID.randomUUID().toString();

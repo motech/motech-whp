@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class FlowSessionStub implements FlowSession {
 
+    public static final String CURRENT_NODE = "CURRENT_NODE";
     private Map<String, Object> sessionAttributes = new HashMap<>();
 
     @Override
@@ -33,10 +34,14 @@ public class FlowSessionStub implements FlowSession {
         return (T) sessionAttributes.get(key);
     }
 
+    @Override
     public void setCurrentNode(Node node) {
+        set(CURRENT_NODE, node);
     }
 
+    @Override
     public Node getCurrentNode() {
-        return null;
+        return get(CURRENT_NODE);
     }
+
 }

@@ -20,6 +20,9 @@ public class RecordAdherenceOperation implements INodeOperation {
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private ReportingPublisherService reportingService;
 
+    public RecordAdherenceOperation() {
+    }
+
     public RecordAdherenceOperation(String currentPatientId, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, ReportingPublisherService reportingService) {
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.reportingService = reportingService;

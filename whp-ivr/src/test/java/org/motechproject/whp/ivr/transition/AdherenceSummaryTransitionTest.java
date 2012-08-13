@@ -1,6 +1,5 @@
 package org.motechproject.whp.ivr.transition;
 
-import org.apache.commons.collections.ListUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -9,7 +8,6 @@ import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
@@ -18,7 +16,6 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
-import org.motechproject.whp.ivr.prompts.WelcomeMessagePrompts;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -30,12 +27,9 @@ import org.motechproject.whp.user.repository.AllProviders;
 import java.util.List;
 import java.util.Properties;
 
-import static org.apache.commons.collections.ListUtils.sum;
-import static org.hamcrest.Matchers.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.anyString;
@@ -47,7 +41,7 @@ import static org.motechproject.whp.ivr.prompts.AdherenceCaptureWindowClosedProm
 import static org.motechproject.whp.ivr.prompts.AdherenceSummaryPrompts.adherenceSummaryPrompts;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.adherenceSummaryWithCallCompletionPrompts;
 import static org.motechproject.whp.ivr.prompts.WelcomeMessagePrompts.welcomeMessagePrompts;
-import static org.motechproject.whp.patient.builder.ProviderBuilder.newProviderBuilder;
+import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 

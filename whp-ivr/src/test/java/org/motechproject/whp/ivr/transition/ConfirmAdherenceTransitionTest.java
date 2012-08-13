@@ -16,7 +16,6 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -81,23 +80,8 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     public void shouldAddRecordAdherenceOperation_ForValidInput() {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, "3");
         Node node = confirmAdherenceTransition.getDestinationNode("1", flowSession);
-        assertThat(node.getOperations().size(), is(2));
+        assertThat(node.getOperations().size(), is(1));
         assertThat((RecordAdherenceOperation) node.getOperations().get(0), is(new RecordAdherenceOperation(PATIENT1_ID, treatmentUpdateOrchestrator, reportingPublisherService)));
-        assertThat(node.getOperations().get(1), instanceOf(ResetFlowSessionOperation.class));
-    }
-
-    @Test
-    public void shouldNotAddRecordAdherenceOperation_ForInvalidInput() {
-        Node node = confirmAdherenceTransition.getDestinationNode("8", flowSession);
-        assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
-    }
-
-    @Test
-    public void shouldNotAddRecordAdherenceOperation_ForSkipInput() {
-        Node node = confirmAdherenceTransition.getDestinationNode("9", flowSession);
-        assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
     }
 
     @Test

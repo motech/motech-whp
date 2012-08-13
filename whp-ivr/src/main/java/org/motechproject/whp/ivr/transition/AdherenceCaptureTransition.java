@@ -7,9 +7,7 @@ import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
-import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -27,7 +25,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     @Autowired
     private PatientService patientService;
 
-    AdherenceCaptureTransition() {
+    public AdherenceCaptureTransition() {
     }
 
     public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage, PatientService patientService, ReportingPublisherService reportingPublisherService) {
@@ -54,7 +52,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
                 addPatientPromptsAndTransitions(nextNode, ivrSession);
             }
         }
-        return nextNode.addOperations(new ResetFlowSessionOperation());
+        return nextNode;
     }
 
 }

@@ -13,7 +13,6 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -77,27 +76,14 @@ public class AnotherAdherenceCaptureTransitionTest {
     public void shouldAddConfirmAdherenceOperation_ForValidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("3", flowSession);
 
-        assertThat(node.getOperations().size(), is(2));
+        assertThat(node.getOperations().size(), is(1));
         assertThat(node.getOperations().get(0), instanceOf(GetAdherenceOperation.class));
-        assertThat(node.getOperations().get(1), instanceOf(ResetFlowSessionOperation.class));
-    }
-
-    @Test
-    public void shouldNotAddConfirmAdherenceOperation_ForInvalidInput() {
-        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
-        assertThat(node.getOperations(), hasItem(not(isA(ResetFlowSessionOperation.class))));
     }
 
     @Test
     public void shouldAddInvalidAdherenceOperation_ForInvalidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
         assertThat(node.getOperations(), hasItem(isA(InvalidAdherenceOperation.class)));
-    }
-
-    @Test
-    public void shouldNotAddConfirmAdherenceOperation_ForSkipInput() {
-        Node node = adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        assertThat(node.getOperations(), hasItem(isA(ResetFlowSessionOperation.class)));
     }
 
     @Test

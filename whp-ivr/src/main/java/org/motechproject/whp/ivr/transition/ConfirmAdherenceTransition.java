@@ -8,7 +8,6 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
-import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +49,6 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
             }
             addTransitionsToNextPatients(ivrSession, nextNode);
         }
-        return nextNode.addOperations(new ResetFlowSessionOperation());
+        return nextNode;
     }
 }
