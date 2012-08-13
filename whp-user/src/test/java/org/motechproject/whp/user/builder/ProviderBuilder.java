@@ -7,7 +7,7 @@ public class ProviderBuilder {
 
     private Provider provider;
 
-    private ProviderBuilder() {
+    public ProviderBuilder() {
         provider = new Provider();
     }
 

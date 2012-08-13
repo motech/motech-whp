@@ -20,12 +20,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.apache.commons.codec.binary.Base64.encodeBase64URLSafe;
 import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
@@ -47,6 +46,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     private String currentPath;
     private String callerId;
+    private String sessionId;
 
     @Before
     public void setup() throws IOException, InterruptedException {
@@ -82,7 +82,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     }
 
     protected KooKooIvrResponse getResponse(String url) {
-        String response = null;
+        String response;
         try {
             response = httpClient.execute(new HttpGet(url), new BasicResponseHandler());
             JAXBContext jaxbContext = JAXBContext.newInstance(KooKooIvrResponse.class);
@@ -93,13 +93,14 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         return new KooKooIvrResponse();
     }
 
-    protected KooKooIvrResponse startCall(String sessionId, String callerId) {
+    protected KooKooIvrResponse startCall(String callerId) {
+        sessionId = UUID.randomUUID().toString();
         this.currentPath = TREE_START_PATH;
         this.callerId = callerId;
         return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, base64(TREE_START_PATH), callerId, sessionId));
     }
 
-    protected KooKooIvrResponse sendDtmf(String sessionId, String dtmf) {
+    protected KooKooIvrResponse sendDtmf(String dtmf) {
         String encodedTreePath = base64(currentPath);
         KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, encodedTreePath, dtmf, callerId, sessionId));
         currentPath = currentPath + "/" + dtmf;
@@ -132,21 +133,15 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         return numberFileUrls;
     }
 
-    protected Object getBean(String name) {
-        return dispatcherServlet.getWebApplicationContext().getBean(name);
-    }
-
-    protected void assertPrompts(List<String> expectedPrompts, List<String> actualPrompts) {
-        for (int i = 0; i < expectedPrompts.size(); i++) {
-            assertThat(actualPrompts.get(i), is(expectedPrompts.get(i)));
-        }
-    }
-
     protected String[] id(String patientId) {
         String[] charStrings = new String[patientId.length()];
         for (int i = 0; i < patientId.length(); i++)
             charStrings[i] = String.valueOf(patientId.charAt(i));
         return charStrings;
+    }
+
+    protected Object getBean(String name) {
+        return dispatcherServlet.getWebApplicationContext().getBean(name);
     }
 
 }

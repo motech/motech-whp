@@ -17,13 +17,13 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -71,14 +71,14 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     }
 
     private void setUpTestData() {
-        String providerId = "provider1";
-        provider = new Provider(providerId, "123456", "Vaishali", DateUtil.now());
+        provider = new ProviderBuilder().withDefaults().build();
+        String providerId = provider.getProviderId();
         allProviders.add(provider);
 
         LocalDate treatmentStartDate = DateUtil.today().minusDays(10);
-        patient1 = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(treatmentStartDate).withTherapyStartDate(treatmentStartDate).withPatientId("patientid1").withProviderId(providerId).build();
-        patient2 = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(treatmentStartDate).withTherapyStartDate(treatmentStartDate).withPatientId("patientid2").withProviderId(providerId).build();
-        patient3 = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(treatmentStartDate).withTherapyStartDate(treatmentStartDate).withPatientId("patientid3").withProviderId(providerId).build();
+        patient1 = new PatientBuilder().withDefaults().withTherapyStartDate(treatmentStartDate).withPatientId("patientid1").withProviderId(providerId).build();
+        patient2 = new PatientBuilder().withDefaults().withTherapyStartDate(treatmentStartDate).withPatientId("patientid2").withProviderId(providerId).build();
+        patient3 = new PatientBuilder().withDefaults().withTherapyStartDate(treatmentStartDate).withPatientId("patientid3").withProviderId(providerId).build();
 
         allPatients.add(patient1);
         allPatients.add(patient2);
@@ -87,16 +87,14 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldPlayWelcomeMessage() {
-        String sessionId = UUID.randomUUID().toString();
-        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
+        KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
         List<String> playAudioList = ivrResponse.getPlayAudio();
         assertThat(playAudioList, audioList(wav("musicEnter", "welcomeMessage")));
     }
 
     @Test
     public void shouldPlayAdherenceSummary() {
-        String sessionId = UUID.randomUUID().toString();
-        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
+        KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
         assertThat(ivrResponse.getPlayAudio(),
                 is(audioList(
                         wav("instructionalMessage1"),
@@ -112,10 +110,9 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldAskForConfirmation_UponEnteringValidAdherenceValue() {
-        String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getPrimaryMobile());
+        startCall(provider.getPrimaryMobile());
 
-        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "2");
+        KooKooIvrResponse ivrResponse = sendDtmf("2");
 
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
         assertThat(adherenceSummaryPatient1.getDosesTaken(), is(0));
@@ -131,11 +128,10 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldRecordAdherenceForPatient() {
-        String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getPrimaryMobile());
-        sendDtmf(sessionId, "2");
+        startCall(provider.getPrimaryMobile());
+        sendDtmf("2");
 
-        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "1");
+        KooKooIvrResponse ivrResponse = sendDtmf("1");
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("patientList", "2"),
                 alphaNumeric(id("patientid2")),
@@ -148,10 +144,9 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldSkipSavingAdherence_OnPressing9() {
-        String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getPrimaryMobile());
+        startCall(provider.getPrimaryMobile());
 
-        KooKooIvrResponse ivrResponse = sendDtmf(sessionId, "9");
+        KooKooIvrResponse ivrResponse = sendDtmf("9");
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("patientList", "2"),
@@ -164,17 +159,16 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldRecordAdherenceForMultiplePatients() {
-        String sessionId = UUID.randomUUID().toString();
-        startCall(sessionId, provider.getPrimaryMobile());
+        startCall(provider.getPrimaryMobile());
 
         String adherenceCapturedForFirstPatient = "2";
-        recordAdherence(sessionId, adherenceCapturedForFirstPatient);
+        recordAdherence(adherenceCapturedForFirstPatient);
 
         String adherenceCapturedForSecondPatient = "3";
-        recordAdherence(sessionId, adherenceCapturedForSecondPatient);
+        recordAdherence(adherenceCapturedForSecondPatient);
 
         String adherenceCapturedForThirdPatient = "2";
-        KooKooIvrResponse ivrResponse = recordAdherence(sessionId, adherenceCapturedForThirdPatient);
+        KooKooIvrResponse ivrResponse = recordAdherence(adherenceCapturedForThirdPatient);
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
@@ -195,20 +189,18 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() {
-        String sessionId1 = UUID.randomUUID().toString();
-        startCall(sessionId1, provider.getPrimaryMobile());
+        startCall(provider.getPrimaryMobile());
 
-        String adherenceCapturedForFirstPatient = "2";
-        recordAdherence(sessionId1, adherenceCapturedForFirstPatient);
+        String adherenceForFirstPatient = "2";
+        recordAdherence(adherenceForFirstPatient);
 
-        String adherenceCapturedForSecondPatient = "3";
-        recordAdherence(sessionId1, adherenceCapturedForSecondPatient);
+        String adherenceForSecondPatient = "3";
+        recordAdherence(adherenceForSecondPatient);
 
-        String adherenceCapturedForThirdPatient = "2";
-        recordAdherence(sessionId1, adherenceCapturedForThirdPatient);
+        String adherenceForThirdPatient = "2";
+        recordAdherence(adherenceForThirdPatient);
 
-        String sessionId2 = UUID.randomUUID().toString();
-        KooKooIvrResponse ivrResponse = startCall(sessionId2, provider.getPrimaryMobile());
+        KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
                 wav("summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
@@ -217,11 +209,10 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @Test
     public void shouldPlayWindowClosedPrompt_IfNotInAdherenceCaptureWindow() throws IOException {
-        String sessionId = UUID.randomUUID().toString();
         LocalDate thursday = currentAdherenceCaptureWeek().startDate().plusDays(3);
         adjustDateTime(thursday);
 
-        KooKooIvrResponse ivrResponse = startCall(sessionId, provider.getPrimaryMobile());
+        KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(wav("windowOverMessage", "thankYou"))));
         assertThat(ivrResponse.callEnded(), is(true));
@@ -229,17 +220,15 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
     @After
     public void tearDown() {
-        allPatients.remove(allPatients.findByPatientId(patient1.getPatientId()));
-        allPatients.remove(allPatients.findByPatientId(patient2.getPatientId()));
-        allPatients.remove(allPatients.findByPatientId(patient3.getPatientId()));
-        allProviders.remove(allProviders.findByMobileNumber("123456"));
+        allPatients.removeAll();
+        allProviders.removeAll();
         allAdherenceLogs.removeAll();
         reset(reportingPublisherService);
     }
 
-    private KooKooIvrResponse recordAdherence(String sessionId, String adherenceCapturedForFirstPatient) {
-        sendDtmf(sessionId, adherenceCapturedForFirstPatient);
-        return sendDtmf(sessionId, "1");
+    private KooKooIvrResponse recordAdherence(String adherence) {
+        sendDtmf(adherence);
+        return sendDtmf("1");
     }
 
 }
