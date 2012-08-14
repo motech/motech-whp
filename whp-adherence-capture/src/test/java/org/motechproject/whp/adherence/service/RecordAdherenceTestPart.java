@@ -9,6 +9,7 @@ import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -22,6 +23,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.adherence.util.AssertAdherence.areSame;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
@@ -44,14 +46,17 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         patientService.createPatient(patientRequest);
 
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
-        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
-        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
+        TreatmentWeek treatmentWeek = weeklyAdherenceSummary.getWeek();
+        List<Adherence> adherenceLogs = adherenceService.findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), treatmentWeek.startDate(), treatmentWeek.endDate());
 
-        TreatmentWeek treatmentWeek = adherenceSummary.getWeek();
-        List<Adherence> adherenceList = adherenceService.findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), treatmentWeek.startDate(), treatmentWeek.endDate());
-
-        assertEquals(3, adherenceList.size());
+        assertEquals(3, adherenceLogs.size());
         // TODO : Write more asserts to check meta on saved adherence
     }
 
@@ -59,11 +64,19 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
     public void shouldOverwritePillStatusForAdherenceUpdate() {
         Patient patient = createPatient(new PatientRequestBuilder().withDefaults().build());
 
-        WeeklyAdherenceSummary threeDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
-        adherenceService.recordWeeklyAdherence(threeDosesTaken, patient, auditParams);
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
-        WeeklyAdherenceSummary zeroDosesTaken = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
-        adherenceService.recordWeeklyAdherence(zeroDosesTaken, patient, auditParams);
+        weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
+        adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
         patient = allPatients.findByPatientId(PATIENT_ID);
         WeeklyAdherenceSummary currentWeekAdherence = adherenceService.currentWeekAdherence(patient);
@@ -95,10 +108,13 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         adherenceIsRecordedForTheFirstTime();
         mockCurrentDate(today.plusDays(1));
 
-        final WeeklyAdherenceSummary build = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
+        final WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(0).build();
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
-
-        adherenceService.recordWeeklyAdherence(build, patient, auditParams);
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
         patient = allPatients.findByPatientId(PATIENT_ID);
         assertNull(patient.getCurrentTherapy().getStartDate());
@@ -110,13 +126,17 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         Patient patient = createPatient(withDosesOnMonWedFri);
 
         new WeeklyAdherenceSummaryBuilder().withDosesTaken(3);
-        WeeklyAdherenceSummary expectedAdherenceSummary = new WeeklyAdherenceSummaryBuilder()
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder()
                 .forPatient(patient)
                 .build();
-        adherenceService.recordWeeklyAdherence(expectedAdherenceSummary, patient, auditParams);
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
         WeeklyAdherenceSummary adherenceSummary = adherenceService.currentWeekAdherence(patient);
-        areSame(expectedAdherenceSummary, adherenceSummary);
+        areSame(weeklyAdherenceSummary, adherenceSummary);
     }
 
     @Test

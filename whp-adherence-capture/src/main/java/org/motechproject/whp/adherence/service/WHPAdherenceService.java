@@ -54,14 +54,8 @@ public class WHPAdherenceService {
         this.allAdherenceLogs = allAdherenceLogs;
     }
 
-    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
-
-        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+    public void recordWeeklyAdherence( AdherenceList adherenceList, WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
         adherenceService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
-
-        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
-        }
         adherenceAuditService.auditWeeklyAdherence(patient, weeklyAdherenceSummary, auditParams);
     }
 

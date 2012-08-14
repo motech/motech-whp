@@ -4,11 +4,14 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
 public class StartPatientOnTreatmentTestPart extends WHPAdherenceServiceTestPart {
@@ -30,8 +33,12 @@ public class StartPatientOnTreatmentTestPart extends WHPAdherenceServiceTestPart
         assertNotNull(startDate);
 
         mockCurrentDate(today.plusDays(3)); //moving to the sunday -> capturing adherence for this week -> subsequent to first ever adherence captured week
-        final WeeklyAdherenceSummary build = new WeeklyAdherenceSummaryBuilder().build();
-        adherenceService.recordWeeklyAdherence(build, patient, auditParams);
+        final WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
         assertEquals(
                 startDate,

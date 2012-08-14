@@ -11,10 +11,8 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
-import org.motechproject.whp.adherence.domain.Adherence;
-import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.domain.*;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -26,6 +24,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 
@@ -106,19 +105,27 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
 
     protected WeeklyAdherenceSummary recordAdherence() {
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
-        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(1).forPatient(patient).build();
-        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
-        return adherenceSummary;
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(1).forPatient(patient).build();
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
+        return weeklyAdherenceSummary;
     }
 
     protected void adherenceIsRecordedForTheFirstTime() {
-        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withPatientType(PatientType.New)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         Patient patient = createPatient(patientRequest);
-        adherenceService.recordWeeklyAdherence(adherenceSummary, patient, auditParams);
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
     }
 
     protected void assertTbAndProviderId(Adherence adherence, String expectedTbId, String expectedProviderId) {

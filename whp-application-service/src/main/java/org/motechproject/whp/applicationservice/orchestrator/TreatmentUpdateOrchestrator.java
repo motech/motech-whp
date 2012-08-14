@@ -5,8 +5,10 @@ import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Component
@@ -41,9 +44,9 @@ public class TreatmentUpdateOrchestrator {
     public void adjustPhaseStartDates(String patientId, LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
         Patient patient = patientService.findByPatientId(patientId);
         patient.adjustPhaseDates(ipStartDate, eipStartDate, cpStartDate);
-        patientService.update(patient);
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
+        patientService.update(patient);
     }
 
     private void recomputePillStatus(Patient patient) {
@@ -64,6 +67,7 @@ public class TreatmentUpdateOrchestrator {
         patient.nextPhaseName(phaseToTransitionTo);
 
         attemptPhaseTransition(patient);
+        patientService.update(patient);
     }
 
     private void attemptPhaseTransition(Patient patient) {
@@ -88,7 +92,6 @@ public class TreatmentUpdateOrchestrator {
         while (patient.currentPhaseDoseComplete()) {
             attemptPhaseTransition(patient);
         }
-        patientService.update(patient);
     }
 
     public void updateDoseInterruptions(Patient patient) {
@@ -121,7 +124,14 @@ public class TreatmentUpdateOrchestrator {
 
     public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
         Patient patient = patientService.findByPatientId(patientId);
-        whpAdherenceService.recordWeeklyAdherence(weeklyAdherenceSummary, patient, auditParams);
+
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            //patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+            patient.startTherapy(adherenceList.firstDoseTakenOn());
+        }
+
+        whpAdherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
         refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
     }
 
@@ -150,5 +160,6 @@ public class TreatmentUpdateOrchestrator {
         patient.setLastAdherenceWeekStartDate(lastAdherenceWeekStartDate);
         recomputePillStatus(patient);
         attemptPhaseTransition(patient);
+        patientService.update(patient);
     }
 }

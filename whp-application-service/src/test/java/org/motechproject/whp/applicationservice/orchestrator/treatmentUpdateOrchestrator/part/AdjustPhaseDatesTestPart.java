@@ -29,7 +29,7 @@ public class AdjustPhaseDatesTestPart extends TreatmentUpdateOrchestratorTestPar
         assertEquals(ipStartDate, patient.getCurrentTherapy().getPhaseStartDate(IP));
         assertEquals(eipStartDate, patient.getCurrentTherapy().getPhaseStartDate(EIP));
         assertEquals(cpStartDate, patient.getCurrentTherapy().getPhaseStartDate(CP));
-        verify(patientService, times(4)).update(patient);
+        verify(patientService, times(3)).update(patient);
     }
 
     @Test

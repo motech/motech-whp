@@ -6,8 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -30,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart {
@@ -123,14 +126,18 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
     public void shouldRecordWeeklyAdherence() {
         patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today().minusMonths(2));
-        WeeklyAdherenceSummary adherence = new WeeklyAdherenceSummary();
+        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary();
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
 
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
-        when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(adherence);
+        when(whpAdherenceService.currentWeekAdherence(patient)).thenReturn(weeklyAdherenceSummary);
 
-        treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence , patient.getPatientId() , auditParams);
-        verify(whpAdherenceService).recordWeeklyAdherence(adherence, patient, auditParams);
+        treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary , patient.getPatientId() , auditParams);
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+        }
+        verify(whpAdherenceService).recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
     }
 
