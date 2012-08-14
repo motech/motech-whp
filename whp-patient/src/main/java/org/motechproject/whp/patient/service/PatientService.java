@@ -65,13 +65,6 @@ public class PatientService {
         allPatients.update(patient);
     }
 
-    public Patient setNextPhaseName(String patientId, Phase nextPhase) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        patient.nextPhaseName(nextPhase);
-        allPatients.update(patient);
-        return patient;
-    }
-
     public void revertAutoCompleteOfLastPhase(Patient patient) {
         patient.getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
         allPatients.update(patient);

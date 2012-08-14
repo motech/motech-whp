@@ -1,5 +1,6 @@
 package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
+import junit.framework.Assert;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +10,11 @@ import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -26,10 +29,10 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
 
     @Test
     public void shouldNotEndCurrentPhaseWhenPatientHasNotTakenAllDosesForCurrentPhase() {
-        when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
+
         treatmentUpdateOrchestrator.setNextPhase(PATIENT_ID, Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
+        assertNull(patient.getCurrentTherapy().getCurrentPhase().getEndDate());
     }
 
     @Test
@@ -42,18 +45,15 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
-        when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                patient.nextPhaseName(Phase.EIP);
-                return patient;
-            }
-        });
+        PhaseRecord previousPhase = patient.getCurrentPhase();
 
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
-        assertNull(patient.getCurrentTherapy().getCurrentPhase().getEndDate());
+        assertNotNull(previousPhase.getEndDate());
+        PhaseRecord currentPhase = patient.getCurrentPhase();
+        assertNotSame(previousPhase, currentPhase);
+
+        assertNull(currentPhase.getEndDate());
     }
 
     @Test
@@ -68,12 +68,11 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
         AdherenceRecord adherenceRecord = new AdherenceRecord(patient.getPatientId(), THERAPY_ID, twentyFourthDoseTakenDate);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
 
-        when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
-
         PhaseRecord previousPhase = patient.getCurrentPhase();
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
-        verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
+        assertEquals(Phase.EIP,patient.getCurrentPhase().getName());
+
         verify(whpAdherenceService, times(1)).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
         assertFalse(previousPhase.equals(patient.getCurrentPhase()));
     }

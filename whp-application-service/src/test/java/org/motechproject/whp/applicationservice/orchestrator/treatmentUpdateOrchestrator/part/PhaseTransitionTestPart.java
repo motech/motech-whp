@@ -55,7 +55,7 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
 
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
-        when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
+
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         assertFalse(previousPhase.equals(patient.getCurrentPhase()));
