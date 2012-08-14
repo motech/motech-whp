@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.CallLogRequest;
@@ -12,10 +13,12 @@ import org.motechproject.whp.reports.contract.CallLogRequest;
 public class PublishCallLogOperation implements INodeOperation{
 
     private ReportingPublisherService reportingPublisherService;
+    private CallStatus callStatus;
     private DateTime callEndTime;
 
-    public PublishCallLogOperation(ReportingPublisherService reportingPublisherService, DateTime callEndTime) {
+    public PublishCallLogOperation(ReportingPublisherService reportingPublisherService, CallStatus callStatus, DateTime callEndTime) {
         this.reportingPublisherService = reportingPublisherService;
+        this.callStatus = callStatus;
         this.callEndTime = callEndTime;
     }
 
@@ -29,6 +32,7 @@ public class PublishCallLogOperation implements INodeOperation{
 
     private CallLogRequest buildCallLog(IvrSession ivrSession) {
         CallLogRequest callLogRequest = new CallLogRequest();
+        callLogRequest.setCallStatus(callStatus.value());
         callLogRequest.setCallId(ivrSession.callId());
         callLogRequest.setCalledBy(ivrSession.providerId());
         callLogRequest.setProviderId(ivrSession.providerId());

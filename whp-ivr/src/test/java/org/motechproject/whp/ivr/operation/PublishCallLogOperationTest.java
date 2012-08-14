@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -31,6 +32,7 @@ public class PublishCallLogOperationTest {
     private String callId = "callId";
     private String providerId = "providerId";
     private DateTime startTime = now();
+    private DateTime endTime = now().plusMinutes(1);
 
     @Before
     public void setUp()  {
@@ -39,17 +41,17 @@ public class PublishCallLogOperationTest {
 
     @Test
     public void shouldPublishCallLog(){
-        DateTime endTime = now();
 
         FlowSession flowSession = setUpFlowSession();
 
         int totalPatients = patientsWithAdherence.size() + patientsWithoutAdherence.size();
         int adherenceCapturedInThisSession = patientsWithAdherenceRecordedInThisSession.size();
         int remainingPatientsWithoutAdherence = patientsWithoutAdherence.size() - patientsWithAdherenceRecordedInThisSession.size();
+        CallStatus callStatus = CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW;
 
-        CallLogRequest expectedCallLogRequest = createCallLogRequest(providerId, startTime, endTime, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence, callId);
+        CallLogRequest expectedCallLogRequest = createCallLogRequest(callStatus, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence);
 
-        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, endTime);
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, callStatus, endTime);
 
         publishCallLogOperation.perform("", flowSession);
 
@@ -76,7 +78,7 @@ public class PublishCallLogOperationTest {
         return flowSession;
     }
 
-    private CallLogRequest createCallLogRequest(String providerId, DateTime startTime, DateTime endTime, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence, String callId) {
+    private CallLogRequest createCallLogRequest(CallStatus callStatus, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence) {
         CallLogRequest callLogRequest = new CallLogRequest();
         callLogRequest.setCallId(callId);
         callLogRequest.setEndTime(endTime.toDate());
@@ -86,6 +88,7 @@ public class PublishCallLogOperationTest {
         callLogRequest.setTotalPatients(totalPatients);
         callLogRequest.setAdherenceCaptured(adherenceCaptured);
         callLogRequest.setAdherenceNotCaptured(remainingPatientsWithoutAdherence);
+        callLogRequest.setCallStatus(callStatus.value());
         return callLogRequest;
     }
 }

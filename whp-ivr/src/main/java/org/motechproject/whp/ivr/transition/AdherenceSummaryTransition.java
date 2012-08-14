@@ -4,6 +4,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
@@ -48,14 +49,14 @@ public class AdherenceSummaryTransition implements ITransition {
         Node captureAdherenceNode = new Node();
 
         captureAdherenceNode.addPrompts(welcomeMessagePrompts(whpIvrMessage));
+        IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
+        captureAdherenceNode.addOperations(new RecordCallStartTimeOperation(now()));
 
         if (isWindowClosedToday()) {
             captureAdherenceNode.addPrompts(adherenceCaptureWindowClosedPrompts(whpIvrMessage));
+            captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW, DateUtil.now()));
             return captureAdherenceNode;
         }
-
-        IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
-        captureAdherenceNode.addOperations(new RecordCallStartTimeOperation(now()));
 
         if (ivrSession.hasPatientsWithoutAdherence()) {
             captureAdherenceNode.addPrompts(adherenceSummaryPrompts(whpIvrMessage, ivrSession.patientsWithAdherence(), ivrSession.patientsWithoutAdherence()));
@@ -74,7 +75,7 @@ public class AdherenceSummaryTransition implements ITransition {
 
     private Node addTransitionToTerminateCall(Node captureAdherenceNode, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
         captureAdherenceNode.addPrompts(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage, countOfAllPatients, countOfPatientsWithAdherence));
-        captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, DateUtil.now()));
+        captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.ADHERENCE_ALREADY_PROVIDED, DateUtil.now()));
         return captureAdherenceNode;
     }
 }

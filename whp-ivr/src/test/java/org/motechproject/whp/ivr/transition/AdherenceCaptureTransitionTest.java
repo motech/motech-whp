@@ -10,7 +10,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.service.AdherenceDataService;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
@@ -34,7 +34,8 @@ import java.util.Properties;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
@@ -167,7 +168,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         mockCurrentDate(DateUtil.now());
 
         DateTime now = DateUtil.now();
-        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, now);
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now);
 
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
         assertThat(destinationNode.getOperations(), hasItem(publishCallLogOperation));
@@ -182,10 +183,11 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         play(adherenceCaptureTransition, flowSession, "9");
         Assert.assertEquals(now, new IvrSession(flowSession).startOfAdherenceSubmission());
     }
+
     @Test
     public void shouldReportWhenOnSkipAdherence() {
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        assertThat(destinationNode.getOperations(),hasItem(isA(SkipAdherenceOperation.class)));
+        assertThat(destinationNode.getOperations(), hasItem(isA(SkipAdherenceOperation.class)));
     }
 
     @Test

@@ -50,6 +50,9 @@ public class PromptBuilder {
     public Prompt[] build() {
         return prompts.toArray(new Prompt[prompts.size()]);
     }
+    public List<Prompt> buildList() {
+        return prompts;
+    }
 
     private String withFileURLFor(Integer number) {
         return ALPHANUMERIC_DIR + PATH_SEPARATOR + number.toString();

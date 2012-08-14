@@ -3,6 +3,7 @@ package org.motechproject.whp.ivr.session;
 
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
@@ -24,7 +25,6 @@ public class IvrSession {
     public static final String CALL_START_TIME = "CALL_START_TIME";
     public static final String SID = "sid";
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
-
     private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
@@ -176,7 +176,7 @@ public class IvrSession {
 
     private List<String> patientsWithAdherenceRecordedInThisSession() {
         List<String> patientsWithAdherenceRecordedInThisSession = (List<String>) flowSession.get(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION);
-        if(patientsWithAdherenceRecordedInThisSession == null) {
+        if (patientsWithAdherenceRecordedInThisSession == null) {
             patientsWithAdherenceRecordedInThisSession = new SerializableList(new ArrayList<String>());
             flowSession.set(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION, (SerializableList) patientsWithAdherenceRecordedInThisSession);
         }
@@ -185,12 +185,11 @@ public class IvrSession {
     }
 
 
-
     public void recordCallStartTime(DateTime dateTime) {
         flowSession.set(CALL_START_TIME, dateTime);
     }
 
-    public DateTime callStartTime(){
+    public DateTime callStartTime() {
         return setTimeZone(parse(flowSession.get(CALL_START_TIME).toString()));
     }
 }

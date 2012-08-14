@@ -2,17 +2,21 @@ package org.motechproject.whp.ivr.transition;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
+import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
@@ -31,6 +35,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.isA;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
@@ -109,17 +114,29 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
         when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
         mockCurrentDate(DateUtil.now());
-
-        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, now());
-        Node expectedNode = new Node()
-                .addPrompts(welcomeMessagePrompts(whpIvrMessage))
-                .addPrompts(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage,
+        List<Prompt> expectedPrompts = new PromptBuilder(whpIvrMessage)
+                .addAll(welcomeMessagePrompts(whpIvrMessage))
+                .addAll(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage,
                         adherenceSummary.countOfAllPatients(),
-                        adherenceSummary.countOfPatientsWithAdherence()))
-                .addOperations(publishCallLogOperation);
+                        adherenceSummary.countOfPatientsWithAdherence())).buildList();
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
-        assertThat(actualNode, is(expectedNode));
+        assertThat(actualNode.getPrompts(), is(expectedPrompts));
+    }
+
+    @Test
+    public void shouldSaveCallLogWhenThereAreNoPatientsRemaining() {
+        setAdherenceProvided(patient1);
+        setAdherenceProvided(patient2);
+
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+        mockCurrentDate(DateUtil.now());
+
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, CallStatus.ADHERENCE_ALREADY_PROVIDED, now());
+
+        Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
+        assertThat(actualNode.getOperations(), hasItem(isA(RecordCallStartTimeOperation.class)));
         assertThat(actualNode.getOperations(),  hasItem(publishCallLogOperation));
     }
 
@@ -153,7 +170,10 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
     @Test
     public void shouldPlayWindowClosedPrompts_whenCalledBetweenWedToSat() {
         DateTime now = new DateTime(2012, 8, 8, 1, 1, 1, 1);
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+
         mockCurrentDate(now);
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
 
         Node destinationNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
 
@@ -163,6 +183,20 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
         assertThat(expectedNode.getPrompts(), is(destinationNode.getPrompts()));
         assertThat(destinationNode.getTransitions().keySet(), is(empty()));
+    }
+    @Test
+    public void shouldSaveCallLogWhenProviderCallsOnDayOutsideWindow(){
+        DateTime now = new DateTime(2012, 8, 8, 1, 1, 1, 1);
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2));
+        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW, now);
+
+        mockCurrentDate(now);
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+
+        Node destinationNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
+
+        Assert.assertThat(destinationNode.getOperations(), hasItem(isA(RecordCallStartTimeOperation.class)));
+        Assert.assertThat(destinationNode.getOperations(), hasItem(publishCallLogOperation));
     }
 
     @Test

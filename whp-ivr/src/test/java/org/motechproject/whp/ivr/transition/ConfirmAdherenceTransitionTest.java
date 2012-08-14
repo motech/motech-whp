@@ -12,6 +12,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
@@ -151,6 +152,6 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         mockCurrentDate(DateUtil.now());
         DateTime now = DateUtil.now();
 
-        assertThat(node.getOperations(), hasItem(new PublishCallLogOperation(reportingPublisherService, now)));
+        assertThat(node.getOperations(), hasItem(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now)));
     }
 }
