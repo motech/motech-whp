@@ -54,11 +54,6 @@ public class PatientService {
         updateCommandFactory.updateFor(updateScope).apply(patientRequest);
     }
 
-    public void updatePillTakenCount(Patient patient, Phase name, int dosesTaken, LocalDate asOf) {
-        patient.setNumberOfDosesTaken(name, dosesTaken, asOf);
-        allPatients.update(patient);
-    }
-
     public void revertAutoCompleteOfLastPhase(Patient patient) {
         patient.getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
         allPatients.update(patient);

@@ -112,14 +112,14 @@ public class TreatmentUpdateOrchestrator {
     private void updateTotalDoseTakenCount(Patient patient, Phases phases, Phase phase) {
         LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
         int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
-        patientService.updatePillTakenCount(patient, phase, dosesTaken, endDate);
+        patient.setNumberOfDosesTaken(phase, dosesTaken, endDate);
     }
 
     private void updateDoseTakenCountTillSunday(Patient patient, Phases phases, Phase phase) {
         LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
         LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
         int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
-        patientService.updatePillTakenCount(patient, phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
+        patient.setNumberOfDosesTaken(phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
     }
 
     public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
@@ -127,7 +127,6 @@ public class TreatmentUpdateOrchestrator {
 
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            //patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
             patient.startTherapy(adherenceList.firstDoseTakenOn());
         }
 

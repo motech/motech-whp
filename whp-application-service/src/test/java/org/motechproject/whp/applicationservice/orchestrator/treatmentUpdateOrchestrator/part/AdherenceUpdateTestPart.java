@@ -1,6 +1,7 @@
 package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
 
+import junit.framework.Assert;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +66,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patient.getPatientId(), auditParams);
 
-        int dosesTaken = 0;
-        verify(patientService, times(2)).updatePillTakenCount(patient, Phase.IP, dosesTaken, today());
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
 
     @Test
@@ -83,8 +83,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
         treatmentUpdateOrchestrator.recordWeeklyAdherence(adherence, patient.getPatientId(), auditParams);
 
-        int dosesTaken = 0;
-        verify(patientService, times(4)).updatePillTakenCount(patient, Phase.IP, dosesTaken, today());
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
 
     @Test
@@ -100,8 +99,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
         treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
 
-        int dosesTaken = 0;
-        verify(patientService, times(2)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, today());
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
 
     @Test
@@ -117,9 +115,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
         treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
 
-        int dosesTaken = 0;
-        LocalDate endDate = new LocalDate();
-        verify(patientService, times(4)).updatePillTakenCount(patientStub, Phase.IP, dosesTaken, today());
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
 
     @Test

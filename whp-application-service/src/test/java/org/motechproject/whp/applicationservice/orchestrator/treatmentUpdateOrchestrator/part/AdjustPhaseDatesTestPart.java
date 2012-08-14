@@ -3,6 +3,7 @@ package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrc
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.refdata.domain.Phase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -39,8 +40,8 @@ public class AdjustPhaseDatesTestPart extends TreatmentUpdateOrchestratorTestPar
         LocalDate cpStartDate = new LocalDate(2011, 1, 3);
 
         treatmentUpdateOrchestrator.adjustPhaseStartDates(PATIENT_ID, ipStartDate, eipStartDate, cpStartDate);
-        verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(IP), anyInt(), any(LocalDate.class));
-        verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(EIP), anyInt(), any(LocalDate.class));
-        verify(patientService, times(4)).updatePillTakenCount(eq(patient), eq(CP), anyInt(), any(LocalDate.class));
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.EIP));
+        assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.CP));
     }
 }

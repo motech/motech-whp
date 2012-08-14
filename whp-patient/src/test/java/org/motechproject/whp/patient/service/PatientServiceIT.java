@@ -358,7 +358,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patient.startTherapy(today);
         allPatients.update(patient);
 
-        patientService.updatePillTakenCount(patient, Phase.IP, 2, currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
+        patient.setNumberOfDosesTaken(Phase.IP, 2, currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
 
         assertEquals(2, patient.getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
         assertEquals(2, patient.getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP, today()));
