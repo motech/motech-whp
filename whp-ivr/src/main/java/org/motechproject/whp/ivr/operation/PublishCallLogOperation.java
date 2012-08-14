@@ -10,7 +10,7 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 
 @EqualsAndHashCode
-public class PublishCallLogOperation implements INodeOperation{
+public class PublishCallLogOperation implements INodeOperation {
 
     private ReportingPublisherService reportingPublisherService;
     private CallStatus callStatus;

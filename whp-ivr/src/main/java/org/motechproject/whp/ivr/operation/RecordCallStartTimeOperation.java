@@ -11,6 +11,9 @@ public class RecordCallStartTimeOperation implements INodeOperation {
 
     private DateTime callStartTime;
 
+    public RecordCallStartTimeOperation() {
+    }
+
     public RecordCallStartTimeOperation(DateTime callStartTime) {
         this.callStartTime = callStartTime;
     }

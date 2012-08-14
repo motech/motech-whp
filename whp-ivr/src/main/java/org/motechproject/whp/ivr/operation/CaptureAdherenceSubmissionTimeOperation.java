@@ -8,7 +8,10 @@ import org.motechproject.whp.ivr.session.IvrSession;
 
 public class CaptureAdherenceSubmissionTimeOperation implements INodeOperation {
 
-    private final DateTime captureTime;
+    private DateTime captureTime;
+
+    public CaptureAdherenceSubmissionTimeOperation() {
+    }
 
     public CaptureAdherenceSubmissionTimeOperation(DateTime captureTime) {
         this.captureTime = captureTime;

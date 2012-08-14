@@ -9,9 +9,13 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 
-public class SkipAdherenceOperation implements INodeOperation{
+public class SkipAdherenceOperation implements INodeOperation {
+
     private String currentPatientId;
     private ReportingPublisherService reportingService;
+
+    public SkipAdherenceOperation() {
+    }
 
     public SkipAdherenceOperation(String currentPatientId, ReportingPublisherService reportingService) {
         this.currentPatientId = currentPatientId;
@@ -25,6 +29,7 @@ public class SkipAdherenceOperation implements INodeOperation{
         ivrSession.startOfAdherenceSubmission(now());
 
     }
+
     private void publishAdherenceSkipEvent(IvrSession ivrSession) {
         AdherenceCaptureRequest adherenceCaptureRequest = adherenceCaptureRequest().skipAdherence(currentPatientId, ivrSession);
         reportingService.reportAdherenceCapture(adherenceCaptureRequest);

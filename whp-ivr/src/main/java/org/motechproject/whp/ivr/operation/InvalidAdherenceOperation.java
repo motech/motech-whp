@@ -15,6 +15,8 @@ public class InvalidAdherenceOperation implements INodeOperation {
     private ReportingPublisherService reportingService;
     private static Logger logger = Logger.getLogger(InvalidAdherenceOperation.class);
 
+    public InvalidAdherenceOperation() {
+    }
 
     public InvalidAdherenceOperation(String currentPatientId, ReportingPublisherService reportingService) {
         this.currentPatientId = currentPatientId;
