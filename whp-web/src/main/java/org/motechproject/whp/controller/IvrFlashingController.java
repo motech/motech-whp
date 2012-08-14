@@ -21,7 +21,7 @@ public class IvrFlashingController {
         this.ivrCallService = ivrCallService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, headers="Accept=application/xml")
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void callBack(@RequestBody IvrFlashingWebRequest ivrFlashingWebRequest) {
         FlashingRequest flashingRequest = ivrFlashingWebRequest.createFlashingRequest();

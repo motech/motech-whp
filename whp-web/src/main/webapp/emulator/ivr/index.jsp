@@ -12,19 +12,32 @@
 
 <%
     String url = application.getContextPath() + "/whpivr/kookoo/ivr?tree=adherenceCapture&trP=Lw";
+    String flashingUrl = application.getContextPath() + "/ivr/callback";
 %>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://raw.github.com/timrwood/moment/1.7.0/min/moment.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#missedCallButton').click(function () {
-            dojo.xhrPost({
-                url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-                content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-                load:function () {
+
+            var callTime = moment().format('DD/MM/YYYY hh:mm:ss');
+
+            var xml = "<?xml version=\"1.0\"?>\n" +
+                    "<missed_call >\n" +
+                    "<call_no>" + $('#phone').val() + "</call_no>\n" +
+                    "<time>"+ callTime +"</time>\n" +
+                    "</missed_call>";
+            $.ajax({
+                url:'/whp/ivr/callback',
+                data: xml,
+                contentType: "text/xml",
+                dataType: "text",
+                type:'POST',
+                success:function () {
                     alert('Posted missed call');
                 }
-            })
+            });
         });
     });
 </script>
@@ -95,15 +108,6 @@
 
     $(function () {
         setTimeout(pollCall, 500);
-    });
-    $('#missedCallButton').click(function () {
-        dojo.xhrPost({
-            url:'<%= url %>&external_id=' + $('#missedCall').val() + "&call_type=Outbox",
-            content:{ 'phone_no':$('#phone').val(), 'status':'ring', 'sid':callId},
-            load:function () {
-                alert('Posted missed call');
-            }
-        })
     });
 
 
@@ -232,7 +236,7 @@
     <table id="params">
         <tr>
             <td>Phone Number</td>
-            <td><input type="text" id="phone" value="1234567890"/></td>
+            <td><input type="text" id="phone" value="8040649633"/></td>
         </tr>
         <!--tr class="optional">
             <td>call id</td>
@@ -245,6 +249,7 @@
     </table>
 <div>
     <br/>
+    <button id = "missedCallButton">Flash Call</button>
     <button onclick="newCall();">New Call</button>
     <button onclick="endCall();">End Call</button>
     <table>
