@@ -54,12 +54,6 @@ public class PatientService {
         updateCommandFactory.updateFor(updateScope).apply(patientRequest);
     }
 
-    public void startTherapy(String patientId, LocalDate firstDoseTakenDate) {
-        Patient patient = allPatients.findByPatientId(patientId);
-        patient.startTherapy(firstDoseTakenDate);
-        allPatients.update(patient);
-    }
-
     public void updatePillTakenCount(Patient patient, Phase name, int dosesTaken, LocalDate asOf) {
         patient.setNumberOfDosesTaken(name, dosesTaken, asOf);
         allPatients.update(patient);

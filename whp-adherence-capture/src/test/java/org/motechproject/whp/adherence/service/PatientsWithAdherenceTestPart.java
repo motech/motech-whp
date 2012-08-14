@@ -76,7 +76,7 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
             allPatients.add(patient1);
             AdherenceList adherenceList = AdherenceListMapper.map(patient1, summaryForPatient1);
             if (shouldStartOrRestartTreatment(patient1, summaryForPatient1)) {
-                patientService.startTherapy(patient1.getPatientId(), adherenceList.firstDoseTakenOn());
+                patient1.startTherapy(adherenceList.firstDoseTakenOn());
             }
             adherenceService.recordWeeklyAdherence(adherenceList, summaryForPatient1, patient1, auditParams);
 

@@ -339,23 +339,29 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.createPatient(createPatientRequest);
         String patientId = createPatientRequest.getCase_id();
 
-        patientService.startTherapy(patientId, today);
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.startTherapy(today);
+        allPatients.update(patient);
 
-        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getStartDate());
-        assertEquals(today, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getIPStartDate());
+        assertEquals(today, patient.getCurrentTherapy().getStartDate());
+        assertEquals(today, patient.getCurrentTherapy().getPhases().getIPStartDate());
     }
 
     @Test
     public void shouldUpdatePillTakenCountForGivenPhase() {
+        LocalDate today = today();
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(createPatientRequest);
-        patientService.startTherapy(createPatientRequest.getCase_id(), today());
         String patientId = createPatientRequest.getCase_id();
 
-        patientService.updatePillTakenCount(allPatients.findByPatientId(patientId), Phase.IP, 2, currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
+        Patient patient = allPatients.findByPatientId(patientId);
+        patient.startTherapy(today);
+        allPatients.update(patient);
 
-        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
-        assertEquals(2, allPatients.findByPatientId(patientId).getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP, today()));
+        patientService.updatePillTakenCount(patient, Phase.IP, 2, currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday));
+
+        assertEquals(2, patient.getCurrentTherapy().getPhases().getNumberOfDosesTaken(Phase.IP));
+        assertEquals(2, patient.getCurrentTherapy().getPhases().getNumberOfDosesTakenAsOfLastSunday(Phase.IP, today()));
     }
 
     @Test

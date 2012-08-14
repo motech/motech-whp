@@ -135,7 +135,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary , patient.getPatientId() , auditParams);
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+            patient.startTherapy(adherenceList.firstDoseTakenOn());
         }
         verify(whpAdherenceService).recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 

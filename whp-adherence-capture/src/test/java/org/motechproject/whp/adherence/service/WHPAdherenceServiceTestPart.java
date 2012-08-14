@@ -108,7 +108,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(1).forPatient(patient).build();
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+            patient.startTherapy(adherenceList.firstDoseTakenOn());
         }
         adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
         return weeklyAdherenceSummary;
@@ -123,7 +123,8 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         Patient patient = createPatient(patientRequest);
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
         if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patientService.startTherapy(patient.getPatientId(), adherenceList.firstDoseTakenOn());
+            patient.startTherapy(adherenceList.firstDoseTakenOn());
+            allPatients.update(patient);
         }
         adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
     }
