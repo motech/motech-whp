@@ -16,6 +16,9 @@ public class PublishCallLogOperation implements INodeOperation{
     private CallStatus callStatus;
     private DateTime callEndTime;
 
+    public PublishCallLogOperation() {
+    }
+
     public PublishCallLogOperation(ReportingPublisherService reportingPublisherService, CallStatus callStatus, DateTime callEndTime) {
         this.reportingPublisherService = reportingPublisherService;
         this.callStatus = callStatus;
