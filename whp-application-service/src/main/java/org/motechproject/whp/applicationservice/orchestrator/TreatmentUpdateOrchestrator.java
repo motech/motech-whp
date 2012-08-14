@@ -98,7 +98,7 @@ public class TreatmentUpdateOrchestrator {
             if ((dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken))) {
                 patient.dosesMissedSince(doseDate);
             } else {
-                patient.dosesResumedOnAfterBeingInterrupted(doseDate.minusDays(1));
+                patient.dosesResumedOnAfterBeingInterrupted(doseDate);
             }
         }
         patientService.update(patient);

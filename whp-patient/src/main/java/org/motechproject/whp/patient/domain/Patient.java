@@ -229,7 +229,7 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public void dosesResumedOnAfterBeingInterrupted(LocalDate endDate) {
         if (isCurrentlyDoseInterrupted()) {
-            currentTherapy.dosesResumedOnAfterBeingInterrupted(endDate);
+            currentTherapy.dosesResumedOnAfterBeingInterrupted(endDate.minusDays(1));
         }
     }
 
