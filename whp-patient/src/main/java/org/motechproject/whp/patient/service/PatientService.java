@@ -1,6 +1,5 @@
 package org.motechproject.whp.patient.service;
 
-import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
@@ -11,7 +10,6 @@ import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
-import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -52,11 +50,6 @@ public class PatientService {
         UpdateScope updateScope = patientRequest.updateScope(canBeTransferred(patientRequest.getCase_id()));
         validator.validate(patientRequest, updateScope.name());
         updateCommandFactory.updateFor(updateScope).apply(patientRequest);
-    }
-
-    public void revertAutoCompleteOfLastPhase(Patient patient) {
-        patient.getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
-        allPatients.update(patient);
     }
 
     public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {

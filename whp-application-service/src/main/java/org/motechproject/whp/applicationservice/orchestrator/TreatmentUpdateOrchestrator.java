@@ -72,7 +72,7 @@ public class TreatmentUpdateOrchestrator {
 
     private void attemptPhaseTransition(Patient patient) {
         if (patient.isTransitioning() && patient.getRemainingDosesInLastCompletedPhase() > 0) {
-            patientService.revertAutoCompleteOfLastPhase(patient);
+            patient.revertAutoCompleteOfLastPhase();
         }
 
         if (patient.latestPhaseDoseComplete()) {
@@ -80,7 +80,6 @@ public class TreatmentUpdateOrchestrator {
             AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patient.getPatientId(), patient.getCurrentTherapy().getUid(),
                     patient.numberOfDosesForPhase(latestPhaseRecord.getName()), latestPhaseRecord.getStartDate());
             patient.endLatestPhase(recordOfLastDoseInPhase.doseDate());
-
         }
 
         if (patient.isTransitioning() && !patient.isOrHasBeenOnCp() && patient.hasPhaseToTransitionTo()) {

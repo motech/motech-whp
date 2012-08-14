@@ -417,4 +417,8 @@ public class Patient extends MotechBaseDataObject {
     public boolean isValidDose(int doseTaken) {
         return doseTaken <= dosesPerWeek();
     }
+
+    public void revertAutoCompleteOfLastPhase() {
+        getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
+    }
 }

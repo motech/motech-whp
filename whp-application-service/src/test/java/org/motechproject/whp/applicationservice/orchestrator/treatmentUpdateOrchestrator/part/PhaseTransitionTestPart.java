@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
@@ -67,6 +66,7 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         LocalDate twentyFourthDoseTakenDate = new LocalDate(2012, 5, 11);
         patient.startTherapy(therapyStartDate);
         patient.setNumberOfDosesTaken(Phase.IP, 24, twentyFourthDoseTakenDate);
+        PhaseRecord previousPhase = patient.getCurrentPhase();
         patient.endLatestPhase(twentyFourthDoseTakenDate);
 
         //set and reset to show the flow of a phase auto closing and then the CMF Admin manually reducing a dose
@@ -75,8 +75,9 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         treatmentUpdateOrchestrator.adjustPhaseStartDates(patient.getPatientId(), therapyStartDate.minusDays(1), null, null);
 
-        verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
-        assertNull(patient.getCurrentPhase()); // Current phase is closed, and next phase is not started
+        assertNotNull(patient.getCurrentPhase()); // Current phase is not closed
+        assertNull(patient.getCurrentPhase().getEndDate()); // Current phase's end date is undefined as phase is still ongoing
+        assertEquals(previousPhase, patient.getCurrentPhase()); // Phase transition shouldn't happen as it was reverted
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
     }
 }
