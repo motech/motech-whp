@@ -85,6 +85,7 @@ public class TreatmentUpdateOrchestrator {
         while (patient.currentPhaseDoseComplete()) {
             attemptPhaseTransition(patient);
         }
+        patientService.update(patient);
     }
 
     public void updateDoseInterruptions(Patient patient) {
