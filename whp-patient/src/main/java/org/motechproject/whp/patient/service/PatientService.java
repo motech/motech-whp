@@ -72,11 +72,6 @@ public class PatientService {
         return patient;
     }
 
-    public void autoCompleteLatestPhase(Patient patient, LocalDate endDate) {
-        patient.endLatestPhase(endDate);
-        allPatients.update(patient);
-    }
-
     public void revertAutoCompleteOfLastPhase(Patient patient) {
         patient.getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
         allPatients.update(patient);

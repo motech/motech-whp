@@ -73,7 +73,8 @@ public class TreatmentUpdateOrchestrator {
             PhaseRecord latestPhaseRecord = patient.latestPhaseRecord();
             AdherenceRecord recordOfLastDoseInPhase = whpAdherenceService.nThTakenDose(patient.getPatientId(), patient.getCurrentTherapy().getUid(),
                     patient.numberOfDosesForPhase(latestPhaseRecord.getName()), latestPhaseRecord.getStartDate());
-            patientService.autoCompleteLatestPhase(patient, recordOfLastDoseInPhase.doseDate());
+            patient.endLatestPhase(recordOfLastDoseInPhase.doseDate());
+
         }
 
         if (patient.isTransitioning() && !patient.isOrHasBeenOnCp() && patient.hasPhaseToTransitionTo()) {

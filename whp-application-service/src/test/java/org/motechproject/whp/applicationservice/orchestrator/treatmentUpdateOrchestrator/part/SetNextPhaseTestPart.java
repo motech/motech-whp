@@ -9,6 +9,8 @@ import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -48,19 +50,10 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
             }
         });
 
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
-                patient.endLatestPhase(twentyFourthDoseTakenDate);
-                return null;
-            }
-        }).when(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
-
-
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
-        verify(patientService, times(1)).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
+        assertNull(patient.getCurrentTherapy().getCurrentPhase().getEndDate());
     }
 
     @Test
@@ -77,20 +70,11 @@ public class SetNextPhaseTestPart extends TreatmentUpdateOrchestratorTestPart {
 
         when(patientService.setNextPhaseName(patient.getPatientId(), Phase.EIP)).thenReturn(patient);
 
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
-                patient.endLatestPhase(twentyFourthDoseTakenDate);
-                return null;
-            }
-        }).when(patientService).autoCompleteLatestPhase(patient, twentyFourthDoseTakenDate);
-
         PhaseRecord previousPhase = patient.getCurrentPhase();
         treatmentUpdateOrchestrator.setNextPhase(patient.getPatientId(), Phase.EIP);
 
         verify(patientService, times(1)).setNextPhaseName(patient.getPatientId(), Phase.EIP);
         verify(whpAdherenceService, times(1)).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        //verify(patientService).startNextPhase(patient);
         assertFalse(previousPhase.equals(patient.getCurrentPhase()));
     }
 }

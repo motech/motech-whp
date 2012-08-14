@@ -9,9 +9,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -36,12 +34,11 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(whpAdherenceService.nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate)).thenReturn(adherenceRecord);
         PhaseRecord previousPhase = patient.getCurrentPhase();
-        //treatmentUpdateOrchestrator.attemptPhaseTransition(patient);
         treatmentUpdateOrchestrator.adjustPhaseStartDates(patient.getPatientId(), therapyStartDate.minusDays(1), null, null);
 
         verify(whpAdherenceService).nThTakenDose(patient.getPatientId(), THERAPY_ID, 24, therapyStartDate);
-        verify(patientService).autoCompleteLatestPhase(patient, adherenceRecord.doseDate());
-        //verify(patientService, never()).startNextPhase(any(Patient.class));
+
+        assertTrue(patient.getCurrentTherapy().getCurrentPhase().getEndDate().equals(adherenceRecord.doseDate()));
         assertTrue(previousPhase.equals(patient.getCurrentPhase()));
     }
 
@@ -81,6 +78,5 @@ public class PhaseTransitionTestPart extends TreatmentUpdateOrchestratorTestPart
         verify(patientService, times(1)).revertAutoCompleteOfLastPhase(patient);
         assertNull(patient.getCurrentPhase()); // Current phase is closed, and next phase is not started
         verify(whpAdherenceService, never()).nThTakenDose(anyString(), anyString(), anyInt(), any(LocalDate.class));
-        verify(patientService, never()).autoCompleteLatestPhase(any(Patient.class), any(LocalDate.class));
     }
 }
