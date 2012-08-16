@@ -49,25 +49,67 @@ public class TreatmentUpdateOrchestrator {
         patientService.update(patient);
     }
 
-    private void recomputePillStatus(Patient patient) {
-        Phases phases = patient.getCurrentTherapy().getPhases();
-        for (Phase phase : patient.getHistoryOfPhases()) {
-            /*
-             1) endDate =  phases.getStartDate(nextPhase) :- will include all doses from start to start (note: Anna Stratis wanted this)
-             2) minusDays(1) so that the end of current phase does not overlap with the start of the next phase
-            */
-            updateTotalDoseTakenCount(patient, phases, phase);
-            updateDoseTakenCountTillSunday(patient, phases, phase);
-        }
-        updateDoseInterruptions(patient);
-    }
-
     public void setNextPhase(String patientId, Phase phaseToTransitionTo) {
         Patient patient = patientService.findByPatientId(patientId);
         patient.nextPhaseName(phaseToTransitionTo);
 
         attemptPhaseTransition(patient);
         patientService.update(patient);
+    }
+
+    public void updateDoseInterruptions(Patient patient) {
+        HashMap<LocalDate, PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
+        List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
+
+        patient.clearDoseInterruptionsForUpdate();
+        for (LocalDate doseDate : allDoseDates) {
+            if ((dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken))) {
+                patient.dosesMissedSince(doseDate);
+            } else {
+                patient.dosesResumedOnAfterBeingInterrupted(doseDate);
+            }
+        }
+        patientService.update(patient);
+    }
+
+    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
+        Patient patient = patientService.findByPatientId(patientId);
+
+        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
+        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
+            patient.startTherapy(adherenceList.firstDoseTakenOn());
+        }
+
+        whpAdherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
+        refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
+    }
+
+    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
+        if (!dailyAdherenceRequests.isEmpty()) {
+            whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
+            refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
+        }
+    }
+
+    private void recomputePillStatus(Patient patient) {
+        updateDoseTakenCount(patient);
+        updateDoseInterruptions(patient);
+    }
+
+    private void updateDoseTakenCount(Patient patient) {
+        Phases phases = patient.getCurrentTherapy().getPhases();
+        for (Phase phase : patient.getHistoryOfPhases()) {
+            LocalDate startDate = phases.getStartDate(phase);
+            LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
+            updateDoseTakenCount(patient, phase, startDate, endDate);//Doses taken till Saturday
+            endDate = week(endDate).dateOf(DayOfWeek.Sunday);
+            updateDoseTakenCount(patient, phase, startDate, endDate);// Doses taken till Sunday
+        }
+    }
+
+    private void updateDoseTakenCount(Patient patient, Phase phase, LocalDate startDate, LocalDate endDate) {
+        int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), startDate, endDate);
+        patient.setNumberOfDosesTaken(phase, dosesTaken, endDate);
     }
 
     private void attemptPhaseTransition(Patient patient) {
@@ -90,53 +132,6 @@ public class TreatmentUpdateOrchestrator {
 
         while (patient.currentPhaseDoseComplete()) {
             attemptPhaseTransition(patient);
-        }
-    }
-
-    public void updateDoseInterruptions(Patient patient) {
-        HashMap<LocalDate, PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
-        List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
-
-        patient.clearDoseInterruptionsForUpdate();
-        for (LocalDate doseDate : allDoseDates) {
-            if ((dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken))) {
-                patient.dosesMissedSince(doseDate);
-            } else {
-                patient.dosesResumedOnAfterBeingInterrupted(doseDate);
-            }
-        }
-        patientService.update(patient);
-    }
-
-    private void updateTotalDoseTakenCount(Patient patient, Phases phases, Phase phase) {
-        LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
-        int dosesTaken = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), endDate);
-        patient.setNumberOfDosesTaken(phase, dosesTaken, endDate);
-    }
-
-    private void updateDoseTakenCountTillSunday(Patient patient, Phases phases, Phase phase) {
-        LocalDate endDate = phases.getNextPhaseStartDate(phase) != null ? phases.getNextPhaseStartDate(phase).minusDays(1) : DateUtil.today();
-        LocalDate sundayBeforeEndDate = week(endDate).dateOf(DayOfWeek.Sunday);
-        int dosesTakenAsOfLastSunday = whpAdherenceService.countOfDosesTakenBetween(patient.getPatientId(), patient.currentTherapyId(), phases.getStartDate(phase), sundayBeforeEndDate);
-        patient.setNumberOfDosesTaken(phase, dosesTakenAsOfLastSunday, sundayBeforeEndDate);
-    }
-
-    public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {
-        Patient patient = patientService.findByPatientId(patientId);
-
-        AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);
-        if (shouldStartOrRestartTreatment(patient, weeklyAdherenceSummary)) {
-            patient.startTherapy(adherenceList.firstDoseTakenOn());
-        }
-
-        whpAdherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
-        refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
-    }
-
-    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
-        if (!dailyAdherenceRequests.isEmpty()) {
-            whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
-            refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
         }
     }
 

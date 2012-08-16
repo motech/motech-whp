@@ -448,6 +448,19 @@ public class PatientTest {
         assertNull(patient.getLastAdherenceWeekStartDate());
     }
 
+    @Test
+    public void shouldRevertAutoPhaseCompletion_whenCurrentPhaseBecomesIncomplete(){
+        Patient patient = patient();
+        patient.startTherapy(new LocalDate(2012, 3, 1));
+        PhaseRecord previousPhase = patient.getCurrentPhase();
+        patient.endLatestPhase(new LocalDate(2012, 5, 11));
+        patient.revertAutoCompleteOfLastPhase();
+
+        assertNotNull(patient.getCurrentPhase()); // Current phase is not closed
+        assertNull(patient.getCurrentPhase().getEndDate()); // Current phase's end date is undefined as phase is still ongoing
+        assertEquals(previousPhase, patient.getCurrentPhase()); // Phase transition shouldn't happen as it was reverted
+    }
+
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);
     }
