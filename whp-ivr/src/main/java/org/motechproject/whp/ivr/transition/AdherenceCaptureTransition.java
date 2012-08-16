@@ -42,13 +42,13 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         Node nextNode = new Node();
         if (ivrInput.isSkipInput()) {
             nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
-            addTransitionsToNextPatients(ivrSession, nextNode);
+            addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
         } else if (ivrInput.isNumeric() && patient.isValidDose(ivrInput.input())) {
             nextNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt(input)).node();
         } else {
             nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
             nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
-            addPatientPromptsAndTransitions(nextNode, ivrSession);
+            addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         }
         return nextNode;
     }

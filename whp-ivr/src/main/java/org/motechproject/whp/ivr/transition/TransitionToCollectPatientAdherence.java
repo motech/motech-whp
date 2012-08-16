@@ -29,17 +29,17 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
         this.reportingPublisherService = reportingPublisherService;
     }
 
-    protected void addTransitionsToNextPatients(IvrSession ivrSession, Node nextNode) {
+    protected void addTransitionsAndPromptsForNextPatient(IvrSession ivrSession, Node nextNode) {
         if (ivrSession.hasNextPatient()) {
             ivrSession.nextPatient();
-            addPatientPromptsAndTransitions(nextNode, ivrSession);
+            addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         } else {
             nextNode.addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, ivrSession.countOfAllPatients(), ivrSession.countOfCurrentPatientsWithAdherence()));
             nextNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, DateUtil.now()));
         }
     }
 
-    protected void addPatientPromptsAndTransitions(Node node, IvrSession ivrSession) {
+    protected void addTransitionsAndPromptsForCurrentPatient(Node node, IvrSession ivrSession) {
         node.addPrompts(captureAdherencePrompts(whpIvrMessage,
                 ivrSession.currentPatientId(),
                 ivrSession.currentPatientNumber()));

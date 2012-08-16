@@ -15,9 +15,9 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
-import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -28,15 +28,16 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.Properties;
 
+import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
-import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
 
@@ -74,7 +75,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService);
     }
 
     @Test
@@ -98,17 +99,22 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     public void shouldEndCallPatient_ForLastPatientOnInvalidInput() {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
 
+        Patient patient = PatientBuilder.patient();
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
+
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, 1, 0));
+        Node expectedNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt("5")).node();
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 
     @Test
-    public void shouldAskAdherenceForNextPatient_ForInvalidInput() {
+    public void shouldRepeatConfirmOrReenterPrompts_ForInvalidInput() {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID, PATIENT2_ID)));
+        Patient patient = PatientBuilder.patient();
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
 
         Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-        Node expectedNode = new Node().addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, PATIENT2_ID, 2));
+        Node expectedNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt("5")).node();
         assertThat(node.getPrompts(), is(expectedNode.getPrompts()));
     }
 
@@ -154,4 +160,5 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
 
         assertThat(node.getOperations(), hasItem(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now)));
     }
+
 }
