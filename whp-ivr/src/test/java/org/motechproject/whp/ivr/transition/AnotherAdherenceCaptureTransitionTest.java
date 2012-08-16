@@ -132,6 +132,18 @@ public class AnotherAdherenceCaptureTransitionTest {
     }
 
     @Test
+    public void shouldAddInvalidAdherencePrompts_OnNonNumericInput() {
+
+        Node node = adherenceCaptureTransition.getDestinationNode("*", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+    }
+
+    @Test
     public void shouldAddCaptureAdherencePromptsAndTransitionForCurrentPatient_OnWrongInput() {
         flowSession.set(CURRENT_PATIENT_INDEX, 0);
         Prompt[] expectedPrompts = captureAdherencePrompts(whpIvrMessage, new IvrSession(flowSession));

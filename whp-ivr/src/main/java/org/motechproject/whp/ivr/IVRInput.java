@@ -14,7 +14,11 @@ public class IVRInput {
     }
 
     public boolean isSkipInput() {
-        return !StringUtils.isNumeric(key) || SKIP_PATIENT_CODE.equals(key);
+        return SKIP_PATIENT_CODE.equals(key);
+    }
+
+    public boolean isNumeric() {
+        return StringUtils.isNumeric(key);
     }
 
     public boolean isNotSkipInput() {
