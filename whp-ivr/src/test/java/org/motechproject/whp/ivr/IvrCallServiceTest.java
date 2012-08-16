@@ -1,7 +1,6 @@
 package org.motechproject.whp.ivr;
 
 import org.joda.time.DateTime;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -10,9 +9,9 @@ import org.motechproject.ivr.service.CallRequest;
 import org.motechproject.ivr.service.IVRService;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.ivr.audit.domain.FlashingRequestLog;
-import org.motechproject.whp.ivr.audit.repository.AllFlashingRequestLogs;
 import org.motechproject.whp.ivr.request.FlashingRequest;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -28,65 +27,81 @@ public class IvrCallServiceTest extends BaseUnitTest {
     @Mock
     ProviderService providerService;
     @Mock
-    AllFlashingRequestLogs allFlashingRequestLogs;
-
+    private ReportingPublisherService reportingPublisherService;
+    
     private IvrCallService ivrCallService;
-    private String ivrCallBackURL = "callBackURL";
+    private static final String IVR_CALL_BACK_URL = "callBackURL";
+    private static final String PHONE_NUMBER_FIELD_KEY = "PHONE_NUMBER_FIELD_KEY";
 
     @Before
     public void setUp() {
         initMocks(this);
         mockCurrentDate(DateUtil.now());
-        ivrCallService = new IvrCallService(ivrService, providerService, allFlashingRequestLogs, ivrCallBackURL);
+        ivrCallService = new IvrCallService(ivrService, providerService, reportingPublisherService, IVR_CALL_BACK_URL);
     }
 
     @Test
     public void shouldInitiateOutboundCallForRegisteredMobileNumbers(){
-        String phoneNumber = "phoneNumber";
-        Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(phoneNumber).build();
-        FlashingRequest flashingRequest = new FlashingRequest(phoneNumber, DateTime.now());
-        FlashingRequestLog expectedFlashingRequestLog = createFlashingRequestLog(flashingRequest);
-        expectedFlashingRequestLog.setProviderId(provider.getProviderId());
+        Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
 
-        when(providerService.findByMobileNumber(phoneNumber)).thenReturn(provider);
+        when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
 
         ivrCallService.handleFlashingRequest(flashingRequest);
-
-        verify(allFlashingRequestLogs).add(expectedFlashingRequestLog);
 
         ArgumentCaptor<CallRequest> argumentCaptor = ArgumentCaptor.forClass(CallRequest.class);
         verify(ivrService).initiateCall(argumentCaptor.capture());
 
         CallRequest callRequest = argumentCaptor.getValue();
-        assertThat(callRequest.getPhone(), is(phoneNumber));
-        assertThat(callRequest.getCallBackUrl(), is(ivrCallBackURL));
-        verify(providerService).findByMobileNumber(phoneNumber);
+        assertThat(callRequest.getPhone(), is(PHONE_NUMBER_FIELD_KEY));
+        assertThat(callRequest.getCallBackUrl(), is(IVR_CALL_BACK_URL));
+        verify(providerService).findByMobileNumber(PHONE_NUMBER_FIELD_KEY);
     }
 
     @Test
     public void shouldNotInitiateOutboundCallForUnregisteredMobileNumbers() {
-        String phoneNumber = "phoneNumber";
-        FlashingRequest flashingRequest = new FlashingRequest(phoneNumber, DateTime.now());
-        FlashingRequestLog expectedFlashingRequestLog = createFlashingRequestLog(flashingRequest);
-        expectedFlashingRequestLog.setProviderId(null);
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
 
-        when(providerService.findByMobileNumber(phoneNumber)).thenReturn(null);
+        when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(null);
 
         ivrCallService.handleFlashingRequest(flashingRequest);
 
-        verify(providerService).findByMobileNumber(phoneNumber);
-        verify(allFlashingRequestLogs).add(expectedFlashingRequestLog);
+        verify(providerService).findByMobileNumber(PHONE_NUMBER_FIELD_KEY);
         verifyZeroInteractions(ivrService);
     }
 
-    @After
-    public void tearDown() {
-        verifyNoMoreInteractions(allFlashingRequestLogs);
-        verifyNoMoreInteractions(providerService);
-        verifyNoMoreInteractions(ivrService);
+    @Test
+    public void shouldLogFlashingEvent_whenCallArrivesFromRegisteredMobileNumber(){
+        Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+
+        when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
+
+        ivrCallService.handleFlashingRequest(flashingRequest);
+
+        ArgumentCaptor<CallRequest> argumentCaptor = ArgumentCaptor.forClass(CallRequest.class);
+        verify(ivrService).initiateCall(argumentCaptor.capture());
+
+        FlashingLogRequest expectedFlashingLogRequest = createFlashingLogRequest(flashingRequest);
+        expectedFlashingLogRequest.setProviderId(provider.getProviderId());
+        verify(reportingPublisherService).reportFlashingLog(expectedFlashingLogRequest);
     }
 
-    private FlashingRequestLog createFlashingRequestLog(FlashingRequest flashingRequest) {
-        return new FlashingRequestLog(flashingRequest.getMobileNumber(), flashingRequest.getCallTime());
+    @Test
+    public void shouldLogFlashingEvent_whenCallArrivesFromUnregisteredMobileNumber(){
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(null);
+        ivrCallService.handleFlashingRequest(flashingRequest);
+
+        FlashingLogRequest expectedFlashingRequestLog = createFlashingLogRequest(flashingRequest);
+        expectedFlashingRequestLog.setProviderId(null);
+        verify(reportingPublisherService).reportFlashingLog(expectedFlashingRequestLog);
+    }
+
+    private FlashingLogRequest createFlashingLogRequest(FlashingRequest flashingRequest) {
+        FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
+        flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
+        flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
+        return flashingLogRequest;
     }
 }

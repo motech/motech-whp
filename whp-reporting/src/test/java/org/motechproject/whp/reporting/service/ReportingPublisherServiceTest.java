@@ -8,6 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.reports.contract.FlashingLogRequest;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -54,5 +55,15 @@ public class ReportingPublisherServiceTest {
         reportingPublisher.reportCallLog(callLog);
 
         verify(httpClientService).post(reportingEventURLs.getCallLogURL(), callLog);
+    }
+
+    @Test
+    public void shouldPublishFlashingLog() throws Exception {
+        String providerId = "123456";
+        FlashingLogRequest flashingLog = new FlashingLogRequest();
+        flashingLog.setProviderId(providerId);
+        reportingPublisher.reportFlashingLog(flashingLog);
+
+        verify(httpClientService).post(reportingEventURLs.getFlashingLogURL(), flashingLog);
     }
 }

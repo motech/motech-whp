@@ -26,4 +26,9 @@ public class ReportingEventURLsIT {
         assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost:8080/whp-reports/callLog/measure"));
     }
 
+    @Test
+    public void shouldGetFlashingLogMeasureURL(){
+        assertThat(reportingEventURLs.getFlashingLogURL(), is("http://localhost:8080/whp-reports/flashingLog/measure"));
+    }
+
 }

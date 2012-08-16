@@ -2,9 +2,9 @@ package org.motechproject.whp.ivr;
 
 import org.motechproject.ivr.service.CallRequest;
 import org.motechproject.ivr.service.IVRService;
-import org.motechproject.whp.ivr.audit.domain.FlashingRequestLog;
-import org.motechproject.whp.ivr.audit.repository.AllFlashingRequestLogs;
 import org.motechproject.whp.ivr.request.FlashingRequest;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +19,38 @@ public class IvrCallService {
 
     private IVRService ivrService;
     private ProviderService providerService;
-    private AllFlashingRequestLogs allFlashingRequestLogs;
     private String ivrCallBackURL;
+    private ReportingPublisherService reportingPublisherService;
 
     @Autowired
-    public IvrCallService(IVRService ivrService, ProviderService providerService, AllFlashingRequestLogs allFlashingRequestLogs, @Value("${application.url}") String ivrCallBackURL) {
+    public IvrCallService(IVRService ivrService, ProviderService providerService, ReportingPublisherService reportingPublisherService, @Value("${application.url}") String ivrCallBackURL) {
         this.ivrService = ivrService;
         this.providerService = providerService;
-        this.allFlashingRequestLogs = allFlashingRequestLogs;
+        this.reportingPublisherService = reportingPublisherService;
         this.ivrCallBackURL = ivrCallBackURL;
     }
 
     public void handleFlashingRequest(FlashingRequest flashingRequest) {
         Map<String, String> params = new HashMap<>();
-        CallRequest callRequest = new CallRequest(flashingRequest.getMobileNumber(), params, ivrCallBackURL);
+        String mobileNumber = flashingRequest.getMobileNumber();
+        CallRequest callRequest = new CallRequest(mobileNumber, params, ivrCallBackURL);
 
-        Provider provider = providerService.findByMobileNumber(flashingRequest.getMobileNumber());
+        Provider provider = providerService.findByMobileNumber(mobileNumber);
 
-        FlashingRequestLog flashingRequestLog = new FlashingRequestLog(
-                flashingRequest.getMobileNumber(),
-                flashingRequest.getCallTime());
+        FlashingLogRequest flashingRequestLog = buildFlashingLogRequest(flashingRequest);
 
         if(provider != null){
             ivrService.initiateCall(callRequest);
             flashingRequestLog.setProviderId(provider.getProviderId());
         }
 
-        allFlashingRequestLogs.add(flashingRequestLog);
+        reportingPublisherService.reportFlashingLog(flashingRequestLog);
+    }
+
+    private FlashingLogRequest buildFlashingLogRequest(FlashingRequest flashingRequest) {
+        FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
+        flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
+        flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
+        return flashingLogRequest;
     }
 }
