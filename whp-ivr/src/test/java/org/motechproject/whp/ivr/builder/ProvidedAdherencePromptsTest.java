@@ -4,14 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WhpIvrMessage;
-import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts;
 
 import java.util.Properties;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.motechproject.whp.ivr.IvrAudioFiles.CONFIRM_ADHERENCE;
+import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
-public class ConfirmAdherencePromptsTest {
+public class ProvidedAdherencePromptsTest {
 
     private WhpIvrMessage whpIvrMessage;
     private PromptBuilder promptBuilder;
@@ -24,9 +24,12 @@ public class ConfirmAdherencePromptsTest {
 
     @Test
     public void shouldBuildConfirmAdherencePrompts() {
-        Prompt[] builtPrompts = ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage);
-        Prompt[] expectedPrompts = promptBuilder.wav(CONFIRM_ADHERENCE).build();
+        Prompt[] builtPrompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, "id", 2, 3);
+        Prompt[] expectedPrompts = promptBuilder.wav(PATIENT).id("i").id("d")
+                .wav(HAS_TAKEN).number(3)
+                .wav(OUT_OF).number(2)
+                .wav(DOSES)
+                .build();
         assertArrayEquals(expectedPrompts, builtPrompts);
     }
-
 }

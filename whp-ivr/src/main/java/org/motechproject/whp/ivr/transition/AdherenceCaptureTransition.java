@@ -5,7 +5,7 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WhpIvrMessage;
-import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
+import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts.invalidAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 
 @Component
 @EqualsAndHashCode
@@ -44,7 +46,10 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
             addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
         } else if (ivrInput.isNumeric() && patient.isValidDose(ivrInput.input())) {
-            nextNode = new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt(input)).node();
+            nextNode.addOperations(new GetAdherenceOperation());
+            nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, patient.getPatientId(), parseInt(input), patient.dosesPerWeek()));
+            nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
+            nextNode.addTransition("?", new ConfirmAdherenceTransition());
         } else {
             nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
             nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));

@@ -7,7 +7,7 @@ import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WhpIvrMessage;
-import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
+import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
@@ -15,7 +15,7 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static java.lang.Integer.parseInt;
+import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 
 @EqualsAndHashCode
 public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdherence {
@@ -51,17 +51,20 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
 
         Node nextNode = new Node();
         switch (input) {
-            case "2":
-                addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
-                break;
             case "1":
                 ivrSession.recordAdherenceForCurrentPatient();
                 nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
                 addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
                 break;
+            case "2":
+                addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
+                break;
             default:
-                return new ConfirmAdherenceNodeBuilder(whpIvrMessage).with(patient, parseInt(input)).node();
+                nextNode.addOperations(new GetAdherenceOperation());
+                nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
+                nextNode.addTransition("?", new ConfirmAdherenceTransition());
         }
         return nextNode;
     }
+
 }

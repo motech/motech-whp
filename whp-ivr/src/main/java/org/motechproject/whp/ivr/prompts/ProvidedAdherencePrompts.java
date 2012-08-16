@@ -17,8 +17,7 @@ public class ProvidedAdherencePrompts {
                 .number(dosesPerWeek)
                 .wav(OUT_OF)
                 .number(adherenceInput)
-                .wav(DOSES)
-                .wav(CONFIRM_ADHERENCE);
+                .wav(DOSES);
         return promptBuilder.build();
     }
 
