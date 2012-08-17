@@ -158,6 +158,19 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     }
 
     @Test
+    public void shouldRepeatAdherencePrompts_ForInvalidAdherenceInput() {
+        startCall(provider.getPrimaryMobile());
+
+        KooKooIvrResponse ivrResponse = sendDtmf("*");
+
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+                wav("errorMessage1", "TreatmentCategoryGovernement", "errorMessage2", "0", "errorMessage3", "3", "errorMessage4"))));
+
+        assertTrue(ivrResponse.getGotoUrl().contains((base64("/*"))));
+        verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+    }
+
+    @Test
     public void shouldRecordAdherenceForMultiplePatients() {
         startCall(provider.getPrimaryMobile());
 
