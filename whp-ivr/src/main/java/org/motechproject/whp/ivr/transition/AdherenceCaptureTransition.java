@@ -45,7 +45,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         if (ivrInput.isSkipInput()) {
             nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
             addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
-        } else if (ivrInput.isNumeric() && patient.isValidDose(ivrInput.input())) {
+        } else if (ivrInput.isNumeric() && patient.isValidDose(parseInt(ivrInput.input()))) {
             nextNode.addOperations(new GetAdherenceOperation());
             nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, patient.getPatientId(), parseInt(input), patient.dosesPerWeek()));
             nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));

@@ -10,8 +10,6 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,12 +17,11 @@ import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmA
 
 @EqualsAndHashCode
 public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdherence {
+
     @Autowired
     private WHPAdherenceService adherenceService;
     @Autowired
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-    @Autowired
-    private PatientService patientService;
 
     public ConfirmAdherenceTransition() {
     }
@@ -32,14 +29,12 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     public ConfirmAdherenceTransition(WhpIvrMessage whpIvrMessage,
                                       WHPAdherenceService adherenceService,
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
-                                      ReportingPublisherService reportingPublisherService,
-                                      PatientService patientService) {
+                                      ReportingPublisherService reportingPublisherService) {
 
         super(whpIvrMessage, reportingPublisherService);
 
         this.adherenceService = adherenceService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
-        this.patientService = patientService;
         this.reportingPublisherService = reportingPublisherService;
     }
 
@@ -47,7 +42,6 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     public Node getDestinationNode(String input, FlowSession flowSession) {
         IvrSession ivrSession = new IvrSession(flowSession);
         String currentPatientId = ivrSession.currentPatientId();
-        Patient patient = patientService.findByPatientId(ivrSession.currentPatientId());
 
         Node nextNode = new Node();
         switch (input) {

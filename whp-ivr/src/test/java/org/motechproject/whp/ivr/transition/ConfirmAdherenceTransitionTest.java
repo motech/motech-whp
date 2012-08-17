@@ -74,7 +74,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService);
     }
 
     @Test

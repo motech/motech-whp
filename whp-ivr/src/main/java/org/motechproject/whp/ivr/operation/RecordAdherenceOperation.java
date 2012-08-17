@@ -34,7 +34,7 @@ public class RecordAdherenceOperation implements INodeOperation {
         IvrSession ivrSession = new IvrSession(session);
         recordAdherence(ivrSession);
         publishAdherenceSubmissionEvent(ivrSession);
-        updateAdherenceCapturedTime(ivrSession);
+        ivrSession.startOfAdherenceSubmission(DateUtil.now());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RecordAdherenceOperation implements INodeOperation {
     private void recordAdherence(IvrSession ivrSession) {
         AuditParams auditParams = new AuditParams(ivrSession.providerId(), AdherenceSource.IVR, "");
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummary(currentPatientId, currentAdherenceCaptureWeek());
-        weeklyAdherenceSummary.setDosesTaken(ivrSession.adherenceInputForCurrentPatient().input());
+        weeklyAdherenceSummary.setDosesTaken(Integer.parseInt(ivrSession.adherenceInputForCurrentPatient().input()));
         treatmentUpdateOrchestrator.recordWeeklyAdherence(weeklyAdherenceSummary, currentPatientId, auditParams);
     }
 
@@ -67,7 +67,4 @@ public class RecordAdherenceOperation implements INodeOperation {
         reportingService.reportAdherenceCapture(request);
     }
 
-    private void updateAdherenceCapturedTime(IvrSession ivrSession) {
-        ivrSession.startOfAdherenceSubmission(DateUtil.now());
-    }
 }

@@ -63,7 +63,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
         assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
         assertEquals(ADHERENCE_PROVIDED, adherenceCaptureRequest.getStatus());
-        assertEquals(Integer.valueOf(INPUT_FOR_CURRENT_PATIENT), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(INPUT_FOR_CURRENT_PATIENT, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
         assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
@@ -77,7 +77,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
         assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
         assertEquals(SKIPPED, adherenceCaptureRequest.getStatus());
-        assertEquals(Integer.valueOf(IVRInput.SKIP_PATIENT_CODE), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(IVRInput.SKIP_PATIENT_CODE, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
         assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
@@ -94,7 +94,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(PATIENT_ID, adherenceCaptureRequest.getPatientId());
         assertEquals(PROVIDER_ID, adherenceCaptureRequest.getProviderId());
         assertEquals(INVALID, adherenceCaptureRequest.getStatus());
-        assertEquals(Integer.valueOf(adherenceInput), adherenceCaptureRequest.getSubmittedValue());
+        assertEquals(adherenceInput, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
         assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());

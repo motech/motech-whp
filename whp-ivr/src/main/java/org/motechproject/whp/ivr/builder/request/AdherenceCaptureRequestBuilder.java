@@ -9,6 +9,7 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 public class AdherenceCaptureRequestBuilder {
 
     private AdherenceCaptureRequest request;
+
     private final static String INVALID = "Invalid";
     private final static String SKIPPED = "Skipped";
     private final static String ADHERENCE_PROVIDED = "Given";
@@ -34,18 +35,18 @@ public class AdherenceCaptureRequestBuilder {
 
     public AdherenceCaptureRequest invalidAdherence(String patientId, IvrSession ivrSession, String input) {
         initRequest(patientId, ivrSession);
-        this.invalidInput(Integer.parseInt(input));
+        this.invalidInput(input);
         return request;
     }
 
-    private AdherenceCaptureRequestBuilder validInput(Integer input) {
+    private AdherenceCaptureRequestBuilder validInput(String input) {
         request.setValid(true);
         request.setStatus(ADHERENCE_PROVIDED);
         request.setSubmittedValue(input);
         return this;
     }
 
-    private AdherenceCaptureRequestBuilder invalidInput(Integer input) {
+    private AdherenceCaptureRequestBuilder invalidInput(String input) {
         request.setValid(false);
         request.setStatus(INVALID);
         request.setSubmittedValue(input);
@@ -55,7 +56,7 @@ public class AdherenceCaptureRequestBuilder {
     private AdherenceCaptureRequestBuilder skipInput() {
         request.setValid(true);
         request.setStatus(SKIPPED);
-        request.setSubmittedValue(Integer.valueOf(IVRInput.SKIP_PATIENT_CODE));
+        request.setSubmittedValue(IVRInput.SKIP_PATIENT_CODE);
         return this;
     }
 

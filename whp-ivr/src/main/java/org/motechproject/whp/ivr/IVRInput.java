@@ -2,8 +2,6 @@ package org.motechproject.whp.ivr;
 
 import org.apache.commons.lang.StringUtils;
 
-import static java.lang.Integer.parseInt;
-
 public class IVRInput {
 
     public static final String SKIP_PATIENT_CODE = "9";
@@ -25,8 +23,8 @@ public class IVRInput {
         return !isSkipInput();
     }
 
-    public int input() {
-        return parseInt(key);
+    public String input() {
+        return key;
     }
 
 }
