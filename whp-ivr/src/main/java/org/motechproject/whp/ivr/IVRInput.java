@@ -16,7 +16,7 @@ public class IVRInput {
     }
 
     public boolean isNumeric() {
-        return StringUtils.isNumeric(key);
+        return StringUtils.isNotEmpty(key) && StringUtils.isNumeric(key);
     }
 
     public boolean isNotSkipInput() {
