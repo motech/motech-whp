@@ -29,8 +29,6 @@
         <module>whp-tb-adherence</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
-        <module>whp-data-importer</module>
-        <module>whp-migration</module>
         <module>whp-webservice</module>
         <module>whp-ivr</module>
         <module>whp-web</module>
