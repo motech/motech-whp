@@ -164,10 +164,21 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         KooKooIvrResponse ivrResponse = sendDtmf("*");
 
         assertThat(ivrResponse.getPlayAudio(), is(audioList(
-                wav("errorMessage1", "TreatmentCategoryGovernement", "errorMessage2", "0", "errorMessage3", "3", "errorMessage4"))));
+                wav("errorMessage1", "TreatmentCategoryGovernement", "errorMessage2", "0", "errorMessage3", "3", "errorMessage4"),
+                wav("patientList", "1"), alphaNumeric(id("patientid1")), wav("enterAdherence"))));
 
         assertTrue(ivrResponse.getGotoUrl().contains((base64("/*"))));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
+    }
+
+    @Test
+    public void shouldRepeatConfirmPrompts_ForInvalidAdherenceConfirmInput() {
+        startCall(provider.getPrimaryMobile());
+        sendDtmf("3");
+        KooKooIvrResponse ivrResponse = sendDtmf("9");
+
+        assertThat(ivrResponse.getPlayAudio(), is(audioList(wav("confirmMessage4"))));
+        assertTrue(ivrResponse.getGotoUrl().contains((base64("/3/9"))));
     }
 
     @Test
