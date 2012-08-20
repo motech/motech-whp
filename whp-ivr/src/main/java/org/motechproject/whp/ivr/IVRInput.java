@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 public class IVRInput {
 
     public static final String SKIP_PATIENT_CODE = "9";
+    public static final String NO_INPUT_CODE = "";
     private String key;
 
     public IVRInput(String key) {
@@ -21,6 +22,9 @@ public class IVRInput {
 
     public boolean isNotSkipInput() {
         return !isSkipInput();
+    }
+    public boolean noInput() {
+        return key.equals(NO_INPUT_CODE);
     }
 
     public String input() {

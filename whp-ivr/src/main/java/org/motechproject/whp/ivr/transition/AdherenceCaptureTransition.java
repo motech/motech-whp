@@ -7,6 +7,7 @@ import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
+import org.motechproject.whp.ivr.operation.NoInputAdherenceOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.patient.domain.Patient;
@@ -16,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.parseInt;
-import static org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts.invalidAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts.invalidAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 
 @Component
@@ -42,7 +43,10 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         Patient patient = patientService.findByPatientId(ivrSession.currentPatientId());
 
         Node nextNode = new Node();
-        if (ivrInput.isSkipInput()) {
+        if (ivrInput.noInput()) {
+            addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
+            nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        } else if (ivrInput.isSkipInput()) {
             nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
             addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
         } else if (ivrInput.isNumeric() && patient.isValidDose(parseInt(ivrInput.input()))) {

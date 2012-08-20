@@ -11,6 +11,7 @@ public class AdherenceCaptureRequestBuilder {
     private AdherenceCaptureRequest request;
 
     private final static String INVALID = "Invalid";
+    private final static String NO_INPUT = "NoInput";
     private final static String SKIPPED = "Skipped";
     private final static String ADHERENCE_PROVIDED = "Given";
 
@@ -39,6 +40,12 @@ public class AdherenceCaptureRequestBuilder {
         return request;
     }
 
+    public AdherenceCaptureRequest noAdherenceInput(String patientId, IvrSession ivrSession) {
+        initRequest(patientId, ivrSession);
+        this.noInput();
+        return request;
+    }
+
     private AdherenceCaptureRequestBuilder validInput(String input) {
         request.setValid(true);
         request.setStatus(ADHERENCE_PROVIDED);
@@ -50,6 +57,13 @@ public class AdherenceCaptureRequestBuilder {
         request.setValid(false);
         request.setStatus(INVALID);
         request.setSubmittedValue(input);
+        return this;
+    }
+
+    private AdherenceCaptureRequestBuilder noInput() {
+        request.setValid(false);
+        request.setStatus(NO_INPUT);
+        request.setSubmittedValue(IVRInput.NO_INPUT_CODE);
         return this;
     }
 

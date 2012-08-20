@@ -8,13 +8,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.operation.NoInputAdherenceOperation;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
+import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -33,9 +36,10 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
@@ -207,6 +211,23 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         new IvrSession(flowSession).startOfAdherenceSubmission(oldTime);
         replay(adherenceCaptureTransition, flowSession, "1");
         Assert.assertEquals(oldTime, new IvrSession(flowSession).startOfAdherenceSubmission());
+    }
+
+    @Test
+    public void shouldRepeatOnNoInput() {
+        Prompt[] expectedPrompts = CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patientId1, 1);
+
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
+        assertThat(destinationNode.getPrompts().size(), is(expectedPrompts.length));
+        assertTrue(destinationNode.getTransitions().get("?") instanceof AdherenceCaptureTransition);
+    }
+
+    @Test
+    public void shouldReportOnNoInput() {
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
+        assertThat(destinationNode.getOperations(), hasItem(isA(NoInputAdherenceOperation.class)));
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {

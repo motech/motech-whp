@@ -1,12 +1,14 @@
 package org.motechproject.whp.ivr.transition;
 
 
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
@@ -17,6 +19,8 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
+import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -28,6 +32,7 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
@@ -65,8 +70,8 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patient1 = new PatientBuilder().withPatientId(PATIENT1_ID).build();
-        patient2 = new PatientBuilder().withPatientId(PATIENT2_ID).build();
+        patient1 = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).build();
+        patient2 = new PatientBuilder().withDefaults().withPatientId(PATIENT2_ID).build();
 
         flowSession = new FlowSessionStub();
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID, PATIENT2_ID)));
@@ -74,7 +79,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService);
     }
 
     @Test
@@ -146,6 +151,21 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         DateTime now = DateUtil.now();
 
         assertThat(node.getOperations(), hasItem(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now)));
+    }
+
+    @Test
+    public void shouldRepeatOnNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
+                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
+                .addAll(ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage)).build();
+
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
+        assertThat(destinationNode.getPrompts().size(), Matchers.is(expectedPrompts.length));
+        assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
     }
 
 }
