@@ -53,6 +53,8 @@
         <intercept-url pattern="/patients/**" access="hasRole('PROVIDER')" requires-channel="any"/>
         <intercept-url pattern="/adherence/**" access="hasRole('PROVIDER')" requires-channel="any"/>
 
+        <!-- permit all -->
+        <intercept-url pattern="/ivr/callback" access="permitAll" requires-channel="any"/>
     </http>
 
     <beans:bean id="loginFailureHandler" class="org.motechproject.security.authentication.LoginFailureHandler">
