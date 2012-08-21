@@ -168,4 +168,18 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
     }
 
+    @Test
+    public void shouldRepeatOnInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
+                .addAll(ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage)).build();
+
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("4", flowSession);
+
+        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
+        assertThat(destinationNode.getPrompts().size(), Matchers.is(expectedPrompts.length));
+        assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
+    }
+
 }

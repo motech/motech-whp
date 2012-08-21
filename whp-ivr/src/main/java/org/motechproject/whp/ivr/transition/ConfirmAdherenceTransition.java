@@ -70,7 +70,6 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                     addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
                     break;
                 default:
-                    nextNode.addOperations(new GetAdherenceOperation());
                     nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
                     nextNode.addTransition("?", new ConfirmAdherenceTransition());
             }
