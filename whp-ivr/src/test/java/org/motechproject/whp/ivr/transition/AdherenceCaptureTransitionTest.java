@@ -14,10 +14,12 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
+import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.NoInputAdherenceOperation;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -40,11 +42,18 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
+import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
+import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_NO_INPUT_RETRY_COUNT;
+import static org.motechproject.whp.ivr.session.IvrSession.CURRENT_PATIENT_INDEX;
 import static org.motechproject.whp.ivr.session.IvrSession.PROVIDER_ID;
+import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.INVALID_INPUT_THRESHOLD_KEY;
+import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.NO_INPUT_THRESHOLD_KEY;
 import static org.motechproject.whp.ivr.util.PlatformStub.play;
 import static org.motechproject.whp.ivr.util.PlatformStub.replay;
 
@@ -54,6 +63,9 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     PatientService patientService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
+
+    @Mock
+    private Properties ivrProperties;
 
     FlowSession flowSession;
     WhpIvrMessage whpIvrMessage;
@@ -75,9 +87,11 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService,ivrProperties);
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
+        when(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY)).thenReturn("2");
+        when(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY)).thenReturn("2");
     }
 
     @Test
@@ -214,8 +228,9 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldRepeatOnNoInput() {
+    public void shouldRepeatOnNoInput_withinRetryThreshold() {
         Prompt[] expectedPrompts = CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patientId1, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
 
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
 
@@ -225,9 +240,44 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldReportOnNoInput() {
+    public void shouldReportOnNoInput_withinRetryThreshold() {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
         assertThat(destinationNode.getOperations(), hasItem(isA(NoInputAdherenceOperation.class)));
+    }
+
+    @Test
+    public void shouldAddInvalidAdherenceOperationForInvalidInput_withinRetryThreshold() {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+        assertThat(node.getOperations(), hasItem(isA(InvalidAdherenceOperation.class)));
+    }
+
+    @Test
+    public void shouldAddInvalidAdherencePromptsOnInvalidInput_withinRetryThreshold() {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+    }
+
+    @Test
+    public void shouldAddCaptureAdherencePromptsAndTransitionForCurrentPatientOnInvalidInput_withinRetryThreshold() {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_INDEX, 0);
+        Prompt[] expectedPrompts = captureAdherencePrompts(whpIvrMessage, new IvrSession(flowSession));
+
+        Node node = adherenceCaptureTransition.getDestinationNode("4", flowSession);
+
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
+        assertThat((Integer)flowSession.get(CURRENT_PATIENT_INDEX), is(0));
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {

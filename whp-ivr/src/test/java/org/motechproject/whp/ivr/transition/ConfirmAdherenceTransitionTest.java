@@ -31,6 +31,7 @@ import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -42,6 +43,8 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
+import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.INVALID_INPUT_THRESHOLD_KEY;
+import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.NO_INPUT_THRESHOLD_KEY;
 
 public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
 
@@ -60,6 +63,8 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     AdherenceDataService adherenceDataService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
+    @Mock
+    private Properties ivrProperties;
 
     FlowSession flowSession;
     WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
@@ -76,8 +81,10 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
+        when(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY)).thenReturn("2");
+        when(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY)).thenReturn("2");
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService, ivrProperties);
     }
 
     @Test
@@ -142,8 +149,9 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldRepeatOnNoInput() {
+    public void shouldRepeatOnNoInput_withinRetryThreshold() {
         int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
                 .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
@@ -156,8 +164,9 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldRepeatOnInvalidInput() {
+    public void shouldRepeatOnInvalidInput_withinRetryThreshold() {
         int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
                 .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
@@ -169,4 +178,69 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
     }
 
+    @Test
+    public void shouldSkipToNextPatientOnNoInput_exceedingRetryThreshold() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+    }
+
+    @Test
+    public void shouldSkipToNextPatientOnInvalidInput_exceedingRetryThreshold() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("5", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+    }
+
+    @Test
+    public void shouldResetRetryCountersOnTransitionToNextNode() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidSkipEntry() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("2", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT1_ID));
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidConfirmationEntry() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("1", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
 }

@@ -25,6 +25,8 @@ public class IvrSession {
     public static final String CALL_START_TIME = "CALL_START_TIME";
     public static final String SID = "sid";
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
+    public static final String CURRENT_INVALID_INPUT_RETRY_COUNT = "currentInvalidInputRetryCount";
+    public static final String CURRENT_NO_INPUT_RETRY_COUNT = "currentNoInputRetryCount";
     private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
@@ -107,14 +109,6 @@ public class IvrSession {
         return new IVRInput(flowSession.get(CURRENT_PATIENT_ADHERENCE_INPUT).toString());
     }
 
-    public void resetCurrentPatientIndex() {
-        flowSession.set(CURRENT_PATIENT_INDEX, null);
-    }
-
-    public void resetPatientsWithAdherenceRecordedInSession() {
-        flowSession.set(PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION, null);
-    }
-
     public void adherenceInputForCurrentPatient(String input) {
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, input);
     }
@@ -184,13 +178,30 @@ public class IvrSession {
         return patientsWithAdherenceRecordedInThisSession;
     }
 
-
     public void recordCallStartTime(DateTime dateTime) {
         flowSession.set(CALL_START_TIME, dateTime);
     }
 
     public DateTime callStartTime() {
         return setTimeZone(parse(flowSession.get(CALL_START_TIME).toString()));
+    }
+
+    public void currentInvalidInputRetryCount(int retryCount) {
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, retryCount);
+    }
+
+    public void currentNoInputRetryCount(int retryCount) {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, retryCount);
+    }
+
+    public int currentInvalidInputRetryCount() {
+        Integer count = flowSession.get(CURRENT_INVALID_INPUT_RETRY_COUNT);
+        return count == null ? 0 : count;
+    }
+
+    public int currentNoInputRetryCount() {
+        Integer count = flowSession.get(CURRENT_NO_INPUT_RETRY_COUNT);
+        return count == null ? 0 : count;
     }
 }
 

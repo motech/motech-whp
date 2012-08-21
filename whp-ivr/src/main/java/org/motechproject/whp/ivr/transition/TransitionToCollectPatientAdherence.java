@@ -9,24 +9,33 @@ import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.Properties;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 
 public abstract class TransitionToCollectPatientAdherence implements ITransition {
 
+    public static final String INVALID_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.invalidInput";
+    public static final String NO_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.noInput";
+
+    protected enum InputType {INVALID_INPUT, NO_INPUT;}
     @Autowired
     protected WhpIvrMessage whpIvrMessage;
-
     @Autowired
     protected ReportingPublisherService reportingPublisherService;
+    @Autowired
+    private Properties properties;
 
     public TransitionToCollectPatientAdherence() {
     }
 
-    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService) {
+    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, @Qualifier("ivrProperties") Properties properties) {
         this.whpIvrMessage = whpIvrMessage;
         this.reportingPublisherService = reportingPublisherService;
+        this.properties = properties;
     }
 
     protected void addTransitionsAndPromptsForNextPatient(IvrSession ivrSession, Node nextNode) {
@@ -44,5 +53,34 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
                 ivrSession.currentPatientId(),
                 ivrSession.currentPatientNumber()));
         node.addTransition("?", new AdherenceCaptureTransition());
+    }
+
+    protected void resetRetryCounts(IvrSession ivrSession) {
+        setCurrentRetryCount(ivrSession, 0, InputType.INVALID_INPUT);
+        setCurrentRetryCount(ivrSession, 0, InputType.NO_INPUT);
+    }
+
+    protected void setCurrentRetryCount(IvrSession ivrSession, int retryCount, InputType type) {
+        if (type == InputType.INVALID_INPUT) {
+            ivrSession.currentInvalidInputRetryCount(retryCount);
+        } else {
+            ivrSession.currentNoInputRetryCount(retryCount);
+        }
+    }
+
+    protected int getRetryThreshold(InputType type) {
+        if (type == InputType.INVALID_INPUT) {
+            return Integer.valueOf(properties.getProperty(INVALID_INPUT_THRESHOLD_KEY));
+        } else {
+            return Integer.valueOf(properties.getProperty(NO_INPUT_THRESHOLD_KEY));
+        }
+    }
+
+    protected int getCurrentRetryCount(IvrSession ivrSession, InputType type) {
+        if (type == InputType.INVALID_INPUT) {
+            return ivrSession.currentInvalidInputRetryCount();
+        } else {
+            return ivrSession.currentNoInputRetryCount();
+        }
     }
 }

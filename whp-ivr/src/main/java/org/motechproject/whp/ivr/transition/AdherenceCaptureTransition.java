@@ -14,7 +14,10 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
@@ -27,12 +30,17 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
 
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private static Properties ivrProperties;
 
     public AdherenceCaptureTransition() {
     }
 
-    public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage, PatientService patientService, ReportingPublisherService reportingPublisherService) {
-        super(whpIvrMessage, reportingPublisherService);
+    public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage,
+                                      PatientService patientService,
+                                      ReportingPublisherService reportingPublisherService,
+                                      @Qualifier("ivrProperties") Properties properties) {
+        super(whpIvrMessage, reportingPublisherService, ivrProperties);
         this.patientService = patientService;
     }
 

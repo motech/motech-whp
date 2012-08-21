@@ -35,6 +35,8 @@ import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callComple
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
+import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.INVALID_INPUT_THRESHOLD_KEY;
+import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.NO_INPUT_THRESHOLD_KEY;
 
 public class AnotherAdherenceCaptureTransitionTest {
 
@@ -53,6 +55,9 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Mock
     private ReportingPublisherService reportingPublisherService;
 
+    @Mock
+    private Properties ivrProperties;
+
     FlowSession flowSession;
     WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
     AdherenceCaptureTransition adherenceCaptureTransition;
@@ -68,8 +73,10 @@ public class AnotherAdherenceCaptureTransitionTest {
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT_1).build();
         when(patientService.findByPatientId(PATIENT_1)).thenReturn(patient);
+        when(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY)).thenReturn("2");
+        when(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY)).thenReturn("2");
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService,ivrProperties);
     }
 
     @Test
@@ -78,12 +85,6 @@ public class AnotherAdherenceCaptureTransitionTest {
 
         assertThat(node.getOperations().size(), is(1));
         assertThat(node.getOperations().get(0), instanceOf(GetAdherenceOperation.class));
-    }
-
-    @Test
-    public void shouldAddInvalidAdherenceOperation_ForInvalidInput() {
-        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
-        assertThat(node.getOperations(), hasItem(isA(InvalidAdherenceOperation.class)));
     }
 
     @Test
@@ -120,18 +121,6 @@ public class AnotherAdherenceCaptureTransitionTest {
     }
 
     @Test
-    public void shouldAddInvalidAdherencePrompts_OnWrongInput() {
-
-        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
-
-        assertThat(node.getTransitions().size(), is(1));
-        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
-
-        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
-        assertThat(node.getPrompts(), hasItems(expectedPrompts));
-    }
-
-    @Test
     public void shouldAddInvalidAdherencePrompts_OnNonNumericInput() {
 
         Node node = adherenceCaptureTransition.getDestinationNode("*", flowSession);
@@ -141,19 +130,6 @@ public class AnotherAdherenceCaptureTransitionTest {
 
         Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
         assertThat(node.getPrompts(), hasItems(expectedPrompts));
-    }
-
-    @Test
-    public void shouldAddCaptureAdherencePromptsAndTransitionForCurrentPatient_OnWrongInput() {
-        flowSession.set(CURRENT_PATIENT_INDEX, 0);
-        Prompt[] expectedPrompts = captureAdherencePrompts(whpIvrMessage, new IvrSession(flowSession));
-
-        Node node = adherenceCaptureTransition.getDestinationNode("4", flowSession);
-
-        assertThat(node.getPrompts(), hasItems(expectedPrompts));
-        assertThat(node.getTransitions().size(), is(1));
-        assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
-        assertThat((Integer)flowSession.get(CURRENT_PATIENT_INDEX), is(0));
     }
 
 }
