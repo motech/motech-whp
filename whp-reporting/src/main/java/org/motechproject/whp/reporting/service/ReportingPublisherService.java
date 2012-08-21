@@ -33,8 +33,7 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getCallLogURL(), callLogRequest);
     }
 
-    public void reportFlashingLog(FlashingLogRequest flashingLogRequest) {
-        flashingLogRequest.setCreationTime(new Date());
+    public void reportFlashingRequest(FlashingLogRequest flashingLogRequest) {
         httpClientService.post(reportingEventURLs.getFlashingLogURL(), flashingLogRequest);
     }
 }

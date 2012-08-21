@@ -2,6 +2,7 @@ package org.motechproject.whp.ivr;
 
 import org.motechproject.ivr.service.CallRequest;
 import org.motechproject.ivr.service.IVRService;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.request.FlashingRequest;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
@@ -44,11 +45,12 @@ public class IvrCallService {
             flashingRequestLog.setProviderId(provider.getProviderId());
         }
 
-        reportingPublisherService.reportFlashingLog(flashingRequestLog);
+        reportingPublisherService.reportFlashingRequest(flashingRequestLog);
     }
 
     private FlashingLogRequest buildFlashingLogRequest(FlashingRequest flashingRequest) {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
+        flashingLogRequest.setCreationTime(DateUtil.now().toDate());
         flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
         flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
         return flashingLogRequest;

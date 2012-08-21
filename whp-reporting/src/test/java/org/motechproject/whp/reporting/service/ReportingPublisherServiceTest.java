@@ -62,7 +62,7 @@ public class ReportingPublisherServiceTest {
         String providerId = "123456";
         FlashingLogRequest flashingLog = new FlashingLogRequest();
         flashingLog.setProviderId(providerId);
-        reportingPublisher.reportFlashingLog(flashingLog);
+        reportingPublisher.reportFlashingRequest(flashingLog);
 
         verify(httpClientService).post(reportingEventURLs.getFlashingLogURL(), flashingLog);
     }

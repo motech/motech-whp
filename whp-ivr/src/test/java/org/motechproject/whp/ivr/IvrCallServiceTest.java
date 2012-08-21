@@ -84,7 +84,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
 
         FlashingLogRequest expectedFlashingLogRequest = createFlashingLogRequest(flashingRequest);
         expectedFlashingLogRequest.setProviderId(provider.getProviderId());
-        verify(reportingPublisherService).reportFlashingLog(expectedFlashingLogRequest);
+        verify(reportingPublisherService).reportFlashingRequest(expectedFlashingLogRequest);
     }
 
     @Test
@@ -95,12 +95,13 @@ public class IvrCallServiceTest extends BaseUnitTest {
 
         FlashingLogRequest expectedFlashingRequestLog = createFlashingLogRequest(flashingRequest);
         expectedFlashingRequestLog.setProviderId(null);
-        verify(reportingPublisherService).reportFlashingLog(expectedFlashingRequestLog);
+        verify(reportingPublisherService).reportFlashingRequest(expectedFlashingRequestLog);
     }
 
     private FlashingLogRequest createFlashingLogRequest(FlashingRequest flashingRequest) {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
         flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
+        flashingLogRequest.setCreationTime(DateUtil.now().toDate());
         flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
         return flashingLogRequest;
     }
