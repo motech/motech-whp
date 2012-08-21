@@ -23,12 +23,12 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
     @Autowired
     AllAdherenceLogs allAdherenceLogs;
 
-    AdherenceService adherenceService;
+    AdherenceLogService adherenceLogService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceService = new AdherenceService(allAdherenceLogs);
+        adherenceLogService = new AdherenceLogService(allAdherenceLogs);
     }
 
     @After
@@ -48,9 +48,9 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
         AdherenceRecord patientTwoWithinDateLimit = new AdherenceRecord("externalId2", "treatmentId", today.minusDays(1));
         patientTwoWithinDateLimit = patientTwoWithinDateLimit.status(1);
 
-        adherenceService.saveOrUpdateAdherence(asList(patientOneOutsideLimit, patientOneWithinDateLimit, patientTwoWithinDateLimit));
-        assertEquals(1, adherenceService.adherence(today, 0, 1).size());
-        assertEquals(1, adherenceService.adherence(today, 1, 1).size());
+        adherenceLogService.saveOrUpdateAdherence(asList(patientOneOutsideLimit, patientOneWithinDateLimit, patientTwoWithinDateLimit));
+        assertEquals(1, adherenceLogService.adherence(today, 0, 1).size());
+        assertEquals(1, adherenceLogService.adherence(today, 1, 1).size());
     }
 
     @Test
@@ -62,8 +62,8 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
         AdherenceRecord forToday = new AdherenceRecord("externalId", "treatmentId", today);
         forToday = forToday.status(1);
 
-        adherenceService.saveOrUpdateAdherence(asList(forYesterday, forToday));
-        assertEquals(2, adherenceService.adherence("externalId", "treatmentId", today.minusDays(1), today).size());
+        adherenceLogService.saveOrUpdateAdherence(asList(forYesterday, forToday));
+        assertEquals(2, adherenceLogService.adherence("externalId", "treatmentId", today.minusDays(1), today).size());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class AdherenceServiceIT extends SpringIntegrationTest {
         AdherenceRecord datum2 = new AdherenceRecord("externalId1", "treatmentId2", now);
 
         AdherenceLogMapper mapper = new AdherenceLogMapper();
-        adherenceService.addOrUpdateLogsByDoseDate(asList(datum1, datum2), "externalId1");
+        adherenceLogService.addOrUpdateLogsByDoseDate(asList(datum1, datum2), "externalId1");
 
         List<AdherenceLog> logsInDb = allAdherenceLogs.getAll();
         assertEquals(2, logsInDb.size());

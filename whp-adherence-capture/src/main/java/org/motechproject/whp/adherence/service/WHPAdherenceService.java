@@ -3,7 +3,7 @@ package org.motechproject.whp.adherence.service;
 import org.joda.time.LocalDate;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceService;
+import org.motechproject.adherence.service.AdherenceLogService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
@@ -11,7 +11,6 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
-import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
@@ -29,25 +28,24 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 @Service
 public class WHPAdherenceService {
 
     private AllPatients allPatients;
-    private AdherenceService adherenceService;
+    private AdherenceLogService adherenceLogService;
     private PatientService patientService;
     private AdherenceAuditService adherenceAuditService;
     private AllAdherenceLogs allAdherenceLogs;
 
     @Autowired
-    public WHPAdherenceService(AdherenceService adherenceService,
+    public WHPAdherenceService(AdherenceLogService adherenceLogService,
                                AllPatients allPatients,
                                PatientService patientService,
                                AdherenceAuditService adherenceAuditService,
                                AllAdherenceLogs allAdherenceLogs) {
-        this.adherenceService = adherenceService;
+        this.adherenceLogService = adherenceLogService;
         this.allPatients = allPatients;
         this.patientService = patientService;
         this.adherenceAuditService = adherenceAuditService;
@@ -55,13 +53,13 @@ public class WHPAdherenceService {
     }
 
     public void recordWeeklyAdherence( AdherenceList adherenceList, WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
-        adherenceService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
+        adherenceLogService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
         adherenceAuditService.auditWeeklyAdherence(patient, weeklyAdherenceSummary, auditParams);
     }
 
     public WeeklyAdherenceSummary currentWeekAdherence(Patient patient) {
         TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
-        List<AdherenceRecord> adherenceRecords = adherenceService.adherence(
+        List<AdherenceRecord> adherenceRecords = adherenceLogService.adherence(
                 patient.getPatientId(),
                 patient.currentTherapyId(),
                 treatmentWeek.startDate(),
@@ -75,27 +73,27 @@ public class WHPAdherenceService {
     }
 
     public List<Adherence> allAdherenceData(int pageNumber, int pageSize) {
-        List<AdherenceRecord> adherenceData = adherenceService.adherence(DateUtil.today(), pageNumber, pageSize);
+        List<AdherenceRecord> adherenceData = adherenceLogService.adherence(DateUtil.today(), pageNumber, pageSize);
         return new AdherenceMapper().map(adherenceData);
     }
 
     public void addOrUpdateLogsByDoseDate(List<Adherence> adherenceList, Patient patient, AuditParams auditParams) {
         List<AdherenceRecord> adherenceData = AdherenceRecordMapper.map(adherenceList);
-        adherenceService.addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
+        adherenceLogService.addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
         adherenceAuditService.auditDailyAdherence(patient, adherenceList, auditParams);
     }
 
     public AdherenceList findLogsInRange(String patientId, String treatmentId, LocalDate start, LocalDate end) {
         List<AdherenceRecord> adherenceData = new ArrayList<>();
         if (start != null && WHPDateUtil.isOnOrBefore(start, end)) {
-            adherenceData = adherenceService.adherence(patientId, treatmentId, start, end);
+            adherenceData = adherenceLogService.adherence(patientId, treatmentId, start, end);
         }
         return new AdherenceMapper().map(adherenceData);
     }
 
     public int countOfDosesTakenBetween(String patientId, String therapyUid, LocalDate startDate, LocalDate endDate) {
         if (!endDate.isBefore(startDate)) {
-            return adherenceService.countOfDosesTakenBetween(patientId, therapyUid, startDate, endDate);
+            return adherenceLogService.countOfDosesTakenBetween(patientId, therapyUid, startDate, endDate);
         } else {
             return 0;
         }
@@ -126,7 +124,7 @@ public class WHPAdherenceService {
     }
 
     public AdherenceRecord nThTakenDose(String patientId, String therapyUid, Integer doseNumber, LocalDate startDate) {
-        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogsFrom(patientId, therapyUid, startDate);
+        List<AdherenceRecord> adherenceRecords = adherenceLogService.allTakenLogsFrom(patientId, therapyUid, startDate);
         return adherenceRecords.get(doseNumber - 1);
     }
 
@@ -144,7 +142,7 @@ public class WHPAdherenceService {
     }
 
     public AdherenceList getAdherenceSortedByDate(String patientId, String therapyUid) {
-        List<AdherenceRecord> adherenceRecords = adherenceService.allTakenLogs(patientId, therapyUid);
+        List<AdherenceRecord> adherenceRecords = adherenceLogService.allTakenLogs(patientId, therapyUid);
         return new AdherenceMapper().map(adherenceRecords);
     }
 

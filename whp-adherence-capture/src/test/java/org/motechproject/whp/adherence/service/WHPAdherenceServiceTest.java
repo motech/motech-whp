@@ -8,7 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceService;
+import org.motechproject.adherence.service.AdherenceLogService;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
@@ -41,7 +41,7 @@ public class WHPAdherenceServiceTest {
 
     public static final String THERAPY_UID = "therapyUid";
     @Mock
-    AdherenceService adherenceService;
+    AdherenceLogService adherenceLogService;
     @Mock
     AllPatients allPatients;
     @Mock
@@ -56,7 +56,7 @@ public class WHPAdherenceServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        whpAdherenceService = new WHPAdherenceService(adherenceService, allPatients, patientService, adherenceAuditService, allAdherenceLogs);
+        whpAdherenceService = new WHPAdherenceService(adherenceLogService, allPatients, patientService, adherenceAuditService, allAdherenceLogs);
     }
 
     public DailyAdherenceRequest createDailyAdherenceRequest(int day, int month, int year, int pillStatus) {
@@ -93,7 +93,7 @@ public class WHPAdherenceServiceTest {
         whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
 
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
-        verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
+        verify(adherenceLogService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
 
         List dataToBeStored = argumentCaptor.getValue();
         assertEquals(3, dataToBeStored.size());
@@ -154,7 +154,7 @@ public class WHPAdherenceServiceTest {
         whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
-        verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
+        verify(adherenceLogService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
 
         List<AdherenceRecord> dataToBeStored = argumentCaptor.getValue();
         assertEquals(1, dataToBeStored.size());
@@ -177,7 +177,7 @@ public class WHPAdherenceServiceTest {
         whpAdherenceService.recordDailyAdherence(request.getDailyAdherenceRequests(), patient, null);
         ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
-        verify(adherenceService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
+        verify(adherenceLogService, times(1)).addOrUpdateLogsByDoseDate(argumentCaptor.capture(), eq(patient.getPatientId()));
 
         assertEquals(1, argumentCaptor.getValue().size());
         Adherence adherence = new AdherenceMapper().map((AdherenceRecord) argumentCaptor.getValue().get(0));
@@ -188,21 +188,21 @@ public class WHPAdherenceServiceTest {
     public void shouldReturnZeroAsTheNumberOfDosesTakenIfEndDateIsBeforeStartDate() {
         int result = whpAdherenceService.countOfDosesTakenBetween(PATIENT_ID, THERAPY_UID, today(), today().minusDays(1));
         assertEquals(0, result);
-        verifyZeroInteractions(adherenceService);
+        verifyZeroInteractions(adherenceLogService);
     }
 
     @Test
     public void shouldReturnEmptyListOfAdherenceRecordsIfEndDateIsBeforeStartDate() {
         AdherenceList result = whpAdherenceService.findLogsInRange(PATIENT_ID, THERAPY_UID, today(), today().minusDays(1));
         assertEquals(0, result.size());
-        verifyZeroInteractions(adherenceService);
+        verifyZeroInteractions(adherenceLogService);
     }
 
     @Test
     public void shouldReturnEmptyListOfAdherenceRecordsIfStartDateIsNull() {
         AdherenceList result = whpAdherenceService.findLogsInRange(PATIENT_ID, THERAPY_UID, null, today().minusDays(1));
         assertEquals(0, result.size());
-        verifyZeroInteractions(adherenceService);
+        verifyZeroInteractions(adherenceLogService);
     }
 
     private void assertLog(AdherenceRecord adherenceRecord, String patientId, LocalDate doseDate, String therapyUid, String providerId, String tbId) {

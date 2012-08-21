@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AdherenceService {
+public class AdherenceLogService {
 
     private AllAdherenceLogs allAdherenceLogs;
 
     @Autowired
-    public AdherenceService(AllAdherenceLogs allAdherenceLogs) {
+    public AdherenceLogService(AllAdherenceLogs allAdherenceLogs) {
         this.allAdherenceLogs = allAdherenceLogs;
     }
 

@@ -10,17 +10,17 @@ import org.motechproject.util.DateUtil;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class AdherenceServiceTest {
+public class AdherenceLogServiceTest {
 
     @Mock
     AllAdherenceLogs allAdherenceLogs;
 
-    AdherenceService adherenceService;
+    AdherenceLogService adherenceLogService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceService = new AdherenceService(allAdherenceLogs);
+        adherenceLogService = new AdherenceLogService(allAdherenceLogs);
     }
 
     @Test
@@ -30,7 +30,7 @@ public class AdherenceServiceTest {
         String patientId = "patientId";
         String treatmentId = "treatmentId";
 
-        adherenceService.countOfDosesTakenBetween(patientId, treatmentId, yesterday, today);
+        adherenceLogService.countOfDosesTakenBetween(patientId, treatmentId, yesterday, today);
 
         verify(allAdherenceLogs).countOfDosesTakenBetween(patientId, treatmentId, yesterday, today);
     }
