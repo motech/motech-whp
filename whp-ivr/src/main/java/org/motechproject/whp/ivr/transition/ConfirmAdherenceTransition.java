@@ -54,11 +54,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
         Node nextNode = new Node();
         IVRInput ivrInput = new IVRInput(input);
         if (ivrInput.noInput()) {
-            Patient patient = patientService.findByPatientId(currentPatientId);
-            Integer adherenceInput = Integer.parseInt(ivrSession.adherenceInputForCurrentPatient().input());
-            nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
-            nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
-            nextNode.addTransition("?", new ConfirmAdherenceTransition());
+            repeatNode(ivrSession, currentPatientId, nextNode);
         } else {
             switch (input) {
                 case "1":
@@ -70,11 +66,18 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                     addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
                     break;
                 default:
-                    nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
-                    nextNode.addTransition("?", new ConfirmAdherenceTransition());
+                   repeatNode(ivrSession, currentPatientId, nextNode);
             }
         }
         return nextNode;
+    }
+
+    private void repeatNode(IvrSession ivrSession, String currentPatientId, Node nextNode) {
+        Patient patient = patientService.findByPatientId(currentPatientId);
+        Integer adherenceInput = Integer.parseInt(ivrSession.adherenceInputForCurrentPatient().input());
+        nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
+        nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
+        nextNode.addTransition("?", new ConfirmAdherenceTransition());
     }
 
 }

@@ -100,17 +100,6 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldRepeatConfirmOrReenterPrompts_ForInvalidInput() {
-        flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID, PATIENT2_ID)));
-        Patient patient = PatientBuilder.patient();
-        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
-
-        Node node = confirmAdherenceTransition.getDestinationNode("5", flowSession);
-
-        assertThat(node.getPrompts(), is(asList(confirmAdherencePrompts(whpIvrMessage))));
-    }
-
-    @Test
     public void shouldReplayCurrentPatient_ForReEnterInput() {
         Node node = confirmAdherenceTransition.getDestinationNode("2", flowSession);
 
@@ -163,8 +152,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
 
         Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
 
-        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
-        assertThat(destinationNode.getPrompts().size(), Matchers.is(expectedPrompts.length));
+        assertThat(destinationNode.getPrompts(), is(asList(expectedPrompts)));
         assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
     }
 
@@ -173,12 +161,12 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         int adherenceInput = 2;
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
+                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
                 .addAll(ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage)).build();
 
         Node destinationNode = confirmAdherenceTransition.getDestinationNode("4", flowSession);
 
-        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
-        assertThat(destinationNode.getPrompts().size(), Matchers.is(expectedPrompts.length));
+        assertThat(destinationNode.getPrompts(), is(asList(expectedPrompts)));
         assertTrue(destinationNode.getTransitions().get("?") instanceof ConfirmAdherenceTransition);
     }
 
