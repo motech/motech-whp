@@ -27,7 +27,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     @Autowired
     protected ReportingPublisherService reportingPublisherService;
     @Autowired
-    private Properties properties;
+    private Properties ivrProperties;
 
     public TransitionToCollectPatientAdherence() {
     }
@@ -35,7 +35,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, @Qualifier("ivrProperties") Properties properties) {
         this.whpIvrMessage = whpIvrMessage;
         this.reportingPublisherService = reportingPublisherService;
-        this.properties = properties;
+        this.ivrProperties = properties;
     }
 
     protected void addTransitionsAndPromptsForNextPatient(IvrSession ivrSession, Node nextNode) {
@@ -70,9 +70,9 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
 
     protected int getRetryThreshold(InputType type) {
         if (type == InputType.INVALID_INPUT) {
-            return Integer.valueOf(properties.getProperty(INVALID_INPUT_THRESHOLD_KEY));
+            return Integer.valueOf(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY));
         } else {
-            return Integer.valueOf(properties.getProperty(NO_INPUT_THRESHOLD_KEY));
+            return Integer.valueOf(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY));
         }
     }
 

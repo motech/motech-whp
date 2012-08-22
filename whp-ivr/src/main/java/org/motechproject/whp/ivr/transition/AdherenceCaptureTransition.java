@@ -30,8 +30,6 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
 
     @Autowired
     private PatientService patientService;
-    @Autowired
-    private static Properties ivrProperties;
 
     public AdherenceCaptureTransition() {
     }
@@ -39,7 +37,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage,
                                       PatientService patientService,
                                       ReportingPublisherService reportingPublisherService,
-                                      @Qualifier("ivrProperties") Properties properties) {
+                                      @Qualifier("ivrProperties") Properties ivrProperties) {
         super(whpIvrMessage, reportingPublisherService, ivrProperties);
         this.patientService = patientService;
     }
@@ -52,11 +50,9 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
 
         Node nextNode = new Node();
         if (ivrInput.noInput()) {
-            addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
-            nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+            handleNoInput(ivrSession, nextNode, InputType.NO_INPUT);
         } else if (ivrInput.isSkipInput()) {
-            nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
-            addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
+            moveToNextPatient(ivrSession, nextNode);
         } else if (ivrInput.isNumeric() && patient.isValidDose(parseInt(ivrInput.input()))) {
             nextNode.addOperations(new GetAdherenceOperation());
             nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, patient.getPatientId(), parseInt(input), patient.dosesPerWeek()));
@@ -68,6 +64,23 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         }
         return nextNode;
+    }
+
+    private void handleNoInput(IvrSession ivrSession, Node nextNode, InputType type) {
+        int retryCount = getCurrentRetryCount(ivrSession, type);
+        int retryThreshold = getRetryThreshold(type);
+        if (retryCount < retryThreshold) {
+            addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
+            nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        } else {
+            moveToNextPatient(ivrSession, nextNode);
+        }
+    }
+
+    private void moveToNextPatient(IvrSession ivrSession, Node nextNode) {
+        resetRetryCounts(ivrSession);
+        nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
     }
 
 }
