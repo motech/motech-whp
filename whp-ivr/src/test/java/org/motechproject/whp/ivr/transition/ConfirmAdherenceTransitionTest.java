@@ -1,7 +1,6 @@
 package org.motechproject.whp.ivr.transition;
 
 
-import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +41,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
-import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
 
 public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
@@ -133,6 +131,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     @Test
     public void shouldAddPublishCallLogOperation_WhenThereAreNoMorePatients() {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
+        flowSession.set(CURRENT_PATIENT_INDEX, 0);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, 2);
         String adherenceInput = "1";
         Node node = confirmAdherenceTransition.getDestinationNode(adherenceInput, flowSession);

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.domain.AdherenceLog;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
@@ -207,14 +208,13 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
     }
 
     @Test
-    @Ignore("failing in 1.2.0 couch")
     public void shouldGetSortedAdherence() {
 
         Adherence log1 = createLog(patientId, new LocalDate(2012, 3, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
         Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
         Adherence log3 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
         Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
-        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patient, null);
+        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patient, new AuditParams("test",AdherenceSource.WEB,"test"));
 
         AdherenceList adherenceSortedByDate = adherenceService.getAdherenceSortedByDate(patientId, THERAPY_DOC_ID);
 

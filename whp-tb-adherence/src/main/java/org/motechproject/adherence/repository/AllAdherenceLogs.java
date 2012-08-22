@@ -15,6 +15,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.sort;
+
 @Repository
 public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
 
@@ -107,14 +110,16 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         if (null != adherenceLogs && adherenceLogs.isEmpty()) {
             return;
         }
-        Set<AdherenceLog> logs = new LinkedHashSet<>(adherenceLogs);
+        adherenceLogs = sort(adherenceLogs, on(AdherenceLog.class).doseDate());
+
+
         List<AdherenceLog> logsInDb = findAllLogsForExternalIdInDoseDateRange(externalId, adherenceLogs.get(0).doseDate(), adherenceLogs.get(adherenceLogs.size() - 1).doseDate());
-        ArrayList<AdherenceLog> tobeStoredLogs = mapLogToDbLogsIfExists(logs, logsInDb);
+        ArrayList<AdherenceLog> tobeStoredLogs = mapLogToDbLogsIfExists(adherenceLogs, logsInDb);
         db.executeAllOrNothing(tobeStoredLogs);
     }
 
-    private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(Set<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
-        ArrayList<AdherenceLog> tobeStoredLogs = new ArrayList<AdherenceLog>();
+    private ArrayList<AdherenceLog> mapLogToDbLogsIfExists(List<AdherenceLog> logsToMap, List<AdherenceLog> dbLogs) {
+        Set<AdherenceLog> tobeStoredLogs = new LinkedHashSet<>();   //using set to remove duplicate logs
         List<LocalDate> doseDatesToBeMappedWith = getDoseDates(dbLogs);
         for (AdherenceLog log : logsToMap) {
             int logPos = doseDatesToBeMappedWith.indexOf(log.doseDate());
@@ -129,12 +134,12 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
                 tobeStoredLogs.add(dbLog);
             }
         }
-        return tobeStoredLogs;
+        return new ArrayList<>(tobeStoredLogs);
     }
 
     private List<LocalDate> getDoseDates(List<AdherenceLog> logs) {
         List<LocalDate> doseDates = new ArrayList<>();
-        for(AdherenceLog log : logs)
+        for (AdherenceLog log : logs)
             doseDates.add(log.doseDate());
         return doseDates;
     }
