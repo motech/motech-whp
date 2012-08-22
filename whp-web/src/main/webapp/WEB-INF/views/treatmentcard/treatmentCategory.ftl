@@ -4,9 +4,9 @@
 <div class="print-version-text">
     <#if patient.treatmentCategoryCode == "01">
         New Case
-        (Pulmonory Smear-Positive,
+        (Pulmonary Smear-Positive,
         Seriously ill Smear Negative, or
-        Seriously ill extra pulmonory)
+        Seriously ill extra pulmonary)
         <#if isCP>
             <@categoryDrugs/>
         <#else>
@@ -24,9 +24,9 @@
         </#if>
     <#elseif patient.treatmentCategoryCode == "11">
         New Case
-        (Pulmonory Smear-Positive,
+        (Pulmonary Smear-Positive,
         Seriously ill Smear Negative, or
-        Seriously ill extra pulmonory)
+        Seriously ill extra pulmonary)
         <#if isCP>
             <@categoryDrugs dosesPerWeek=7/>
         <#else>

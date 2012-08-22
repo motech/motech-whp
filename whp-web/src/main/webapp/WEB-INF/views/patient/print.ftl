@@ -211,7 +211,7 @@
     </table>
 </div>
 <div class="additional-treatments">
-    <h4 class="inherit-font tc-label text-center">Addtional Treatments</h4>
+    <h4 class="inherit-font tc-label text-center">Additional Treatments</h4>
 
     <div>
         <label class="tc-label">HIV status</label>
