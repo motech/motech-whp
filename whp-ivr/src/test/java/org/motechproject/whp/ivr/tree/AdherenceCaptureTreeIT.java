@@ -123,7 +123,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
                         alphaNumeric(id(patient1.getPatientId())),
                         wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?type=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));
+        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?provider=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));
     }
 
     @Test
