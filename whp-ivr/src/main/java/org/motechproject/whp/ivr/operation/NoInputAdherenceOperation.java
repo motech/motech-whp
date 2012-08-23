@@ -27,13 +27,11 @@ public class NoInputAdherenceOperation implements INodeOperation {
     @Override
     public void perform(String input, FlowSession flowSession) {
         IvrSession ivrSession = new IvrSession(flowSession);
-        publishAdherenceInputEvent(input, ivrSession);
+        publishAdherenceInputEvent(ivrSession);
     }
 
-    private void publishAdherenceInputEvent(String input, IvrSession ivrSession) {
-        logger.info("Building invalid adherence request");
+    private void publishAdherenceInputEvent(IvrSession ivrSession) {
         AdherenceCaptureRequest adherenceCaptureRequest = adherenceCaptureRequest().noAdherenceInput(currentPatientId, ivrSession);
-        logger.info("Publishing invalid adherence request");
         reportingService.reportAdherenceCapture(adherenceCaptureRequest);
     }
 }

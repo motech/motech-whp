@@ -30,9 +30,7 @@ public class InvalidAdherenceOperation implements INodeOperation {
     }
 
     private void publishAdherenceInputEvent(String input, IvrSession ivrSession) {
-        logger.info("Building invalid adherence request");
         AdherenceCaptureRequest adherenceCaptureRequest = adherenceCaptureRequest().invalidAdherence(currentPatientId, ivrSession, input);
-        logger.info("Publishing invalid adherence request");
         reportingService.reportAdherenceCapture(adherenceCaptureRequest);
     }
 }
