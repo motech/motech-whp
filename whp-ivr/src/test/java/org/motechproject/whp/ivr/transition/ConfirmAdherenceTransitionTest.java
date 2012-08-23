@@ -179,7 +179,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldSkipToNextPatientOnNoInput_exceedingRetryThreshold() {
+    public void shouldMoveToNextPatientOnNoInput_exceedingRetryThreshold() {
         int adherenceInput = 2;
         flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
@@ -191,7 +191,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldSkipToNextPatientOnInvalidInput_exceedingRetryThreshold() {
+    public void shouldMoveToNextPatientOnInvalidInput_exceedingRetryThreshold() {
         int adherenceInput = 2;
         flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
@@ -203,7 +203,31 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldResetRetryCountersOnTransitionToNextNode() {
+    public void shouldMoveToNextPatientOnValidInputDuringRetry_afterInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("1", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+    }
+
+    @Test
+    public void shouldMoveToNextPatientOnValidInputDuringRetry_afterNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        confirmAdherenceTransition.getDestinationNode("1", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+    }
+
+    @Test
+    public void shouldResetRetryCountersOnTransitionToNextPatient() {
         int adherenceInput = 2;
         flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
@@ -212,6 +236,26 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
 
         IvrSession ivrSession = new IvrSession(flowSession);
         assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidEntryDuringRepeat_afterInvalidEntry() {
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        confirmAdherenceTransition.getDestinationNode("2", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidEntryDuringRepeat_afterNoEntry() {
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        confirmAdherenceTransition.getDestinationNode("2", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
         assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
     }

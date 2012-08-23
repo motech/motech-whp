@@ -28,6 +28,7 @@ public class IvrSession {
     public static final String CURRENT_INVALID_INPUT_RETRY_COUNT = "currentInvalidInputRetryCount";
     public static final String CURRENT_NO_INPUT_RETRY_COUNT = "currentNoInputRetryCount";
     private FlowSession flowSession;
+    public static final String IS_FIRST_INVALID_INPUT = "firstInvalidInput";
 
     public IvrSession(FlowSession flowSession) {
         this.flowSession = flowSession;
@@ -202,6 +203,15 @@ public class IvrSession {
     public int currentNoInputRetryCount() {
         Integer count = flowSession.get(CURRENT_NO_INPUT_RETRY_COUNT);
         return count == null ? 0 : count;
+    }
+
+    public void firstInvalidInput(boolean first) {
+        flowSession.set(IS_FIRST_INVALID_INPUT, Boolean.valueOf(first));
+    }
+
+    public boolean firstInvalidInput() {
+        Boolean flag = flowSession.get(IS_FIRST_INVALID_INPUT);
+        return flag == null ? true : flag;
     }
 }
 

@@ -119,17 +119,4 @@ public class AnotherAdherenceCaptureTransitionTest {
         assertThat(node.getTransitions().size(), is(1));
         assertThat(node.getTransitions().get("?"), instanceOf(ConfirmAdherenceTransition.class));
     }
-
-    @Test
-    public void shouldAddInvalidAdherencePrompts_OnNonNumericInput() {
-
-        Node node = adherenceCaptureTransition.getDestinationNode("*", flowSession);
-
-        assertThat(node.getTransitions().size(), is(1));
-        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
-
-        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
-        assertThat(node.getPrompts(), hasItems(expectedPrompts));
-    }
-
 }

@@ -80,7 +80,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
         int retryCount = getCurrentRetryCount(ivrSession, type);
         int retryThreshold = getRetryThreshold(type);
         if (retryCount < retryThreshold) {
-            setCurrentRetryCount(ivrSession, retryCount++, type);
+            setCurrentRetryCount(ivrSession, ++retryCount, type);
             repeatCurrentPatient(ivrSession, currentPatientId, nextNode);
         } else {
             moveToNextPatient(ivrSession, currentPatientId, nextNode);

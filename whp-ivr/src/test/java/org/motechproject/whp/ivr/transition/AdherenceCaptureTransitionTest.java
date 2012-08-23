@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
@@ -19,6 +20,7 @@ import org.motechproject.whp.ivr.operation.NoInputAdherenceOperation;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
+import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
 import org.motechproject.whp.ivr.prompts.InvalidAdherencePrompts;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -34,6 +36,7 @@ import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
+import java.util.List;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
@@ -284,7 +287,20 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldResetRetryCountersOnTransitionToNextNode() {
+    public void shouldAddInvalidAdherencePromptsOnNonNumericInput_withinRetryThreshold() {
+
+        Node node = adherenceCaptureTransition.getDestinationNode("*", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+    }
+
+    @Test
+    public void shouldResetRetryCountersOnTransitionToNextPatient() {
         int adherenceInput = 2;
         flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
@@ -295,6 +311,74 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         assertThat(ivrSession.currentPatientId(), is(patientId2));
         assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponFirstInvalidEntry() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidEntryDuringRepeat_afterInvalidEntry() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("1", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldResetRetryCountersUponValidEntryDuringRepeat_afterNoEntry() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("1", flowSession);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldMoveToConfirmAdherenceEntryUponValidEntryDuringRepeat_afterInvalidEntry() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        // Entering valid input
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        Node node = adherenceCaptureTransition.getDestinationNode("2", flowSession);
+        Prompt[] expectedPrompts = ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage);
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+    }
+
+    @Test
+    public void shouldMoveToConfirmAdherenceEntryUponValidEntryDuringRepeat_afterNoEntry() {
+        // Entering no input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        adherenceCaptureTransition.getDestinationNode("", flowSession);
+
+        // Entering valid input
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        Node node = adherenceCaptureTransition.getDestinationNode("2", flowSession);
+        Prompt[] expectedPrompts = ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage);
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
     }
 
     @Test
@@ -309,6 +393,123 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         assertThat(node.getTransitions().size(), is(1));
         assertThat((AdherenceCaptureTransition) node.getTransitions().get("?"), is(new AdherenceCaptureTransition()));
         assertThat((Integer)flowSession.get(CURRENT_PATIENT_INDEX), is(0));
+    }
+
+    @Test
+    public void shouldSupportNoInputsUptoConfiguredThreshold_afterEnteringInvalidInput() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+
+
+        // Entering no input
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        expectedPrompts = CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patientId1, 1);
+
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
+        assertThat(destinationNode.getPrompts().size(), is(expectedPrompts.length));
+        assertTrue(destinationNode.getTransitions().get("?") instanceof AdherenceCaptureTransition);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(2, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldSupportInvalidInputsUptoConfiguredThreshold_afterEnteringInvalidInput() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        expectedPrompts = CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patientId1, 1);
+
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("?", flowSession);
+        expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+
+        assertThat(destinationNode.getPrompts(), hasItems(expectedPrompts));
+        assertTrue(destinationNode.getTransitions().get("?") instanceof AdherenceCaptureTransition);
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(2, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldMoveToNextPatientUponEnteringNoInputExceedingThreshold_afterEnteringInvalidInput() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+
+        // Entering no input
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        adherenceCaptureTransition.getDestinationNode("", flowSession);
+
+        ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(patientId2));
+    }
+
+    @Test
+    public void shouldMoveToNextPatientUponEnteringInvalidInputExceedingThreshold_afterEnteringInvalidInput() {
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+
+        assertThat(node.getTransitions().size(), is(1));
+        assertThat(node.getTransitions().get("?"), instanceOf(AdherenceCaptureTransition.class));
+
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patient1").build();
+        Prompt[] expectedPrompts = InvalidAdherencePrompts.invalidAdherencePrompts(whpIvrMessage, patient1.getCurrentTherapy().getTreatmentCategory());
+        assertThat(node.getPrompts(), hasItems(expectedPrompts));
+
+        IvrSession ivrSession = new IvrSession(flowSession);
+        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentNoInputRetryCount());
+
+        // Entering invalid input
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        adherenceCaptureTransition.getDestinationNode("?", flowSession);
+
+        ivrSession = new IvrSession(flowSession);
+        assertThat(ivrSession.currentPatientId(), is(patientId2));
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {
