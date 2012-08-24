@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Properties;
 
-import static org.motechproject.whp.ivr.IVRInput.NO_INPUT_CODE;
+import static org.motechproject.whp.ivr.IVRInput.*;
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
 import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.InputType.NO_INPUT;
@@ -57,13 +57,13 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
 
         Node nextNode = new Node();
         switch (input) {
-            case "1":
+            case ADHERENCE_CONFIRM_CODE:
                 resetRetryCounts(ivrSession);
                 ivrSession.recordAdherenceForCurrentPatient();
                 nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
                 moveToNextPatient(ivrSession, nextNode, false);
                 break;
-            case "2":
+            case ADHERENCE_RE_ENTER_CODE:
                 resetRetryCounts(ivrSession);
                 addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
                 break;
@@ -77,22 +77,13 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     }
 
     private void handleImproperInput(IvrSession ivrSession, String currentPatientId, Node nextNode, InputType type) {
-        int retryCount = getCurrentRetryCount(ivrSession, type);
-        int retryThreshold = getRetryThreshold(type);
-        if (retryCount < retryThreshold) {
+        if (canRetry(ivrSession, type)) {
+            int retryCount = getCurrentRetryCount(ivrSession, type);
             setCurrentRetryCount(ivrSession, ++retryCount, type);
             repeatCurrentPatient(ivrSession, currentPatientId, nextNode);
         } else {
             moveToNextPatient(ivrSession, nextNode, true);
         }
-    }
-
-    private void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
-        resetRetryCounts(ivrSession);
-        if(isThresholdRollover) {
-            addThresholdRolloverPromptsForCurrentPatient(nextNode);
-        }
-        addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
     }
 
     private void repeatCurrentPatient(IvrSession ivrSession, String currentPatientId, Node nextNode) {

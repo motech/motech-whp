@@ -77,8 +77,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         }
         InputType type = InputType.INVALID_INPUT;
         int retryCount = getCurrentRetryCount(ivrSession, type);
-        int retryThreshold = getRetryThreshold(type);
-        if (retryCount < retryThreshold) {
+        if (canRetry(ivrSession, type)) {
             retryCount = isVeryFirstInvalidInput ? retryCount : ++retryCount;
             setCurrentRetryCount(ivrSession, retryCount, type);
             nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
@@ -92,8 +91,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     private void handleNoInput(IvrSession ivrSession, Node nextNode) {
         InputType type = InputType.NO_INPUT;
         int retryCount = getCurrentRetryCount(ivrSession, type);
-        int retryThreshold = getRetryThreshold(type);
-        if (retryCount < retryThreshold) {
+        if (canRetry(ivrSession, type)) {
             setCurrentRetryCount(ivrSession,++retryCount,type);
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
             nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
@@ -102,17 +100,9 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         }
     }
 
-    private void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
-        resetRetryCounts(ivrSession);
-        resetInvalidInputState(ivrSession);
-        nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
-        if(isThresholdRollover) {
-            addThresholdRolloverPromptsForCurrentPatient(nextNode);
-        }
-        addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
-    }
-
-    private void resetInvalidInputState(IvrSession ivrSession) {
+    protected void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
         ivrSession.firstInvalidInput(true);
+        nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        super.moveToNextPatient(ivrSession, nextNode, isThresholdRollover);
     }
 }

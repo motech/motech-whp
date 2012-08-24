@@ -40,6 +40,20 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
         this.ivrProperties = properties;
     }
 
+    protected boolean canRetry(IvrSession ivrSession, InputType type) {
+        int retryCount = getCurrentRetryCount(ivrSession, type);
+        int retryThreshold = getRetryThreshold(type);
+        return retryCount < retryThreshold;
+    }
+
+    protected void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
+        resetRetryCounts(ivrSession);
+        if(isThresholdRollover) {
+            addThresholdRolloverPromptsForCurrentPatient(nextNode);
+        }
+        addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
+    }
+
     protected void addTransitionsAndPromptsForNextPatient(IvrSession ivrSession, Node nextNode) {
         if (ivrSession.hasNextPatient()) {
             ivrSession.nextPatient();

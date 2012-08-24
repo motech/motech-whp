@@ -6,6 +6,8 @@ public class IVRInput {
 
     public static final String SKIP_PATIENT_CODE = "9";
     public static final String NO_INPUT_CODE = "";
+    public static final String ADHERENCE_CONFIRM_CODE = "1";
+    public static final String ADHERENCE_RE_ENTER_CODE = "2";
     private String key;
 
     public IVRInput(String key) {
