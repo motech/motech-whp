@@ -70,12 +70,16 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     }
 
     private void handleInvalidInput(IvrSession ivrSession, Patient patient, Node nextNode) {
-        boolean isVeryFirstInvalidEntry = initializeInvalidInputState(ivrSession);
+        boolean isVeryFirstInvalidInput = ivrSession.firstInvalidInput();
+        if (isVeryFirstInvalidInput) {
+            ivrSession.firstInvalidInput(false);
+            resetRetryCounts(ivrSession);
+        }
         InputType type = InputType.INVALID_INPUT;
         int retryCount = getCurrentRetryCount(ivrSession, type);
         int retryThreshold = getRetryThreshold(type);
         if (retryCount < retryThreshold) {
-            retryCount = isVeryFirstInvalidEntry ? retryCount : ++retryCount;
+            retryCount = isVeryFirstInvalidInput ? retryCount : ++retryCount;
             setCurrentRetryCount(ivrSession, retryCount, type);
             nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
             nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
@@ -103,16 +107,6 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         resetInvalidInputState(ivrSession);
         nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
         addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
-    }
-
-    private boolean initializeInvalidInputState(IvrSession ivrSession) {
-        boolean firstInvalidEntry = false;
-        if (ivrSession.firstInvalidInput()) {
-            ivrSession.firstInvalidInput(false);
-            resetRetryCounts(ivrSession);
-            firstInvalidEntry = true;
-        }
-        return firstInvalidEntry;
     }
 
     private void resetInvalidInputState(IvrSession ivrSession) {
