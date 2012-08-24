@@ -27,8 +27,8 @@ public class IvrSession {
     public static final String CURRENT_PATIENT_ADHERENCE_INPUT = "curretPatientAdherenceInput";
     public static final String CURRENT_INVALID_INPUT_RETRY_COUNT = "currentInvalidInputRetryCount";
     public static final String CURRENT_NO_INPUT_RETRY_COUNT = "currentNoInputRetryCount";
-    private FlowSession flowSession;
     public static final String IS_FIRST_INVALID_INPUT = "firstInvalidInput";
+    private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
         this.flowSession = flowSession;

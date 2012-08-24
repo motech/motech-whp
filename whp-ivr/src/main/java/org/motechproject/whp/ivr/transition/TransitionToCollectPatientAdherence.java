@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.MenuRepeatFailurePrompts.noValidInputMovingOn;
 
 public abstract class TransitionToCollectPatientAdherence implements ITransition {
 
@@ -47,6 +48,10 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
             nextNode.addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, ivrSession.countOfAllPatients(), ivrSession.countOfCurrentPatientsWithAdherence()));
             nextNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, DateUtil.now()));
         }
+    }
+
+    protected void addThresholdRolloverPromptsForCurrentPatient(Node nextNode) {
+        nextNode.addPrompts(noValidInputMovingOn(whpIvrMessage));
     }
 
     protected void addTransitionsAndPromptsForCurrentPatient(Node node, IvrSession ivrSession) {

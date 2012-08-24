@@ -29,4 +29,5 @@ public class IvrAudioFiles {
     public static final String INVALID_ADHERENCE_MESSAGE_PART2 = "errorMessage2";
     public static final String INVALID_ADHERENCE_MESSAGE_PART3 = "errorMessage3";
     public static final String INVALID_ADHERENCE_MESSAGE_PART4 = "errorMessage4";
+    public static final String MENU_REPEAT_FAILURE = "menuRepeatFailure";
 }

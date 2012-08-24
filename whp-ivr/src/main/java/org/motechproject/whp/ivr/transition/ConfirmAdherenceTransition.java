@@ -61,7 +61,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                 resetRetryCounts(ivrSession);
                 ivrSession.recordAdherenceForCurrentPatient();
                 nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
-                moveToNextPatient(ivrSession, nextNode);
+                moveToNextPatient(ivrSession, nextNode, false);
                 break;
             case "2":
                 resetRetryCounts(ivrSession);
@@ -83,12 +83,15 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
             setCurrentRetryCount(ivrSession, ++retryCount, type);
             repeatCurrentPatient(ivrSession, currentPatientId, nextNode);
         } else {
-            moveToNextPatient(ivrSession, nextNode);
+            moveToNextPatient(ivrSession, nextNode, true);
         }
     }
 
-    private void moveToNextPatient(IvrSession ivrSession, Node nextNode) {
+    private void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
         resetRetryCounts(ivrSession);
+        if(isThresholdRollover) {
+            addThresholdRolloverPromptsForCurrentPatient(nextNode);
+        }
         addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
     }
 

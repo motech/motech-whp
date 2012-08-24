@@ -52,6 +52,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.MenuRepeatFailurePrompts.noValidInputMovingOn;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
 import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.INVALID_INPUT_THRESHOLD_KEY;
 import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.NO_INPUT_THRESHOLD_KEY;
@@ -510,6 +511,57 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         ivrSession = new IvrSession(flowSession);
         assertThat(ivrSession.currentPatientId(), is(patientId2));
+    }
+
+    @Test
+    public void shouldAddMenuRepeatFailurePromptsExceedingRetryThreshold_forInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(IS_FIRST_INVALID_INPUT, Boolean.valueOf(false));
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = adherenceCaptureTransition.getDestinationNode("5", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), is(expectedPrompts[0]));
+    }
+
+    @Test
+    public void shouldAddMenuRepeatFailurePromptsExceedingRetryThreshold_forNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = adherenceCaptureTransition.getDestinationNode("", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), is(expectedPrompts[0]));
+    }
+
+    @Test
+    public void shouldNotAddMenuRepeatFailurePromptsWithinRetryThreshold_forInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = adherenceCaptureTransition.getDestinationNode("5", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), not(is(expectedPrompts[0])));
+        assertThat(prompts, not(contains(expectedPrompts)));
+    }
+
+    @Test
+    public void shouldNotAddMenuRepeatFailurePromptsWithinRetryThreshold_forNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = adherenceCaptureTransition.getDestinationNode("", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), not(is(expectedPrompts[0])));
+        assertThat(prompts, not(contains(expectedPrompts)));
     }
 
     private Patient getPatientFor3DosesPerWeek(String patientId) {

@@ -29,20 +29,21 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
+import java.util.List;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.ivr.IvrAudioFiles.ENTER_ADHERENCE;
 import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
+import static org.motechproject.whp.ivr.prompts.MenuRepeatFailurePrompts.noValidInputMovingOn;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
 import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.INVALID_INPUT_THRESHOLD_KEY;
 import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.NO_INPUT_THRESHOLD_KEY;
@@ -309,6 +310,56 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         assertThat(ivrSession.currentPatientId(), is(PATIENT2_ID));
         assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
+    }
+
+    @Test
+    public void shouldAddMenuRepeatFailurePromptsExceedingRetryThreshold_forInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = confirmAdherenceTransition.getDestinationNode("5", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), is(expectedPrompts[0]));
+    }
+
+    @Test
+    public void shouldAddMenuRepeatFailurePromptsExceedingRetryThreshold_forNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = confirmAdherenceTransition.getDestinationNode("", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), is(expectedPrompts[0]));
+    }
+
+    @Test
+    public void shouldNotAddMenuRepeatFailurePromptsWithinRetryThreshold_forInvalidInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = confirmAdherenceTransition.getDestinationNode("5", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), not(is(expectedPrompts[0])));
+        assertThat(prompts, not(contains(expectedPrompts)));
+    }
+
+    @Test
+    public void shouldNotAddMenuRepeatFailurePromptsWithinRetryThreshold_forNoInput() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        List<Prompt> prompts = confirmAdherenceTransition.getDestinationNode("", flowSession).getPrompts();
+        Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage).addAll(noValidInputMovingOn(whpIvrMessage)).build();
+
+        assertThat(prompts.get(0), not(is(expectedPrompts[0])));
+        assertThat(prompts, not(contains(expectedPrompts)));
     }
 
 }

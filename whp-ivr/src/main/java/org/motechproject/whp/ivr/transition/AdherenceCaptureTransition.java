@@ -52,7 +52,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         if (ivrInput.noInput()) {
             handleNoInput(ivrSession, nextNode);
         } else if (ivrInput.isSkipInput()) {
-            moveToNextPatient(ivrSession, nextNode);
+            moveToNextPatient(ivrSession, nextNode, false);
         } else if (ivrInput.isNumeric() && patient.isValidDose(parseInt(ivrInput.input()))) {
             handleValidInput(input, patient, nextNode, ivrSession);
         } else {
@@ -85,7 +85,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         } else {
-            moveToNextPatient(ivrSession, nextNode);
+            moveToNextPatient(ivrSession, nextNode, true);
         }
     }
 
@@ -98,14 +98,17 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
             nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
         } else {
-            moveToNextPatient(ivrSession, nextNode);
+            moveToNextPatient(ivrSession, nextNode, true);
         }
     }
 
-    private void moveToNextPatient(IvrSession ivrSession, Node nextNode) {
+    private void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
         resetRetryCounts(ivrSession);
         resetInvalidInputState(ivrSession);
         nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        if(isThresholdRollover) {
+            addThresholdRolloverPromptsForCurrentPatient(nextNode);
+        }
         addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
     }
 
