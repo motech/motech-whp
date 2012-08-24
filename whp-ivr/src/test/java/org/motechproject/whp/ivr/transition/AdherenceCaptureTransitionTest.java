@@ -321,7 +321,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
 
         IvrSession ivrSession = new IvrSession(flowSession);
-        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
     }
 
@@ -421,7 +421,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         assertTrue(destinationNode.getTransitions().get("?") instanceof AdherenceCaptureTransition);
 
         IvrSession ivrSession = new IvrSession(flowSession);
-        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(2, ivrSession.currentNoInputRetryCount());
     }
 
@@ -469,7 +469,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         assertThat(node.getPrompts(), hasItems(expectedPrompts));
 
         IvrSession ivrSession = new IvrSession(flowSession);
-        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
 
         // Entering no input
@@ -498,7 +498,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         assertThat(node.getPrompts(), hasItems(expectedPrompts));
 
         IvrSession ivrSession = new IvrSession(flowSession);
-        assertEquals(1, ivrSession.currentInvalidInputRetryCount());
+        assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
 
         // Entering invalid input
