@@ -23,7 +23,7 @@ public abstract class BasePatientTest extends BaseTest {
 
     public void setupTestPatientForDistrict(String districtName) {
         PatientDataService patientDataService = new PatientDataService(webDriver);
-        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo", districtName);
+        testPatient = patientDataService.createPatient(provider.getProviderId(), "Foo8", districtName);
     }
 
     public void setupProvider() {

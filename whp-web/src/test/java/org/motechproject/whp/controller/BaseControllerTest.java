@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -30,22 +28,6 @@ public class BaseControllerTest extends BaseUnitTest {
         MotechUser loggedInUser = mock(MotechUser.class);
         when(session.getAttribute(LoginSuccessHandler.LOGGED_IN_USER)).thenReturn(loggedInUser);
         when(loggedInUser.getUserName()).thenReturn(userName);
-    }
-
-    @Test
-    public void shouldForwardToErrorPageOnException() throws Exception {
-        BaseController controller = new BaseController(){
-            @RequestMapping(value = "test", method = RequestMethod.GET)
-            public String throwException() {
-                if(true)
-                    throw new RuntimeException("Error occurred");
-                return "success";
-            }
-        };
-
-        standaloneSetup(controller).build()
-                .perform(get("/test"))
-                .andExpect(forwardedUrl("errors/error"));
     }
 
 }

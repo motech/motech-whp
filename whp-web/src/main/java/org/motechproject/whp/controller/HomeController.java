@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/")
-public class HomeController extends BaseController {
+public class HomeController extends BaseWebController {
 
     private AllProviders allProviders;
 

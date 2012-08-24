@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/itadmin")
-public class ItAdminController extends BaseController{
+public class ItAdminController extends BaseWebController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String homePage(HttpServletRequest request) {

@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @Controller
-public class UserController extends BaseController {
+public class UserController extends BaseWebController {
 
     private UserService userService;
     private Properties whpProperties;

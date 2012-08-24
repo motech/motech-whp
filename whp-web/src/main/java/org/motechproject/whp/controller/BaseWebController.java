@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 
-public abstract class BaseController {
+public abstract class BaseWebController {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -20,5 +20,6 @@ public abstract class BaseController {
         logger.error("Error occurred", ex);
         return "errors/error";
     }
+
 }
 

@@ -43,7 +43,7 @@ import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
 @RequestMapping(value = "/patients")
-public class PatientController extends BaseController {
+public class PatientController extends BaseWebController {
 
     public static final String DISTRICT_LIST = "districts";
     public static final String SELECTED_DISTRICT = "selectedDistrict";

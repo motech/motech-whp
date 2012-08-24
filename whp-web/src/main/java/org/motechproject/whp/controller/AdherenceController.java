@@ -34,7 +34,7 @@ import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.c
 @Controller
 @RequestMapping(value = "/adherence")
 @ExcelDataSource(name = "adherence")
-public class AdherenceController extends BaseController {
+public class AdherenceController extends BaseWebController {
 
     private PatientService patientService;
     private WHPAdherenceService adherenceService;

@@ -5,7 +5,6 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
@@ -25,7 +24,7 @@ import static org.motechproject.whp.controller.PatientController.redirectToPatie
 
 @Controller
 @RequestMapping(value = "/treatmentcard")
-public class TreatmentCardController extends BaseController {
+public class TreatmentCardController extends BaseWebController {
 
     AllPatients allPatients;
 

@@ -119,6 +119,11 @@ public class Therapy {
     }
 
     @JsonIgnore
+    public String getCreationDateAsString() {
+        return WHPDate.date(creationDate.toLocalDate()).value();
+    }
+
+    @JsonIgnore
     public void endLatestPhase(LocalDate endDate) {
         latestPhaseRecord().setEndDate(endDate);
     }

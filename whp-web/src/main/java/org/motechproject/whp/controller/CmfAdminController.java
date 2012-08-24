@@ -30,7 +30,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Controller
 @RequestMapping(value = "/cmfAdmin")
-public class CmfAdminController extends BaseController{
+public class CmfAdminController extends BaseWebController {
 
     AllCmfLocations allCmfLocations;
     AllCmfAdmins allCmfAdmins;
