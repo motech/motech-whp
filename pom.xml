@@ -277,11 +277,6 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-migration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-data-importer</artifactId>
                 <version>${project.version}</version>
             </dependency>
