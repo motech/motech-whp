@@ -1,6 +1,7 @@
 package org.motechproject.whp.ivr.transition;
 
 
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -191,7 +192,29 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldMoveToNextPatientOnInvalidInput_exceedingRetryThreshold() {
+    public void shouldNotAddRecordAdherenceOperationOnInvalidInput_exceedingRetryThreshold() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("5", flowSession);
+
+        assertThat(destinationNode.getOperations().size(), Matchers.is(0));
+    }
+
+    @Test
+    public void shouldNotAddRecordAdherenceOperationOnNoInput_exceedingRetryThreshold() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getOperations().size(), Matchers.is(0));
+    }
+
+    @Test
+    public void shouldSkipToNextPatientOnInvalidInput_exceedingRetryThreshold() {
         int adherenceInput = 2;
         flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
@@ -287,4 +310,5 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         assertEquals(0, ivrSession.currentInvalidInputRetryCount());
         assertEquals(0, ivrSession.currentNoInputRetryCount());
     }
+
 }

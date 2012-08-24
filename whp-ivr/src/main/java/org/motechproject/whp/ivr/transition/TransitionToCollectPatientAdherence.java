@@ -21,7 +21,8 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     public static final String INVALID_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.invalidInput";
     public static final String NO_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.noInput";
 
-    protected enum InputType {INVALID_INPUT, NO_INPUT;}
+    protected enum InputType {INVALID_INPUT, NO_INPUT}
+
     @Autowired
     protected WhpIvrMessage whpIvrMessage;
     @Autowired

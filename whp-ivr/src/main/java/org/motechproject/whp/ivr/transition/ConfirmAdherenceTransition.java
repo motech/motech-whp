@@ -6,7 +6,6 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -18,8 +17,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Properties;
 
+import static org.motechproject.whp.ivr.IVRInput.NO_INPUT_CODE;
 import static org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts.confirmAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts.providedAdherencePrompts;
+import static org.motechproject.whp.ivr.transition.TransitionToCollectPatientAdherence.InputType.NO_INPUT;
 
 @EqualsAndHashCode
 public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdherence {
@@ -55,23 +56,22 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
         String currentPatientId = ivrSession.currentPatientId();
 
         Node nextNode = new Node();
-        IVRInput ivrInput = new IVRInput(input);
-        if (ivrInput.noInput()) {
-            handleImproperInput(ivrSession, currentPatientId, nextNode, InputType.NO_INPUT);
-        } else {
-            switch (input) {
-                case "1":
-                    resetRetryCounts(ivrSession);
-                    ivrSession.recordAdherenceForCurrentPatient();
-                    moveToNextPatient(ivrSession, currentPatientId, nextNode);
-                    break;
-                case "2":
-                    resetRetryCounts(ivrSession);
-                    addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
-                    break;
-                default:
-                    handleImproperInput(ivrSession, currentPatientId, nextNode, InputType.INVALID_INPUT);
-            }
+        switch (input) {
+            case "1":
+                resetRetryCounts(ivrSession);
+                ivrSession.recordAdherenceForCurrentPatient();
+                nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
+                moveToNextPatient(ivrSession, nextNode);
+                break;
+            case "2":
+                resetRetryCounts(ivrSession);
+                addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
+                break;
+            case NO_INPUT_CODE:
+                handleImproperInput(ivrSession, currentPatientId, nextNode, NO_INPUT);
+                break;
+            default:
+                handleImproperInput(ivrSession, currentPatientId, nextNode, InputType.INVALID_INPUT);
         }
         return nextNode;
     }
@@ -83,13 +83,12 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
             setCurrentRetryCount(ivrSession, ++retryCount, type);
             repeatCurrentPatient(ivrSession, currentPatientId, nextNode);
         } else {
-            moveToNextPatient(ivrSession, currentPatientId, nextNode);
+            moveToNextPatient(ivrSession, nextNode);
         }
     }
 
-    private void moveToNextPatient(IvrSession ivrSession, String currentPatientId, Node nextNode) {
+    private void moveToNextPatient(IvrSession ivrSession, Node nextNode) {
         resetRetryCounts(ivrSession);
-        nextNode.addOperations(new RecordAdherenceOperation(currentPatientId, treatmentUpdateOrchestrator, reportingPublisherService));
         addTransitionsAndPromptsForNextPatient(ivrSession, nextNode);
     }
 
