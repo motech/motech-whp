@@ -12,6 +12,7 @@ import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.operation.GetAdherenceOperation;
+import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -83,8 +84,12 @@ public class AnotherAdherenceCaptureTransitionTest {
     @Test
     public void shouldNotAddConfirmAdherenceOperation_ForInvalidInput() {
         Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
-        assertThat(node.getOperations().size(), is(1));
-        assertThat(node.getOperations().get(0), instanceOf(ResetFlowSessionOperation.class));
+        assertThat(node.getOperations(), hasItem(not(isA(ResetFlowSessionOperation.class))));
+    }
+    @Test
+    public void shouldAddInvalidAdherenceOperation_ForInvalidInput() {
+        Node node = adherenceCaptureTransition.getDestinationNode("8", flowSession);
+        assertThat(node.getOperations(), hasItem(isA(InvalidAdherenceOperation.class)));
     }
 
     @Test

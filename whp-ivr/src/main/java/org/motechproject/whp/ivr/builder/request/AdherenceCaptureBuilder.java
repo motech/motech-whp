@@ -10,9 +10,9 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 public class AdherenceCaptureBuilder {
 
     private AdherenceCaptureRequest request;
-    private final static String UNKNOWN = "Unknown";
+    private final static String INVALID = "Invalid";
     private final static String SKIPPED = "Skipped";
-    private final static String TAKEN = "Taken";
+    private final static String ADHERENCE_PROVIDED = "Given";
 
     public AdherenceCaptureBuilder() {
 
@@ -42,14 +42,14 @@ public class AdherenceCaptureBuilder {
 
     private AdherenceCaptureBuilder validInput(Integer input) {
         request.setValid(true);
-        request.setStatus(TAKEN);
+        request.setStatus(ADHERENCE_PROVIDED);
         request.setSubmittedValue(input);
         return this;
     }
 
     private AdherenceCaptureBuilder invalidInput(Integer input) {
        request.setValid(false);
-       request.setStatus(UNKNOWN);
+       request.setStatus(INVALID);
         request.setSubmittedValue(input);
         return this;
     }

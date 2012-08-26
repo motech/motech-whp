@@ -7,6 +7,7 @@ import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.WHPIVRMessage;
 import org.motechproject.whp.ivr.builder.node.ConfirmAdherenceNodeBuilder;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
+import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.ResetFlowSessionOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
@@ -47,6 +48,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
             if (patient.isValidDose(ivrInput.input())) {
                 nextNode = new ConfirmAdherenceNodeBuilder(whpivrMessage).with(patient, parseInt(input)).node();
             } else {
+                nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
                 addTransitionsToNextPatients(ivrSession, nextNode);
             }
         }
