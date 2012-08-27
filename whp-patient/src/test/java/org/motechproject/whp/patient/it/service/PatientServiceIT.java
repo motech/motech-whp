@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service;
+package org.motechproject.whp.patient.it.service;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -16,6 +16,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;

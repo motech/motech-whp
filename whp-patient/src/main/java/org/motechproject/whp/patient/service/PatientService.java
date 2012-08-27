@@ -84,7 +84,7 @@ public class PatientService {
         allTherapyRemarks.add(new TherapyRemark(patientId, therapy.getUid(), remark, user));
     }
 
-    boolean canBeTransferred(String patientId) {
+    public boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         List<WHPErrorCode> errors = new ArrayList<>();
         if (patient == null) {

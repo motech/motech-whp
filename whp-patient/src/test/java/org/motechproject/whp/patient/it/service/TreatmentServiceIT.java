@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.service;
+package org.motechproject.whp.patient.it.service;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +11,8 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SampleInstance;

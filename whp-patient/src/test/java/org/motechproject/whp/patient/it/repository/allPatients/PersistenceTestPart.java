@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.repository.allPatients;
+package org.motechproject.whp.patient.it.repository.allPatients;
 
 import org.junit.Test;
 import org.motechproject.util.DateUtil;

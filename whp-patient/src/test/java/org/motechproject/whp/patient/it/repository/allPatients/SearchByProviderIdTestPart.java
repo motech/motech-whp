@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.repository.allPatients;
+package org.motechproject.whp.patient.it.repository.allPatients;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
