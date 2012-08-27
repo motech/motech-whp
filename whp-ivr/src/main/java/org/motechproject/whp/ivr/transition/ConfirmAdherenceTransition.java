@@ -40,9 +40,9 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                                       ReportingPublisherService reportingPublisherService,
                                       PatientService patientService,
-                                      @Qualifier("ivrProperties") Properties ivrProperties) {
-
-        super(whpIvrMessage, reportingPublisherService, ivrProperties);
+                                      Integer invalidInputThreshold,
+                                      Integer noInputThreshold) {
+        super(whpIvrMessage, reportingPublisherService, invalidInputThreshold, noInputThreshold);
 
         this.adherenceService = adherenceService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;

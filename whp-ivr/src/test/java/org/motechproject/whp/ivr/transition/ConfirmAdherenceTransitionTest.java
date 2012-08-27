@@ -45,8 +45,6 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.PATIENT_LIST;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
 import static org.motechproject.whp.ivr.prompts.MenuRepeatFailurePrompts.noValidInputMovingOn;
 import static org.motechproject.whp.ivr.session.IvrSession.*;
-import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.INVALID_INPUT_THRESHOLD_KEY;
-import static org.motechproject.whp.ivr.transition.ConfirmAdherenceTransition.NO_INPUT_THRESHOLD_KEY;
 
 public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
 
@@ -65,8 +63,6 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     AdherenceDataService adherenceDataService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
-    @Mock
-    private Properties ivrProperties;
 
     FlowSession flowSession;
     WhpIvrMessage whpIvrMessage = new WhpIvrMessage(new Properties());
@@ -83,10 +79,8 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(IvrSession.PROVIDER_ID, PROVIDER_ID);
         Patient patient = new PatientBuilder().withDefaults().withPatientId(PATIENT1_ID).withAdherenceProvidedForLastWeek().build();
         when(patientService.findByPatientId(PATIENT1_ID)).thenReturn(patient);
-        when(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY)).thenReturn("2");
-        when(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY)).thenReturn("2");
 
-        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService, ivrProperties);
+        confirmAdherenceTransition = new ConfirmAdherenceTransition(whpIvrMessage, adherenceService, treatmentUpdateOrchestrator, reportingPublisherService, patientService, 2, 2);
     }
 
     @Test

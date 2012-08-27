@@ -9,9 +9,7 @@ import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.Properties;
+import org.springframework.beans.factory.annotation.Value;
 
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
@@ -19,25 +17,27 @@ import static org.motechproject.whp.ivr.prompts.MenuRepeatFailurePrompts.noValid
 
 public abstract class TransitionToCollectPatientAdherence implements ITransition {
 
-    public static final String INVALID_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.invalidInput";
-    public static final String NO_INPUT_THRESHOLD_KEY = "ivr.menuRepeat.count.noInput";
-
     protected enum InputType {INVALID_INPUT, NO_INPUT}
 
     @Autowired
     protected WhpIvrMessage whpIvrMessage;
     @Autowired
     protected ReportingPublisherService reportingPublisherService;
-    @Autowired
-    private Properties ivrProperties;
+
+    @Value("${ivr.menuRepeat.count.invalidInput}")
+    private Integer invalidInputThreshold;
+
+    @Value("${ivr.menuRepeat.count.noInput}")
+    private Integer noInputThreshold;
 
     public TransitionToCollectPatientAdherence() {
     }
 
-    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, @Qualifier("ivrProperties") Properties properties) {
+    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, Integer invalidInputThreshold, Integer noInputThreshold) {
         this.whpIvrMessage = whpIvrMessage;
         this.reportingPublisherService = reportingPublisherService;
-        this.ivrProperties = properties;
+        this.invalidInputThreshold = invalidInputThreshold;
+        this.noInputThreshold = noInputThreshold;
     }
 
     protected boolean canRetry(IvrSession ivrSession, InputType type) {
@@ -90,9 +90,9 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
 
     protected int getRetryThreshold(InputType type) {
         if (type == InputType.INVALID_INPUT) {
-            return Integer.valueOf(ivrProperties.getProperty(INVALID_INPUT_THRESHOLD_KEY));
+            return invalidInputThreshold;
         } else {
-            return Integer.valueOf(ivrProperties.getProperty(NO_INPUT_THRESHOLD_KEY));
+            return noInputThreshold;
         }
     }
 
