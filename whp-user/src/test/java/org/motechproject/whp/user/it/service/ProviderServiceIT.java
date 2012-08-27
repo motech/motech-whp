@@ -1,4 +1,4 @@
-package org.motechproject.whp.user.service;
+package org.motechproject.whp.user.it.service;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -12,6 +12,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

@@ -1,10 +1,11 @@
-package org.motechproject.whp.user.repository;
+package org.motechproject.whp.user.it.repository;
 
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -14,7 +15,7 @@ import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-@ContextConfiguration(locations = "classpath*:applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
 
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";

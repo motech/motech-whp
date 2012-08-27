@@ -1,4 +1,4 @@
-package org.motechproject.whp.user.service;
+package org.motechproject.whp.user.it.service;
 
 import org.junit.After;
 import org.junit.Test;
@@ -9,12 +9,13 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllCmfAdmins;
+import org.motechproject.whp.user.service.CmfAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
 
-@ContextConfiguration(locations = "classpath*:applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
 public class CmfAdminServiceIT extends SpringIntegrationTest {
 
     @Autowired

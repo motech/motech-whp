@@ -1,10 +1,11 @@
-package org.motechproject.whp.user.repository;
+package org.motechproject.whp.user.it.repository;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.user.domain.CmfAdmin;
+import org.motechproject.whp.user.repository.AllCmfAdmins;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(locations = "classpath*:applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
 public class AllCmfAdminsIT extends SpringIntegrationTest {
 
     @Autowired
