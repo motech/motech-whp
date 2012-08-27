@@ -40,8 +40,8 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
                                       TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                                       ReportingPublisherService reportingPublisherService,
                                       PatientService patientService,
-                                      Integer invalidInputThreshold,
-                                      Integer noInputThreshold) {
+                                      String invalidInputThreshold,
+                                      String noInputThreshold) {
         super(whpIvrMessage, reportingPublisherService, invalidInputThreshold, noInputThreshold);
 
         this.adherenceService = adherenceService;

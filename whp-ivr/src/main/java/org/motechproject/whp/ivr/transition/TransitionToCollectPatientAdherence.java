@@ -1,5 +1,6 @@
 package org.motechproject.whp.ivr.transition;
 
+import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.util.DateUtil;
@@ -23,17 +24,16 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
     protected WhpIvrMessage whpIvrMessage;
     @Autowired
     protected ReportingPublisherService reportingPublisherService;
-
     @Value("${ivr.menuRepeat.count.invalidInput}")
-    private Integer invalidInputThreshold;
+    private String invalidInputThreshold;
 
     @Value("${ivr.menuRepeat.count.noInput}")
-    private Integer noInputThreshold;
+    private String noInputThreshold;
 
     public TransitionToCollectPatientAdherence() {
     }
 
-    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, Integer invalidInputThreshold, Integer noInputThreshold) {
+    public TransitionToCollectPatientAdherence(WhpIvrMessage whpIvrMessage, ReportingPublisherService reportingPublisherService, String invalidInputThreshold, String noInputThreshold) {
         this.whpIvrMessage = whpIvrMessage;
         this.reportingPublisherService = reportingPublisherService;
         this.invalidInputThreshold = invalidInputThreshold;
@@ -90,9 +90,9 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
 
     protected int getRetryThreshold(InputType type) {
         if (type == InputType.INVALID_INPUT) {
-            return invalidInputThreshold;
+            return Integer.valueOf(invalidInputThreshold);
         } else {
-            return noInputThreshold;
+            return Integer.valueOf(noInputThreshold);
         }
     }
 

@@ -87,7 +87,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
 
         when(patientService.findByPatientId(patientId1)).thenReturn(patient);
 
-        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService, 2, 2);
+        adherenceCaptureTransition = new AdherenceCaptureTransition(whpIvrMessage, patientService, reportingPublisherService, "2", "2");
     }
 
     @Test

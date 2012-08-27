@@ -34,8 +34,8 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     public AdherenceCaptureTransition(WhpIvrMessage whpIvrMessage,
                                       PatientService patientService,
                                       ReportingPublisherService reportingPublisherService,
-                                      Integer invalidInputThreshold,
-                                      Integer noInputThreshold) {
+                                      String invalidInputThreshold,
+                                      String noInputThreshold) {
         super(whpIvrMessage, reportingPublisherService, invalidInputThreshold, noInputThreshold);
         this.patientService = patientService;
     }
