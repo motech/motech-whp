@@ -1,11 +1,12 @@
-package org.motechproject.adherence.repository;
+package org.motechproject.adherence.it.repository;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
-import org.motechproject.adherence.common.SpringIntegrationTest;
+import org.motechproject.adherence.it.common.SpringIntegrationTest;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.domain.AdherenceLog;
+import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 

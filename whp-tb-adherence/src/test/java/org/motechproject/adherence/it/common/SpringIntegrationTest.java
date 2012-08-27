@@ -1,4 +1,4 @@
-package org.motechproject.adherence.common;
+package org.motechproject.adherence.it.common;
 
 import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;
