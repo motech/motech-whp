@@ -1,8 +1,7 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.adherence.it.service;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.adherence.contract.AdherenceRecord;
 import org.motechproject.adherence.domain.AdherenceLog;

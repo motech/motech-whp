@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.adherence.it.service;
 
 import org.ektorp.CouchDbConnector;
 import org.joda.time.LocalDate;
@@ -13,6 +13,7 @@ import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLo
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.adherence.it.service;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;

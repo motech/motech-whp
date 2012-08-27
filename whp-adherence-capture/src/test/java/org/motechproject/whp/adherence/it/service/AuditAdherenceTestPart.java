@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.adherence.it.service;
 
 import org.junit.Test;
 import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
