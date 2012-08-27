@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.repository;
+package org.motechproject.whp.refdata.it.cache;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
@@ -9,6 +9,7 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.kubek2k.springockito.annotations.WrapWithSpy;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.District;
+import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;

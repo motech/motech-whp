@@ -1,9 +1,10 @@
-package org.motechproject.whp.refdata.repository;
+package org.motechproject.whp.refdata.it.repository;
 
 import org.junit.After;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.refdata.domain.CmfLocation;
+import org.motechproject.whp.refdata.repository.AllCmfLocations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
