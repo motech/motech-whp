@@ -1,12 +1,11 @@
 package org.motechproject.whp.ivr.prompts;
 
 
-import org.motechproject.decisiontree.model.Prompt;
+import org.motechproject.decisiontree.core.model.Prompt;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
-import static org.motechproject.whp.ivr.IvrAudioFiles.*;
+import static org.motechproject.whp.ivr.IvrAudioFiles.MENU_REPEAT_FAILURE;
 
 public class MenuRepeatFailurePrompts {
 

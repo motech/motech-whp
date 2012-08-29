@@ -6,9 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.Node;
-import org.motechproject.decisiontree.model.Prompt;
+import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.core.model.Node;
+import org.motechproject.decisiontree.core.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
@@ -81,7 +81,6 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         IvrSession ivrSession = new IvrSession(flowSession);
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1, patientId2)));
         ivrSession.providerId(PROVIDER_ID);
-        ivrSession.callId("callId");
 
         Patient patient = getPatientFor3DosesPerWeek(patientId1);
 

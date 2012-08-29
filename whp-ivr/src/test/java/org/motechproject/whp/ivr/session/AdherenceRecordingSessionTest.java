@@ -7,11 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.mockito.Mock;
-import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -41,7 +39,7 @@ public class AdherenceRecordingSessionTest {
         @Mock
         protected AllProviders allProviders;
 
-        protected FlowSession flowSession;
+        protected FlowSessionStub flowSession;
 
         protected AdherenceRecordingSession adherenceRecordingSession;
 
@@ -55,8 +53,7 @@ public class AdherenceRecordingSessionTest {
     public static class WhenProviderReportsAdherence extends AdherenceRecordingSessionTestCase {
 
         protected static final String PROVIDER_ID = "providerid";
-        protected static final String MOBILE_NUMBER = "mobileNumber";
-        protected static final String CALL_ID = "call_id1";
+        protected static final String MOBILE_NUMBER = "phoneNumber";
         private List<Patient> patientsWithAdherence;
         private List<Patient> patientsWithoutAdherence;
         protected DateTime now = new DateTime(2011, 1, 1, 10, 0, 0, 0);
@@ -66,7 +63,6 @@ public class AdherenceRecordingSessionTest {
             initMocks(this);
             setupSession();
 
-            LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
             patientsWithAdherence = asList(
                     new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient1").withAdherenceProvidedForLastWeek().build(),
                     new PatientBuilder().withDefaults().withTherapyStartDate(new LocalDate(2012, 7, 7)).withPatientId("patient2").withAdherenceProvidedForLastWeek().build());
@@ -83,8 +79,7 @@ public class AdherenceRecordingSessionTest {
 
         private void setupSession() {
             flowSession = new FlowSessionStub();
-            flowSession.set("cid", MOBILE_NUMBER);
-            flowSession.set("sid", CALL_ID);
+            flowSession.setPhoneNumber(MOBILE_NUMBER);
         }
 
         private void setupSummary() {
@@ -112,21 +107,20 @@ public class AdherenceRecordingSessionTest {
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
-            assertEquals(MOBILE_NUMBER, session.mobileNumber());
+            assertEquals(MOBILE_NUMBER, session.phoneNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
-            assertEquals(CALL_ID, session.callId());
+            assertEquals(FlowSessionStub.SESSION_ID, session.callId());
         }
     }
 
     public static class WhenProviderReportsAdherenceForSecondPatient extends AdherenceRecordingSessionTestCase {
 
         protected static final String PROVIDER_ID = "providerid";
-        protected static final String MOBILE_NUMBER = "mobileNumber";
-        private LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
+        protected static final String MOBILE_NUMBER = "phoneNumber";
         private List<Patient> patientsWithAdherence;
         private List<Patient> patientsWithoutAdherence;
         private List<Patient> patientsWithAdherenceAfterFirstInput;
@@ -170,7 +164,7 @@ public class AdherenceRecordingSessionTest {
 
         private void setupSession() {
             flowSession = new FlowSessionStub();
-            flowSession.set("cid", MOBILE_NUMBER);
+            flowSession.setPhoneNumber(MOBILE_NUMBER);
         }
 
         @Test
@@ -194,7 +188,6 @@ public class AdherenceRecordingSessionTest {
         public static final String MOBILE_NUMBER = "mobileNumber2";
         private List<Patient> patientsWithAdherence;
         private List<Patient> patientsWithoutAdherence;
-        private static final String CALL_ID = "call_id2";
         protected DateTime now = new DateTime(2011, 1, 1, 10, 10, 0, 0);
 
         @Before
@@ -211,8 +204,7 @@ public class AdherenceRecordingSessionTest {
 
         private void setupSession() {
             flowSession = new FlowSessionStub();
-            flowSession.set("cid", MOBILE_NUMBER);
-            flowSession.set("sid", CALL_ID);
+            flowSession.setPhoneNumber(MOBILE_NUMBER);
         }
 
         private void setupSummary() {
@@ -240,13 +232,13 @@ public class AdherenceRecordingSessionTest {
         @Test
         public void shouldInitializeSessionWithMobileNumber() {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
-            assertEquals(MOBILE_NUMBER, session.mobileNumber());
+            assertEquals(MOBILE_NUMBER, session.phoneNumber());
         }
 
         @Test
         public void shouldInitializeSessionWithCallId() {
             IvrSession session = new IvrSession(adherenceRecordingSession.initialize(flowSession));
-            assertEquals(CALL_ID, session.callId());
+            assertEquals(FlowSessionStub.SESSION_ID, session.callId());
         }
     }
 }

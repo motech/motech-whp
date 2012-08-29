@@ -2,7 +2,7 @@ package org.motechproject.whp.ivr.prompts;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.decisiontree.model.Prompt;
+import org.motechproject.decisiontree.core.model.Prompt;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 

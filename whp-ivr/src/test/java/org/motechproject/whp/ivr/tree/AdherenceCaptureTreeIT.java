@@ -88,18 +88,18 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     @Test
     public void shouldPlayWelcomeMessage() {
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
-        List<String> playAudioList = ivrResponse.getPlayAudio();
+        List<String> playAudioList = ivrResponse.getTransitionPrompts();
         assertThat(playAudioList, audioList(wav("musicEnter", "welcomeMessage")));
     }
 
     @Test
     public void shouldPlayAdherenceSummary() {
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
-        assertThat(ivrResponse.getPlayAudio(),
+        assertThat(ivrResponse.getTransitionPrompts(),
                 is(audioList(
                         wav("instructionalMessage1"),
                         alphaNumeric("0"),
-                        wav("instructionalMessage2"),
+                    wav("instructionalMessage2"),
                         alphaNumeric("3"),
                         wav("instructionalMessage3"),
                         wav("patientList"),
@@ -117,13 +117,13 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         WeeklyAdherenceSummary adherenceSummaryPatient1 = adherenceService.currentWeekAdherence(patient1);
         assertThat(adherenceSummaryPatient1.getDosesTaken(), is(0));
 
-        assertThat(ivrResponse.getPlayAudio(),
+        assertThat(ivrResponse.getTransitionPrompts(),
                 is(audioList(
                         wav("confirmMessage1"),
                         alphaNumeric(id(patient1.getPatientId())),
                         wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
-        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?provider=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));
+        assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?provider=kookoo&ln=en&tree=adherenceCapture"));
     }
 
     @Test
@@ -132,12 +132,11 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         sendDtmf("2");
 
         KooKooIvrResponse ivrResponse = sendDtmf("1");
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
                 wav("patientList", "2"),
                 alphaNumeric(id("patientid2")),
                 wav("enterAdherence"))));
 
-        assertTrue(ivrResponse.getGotoUrl().contains(base64("/2/1")));
         assertThat(adherenceService.currentWeekAdherence(patient1).getDosesTaken(), is(2));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
@@ -148,12 +147,11 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         KooKooIvrResponse ivrResponse = sendDtmf("9");
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
                 wav("patientList", "2"),
                 alphaNumeric(id("patientid2")),
                 wav("enterAdherence"))));
 
-        assertTrue(ivrResponse.getGotoUrl().contains((base64("/9"))));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
@@ -163,11 +161,10 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         KooKooIvrResponse ivrResponse = sendDtmf("*");
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
                 wav("errorMessage1", "TreatmentCategoryGovernement", "errorMessage2", "0", "errorMessage3", "3", "errorMessage4"),
                 wav("patientList", "1"), alphaNumeric(id("patientid1")), wav("enterAdherence"))));
 
-        assertTrue(ivrResponse.getGotoUrl().contains((base64("/*"))));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
@@ -177,8 +174,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         sendDtmf("3");
         KooKooIvrResponse ivrResponse = sendDtmf("9");
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(wav("confirmMessage4"))));
-        assertTrue(ivrResponse.getGotoUrl().contains((base64("/3/9"))));
+        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(wav("confirmMessage4"))));
     }
 
     @Test
@@ -194,7 +190,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         String adherenceCapturedForThirdPatient = "2";
         KooKooIvrResponse ivrResponse = recordAdherence(adherenceCapturedForThirdPatient);
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+        assertThat(ivrResponse.getNoticePrompts(), is(audioList(
                 wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
 
         assertNull(ivrResponse.getGotoUrl());
@@ -226,7 +222,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(
+        assertThat(ivrResponse.getNoticePrompts(), is(audioList(
                 wav("summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
         assertThat(ivrResponse.callEnded(), is(true));
     }
@@ -238,7 +234,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
-        assertThat(ivrResponse.getPlayAudio(), is(audioList(wav("windowOverMessage", "thankYou"))));
+        assertThat(ivrResponse.getNoticePrompts(), is(audioList(wav("windowOverMessage", "thankYou"))));
         assertThat(ivrResponse.callEnded(), is(true));
     }
 

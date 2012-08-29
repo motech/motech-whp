@@ -50,7 +50,6 @@ public class RecordAdherenceOperationTest extends BaseUnitTest {
         FlowSessionStub flowSession = new FlowSessionStub();
         flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         IvrSession ivrSession = new IvrSession(flowSession);
-        ivrSession.callId("callId");
         ivrSession.providerId(PROVIDER);
         ivrSession.startOfAdherenceSubmission(new DateTime(2011, 1, 1, 1, 1, 1));
         ivrSession.patientsWithoutAdherence(Arrays.asList(new PatientBuilder().withPatientId("patient1").build(), new PatientBuilder().withPatientId(CURRENT_PATIENT).build()));
@@ -70,7 +69,6 @@ public class RecordAdherenceOperationTest extends BaseUnitTest {
         flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.startOfAdherenceSubmission(new DateTime(2011, 1, 1, 1, 1, 1));
-        ivrSession.callId("callId");
 
         recordAdherenceOperation.perform("2", flowSession);
         verify(reportingService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
@@ -83,7 +81,6 @@ public class RecordAdherenceOperationTest extends BaseUnitTest {
         flowSession.set(IvrSession.CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         IvrSession ivrSession = new IvrSession(flowSession);
         ivrSession.startOfAdherenceSubmission(new DateTime(2010, 1, 1, 1, 1, 1));
-        ivrSession.callId("callId");
 
         recordAdherenceOperation.perform("2", flowSession);
         assertEquals(NOW, ivrSession.startOfAdherenceSubmission());

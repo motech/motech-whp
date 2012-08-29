@@ -4,7 +4,7 @@ package org.motechproject.whp.ivr.operation;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.core.FlowSession;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

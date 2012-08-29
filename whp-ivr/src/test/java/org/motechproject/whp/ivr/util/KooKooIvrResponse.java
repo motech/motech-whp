@@ -1,8 +1,5 @@
 package org.motechproject.whp.ivr.util;
 
-import lombok.Data;
-import lombok.Getter;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
@@ -10,19 +7,32 @@ import java.util.List;
 @XmlRootElement(name = "response")
 public class KooKooIvrResponse {
 
-    List<String> playAudio;
+    List<String> noticePrompts;
+
+    CollectDtmfResponse collectDtmf;
 
     String gotoUrl;
 
     String hangup;
 
+
+
     @XmlElement(name = "playaudio")
-    public List<String> getPlayAudio() {
-        return playAudio;
+    public List<String> getNoticePrompts() {
+        return noticePrompts;
     }
 
-    public void setPlayAudio(List<String> playAudio) {
-        this.playAudio = playAudio;
+    public void setNoticePrompts(List<String> noticePrompts) {
+        this.noticePrompts = noticePrompts;
+    }
+
+    @XmlElement(name = "collectdtmf")
+    public CollectDtmfResponse getCollectDtmf() {
+        return collectDtmf;
+    }
+
+    public void setCollectDtmf(CollectDtmfResponse collectDtmf) {
+        this.collectDtmf = collectDtmf;
     }
 
     @XmlElement(name = "gotourl")
@@ -47,4 +57,9 @@ public class KooKooIvrResponse {
         return hangup != null && gotoUrl == null;
     }
 
+    public List<String> getTransitionPrompts() {
+        return collectDtmf.getPlayAudio();
+    }
 }
+
+

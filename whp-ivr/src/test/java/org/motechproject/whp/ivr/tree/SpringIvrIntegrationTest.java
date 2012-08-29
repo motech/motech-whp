@@ -32,7 +32,6 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     static Server server;
     static String CONTEXT_PATH = "/whp";
-    public static final String TREE_START_PATH = "";
     public static final String FAKETIME_URL = "http://localhost:7080/whp/motech-delivery-tools/datetime/update?date=%s&hour=0&minute=0";
 
     String KOOKOO_CALLBACK_URL = "/kookoo/ivr";
@@ -41,10 +40,9 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     DefaultHttpClient httpClient;
 
     private static DispatcherServlet dispatcherServlet;
-    protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s";
-    protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s&";
+    protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&ln=en&cid=%s&sid=%s";
+    protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s&";
 
-    private String currentPath;
     private String callerId;
     private String sessionId;
 
@@ -95,20 +93,13 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
 
     protected KooKooIvrResponse startCall(String callerId) {
         sessionId = UUID.randomUUID().toString();
-        this.currentPath = TREE_START_PATH;
         this.callerId = callerId;
-        return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, base64(TREE_START_PATH), callerId, sessionId));
+        return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, callerId, sessionId));
     }
 
     protected KooKooIvrResponse sendDtmf(String dtmf) {
-        String encodedTreePath = base64(currentPath);
-        KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, encodedTreePath, dtmf, callerId, sessionId));
-        currentPath = currentPath + "/" + dtmf;
+        KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, dtmf, callerId, sessionId));
         return ivrResponse;
-    }
-
-    protected String base64(String input) {
-        return new String(encodeBase64URLSafe(input.getBytes()));
     }
 
     protected List<String> wav(String... fileNames) {

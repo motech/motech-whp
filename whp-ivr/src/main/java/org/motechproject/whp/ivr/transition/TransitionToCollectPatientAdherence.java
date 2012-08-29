@@ -1,8 +1,7 @@
 package org.motechproject.whp.ivr.transition;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.motechproject.decisiontree.model.ITransition;
-import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.core.model.ITransition;
+import org.motechproject.decisiontree.core.model.Node;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;

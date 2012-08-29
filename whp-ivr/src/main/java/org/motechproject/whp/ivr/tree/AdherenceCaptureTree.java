@@ -1,7 +1,7 @@
 package org.motechproject.whp.ivr.tree;
 
-import org.motechproject.decisiontree.model.Tree;
-import org.motechproject.decisiontree.repository.AllTrees;
+import org.motechproject.decisiontree.core.model.Tree;
+import org.motechproject.decisiontree.core.repository.AllTrees;
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.ivr.transition.AdherenceSummaryTransition;
 import org.springframework.beans.factory.annotation.Autowired;
