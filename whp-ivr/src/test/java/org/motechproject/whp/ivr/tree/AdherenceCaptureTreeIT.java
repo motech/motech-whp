@@ -180,24 +180,23 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     @Test
     public void shouldRecordAdherenceForMultiplePatients() {
         startCall(provider.getPrimaryMobile());
-        recordAdherence("2");
-        recordAdherence("3");
-        KooKooIvrResponse ivrResponse = recordAdherence("2");
+
+        String adherenceCapturedForFirstPatient = "2";
+        recordAdherence(adherenceCapturedForFirstPatient);
+
+        String adherenceCapturedForSecondPatient = "3";
+        recordAdherence(adherenceCapturedForSecondPatient);
+
+        String adherenceCapturedForThirdPatient = "2";
+        KooKooIvrResponse ivrResponse = recordAdherence(adherenceCapturedForThirdPatient);
 
         assertThat(ivrResponse.getNoticePrompts(), is(audioList(
                 wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
 
         assertNull(ivrResponse.getGotoUrl());
         assertThat(ivrResponse.callEnded(), is(true));
-    }
 
-    @Test
-    public void shouldPublishCallLogUponAdherenceCapture() {
-        startCall(provider.getPrimaryMobile());
-        recordAdherence("2");
-        recordAdherence("3");
-        recordAdherence("2");
-
+        // TODO : should be a separate test
         ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
         verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
         CallLogRequest callLogRequest = argumentCaptor.getValue();
@@ -211,9 +210,15 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     @Test
     public void shouldPlayAdherenceSummaryWhenProviderHasProvidedAdherenceForAllPatients() {
         startCall(provider.getPrimaryMobile());
-        recordAdherence("2");
-        recordAdherence("3");
-        recordAdherence("2");
+
+        String adherenceForFirstPatient = "2";
+        recordAdherence(adherenceForFirstPatient);
+
+        String adherenceForSecondPatient = "3";
+        recordAdherence(adherenceForSecondPatient);
+
+        String adherenceForThirdPatient = "2";
+        recordAdherence(adherenceForThirdPatient);
 
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
