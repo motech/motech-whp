@@ -31,6 +31,7 @@ public class NoInputAdherenceOperationTest extends BaseUnitTest {
         mockCurrentDate(adherenceStartTime);
         flowSessionStub = new FlowSessionStub();
         ivrSession = new IvrSession(flowSessionStub);
+        ivrSession.callId("callId");
         ivrSession.startOfAdherenceSubmission(adherenceStartTime);
         ivrSession.adherenceInputForCurrentPatient("9");
     }

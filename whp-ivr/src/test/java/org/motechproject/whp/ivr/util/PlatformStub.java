@@ -1,8 +1,8 @@
 package org.motechproject.whp.ivr.util;
 
-import org.motechproject.decisiontree.core.FlowSession;
-import org.motechproject.decisiontree.core.model.INodeOperation;
-import org.motechproject.decisiontree.core.model.ITransition;
+import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
+import org.motechproject.decisiontree.model.ITransition;
 
 public class PlatformStub {
 

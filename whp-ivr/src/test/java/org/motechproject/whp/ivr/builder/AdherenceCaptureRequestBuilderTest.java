@@ -21,7 +21,9 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
 
     private static final String INPUT_FOR_CURRENT_PATIENT = "1";
     private static final String ADHERENCE_PROVIDED = "Given";
-    private static final String MOBILE_NUMBER = "phoneNumber";
+    private static final String MOBILE_NUMBER = "mobileNumber";
+
+    private static final String CALL_ID = "callId";
 
     private static final DateTime LAST_SUBMISSION_TIME = new DateTime(2011, 1, 1, 1, 1, 0, 0);
     private static final DateTime NOW = new DateTime(2011, 1, 1, 1, 1, 10, 0);
@@ -39,14 +41,13 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
 
     private void setupSession() {
         FlowSessionStub flowSession = new FlowSessionStub();
-        flowSession.setPhoneNumber(MOBILE_NUMBER);
-
+        flowSession.set("cid", MOBILE_NUMBER);
 
         ivrSession = new IvrSession(flowSession);
         ivrSession.providerId(PROVIDER_ID);
         ivrSession.startOfAdherenceSubmission(LAST_SUBMISSION_TIME);
         ivrSession.adherenceInputForCurrentPatient(INPUT_FOR_CURRENT_PATIENT);
-
+        ivrSession.callId(CALL_ID);
     }
 
     @Test
@@ -64,7 +65,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(ADHERENCE_PROVIDED, adherenceCaptureRequest.getStatus());
         assertEquals(INPUT_FOR_CURRENT_PATIENT, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
-        assertEquals(FlowSessionStub.SESSION_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
     }
 
@@ -78,7 +79,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(SKIPPED, adherenceCaptureRequest.getStatus());
         assertEquals(IVRInput.SKIP_PATIENT_CODE, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
-        assertEquals(FlowSessionStub.SESSION_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
     }
 
@@ -95,7 +96,7 @@ public class AdherenceCaptureRequestBuilderTest extends BaseUnitTest {
         assertEquals(INVALID, adherenceCaptureRequest.getStatus());
         assertEquals(adherenceInput, adherenceCaptureRequest.getSubmittedValue());
         assertEquals(MOBILE_NUMBER, adherenceCaptureRequest.getSubmittedBy());
-        assertEquals(FlowSessionStub.SESSION_ID, adherenceCaptureRequest.getCallId());
+        assertEquals(CALL_ID, adherenceCaptureRequest.getCallId());
         assertEquals(DIFFERENCE_IN_SECONDS, adherenceCaptureRequest.getTimeTaken());
 
     }

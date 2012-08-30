@@ -26,6 +26,7 @@ public class InvalidAdherenceOperationTest extends BaseUnitTest {
         mockCurrentDate(new DateTime(2012,7,8,0,0,0));
         flowSessionStub = new FlowSessionStub();
         ivrSession = new IvrSession(flowSessionStub);
+        ivrSession.callId("callId");
         adherenceStartTime = new DateTime(2012,7,8,0,10,10);
         ivrSession.startOfAdherenceSubmission(adherenceStartTime);
         ivrSession.adherenceInputForCurrentPatient("9");

@@ -2,7 +2,8 @@ package org.motechproject.whp.ivr.session;
 
 
 import org.joda.time.DateTime;
-import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
@@ -33,8 +34,8 @@ public class IvrSession {
         this.flowSession = flowSession;
     }
 
-    public String phoneNumber() {
-        return flowSession.getPhoneNumber();
+    public String mobileNumber() {
+        return flowSession.get("cid");
     }
 
     private List<String> getPatientIds(List<Patient> patients) {
@@ -67,9 +68,12 @@ public class IvrSession {
     }
 
     public String callId() {
-        return flowSession.getSessionId();
+        return flowSession.get(SID).toString();
     }
 
+    public void callId(String callId) {
+        flowSession.set(SID, callId);
+    }
 
     public void currentPatientIndex(int value) {
         flowSession.set(CURRENT_PATIENT_INDEX, value);

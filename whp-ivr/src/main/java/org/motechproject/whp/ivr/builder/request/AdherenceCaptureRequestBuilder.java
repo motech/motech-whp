@@ -87,7 +87,7 @@ public class AdherenceCaptureRequestBuilder {
 
     private AdherenceCaptureRequestBuilder forSession(IvrSession ivrSession) {
         this.byProvider(ivrSession.providerId())
-                .throughMobile(ivrSession.phoneNumber())
+                .throughMobile(ivrSession.mobileNumber())
                 .onCall(ivrSession.callId())
                 .withStartOfAdherenceSubmission(ivrSession.startOfAdherenceSubmission());
         return this;

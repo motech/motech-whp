@@ -2,8 +2,8 @@ package org.motechproject.whp.ivr.operation;
 
 
 import org.joda.time.DateTime;
-import org.motechproject.decisiontree.core.FlowSession;
-import org.motechproject.decisiontree.core.model.INodeOperation;
+import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 
 public class CaptureAdherenceSubmissionTimeOperation implements INodeOperation {

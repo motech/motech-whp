@@ -2,8 +2,8 @@ package org.motechproject.whp.ivr.builder;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.decisiontree.core.model.AudioPrompt;
-import org.motechproject.decisiontree.core.model.Prompt;
+import org.motechproject.decisiontree.model.AudioPrompt;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 
 import java.util.Properties;

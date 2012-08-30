@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.decisiontree.core.FlowSession;
-import org.motechproject.decisiontree.core.model.INodeOperation;
-import org.motechproject.decisiontree.core.model.Node;
-import org.motechproject.decisiontree.core.model.Prompt;
+import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.model.INodeOperation;
+import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
@@ -51,7 +51,7 @@ import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuil
 public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
     public static final String PROVIDER_ID = "providerid";
-    public static final String MOBILE_NUMBER = "phoneNumber";
+    public static final String MOBILE_NUMBER = "mobileNumber";
 
     @Mock
     private AdherenceDataService adherenceDataService;
