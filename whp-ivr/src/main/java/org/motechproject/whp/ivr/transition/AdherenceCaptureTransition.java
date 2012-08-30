@@ -75,11 +75,11 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         }
         InputType type = InputType.INVALID_INPUT;
         int retryCount = getCurrentRetryCount(ivrSession, type);
+        nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
         if (canRetry(ivrSession, type)) {
             retryCount = isVeryFirstInvalidInput ? retryCount : ++retryCount;
             setCurrentRetryCount(ivrSession, retryCount, type);
             nextNode.addPrompts(invalidAdherencePrompts(whpIvrMessage, patient.getCurrentTherapy().getTreatmentCategory()));
-            nextNode.addOperations(new InvalidAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         } else {
             moveToNextPatient(ivrSession, nextNode, true);
@@ -89,10 +89,10 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     private void handleNoInput(IvrSession ivrSession, Node nextNode) {
         InputType type = InputType.NO_INPUT;
         int retryCount = getCurrentRetryCount(ivrSession, type);
+        nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
         if (canRetry(ivrSession, type)) {
             setCurrentRetryCount(ivrSession,++retryCount,type);
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
-            nextNode.addOperations(new NoInputAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
         } else {
             moveToNextPatient(ivrSession, nextNode, true);
         }
@@ -100,7 +100,9 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
 
     protected void moveToNextPatient(IvrSession ivrSession, Node nextNode, boolean isThresholdRollover) {
         ivrSession.firstInvalidInput(true);
-        nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        if(!isThresholdRollover) {
+            nextNode.addOperations(new SkipAdherenceOperation(ivrSession.currentPatientId(), reportingPublisherService));
+        }
         super.moveToNextPatient(ivrSession, nextNode, isThresholdRollover);
     }
 }
