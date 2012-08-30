@@ -275,11 +275,11 @@
                 <scope>test</scope>
                 <type>jar</type>
             </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-data-importer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.motechproject.whp</groupId>-->
+                <!--<artifactId>whp-data-importer</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-treatment-card</artifactId>
