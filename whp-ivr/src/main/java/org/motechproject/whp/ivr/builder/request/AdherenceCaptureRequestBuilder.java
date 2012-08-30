@@ -10,10 +10,10 @@ public class AdherenceCaptureRequestBuilder {
 
     private AdherenceCaptureRequest request;
 
-    public final static String INVALID = "Invalid";
-    public final static String NO_INPUT = "NoInput";
-    public final static String SKIPPED = "Skipped";
-    public final static String ADHERENCE_PROVIDED = "Given";
+    private final static String INVALID = "Invalid";
+    private final static String NO_INPUT = "NoInput";
+    private final static String SKIPPED = "Skipped";
+    private final static String ADHERENCE_PROVIDED = "Given";
 
     public AdherenceCaptureRequestBuilder() {
     }

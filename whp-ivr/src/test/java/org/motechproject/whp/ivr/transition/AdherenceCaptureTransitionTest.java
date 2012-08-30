@@ -254,17 +254,10 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldReportOnNoInput_exceedingRetryThreshold() {
+    public void shouldNotReportOnNoInput_exceedingRetryThreshold() {
         flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
         Node destinationNode = adherenceCaptureTransition.getDestinationNode("", flowSession);
-        assertThat(destinationNode.getOperations(), hasItem(isA(NoInputAdherenceOperation.class)));
-    }
-
-    @Test
-    public void shouldReportOnInvalidInput_exceedingRetryThreshold() {
-        flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 2);
-        Node destinationNode = adherenceCaptureTransition.getDestinationNode("?", flowSession);
-        assertThat(destinationNode.getOperations(), hasItem(isA(InvalidAdherenceOperation.class)));
+        assertThat(destinationNode.getOperations(), not(hasItem(isA(NoInputAdherenceOperation.class))));
     }
 
     @Test

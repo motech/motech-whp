@@ -9,7 +9,6 @@ import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.ivr.IvrAudioFiles;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.util.KooKooIvrResponse;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -31,11 +30,10 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.matcher.IvrResponseAudioMatcher.audioList;
-import static org.motechproject.whp.ivr.IvrAudioFiles.*;
-import static org.motechproject.whp.ivr.builder.request.AdherenceCaptureRequestBuilder.*;
 
 public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
@@ -91,34 +89,23 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     public void shouldPlayWelcomeMessage() {
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
         List<String> playAudioList = ivrResponse.getTransitionPrompts();
-        assertThat(playAudioList, audioList(wav(MUSIC_ENTER, WELCOME_MESSAGE)));
+        assertThat(playAudioList, audioList(wav("musicEnter", "welcomeMessage")));
     }
 
     @Test
-    public void shouldPlayAdherenceSummary_uponCallBeginning_withinAdherenceCaptureWindow() {
+    public void shouldPlayAdherenceSummary() {
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
         assertThat(ivrResponse.getTransitionPrompts(),
                 is(audioList(
-                        wav(ADHERENCE_PROVIDED_FOR),
+                        wav("instructionalMessage1"),
                         alphaNumeric("0"),
-                        wav(ADHERENCE_TO_BE_PROVIDED_FOR),
+                    wav("instructionalMessage2"),
                         alphaNumeric("3"),
-                        wav(ADHERENCE_CAPTURE_INSTRUCTION),
-                        wav(PATIENT_LIST),
+                        wav("instructionalMessage3"),
+                        wav("patientList"),
                         alphaNumeric("1"),
                         alphaNumeric(id("patientid1")),
-                        wav(ENTER_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldPlayWindowClosedMessage_uponCallBeginning_outsideAdherenceCaptureWindow() throws IOException {
-        LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
-        adjustDateTime(lastMonday.plusDays(3));
-        KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
-        assertThat(ivrResponse.getNoticePrompts(),
-                is(audioList(
-                        wav(WINDOW_OVER),
-                        wav(THANK_YOU))));
+                        wav("enterAdherence"))));
     }
 
     @Test
@@ -132,199 +119,62 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         assertThat(ivrResponse.getTransitionPrompts(),
                 is(audioList(
-                        wav(PATIENT),
+                        wav("confirmMessage1"),
                         alphaNumeric(id(patient1.getPatientId())),
-                        wav(HAS_TAKEN, "3", OUT_OF, "2", DOSES, CONFIRM_ADHERENCE))));
+                        wav("confirmMessage1a", "3", "confirmMessage2", "2", "confirmMessage3", "confirmMessage4"))));
 
         assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?provider=kookoo&ln=en&tree=adherenceCapture"));
     }
 
     @Test
-    public void shouldRecordAdherenceForPatient_uponEnteringValidAdherenceValueAndConfirmation() {
+    public void shouldRecordAdherenceForPatient() {
         startCall(provider.getPrimaryMobile());
         sendDtmf("2");
 
         KooKooIvrResponse ivrResponse = sendDtmf("1");
         assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(PATIENT_LIST, "2"),
+                wav("patientList", "2"),
                 alphaNumeric(id("patientid2")),
-                wav(ENTER_ADHERENCE))));
+                wav("enterAdherence"))));
 
         assertThat(adherenceService.currentWeekAdherence(patient1).getDosesTaken(), is(2));
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     @Test
-    public void shouldPublishAdherenceCaptureLog_uponEnteringValidAdherenceValueAndConfirmation() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("2");
-        sendDtmf("1");
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-        assertThat(adherenceCaptureRequest.getStatus(), is(ADHERENCE_PROVIDED));
-    }
-
-    @Test
-    public void shouldSkipSavingAdherence_uponSkippingCurrentPatient_ByPressing9() {
+    public void shouldSkipSavingAdherence_OnPressing9() {
         startCall(provider.getPrimaryMobile());
 
         KooKooIvrResponse ivrResponse = sendDtmf("9");
 
         assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(PATIENT_LIST, "2"),
+                wav("patientList", "2"),
                 alphaNumeric(id("patientid2")),
-                wav(ENTER_ADHERENCE))));
+                wav("enterAdherence"))));
 
         verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     @Test
-    public void shouldPublishSkipPatientLog_uponSkippingCurrentPatient_byPressing9() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("9");
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-        assertThat(adherenceCaptureRequest.getStatus(), is(SKIPPED));
-    }
-
-    @Test
-    public void shouldRepeatAdherencePrompts_ForInvalidAdherenceInput_withinReplayThreshold() {
+    public void shouldRepeatAdherencePrompts_ForInvalidAdherenceInput() {
         startCall(provider.getPrimaryMobile());
 
         KooKooIvrResponse ivrResponse = sendDtmf("*");
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(INVALID_ADHERENCE_MESSAGE_PART1, TREATMENT_CATEGORY_GOVT, INVALID_ADHERENCE_MESSAGE_PART2, "0", INVALID_ADHERENCE_MESSAGE_PART3, "3", INVALID_ADHERENCE_MESSAGE_PART4),
-                wav(PATIENT_LIST, "1"), alphaNumeric(id("patientid1")), wav(ENTER_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldPublishInvalidAdherenceValueLog_ForEachInvalidAdherenceInput() {
-        startCall(provider.getPrimaryMobile());
-
-        sendDtmf("*");
-
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-
-        assertThat(adherenceCaptureRequest.getStatus(), is(INVALID));
-    }
-
-    @Test
-    public void shouldBeginAdherenceCaptureForNextPatient_ForInvalidAdherenceInput_exceedingReplayThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("*");
-        sendDtmf("*");
-        sendDtmf("*");
-        KooKooIvrResponse ivrResponse = sendDtmf("*");
 
         assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(MENU_REPEAT_FAILURE), wav(PATIENT_LIST, "2"), alphaNumeric(id("patientid2")), wav(ENTER_ADHERENCE))));
+                wav("errorMessage1", "TreatmentCategoryGovernement", "errorMessage2", "0", "errorMessage3", "3", "errorMessage4"),
+                wav("patientList", "1"), alphaNumeric(id("patientid1")), wav("enterAdherence"))));
+
+        verify(reportingPublisherService).reportAdherenceCapture(any(AdherenceCaptureRequest.class));
     }
 
     @Test
-    public void shouldNotPublishSkipPatientLog_ForInvalidAdherenceInput_exceedingReplayThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("*");
-        sendDtmf("*");
-        sendDtmf("*");
-        sendDtmf("*");
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService, times(4)).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-
-        assertThat(adherenceCaptureRequest.getStatus(), is(INVALID));
-    }
-
-    @Test
-    public void shouldRepeatAdherencePrompts_ForNoAdherenceInput_withinReplayThreshold() {
-        startCall(provider.getPrimaryMobile());
-
-        KooKooIvrResponse ivrResponse = sendDtmf("");
-
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(PATIENT_LIST, "1"), alphaNumeric(id("patientid1")), wav(ENTER_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldPublishNoAdherenceValueLog_ForEachInvalidAdherenceInput() {
-        startCall(provider.getPrimaryMobile());
-
-        sendDtmf("");
-
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-
-        assertThat(adherenceCaptureRequest.getStatus(), is(NO_INPUT));
-    }
-
-    @Test
-    public void shouldBeginAdherenceCaptureForNextPatient_ForNoAdherenceInput_exceedingReplayThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("");
-        sendDtmf("");
-        KooKooIvrResponse ivrResponse = sendDtmf("");
-
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(MENU_REPEAT_FAILURE), wav(PATIENT_LIST, "2"), alphaNumeric(id("patientid2")), wav(ENTER_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldNotPublishSkipPatientLog_ForNoAdherenceInput_exceedingReplayThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("");
-        sendDtmf("");
-        sendDtmf("");
-        ArgumentCaptor<AdherenceCaptureRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCaptureRequest.class);
-        verify(reportingPublisherService, times(3)).reportAdherenceCapture(argumentCaptor.capture());
-        AdherenceCaptureRequest adherenceCaptureRequest = argumentCaptor.getValue();
-
-        assertThat(adherenceCaptureRequest.getStatus(), is(NO_INPUT));
-    }
-
-    @Test
-    public void shouldRepeatConfirmPrompts_ForInvalidAdherenceConfirmInput_withinMenuRepeatThreshold() {
+    public void shouldRepeatConfirmPrompts_ForInvalidAdherenceConfirmInput() {
         startCall(provider.getPrimaryMobile());
         sendDtmf("3");
         KooKooIvrResponse ivrResponse = sendDtmf("9");
 
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(wav(CONFIRM_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldRepeatConfirmPrompts_ForNoAdherenceConfirmInput_withinMenuRepeatThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("3");
-        KooKooIvrResponse ivrResponse = sendDtmf("");
-
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(wav(CONFIRM_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldSkipCurrentPatientAndProceedToCaptureNextPatientsAdherence_ForInvalidAdherenceConfirmInput_exceedingMenuRepeatThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("3");
-        sendDtmf("3");
-        sendDtmf("3");
-        KooKooIvrResponse ivrResponse = sendDtmf("3");
-
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(MENU_REPEAT_FAILURE), wav(PATIENT_LIST, "2"), alphaNumeric(id("patientid2")), wav(ENTER_ADHERENCE))));
-    }
-
-    @Test
-    public void shouldSkipCurrentPatientAndProceedToCaptureNextPatientsAdherence_ForNoAdherenceConfirmInput_exceedingMenuRepeatThreshold() {
-        startCall(provider.getPrimaryMobile());
-        sendDtmf("3");
-        sendDtmf("");
-        sendDtmf("");
-        KooKooIvrResponse ivrResponse = sendDtmf("");
-
-        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(
-                wav(MENU_REPEAT_FAILURE), wav(PATIENT_LIST, "2"), alphaNumeric(id("patientid2")), wav(ENTER_ADHERENCE))));
+        assertThat(ivrResponse.getTransitionPrompts(), is(audioList(wav("confirmMessage4"))));
     }
 
     @Test
@@ -335,7 +185,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         KooKooIvrResponse ivrResponse = recordAdherence("2");
 
         assertThat(ivrResponse.getNoticePrompts(), is(audioList(
-                wav(THANK_YOU, END_OF_CALL_ADHERENCE_PROVIDED_FOR, "3", END_OF_CALL_ADHERENCE_OUT_OF, "3", END_OF_CALL_ADHERENCE_TOTAL_PATIENTS, COMPLETION_MESSAGE, MUSIC_END_NOTE))));
+                wav("thankYou", "summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
 
         assertNull(ivrResponse.getGotoUrl());
         assertThat(ivrResponse.callEnded(), is(true));
@@ -368,7 +218,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
         assertThat(ivrResponse.getNoticePrompts(), is(audioList(
-                wav(END_OF_CALL_ADHERENCE_PROVIDED_FOR, "3", END_OF_CALL_ADHERENCE_OUT_OF, "3", END_OF_CALL_ADHERENCE_TOTAL_PATIENTS, COMPLETION_MESSAGE, MUSIC_END_NOTE))));
+                wav("summaryMessage1", "3", "summaryMessage2", "3", "summaryMessage3", "completionMessage", "musicEnd-note"))));
         assertThat(ivrResponse.callEnded(), is(true));
     }
 
@@ -379,7 +229,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
 
         KooKooIvrResponse ivrResponse = startCall(provider.getPrimaryMobile());
 
-        assertThat(ivrResponse.getNoticePrompts(), is(audioList(wav(WINDOW_OVER, THANK_YOU))));
+        assertThat(ivrResponse.getNoticePrompts(), is(audioList(wav("windowOverMessage", "thankYou"))));
         assertThat(ivrResponse.callEnded(), is(true));
     }
 
