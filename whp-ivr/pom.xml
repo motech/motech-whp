@@ -32,13 +32,13 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-ivr-kookoo</artifactId>
-            <version>0.13-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-event</artifactId>
-            <version>0.13-SNAPSHOT</version>
+            <artifactId>motech-platform-decisiontree</artifactId>
+            <version>${motech.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
