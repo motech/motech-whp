@@ -1,0 +1,11 @@
+[       {"patientId" : "raj2","providerId" : "abcd","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj2","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "xyz","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "dheeru","mobileNumber" : "100","district" : "bihar","status" : "EIP"},
+        {"patientId" : "raj","providerId" : "xyz","mobileNumber" : "100","district" : "bihar","status" : "EIP"}
+]
