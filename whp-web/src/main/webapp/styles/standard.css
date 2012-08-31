@@ -180,7 +180,7 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
 }
 
 #treatmentCard table .tick-icon div {
-    margin-left: 0px;
+    margin-left: -2px;
 }
 
 #treatmentCard table .dash-icon {
