@@ -166,14 +166,21 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
     font-size: 130%;
 }
 
-#treatmentCard table .round-icon div {
+#treatmentCard table .round-icon:not(.sunday) div {
     margin-left: 0px;
     line-height: 22px;
 }
 
-#treatmentCard table .tick-icon div {
-    margin-left: -2px;
+#treatmentCard table .round-icon div {
+    margin-left: 0px;
+}
+
+#treatmentCard table .tick-icon:not(.sunday) div {
     line-height: 23px;
+}
+
+#treatmentCard table .tick-icon div {
+    margin-left: 0px;
 }
 
 #treatmentCard table .dash-icon {
@@ -417,12 +424,15 @@ div.buttons a, div.buttons button {
 }
 #treatmentCard .sunday {
     padding-left: 4px;
+    min-width: 12px;
+    max-width: 12px;
 }
 #treatmentCard .sunday div {
     height: 18px;
+    line-height: 18px;
 }
 #treatmentCard .sunday.dash-icon div {
-    line-height: 12px;
+    line-height: 13px;
 }
 
 .line-height-normal td {
