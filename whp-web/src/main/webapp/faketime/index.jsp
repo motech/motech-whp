@@ -1,7 +1,7 @@
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.util.Properties" %>
-<%@page import="java.util.Arrays" %>
+<%@ page import="org.motechproject.util.DateUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,8 +11,12 @@
     String appVersion = whpProperties.getProperty("application.version");
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-ui-1.8.21.custom.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-datetimepicker-addon.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-ui-slider.js"></script>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css/"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
+    <link rel="stylesheet" media="all" type="text/css" href="../styles/jquery-ui-theme.css"/>
 </head>
 <body>
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
@@ -21,35 +25,36 @@
 
 <div class="container">
     <div class="pull-right"><a href="/whp/emulator/">home</a></div>
-    <div id="information">
-        Format of date field: yyyy-mm-dd
+    <div>
+        <form action="" method="get">
+            Current Time : <%=DateUtil.now().toDate()%><input type="submit" value="Refresh"/>
+        </form>
     </div>
 
     <form name="fakeTimeSubmit">
-        <div class="row-fluid">
-            <span style="vertical-align:top" class="pull-left span3">Date</span>
-            <input id="date" class="span" name="date" type="text" value=""/>
-        </div>
-        <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Hour</span>
-            <input id="hour" name="hour" class="span2" type="text" value=""/>
-        </div>
-        <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Minutes</span>
-            <input id="minute" class="span2" type="text" value=""/>
-        </div>
+        <label for="newDateTime">New Date Time</label>
+        <input type="text" name="newDateTime" id="newDateTime" value=""/>
         <input type="button" id="post-button" value="Submit"/>
     </form>
     <script type="text/javascript">
-            $('#post-button').click(function () {
+        $(function () {
+            $('#newDateTime').datetimepicker({
+                dateFormat:'yy-mm-dd',
+                timeFormat:'hh:mm'
+            });
+        });
+
+        $('#post-button').click(function () {
             var host = window.location.host;
-            var urlString = "/whp/motech-delivery-tools/datetime/update?type=flow&date=" + $("#date").val() + "&hour=" + $("#hour").val() + "&minute=" + $("#minute").val();
+            var newDate = $("#newDateTime").val().split(" ")[0];
+            var timeComponent = $("#newDateTime").val().split(" ")[1];
+            var urlString = "/whp/motech-delivery-tools/datetime/update?type=flow&date=" + newDate + "&hour=" + timeComponent.split(":")[0] + "&minute=" + timeComponent.split(":")[1];
             $.ajax({
                 type:'GET',
                 url:"http://" + host + urlString,
                 contentType:"application/xml; charset=utf-8",
                 success:function (data, textStatus, jqXHR) {
-                    $('#statusMessage').html("Status of request: SUCCESS");
+                    location.reload();
                 },
                 error:function (xhr, status, error) {
                     $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);
