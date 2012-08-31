@@ -120,7 +120,7 @@
     <br/>
     <br/>
     <textarea id="statusMessage" rows="30" cols="100" style="min-width: 100%" readonly></textarea>
-    <div id="template" style="display:none">
+    <textarea id="template" style="display:none">
         <case xmlns="http://openrosa.org/javarosa" case_id="$CASE_ID$" api_key="3F2504E04F8911D39A0C0305E82C3301" date_modified="03/04/2012 11:23:40"
               user_id="system">
             <create>
@@ -154,11 +154,13 @@
                 <weight>$W$</weight>
             </update>
         </case>
-    </div>
+    </textarea>
     <script type="text/javascript">
         var patientXML = "";
-        function replaceTemplateValues() {
-            patientXML = $("#template").html()
+        function generatePatientXml() {
+            patientXML =  $("#template").val();
+            patientXML = $.trim(patientXML);
+
             patientXML = patientXML.replace('$TB_ID$', $("#tb_id").val());
             patientXML = patientXML.replace('$CASE_NAME$', $("#case_name").val());
             patientXML = patientXML.replace('$CASE_ID$', $("#case_id").val());
@@ -186,7 +188,7 @@
         }
         $(document).ready(function() {
             $('#submit').click(function () {
-                replaceTemplateValues();
+                generatePatientXml();
                 var host = window.location.host;
                 $.ajax({
                     type:'POST',

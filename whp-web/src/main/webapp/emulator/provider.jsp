@@ -67,9 +67,12 @@
         </user_data>
     </$REGISTRATION$></textarea>
     <script type="text/javascript">
-        var providerXML = $("#template").val();
-        providerXML = $.trim(providerXML);
-        function replaceTemplateValues() {
+        var providerXML;
+
+        function generateProviderXml() {
+            providerXML = $("#template").val();
+            providerXML = $.trim(providerXML);
+
             providerXML = providerXML.replace('$PROVIDER_ID$', $("#provider_id").val());
             providerXML = providerXML.replace('$PRIMARY_MOBILE$', $("#primary_mobile").val());
             providerXML = providerXML.replace('$SECONDARY_MOBILE$', $("#secondary_mobile").val());
@@ -79,7 +82,7 @@
             providerXML = providerXML.replace('$REGISTRATION$', "Registration");
         }
         $('#post-button').click(function () {
-            replaceTemplateValues();
+            generateProviderXml();
             var host = window.location.host;
             $.ajax({
                 type:'POST',
