@@ -91,6 +91,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
         Integer adherenceInput = Integer.parseInt(ivrSession.adherenceInputForCurrentPatient().input());
         nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
         nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
+        nextNode.setMaxTransitionInputDigit(1);
         nextNode.addTransition("?", new ConfirmAdherenceTransition());
     }
 }

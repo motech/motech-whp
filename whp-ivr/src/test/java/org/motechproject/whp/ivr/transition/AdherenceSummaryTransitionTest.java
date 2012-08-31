@@ -101,6 +101,16 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         assertThat(actualNode, is(expectedNode));
     }
 
+    @Test
+    public void shouldSetMaxInputDigitIfItHasTransition() {
+        setAdherenceProvided(patient1);
+        AdherenceSummaryByProvider adherenceSummary = adherenceSummary(asList(patient1, patient2, patient3));
+        when(adherenceDataService.getAdherenceSummary(PROVIDER_ID)).thenReturn(adherenceSummary);
+
+        Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
+        assertThat(actualNode.getMaxTransitionInputDigit(), is(1));
+    }
+
     private Patient setAdherenceProvided(Patient patient) {
         patient.setLastAdherenceWeekStartDate(currentAdherenceCaptureWeek().startDate());
         return patient;

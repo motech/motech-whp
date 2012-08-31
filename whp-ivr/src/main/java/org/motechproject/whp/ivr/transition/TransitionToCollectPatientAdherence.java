@@ -72,6 +72,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
         node.addPrompts(captureAdherencePrompts(whpIvrMessage,
                 ivrSession.currentPatientId(),
                 ivrSession.currentPatientNumber()));
+        node.setMaxTransitionInputDigit(1);
         node.addTransition("?", new AdherenceCaptureTransition());
     }
 

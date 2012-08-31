@@ -104,6 +104,24 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldSetMaxDigitCountInNodeOnSkippingCurrentPatient_IfHasTransition() {
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
+        assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
+    }
+
+    @Test
+    public void shouldSetMaxDigitCountInNodeForValidInput() {
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("2", flowSession);
+        assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
+    }
+
+    @Test
+    public void shouldSetMaxDigitCountInNodeForInValidInput() {
+        Node destinationNode = adherenceCaptureTransition.getDestinationNode("7", flowSession);
+        assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
+    }
+
+    @Test
     public void shouldPlayEndOfCallPromptsIfAdherenceIsSkippedForTheLastPatient() {
         new IvrSession(flowSession).currentPatientIndex(1);
         PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage)

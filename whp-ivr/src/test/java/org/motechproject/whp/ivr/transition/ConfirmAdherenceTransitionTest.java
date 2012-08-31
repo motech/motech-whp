@@ -132,6 +132,27 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldSetMaxDigitCountOnRepeating() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
+    }
+
+    @Test
+    public void shouldSetMaxDigitCountOnSkippingCurrentPatient_ifHasNextPatient() {
+        int adherenceInput = 2;
+        flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 2);
+        flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
+
+        Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
+
+        assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
+    }
+
+    @Test
     public void shouldAddPublishCallLogOperation_WhenThereAreNoMorePatients() {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
         flowSession.set(CURRENT_PATIENT_INDEX, 0);

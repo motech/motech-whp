@@ -64,6 +64,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
         nextNode.addOperations(new GetAdherenceOperation());
         nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, patient.getPatientId(), parseInt(input), patient.dosesPerWeek()));
         nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
+        nextNode.setMaxTransitionInputDigit(1);
         nextNode.addTransition("?", new ConfirmAdherenceTransition());
     }
 

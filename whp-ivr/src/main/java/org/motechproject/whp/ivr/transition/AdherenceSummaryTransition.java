@@ -69,6 +69,7 @@ public class AdherenceSummaryTransition implements ITransition {
     private Node addAdherenceCaptureTransitions(final IvrSession ivrSession, Node captureAdherenceNode) {
         captureAdherenceNode.addPrompts(captureAdherencePrompts(whpIvrMessage, ivrSession));
         captureAdherenceNode.addOperations(new CaptureAdherenceSubmissionTimeOperation(now()));
+        captureAdherenceNode.setMaxTransitionInputDigit(1);
         captureAdherenceNode.addTransition("?", new AdherenceCaptureTransition());
         return captureAdherenceNode;
     }
