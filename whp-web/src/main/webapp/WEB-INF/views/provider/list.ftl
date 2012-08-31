@@ -7,24 +7,30 @@
 <@layout.defaultLayout "MoTeCH-WHP">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 
-<@paginator.paginate entity="patient">
+<@paginator.paginate entity="provider">
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Patient Id</th>
                 <th>Provider Id</th>
-                <th>Mobile Number</th>
                 <th>District</th>
+                <th>Primary Mobile Number</th>
+                <th>Secondary Mobile Number</th>
+                <th>Tertiary Mobile Number</th>
                 <th>Status</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr class="odd gradeX" ng-repeat="item in data">
-                <td>{{item.patientId}}</td>
+            <tr class="odd gradeX" ng-repeat="item in data.results">
                 <td>{{item.providerId}}</td>
-                <td>{{item.mobileNumber}}</td>
                 <td>{{item.district}}</td>
+                <td>{{item.primaryMobile}}</td>
+                <td>{{item.primaryMobile}}</td>
+                <td>{{item.primaryMobile}}</td>
                 <td>{{item.status}}</td>
+                <td></td>
+                <td></td>
             </tr>
     </table>
 </@paginator.paginate>

@@ -298,6 +298,11 @@
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.motechproject.contrib-whp</groupId>
+                <artifactId>motech-paginator</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-testing-utils</artifactId>
                 <version>${motech.version}</version>

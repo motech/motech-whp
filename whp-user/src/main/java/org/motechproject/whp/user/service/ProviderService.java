@@ -1,9 +1,11 @@
 package org.motechproject.whp.user.service;
 
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.paginator.response.PageResults;
+import org.motechproject.paginator.service.Paging;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ProviderService {
+public class ProviderService implements Paging {
 
     MotechAuthenticationService motechAuthenticationService;
 
@@ -31,12 +33,11 @@ public class ProviderService {
 
     public void registerProvider(ProviderRequest providerRequest) {
         String providerDocId = createProvider(providerRequest);
-        try{
+        try {
             // TODO : make this idempotent
             motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
-        }
-        catch (Exception e) {
-            throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR,e.getMessage());
+        } catch (Exception e) {
+            throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR, e.getMessage());
         }
     }
 
@@ -49,14 +50,14 @@ public class ProviderService {
     }
 
     public List<Provider> fetchBy(String district, String providerId) {
-        if(providerId.isEmpty()) {
+        if (providerId.isEmpty()) {
             return fetchBy(district);
         } else {
             return allProviders.findByDistrictAndProviderId(district, providerId);
         }
     }
 
-    public List<Provider> fetchBy(String district){
+    public List<Provider> fetchBy(String district) {
         return allProviders.findByDistrict(district);
     }
 
@@ -68,11 +69,24 @@ public class ProviderService {
         return allWebUsers;
     }
 
-    public Provider findByProviderId(String providerId){
+    public Provider findByProviderId(String providerId) {
         return allProviders.findByProviderId(providerId);
     }
 
     public Provider findByMobileNumber(String mobileNumber) {
         return allProviders.findByMobileNumber(mobileNumber);
+    }
+
+    @Override
+    public PageResults page(Integer pageNo, Integer rowsPerPage) {
+        List<Provider> allProviders = this.allProviders.getAll();
+
+        int endIndex = (pageNo + 1) * rowsPerPage >  allProviders.size() ? allProviders.size() : (pageNo + 1) * rowsPerPage;
+        List<Provider> providers = allProviders.subList(pageNo * rowsPerPage, endIndex);
+        PageResults pageResults = new PageResults();
+        pageResults.setTotalRows(allProviders.size());
+        pageResults.setPageNo(pageNo);
+        pageResults.setResults(providers);
+        return pageResults;
     }
 }
