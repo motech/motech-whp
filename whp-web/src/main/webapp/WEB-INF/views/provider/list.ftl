@@ -66,7 +66,7 @@
             <th type="reset-password"></th>
         </tr>
 
-<@paginator.paginate entity="provider">
+<@paginator.paginate entity="provider" contextRoot="/whp">
     <table class="table table-striped table-bordered">
         <thead>
             <tr>

@@ -1,8 +1,8 @@
-<#macro paginate entity>
+<#macro paginate entity contextRoot>
 
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/pagination.css'/>"/>
 
-    <div ng-init="entity='${entity}'">
+    <div ng-init="entity='${entity}';contextRoot='${contextRoot}'">
         <div class="paginator"  ng-controller="PaginationCtrl" >
             <div class="paginator-content">
                 <#nested>
