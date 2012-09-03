@@ -18,7 +18,7 @@ public class IvrAudioFiles {
     public static final String OUT_OF = "confirmMessage2";
     public static final String DOSES = "confirmMessage3";
     public static final String CONFIRM_ADHERENCE = "confirmMessage4";
-    public static final String CALL_BACK_MESSAGE = "callBackMessage";
+    public static final String CALL_BACK_MESSAGE = "callbackMessage";
     public static final String COMPLETION_MESSAGE = "completionMessage";
     public static final String MUSIC_END_NOTE = "musicEnd-note";
     public static final String THANK_YOU = "thankYouMessage";
