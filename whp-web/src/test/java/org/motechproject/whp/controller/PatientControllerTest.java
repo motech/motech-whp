@@ -11,6 +11,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
@@ -75,6 +76,7 @@ public class PatientControllerTest extends BaseControllerTest {
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     private static final String LOGGED_IN_USER_NAME = "username";
+    private ArrayList<TherapyRemark> cmfAdminRemarks;
 
 
     @Before
@@ -92,6 +94,8 @@ public class PatientControllerTest extends BaseControllerTest {
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
         when(allDistrictsCache.getAll()).thenReturn(districts);
+        cmfAdminRemarks = new ArrayList<>();
+        when(patientService.getRemarks(patient)).thenReturn(cmfAdminRemarks);
     }
 
     private void setupMessageSource() {
@@ -120,8 +124,9 @@ public class PatientControllerTest extends BaseControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attribute("patient", patientInfo))
+                .andExpect(model().attribute("cmfAdminRemarks",cmfAdminRemarks))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
     }
@@ -134,9 +139,8 @@ public class PatientControllerTest extends BaseControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/print/" + patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(2))
                 .andExpect(model().attribute("patient", patientInfo))
-                .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(model().attribute("treatmentCard", treatmentCard))
                 .andExpect(forwardedUrl("patient/print"));
     }
