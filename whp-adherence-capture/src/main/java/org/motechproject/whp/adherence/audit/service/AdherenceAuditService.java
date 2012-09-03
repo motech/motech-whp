@@ -29,13 +29,13 @@ public class AdherenceAuditService {
     public void auditWeeklyAdherence(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         AuditLog auditLog = new AuditLog()
-                .numberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
-                .providerId(currentTreatment.getProviderId())
-                .remark(auditParams.getRemarks())
-                .user(auditParams.getUser())
+                .withNumberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
+                .withProviderId(currentTreatment.getProviderId())
+                .withRemark(auditParams.getRemarks())
+                .withUser(auditParams.getUser())
                 .sourceOfChange(auditParams.getSourceOfChange().name())
-                .patientId(weeklyAdherenceSummary.getPatientId())
-                .tbId(currentTreatment.getTbId());
+                .withPatientId(weeklyAdherenceSummary.getPatientId())
+                .withTbId(currentTreatment.getTbId());
         allAuditLogs.add(auditLog);
     }
 

@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
@@ -14,6 +15,7 @@ import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.repository.AllDistricts;
+import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
@@ -58,6 +60,8 @@ public class PatientController extends BaseWebController {
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
     private TreatmentCardService treatmentCardService;
+    private ProviderRemarksService providerRemarksService;
+
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -67,7 +71,8 @@ public class PatientController extends BaseWebController {
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
-                             AllDistricts allDistrictsCache) {
+                             AllDistricts allDistrictsCache,
+                             ProviderRemarksService providerRemarksService) {
 
         this.patientService = patientService;
         this.whpAdherenceService = whpAdherenceService;
@@ -76,6 +81,7 @@ public class PatientController extends BaseWebController {
         this.providerService = providerService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.messageSource = messageSource;
+        this.providerRemarksService = providerRemarksService;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -205,7 +211,8 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
-        uiModel.addAttribute("cmfAdminRemarks", patientService.getRemarks(patient));
+        uiModel.addAttribute("cmfAdminRemarks", patientService.getCmfAdminRemarks(patient));
+        uiModel.addAttribute("providerRemarks", providerRemarksService.getRemarks(patient));
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotEmpty(messages)) {

@@ -1,6 +1,7 @@
 package org.motechproject.whp.adherence.audit.domain;
 
 
+import lombok.Data;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
@@ -8,6 +9,7 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 
 @TypeDiscriminator("doc.type == 'AuditLog'")
+@Data
 public class AuditLog extends MotechBaseDataObject {
 
     @JsonProperty
@@ -31,7 +33,7 @@ public class AuditLog extends MotechBaseDataObject {
         return numberOfDosesTaken;
     }
 
-    public AuditLog numberOfDosesTaken(int doses) {
+    public AuditLog withNumberOfDosesTaken(int doses) {
         numberOfDosesTaken = doses;
         return this;
     }
@@ -40,7 +42,7 @@ public class AuditLog extends MotechBaseDataObject {
         return remark;
     }
 
-    public AuditLog remark(String remark) {
+    public AuditLog withRemark(String remark) {
         this.remark = remark;
         return this;
     }
@@ -58,7 +60,7 @@ public class AuditLog extends MotechBaseDataObject {
         return this.patientId;
     }
 
-    public AuditLog patientId(String patientId) {
+    public AuditLog withPatientId(String patientId) {
         this.patientId = patientId;
         return this;
     }
@@ -67,12 +69,12 @@ public class AuditLog extends MotechBaseDataObject {
         return this.tbId;
     }
 
-    public AuditLog tbId(String tbId) {
+    public AuditLog withTbId(String tbId) {
         this.tbId = tbId;
         return this;
     }
 
-    public AuditLog providerId(String providerId) {
+    public AuditLog withProviderId(String providerId) {
         this.providerId = providerId;
         return this;
     }
@@ -81,7 +83,7 @@ public class AuditLog extends MotechBaseDataObject {
         return providerId;
     }
 
-    public AuditLog user(String user) {
+    public AuditLog withUser(String user) {
         this.user = user;
         return this;
     }
