@@ -7,7 +7,7 @@
 <@layout.defaultLayout "MoTeCH-WHP">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 
-<@paginator.paginate entity="provider">
+<@paginator.paginate entity="provider" contextRoot="/whp">
     <table class="table table-striped table-bordered">
         <thead>
             <tr>

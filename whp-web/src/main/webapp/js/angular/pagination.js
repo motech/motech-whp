@@ -5,7 +5,7 @@ function PaginationCtrl($scope, $http) {
     $scope.pageSize = 5;
 
     $scope.loadPage = function (){
-        $http.get('/whp/page/' + $scope.entity + '?pageNo=' + $scope.currentPage).success(function(data) {
+        $http.get($scope.contextRoot + '/page/' + $scope.entity + '?pageNo=' + $scope.currentPage).success(function(data) {
             $scope.data = data;
             $scope.numberOfPages=function(){
                 return Math.ceil($scope.data.results.length/$scope.pageSize);
