@@ -55,32 +55,12 @@ ${message}
 </form>
 
 <br/>
+<#include "remarks.ftl"/>
 <script type="text/javascript">
-    $('#saveTheDate').click(function () {
-        if ($('#ipDatePicker').val() === "" && $('#eipDatePicker').val() === "" && $('#cpDatePicker').val() === "") {
-            event.preventDefault();
-            jConfirm('All phase start dates are set to empty. Do you want to continue?', 'Warning', function (r) {
-                if (r === true) {
-                    $('#setDatesModal').submit();
-                }
-            });
-        }
-    });
-    $(".date-dismiss").click(function(event){
-       $(event.target).closest("tr").find("input").val("");
-    });
     $('#ipDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
     $('#eipDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
     $('#cpDatePicker').datepicker({maxDate: '${today}', dateFormat:'dd/mm/yy'});
-    $("#clearFields").click(function () {
-        $('#ipDatePicker').val('');
-        $('#eipDatePicker').val('');
-        $('#cpDatePicker').val('');
-    });
-    $('#ipDatePicker').css('cursor', 'pointer');
-    $('#eipDatePicker').css('cursor', 'pointer');
-    $('#cpDatePicker').css('cursor', 'pointer');
-    createAutoClosingAlert(".dateUpdated-message-alert", 5000)
+
     $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}', function() {
         setUpTreatmentCardTable();
     });

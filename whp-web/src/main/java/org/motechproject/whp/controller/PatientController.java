@@ -113,8 +113,7 @@ public class PatientController extends BaseWebController {
     @RequestMapping(value = "print/{id}", method = RequestMethod.GET)
     public String print(@PathVariable("id") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
-        setupDashboardModel(uiModel, request, patient);
-        uiModel.addAttribute("treatmentCard", treatmentCardService.treatmentCard(patient));
+        setupPrintDashboardModel(uiModel, patient);
         return "patient/print";
     }
 
@@ -206,11 +205,20 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
+        uiModel.addAttribute("cmfAdminRemarks", patientService.getRemarks(patient));
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotEmpty(messages)) {
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
+    }
+
+    private void setupPrintDashboardModel(Model uiModel, Patient patient) {
+        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
+        Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
+
+        uiModel.addAttribute("patient", new PatientInfo(patient, provider));
+        uiModel.addAttribute("treatmentCard", treatmentCardService.treatmentCard(patient));
     }
 
     private String dateMessage(String date) {

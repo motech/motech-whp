@@ -26,4 +26,8 @@ public class TherapyRemark extends MotechBaseDataObject {
         this.remark = remark;
         this.user = user;
     }
+
+    public DateTime getCreationTime() {
+        return DateUtil.setTimeZone(creationTime);
+    }
 }
