@@ -84,9 +84,11 @@ public class PatientService {
         allTherapyRemarks.add(new TherapyRemark(patientId, therapy.getUid(), remark, user));
     }
 
-    public List<TherapyRemark> getRemarks(Patient patient) {
+    public List<TherapyRemark> getCmfAdminRemarks(Patient patient) {
         return allTherapyRemarks.findByTherapyId(patient.getCurrentTherapy().getUid());
     }
+
+
 
     public boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);

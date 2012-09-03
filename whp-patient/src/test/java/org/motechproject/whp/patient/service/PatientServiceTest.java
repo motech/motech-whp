@@ -11,14 +11,12 @@ import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
-import org.motechproject.whp.user.seed.ProviderSeed;
 import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -53,6 +51,6 @@ public class PatientServiceTest {
 
         when(allTherapyRemarks.findByTherapyId(therapyId)).thenReturn(therapyRemarks);
 
-        assertThat(patientService.getRemarks(patient), is(therapyRemarks));
+        assertThat(patientService.getCmfAdminRemarks(patient), is(therapyRemarks));
     }
 }

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.util.WHPDate;
@@ -15,6 +16,7 @@ import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
+import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
@@ -66,6 +68,8 @@ public class PatientControllerTest extends BaseControllerTest {
     TreatmentCardService treatmentCardService;
     @Mock
     HttpSession session;
+    @Mock
+    ProviderRemarksService providerRemarksService;
 
     AbstractMessageSource messageSource;
 
@@ -76,7 +80,8 @@ public class PatientControllerTest extends BaseControllerTest {
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
     private static final String LOGGED_IN_USER_NAME = "username";
-    private ArrayList<TherapyRemark> cmfAdminRemarks;
+    private List<TherapyRemark> cmfAdminRemarks;
+    private List<AuditLog> auditLogs;
 
 
     @Before
@@ -88,14 +93,16 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache);
+        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
         when(allDistrictsCache.getAll()).thenReturn(districts);
-        cmfAdminRemarks = new ArrayList<>();
-        when(patientService.getRemarks(patient)).thenReturn(cmfAdminRemarks);
+        cmfAdminRemarks = mock(List.class);
+        when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
+        auditLogs = mock(List.class);
+        when(providerRemarksService.getRemarks(patient)).thenReturn(auditLogs);
     }
 
     private void setupMessageSource() {
@@ -124,9 +131,10 @@ public class PatientControllerTest extends BaseControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(5))
                 .andExpect(model().attribute("patient", patientInfo))
-                .andExpect(model().attribute("cmfAdminRemarks",cmfAdminRemarks))
+                .andExpect(model().attribute("cmfAdminRemarks", cmfAdminRemarks))
+                .andExpect(model().attribute("providerRemarks", auditLogs))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
     }
