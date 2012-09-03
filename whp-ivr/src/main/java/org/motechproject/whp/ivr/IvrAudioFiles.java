@@ -24,7 +24,7 @@ public class IvrAudioFiles {
     public static final String THANK_YOU = "thankYouMessage";
     public static final String WINDOW_OVER = "windowOverMessage";
     public static final String INVALID_ADHERENCE_MESSAGE_PART1 = "errorMessage1";
-    public static final String TREATMENT_CATEGORY_GOVT = "treatmentCategoryGovernement";
+    public static final String TREATMENT_CATEGORY_GOVT = "treatmentCategoryGovernment";
     public static final String TREATMENT_CATEGORY_COMMERCIAL = "treatmentCategoryCommercial";
     public static final String INVALID_ADHERENCE_MESSAGE_PART2 = "errorMessage2";
     public static final String INVALID_ADHERENCE_MESSAGE_PART3 = "errorMessage3";
