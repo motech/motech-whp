@@ -29,7 +29,6 @@ public class TreatmentCardPage extends PatientDashboardPage {
     @FindBy(how = How.ID, using = "longestTreatmentInterruption")
     WebElement longestTreatmentInterruption;
 
-
     public TreatmentCardPage(WebDriver webDriver) {
         super(webDriver);
     }

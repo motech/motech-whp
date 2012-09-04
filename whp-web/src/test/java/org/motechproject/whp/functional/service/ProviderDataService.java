@@ -34,6 +34,6 @@ public class ProviderDataService {
     }
 
     private String generateId() {
-        return "testProvider-" + UUID.randomUUID();
+        return "testprovider-" + UUID.randomUUID();
     }
 }

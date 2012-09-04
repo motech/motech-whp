@@ -30,6 +30,9 @@ public class UpdateAdherencePage extends Page {
     @FindBy(how = How.ID, using = "dosesTaken")
     private WebElement numberOfDosesTaken;
 
+    @FindBy(how = How.ID, using = "remarks")
+    private WebElement patientRemarks;
+
     @Override
     public void postInitialize() {
         adherenceForm = WebDriverFactory.createWebElement(adherenceForm);
@@ -54,6 +57,10 @@ public class UpdateAdherencePage extends Page {
 
     public UpdateAdherencePage setNumberOfDosesTaken(int i) {
         ((WHPWebElement) numberOfDosesTaken).select(i + "");
+        return this;
+    }
+    public UpdateAdherencePage setRemarks(String remarks) {
+        patientRemarks.sendKeys(remarks);
         return this;
     }
 
