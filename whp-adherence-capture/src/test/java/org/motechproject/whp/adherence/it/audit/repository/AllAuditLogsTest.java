@@ -65,7 +65,6 @@ public class AllAuditLogsTest extends SpringIntegrationTest {
 
         List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(tbIds);
 
-        assertThat(result.size(),is(3));
         assertThat(result, is(asList(auditLog3, auditLog2, auditLog1)));
     }
 
@@ -84,7 +83,6 @@ public class AllAuditLogsTest extends SpringIntegrationTest {
 
         List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(asList(tbId));
 
-        assertThat(result.size(),is(1));
         assertThat(result, is(asList(auditLog)));
 
     }
