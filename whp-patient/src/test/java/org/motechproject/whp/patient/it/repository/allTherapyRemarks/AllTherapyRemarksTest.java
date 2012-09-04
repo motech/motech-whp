@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -52,10 +53,7 @@ public class AllTherapyRemarksTest extends SpringIntegrationTest {
     public void shouldFetchRemarksChronologicallyByTherapyId() {
         List<TherapyRemark> therapyRemarks = allTherapyRemarks.findByTherapyId(THERAPY_ID);
 
-        assertThat(therapyRemarks.size(), is(3));
-        assertThat(therapyRemarks.get(0), is(remark3));
-        assertThat(therapyRemarks.get(1), is(remark2));
-        assertThat(therapyRemarks.get(2), is(remark1));
+        assertThat(therapyRemarks, is(asList(remark3,remark2,remark1)));
     }
 
     @After
