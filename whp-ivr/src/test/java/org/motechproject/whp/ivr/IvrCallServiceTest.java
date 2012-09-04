@@ -32,12 +32,29 @@ public class IvrCallServiceTest extends BaseUnitTest {
     private IvrCallService ivrCallService;
     private static final String IVR_CALL_BACK_URL = "callBackURL";
     private static final String PHONE_NUMBER_FIELD_KEY = "PHONE_NUMBER_FIELD_KEY";
+    private static final String NATIONAL_TELEPHONE_NUMBER_PREFIX = "0";
 
     @Before
     public void setUp() {
         initMocks(this);
         mockCurrentDate(DateUtil.now());
         ivrCallService = new IvrCallService(ivrService, providerService, reportingPublisherService, IVR_CALL_BACK_URL);
+    }
+
+    @Test
+    public void shouldPrefixMobileNumber_withNationalTelephoneNumberPrefix_zero() {
+        Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+
+        when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
+
+        ivrCallService.handleFlashingRequest(flashingRequest);
+
+        ArgumentCaptor<CallRequest> argumentCaptor = ArgumentCaptor.forClass(CallRequest.class);
+        verify(ivrService).initiateCall(argumentCaptor.capture());
+
+        CallRequest callRequest = argumentCaptor.getValue();
+        assertThat(callRequest.getPhone(), is(NATIONAL_TELEPHONE_NUMBER_PREFIX + PHONE_NUMBER_FIELD_KEY));
     }
 
     @Test
@@ -53,7 +70,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
         verify(ivrService).initiateCall(argumentCaptor.capture());
 
         CallRequest callRequest = argumentCaptor.getValue();
-        assertThat(callRequest.getPhone(), is(PHONE_NUMBER_FIELD_KEY));
+        assertThat(callRequest.getPhone(), is(NATIONAL_TELEPHONE_NUMBER_PREFIX + PHONE_NUMBER_FIELD_KEY));
         assertThat(callRequest.getCallBackUrl(), is(IVR_CALL_BACK_URL));
         verify(providerService).findByMobileNumber(PHONE_NUMBER_FIELD_KEY);
     }
