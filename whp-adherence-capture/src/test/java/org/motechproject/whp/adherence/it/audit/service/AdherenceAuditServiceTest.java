@@ -64,6 +64,28 @@ public class AdherenceAuditServiceTest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldTrimRemarkOnStoringAuditLog() {
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        auditParams.setRemarks("   remarks  ");
+        adherenceAuditService.auditWeeklyAdherence(patient, adherenceSummary, auditParams);
+
+        AuditLog auditLog = adherenceAuditService.fetchWeeklyAuditLogs().get(0);
+
+        assertEquals("remarks", auditLog.remark());
+    }
+
+    @Test
+    public void shouldHandleNullRemarkValue() {
+        WeeklyAdherenceSummary adherenceSummary = new WeeklyAdherenceSummaryBuilder().build();
+        auditParams.setRemarks(null);
+        adherenceAuditService.auditWeeklyAdherence(patient, adherenceSummary, auditParams);
+
+        AuditLog auditLog = adherenceAuditService.fetchWeeklyAuditLogs().get(0);
+
+        assertEquals(null, auditLog.remark());
+    }
+
+    @Test
     public void shouldAuditDailyAdherenceCaptured(){
         LocalDate pillDate = DateUtil.today();
         Adherence adherenceData = AdherenceDataBuilder.createLog(pillDate, "providerId", TB_ID, PillStatus.Taken);
