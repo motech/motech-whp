@@ -7,6 +7,7 @@ import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,16 @@ public class IvrSession {
     public static final String CURRENT_INVALID_INPUT_RETRY_COUNT = "currentInvalidInputRetryCount";
     public static final String CURRENT_NO_INPUT_RETRY_COUNT = "currentNoInputRetryCount";
     public static final String IS_FIRST_INVALID_INPUT = "firstInvalidInput";
+    private static final String NATIONAL_TELEPHONE_NUMBER_PREFIX = "0";
     private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
         this.flowSession = flowSession;
+        // Stripping the national telephone number prefix from the actual mobile number for all practical usage
+        String cid = flowSession.get("cid");
+        if(StringUtils.hasText(cid) && cid.startsWith(NATIONAL_TELEPHONE_NUMBER_PREFIX)) {
+            this.flowSession.set("cid", cid.substring(1));
+        }
     }
 
     public String mobileNumber() {
