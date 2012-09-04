@@ -16,6 +16,7 @@ maven-eclipse.xml
 *.eml
 *.log
 *.userlibraries
+*overlays/
 out/
 *.out
 test-output/
