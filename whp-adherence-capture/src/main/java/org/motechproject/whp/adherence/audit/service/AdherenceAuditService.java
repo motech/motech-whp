@@ -31,7 +31,7 @@ public class AdherenceAuditService {
         AuditLog auditLog = new AuditLog()
                 .withNumberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
                 .withProviderId(currentTreatment.getProviderId())
-                .withRemark(auditParams.getRemarks())
+                .withRemark(auditParams.getRemarks() == null ? auditParams.getRemarks() : auditParams.getRemarks().trim())
                 .withUser(auditParams.getUser())
                 .sourceOfChange(auditParams.getSourceOfChange().name())
                 .withPatientId(weeklyAdherenceSummary.getPatientId())
@@ -44,7 +44,7 @@ public class AdherenceAuditService {
     }
 
     public void auditDailyAdherence(Patient patient, List<Adherence> adherenceData, AuditParams auditParams) {
-        for(Adherence adherence : adherenceData) {
+        for (Adherence adherence : adherenceData) {
             DailyAdherenceAuditLog auditLog = new DailyAdherenceAuditLog();
             auditLog.setPatientId(patient.getPatientId());
             auditLog.setTbId(adherence.getTbId());

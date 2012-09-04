@@ -25,7 +25,7 @@ public class AllAuditLogs extends MotechBaseRepository<AuditLog> {
         super(AuditLog.class, dbCouchDbConnector);
     }
 
-    @View(name = "find_by_audit_tb_ids", map = "function(doc) {if (doc.type ==='AuditLog' && doc.remark != null && doc.remark.trim() != '') {emit(doc.tbId, doc._id);}}")
+    @View(name = "find_by_audit_tb_ids", map = "function(doc) {if (doc.type ==='AuditLog' && doc.remark != null && doc.remark != '') {emit(doc.tbId, doc._id);}}")
     public List<AuditLog> findByTbIdsWithRemarks(List<String> tbIds) {
         ViewQuery query=createQuery("find_by_audit_tb_ids").keys(tbIds).includeDocs(true);
         List<AuditLog> auditLogs = db.queryView(query, AuditLog.class);
