@@ -96,7 +96,7 @@ public class ProviderService implements Paging {
     public PageResults page(Integer pageNo, Integer rowsPerPage, Properties properties) {
         List<Provider> allProviders = this.allProviders.getAll();
 
-        int endIndex = (pageNo + 1) * rowsPerPage >  allProviders.size() ? allProviders.size() : (pageNo + 1) * rowsPerPage;
+        int endIndex = (pageNo + 1) * rowsPerPage > allProviders.size() ? allProviders.size() : (pageNo + 1) * rowsPerPage;
         List<Provider> providers = allProviders.subList(pageNo * rowsPerPage, endIndex);
         PageResults pageResults = new PageResults();
         pageResults.setTotalRows(allProviders.size());
@@ -109,6 +109,4 @@ public class ProviderService implements Paging {
     public String entityName() {
         return "provider";
     }
-
-
 }
