@@ -584,3 +584,12 @@ div.buttons a, div.buttons button {
 .reset-password, .reset-password:hover {
     color: #d2691e;
 }
+
+.line {
+    height: 1px;
+    background-color: #add8e6;
+    margin: 1px;
+}
+.underline {
+    text-decoration: underline;
+}

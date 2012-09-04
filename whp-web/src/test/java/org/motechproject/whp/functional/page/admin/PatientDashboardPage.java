@@ -1,5 +1,7 @@
 package org.motechproject.whp.functional.page.admin;
 
+import org.hamcrest.Matchers;
+import org.joda.time.DateTime;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.Page;
@@ -10,12 +12,33 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.openqa.selenium.By.name;
 
 public class PatientDashboardPage extends Page {
 
     @FindBy(how = How.ID, using = "setDateLink")
     WebElement adjustStartDatesLink;
+
+    @FindBy(how = How.ID, using = "remarks-content")
+    WebElement remarksContent;
+
+    @FindBy(how = How.ID, using = "cmf-admin-remarks")
+    WebElement cmfAdminRemarks;
+
+    @FindBy(how = How.ID, using = "provider-remarks")
+    WebElement providerRemarks;
+
+    @FindBy(how = How.ID, using = "addRemark")
+    WebElement addRemarkButton;
+
+    @FindBy(how = How.ID, using = "patientRemark")
+    WebElement patientRemarks;
 
     private final String ipStartDate = "ipStartDate";
     private final String eipStartDate = "eipStartDate";
@@ -67,4 +90,39 @@ public class PatientDashboardPage extends Page {
     public String getCpStartDate() {
         return webDriver.findElement(name(cpStartDate)).getAttribute("value");
     }
+
+    public String getRemarks() {
+        return remarksContent.getText();
+    }
+
+    public PatientDashboardPage addRemarks(String remarks) {
+        patientRemarks.sendKeys(remarks);
+        addRemarkButton.click();
+
+        return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
+    }
+
+    public void verifyCmfAdminRemark(String user, DateTime dateTime, String remark, int position) {
+        List<WebElement> remarks = cmfAdminRemarks.findElements(By.className("cmf-admin-remark"));
+
+        assertRemark(user, dateTime, remark, position, remarks, false);
+    }
+
+    public void verifyProviderRemark(String user, DateTime dateTime, String remark, int position) {
+        List<WebElement> remarks = providerRemarks.findElements(By.className("provider-remark"));
+
+        assertRemark(user, dateTime, remark, position, remarks, true);
+    }
+
+    private void assertRemark(String user, DateTime dateTime, String remark, int position, List<WebElement> remarks, boolean isProviderRemark) {
+        assertThat(remarks.size(), is(greaterThan(position)));
+        WebElement cmfAdminRemark = remarks.get(position);
+        String adminSays = String.format("%s on %s at %s says:", user.toLowerCase(), dateTime.toString("dd/MM/yyyy"), dateTime.toString("hh:mm a"));
+        assertThat(cmfAdminRemark.findElement(By.tagName("h5")).getText(), is(Matchers.containsString(adminSays)));
+        assertThat(cmfAdminRemark.findElement(By.tagName("div")).getText(), is(remark));
+
+        if(isProviderRemark)
+            assertThat(cmfAdminRemark.findElement(By.tagName("h5")).getText(), is(startsWith("Provider ")));
+    }
+
 }

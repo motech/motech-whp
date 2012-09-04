@@ -16,7 +16,7 @@ public class PatientDataService {
     }
 
     public TestPatient createPatient(String providerId, String firstName, String district) {
-        TestPatient testPatient = new TestPatient(UUID.randomUUID().toString(), PatientBuilder.TB_ID, providerId, firstName, district);
+        TestPatient testPatient = new TestPatient(UUID.randomUUID().toString(), UUID.randomUUID().toString(), providerId, firstName, district);
         PatientCreatePage patientCreatePage = PatientCreatePage.fetch(webDriver);
         patientCreatePage.createPatient(testPatient);
         return testPatient;
