@@ -22,6 +22,7 @@ public class IvrCallService {
     private ProviderService providerService;
     private String ivrCallBackURL;
     private ReportingPublisherService reportingPublisherService;
+    private static final String NATIONAL_TELEPHONE_NUMBER_PREFIX = "0";
 
     @Autowired
     public IvrCallService(IVRService ivrService, ProviderService providerService, ReportingPublisherService reportingPublisherService, @Value("${application.url}") String ivrCallBackURL) {
@@ -32,20 +33,23 @@ public class IvrCallService {
     }
 
     public void handleFlashingRequest(FlashingRequest flashingRequest) {
-        Map<String, String> params = new HashMap<>();
-        String mobileNumber = flashingRequest.getMobileNumber();
-        CallRequest callRequest = new CallRequest(mobileNumber, params, ivrCallBackURL);
-
-        Provider provider = providerService.findByMobileNumber(mobileNumber);
-
         FlashingLogRequest flashingRequestLog = buildFlashingLogRequest(flashingRequest);
 
+        String mobileNumber = flashingRequest.getMobileNumber();
+        Provider provider = providerService.findByMobileNumber(mobileNumber);
         if(provider != null){
+            Map<String, String> params = new HashMap<>();
+            mobileNumber = prefixNationalCode(mobileNumber);
+            CallRequest callRequest = new CallRequest(mobileNumber, params, ivrCallBackURL);
             ivrService.initiateCall(callRequest);
             flashingRequestLog.setProviderId(provider.getProviderId());
         }
 
         reportingPublisherService.reportFlashingRequest(flashingRequestLog);
+    }
+
+    private String prefixNationalCode(String mobileNumber) {
+        return NATIONAL_TELEPHONE_NUMBER_PREFIX + mobileNumber;
     }
 
     private FlashingLogRequest buildFlashingLogRequest(FlashingRequest flashingRequest) {
