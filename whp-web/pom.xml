@@ -262,6 +262,9 @@
                     <webAppConfig>
                         <contextPath>/whp</contextPath>
                     </webAppConfig>
+                    <webApp>
+                        target/whp-${version}.war
+                    </webApp>
                     <stopKey>secret</stopKey>
                     <stopPort>6667</stopPort>
                 </configuration>
@@ -279,9 +282,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>2.2</version>
                 <configuration>
                     <warName>whp-${version}</warName>
+                    <overlays>
+                        <overlay>
+                            <groupId>org.motechproject.contrib-whp</groupId>
+                            <artifactId>motech-paginator</artifactId>
+                            <excludes>
+                                <exclude>**/motech-paginator-jquery.js</exclude>
+                            </excludes>
+                        </overlay>
+                    </overlays>
                 </configuration>
             </plugin>
             <plugin>
