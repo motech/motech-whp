@@ -1,4 +1,4 @@
-<h3 id="Remarks" class="underline">Remarks</h3>
+<h3 class="remarks underline">Remarks</h3>
 <div id="remarks-content">
 <#if cmfAdminRemarks?size == 0 && providerRemarks?size == 0>
     <label>
@@ -14,13 +14,14 @@
                 at ${cmfAdminRemark.creationTime.toString("hh:mm a")} says:
             </h5>
 
-            <div>${cmfAdminRemark.remark}</div>
+            <div>
+            <pre><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
+            </div>
             <br/>
         </div>
     </#list>
     </div>
 <#if cmfAdminRemarks?size!=0>
-   <hr class="line"/>
     <br/>
 </#if>
     <div id="provider-remarks">
@@ -31,7 +32,9 @@
                 at ${providerRemark.creationTime.toString("hh:mm a")} says:
             </h5>
 
-            <div>${providerRemark.remark()}</div>
+            <div>
+            <pre><#transform html_escape>${providerRemark.remark()}</#transform></pre>
+            </div>
             <br/>
         </div>
     </#list>

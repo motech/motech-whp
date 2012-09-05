@@ -187,9 +187,17 @@ public class PatientControllerTest extends BaseControllerTest {
     @Test
     public void shouldAddRemarkToPatientsTherapyAndShowPatient() {
         String remark = "remark";
-        String view = patientController.addRemark(patient.getPatientId(), remark, request);
-        verify(patientService).addRemark(patient.getPatientId(), remark, LOGGED_IN_USER_NAME);
-        assertEquals("redirect:/patients/show?patientId=" + patient.getPatientId(), view);
+        List<TherapyRemark> cmfAdminRemarks = mock(List.class);
+        when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
+        List<AuditLog> providerRemarks = mock(List.class);
+        when(providerRemarksService.getRemarks(patient)).thenReturn(providerRemarks);
+
+        String view = patientController.addRemark(uiModel,patient.getPatientId(), remark, request);
+
+        verify(patientService).addRemark(patient, remark, LOGGED_IN_USER_NAME);
+        verify(uiModel).addAttribute("cmfAdminRemarks", cmfAdminRemarks);
+        verify(uiModel).addAttribute("providerRemarks", providerRemarks);
+        assertEquals("patient/remarks", view);
     }
 
     @Test

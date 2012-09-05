@@ -98,6 +98,7 @@ public class PatientDashboardPage extends Page {
     public PatientDashboardPage addRemarks(String remarks) {
         patientRemarks.sendKeys(remarks);
         addRemarkButton.click();
+        waitForElementToBeReloadedByAjax();
 
         return MyPageFactory.initElements(webDriver, PatientDashboardPage.class);
     }

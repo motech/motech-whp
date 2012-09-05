@@ -3,6 +3,7 @@ package org.motechproject.whp.functional.test.patient;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.page.LoginPage;
@@ -32,8 +33,7 @@ public class PatientRemarksTest extends BasePatientTest {
 
         PatientDashboardPage patientDashboard = assertNoRemarksMessage();
 
-        DateTime now = DateUtil.endOfDay(DateUtil.now().toDate());
-        adjustDateTime(now);
+        adjustDateTime(getLastSunday());
         patientDashboard = patientDashboard.addRemarks("test remark");
         assertThat(patientDashboard.getRemarks(), is(not(containsString("No remarks added for the patient."))));
 
@@ -78,7 +78,8 @@ public class PatientRemarksTest extends BasePatientTest {
     @Test
     public void shouldDisplayProviderRemarksChronologically() {
         setupPatientForProvider();
-        DateTime now = DateUtil.endOfDay(DateUtil.now().toDate());
+
+        DateTime sunday = getLastSunday();
 
         String olderRemark = "older remark";
         String oldRemark = "old remark";
@@ -86,24 +87,29 @@ public class PatientRemarksTest extends BasePatientTest {
         
         ProviderPage providerPage = LoginPage.fetch(webDriver).loginAsProvider(provider.getProviderId(), provider.getPassword());
 
-        DateTime olderRemarkTime = now.minusWeeks(2);
+        DateTime olderRemarkTime = sunday.minusWeeks(2);
         adjustDateTime(olderRemarkTime);
         UpdateAdherencePage updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(0).setRemarks(olderRemark).submit();
 
-        DateTime oldRemarkTime = now.minusWeeks(1);
+        DateTime oldRemarkTime = sunday.minusWeeks(1);
         adjustDateTime(oldRemarkTime);
         updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(2).setRemarks(oldRemark).submit();
 
-        adjustDateTime(now);
+        adjustDateTime(sunday);
         updateAdherencePage = providerPage.clickEditAdherenceLink(testPatient.getCaseId());
         updateAdherencePage.setNumberOfDosesTaken(2).setRemarks(newRemark).submit().logout();
 
         TreatmentCardPage treatmentCardPage = getListPageFor(provider).clickOnPatientWithTherapyStarted(testPatient.getCaseId());
-        treatmentCardPage.verifyProviderRemark(provider.getProviderId(), now, newRemark, 0);
+        treatmentCardPage.verifyProviderRemark(provider.getProviderId(), sunday, newRemark, 0);
         treatmentCardPage.verifyProviderRemark(provider.getProviderId(), oldRemarkTime, oldRemark, 1);
         treatmentCardPage.verifyProviderRemark(provider.getProviderId(), olderRemarkTime, olderRemark, 2);
+    }
+
+    private DateTime getLastSunday() {
+        int lastSundayOffset = DateUtil.daysPast(DateUtil.today(), DayOfWeek.Sunday);
+        return DateUtil.now().minusDays(lastSundayOffset);
     }
 
     private PatientDashboardPage assertNoRemarksMessage() {
