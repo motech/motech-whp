@@ -15,6 +15,9 @@
         <li>
             <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data to excel</a>
         <li>
+        <li>
+            <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data to excel</a>
+        <li>
         <li class="divider"></li>
     </ul>
 </div>

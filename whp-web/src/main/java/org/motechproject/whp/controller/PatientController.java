@@ -1,6 +1,8 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.export.annotation.DataProvider;
+import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.model.DayOfWeek;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,6 +48,7 @@ import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
 @RequestMapping(value = "/patients")
+@ExcelDataSource(name = "patients")
 public class PatientController extends BaseWebController {
 
     public static final String DISTRICT_LIST = "districts";
@@ -85,7 +89,7 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
-    public String listByProvider( Model uiModel, HttpServletRequest request) {
+    public String listByProvider(Model uiModel, HttpServletRequest request) {
         String idOfLoggedInProvider = loggedInUser(request).getUserName();
         List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(idOfLoggedInProvider);
         prepareModelForListView(uiModel, patientsForProvider);
@@ -99,10 +103,10 @@ public class PatientController extends BaseWebController {
         String selectedDistrict = (String) session.getAttribute(SELECTED_DISTRICT);
         String selectedProvider = (String) session.getAttribute(SELECTED_PROVIDER);
 
-        if(StringUtils.isEmpty(selectedDistrict))
+        if (StringUtils.isEmpty(selectedDistrict))
             selectedDistrict = allDistrictsCache.getAll().get(0).getName();
 
-        List<Patient> patients = getPatientsFor(selectedDistrict,selectedProvider);
+        List<Patient> patients = getPatientsFor(selectedDistrict, selectedProvider);
         prepareModelForListView(uiModel, patients, selectedDistrict, selectedProvider);
 
         return "patient/list";
@@ -132,7 +136,7 @@ public class PatientController extends BaseWebController {
         List<Patient> patients = getPatientsFor(districtName, providerId);
 
         HttpSession session = request.getSession();
-        session.setAttribute(SELECTED_DISTRICT,districtName);
+        session.setAttribute(SELECTED_DISTRICT, districtName);
         session.setAttribute(SELECTED_PROVIDER, providerId);
 
         prepareModelForListView(uiModel, patients, districtName, providerId);
@@ -249,5 +253,10 @@ public class PatientController extends BaseWebController {
         patientService.addRemark(patient, remark, authenticatedUser.getUserName());
         setUpModelForRemarks(uiModel, patient);
         return "patient/remarks";
+    }
+
+    @DataProvider
+    public List<Patient> patientSummaryReport(int pageNumber) {
+        return patientService.getAll();
     }
 }

@@ -102,4 +102,8 @@ public class PatientService {
             return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
         }
     }
+
+    public List<Patient> getAll() {
+        return allPatients.getAll();
+    }
 }
