@@ -211,13 +211,17 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
-        uiModel.addAttribute("cmfAdminRemarks", patientService.getCmfAdminRemarks(patient));
-        uiModel.addAttribute("providerRemarks", providerRemarksService.getRemarks(patient));
+        setUpModelForRemarks(uiModel, patient);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotEmpty(messages)) {
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
+    }
+
+    private void setUpModelForRemarks(Model uiModel, Patient patient) {
+        uiModel.addAttribute("cmfAdminRemarks", patientService.getCmfAdminRemarks(patient));
+        uiModel.addAttribute("providerRemarks", providerRemarksService.getRemarks(patient));
     }
 
     private void setupPrintDashboardModel(Model uiModel, Patient patient) {
@@ -239,10 +243,11 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "addRemark/{id}", method = RequestMethod.POST)
-    public String addRemark(@PathVariable("id") String patientId, @RequestParam("patientRemark") String remark, HttpServletRequest httpServletRequest) {
+    public String addRemark(Model uiModel, @PathVariable("id") String patientId, @RequestParam("patientRemark") String remark, HttpServletRequest httpServletRequest) {
         MotechUser authenticatedUser = loggedInUser(httpServletRequest);
-        patientService.addRemark(patientId, remark, authenticatedUser.getUserName());
-        Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Remark saved for Patient : " + patientId, httpServletRequest);
-        return String.format("redirect:/patients/show?patientId=%s", patientId);
+        Patient patient = patientService.findByPatientId(patientId);
+        patientService.addRemark(patient, remark, authenticatedUser.getUserName());
+        setUpModelForRemarks(uiModel, patient);
+        return "patient/remarks";
     }
 }

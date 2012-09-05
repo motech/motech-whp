@@ -78,10 +78,9 @@ public class PatientService {
         return providerIds;
     }
 
-    public void addRemark(String patientId, String remark, String user) {
-        Patient patient = allPatients.findByPatientId(patientId);
+    public void addRemark(Patient patient, String remark, String user) {
         Therapy therapy = patient.getCurrentTherapy();
-        allTherapyRemarks.add(new TherapyRemark(patientId, therapy.getUid(), remark, user));
+        allTherapyRemarks.add(new TherapyRemark(patient.getPatientId(), therapy.getUid(), remark, user));
     }
 
     public List<TherapyRemark> getCmfAdminRemarks(Patient patient) {

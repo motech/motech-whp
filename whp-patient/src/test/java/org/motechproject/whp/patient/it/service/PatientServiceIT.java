@@ -407,7 +407,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.createPatient(patientRequest);
         Patient patient = patientService.findByPatientId(PATIENT_ID);
 
-        patientService.addRemark(PATIENT_ID, "remark", "username");
+        patientService.addRemark(patient, "remark", "username");
 
         assertEquals(1, allTherapyRemarks.getAll().size());
 

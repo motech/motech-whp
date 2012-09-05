@@ -1,7 +1,19 @@
 $(function () {
     $('#addRemarkForm').submit(function(event) {
-        if($('#patientRemark').val().trim() == "") {
-            event.preventDefault();
+        event.preventDefault();
+
+        if($('#patientRemark').val().trim() != "") {
+            $('#addRemark').attr('disabled', true);
+            var data = {
+                "patientRemark": $('#patientRemark').val().trim()
+            };
+
+            $.post($('#addRemarkForm').attr('action'), data, function(response) {
+                $('#patientRemark').val("");
+                $('#addRemark').removeAttr('disabled');
+                $('#remarks').html(response);
+                $('.cmf-admin-remark').first().effect("highlight", {}, 6000);
+            });
         }
     });
 

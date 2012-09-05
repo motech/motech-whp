@@ -115,10 +115,6 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
     text-align: center;
 }
 
-#remarks {
-    height: 100px;
-}
-
 .disable-remarks {
     resize: none;
 }
@@ -586,10 +582,19 @@ div.buttons a, div.buttons button {
 }
 
 .line {
-    height: 1px;
+    height: 3px;
     background-color: #add8e6;
     margin: 1px;
 }
 .underline {
     text-decoration: underline;
+}
+pre {
+    display: inline;
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+}
+#cmf-admin-remarks {
+    border-bottom: 1px #add8e6 solid;
 }
