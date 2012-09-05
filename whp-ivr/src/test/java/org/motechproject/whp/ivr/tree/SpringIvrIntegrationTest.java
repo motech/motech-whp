@@ -43,6 +43,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     private static DispatcherServlet dispatcherServlet;
     protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s";
     protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s&";
+    protected final String HANGUP_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=Disconnect&cid=%s&sid=%s&";
 
     private String currentPath;
     private String callerId;
@@ -105,6 +106,11 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         KooKooIvrResponse ivrResponse = getResponse(String.format(GOT_DTMF_URL_FORMAT, SERVER_URL, encodedTreePath, dtmf, callerId, sessionId));
         currentPath = currentPath + "/" + dtmf;
         return ivrResponse;
+    }
+
+    protected KooKooIvrResponse disconnectCall() {
+        String encodedTreePath = base64(currentPath);
+        return getResponse(String.format(HANGUP_URL_FORMAT, SERVER_URL, encodedTreePath, callerId, sessionId));
     }
 
     protected String base64(String input) {

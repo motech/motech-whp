@@ -1,12 +1,9 @@
 package org.motechproject.whp.ivr.transition;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
-import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +57,7 @@ public abstract class TransitionToCollectPatientAdherence implements ITransition
             addTransitionsAndPromptsForCurrentPatient(nextNode, ivrSession);
         } else {
             nextNode.addPrompts(callCompletionPromptsAfterCapturingAdherence(whpIvrMessage, ivrSession.countOfAllPatients(), ivrSession.countOfCurrentPatientsWithAdherence()));
-            nextNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, DateUtil.now()));
+            ivrSession.callStatus(CallStatus.VALID_ADHERENCE_CAPTURE);
         }
     }
 

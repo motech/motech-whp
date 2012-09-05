@@ -16,7 +16,6 @@ import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
 import org.motechproject.whp.ivr.operation.InvalidAdherenceOperation;
 import org.motechproject.whp.ivr.operation.NoInputAdherenceOperation;
-import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.SkipAdherenceOperation;
 import org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts;
 import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
@@ -177,19 +176,15 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldAddPublishCallLogOperationAtEndOfCall() {
+    public void shouldSetCallStatusAfterAdherenceCaptureForLastPatient() {
         Patient patient = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
 
         flowSession.set(IvrSession.PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(patientId1)));
         flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(asList(patient.getPatientId())));
 
-        mockCurrentDate(DateUtil.now());
+        adherenceCaptureTransition.getDestinationNode("9", flowSession);
 
-        DateTime now = DateUtil.now();
-        PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now);
-
-        Node destinationNode = adherenceCaptureTransition.getDestinationNode("9", flowSession);
-        assertThat(destinationNode.getOperations(), hasItem(publishCallLogOperation));
+        assertEquals(CallStatus.VALID_ADHERENCE_CAPTURE, flowSession.get(IvrSession.CALL_STATUS));
     }
 
     @Test

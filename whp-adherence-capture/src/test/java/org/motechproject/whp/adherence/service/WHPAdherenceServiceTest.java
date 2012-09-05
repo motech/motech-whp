@@ -56,7 +56,7 @@ public class WHPAdherenceServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        whpAdherenceService = new WHPAdherenceService(adherenceLogService, allPatients, patientService, adherenceAuditService, allAdherenceLogs);
+        whpAdherenceService = new WHPAdherenceService(adherenceLogService, adherenceAuditService, allAdherenceLogs);
     }
 
     public DailyAdherenceRequest createDailyAdherenceRequest(int day, int month, int year, int pillStatus) {

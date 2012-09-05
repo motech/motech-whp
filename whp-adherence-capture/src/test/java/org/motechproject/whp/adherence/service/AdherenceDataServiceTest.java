@@ -35,7 +35,7 @@ public class AdherenceDataServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceDataService = new AdherenceDataService(whpAdherenceService, allPatients);
+        adherenceDataService = new AdherenceDataService(allPatients);
     }
 
 

@@ -2,19 +2,7 @@ package org.motechproject.whp.ivr;
 
 
 public enum CallStatus {
-    ADHERENCE_ALREADY_PROVIDED("adherenceAlreadyProvided"), VALID_ADHERENCE_CAPTURE("validAdherenceCapture"), OUTSIDE_ADHERENCE_CAPTURE_WINDOW("outsideAdherenceCaptureWindow");
 
-    private String value;
-    CallStatus(String value) {
-          this.value = value;
-    }
+    ADHERENCE_ALREADY_PROVIDED, VALID_ADHERENCE_CAPTURE, OUTSIDE_ADHERENCE_CAPTURE_WINDOW, PROVIDER_DISCONNECT
 
-    public String value() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return value();
-    }
 }

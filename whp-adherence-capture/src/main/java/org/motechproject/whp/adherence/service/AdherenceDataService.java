@@ -12,12 +12,10 @@ import java.util.List;
 @Component
 public class AdherenceDataService {
 
-    private WHPAdherenceService whpAdherenceService;
     private AllPatients allPatients;
 
     @Autowired
-    public AdherenceDataService(WHPAdherenceService whpAdherenceService, AllPatients allPatients) {
-        this.whpAdherenceService = whpAdherenceService;
+    public AdherenceDataService(AllPatients allPatients) {
         this.allPatients = allPatients;
     }
 

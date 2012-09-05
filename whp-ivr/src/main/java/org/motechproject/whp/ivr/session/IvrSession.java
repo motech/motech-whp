@@ -30,6 +30,8 @@ public class IvrSession {
     public static final String CURRENT_NO_INPUT_RETRY_COUNT = "currentNoInputRetryCount";
     public static final String IS_FIRST_INVALID_INPUT = "firstInvalidInput";
     private static final String NATIONAL_TELEPHONE_NUMBER_PREFIX = "0";
+    public static final String CALL_STATUS = "callStatus";
+
     private FlowSession flowSession;
 
     public IvrSession(FlowSession flowSession) {
@@ -213,12 +215,21 @@ public class IvrSession {
     }
 
     public void firstInvalidInput(boolean first) {
-        flowSession.set(IS_FIRST_INVALID_INPUT, Boolean.valueOf(first));
+        flowSession.set(IS_FIRST_INVALID_INPUT, first);
     }
 
     public boolean firstInvalidInput() {
         Boolean flag = flowSession.get(IS_FIRST_INVALID_INPUT);
         return flag == null ? true : flag;
     }
+
+    public void callStatus(CallStatus callStatus) {
+        flowSession.set(CALL_STATUS, callStatus);
+    }
+
+    public CallStatus callStatus() {
+        return flowSession.get(CALL_STATUS) == null ? CallStatus.PROVIDER_DISCONNECT :  CallStatus.valueOf(flowSession.get(CALL_STATUS).toString());
+    }
+
 }
 

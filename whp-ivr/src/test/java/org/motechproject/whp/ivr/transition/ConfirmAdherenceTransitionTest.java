@@ -17,7 +17,6 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
-import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordAdherenceOperation;
 import org.motechproject.whp.ivr.prompts.ConfirmAdherencePrompts;
 import org.motechproject.whp.ivr.prompts.ProvidedAdherencePrompts;
@@ -152,8 +151,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         assertThat(destinationNode.getMaxTransitionInputDigit(), is(1));
     }
 
-    @Test
-    public void shouldAddPublishCallLogOperation_WhenThereAreNoMorePatients() {
+    public void shouldSetCallStatusInSession_WhenThereAreNoMorePatients() {
         flowSession.set(PATIENTS_WITHOUT_ADHERENCE, new SerializableList(asList(PATIENT1_ID)));
         flowSession.set(CURRENT_PATIENT_INDEX, 0);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, 2);
@@ -162,7 +160,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         mockCurrentDate(DateUtil.now());
         DateTime now = DateUtil.now();
 
-        assertThat(node.getOperations(), hasItem(new PublishCallLogOperation(reportingPublisherService, CallStatus.VALID_ADHERENCE_CAPTURE, now)));
+        assertEquals(CallStatus.VALID_ADHERENCE_CAPTURE, flowSession.get(IvrSession.CALL_STATUS));
     }
 
     @Test

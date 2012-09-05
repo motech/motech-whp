@@ -20,12 +20,12 @@ import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
@@ -33,21 +33,15 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentA
 @Service
 public class WHPAdherenceService {
 
-    private AllPatients allPatients;
     private AdherenceLogService adherenceLogService;
-    private PatientService patientService;
     private AdherenceAuditService adherenceAuditService;
     private AllAdherenceLogs allAdherenceLogs;
 
     @Autowired
     public WHPAdherenceService(AdherenceLogService adherenceLogService,
-                               AllPatients allPatients,
-                               PatientService patientService,
                                AdherenceAuditService adherenceAuditService,
                                AllAdherenceLogs allAdherenceLogs) {
         this.adherenceLogService = adherenceLogService;
-        this.allPatients = allPatients;
-        this.patientService = patientService;
         this.adherenceAuditService = adherenceAuditService;
         this.allAdherenceLogs = allAdherenceLogs;
     }
