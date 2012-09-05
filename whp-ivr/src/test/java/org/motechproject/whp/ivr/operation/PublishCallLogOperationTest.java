@@ -88,7 +88,7 @@ public class PublishCallLogOperationTest {
         callLogRequest.setTotalPatients(totalPatients);
         callLogRequest.setAdherenceCaptured(adherenceCaptured);
         callLogRequest.setAdherenceNotCaptured(remainingPatientsWithoutAdherence);
-        callLogRequest.setCallStatus(callStatus.value());
+        callLogRequest.setCallStatus(callStatus.name());
         return callLogRequest;
     }
 }

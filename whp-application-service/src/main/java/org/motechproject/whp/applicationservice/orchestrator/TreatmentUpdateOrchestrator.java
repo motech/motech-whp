@@ -141,6 +141,7 @@ public class TreatmentUpdateOrchestrator {
         LocalDate lastAdherenceProvidedDate = doseDates.get(doseDates.size() - 1);
         return new TreatmentWeek(lastAdherenceProvidedDate).startDate();
     }
+
     private List<LocalDate> getDoseDates(List<DailyAdherenceRequest> dailyAdherenceRequests) {
         List<LocalDate> doseDates = new ArrayList<>();
         for(DailyAdherenceRequest dailyAdherenceRequest : dailyAdherenceRequests) {

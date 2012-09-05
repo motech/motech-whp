@@ -3,15 +3,12 @@ package org.motechproject.whp.ivr.transition;
 import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.ITransition;
 import org.motechproject.decisiontree.model.Node;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.operation.CaptureAdherenceSubmissionTimeOperation;
-import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.operation.RecordCallStartTimeOperation;
 import org.motechproject.whp.ivr.session.AdherenceRecordingSession;
 import org.motechproject.whp.ivr.session.IvrSession;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,22 +28,21 @@ public class AdherenceSummaryTransition implements ITransition {
     private WhpIvrMessage whpIvrMessage;
     @Autowired
     private AdherenceRecordingSession recordingSession;
-    @Autowired
-    private ReportingPublisherService reportingPublisherService;
 
     /*Required for platform autowiring*/
     public AdherenceSummaryTransition() {
     }
 
-    public AdherenceSummaryTransition(WhpIvrMessage whpIvrMessage, AdherenceRecordingSession recordingSession, ReportingPublisherService reportingPublisherService) {
+    public AdherenceSummaryTransition(WhpIvrMessage whpIvrMessage, AdherenceRecordingSession recordingSession) {
         this.whpIvrMessage = whpIvrMessage;
         this.recordingSession = recordingSession;
-        this.reportingPublisherService = reportingPublisherService;
     }
 
     @Override
     public Node getDestinationNode(String input, FlowSession flowSession) {
         Node captureAdherenceNode = new Node();
+
+        addHangupTransition(captureAdherenceNode);
 
         captureAdherenceNode.addPrompts(welcomeMessagePrompts(whpIvrMessage));
         IvrSession ivrSession = new IvrSession(recordingSession.initialize(flowSession));
@@ -54,7 +50,7 @@ public class AdherenceSummaryTransition implements ITransition {
 
         if (isWindowClosedToday()) {
             captureAdherenceNode.addPrompts(adherenceCaptureWindowClosedPrompts(whpIvrMessage));
-            captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW, DateUtil.now()));
+            ivrSession.callStatus(CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW);
             return captureAdherenceNode;
         }
 
@@ -63,7 +59,11 @@ public class AdherenceSummaryTransition implements ITransition {
             return addAdherenceCaptureTransitions(ivrSession, captureAdherenceNode);
         }
 
-        return addTransitionToTerminateCall(captureAdherenceNode, ivrSession.countOfAllPatients(), ivrSession.countOfPatientsWithAdherence());
+        return addTransitionToTerminateCall(captureAdherenceNode, ivrSession);
+    }
+
+    private void addHangupTransition(Node node) {
+        node.addTransition("hangup", new HangupTransition());
     }
 
     private Node addAdherenceCaptureTransitions(final IvrSession ivrSession, Node captureAdherenceNode) {
@@ -74,9 +74,9 @@ public class AdherenceSummaryTransition implements ITransition {
         return captureAdherenceNode;
     }
 
-    private Node addTransitionToTerminateCall(Node captureAdherenceNode, Integer countOfAllPatients, Integer countOfPatientsWithAdherence) {
-        captureAdherenceNode.addPrompts(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage, countOfAllPatients, countOfPatientsWithAdherence));
-        captureAdherenceNode.addOperations(new PublishCallLogOperation(reportingPublisherService, CallStatus.ADHERENCE_ALREADY_PROVIDED, DateUtil.now()));
+    private Node addTransitionToTerminateCall(Node captureAdherenceNode, IvrSession ivrSession) {
+        ivrSession.callStatus(CallStatus.ADHERENCE_ALREADY_PROVIDED);
+        captureAdherenceNode.addPrompts(adherenceSummaryWithCallCompletionPrompts(whpIvrMessage, ivrSession.countOfAllPatients(), ivrSession.countOfPatientsWithAdherence()));
         return captureAdherenceNode;
     }
 }

@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class AdherenceServiceIT extends SpringIntegrationTest {
+public class AdherenceLogServiceIT extends SpringIntegrationTest {
 
     @Autowired
     AllAdherenceLogs allAdherenceLogs;
