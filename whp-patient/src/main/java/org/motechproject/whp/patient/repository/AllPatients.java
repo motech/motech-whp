@@ -78,6 +78,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
+    @GenerateView
+    public List<Patient> getAll(int pageNumber, int pageSize) {
+        ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
+        return db.queryView(query, Patient.class);
+    }
+
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
         @Override
