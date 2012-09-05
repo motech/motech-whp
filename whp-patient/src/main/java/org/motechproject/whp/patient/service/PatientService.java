@@ -106,4 +106,8 @@ public class PatientService {
     public List<Patient> getAll() {
         return allPatients.getAll();
     }
+
+    public List<Patient> getAll(int pageNumber, int pageSize) {
+        return allPatients.getAll(pageNumber, pageSize);
+    }
 }

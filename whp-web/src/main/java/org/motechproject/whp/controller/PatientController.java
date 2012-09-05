@@ -12,6 +12,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.mapper.PatientSummaryMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -20,6 +21,7 @@ import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
+import org.motechproject.whp.uimodel.PatientSummary;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -256,7 +258,8 @@ public class PatientController extends BaseWebController {
     }
 
     @DataProvider
-    public List<Patient> patientSummaryReport(int pageNumber) {
-        return patientService.getAll();
+    public List<PatientSummary> patientSummaryReport(int pageNumber) {
+        List<Patient> patientList = patientService.getAll(pageNumber - 1, 10000);
+        return new PatientSummaryMapper().map(patientList);
     }
 }
