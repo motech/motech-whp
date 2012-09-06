@@ -66,15 +66,18 @@
             <th type="reset-password"></th>
         </tr>
 
-<@paginator.paginate entity="patient">
+<@paginator.paginate entity="provider">
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Patient Id</th>
                 <th>Provider Id</th>
-                <th>Mobile Number</th>
                 <th>District</th>
+                <th>Primary Mobile Number</th>
+                <th>Secondary Mobile Number</th>
+                <th>Tertiary Mobile Number</th>
                 <th>Status</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -90,6 +93,9 @@
                     <td id="provider_{{provider.providerId}}_TertiaryMobile">
                         {{item.tertiaryMobile}}
                     </td>
+                <td></td>
+                <td></td>
+                <td></td>
                     <#--<td id="provider_{{provider.providerId}}_Status" type="status">-->
                         <#--<#if provider.active>-->
                             <#--Active-->

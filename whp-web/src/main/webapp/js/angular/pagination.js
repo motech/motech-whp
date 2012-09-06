@@ -5,10 +5,10 @@ function PaginationCtrl($scope, $http) {
     $scope.pageSize = 5;
 
     $scope.loadPage = function (){
-        $http.get('providers.' + $scope.currentPage + '.json').success(function(data) {
+        $http.get('/whp/page/' + $scope.entity + '?pageNo=' + $scope.currentPage).success(function(data) {
             $scope.data = data;
             $scope.numberOfPages=function(){
-                return Math.ceil($scope.data.length/$scope.pageSize);
+                return Math.ceil($scope.data.results.length/$scope.pageSize);
             }
         });
     }

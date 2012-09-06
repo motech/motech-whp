@@ -1,6 +1,8 @@
 package org.motechproject.whp.user.service;
 
 import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.paginator.response.PageResults;
+import org.motechproject.paginator.service.Paging;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -13,15 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
-public class ProviderService {
+public class ProviderService implements Paging {
 
     MotechAuthenticationService motechAuthenticationService;
 
@@ -92,4 +91,24 @@ public class ProviderService {
     public Provider findByMobileNumber(String mobileNumber) {
         return allProviders.findByMobileNumber(mobileNumber);
     }
+
+    @Override
+    public PageResults page(Integer pageNo, Integer rowsPerPage, Properties properties) {
+        List<Provider> allProviders = this.allProviders.getAll();
+
+        int endIndex = (pageNo + 1) * rowsPerPage >  allProviders.size() ? allProviders.size() : (pageNo + 1) * rowsPerPage;
+        List<Provider> providers = allProviders.subList(pageNo * rowsPerPage, endIndex);
+        PageResults pageResults = new PageResults();
+        pageResults.setTotalRows(allProviders.size());
+        pageResults.setPageNo(pageNo);
+        pageResults.setResults(providers);
+        return pageResults;
+    }
+
+    @Override
+    public String entityName() {
+        return "provider";
+    }
+
+
 }
