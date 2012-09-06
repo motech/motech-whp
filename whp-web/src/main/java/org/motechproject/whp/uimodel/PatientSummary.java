@@ -18,8 +18,8 @@ public class PatientSummary {
     private String village;
     private String providerDistrict;
     private String treatmentCategory;
-    private LocalDate tbRegistrationDate;
-    private LocalDate treatmentStartDate;
+    private String tbRegistrationDate;
+    private String treatmentStartDate;
     private String diseaseClass;
     private PatientType patientType;
     private String ipTreatmentProgress;
@@ -74,12 +74,12 @@ public class PatientSummary {
     }
 
     @ExportValue(index = 9, column = "TB Registration Date")
-    public LocalDate getTbRegistrationDate() {
+    public String getTbRegistrationDate() {
         return tbRegistrationDate;
     }
 
     @ExportValue(index = 10)
-    public LocalDate getTreatmentStartDate() {
+    public String getTreatmentStartDate() {
         return treatmentStartDate;
     }
 
