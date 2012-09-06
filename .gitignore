@@ -7,6 +7,7 @@ build/logs/
 logs/
 .externalToolBuilders/
 maven-eclipse.xml
+overlays/
 *.iml
 *.ipr
 *.bak
