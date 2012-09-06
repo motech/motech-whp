@@ -1,5 +1,8 @@
 package org.motechproject.whp.patient.service;
 
+import org.motechproject.event.MotechEvent;
+import org.motechproject.event.annotations.MotechListener;
+import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
@@ -89,7 +92,6 @@ public class PatientService {
     }
 
 
-
     public boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
         List<WHPErrorCode> errors = new ArrayList<>();
@@ -111,4 +113,18 @@ public class PatientService {
     public List<Patient> getAll(int pageNumber, int pageSize) {
         return allPatients.getAll(pageNumber, pageSize);
     }
+
+    @MotechListener(subjects = EventKeys.PROVIDER_DISTRICT_CHANGE)
+    public void handleProviderDistrictChange(MotechEvent motechEvent) {
+        String providerId = (String) motechEvent.getParameters().get("0");
+
+        Provider provider = providerService.findByProviderId(providerId);
+        List<Patient> patients = getAllWithActiveTreatmentForProvider(providerId);
+
+        for (Patient patient : patients) {
+            patient.getCurrentTreatment().setProviderDistrict(provider.getDistrict());
+            update(patient);
+        }
+    }
+
 }

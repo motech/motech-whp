@@ -49,26 +49,19 @@ public class ProviderService {
         Provider provider = providerRequest.makeProvider();
         Provider existingProvider = allProviders.findByProviderId(providerRequest.getProviderId());
 
-        if (existingProvider == null) {
-            return addProvider(provider);
+        String docId = addOrReplace(provider);
+
+        if (existingProvider != null) {
+            if (existingProvider.hasDifferentDistrict(providerRequest.getDistrict())) {
+                eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
+            }
         }
 
-        provider.setId(existingProvider.getId()); //set existing DocId to new provider
-
-        if (existingProvider.hasDifferentDistrict(providerRequest.getDistrict())) {
-            eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
-        }
-
-        return updateProvider(provider);
+        return docId;
     }
 
-    private String updateProvider(Provider provider) {
-        allProviders.update(provider);
-        return provider.getId();
-    }
-
-    private String addProvider(Provider provider) {
-        allProviders.add(provider);
+    private String addOrReplace(Provider provider) {
+        allProviders.addOrReplace(provider);
         return provider.getId();
     }
 

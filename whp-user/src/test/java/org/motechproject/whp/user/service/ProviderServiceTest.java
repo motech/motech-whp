@@ -5,9 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
@@ -111,21 +109,10 @@ public class ProviderServiceTest {
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         when(allProviders.findByProviderId(providerId)).thenReturn(null);
 
-        //Set DocId upon adding Provider
-        doAnswer(new Answer() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                ((Provider) invocation.getArguments()[0]).setId("docId");
-                return null;
-            }
-        }).when(allProviders).add(providerRequest.makeProvider());
+        providerService.createOrUpdateProvider(providerRequest);
 
-
-        String newDocId = providerService.createOrUpdateProvider(providerRequest);
-
-        assertThat(newDocId, is("docId"));
         verify(allProviders).findByProviderId(providerRequest.getProviderId());
-        verify(allProviders).add(providerRequest.makeProvider());
+        verify(allProviders).addOrReplace(providerRequest.makeProvider());
     }
 
     @Test
@@ -134,15 +121,13 @@ public class ProviderServiceTest {
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();
         Provider providerFromDatabase = providerRequest.makeProvider();
-        providerFromDatabase.setId("docId");
 
         when(allProviders.findByProviderId(providerRequest.getProviderId())).thenReturn(providerFromDatabase);
 
-        String providerDocId = providerService.createOrUpdateProvider(providerRequest);
+        providerService.createOrUpdateProvider(providerRequest);
 
-        assertThat(providerDocId, is(providerFromDatabase.getId()));
         verify(allProviders).findByProviderId(providerRequest.getProviderId());
-        verify(allProviders).update(provider);
+        verify(allProviders).addOrReplace(provider);
     }
 
     @Test
@@ -151,17 +136,15 @@ public class ProviderServiceTest {
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();
         Provider providerFromDatabase = providerRequest.makeProvider();
-        providerFromDatabase.setId("docId");
         providerFromDatabase.setDistrict("oldDistrict");
 
         when(allProviders.findByProviderId(providerRequest.getProviderId())).thenReturn(providerFromDatabase);
 
-        String providerDocId = providerService.createOrUpdateProvider(providerRequest);
+        providerService.createOrUpdateProvider(providerRequest);
 
-        assertThat(providerDocId, is(providerFromDatabase.getId()));
         verify(eventContext).send(EventKeys.PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
         verify(allProviders).findByProviderId(providerRequest.getProviderId());
-        verify(allProviders).update(provider);
+        verify(allProviders).addOrReplace(provider);
     }
 
 
