@@ -9,33 +9,43 @@
         Pane</a></h3>
 
     <div id="search-pane">
-        <form action="<@spring.url '/providers/search'/>" method="GET" class="form-horizontal">
-            <div class="offset1">
-                <div class="control-group">
-                    <label class="control-label">District*</label>
+        <form action="<@spring.url '/providers/search'/>" method="GET">
+            <table>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">District*</label>
 
-                    <div class="controls">
-                        <select id="district" name="selectedDistrict">
-                            <#list districts as district>
-                                <option <#if selectedDistrict == district.name> selected </#if>
-                                                                                value="${district.name}">${district.name}</option>
-                            </#list>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="providerId">Provider ID</label>
+                            <div class="controls">
+                                <select id="district" name="selectedDistrict">
+                                    <#list districts as district>
+                                        <option <#if selectedDistrict == district.name> selected </#if>
+                                                                                        value="${district.name}">${district.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label" for="providerId">Provider ID</label>
 
-                    <div class="controls">
-                        <input class="input-large" type="text" name='providerId' id="providerId" autofocus="autofocus"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
-                    </div>
-                </div>
-            </div>
+                            <div class="controls">
+                                <input class="input-large pull-down-5px" type="text" name='providerId' id="providerId"
+                                       autofocus="autofocus"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="control-group pull-down padding-left">
+                            <div class="controls">
+                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
 </div>
@@ -50,7 +60,7 @@
             <th>Tertiary Mobile Number</th>
             <th>Status</th>
             <th type="activate-provider"></th>
-            <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
+        <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
             <th type="reset-password"></th>
         </tr>
         </thead>
@@ -94,13 +104,15 @@
                     </td>
                     <td type="activate-provider">
                         <#if !provider.active>
-                            <a type="activate-link" data-toggle="modal" href="#activateProviderModal" class="activate-link"
+                            <a type="activate-link" data-toggle="modal" href="#activateProviderModal"
+                               class="activate-link"
                                userName="${provider.providerId}">Activate</a>
                         </#if>
                     </td>
                     <td type="reset-password">
                         <#if provider.active>
-                            <a type="reset-password-link" class = "reset-password one-line" data-toggle="modal" href="#resetPasswordModal">Reset Password</a>
+                            <a type="reset-password-link" class="reset-password one-line" data-toggle="modal"
+                               href="#resetPasswordModal">Reset Password</a>
                         </#if>
                     </td>
                 </tr>
