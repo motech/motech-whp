@@ -5,10 +5,15 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PatientSummaryMapper {
+
+    public static final String EXPORT_DATE_FORMAT = "dd/MM/yyyy";
+    public static final String NAME_SEPARATOR = " ";
+
     public PatientSummaryMapper() {
     }
 
@@ -34,9 +39,9 @@ public class PatientSummaryMapper {
         patientSummary.setPatientId(patient.getPatientId());
         patientSummary.setPatientType(patient.getCurrentTreatment().getPatientType());
         patientSummary.setTbId(patient.getCurrentTreatment().getTbId());
-        patientSummary.setTbRegistrationDate(new LocalDate(patient.getCurrentTherapy().getCreationDate()));
+        patientSummary.setTbRegistrationDate(formatDate(new LocalDate(patient.getCurrentTherapy().getCreationDate())));
         patientSummary.setTreatmentCategory(patient.getCurrentTherapy().getTreatmentCategory().getName());
-        patientSummary.setTreatmentStartDate(patient.getCurrentTreatment().getStartDate());
+        patientSummary.setTreatmentStartDate(formatDate(patient.getCurrentTreatment().getStartDate()));
         patientSummary.setTreatmentClosingDate(patient.getCurrentTreatment().getEndDate());
         patientSummary.setTreatmentOutcome(patient.getCurrentTreatment().getTreatmentOutcome());
         patientSummary.setVillage(patient.getCurrentTreatment().getPatientAddress().getAddress_village());
@@ -45,13 +50,19 @@ public class PatientSummaryMapper {
         return patientSummary;
     }
 
+    private String formatDate(LocalDate date) {
+        return new SimpleDateFormat(EXPORT_DATE_FORMAT).format(date.toDate());
+    }
+
     private String buildPatientName(Patient patient) {
         StringBuilder nameBuilder = new StringBuilder();
         if (StringUtils.hasText(patient.getFirstName())) {
             nameBuilder.append(patient.getFirstName());
         }
         if (StringUtils.hasText(patient.getLastName())) {
-            nameBuilder.append(" ");
+            if (nameBuilder.length() > 0) {
+                nameBuilder.append(NAME_SEPARATOR);
+            }
             nameBuilder.append(patient.getLastName());
         }
         return nameBuilder.toString();
