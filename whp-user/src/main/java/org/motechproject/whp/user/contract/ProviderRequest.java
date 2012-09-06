@@ -2,6 +2,7 @@ package org.motechproject.whp.user.contract;
 
 import lombok.Data;
 import org.joda.time.DateTime;
+import org.motechproject.whp.user.domain.Provider;
 
 @Data
 public class ProviderRequest {
@@ -34,4 +35,10 @@ public class ProviderRequest {
             this.providerId = providerId.toLowerCase();
     }
 
+    public Provider makeProvider() {
+        Provider provider = new Provider(getProviderId(), getPrimaryMobile(), getDistrict(), getLastModifiedDate());
+        provider.setSecondaryMobile(getSecondaryMobile());
+        provider.setTertiaryMobile(getTertiaryMobile());
+        return provider;
+    }
 }

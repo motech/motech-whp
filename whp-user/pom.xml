@@ -34,6 +34,17 @@
             <groupId>org.motechproject</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-platform-server-api</artifactId>
+            <version>${motech.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

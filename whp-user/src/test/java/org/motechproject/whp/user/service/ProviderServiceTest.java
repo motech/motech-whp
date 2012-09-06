@@ -1,15 +1,19 @@
 package org.motechproject.whp.user.service;
 
-import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.event.EventKeys;
+import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -19,8 +23,11 @@ import java.util.Map;
 
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,12 +39,16 @@ public class ProviderServiceTest {
     @Mock
     private AllProviders allProviders;
 
+    @Mock
+    private EventContext eventContext;
+
     private ProviderService providerService;
 
 
     @Before
     public void setUp() {
-        providerService = new ProviderService(motechAuthenticationService, allProviders);
+        initMocks(this);
+        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext);
     }
 
     @Test
@@ -90,10 +101,68 @@ public class ProviderServiceTest {
 
         Provider returnedProvider = providerService.findByMobileNumber(mobileNumber);
 
-        assertThat(returnedProvider, Is.is(provider));
+        assertThat(returnedProvider, is(provider));
         verify(allProviders).findByMobileNumber(mobileNumber);
     }
 
+    @Test
+    public void shouldCreateProvider(){
+        String providerId = "providerId";
+        ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
+        when(allProviders.findByProviderId(providerId)).thenReturn(null);
+
+        //Set DocId upon adding Provider
+        doAnswer(new Answer() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                ((Provider) invocation.getArguments()[0]).setId("docId");
+                return null;
+            }
+        }).when(allProviders).add(providerRequest.makeProvider());
+
+
+        String newDocId = providerService.createOrUpdateProvider(providerRequest);
+
+        assertThat(newDocId, is("docId"));
+        verify(allProviders).findByProviderId(providerRequest.getProviderId());
+        verify(allProviders).add(providerRequest.makeProvider());
+    }
+
+    @Test
+    public void shouldUpdateProvider(){
+        String providerId = "providerId";
+        ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
+        Provider provider = providerRequest.makeProvider();
+        Provider providerFromDatabase = providerRequest.makeProvider();
+        providerFromDatabase.setId("docId");
+
+        when(allProviders.findByProviderId(providerRequest.getProviderId())).thenReturn(providerFromDatabase);
+
+        String providerDocId = providerService.createOrUpdateProvider(providerRequest);
+
+        assertThat(providerDocId, is(providerFromDatabase.getId()));
+        verify(allProviders).findByProviderId(providerRequest.getProviderId());
+        verify(allProviders).update(provider);
+    }
+
+    @Test
+    public void shouldUpdateProviderAndSendEvent_whenDistrictHasChanged(){
+        String providerId = "providerId";
+        ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
+        Provider provider = providerRequest.makeProvider();
+        Provider providerFromDatabase = providerRequest.makeProvider();
+        providerFromDatabase.setId("docId");
+        providerFromDatabase.setDistrict("oldDistrict");
+
+        when(allProviders.findByProviderId(providerRequest.getProviderId())).thenReturn(providerFromDatabase);
+
+        String providerDocId = providerService.createOrUpdateProvider(providerRequest);
+
+        assertThat(providerDocId, is(providerFromDatabase.getId()));
+        verify(eventContext).send(EventKeys.PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
+        verify(allProviders).findByProviderId(providerRequest.getProviderId());
+        verify(allProviders).update(provider);
+    }
 
 
     @Test
@@ -110,6 +179,7 @@ public class ProviderServiceTest {
     @After
     public void tearDown() throws Exception {
         verifyNoMoreInteractions(allProviders);
+        verifyNoMoreInteractions(eventContext);
         verifyNoMoreInteractions(motechAuthenticationService);
     }
 }

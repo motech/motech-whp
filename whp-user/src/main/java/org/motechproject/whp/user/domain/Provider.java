@@ -1,6 +1,7 @@
 package org.motechproject.whp.user.domain;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
@@ -42,5 +43,9 @@ public class Provider extends MotechBaseDataObject {
             this.providerId = null;
         else
             this.providerId = providerId.toLowerCase();
+    }
+
+    public boolean hasDifferentDistrict(String district) {
+        return !StringUtils.equals(this.district, district);
     }
 }
