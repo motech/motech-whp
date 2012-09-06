@@ -329,6 +329,7 @@ div.buttons a, div.buttons button {
 
 #search-pane {
     overflow: hidden;
+    height: 45px;
 }
 
 .search-section-header {
@@ -597,4 +598,10 @@ pre {
 }
 #cmf-admin-remarks {
     border-bottom: 1px #add8e6 solid;
+}
+.result-count {
+    margin-top: -34px;
+}
+.pull-down {
+    margin-top: 20px;
 }
