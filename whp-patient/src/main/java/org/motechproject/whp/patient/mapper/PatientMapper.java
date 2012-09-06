@@ -2,10 +2,19 @@ package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.user.service.ProviderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientMapper {
+
+    ProviderService providerService;
+
+    @Autowired
+    public PatientMapper(ProviderService providerService) {
+        this.providerService = providerService;
+    }
 
     public Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
@@ -70,8 +79,8 @@ public class PatientMapper {
 
 
     private Treatment createTreatment(PatientRequest patientRequest, Address address) {
-        String providerDistrict = null;
-        Treatment treatment = new Treatment(patientRequest.getProvider_id(), providerDistrict, patientRequest.getTb_id(), patientRequest.getPatient_type());
+        String providerId = patientRequest.getProvider_id();
+        Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
         treatment.setStartDate(patientRequest.getDate_modified().toLocalDate());
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
@@ -80,6 +89,13 @@ public class PatientMapper {
         setPatientAddress(treatment, address);
 
         return treatment;
+    }
+
+    private String getProviderDistrict(String providerId) {
+        if(providerId == null){
+            return null;
+        }
+        return providerService.findByProviderId(providerId).getDistrict();
     }
 
     private void setPatientAddress(Treatment treatment, Address address) {

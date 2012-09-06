@@ -37,6 +37,13 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-user</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>

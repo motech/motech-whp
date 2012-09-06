@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 
 import static junit.framework.Assert.assertEquals;
@@ -33,7 +34,7 @@ public class TreatmentServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper();
+        patientMapper = new PatientMapper(providerService);
         Patient patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
@@ -42,7 +43,17 @@ public class TreatmentServiceTest {
 
     @Test
     public void shouldOverwriteDiseaseClass_DuringTransferIn() {
-        PatientRequest transferInRequest = new PatientRequestBuilder().withMandatoryFieldsForTransferInTreatment().withDiseaseClass(DiseaseClass.E).build();
+        String providerId = "provider-id";
+        PatientRequest transferInRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForTransferInTreatment()
+                .withProviderId(providerId)
+                .withDiseaseClass(DiseaseClass.E)
+                .build();
+
+        when(providerService.findByProviderId(providerId))
+                .thenReturn(new ProviderBuilder()
+                        .withProviderId(providerId)
+                        .withDistrict("district").build());
 
         treatmentService.transferInPatient(transferInRequest);
 

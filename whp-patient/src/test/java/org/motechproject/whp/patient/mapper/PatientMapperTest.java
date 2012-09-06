@@ -2,26 +2,41 @@ package org.motechproject.whp.patient.mapper;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.user.builder.ProviderBuilder;
+import org.motechproject.whp.user.service.ProviderService;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PatientMapperTest {
 
     private PatientMapper patientMapper;
 
+    @Mock
+    private ProviderService providerService;
+    private String providerId = "provider-id";
+
     @Before
     public void setUp() {
-        patientMapper = new PatientMapper();
+        initMocks(this);
+        patientMapper = new PatientMapper(providerService);
+        when(providerService.findByProviderId(providerId)).thenReturn(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(providerId)
+                .withDistrict("district")
+                .build());
     }
 
     @Test
     public void shouldMapPatientRequestToPatientDomain() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
@@ -35,6 +50,7 @@ public class PatientMapperTest {
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForImportPatient()
                 .withWeightStatistics(null, null, DateUtil.today())
+                .withProviderId(providerId)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
         Treatment treatment = patient.getCurrentTreatment();
@@ -43,7 +59,7 @@ public class PatientMapperTest {
 
     @Test
     public void mapIsMigratedDetail() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId).build();
         patientRequest.setMigrated(true);
         Patient patient = patientMapper.mapPatient(patientRequest);
         assertTrue(patient.isMigrated());
@@ -56,7 +72,7 @@ public class PatientMapperTest {
 
     @Test
     public void shouldCreateNewTreatmentForCategoryChange() {
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
                 .build();
@@ -65,13 +81,23 @@ public class PatientMapperTest {
         Therapy oldTherapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
 
+        String newProviderId = "newproviderid";
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
+                .withProviderId(providerId)
                 .withMandatoryFieldsForOpenNewTreatment()
+                .withProviderId(newProviderId)
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
                 .withPatientAge(60)
                 .withPatientType(PatientType.Relapse)
                 .build();
+
+        when(providerService.findByProviderId(newProviderId)).thenReturn(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(newProviderId)
+                .withDistrict("new-district")
+                .build());
+
 
         patientMapper.mapNewTreatmentForCategoryChange(openNewTreatmentUpdateRequest, patient);
 
@@ -84,6 +110,7 @@ public class PatientMapperTest {
     @Test
     public void shouldCreateNewTreatmentForTransferIn() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withProviderId(providerId)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
                 .build();
@@ -97,6 +124,7 @@ public class PatientMapperTest {
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
                 .withPatientAge(60)
+                .withProviderId(providerId)
                 .build();
 
         patientMapper.mapTreatmentForTransferIn(transferInRequest, patient);
@@ -111,6 +139,7 @@ public class PatientMapperTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
+                .withProviderId(providerId)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
 

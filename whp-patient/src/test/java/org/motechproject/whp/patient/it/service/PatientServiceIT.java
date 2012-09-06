@@ -9,6 +9,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -20,8 +21,10 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -50,6 +53,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
     @Autowired
     ProviderService providerService;
     @Autowired
+    AllProviders allProviders;
+    @Autowired
     AllTherapyRemarks allTherapyRemarks;
 
     @Before
@@ -57,12 +62,18 @@ public class PatientServiceIT extends SpringIntegrationTest {
         super.before();
         allTherapyRemarks.removeAll();
         allPatients.removeAll();
+        allProviders.add(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(PatientBuilder.PROVIDER_ID)
+                .withDistrict("district")
+                .build());
     }
 
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allTherapyRemarks.getAll().toArray());
+        allProviders.removeAll();
         super.after();
     }
 
@@ -275,8 +286,17 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
         commandFactory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
 
+        String newProviderId = "new-provider-id";
+
+        allProviders.add(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(newProviderId)
+                .withDistrict("newDistrict")
+                .build());
+
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
+                .withProviderId(newProviderId)
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
                 .build();

@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
+import org.motechproject.whp.user.service.ProviderService;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -20,6 +21,8 @@ public class SimpleUpdateTest extends BaseUnitTest {
     @Mock
     private AllPatients allPatients;
     @Mock
+    private ProviderService providerService;
+    @Mock
     private TreatmentService treatmentService;
     private SimpleUpdate simpleUpdate;
     private Patient patient;
@@ -27,7 +30,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper();
+        patientMapper = new PatientMapper(providerService);
         patient = new PatientBuilder().withDefaults().build();
         simpleUpdate = new SimpleUpdate(allPatients, patientMapper);
     }

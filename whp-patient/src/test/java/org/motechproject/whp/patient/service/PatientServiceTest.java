@@ -41,7 +41,7 @@ public class PatientServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper();
+        patientMapper = new PatientMapper(providerService);
         patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, updateCommandFactory, requestValidator, providerService);
     }
     @Test

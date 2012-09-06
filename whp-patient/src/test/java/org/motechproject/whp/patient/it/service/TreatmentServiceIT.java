@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.it.service;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -12,10 +12,11 @@ import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.user.builder.ProviderBuilder;
+import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -30,17 +31,29 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     @Autowired
     private AllPatients allPatients;
     @Autowired
-    private TreatmentService treatmentService;
-    @Autowired
     private PatientService patientService;
+    @Autowired
+    AllProviders allProviders;
+
+    private String providerId = "provider-id";
 
     @Before
     public void setup() {
+        createProvider(providerId, "district");
         createTestPatient();
+    }
+
+    private void createProvider(String providerId, String district) {
+        allProviders.add(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(providerId)
+                .withDistrict(district)
+                .build());
     }
 
     private void createTestPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
@@ -59,6 +72,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldCreateActiveTreatmentForPatientOnOpen() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -67,6 +81,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -81,6 +96,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldMarkPatientAsNotHavingActiveTreatmentOnClose() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -95,14 +111,18 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldMarkPatientAsHavingActiveTreatmentOnTransferIn() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-
         patientService.update(updatePatientRequest);
+
+        String newProviderId = "new-provider-id";
+        createProvider(newProviderId, "newDistrict");
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
+                .withProviderId(newProviderId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -117,6 +137,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldUpdateDiseaseClassOnTransferIn() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -128,6 +149,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
+                .withProviderId(providerId)
                 .withDiseaseClass(DiseaseClass.E)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -143,6 +165,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldCaptureNewSmearTestResultsAndWeightStatisticsIfSent() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -150,6 +173,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
+                .withProviderId(providerId)
                 .withSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
                 .withWeightStatistics(SampleInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
                 .withCaseId(CASE_ID)
@@ -235,6 +259,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
+        allProviders.removeAll();
         super.after();
     }
 }
