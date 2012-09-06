@@ -1,7 +1,6 @@
 package org.motechproject.whp.mapper;
 
 import org.joda.time.LocalDate;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
@@ -11,8 +10,6 @@ import org.springframework.util.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PatientSummaryMapper {
 
@@ -24,28 +21,12 @@ public class PatientSummaryMapper {
 
 
     public List<PatientSummary> map(List<Patient> patientList) {
-        List<PatientSummary> patientSummaryList = new ArrayList<PatientSummary>();
-        //patientSummaryList.add(buildSummaryHeader());
+        List<PatientSummary> patientSummaryList = new ArrayList<>();
         for (Patient patient : patientList) {
             PatientSummary patientSummary = map(patient);
             patientSummaryList.add(patientSummary);
         }
-        //patientSummaryList.add(buildSummaryFooter());
         return patientSummaryList;
-    }
-
-    private PatientSummary buildSummaryFooter() {
-        return createInfoRow("* Cumulative missed doses shown as of " + formatDate(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)));
-    }
-
-    private PatientSummary buildSummaryHeader() {
-        return createInfoRow("Summary of all patients generated on " + formatDate(LocalDate.now()));
-    }
-
-    private PatientSummary createInfoRow(String message) {
-        PatientSummary infoRow = new PatientSummary();
-        infoRow.setName(message);
-        return infoRow;
     }
 
     private PatientSummary map(Patient patient) {
