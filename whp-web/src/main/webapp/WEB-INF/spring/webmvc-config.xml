@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-       http://www.springframework.org/schema/util
-       http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 
+    <import resource="classpath*:applicationContext-Paginator-mvc.xml"/>
     <context:component-scan base-package="org.motechproject.whp" use-default-filters="false">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
@@ -23,13 +21,6 @@
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
     <context:component-scan base-package="org.motechproject.flash"/>
-    <context:component-scan base-package="org.motechproject.paginator.controller"/>
-
-    <util:map id="pagingServiceMap"
-              key-type="java.lang.String"
-              value-type="org.motechproject.paginator.service.Paging">
-        <entry key="provider" value-ref="providerService"/>
-    </util:map>
 
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
