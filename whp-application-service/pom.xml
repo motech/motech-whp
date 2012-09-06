@@ -5,16 +5,19 @@
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <name>whp-application-service</name>
     <artifactId>whp-application-service</artifactId>
     <groupId>org.motechproject.whp</groupId>
+
     <properties>
         <build.dir>../build</build.dir>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
