@@ -26,7 +26,7 @@ public class PatientSummary {
     private String cpTreatmentProgress;
     private Integer cumulativeMissedDoses;
     private TreatmentOutcome treatmentOutcome;
-    private LocalDate treatmentClosingDate;
+    private String treatmentClosingDate;
 
     @ExportValue(index = 0)
     public String getName() {
@@ -114,7 +114,7 @@ public class PatientSummary {
     }
 
     @ExportValue(index = 17)
-    public LocalDate getTreatmentClosingDate() {
+    public String getTreatmentClosingDate() {
         return treatmentClosingDate;
     }
 }

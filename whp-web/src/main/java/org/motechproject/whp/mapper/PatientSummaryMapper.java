@@ -1,7 +1,10 @@
 package org.motechproject.whp.mapper;
 
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
@@ -9,10 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
+
 public class PatientSummaryMapper {
 
-    public static final String EXPORT_DATE_FORMAT = "dd/MM/yyyy";
-    public static final String NAME_SEPARATOR = " ";
+    private static final String EXPORT_DATE_FORMAT = "dd/MM/yyyy";
+    private static final String NAME_SEPARATOR = " ";
 
     public PatientSummaryMapper() {
     }
@@ -20,11 +25,27 @@ public class PatientSummaryMapper {
 
     public List<PatientSummary> map(List<Patient> patientList) {
         List<PatientSummary> patientSummaryList = new ArrayList<PatientSummary>();
+        //patientSummaryList.add(buildSummaryHeader());
         for (Patient patient : patientList) {
             PatientSummary patientSummary = map(patient);
             patientSummaryList.add(patientSummary);
         }
+        //patientSummaryList.add(buildSummaryFooter());
         return patientSummaryList;
+    }
+
+    private PatientSummary buildSummaryFooter() {
+        return createInfoRow("* Cumulative missed doses shown as of " + formatDate(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)));
+    }
+
+    private PatientSummary buildSummaryHeader() {
+        return createInfoRow("Summary of all patients generated on " + formatDate(LocalDate.now()));
+    }
+
+    private PatientSummary createInfoRow(String message) {
+        PatientSummary infoRow = new PatientSummary();
+        infoRow.setName(message);
+        return infoRow;
     }
 
     private PatientSummary map(Patient patient) {
@@ -32,26 +53,99 @@ public class PatientSummaryMapper {
         patientSummary.setAge(patient.getAge());
         patientSummary.setCpTreatmentProgress(patient.getCPProgress());
         patientSummary.setCumulativeMissedDoses(patient.getCumulativeDosesNotTaken());
-        patientSummary.setDiseaseClass(patient.getCurrentTherapy().getDiseaseClass().value());
+        patientSummary.setDiseaseClass(extractDiseaseClass(patient));
         patientSummary.setIpTreatmentProgress(patient.getIPProgress());
         patientSummary.setName(buildPatientName(patient));
         patientSummary.setGender(patient.getGender());
         patientSummary.setPatientId(patient.getPatientId());
-        patientSummary.setPatientType(patient.getCurrentTreatment().getPatientType());
-        patientSummary.setTbId(patient.getCurrentTreatment().getTbId());
-        patientSummary.setTbRegistrationDate(formatDate(new LocalDate(patient.getCurrentTherapy().getCreationDate())));
-        patientSummary.setTreatmentCategory(patient.getCurrentTherapy().getTreatmentCategory().getName());
-        patientSummary.setTreatmentStartDate(formatDate(patient.getCurrentTreatment().getStartDate()));
-        patientSummary.setTreatmentClosingDate(patient.getCurrentTreatment().getEndDate());
-        patientSummary.setTreatmentOutcome(patient.getCurrentTreatment().getTreatmentOutcome());
-        patientSummary.setVillage(patient.getCurrentTreatment().getPatientAddress().getAddress_village());
-        patientSummary.setProviderId(patient.getCurrentTreatment().getProviderId());
+        patientSummary.setPatientType(extractPatientType(patient));
+        patientSummary.setTbId(extractTbId(patient));
+        patientSummary.setTbRegistrationDate(extractFormattedTbRegistrationDate(patient));
+        patientSummary.setTreatmentCategory(extractTreatmentCategory(patient));
+        patientSummary.setTreatmentStartDate(extractFormattedTreatmentStartDate(patient));
+        patientSummary.setTreatmentClosingDate(extractFormattedTreatmentClosingDate(patient));
+        patientSummary.setTreatmentOutcome(extractTreatmentOutcome(patient));
+        patientSummary.setVillage(extractVillage(patient));
+        patientSummary.setProviderId(extractProviderId(patient));
         patientSummary.setProviderDistrict("");
         return patientSummary;
     }
 
-    private String formatDate(LocalDate date) {
-        return new SimpleDateFormat(EXPORT_DATE_FORMAT).format(date.toDate());
+    private String extractProviderId(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null) {
+            return patient.getCurrentTreatment().getProviderId();
+        }
+        return null;
+    }
+
+    private String extractVillage(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getPatientAddress() != null) {
+            return patient.getCurrentTreatment().getPatientAddress().getAddress_village();
+        }
+        return null;
+    }
+
+    private TreatmentOutcome extractTreatmentOutcome(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getTreatmentOutcome() != null) {
+            return patient.getCurrentTreatment().getTreatmentOutcome();
+        }
+        return null;
+    }
+
+    private String extractFormattedTreatmentClosingDate(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getEndDate() != null) {
+            return formatDate(patient.getCurrentTreatment().getEndDate());
+        }
+        return null;
+    }
+
+    private String extractFormattedTreatmentStartDate(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getStartDate() != null) {
+            return formatDate(patient.getCurrentTreatment().getStartDate());
+        }
+        return null;
+    }
+
+    private String extractTreatmentCategory(Patient patient) {
+        if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getTreatmentCategory() != null) {
+            return patient.getCurrentTherapy().getTreatmentCategory().getName();
+        }
+        return null;
+    }
+
+    private String extractFormattedTbRegistrationDate(Patient patient) {
+        if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getCreationDate() != null) {
+            return formatDate(patient.getCurrentTherapy().getCreationDate().toLocalDate());
+        }
+        return null;
+    }
+
+    private String extractTbId(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null) {
+            return patient.getCurrentTreatment().getTbId();
+        }
+        return null;
+    }
+
+    private PatientType extractPatientType(Patient patient) {
+        if (patient != null && patient.getCurrentTreatment() != null) {
+            return patient.getCurrentTreatment().getPatientType();
+        }
+        return null;
+    }
+
+    private String extractDiseaseClass(Patient patient) {
+        if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getDiseaseClass() != null) {
+            return patient.getCurrentTherapy().getDiseaseClass().value();
+        }
+        return null;
+    }
+
+    public String formatDate(LocalDate date) {
+        if (date != null) {
+            return new SimpleDateFormat(EXPORT_DATE_FORMAT).format(date.toDate());
+        }
+        return null;
     }
 
     private String buildPatientName(Patient patient) {
