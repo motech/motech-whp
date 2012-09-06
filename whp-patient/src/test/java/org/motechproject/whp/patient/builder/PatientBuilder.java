@@ -177,4 +177,9 @@ public class PatientBuilder {
         patient.setLastAdherenceWeekStartDate(currentAdherenceCaptureWeek().startDate());
         return this;
     }
+
+    public PatientBuilder withAge(int age) {
+        patient.getCurrentTherapy().setPatientAge(age);
+        return this;
+    }
 }
