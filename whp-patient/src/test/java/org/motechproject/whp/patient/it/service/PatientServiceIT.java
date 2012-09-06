@@ -33,6 +33,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
@@ -44,6 +46,7 @@ import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceIT extends SpringIntegrationTest {
 
+    public static final String PROVIDER_DISTRICT = "district";
     @Autowired
     private AllPatients allPatients;
     @Autowired
@@ -65,7 +68,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         allProviders.add(new ProviderBuilder()
                 .withDefaults()
                 .withProviderId(PatientBuilder.PROVIDER_ID)
-                .withDistrict("district")
+                .withDistrict(PROVIDER_DISTRICT)
                 .build());
     }
 
@@ -222,6 +225,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
     public void shouldCreatePatientWithActiveTreatment() {
         String caseId = "caseId";
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withProviderId(PatientBuilder.PROVIDER_ID)
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withCaseId(caseId)
                 .withTbId("elevenDigit")
@@ -230,6 +234,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         Patient patient = allPatients.findByPatientId(caseId);
         assertTrue(patient.isOnActiveTreatment());
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(PROVIDER_DISTRICT));
     }
 
     @Test
@@ -287,11 +292,12 @@ public class PatientServiceIT extends SpringIntegrationTest {
         commandFactory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
 
         String newProviderId = "new-provider-id";
+        String newDistrict = "newDistrict";
 
         allProviders.add(new ProviderBuilder()
                 .withDefaults()
                 .withProviderId(newProviderId)
-                .withDistrict("newDistrict")
+                .withDistrict(newDistrict)
                 .build());
 
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
@@ -305,6 +311,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         assertCurrentTreatmentIsNew(updatedPatient, openNewTreatmentUpdateRequest);
+        assertThat(updatedPatient.getCurrentTreatment().getProviderDistrict(), is(newDistrict));
     }
 
     @Test

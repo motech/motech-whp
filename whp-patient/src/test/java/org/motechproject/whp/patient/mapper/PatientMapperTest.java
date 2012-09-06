@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,9 +12,11 @@ import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
 
 public class PatientMapperTest {
 
@@ -22,15 +25,17 @@ public class PatientMapperTest {
     @Mock
     private ProviderService providerService;
     private String providerId = "provider-id";
+    private String providerDistrict;
 
     @Before
     public void setUp() {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
+        providerDistrict = "district";
         when(providerService.findByProviderId(providerId)).thenReturn(new ProviderBuilder()
                 .withDefaults()
                 .withProviderId(providerId)
-                .withDistrict("district")
+                .withDistrict(providerDistrict)
                 .build());
     }
 
@@ -43,6 +48,8 @@ public class PatientMapperTest {
         assertBasicPatientInfo(patient, patientRequest);
         assertTreatment(patientRequest, patientRequest.getAddress(), patient.getCurrentTreatment());
         assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
+        verify(providerService).findByProviderId(providerId);
     }
 
     @Test
@@ -55,6 +62,7 @@ public class PatientMapperTest {
         Patient patient = patientMapper.mapPatient(patientRequest);
         Treatment treatment = patient.getCurrentTreatment();
         assertEquals(0, treatment.getWeightStatistics().size());
+        verify(providerService).findByProviderId(providerId);
     }
 
     @Test
@@ -67,6 +75,8 @@ public class PatientMapperTest {
         patientRequest.setMigrated(false);
         patient = patientMapper.mapPatient(patientRequest);
         assertFalse(patient.isMigrated());
+
+        verify(providerService, times(2)).findByProviderId(providerId);
     }
 
 
@@ -92,10 +102,11 @@ public class PatientMapperTest {
                 .withPatientType(PatientType.Relapse)
                 .build();
 
+        String newProviderDistrictName = "new-district";
         when(providerService.findByProviderId(newProviderId)).thenReturn(new ProviderBuilder()
                 .withDefaults()
                 .withProviderId(newProviderId)
-                .withDistrict("new-district")
+                .withDistrict(newProviderDistrictName)
                 .build());
 
 
@@ -105,6 +116,9 @@ public class PatientMapperTest {
 
         assertTherapy(openNewTreatmentUpdateRequest, patient.getAge(), patient.getCurrentTherapy());
         assertTreatment(openNewTreatmentUpdateRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(newProviderDistrictName));
+        verify(providerService).findByProviderId(providerId);
+        verify(providerService).findByProviderId(newProviderId);
     }
 
     @Test
@@ -115,6 +129,7 @@ public class PatientMapperTest {
                 .withPatientAge(50)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
+        verify(providerService).findByProviderId(providerId);
 
         Therapy therapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
@@ -124,14 +139,22 @@ public class PatientMapperTest {
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("newTbId")
                 .withPatientAge(60)
-                .withProviderId(providerId)
+                .withProviderId(NEW_PROVIDER_ID)
                 .build();
+
+        String newDistrictName = "new-district";
+        when(providerService.findByProviderId(NEW_PROVIDER_ID)).thenReturn(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(NEW_PROVIDER_ID)
+                .withDistrict(newDistrictName)
+                .build());
 
         patientMapper.mapTreatmentForTransferIn(transferInRequest, patient);
 
         assertSame(therapy, patient.getCurrentTherapy());
-
         assertTreatment(transferInRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
+        verify(providerService).findByProviderId(NEW_PROVIDER_ID);
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(newDistrictName));
     }
 
     @Test
@@ -142,6 +165,8 @@ public class PatientMapperTest {
                 .withProviderId(providerId)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
+
+        verify(providerService).findByProviderId(providerId);
 
         PatientRequest updateRequest = new PatientRequestBuilder()
                 .withSimpleUpdateFields()
@@ -165,6 +190,27 @@ public class PatientMapperTest {
 
         assertEquals(updateRequest.getWeightStatistics().size() + 1, treatment.getWeightStatistics().size());
         assertEquals(updateRequest.getWeightStatistics().get(0), treatment.getWeightStatistics().get(1));
+
+    }
+
+    @Test
+    public void shouldSetProviderDistrictOnCreatingNewTreament(){
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withPatientAge(50)
+                .withProviderId(providerId)
+                .build();
+
+        Treatment treatment = patientMapper.createTreatment(patientRequest, patientRequest.getAddress());
+
+        assertThat(treatment.getProviderDistrict(), is(providerDistrict));
+        verify(providerService).findByProviderId(providerId);
+    }
+
+
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(providerService);
     }
 
     private void assertBasicPatientInfo(Patient patient, PatientRequest patientRequest) {

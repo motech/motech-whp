@@ -78,7 +78,7 @@ public class PatientMapper {
     }
 
 
-    private Treatment createTreatment(PatientRequest patientRequest, Address address) {
+    Treatment createTreatment(PatientRequest patientRequest, Address address) {
         String providerId = patientRequest.getProvider_id();
         Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
         treatment.setStartDate(patientRequest.getDate_modified().toLocalDate());
