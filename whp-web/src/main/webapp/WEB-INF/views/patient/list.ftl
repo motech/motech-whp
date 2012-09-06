@@ -12,36 +12,48 @@
 
         <div id="search-pane">
             <form id="searchForm" action="<@spring.url '/patients/search'/>" input method="POST" submitOnEnterKey="true"
-                  class="offset2-fixed form-horizontal">
-                <div class="control-group">
-                    <label class="control-label">Provider District*</label>
+                  class="">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="control-group">
+                                <label class="control-label">Provider District*</label>
 
-                    <div class="controls">
-                        <select id="district" name="selectedDistrict">
-                            <#list districts as district>
-                                <option <#if selectedDistrict == district.name> selected </#if>
-                                                                                value="${district.name}">${district.name}</option>
-                            </#list>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Provider ID</label>
+                                <div class="controls">
+                                    <select id="district" name="selectedDistrict">
+                                        <#list districts as district>
+                                            <option <#if selectedDistrict == district.name> selected </#if>
+                                                                                            value="${district.name}">${district.name}</option>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="control-group">
+                                <label class="control-label">Provider ID</label>
 
-                    <div class="controls">
-                        <select id="providerId" name="selectedProvider"
-                                <#if selectedProvider??>selectedProviderInSession=${selectedProvider}</#if>
-                                >
-                            <!-- AJAX Fetch Provider IDs -->
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="button" id="searchButton" class="btn btn-primary form-button-center">Search
-                        </button>
-                    </div>
-                </div>
+                                <div class="controls">
+                                    <select id="providerId" name="selectedProvider"
+                                            <#if selectedProvider??>selectedProviderInSession=${selectedProvider}</#if>
+                                            >
+                                        <!-- AJAX Fetch Provider IDs -->
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="control-group pull-down">
+                                <div class="controls">
+                                    <button type="button" id="searchButton" class="btn btn-primary form-button-center">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </table>
             </form>
         </div>
     </div>

@@ -329,7 +329,7 @@ div.buttons a, div.buttons button {
 
 #search-pane {
     overflow: hidden;
-    height: 45px;
+    height: 50px;
 }
 
 .search-section-header {
@@ -604,4 +604,10 @@ pre {
 }
 .pull-down {
     margin-top: 20px;
+}
+.pull-down-5px {
+    margin-top: 5px;
+}
+.padding-left {
+    padding-left: 5px;
 }
