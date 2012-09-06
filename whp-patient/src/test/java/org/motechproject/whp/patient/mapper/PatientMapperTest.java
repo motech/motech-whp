@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -8,16 +9,22 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.PatientType;
 
 import static org.junit.Assert.*;
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapPatient;
 
 public class PatientMapperTest {
+
+    private PatientMapper patientMapper;
+
+    @Before
+    public void setUp() {
+        patientMapper = new PatientMapper();
+    }
 
     @Test
     public void shouldMapPatientRequestToPatientDomain() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .build();
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
         assertBasicPatientInfo(patient, patientRequest);
         assertTreatment(patientRequest, patientRequest.getAddress(), patient.getCurrentTreatment());
         assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
@@ -29,7 +36,7 @@ public class PatientMapperTest {
                 .withMandatoryFieldsForImportPatient()
                 .withWeightStatistics(null, null, DateUtil.today())
                 .build();
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
         Treatment treatment = patient.getCurrentTreatment();
         assertEquals(0, treatment.getWeightStatistics().size());
     }
@@ -38,11 +45,11 @@ public class PatientMapperTest {
     public void mapIsMigratedDetail() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientRequest.setMigrated(true);
-        Patient patient = PatientMapper.mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
         assertTrue(patient.isMigrated());
 
         patientRequest.setMigrated(false);
-        patient = PatientMapper.mapPatient(patientRequest);
+        patient = patientMapper.mapPatient(patientRequest);
         assertFalse(patient.isMigrated());
     }
 
@@ -53,7 +60,7 @@ public class PatientMapperTest {
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
                 .build();
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
 
         Therapy oldTherapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
@@ -66,7 +73,7 @@ public class PatientMapperTest {
                 .withPatientType(PatientType.Relapse)
                 .build();
 
-        PatientMapper.mapNewTreatmentForCategoryChange(openNewTreatmentUpdateRequest, patient);
+        patientMapper.mapNewTreatmentForCategoryChange(openNewTreatmentUpdateRequest, patient);
 
         assertNotSame(patient.getCurrentTherapy(), oldTherapy);
 
@@ -80,7 +87,7 @@ public class PatientMapperTest {
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
                 .build();
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
 
         Therapy therapy = patient.getCurrentTherapy();
         Treatment oldTreatment = patient.getCurrentTreatment();
@@ -92,7 +99,7 @@ public class PatientMapperTest {
                 .withPatientAge(60)
                 .build();
 
-        PatientMapper.mapTreatmentForTransferIn(transferInRequest, patient);
+        patientMapper.mapTreatmentForTransferIn(transferInRequest, patient);
 
         assertSame(therapy, patient.getCurrentTherapy());
 
@@ -105,7 +112,7 @@ public class PatientMapperTest {
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
                 .build();
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
 
         PatientRequest updateRequest = new PatientRequestBuilder()
                 .withSimpleUpdateFields()
@@ -113,7 +120,7 @@ public class PatientMapperTest {
                 .withPatientAge(60)
                 .build();
 
-        PatientMapper.mapUpdates(updateRequest, patient);
+        patientMapper.mapUpdates(updateRequest, patient);
 
         Therapy therapy = patient.getCurrentTherapy();
         Treatment treatment = patient.getCurrentTreatment();

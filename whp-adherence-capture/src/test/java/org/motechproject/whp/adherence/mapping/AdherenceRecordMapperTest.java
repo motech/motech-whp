@@ -22,13 +22,14 @@ public class AdherenceRecordMapperTest {
 
     public static final String PROVIDER_ID = "providerid";
     public static final String TB_ID = "tb_id";
+    public static final String PROVIDER_DISTRICT = "PROVIDER_DISTRICT";
 
     private Patient patient;
 
     @Before
     public void setup() {
         Therapy therapy = new Therapy(new TreatmentCategory(), DiseaseClass.E, 10);
-        Treatment currentTreatment = new Treatment(PROVIDER_ID, TB_ID, PatientType.New);
+        Treatment currentTreatment = new Treatment(PROVIDER_ID, PROVIDER_DISTRICT, TB_ID, PatientType.New);
         therapy.addTreatment(currentTreatment, DateTime.now());
 
         patient = new PatientBuilder().withDefaults().withCurrentTreatment(currentTreatment).build();

@@ -7,6 +7,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
@@ -22,12 +23,13 @@ public class SimpleUpdateTest extends BaseUnitTest {
     private TreatmentService treatmentService;
     private SimpleUpdate simpleUpdate;
     private Patient patient;
-
+    private PatientMapper patientMapper;
     @Before
     public void setUp() {
         initMocks(this);
+        patientMapper = new PatientMapper();
         patient = new PatientBuilder().withDefaults().build();
-        simpleUpdate = new SimpleUpdate(allPatients);
+        simpleUpdate = new SimpleUpdate(allPatients, patientMapper);
     }
 
     @Test

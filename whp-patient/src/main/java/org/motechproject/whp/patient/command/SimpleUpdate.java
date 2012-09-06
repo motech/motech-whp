@@ -5,6 +5,7 @@ import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,14 +13,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapUpdates;
-
 @Component
 public class SimpleUpdate extends UpdateCommand {
 
+    private PatientMapper patientMapper;
+
     @Autowired
-    public SimpleUpdate(AllPatients allPatients) {
+    public SimpleUpdate(AllPatients allPatients, PatientMapper patientMapper) {
         super(allPatients, UpdateScope.simpleUpdate);
+        this.patientMapper = patientMapper;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class SimpleUpdate extends UpdateCommand {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
-            Patient updatedPatient = mapUpdates(patientRequest, patient);
+            Patient updatedPatient = patientMapper.mapUpdates(patientRequest, patient);
             allPatients.update(updatedPatient);
         } else {
             throw new WHPRuntimeException(errorCodes);

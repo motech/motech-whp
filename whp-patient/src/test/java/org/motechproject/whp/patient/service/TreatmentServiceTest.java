@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
 import org.motechproject.whp.user.service.ProviderService;
@@ -27,13 +28,16 @@ public class TreatmentServiceTest {
 
     private TreatmentService treatmentService;
 
+    private PatientMapper patientMapper;
+
     @Before
     public void setUp() {
         initMocks(this);
+        patientMapper = new PatientMapper();
         Patient patient = new PatientBuilder().withDefaults().build();
         when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
-        treatmentService = new TreatmentService(allPatients, providerService);
+        treatmentService = new TreatmentService(allPatients, patientMapper);
     }
 
     @Test

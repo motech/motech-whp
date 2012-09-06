@@ -53,18 +53,18 @@ public class TreatmentTest {
         assertEquals("qwer", treatment.getProviderId());
         assertEquals("asd", treatment.getTbId());
 
-        treatment = new Treatment("QWER", "asd", PatientType.New);
+        treatment = new Treatment("QWER", "providerDistrict", "asd", PatientType.New);
         assertEquals("qwer", treatment.getProviderId());
         assertEquals("asd", treatment.getTbId());
     }
 
     @Test
     public void shouldHandleNullValuesForId() {
-        Treatment treatment = new Treatment(null, null, PatientType.New);
+        Treatment treatment = new Treatment(null, "providerDistrict", null, PatientType.New);
         assertEquals(null, treatment.getProviderId());
         assertEquals(null, treatment.getTbId());
 
-        treatment = new Treatment("", "", PatientType.New);
+        treatment = new Treatment("", "providerDistrict", "", PatientType.New);
         treatment.setProviderId(null);
         treatment.setTbId(null);
         assertEquals(null, treatment.getProviderId());

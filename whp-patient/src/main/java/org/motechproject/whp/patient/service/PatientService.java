@@ -8,6 +8,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
@@ -19,22 +20,22 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapPatient;
-
 @Service
 public class PatientService {
 
     private AllPatients allPatients;
+    private PatientMapper patientMapper;
     private AllTherapyRemarks allTherapyRemarks;
     private UpdateCommandFactory updateCommandFactory;
     private RequestValidator validator;
     private ProviderService providerService;
 
     @Autowired
-    public PatientService(AllPatients allPatients,
+    public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks, UpdateCommandFactory updateCommandFactory,
                           RequestValidator validator, ProviderService providerService) {
         this.allPatients = allPatients;
+        this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
         this.updateCommandFactory = updateCommandFactory;
         this.validator = validator;
@@ -42,7 +43,7 @@ public class PatientService {
     }
 
     public void createPatient(PatientRequest patientRequest) {
-        Patient patient = mapPatient(patientRequest);
+        Patient patient = patientMapper.mapPatient(patientRequest);
         allPatients.add(patient);
     }
 

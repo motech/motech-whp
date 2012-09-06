@@ -9,6 +9,7 @@ import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.user.service.ProviderService;
@@ -34,11 +35,14 @@ public class PatientServiceTest {
     RequestValidator requestValidator;
     @Mock
     ProviderService providerService;
+
+    PatientMapper patientMapper;
+
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         initMocks(this);
-        patientService = new PatientService(allPatients, allTherapyRemarks, updateCommandFactory, requestValidator, providerService);
+        patientMapper = new PatientMapper();
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, updateCommandFactory, requestValidator, providerService);
     }
     @Test
     public void shouldFetchAllRemarksUnderCurrentTherapy(){

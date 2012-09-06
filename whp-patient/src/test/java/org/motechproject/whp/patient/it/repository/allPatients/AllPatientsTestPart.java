@@ -35,7 +35,7 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     }
 
     private Treatment createTreatment(String providerId) {
-        Treatment treatment = new Treatment(providerId, "tbId", PatientType.New);
+        Treatment treatment = new Treatment(providerId, "providerDistrict", "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());

@@ -2,10 +2,12 @@ package org.motechproject.whp.patient.mapper;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PatientMapper {
 
-    public static Patient mapPatient(PatientRequest patientRequest) {
+    public Patient mapPatient(PatientRequest patientRequest) {
         Patient patient = mapBasicInfo(patientRequest);
 
         Therapy therapy = new Therapy(patientRequest.getTreatment_category(), patientRequest.getDisease_class(), patientRequest.getAge());
@@ -16,13 +18,13 @@ public class PatientMapper {
         return patient;
     }
 
-    public static void mapNewTreatmentForCategoryChange(PatientRequest patientRequest, Patient patient) {
+    public void mapNewTreatmentForCategoryChange(PatientRequest patientRequest, Patient patient) {
         Therapy newTherapy = new Therapy(patientRequest.getTreatment_category(), patientRequest.getDisease_class(), patient.getAge());
         Treatment treatment = createTreatment(patientRequest, patient.getCurrentTreatment().getPatientAddress());
         patient.addTreatment(treatment, newTherapy, patientRequest.getDate_modified());
     }
 
-    public static void mapTreatmentForTransferIn(PatientRequest patientRequest, Patient patient) {
+    public void mapTreatmentForTransferIn(PatientRequest patientRequest, Patient patient) {
         Treatment newTreatment = createTreatment(patientRequest, patient.getCurrentTreatment().getPatientAddress());
 
         if (patientRequest.getDisease_class() != null) {
@@ -32,7 +34,7 @@ public class PatientMapper {
         patient.addTreatment(newTreatment, patientRequest.getDate_modified());
     }
 
-    public static Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
+    public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
         Treatment currentTreatment = patient.getCurrentTreatment();
         Therapy currentTherapy = patient.getCurrentTherapy();
 
@@ -51,7 +53,7 @@ public class PatientMapper {
         return patient;
     }
 
-    private static Patient mapBasicInfo(PatientRequest patientRequest) {
+    private Patient mapBasicInfo(PatientRequest patientRequest) {
         Patient patient = new Patient(
                 patientRequest.getCase_id(),
                 patientRequest.getFirst_name(),
@@ -67,8 +69,9 @@ public class PatientMapper {
     }
 
 
-    private static Treatment createTreatment(PatientRequest patientRequest, Address address) {
-        Treatment treatment = new Treatment(patientRequest.getProvider_id(), patientRequest.getTb_id(), patientRequest.getPatient_type());
+    private Treatment createTreatment(PatientRequest patientRequest, Address address) {
+        String providerDistrict = null;
+        Treatment treatment = new Treatment(patientRequest.getProvider_id(), providerDistrict, patientRequest.getTb_id(), patientRequest.getPatient_type());
         treatment.setStartDate(patientRequest.getDate_modified().toLocalDate());
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
@@ -79,7 +82,7 @@ public class PatientMapper {
         return treatment;
     }
 
-    private static void setPatientAddress(Treatment treatment, Address address) {
+    private void setPatientAddress(Treatment treatment, Address address) {
         if (!address.isEmpty()) {
             treatment.setPatientAddress(address);
         }

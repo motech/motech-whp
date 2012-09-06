@@ -17,12 +17,10 @@ import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,10 +41,10 @@ public class ProviderRemarksServiceTest {
     @Test
     public void shouldGetRemarksUnderCurrentTherapy() {
         String tbId1 = "tbid1";
-        Treatment treatmentUnderCurrentTherapy1 = new Treatment("provider1", tbId1, PatientType.New);
+        Treatment treatmentUnderCurrentTherapy1 = new Treatment("provider1", "providerDistrict", tbId1, PatientType.New);
         String tbId2 = "tbid2";
-        Treatment treatmentUnderCurrentTherapy2 = new Treatment("provider2", tbId2, PatientType.TreatmentFailure);
-        Treatment treatmentUnderOldTherapy1 = new Treatment("provider1","tbId3", PatientType.New);
+        Treatment treatmentUnderCurrentTherapy2 = new Treatment("provider2", "providerDistrict", tbId2, PatientType.TreatmentFailure);
+        Treatment treatmentUnderOldTherapy1 = new Treatment("provider1", "providerDistrict", "tbId3", PatientType.New);
 
         Patient patient = new Patient();
         DateTime now = DateUtil.now();

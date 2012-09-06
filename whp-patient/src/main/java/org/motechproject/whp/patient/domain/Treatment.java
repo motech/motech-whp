@@ -16,6 +16,7 @@ import java.util.List;
 public class Treatment {
 
     private String providerId;
+    private String providerDistrict;
     private String tbId;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -30,18 +31,11 @@ public class Treatment {
     public Treatment() {
     }
 
-    public Treatment(String providerId, String tbId, PatientType patientType) {
+    public Treatment(String providerId, String providerDistrict, String tbId, PatientType patientType) {
         setProviderId(providerId);
+        setProviderDistrict(providerDistrict);
         setTbId(tbId);
         setPatientType(patientType);
-    }
-
-    public Treatment updateForTransferIn(String newTbId, String newProviderId, LocalDate startDate, Treatment oldTreatment) {
-        setTbId(newTbId);
-        setProviderId(newProviderId);
-        setStartDate(startDate);
-        setPatientAddress(oldTreatment.getPatientAddress());
-        return this;
     }
 
     public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {

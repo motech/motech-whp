@@ -2,28 +2,27 @@ package org.motechproject.whp.patient.service;
 
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapNewTreatmentForCategoryChange;
-import static org.motechproject.whp.patient.mapper.PatientMapper.mapTreatmentForTransferIn;
 
 @Service
 public class TreatmentService {
 
     private AllPatients allPatients;
+    private PatientMapper patientMapper;
 
     @Autowired
-    public TreatmentService(AllPatients allPatients, ProviderService providerService) {
+    public TreatmentService(AllPatients allPatients, PatientMapper patientMapper) {
         this.allPatients = allPatients;
+        this.patientMapper = patientMapper;
     }
 
     public void openTreatment(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
-        mapNewTreatmentForCategoryChange(patientRequest, patient);
+        patientMapper.mapNewTreatmentForCategoryChange(patientRequest, patient);
         allPatients.update(patient);
     }
 
@@ -48,7 +47,7 @@ public class TreatmentService {
     public void transferInPatient(PatientRequest patientRequest) {
         Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
 
-        mapTreatmentForTransferIn(patientRequest, patient);
+        patientMapper.mapTreatmentForTransferIn(patientRequest, patient);
         patient.reviveLatestTherapy();
         allPatients.update(patient);
     }
