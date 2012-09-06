@@ -1,5 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#include "../layout/legend.ftl">
+<div class="pull-left result-count">Found <span class="bold">${patientList?size}</span> patients</div>
 <script type="text/javascript"
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 <script type="text/javascript"
@@ -11,6 +12,7 @@
         })
     });
 </script>
+
 <table id="patientList" class="table table-striped table-bordered table-condensed" redirectOnRowClick="true">
     <thead>
     <tr>
