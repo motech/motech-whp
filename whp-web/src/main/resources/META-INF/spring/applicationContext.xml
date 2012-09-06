@@ -18,6 +18,7 @@
     <import resource="classpath*:applicationDateTimeSimulatorContext.xml"/>
     <import resource="classpath*:applicationBulkExportContext.xml"/>
     <import resource="classpath*:applicationBulkImportContext.xml"/>
+    <import resource="classpath*:applicationContext-Paginator.xml"/>
     <import resource="classpath*:applicationWebServiceContext.xml"/>
 
 

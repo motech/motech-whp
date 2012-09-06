@@ -51,6 +51,9 @@
         </form>
     </div>
 </div>
+    <@paginator.filter paginationControl="provider_pagination" >
+    <input name="filterTextBox" type="text"/>
+    </@paginator.filter>
 <div class="results">
     <table id="providerList" class="table table-bordered table-condensed default-arrow">
         <thead>
@@ -66,8 +69,8 @@
             <th type="reset-password"></th>
         </tr>
 
-<@paginator.paginate entity="provider" contextRoot="/whp">
-    <table class="table table-striped table-bordered">
+<@paginator.paginate id="provider_pagination" entity="provider" rowsPerPage="1" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+       <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Provider Id</th>
@@ -81,7 +84,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="provider-row" ng-repeat="item in data" id="providerList_{{item.providerId}}" providerId="{{item.providerId}}">
+            <tr class="provider-row" ng-repeat="item in data.results" id="providerList_{{item.providerId}}" providerId="{{item.providerId}}">
                 <td class="providerId" id="providerid_.{{item.providerId}}">{{item.providerId}}</td>
                 <td id="provider_{{item.providerId}}_District">{{item.district}}</td>
                     <td id="provider_{{provider.providerId}}_PrimaryMobile">
@@ -120,5 +123,6 @@
         </tbody>
     </table>
 </@paginator.paginate>
+<@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
 
 </@layout.defaultLayout>

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
+import static java.util.Arrays.asList;
 
 @Service
 public class ProviderService implements Paging {
@@ -93,11 +94,12 @@ public class ProviderService implements Paging {
     }
 
     @Override
-    public PageResults page(Integer pageNo, Integer rowsPerPage, Properties properties) {
+    public PageResults page(Integer pageNo, Integer rowsPerPage, Properties searchCriteria) {
         List<Provider> allProviders = this.allProviders.getAll();
 
-        int endIndex = (pageNo + 1) * rowsPerPage > allProviders.size() ? allProviders.size() : (pageNo + 1) * rowsPerPage;
-        List<Provider> providers = allProviders.subList(pageNo * rowsPerPage, endIndex);
+        int startIndex = (pageNo - 1) * rowsPerPage;
+        int endIndex = (pageNo * rowsPerPage) - 1;
+        List<Provider> providers = (startIndex == endIndex) ? asList(allProviders.get(startIndex)) : allProviders.subList(startIndex, endIndex);
         PageResults pageResults = new PageResults();
         pageResults.setTotalRows(allProviders.size());
         pageResults.setPageNo(pageNo);
