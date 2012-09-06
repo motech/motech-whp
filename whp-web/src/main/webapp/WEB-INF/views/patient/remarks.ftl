@@ -6,7 +6,9 @@
     </label>
 </#if>
 
-    <div id="cmf-admin-remarks">
+    <div id="cmf-admin-remarks"
+            <#if cmfAdminRemarks?size != 0 && providerRemarks?size != 0> class="border-bottom" </#if>
+            >
     <#list cmfAdminRemarks as cmfAdminRemark>
         <div class="cmf-admin-remark">
             <h5>
@@ -15,7 +17,7 @@
             </h5>
 
             <div>
-            <pre><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
+                <pre><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
             </div>
             <br/>
         </div>
@@ -33,7 +35,7 @@
             </h5>
 
             <div>
-            <pre><#transform html_escape>${providerRemark.remark()}</#transform></pre>
+                <pre><#transform html_escape>${providerRemark.remark()}</#transform></pre>
             </div>
             <br/>
         </div>

@@ -596,7 +596,7 @@ pre {
     background-color: inherit;
     padding: 0px;
 }
-#cmf-admin-remarks {
+.border-bottom {
     border-bottom: 1px #add8e6 solid;
 }
 .result-count {
