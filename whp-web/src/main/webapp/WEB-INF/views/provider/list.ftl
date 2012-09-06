@@ -1,7 +1,9 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-itadmin.ftl" as layout>
+<#import "../paginator.ftl" as paginator>
 <#include "../user/activateProvider.ftl">
 <#include "../user/resetPassword.ftl">
+
 <@layout.defaultLayout "MoTeCH-WHP">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 <div id="search-section" class="row well">
@@ -63,66 +65,54 @@
         <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
             <th type="reset-password"></th>
         </tr>
+
+<@paginator.paginate entity="patient">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Patient Id</th>
+                <th>Provider Id</th>
+                <th>Mobile Number</th>
+                <th>District</th>
+                <th>Status</th>
+            </tr>
         </thead>
         <tbody>
-            <#if providerList?size == 0>
-            <tr>
-                <td class="warning" style="text-align: center" colspan="6">
-                    <#if selectedProvider != "">
-                        No providers found for District: '${selectedDistrict}' with provider ID: '${selectedProvider}'
-                    <#else>
-                        No providers found for District: '${selectedDistrict}'
-                    </#if>
-                </td>
-            </tr>
-            <#else>
-                <#list providerList as provider>
-                <tr class="provider-row" id="providerList_${provider.providerId}" providerId="${provider.providerId}">
-                    <td class="providerId" id="provider_${provider.providerId}_ProviderId">${provider.providerId}</td>
-                    <td id="provider_${provider.providerId}_District">${provider.district}</td>
-                    <td id="provider_${provider.providerId}_PrimaryMobile">
-                        <#if provider.primaryMobile?exists>
-                            ${provider.primaryMobile}
-                            </#if>
+            <tr class="provider-row" ng-repeat="item in data" id="providerList_{{item.providerId}}" providerId="{{item.providerId}}">
+                <td class="providerId" id="providerid_.{{item.providerId}}">{{item.providerId}}</td>
+                <td id="provider_{{item.providerId}}_District">{{item.district}}</td>
+                    <td id="provider_{{provider.providerId}}_PrimaryMobile">
+                        {{item.primaryMobile}}
                     </td>
-                    <td id="provider_${provider.providerId}_SecondaryMobile">
-                        <#if provider.secondaryMobile?exists>
-                            ${provider.secondaryMobile}
-                            </#if>
+                    <td id="provider_{{provider.providerId}}_SecondaryMobile">
+                        {{item.secondaryMobile}}
                     </td>
-                    <td id="provider_${provider.providerId}_TertiaryMobile">
-                        <#if provider.tertiaryMobile?exists>
-                            ${provider.tertiaryMobile}
-                            </#if>
+                    <td id="provider_{{provider.providerId}}_TertiaryMobile">
+                        {{item.tertiaryMobile}}
                     </td>
-                    <td id="provider_${provider.providerId}_Status" type="status">
-                        <#if provider.active>
-                            Active
-                        <#else>
-                            Inactive
-                        </#if>
-                    </td>
-                    <td type="activate-provider">
-                        <#if !provider.active>
-                            <a type="activate-link" data-toggle="modal" href="#activateProviderModal"
-                               class="activate-link"
-                               userName="${provider.providerId}">Activate</a>
-                        </#if>
-                    </td>
-                    <td type="reset-password">
-                        <#if provider.active>
-                            <a type="reset-password-link" class="reset-password one-line" data-toggle="modal"
-                               href="#resetPasswordModal">Reset Password</a>
-                        </#if>
-                    </td>
+                    <#--<td id="provider_{{provider.providerId}}_Status" type="status">-->
+                        <#--<#if provider.active>-->
+                            <#--Active-->
+                        <#--<#else>-->
+                            <#--Inactive-->
+                        <#--</#if>-->
+                    <#--</td>-->
+                    <#--<td type="activate-provider">-->
+                        <#--<#if !provider.active>-->
+                            <#--<a type="activate-link" data-toggle="modal" href="#activateProviderModal"-->
+                               <#--class="activate-link"-->
+                               <#--userName="{{provider.providerId}}">Activate</a>-->
+                        <#--</#if>-->
+                    <#--</td>-->
+                    <#--<td type="reset-password">-->
+                        <#--<#if provider.active>-->
+                            <#--<a type="reset-password-link" class="reset-password one-line" data-toggle="modal"-->
+                               <#--href="#resetPasswordModal">Reset Password</a>-->
+                        <#--</#if>-->
+                    <#--</td>-->
                 </tr>
-                </#list>
-            </#if>
         </tbody>
     </table>
-</div>
-
-    <@activateProvider/>
-    <@resetPassword/>
+</@paginator.paginate>
 
 </@layout.defaultLayout>

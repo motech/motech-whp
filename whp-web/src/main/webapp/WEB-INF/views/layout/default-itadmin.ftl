@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#macro defaultLayout title="WHP">
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
