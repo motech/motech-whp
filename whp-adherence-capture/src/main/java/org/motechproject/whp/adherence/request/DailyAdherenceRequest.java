@@ -2,6 +2,7 @@ package org.motechproject.whp.adherence.request;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 
 @Data
 public class DailyAdherenceRequest {
@@ -22,7 +23,7 @@ public class DailyAdherenceRequest {
     }
 
     public LocalDate getDoseDate() {
-        return new LocalDate(year, month, day);
+        return DateUtil.newDate(year, month, day);
     }
 
 }

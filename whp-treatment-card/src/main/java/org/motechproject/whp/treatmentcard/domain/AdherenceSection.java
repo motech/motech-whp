@@ -4,6 +4,7 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.common.domain.WHPConstants;
@@ -114,7 +115,7 @@ public class AdherenceSection {
     }
 
     private void addMonthAdherenceForRange(LocalDate startDate, LocalDate endDate) {
-        for (LocalDate monthStartDate = new LocalDate(startDate.getYear(), startDate.getMonthOfYear(), 1); isOnOrBefore(monthStartDate, endDate); monthStartDate = monthStartDate.plusMonths(1)) {
+        for (LocalDate monthStartDate = DateUtil.newDate(startDate.getYear(), startDate.getMonthOfYear(), 1); isOnOrBefore(monthStartDate, endDate); monthStartDate = monthStartDate.plusMonths(1)) {
             String monthAndYear = monthStartDate.toString(MonthlyAdherence.MonthAndYearFormat);
             int numberOfDays = findNumberOfDays(monthStartDate.getMonthOfYear(), monthStartDate.getYear());
 
