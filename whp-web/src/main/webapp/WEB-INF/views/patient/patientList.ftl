@@ -67,7 +67,7 @@
                 <td id="patient_${patient.patientId}_Village">
                 ${patient.currentTreatment.patientAddress.address_village}
                 </td>
-                <td id="patient_${patient.patientId}_District">${selectedDistrict}</td>
+                <td id="patient_${patient.patientId}_District">${patient.currentTreatment.providerDistrict}</td>
                 <td id="patient_${patient.patientId}_TreatmentCategory">
                 ${patient.currentTherapy.treatmentCategory.name}
                 </td>
