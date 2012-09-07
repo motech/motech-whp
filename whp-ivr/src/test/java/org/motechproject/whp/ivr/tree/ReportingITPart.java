@@ -85,20 +85,4 @@ public class ReportingITPart extends IvrCallFlowITPart {
         assertThat(adherenceCaptureRequest.getStatus(), is(NO_INPUT));
     }
 
-    @Test
-    public void shouldPublishCallLogUponAdherenceCapture() {
-        startCall(provider.getPrimaryMobile());
-        recordConfirmedAdherence("2");
-        recordConfirmedAdherence("3");
-        recordConfirmedAdherence("2");
-
-        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
-        verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
-        CallLogRequest callLogRequest = argumentCaptor.getValue();
-
-        assertThat(callLogRequest.getProviderId(), is(provider.getProviderId()));
-        assertThat(callLogRequest.getTotalPatients(), is(3));
-        assertThat(callLogRequest.getAdherenceCaptured(), is(3));
-        assertThat(callLogRequest.getAdherenceNotCaptured(), is(0));
-    }
 }
