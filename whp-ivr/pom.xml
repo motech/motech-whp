@@ -18,6 +18,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-ivr-kookoo</artifactId>
+            <version>${motech.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-platform-decisiontree</artifactId>
+            <version>${motech.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
         </dependency>
@@ -28,14 +38,6 @@
         <dependency>
             <groupId>org.motechproject.whp.reports</groupId>
             <artifactId>whp-reports-contract</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-ivr-kookoo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-decisiontree</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
