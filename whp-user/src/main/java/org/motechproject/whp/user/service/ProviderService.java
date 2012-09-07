@@ -1,8 +1,9 @@
 package org.motechproject.whp.user.service;
 
-import org.motechproject.scheduler.context.EventContext;
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -15,12 +16,11 @@ import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.*;
 
-import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 import static java.util.Arrays.asList;
+import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
 public class ProviderService implements Paging {
@@ -68,7 +68,7 @@ public class ProviderService implements Paging {
     }
 
     public List<Provider> fetchBy(String district, String providerId) {
-        if (providerId.isEmpty()) {
+        if (StringUtils.isEmpty(providerId)) {
             return fetchBy(district);
         } else {
             return allProviders.findByDistrictAndProviderId(district, providerId);

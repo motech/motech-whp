@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.page.admin;
 
+import org.junit.Ignore;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
@@ -19,6 +20,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.whp.functional.framework.WebDriverFactory.createWebElement;
 
+@Ignore("Ignored until pagination is completed on Provider page")
 public class ListProvidersPage extends LoggedInUserPage {
 
     @FindBy(how = How.ID, using = "providerId")
