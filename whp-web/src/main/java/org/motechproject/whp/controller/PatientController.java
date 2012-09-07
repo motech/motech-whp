@@ -52,7 +52,6 @@ import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
 @RequestMapping(value = "/patients")
-@ExcelDataSource(name = "patients")
 public class PatientController extends BaseWebController {
 
     public static final String DISTRICT_LIST = "districts";
@@ -257,22 +256,5 @@ public class PatientController extends BaseWebController {
         patientService.addRemark(patient, remark, authenticatedUser.getUserName());
         setUpModelForRemarks(uiModel, patient);
         return "patient/remarks";
-    }
-
-    @Header(span = 3)
-    public List<String> patientSummaryHeader() {
-        return asList("Generated as on " + new WHPDate(new LocalDate()).value());
-    }
-
-    @Footer(span = 3)
-    public List<String> patientSummaryFooter() {
-        LocalDate lastSunday = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
-        return asList("Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
-    }
-
-    @DataProvider
-    public List<PatientSummary> patientSummaryReport(int pageNumber) {
-        List<Patient> patientList = patientService.getAll(pageNumber - 1, 10000);
-        return new PatientSummaryMapper().map(patientList);
     }
 }
