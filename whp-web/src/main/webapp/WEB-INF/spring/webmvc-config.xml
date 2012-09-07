@@ -14,6 +14,9 @@
     <context:component-scan base-package="org.motechproject.deliverytools" use-default-filters="false">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    <context:component-scan base-package="org.motechproject.diagnostics.controller">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
     <context:component-scan base-package="org.motechproject.flash"/>
 
 

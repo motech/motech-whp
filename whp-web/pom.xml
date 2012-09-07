@@ -140,6 +140,12 @@
         <dependency>
             <groupId>org.motechproject.contrib-whp</groupId>
             <artifactId>motech-flash-scope</artifactId>
+            <version>${motech.contrib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.contrib-whp</groupId>
+            <artifactId>motech-diagnostics</artifactId>
+            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
