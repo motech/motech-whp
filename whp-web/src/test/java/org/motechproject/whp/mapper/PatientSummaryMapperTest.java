@@ -3,6 +3,7 @@ package org.motechproject.whp.mapper;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.Phase;
@@ -75,7 +76,7 @@ public class PatientSummaryMapperTest {
     private void verifyDates(String formattedDate, LocalDate date, PatientSummaryMapper patientSummaryMapper) {
         if (StringUtils.hasText(formattedDate)) {
             if (date != null) {
-                assertEquals(formattedDate, patientSummaryMapper.formatDate(date));
+                assertEquals(formattedDate, new WHPDate(date).value());
             }
         }
     }
