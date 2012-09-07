@@ -11,9 +11,11 @@ import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.*;
 
@@ -103,8 +105,18 @@ public class ProviderService implements Paging {
         PageResults pageResults = new PageResults();
         pageResults.setTotalRows(allProviders.size());
         pageResults.setPageNo(pageNo);
-        pageResults.setResults(providers);
+        pageResults.setResults(prepareResultsModel(providers));
         return pageResults;
+    }
+
+    private List<ProviderRow> prepareResultsModel(List<Provider> matchingProviders) {
+        Map<String, MotechUser> users = fetchAllWebUsers();
+
+        List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
+        for (Provider provider : matchingProviders) {
+            providerRows.add(new ProviderRow(provider, users.get(provider.getProviderId()).isActive()));
+        }
+        return providerRows;
     }
 
     @Override

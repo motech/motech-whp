@@ -25,10 +25,12 @@ function addResetPasswordLink(userName) {
     removeActivateColumnIfAllAreActive();
 }
 
+function highlightProviderRow(userName) {
+    $('tr[providerId=' + userName + '] td').effect("highlight", {}, 6000);
+}
 function setProviderAsActive(userName) {
     $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
     $('tr[providerId=' + userName + '] td[type=status]').text('Active');
-    $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
 }
 
 $(function () {
@@ -50,9 +52,10 @@ $(function () {
     $('#activateProviderModal').bind('activateProviderSuccess', function (event, userName) {
         setProviderAsActive(userName);
         addResetPasswordLink(userName);
+        highlightProviderRow(userName);
     });
     $('#resetPasswordModal').bind('resetPasswordSuccess', function (event, userName) {
-        $('tr[providerId=' + userName + ']').effect("highlight", {}, 6000);
+        highlightProviderRow(userName);
         removeResetPasswordColumnIfAllAreInActive();
     });
 });

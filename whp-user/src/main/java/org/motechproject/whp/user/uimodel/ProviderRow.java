@@ -1,4 +1,4 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.user.uimodel;
 
 import lombok.Data;
 import org.motechproject.whp.user.domain.Provider;
