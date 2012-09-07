@@ -69,9 +69,7 @@ public class PatientService {
     }
 
     public List<Patient> searchBy(String districtName) {
-        List<Provider> providers = providerService.fetchBy(districtName);
-        List<String> providerIds = getProviderIds(providers);
-        return allPatients.getAllUnderActiveTreatmentWithCurrentProviders(providerIds);
+        return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
     }
 
     private List<String> getProviderIds(List<Provider> providers) {

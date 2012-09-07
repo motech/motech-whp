@@ -18,24 +18,25 @@ import static org.motechproject.util.DateUtil.now;
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public abstract class AllPatientsTestPart extends SpringIntegrationTest {
 
+    public static final String PROVIDER_DISTRICT ="provider-district";
     @Autowired
     AllPatients allPatients;
 
-    public Patient createPatient(String patientId, String providerId) {
-        return createPatientOnActiveTreatment(patientId, "Raju", providerId, now());
+    public Patient createPatient(String patientId, String providerId, String providerDistrict) {
+        return createPatientOnActiveTreatment(patientId, "Raju", providerId, providerDistrict, now());
     }
 
-    public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId, DateTime dateModified) {
+    public Patient createPatientOnActiveTreatment(String patientId, String firstName, String providerId, String providerDistrict, DateTime dateModified) {
         Therapy therapy = createTherapy();
         Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
-        Treatment treatment = createTreatment(providerId);
+        Treatment treatment = createTreatment(providerId, providerDistrict);
         patient.addTreatment(treatment, therapy, dateModified);
         allPatients.add(patient);
         return patient;
     }
 
-    private Treatment createTreatment(String providerId) {
-        Treatment treatment = new Treatment(providerId, "providerDistrict", "tbId", PatientType.New);
+    private Treatment createTreatment(String providerId, String providerDistrict) {
+        Treatment treatment = new Treatment(providerId, providerDistrict, "tbId", PatientType.New);
         treatment.setPatientAddress(new Address("house number", "landmark", "block", "village", "district", "state"));
         treatment.addSmearTestResult(smearTestResult());
         treatment.addWeightStatistics(weightStatistics());

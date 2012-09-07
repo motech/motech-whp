@@ -70,9 +70,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return db.queryView(q, Patient.class);
     }
 
-    @View(name = "find_by_provider_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerId, doc._id);}}")
-    public List<Patient> getAllUnderActiveTreatmentWithCurrentProviders(List<String> providerIds) {
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment_v1").keys(providerIds).includeDocs(true);
+    @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
+    public List<Patient> getAllUnderActiveTreatmentInDistrict(String district) {
+        ViewQuery q = createQuery("find_by_district_having_active_treatment_v1").key(district).includeDocs(true);
         List<Patient> patients = db.queryView(q, Patient.class);
         Collections.sort(patients, new PatientComparatorByFirstName());
         return patients;

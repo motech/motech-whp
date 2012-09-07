@@ -15,7 +15,7 @@ public class PersistenceTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldSavePatientInfo() {
-        createPatient("cha01100001", "providerId");
+        createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
 
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
 
@@ -32,7 +32,7 @@ public class PersistenceTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldSaveProfileFields() {
-        createPatient("cha01100001", "providerId");
+        createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
 
         assertEquals("Raju", savedPatient.getFirstName());
@@ -42,7 +42,7 @@ public class PersistenceTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldSaveSmearTestResults() {
-        createPatient("cha01100001", "providerId");
+        createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
         Patient savedPatient = allPatients.findByPatientId("cha01100001");
 
         SmearTestRecord smearTestRecord = savedPatient.getCurrentTreatment().getSmearTestResults().latestResult();

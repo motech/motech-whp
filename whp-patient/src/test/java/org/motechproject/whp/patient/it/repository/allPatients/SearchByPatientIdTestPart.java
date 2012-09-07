@@ -12,7 +12,7 @@ public class SearchByPatientIdTestPart extends AllPatientsTestPart {
 
     @Test
     public void patientIdShouldBeCaseInsensitive() {
-        createPatient("Cha01100002", "providerId");
+        createPatient("Cha01100002", "providerId", PROVIDER_DISTRICT);
 
         Patient savedPatient = allPatients.findByPatientId("chA01100002");
         assertNotNull(savedPatient);
@@ -20,7 +20,7 @@ public class SearchByPatientIdTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldSaveIdsInLowerCase() {
-        createPatient("Cha01100002", "providerId");
+        createPatient("Cha01100002", "providerId", PROVIDER_DISTRICT);
         Patient savedPatient = allPatients.findByPatientId("chA01100002");
 
         assertEquals("tbid", savedPatient.getCurrentTreatment().getTbId());
