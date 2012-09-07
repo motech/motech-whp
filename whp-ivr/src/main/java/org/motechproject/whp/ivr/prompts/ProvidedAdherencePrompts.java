@@ -9,10 +9,9 @@ import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 
 public class ProvidedAdherencePrompts {
 
-    public static Prompt[] providedAdherencePrompts(WhpIvrMessage whpIvrMessage, String patientId, int adherenceInput, int dosesPerWeek) {
+    public static Prompt[] providedAdherencePrompts(WhpIvrMessage whpIvrMessage, int adherenceInput, int dosesPerWeek) {
         PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage);
         promptBuilder.wav(PATIENT)
-                .id(patientId)
                 .wav(HAS_TAKEN)
                 .number(dosesPerWeek)
                 .wav(OUT_OF)

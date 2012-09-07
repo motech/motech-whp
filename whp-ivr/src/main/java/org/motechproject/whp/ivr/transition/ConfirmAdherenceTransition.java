@@ -86,7 +86,7 @@ public class ConfirmAdherenceTransition extends TransitionToCollectPatientAdhere
     private void repeatCurrentPatient(IvrSession ivrSession, String currentPatientId, Node nextNode) {
         Patient patient = patientService.findByPatientId(currentPatientId);
         Integer adherenceInput = Integer.parseInt(ivrSession.adherenceInputForCurrentPatient().input());
-        nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, currentPatientId, adherenceInput, patient.dosesPerWeek()));
+        nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, adherenceInput, patient.dosesPerWeek()));
         nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
         nextNode.setMaxTransitionInputDigit(1);
         nextNode.addTransition("?", new ConfirmAdherenceTransition());

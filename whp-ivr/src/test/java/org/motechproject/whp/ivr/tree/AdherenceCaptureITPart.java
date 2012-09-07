@@ -27,7 +27,6 @@ public class AdherenceCaptureITPart extends IvrCallFlowITPart {
         assertThat(ivrResponse.getPlayAudio(),
                 is(audioList(
                         wav(PATIENT),
-                        alphaNumeric(id(patient1.getPatientId())),
                         wav(HAS_TAKEN, "3", OUT_OF, "2", DOSES, CONFIRM_ADHERENCE))));
 
         assertThat(ivrResponse.getGotoUrl(), is("http://localhost:7080/whp/kookoo/ivr?provider=kookoo&ln=en&tree=adherenceCapture&trP=" + base64("/2")));

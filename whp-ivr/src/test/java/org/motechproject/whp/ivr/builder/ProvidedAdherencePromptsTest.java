@@ -24,8 +24,8 @@ public class ProvidedAdherencePromptsTest {
 
     @Test
     public void shouldBuildConfirmAdherencePrompts() {
-        Prompt[] builtPrompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, "id", 2, 3);
-        Prompt[] expectedPrompts = promptBuilder.wav(PATIENT).id("i").id("d")
+        Prompt[] builtPrompts = ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, 2, 3);
+        Prompt[] expectedPrompts = promptBuilder.wav(PATIENT)
                 .wav(HAS_TAKEN).number(3)
                 .wav(OUT_OF).number(2)
                 .wav(DOSES)

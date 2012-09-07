@@ -146,7 +146,6 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         int dosesPerWeek = 3;
         PromptBuilder promptBuilder = new PromptBuilder(whpIvrMessage)
                 .wav(PATIENT)
-                .id(patientId1)
                 .wav(HAS_TAKEN)
                 .number(dosesPerWeek)
                 .wav(OUT_OF)

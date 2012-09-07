@@ -169,7 +169,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(CURRENT_NO_INPUT_RETRY_COUNT, 1);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
-                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
+                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, adherenceInput, patient1.dosesPerWeek()))
                 .addAll(ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage)).build();
 
         Node destinationNode = confirmAdherenceTransition.getDestinationNode("", flowSession);
@@ -184,7 +184,7 @@ public class ConfirmAdherenceTransitionTest extends BaseUnitTest {
         flowSession.set(CURRENT_INVALID_INPUT_RETRY_COUNT, 1);
         flowSession.set(CURRENT_PATIENT_ADHERENCE_INPUT, adherenceInput);
         Prompt[] expectedPrompts = new PromptBuilder(whpIvrMessage)
-                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, PATIENT1_ID, adherenceInput, patient1.dosesPerWeek()))
+                .addAll(ProvidedAdherencePrompts.providedAdherencePrompts(whpIvrMessage, adherenceInput, patient1.dosesPerWeek()))
                 .addAll(ConfirmAdherencePrompts.confirmAdherencePrompts(whpIvrMessage)).build();
 
         Node destinationNode = confirmAdherenceTransition.getDestinationNode("4", flowSession);

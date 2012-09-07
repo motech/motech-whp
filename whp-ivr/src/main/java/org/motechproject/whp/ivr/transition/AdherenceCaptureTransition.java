@@ -62,7 +62,7 @@ public class AdherenceCaptureTransition extends TransitionToCollectPatientAdhere
     private void handleValidInput(String input, Patient patient, Node nextNode, IvrSession ivrSession) {
         resetRetryCounts(ivrSession);
         nextNode.addOperations(new GetAdherenceOperation());
-        nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, patient.getPatientId(), parseInt(input), patient.dosesPerWeek()));
+        nextNode.addPrompts(providedAdherencePrompts(whpIvrMessage, parseInt(input), patient.dosesPerWeek()));
         nextNode.addPrompts(confirmAdherencePrompts(whpIvrMessage));
         nextNode.setMaxTransitionInputDigit(1);
         nextNode.addTransition("?", new ConfirmAdherenceTransition());

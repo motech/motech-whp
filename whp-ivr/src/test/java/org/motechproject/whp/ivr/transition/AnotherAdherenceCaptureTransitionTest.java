@@ -86,7 +86,7 @@ public class AnotherAdherenceCaptureTransitionTest {
         int dosesPerWeek = 3;
 
         Node node = adherenceCaptureTransition.getDestinationNode(adherenceInput, flowSession);
-        assertThat(node.getPrompts(), hasItems(providedAdherencePrompts(whpIvrMessage, PATIENT_1, Integer.parseInt(adherenceInput), dosesPerWeek)));
+        assertThat(node.getPrompts(), hasItems(providedAdherencePrompts(whpIvrMessage, Integer.parseInt(adherenceInput), dosesPerWeek)));
     }
 
     @Test
