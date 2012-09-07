@@ -1,8 +1,11 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
+import org.motechproject.export.annotation.Footer;
+import org.motechproject.export.annotation.Header;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -39,10 +42,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
@@ -252,6 +257,17 @@ public class PatientController extends BaseWebController {
         patientService.addRemark(patient, remark, authenticatedUser.getUserName());
         setUpModelForRemarks(uiModel, patient);
         return "patient/remarks";
+    }
+
+    @Header(span = 3)
+    public List<String> patientSummaryHeader() {
+        return asList("Generated as on " + new WHPDate(new LocalDate()).value());
+    }
+
+    @Footer(span = 3)
+    public List<String> patientSummaryFooter() {
+        LocalDate lastSunday = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
+        return asList("Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
     }
 
     @DataProvider

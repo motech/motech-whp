@@ -1,20 +1,18 @@
 package org.motechproject.whp.mapper;
 
-import org.joda.time.LocalDate;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.PatientType;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PatientSummaryMapper {
 
-    private static final String EXPORT_DATE_FORMAT = "dd/MM/yyyy";
-    private static final String NAME_SEPARATOR = " ";
+    public static final String NAME_SEPARATOR = " ";
 
     public PatientSummaryMapper() {
     }
@@ -75,14 +73,14 @@ public class PatientSummaryMapper {
 
     private String extractFormattedTreatmentClosingDate(Patient patient) {
         if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getEndDate() != null) {
-            return formatDate(patient.getCurrentTreatment().getEndDate());
+            return new WHPDate(patient.getCurrentTreatment().getEndDate()).value();
         }
         return null;
     }
 
     private String extractFormattedTreatmentStartDate(Patient patient) {
         if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getStartDate() != null) {
-            return formatDate(patient.getCurrentTreatment().getStartDate());
+            return new WHPDate(patient.getCurrentTreatment().getStartDate()).value();
         }
         return null;
     }
@@ -96,7 +94,7 @@ public class PatientSummaryMapper {
 
     private String extractFormattedTbRegistrationDate(Patient patient) {
         if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getCreationDate() != null) {
-            return formatDate(patient.getCurrentTherapy().getCreationDate().toLocalDate());
+            return new WHPDate(patient.getCurrentTherapy().getCreationDate().toLocalDate()).value();
         }
         return null;
     }
@@ -118,13 +116,6 @@ public class PatientSummaryMapper {
     private String extractDiseaseClass(Patient patient) {
         if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getDiseaseClass() != null) {
             return patient.getCurrentTherapy().getDiseaseClass().value();
-        }
-        return null;
-    }
-
-    public String formatDate(LocalDate date) {
-        if (date != null) {
-            return new SimpleDateFormat(EXPORT_DATE_FORMAT).format(date.toDate());
         }
         return null;
     }
