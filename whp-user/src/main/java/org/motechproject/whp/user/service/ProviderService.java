@@ -23,7 +23,7 @@ import static java.util.Arrays.asList;
 import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
-public class ProviderService implements Paging {
+public class ProviderService {
 
     MotechAuthenticationService motechAuthenticationService;
 
@@ -93,34 +93,5 @@ public class ProviderService implements Paging {
 
     public Provider findByMobileNumber(String mobileNumber) {
         return allProviders.findByMobileNumber(mobileNumber);
-    }
-
-    @Override
-    public PageResults page(Integer pageNo, Integer rowsPerPage, Properties searchCriteria) {
-        List<Provider> allProviders = this.allProviders.getAll();
-
-        int startIndex = (pageNo - 1) * rowsPerPage;
-        int endIndex = (pageNo * rowsPerPage) - 1;
-        List<Provider> providers = (startIndex == endIndex) ? asList(allProviders.get(startIndex)) : allProviders.subList(startIndex, endIndex);
-        PageResults pageResults = new PageResults();
-        pageResults.setTotalRows(allProviders.size());
-        pageResults.setPageNo(pageNo);
-        pageResults.setResults(prepareResultsModel(providers));
-        return pageResults;
-    }
-
-    private List<ProviderRow> prepareResultsModel(List<Provider> matchingProviders) {
-        Map<String, MotechUser> users = fetchAllWebUsers();
-
-        List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
-        for (Provider provider : matchingProviders) {
-            providerRows.add(new ProviderRow(provider, users.get(provider.getProviderId()).isActive()));
-        }
-        return providerRows;
-    }
-
-    @Override
-    public String entityName() {
-        return "provider";
     }
 }
