@@ -26,7 +26,8 @@
         <intercept-url pattern="/motech-delivery-tools/**" access="permitAll" requires-channel="any"/>
 
         <!--Only admin-->
-        <intercept-url pattern="/adherence/reports/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/reports/adherence/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/reports/patients/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/show/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/print/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/patients/list/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
