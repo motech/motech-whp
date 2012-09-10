@@ -33,6 +33,7 @@
         <module>whp-ivr</module>
         <module>whp-web</module>
         <module>whp-reporting</module>
+        <module>whp-container</module>
     </modules>
 
     <repositories>
@@ -207,6 +208,11 @@
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-user</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-container</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

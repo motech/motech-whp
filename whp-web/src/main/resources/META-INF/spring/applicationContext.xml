@@ -32,6 +32,7 @@
     <import resource="classpath*:applicationBulkImportContext.xml"/>
     <import resource="classpath*:applicationContext-Paginator.xml"/>
     <import resource="classpath*:applicationWebServiceContext.xml"/>
+    <import resource="classpath*:applicationContainerContext.xml"/>
 
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

@@ -1,11 +1,6 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDate;
-import org.motechproject.export.annotation.DataProvider;
-import org.motechproject.export.annotation.ExcelDataSource;
-import org.motechproject.export.annotation.Footer;
-import org.motechproject.export.annotation.Header;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
@@ -13,7 +8,6 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
-import org.motechproject.whp.mapper.PatientSummaryMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -22,7 +16,6 @@ import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
-import org.motechproject.whp.uimodel.PatientSummary;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -42,12 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.*;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller

@@ -10,7 +10,10 @@
     </div>
     </#if>
 <div class="row">
-<span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>
+    <span class="pull-left"><a href="/whp/containerRegistration">Container Registration</a></span>
+</div>
+<div class="row">
+    <span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>
 <@legend key1="paused" value1="Current Treatment Paused" />
 </div>
 <div class="row">
