@@ -26,7 +26,7 @@ public class PatientSummaryMapperTest {
 
         List<PatientSummary> patientSummaries = patientSummaryMapper.map(asList(activePatient));
 
-        verifyActivePatientSummary(patientSummaries.get(0), activePatient, patientSummaryMapper);
+        verifyActivePatientSummary(patientSummaries.get(0), activePatient);
     }
 
     @Test
@@ -36,16 +36,16 @@ public class PatientSummaryMapperTest {
 
         List<PatientSummary> patientSummaries = patientSummaryMapper.map(asList(inactivePatient));
 
-        verifyInactivePatientSummary(patientSummaries.get(0), inactivePatient, patientSummaryMapper);
+        verifyInactivePatientSummary(patientSummaries.get(0), inactivePatient);
     }
 
-    private void verifyInactivePatientSummary(PatientSummary patientSummary, Patient inactivePatient, PatientSummaryMapper patientSummaryMapper) {
-        verifyActivePatientSummary(patientSummary, inactivePatient, patientSummaryMapper);
+    private void verifyInactivePatientSummary(PatientSummary patientSummary, Patient inactivePatient) {
+        verifyActivePatientSummary(patientSummary, inactivePatient);
         verifyDates(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate());
-        assertEquals(patientSummary.getTreatmentOutcome(), inactivePatient.getCurrentTreatment().getTreatmentOutcome());
+        assertEquals(patientSummary.getTreatmentOutcome(), inactivePatient.getCurrentTreatment().getTreatmentOutcome().getOutcome());
     }
 
-    private void verifyActivePatientSummary(PatientSummary patientSummary, Patient patient, PatientSummaryMapper patientSummaryMapper) {
+    private void verifyActivePatientSummary(PatientSummary patientSummary, Patient patient) {
         assertEquals(patientSummary.getAge(), patient.getAge());
         assertEquals(patientSummary.getCpTreatmentProgress(), patient.getCPProgress());
         assertEquals(patientSummary.getCumulativeMissedDoses(), Integer.valueOf(patient.getCumulativeDosesNotTaken()));

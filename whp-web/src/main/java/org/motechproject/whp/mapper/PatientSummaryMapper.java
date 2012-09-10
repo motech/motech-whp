@@ -64,9 +64,9 @@ public class PatientSummaryMapper {
         return null;
     }
 
-    private TreatmentOutcome extractTreatmentOutcome(Patient patient) {
+    private String extractTreatmentOutcome(Patient patient) {
         if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getTreatmentOutcome() != null) {
-            return patient.getCurrentTreatment().getTreatmentOutcome();
+            return patient.getCurrentTreatment().getTreatmentOutcome().getOutcome();
         }
         return null;
     }
