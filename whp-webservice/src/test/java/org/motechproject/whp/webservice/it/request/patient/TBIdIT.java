@@ -9,7 +9,7 @@ import org.motechproject.whp.webservice.request.PatientWebRequest;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
-public class TBIdTest extends BasePatientTest {
+public class TBIdIT extends BasePatientIT {
 
     @Test
     public void shouldThrowException_WhenTbIdFieldIsNull() {

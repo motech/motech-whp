@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class LastModifiedDateTest extends BasePatientTest {
+public class LastModifiedDateIT extends BasePatientIT {
     @Test
     public void shouldNotThrowException_WhenLastModifiedDateFormatIsCorrect() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withLastModifiedDate("03/04/2012 02:20:30").build();

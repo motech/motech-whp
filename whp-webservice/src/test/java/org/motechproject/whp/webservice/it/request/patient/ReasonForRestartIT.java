@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class ReasonForRestartTest extends BasePatientTest {
+public class ReasonForRestartIT extends BasePatientIT {
 
     @Test
     public void shouldThrowExceptionIfReasonNotSpecifiedInRestartTreatmentScope() {

@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 
-public class TertiaryMobileNumberTest extends BaseProviderTest {
+public class TertiaryMobileNumberIT extends BaseProviderIT {
 
     @Test
     public void shouldNotThrowExceptionWhenTertiaryMobileNumberIsEmpty() {

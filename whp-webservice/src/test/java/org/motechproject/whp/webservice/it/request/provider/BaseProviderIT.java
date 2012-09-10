@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
-public abstract class BaseProviderTest extends SpringIntegrationTest {
+public abstract class BaseProviderIT extends SpringIntegrationTest {
 
     @Autowired
     protected RequestValidator validator;

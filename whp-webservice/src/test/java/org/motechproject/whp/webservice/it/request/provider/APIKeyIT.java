@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 
-public class APIKeyTest extends BaseProviderTest {
+public class APIKeyIT extends BaseProviderIT {
     @Test
     public void shouldBeValidWhenAPIKeyIsValid() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()

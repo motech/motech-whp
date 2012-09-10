@@ -17,7 +17,7 @@ import static junit.framework.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
-public class APIKeyValidatorTest extends SpringIntegrationTest {
+public class APIKeyValidatorIT extends SpringIntegrationTest {
 
     private Properties whpAPIValidationProperty;
     private TestClass testObject;

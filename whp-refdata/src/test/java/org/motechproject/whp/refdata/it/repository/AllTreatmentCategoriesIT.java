@@ -16,7 +16,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationRefDataContext.xml")
-public class AllTreatmentCategoriesTest extends SpringIntegrationTest {
+public class AllTreatmentCategoriesIT extends SpringIntegrationTest {
 
     public static final String CODE = "99";
 

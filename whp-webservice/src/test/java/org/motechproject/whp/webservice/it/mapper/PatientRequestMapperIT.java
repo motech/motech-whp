@@ -26,7 +26,7 @@ import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
-public class PatientRequestMapperTest extends SpringIntegrationTest {
+public class PatientRequestMapperIT extends SpringIntegrationTest {
 
     @Autowired
     AllTreatmentCategories allTreatmentCategories;

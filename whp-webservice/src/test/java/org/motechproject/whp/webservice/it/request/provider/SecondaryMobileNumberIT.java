@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 
-public class SecondaryMobileNumberTest extends BaseProviderTest {
+public class SecondaryMobileNumberIT extends BaseProviderIT {
     @Test
     public void shouldNotThrowExceptionWhenSecondaryMobileNumberIsEmpty() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withProviderId("1a123").withDate("17/03/1990 17:03:56").withDistrict("Chambal").withSecondaryMobile("").build();

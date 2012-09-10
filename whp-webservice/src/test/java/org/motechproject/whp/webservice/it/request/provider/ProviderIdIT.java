@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 
-public class ProviderIdTest extends BaseProviderTest {
+public class ProviderIdIT extends BaseProviderIT {
 
     @Test
     public void shouldThrowAnExceptionIfProviderIdIsNull() {

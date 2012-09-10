@@ -7,7 +7,7 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class GenderTest extends BasePatientTest {
+public class GenderIT extends BasePatientIT {
 
     @Test
     public void shouldThrowExceptionWhenGenderNotEnumerated() {

@@ -17,7 +17,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
-public class AllAuditLogsTest extends SpringIntegrationTest {
+public class AllAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired
     AllAuditLogs allAuditLogs;

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
-public class ITAdminSeedTest extends SpringIntegrationTest {
+public class ITAdminSeedIT extends SpringIntegrationTest {
 
     @Autowired
     ITAdminSeed itAdminSeed;

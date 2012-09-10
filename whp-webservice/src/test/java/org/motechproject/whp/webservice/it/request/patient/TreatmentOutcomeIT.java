@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class TreatmentOutcomeTest extends BasePatientTest {
+public class TreatmentOutcomeIT extends BasePatientIT {
     @Test
     public void shouldThrowExceptionIfTreatmentOutcomeIsNull() {
         expectFieldValidationRuntimeException("field:treatment_outcome:value should not be null");

@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 
-public class PrimaryMobileNumberTest extends BaseProviderTest {
+public class PrimaryMobileNumberIT extends BaseProviderIT {
     @Test
     public void shouldThrowExceptionWhenPrimaryMobileNumberIsEmpty() {
         expectFieldValidationRuntimeException("field:primary_mobile:value should not be null");

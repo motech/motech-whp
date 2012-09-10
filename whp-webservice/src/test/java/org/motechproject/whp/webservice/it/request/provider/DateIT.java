@@ -9,7 +9,7 @@ import org.motechproject.whp.webservice.request.ProviderWebRequest;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
-public class DateTest extends BaseProviderTest {
+public class DateIT extends BaseProviderIT {
 
     @Test
     public void shouldThrowAnExceptionIfDateIsNull() {

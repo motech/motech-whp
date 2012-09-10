@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class MobileNumberTest extends BasePatientTest {
+public class MobileNumberIT extends BasePatientIT {
     public void shouldNotThrowException_WhenMobileNumberIsEmpty() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withMobileNumber("").build();
         validator.validate(webRequest, UpdateScope.createScope);

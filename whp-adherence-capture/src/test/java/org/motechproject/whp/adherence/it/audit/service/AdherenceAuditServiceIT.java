@@ -30,7 +30,7 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 import static org.motechproject.whp.patient.builder.PatientBuilder.TB_ID;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
-public class AdherenceAuditServiceTest extends SpringIntegrationTest {
+public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
     Patient patient;
 

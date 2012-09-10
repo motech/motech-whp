@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
-public class UpdateCommandFactoryTest extends SpringIntegrationTest {
+public class UpdateCommandFactoryIT extends SpringIntegrationTest {
 
     @Autowired
     private UpdateCommandFactory treatmentUpdateFactory;

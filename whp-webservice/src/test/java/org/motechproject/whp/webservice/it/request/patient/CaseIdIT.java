@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class CaseIdTest extends BasePatientTest {
+public class CaseIdIT extends BasePatientIT {
     @Test
     public void shouldNotThrowException_WhenCaseIdIs10Characters() {
         PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withCaseId("1234567890").build();

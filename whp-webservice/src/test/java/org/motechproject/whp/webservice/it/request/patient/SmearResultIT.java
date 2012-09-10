@@ -5,7 +5,7 @@ import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
-public class SmearResultTest extends BasePatientTest {
+public class SmearResultIT extends BasePatientIT {
 
     @Test
     public void shouldThrowException_WhenSmearTest1DateFormatIsIncorrect() {

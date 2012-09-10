@@ -16,7 +16,7 @@ public class BaseWebControllerTest extends BaseUnitTest {
         BaseWebController controller = new BaseWebController(){
             @RequestMapping(value = "test", method = RequestMethod.GET)
             public String throwException() {
-                throw new RuntimeException("Error occurred");
+                throw new RuntimeException("Expected exception");
             }
         };
 
