@@ -29,10 +29,6 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-webservice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-container</artifactId>
         </dependency>
         <dependency>
