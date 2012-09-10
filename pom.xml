@@ -276,9 +276,9 @@
                 <type>jar</type>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>org.motechproject.whp</groupId>-->
-                <!--<artifactId>whp-data-importer</artifactId>-->
-                <!--<version>${project.version}</version>-->
+            <!--<groupId>org.motechproject.whp</groupId>-->
+            <!--<artifactId>whp-data-importer</artifactId>-->
+            <!--<version>${project.version}</version>-->
             <!--</dependency>-->
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
@@ -678,9 +678,9 @@
                     <printSummary>true</printSummary>
                     <includes>
                         <include>**/*Test.java</include>
-                        <include>**/*IT.java</include>
                     </includes>
                     <excludes>
+                        <exclude>**/*IT.java</exclude>
                         <exclude>**/*TestPart.java</exclude>
                         <exclude>**/functional/**/*Test.java</exclude>
                     </excludes>
@@ -702,24 +702,6 @@
                                 <file>${build.dir}/maven.properties</file>
                             </files>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>delete-all-dbs</id>
-                        <phase>process-test-classes</phase>
-                        <configuration>
-                            <target unless="skipTests">
-                                <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -760,4 +742,50 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>IT</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>delete-all-dbs</id>
+                                <phase>process-test-classes</phase>
+                                <configuration>
+                                    <target unless="skipTests">
+                                        <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <argLine>-XX:MaxPermSize=1024M -ea -Dfile.encoding=UTF-8</argLine>
+                            <printSummary>true</printSummary>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*Test.java</exclude>
+                                <exclude>**/*TestPart.java</exclude>
+                                <exclude>**/functional/**/*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

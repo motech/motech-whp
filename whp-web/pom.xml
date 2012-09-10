@@ -210,31 +210,6 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>load-seed-data-in-Db</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <target unless="skipTests">
-                                <echo message="Seed data loading: START"/>
-                                <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
-                                    <classpath>
-                                        <pathelement path="${compile_classpath}"/>
-                                    </classpath>
-                                </java>
-                                <echo message="Seed data loading: END"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>7.3.0.v20110203</version>
@@ -345,6 +320,12 @@
                                 <echo message="Seed data loading: END"/>
                             </target>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>loadSeedDataInDb</id>
+                                <phase>process-test-classes</phase>
+                            </execution>
+                        </executions>
                         <goals>
                             <goal>run</goal>
                         </goals>
@@ -364,15 +345,48 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>load-seed-data-in-Db</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <target unless="skipTests">
+                                        <echo message="Seed data loading: START"/>
+                                        <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                        <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
+                                            <classpath>
+                                                <pathelement path="${compile_classpath}"/>
+                                            </classpath>
+                                        </java>
+                                        <echo message="Seed data loading: END"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
                         <version>7.3.0.v20110203</version>
                         <executions>
                             <execution>
                                 <id>start-jetty</id>
-                                <phase>pre-integration-test</phase>
+                                <phase>process-test-classes</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>run-war</goal>
                                 </goals>
                                 <configuration>
                                     <daemon>true</daemon>
@@ -445,6 +459,11 @@
                                     <includes>
                                         <include>**/functional/test/serial/**/*.java</include>
                                     </includes>
+                                    <excludes>
+                                        <exclude>**/*Test.java</exclude>
+                                        <exclude>**/*TestPart.java</exclude>
+                                        <exclude>**/*IT.java</exclude>
+                                    </excludes>
                                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                                 </configuration>
                             </execution>
