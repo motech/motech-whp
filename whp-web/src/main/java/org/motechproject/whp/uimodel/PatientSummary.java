@@ -25,7 +25,7 @@ public class PatientSummary {
     private String ipTreatmentProgress;
     private String cpTreatmentProgress;
     private Integer cumulativeMissedDoses;
-    private TreatmentOutcome treatmentOutcome;
+    private String treatmentOutcome;
     private String treatmentClosingDate;
 
     @ExportValue(index = 0)
@@ -109,7 +109,7 @@ public class PatientSummary {
     }
 
     @ExportValue(index = 16)
-    public TreatmentOutcome getTreatmentOutcome() {
+    public String getTreatmentOutcome() {
         return treatmentOutcome;
     }
 
