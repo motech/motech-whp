@@ -31,7 +31,7 @@ function setProviderAsActive(userName) {
 $(function () {
     $('#provider_pagination').bind('pageLoadSuccess', function () {
         if ($('#providerList tbody tr').length == 1) {
-            var noResultsMessage = "No Patients found for District '" + $('[name=selectedDistrict]').val() + "'";
+            var noResultsMessage = "No Providers found for District '" + $('[name=selectedDistrict]').val() + "'";
 
             if ($('[name=providerId]').val() != '') {
                 noResultsMessage += " with provider ID: '" + $('[name=providerId]').val() + "'";
