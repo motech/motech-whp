@@ -41,7 +41,7 @@ public class PatientSummaryMapperTest {
 
     private void verifyInactivePatientSummary(PatientSummary patientSummary, Patient inactivePatient, PatientSummaryMapper patientSummaryMapper) {
         verifyActivePatientSummary(patientSummary, inactivePatient, patientSummaryMapper);
-        verifyDates(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate(), patientSummaryMapper);
+        verifyDates(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate());
         assertEquals(patientSummary.getTreatmentOutcome(), inactivePatient.getCurrentTreatment().getTreatmentOutcome());
     }
 
@@ -56,24 +56,15 @@ public class PatientSummaryMapperTest {
         assertEquals(patientSummary.getPatientId(), patient.getPatientId());
         assertEquals(patientSummary.getPatientType(), patient.getCurrentTreatment().getPatientType());
         assertEquals(patientSummary.getTbId(), patient.getCurrentTreatment().getTbId());
-        verifyDateTimes(patientSummary.getTbRegistrationDate(), patient.getCurrentTherapy().getCreationDate(), patientSummaryMapper);
+        verifyDates(patientSummary.getTbRegistrationDate(), patient.getCurrentTreatment().getStartDate());
         assertEquals(patientSummary.getTreatmentCategory(), patient.getCurrentTherapy().getTreatmentCategory().getName());
-        verifyDates(patientSummary.getTreatmentStartDate(), patient.getCurrentTreatment().getStartDate(), patientSummaryMapper);
+        verifyDates(patientSummary.getTreatmentStartDate(), patient.getCurrentTherapy().getStartDate());
         assertEquals(patientSummary.getVillage(), patient.getCurrentTreatment().getPatientAddress().getAddress_village());
         assertEquals(patientSummary.getProviderId(), patient.getCurrentTreatment().getProviderId());
         assertEquals(patientSummary.getProviderDistrict(), "");
     }
 
-
-    private void verifyDateTimes(String formattedDate, DateTime dateTime, PatientSummaryMapper patientSummaryMapper) {
-        if (StringUtils.hasText(formattedDate)) {
-            if (dateTime != null) {
-                verifyDates(formattedDate, dateTime.toLocalDate(), patientSummaryMapper);
-            }
-        }
-    }
-
-    private void verifyDates(String formattedDate, LocalDate date, PatientSummaryMapper patientSummaryMapper) {
+    private void verifyDates(String formattedDate, LocalDate date) {
         if (StringUtils.hasText(formattedDate)) {
             if (date != null) {
                 assertEquals(formattedDate, new WHPDate(date).value());

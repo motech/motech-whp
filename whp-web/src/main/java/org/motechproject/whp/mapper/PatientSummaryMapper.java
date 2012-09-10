@@ -79,8 +79,8 @@ public class PatientSummaryMapper {
     }
 
     private String extractFormattedTreatmentStartDate(Patient patient) {
-        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getStartDate() != null) {
-            return new WHPDate(patient.getCurrentTreatment().getStartDate()).value();
+        if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getStartDate() != null) {
+            return new WHPDate(patient.getCurrentTherapy().getStartDate()).value();
         }
         return null;
     }
@@ -93,8 +93,8 @@ public class PatientSummaryMapper {
     }
 
     private String extractFormattedTbRegistrationDate(Patient patient) {
-        if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getCreationDate() != null) {
-            return new WHPDate(patient.getCurrentTherapy().getCreationDate().toLocalDate()).value();
+        if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getStartDate() != null) {
+            return new WHPDate(patient.getCurrentTreatment().getStartDate()).value();
         }
         return null;
     }
