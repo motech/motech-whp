@@ -39,7 +39,7 @@ public class PatientDataSummary {
     @Footer(span = 3)
     public List<String> patientSummaryFooter() {
         LocalDate lastSunday = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
-        return asList("Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
+        return asList("* Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
     }
 
     @DataProvider
