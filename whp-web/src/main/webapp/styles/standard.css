@@ -77,10 +77,11 @@ body {
     background-color: white;
 }
 
-.text-center, .text-center th, .text-center td {
+table tr td.text-center, .text-center, .text-center th, .text-center td {
     text-align: center;
     vertical-align: middle;
 }
+
 
 #version {
     color: #555555;
