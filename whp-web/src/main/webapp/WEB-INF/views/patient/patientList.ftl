@@ -72,8 +72,8 @@
                 ${patient.currentTherapy.treatmentCategory.name}
                 </td>
                 <td id="patient_${patient.patientId}_TherapyCreationDate">
-                    <#if patient.currentTherapy.creationDate?? >
-                                ${patient.currentTherapy.creationDateAsString}
+                    <#if patient.currentTreatment.startDate?? >
+                                ${patient.currentTreatment.startDateAsString}
                             </#if>
                 </td>
                 <td id="patient_${patient.patientId}_TreatmentStartDate">
