@@ -633,3 +633,16 @@ pre {
     line-height: 33px;
 }
 
+#container-registration-form label.error {
+    color: red;
+}
+
+#container-registration-form .span.error {
+    border: 2px solid red;
+}
+
+#container-registration-form #instance.error {
+    border: 2px solid red;
+}
+
+
