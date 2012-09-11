@@ -90,7 +90,7 @@
                         Active
                     </div>
                     <div ng-hide="item.active">
-                        InActive
+                        Inactive
                     </div>
                 </td>
                 <td type="activate-provider">
