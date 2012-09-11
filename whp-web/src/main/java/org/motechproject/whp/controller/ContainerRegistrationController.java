@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
@@ -7,13 +8,15 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 
@@ -37,21 +40,28 @@ public class ContainerRegistrationController extends BaseWebController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request) {
+    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request, BindingResult result) {
+        List<String> errors = registrationRequest.validate();
+        if (!errors.isEmpty()) {
+            uiModel.addAttribute("errors", StringUtils.join(errors, ","));
+            show(uiModel, request);
+            return "containerRegistration/show";
+        }
+
         registrationRequest.setProviderId(loggedInUser(request).getExternalId());
         containerService.registerContainer(registrationRequest);
-        out(WHPConstants.NOTIFICATION_MESSAGE, "Container registered successfully.", request);
+        out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), request);
         return "redirect:/containerRegistration";
     }
 
     private void populateWithInstances(Model uiModel, HttpServletRequest request) {
         ArrayList<String> instances = new ArrayList<>();
-        for(Instance instance : Instance.values())
+        for (Instance instance : Instance.values())
             instances.add(instance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
-        if (isNotEmpty(messages)) {
+        if (isNotBlank(messages)) {
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
     }

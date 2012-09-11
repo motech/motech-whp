@@ -2,6 +2,12 @@
 <#import "../layout/default.ftl" as layout>
 <@layout.defaultLayout "Container-Registration">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
+    <#if errors??>
+        <div class="dateUpdated-message-alert row alert alert-info fade in">
+            <button class="close" data-dismiss="alert">&times;</button>
+            ${errors}
+        </div>
+    </#if>
     <#if message??>
         <div class="dateUpdated-message-alert row alert alert-info fade in">
             <button class="close" data-dismiss="alert">&times;</button>

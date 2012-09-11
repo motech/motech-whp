@@ -12,4 +12,11 @@ public enum Instance {
     public String getDisplayText() {
         return displayText;
     }
+
+    public static boolean isValid(String text) {
+        for(Instance instance : Instance.values())
+            if(instance.getDisplayText().toUpperCase().equals(text.toUpperCase()))
+                return true;
+        return false;
+    }
 }

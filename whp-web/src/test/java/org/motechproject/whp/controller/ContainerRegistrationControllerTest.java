@@ -15,6 +15,8 @@ import org.motechproject.whp.container.service.ContainerService;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
@@ -60,6 +62,22 @@ public class ContainerRegistrationControllerTest {
     }
 
     @Test
+    public void shouldValidateRegistrationRequest() throws Exception {
+        String providerId = "P00011";
+        String containerId = "123456789a";
+        String instance = "invalid_instance";
+
+        standaloneSetup(containerRegistrationController).build()
+                .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance)
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, providerId, null))))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("errors", "Container Id must be of 10 digits in length,Invalid instance : invalid_instance"))
+                .andExpect(forwardedUrl("containerRegistration/show"));
+
+        verify(containerService, never()).registerContainer(any(RegistrationRequest.class));
+    }
+
+    @Test
     public void shouldRegisterTheContainerGivenTheDetails() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
@@ -70,7 +88,7 @@ public class ContainerRegistrationControllerTest {
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, providerId, null))))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
-                .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container registered successfully."))
+                .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
                 .andExpect(redirectedUrl("/containerRegistration"));
 
         ArgumentCaptor<RegistrationRequest> captor = ArgumentCaptor.forClass(RegistrationRequest.class);
