@@ -56,12 +56,12 @@ public class PatientSummaryMapperTest {
         assertEquals(patientSummary.getPatientId(), patient.getPatientId());
         assertEquals(patientSummary.getPatientType(), patient.getCurrentTreatment().getPatientType());
         assertEquals(patientSummary.getTbId(), patient.getCurrentTreatment().getTbId());
-        verifyDates(patientSummary.getTbRegistrationDate(), patient.getCurrentTreatment().getStartDate());
         assertEquals(patientSummary.getTreatmentCategory(), patient.getCurrentTherapy().getTreatmentCategory().getName());
-        verifyDates(patientSummary.getTreatmentStartDate(), patient.getCurrentTherapy().getStartDate());
         assertEquals(patientSummary.getVillage(), patient.getCurrentTreatment().getPatientAddress().getAddress_village());
         assertEquals(patientSummary.getProviderId(), patient.getCurrentTreatment().getProviderId());
-        assertEquals(patientSummary.getProviderDistrict(), "");
+        assertEquals(patientSummary.getProviderDistrict(), patient.getCurrentTreatment().getProviderDistrict());
+        verifyDates(patientSummary.getTbRegistrationDate(), patient.getCurrentTreatment().getStartDate());
+        verifyDates(patientSummary.getTreatmentStartDate(), patient.getCurrentTherapy().getStartDate());
     }
 
     private void verifyDates(String formattedDate, LocalDate date) {

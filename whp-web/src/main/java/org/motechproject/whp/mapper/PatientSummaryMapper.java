@@ -46,8 +46,15 @@ public class PatientSummaryMapper {
         patientSummary.setTreatmentOutcome(extractTreatmentOutcome(patient));
         patientSummary.setVillage(extractVillage(patient));
         patientSummary.setProviderId(extractProviderId(patient));
-        patientSummary.setProviderDistrict("");
+        patientSummary.setProviderDistrict(extractProviderDistrict(patient));
         return patientSummary;
+    }
+
+    private String extractProviderDistrict(Patient patient) {
+        if(patient != null && patient.getCurrentTreatment() != null) {
+            return patient.getCurrentTreatment().getProviderDistrict();
+        }
+        return null;
     }
 
     private String extractProviderId(Patient patient) {
