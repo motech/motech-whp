@@ -14,8 +14,8 @@ public class RegistrationRequest {
     }
 
     public RegistrationRequest(String providerId, String containerId, String instance) {
+        this.providerId = providerId;
         this.containerId = containerId;
         this.instance = instance;
-        this.providerId = providerId;
     }
 }
