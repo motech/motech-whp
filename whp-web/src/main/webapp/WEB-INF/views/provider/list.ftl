@@ -33,8 +33,8 @@
                             <label class="control-label" for="providerId">Provider ID</label>
 
                             <div class="controls">
-                                <input class="input-large pull-down-5px" type="text" name='providerId' id="providerId"
-                                       autofocus="autofocus"/>
+                                <input class="input-large pull-down-5px" type="text" name='selectedProvider' id="providerId"
+                                       value="${selectedProvider!}" autofocus="autofocus"/>
                             </div>
                         </div>
                     </td>
@@ -51,8 +51,12 @@
         </@paginator.filter>
     </div>
 </div>
+<#if !pageNo??>
+    <#assign pageNo=1/>
+</#if>
 <div class="results">
-    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="3" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="3" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles"
+      currentPage=pageNo>
         <table class="table table-striped table-bordered" id="providerList">
             <thead>
             <tr>

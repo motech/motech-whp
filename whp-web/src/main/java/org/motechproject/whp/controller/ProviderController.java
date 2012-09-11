@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,20 +41,34 @@ public class ProviderController extends BaseWebController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String loadProviderSearchPage(Model uiModel) {
+    public String loadProviderSearchPage(Model uiModel, HttpServletRequest request) throws IOException {
         List<District> districtList = allDistrictsCache.getAll();
         String district = districtList.get(0).getName();
         String providerId = "";
-
-        prepareQueryModel(uiModel, district, providerId);
+        if(request.getParameterMap().isEmpty())
+            initQueryModel(uiModel, district, providerId);
+        else
+            addQueryParametersToUiModel(uiModel, request);
 
         prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
         return "provider/list";
     }
 
+    private void addQueryParametersToUiModel(Model uiModel, HttpServletRequest request) throws IOException {
+        String providerPaginationId = "provider_pagination";
+        uiModel.addAttribute("pageNo", request.getParameter(providerPaginationId+"-pageNo"));
+        uiModel.addAttribute("rowsPerPage", request.getParameter(providerPaginationId+"-rowsPerPage"));
+
+        String searchCriteriaJson = request.getParameter(providerPaginationId + "-searchCriteria");
+        HashMap<String, String> searchCriteria = new ObjectMapper().readValue(searchCriteriaJson, HashMap.class);
+        uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
+        uiModel.addAttribute(SELECTED_DISTRICT, searchCriteria.get(SELECTED_DISTRICT));
+        uiModel.addAttribute(PROVIDER_ID, searchCriteria.get(PROVIDER_ID));
+    }
+
     @RequestMapping(value = "search", method = RequestMethod.GET)
-    public String searchMatchingProviders(@RequestParam("selectedDistrict") String district, String providerId, Model uiModel) {
-        prepareQueryModel(uiModel, district, providerId);
+    public String searchMatchingProviders(@RequestParam("selectedDistrict") String district, @RequestParam("selectedProvider") String providerId, Model uiModel) {
+        initQueryModel(uiModel, district, providerId);
         prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
         return "provider/list";
     }
@@ -61,7 +79,7 @@ public class ProviderController extends BaseWebController {
         return "provider/listByDistrict";
     }
 
-    private void prepareQueryModel(Model uiModel, String districtName, String providerId) {
+    private void initQueryModel(Model uiModel, String districtName, String providerId) {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
         uiModel.addAttribute(PROVIDER_ID, providerId);

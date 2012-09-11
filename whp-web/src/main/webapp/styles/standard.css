@@ -629,4 +629,7 @@ pre {
     color: chocolate;
     display: inline-block;
 }
+.result-count-info {
+    line-height: 33px;
+}
 

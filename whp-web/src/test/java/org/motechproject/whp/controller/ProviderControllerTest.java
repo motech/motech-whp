@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
-import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +78,7 @@ public class ProviderControllerTest {
 
     @Test
     public void shouldLoadProviderSearchPage_verifyViewMappingForGET() throws Exception {
-        String viewName = providerController.loadProviderSearchPage(uiModel);
+        String viewName = providerController.loadProviderSearchPage(uiModel, request);
         assertEquals("provider/list", viewName);
     }
 
@@ -87,7 +87,7 @@ public class ProviderControllerTest {
         List<Provider> expectedList = Arrays.asList(provider1, provider3);
         when(providerService.fetchBy("districtA", "")).thenReturn(expectedList);
 
-        providerController.loadProviderSearchPage(uiModel);
+        providerController.loadProviderSearchPage(uiModel, request);
         verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(expectedList)));
     }
 

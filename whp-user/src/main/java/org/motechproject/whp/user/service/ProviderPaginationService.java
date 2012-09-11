@@ -30,7 +30,7 @@ public class ProviderPaginationService implements Paging {
 
     @Override
     public PageResults page(Integer pageNo, Integer rowsPerPage, Properties searchCriteria) {
-        List<Provider> allProviders = providerService.fetchBy((String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("providerId"));
+        List<Provider> allProviders = providerService.fetchBy((String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
 
         int startIndex = (pageNo - 1) * rowsPerPage;
 

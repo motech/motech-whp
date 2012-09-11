@@ -33,8 +33,8 @@ $(function () {
         if ($('#providerList tbody tr').length == 1) {
             var noResultsMessage = "No Providers found for District '" + $('[name=selectedDistrict]').val() + "'";
 
-            if ($('[name=providerId]').val() != '') {
-                noResultsMessage += " with provider ID: '" + $('[name=providerId]').val() + "'";
+            if ($('[name=selectedProvider]').val() != '') {
+                noResultsMessage += " with provider ID: '" + $('[name=selectedProvider]').val() + "'";
             }
             $('[type=no-results] td').html(noResultsMessage);
             $('[type=no-results]').show();
