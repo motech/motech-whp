@@ -10,7 +10,7 @@
     </div>
     </#if>
 <div class="row">
-    <span class="pull-left"><a href="/whp/containerRegistration">Container Registration</a></span>
+    <span class="pull-left"><a href="/whp/containerRegistration"><u><b>Container Registration</b></u></a></span>
 </div>
 <div class="row">
     <span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>

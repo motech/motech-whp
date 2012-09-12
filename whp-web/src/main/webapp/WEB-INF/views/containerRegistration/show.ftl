@@ -52,6 +52,7 @@
                                     <button type="submit" id="registerButton" class="btn btn-primary form-button-center">
                                         Register
                                     </button>
+                                    <a id="back" class="padding-left" href="<@spring.url ''/>">Back</a>
                                 </div>
                             </div>
                         </td>
