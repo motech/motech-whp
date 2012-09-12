@@ -42,6 +42,13 @@ public class ProviderPage extends ListPatientsPage {
 
     }
 
+    public ContainerRegistrationPage registerContainer() {
+        webDriver.findElement(By.id("register-container")).click();
+        ContainerRegistrationPage containerRegistrationPage = MyPageFactory.initElements(webDriver, ContainerRegistrationPage.class);
+        containerRegistrationPage.registerContainer("1234567890", "Pre-treatment");
+        return containerRegistrationPage;
+    }
+
     public boolean adherenceLoggedForCurrentWeek(String caseId) {
         waitForElementWithCSSToLoad("adherenceCaptured");
         WebElement adherenceLoggedForPatient = webDriver.findElement(By.id(String.format("patient_%s_AdherenceTaken", caseId)));

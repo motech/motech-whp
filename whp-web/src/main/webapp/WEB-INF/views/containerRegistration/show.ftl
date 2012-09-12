@@ -9,7 +9,7 @@
         </div>
     </#if>
     <#if message??>
-        <div class="dateUpdated-message-alert row alert alert-info fade in">
+        <div id="container-registration-confirmation" class="dateUpdated-message-alert row alert alert-info fade in">
             <button class="close" data-dismiss="alert">&times;</button>
             ${message}
         </div>
