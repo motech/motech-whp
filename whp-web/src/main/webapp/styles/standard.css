@@ -650,4 +650,11 @@ pre {
     border: 2px solid red;
 }
 
+.inherit-style {
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+    line-height: inherit;
+}
+
 
