@@ -90,7 +90,10 @@ public class ProviderController extends BaseWebController {
 
         List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
         for (Provider provider : matchingProviders) {
-            providerRows.add(new ProviderRow(provider, users.get(provider.getProviderId()).isActive()));
+            MotechUser motechUser = users.get(provider.getProviderId());
+            if (motechUser != null) {
+                providerRows.add(new ProviderRow(provider, motechUser.isActive()));
+            }
         }
         uiModel.addAttribute(PROVIDER_LIST, providerRows);
     }
