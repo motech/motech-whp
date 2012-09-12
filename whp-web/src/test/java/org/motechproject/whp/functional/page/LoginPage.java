@@ -4,7 +4,7 @@ import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WHPUrl;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.motechproject.whp.functional.page.admin.AdminPage;
-import org.motechproject.whp.functional.page.admin.ListProvidersPage;
+import org.motechproject.whp.functional.page.admin.listprovider.ListProvidersPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -74,9 +74,8 @@ public class LoginPage extends Page {
         return errorMessage.getText();
     }
 
-    public static ListProvidersPage loginAsItAdmin(WebDriver webDriver) {
+    public static void loginAsItAdmin(WebDriver webDriver) {
         LoginPage.fetch(webDriver).login("itadmin1","password");
-        return getListProvidersPage(webDriver);
     }
 
     public ProviderPage loginAsProvider(String providerId, String password) {

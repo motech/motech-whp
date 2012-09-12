@@ -21,5 +21,9 @@ public class TestProvider {
         this.secondaryMobile = secondaryMobile;
         this.tertiaryMobile = tertiaryMobile;
     }
+
+    public String getId() {
+        return providerId.toLowerCase();
+    }
 }
 
