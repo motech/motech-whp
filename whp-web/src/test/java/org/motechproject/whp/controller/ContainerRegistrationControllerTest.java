@@ -10,6 +10,7 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
+import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -30,11 +32,13 @@ public class ContainerRegistrationControllerTest {
     private ContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
+    @Mock
+    private RegistrationRequestValidator registrationRequestValidator;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerRegistrationController = new ContainerRegistrationController(containerService);
+        containerRegistrationController = new ContainerRegistrationController(containerService, registrationRequestValidator);
     }
 
     @Test
@@ -66,6 +70,11 @@ public class ContainerRegistrationControllerTest {
         String providerId = "P00011";
         String containerId = "123456789a";
         String instance = "invalid_instance";
+
+        ArrayList<String> errors = new ArrayList<>();
+        errors.add("Container Id must be of 10 digits in length");
+        errors.add("Invalid instance : invalid_instance");
+        when(registrationRequestValidator.validate(any(RegistrationRequest.class))).thenReturn(errors);
 
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance)

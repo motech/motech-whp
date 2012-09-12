@@ -4,11 +4,11 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
+import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,10 +26,12 @@ public class ContainerRegistrationController extends BaseWebController {
 
     public static final String INSTANCES = "instances";
     private ContainerService containerService;
+    private RegistrationRequestValidator registrationRequestValidator;
 
     @Autowired
-    public ContainerRegistrationController(ContainerService containerService) {
+    public ContainerRegistrationController(ContainerService containerService, RegistrationRequestValidator registrationRequestValidator) {
         this.containerService = containerService;
+        this.registrationRequestValidator = registrationRequestValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -40,8 +42,8 @@ public class ContainerRegistrationController extends BaseWebController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request, BindingResult result) {
-        List<String> errors = registrationRequest.validate();
+    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request) {
+        List<String> errors = registrationRequestValidator.validate(registrationRequest);
         if (!errors.isEmpty()) {
             uiModel.addAttribute("errors", StringUtils.join(errors, ","));
             show(uiModel, request);

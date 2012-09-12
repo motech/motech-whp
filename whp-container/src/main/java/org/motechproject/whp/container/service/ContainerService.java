@@ -19,4 +19,8 @@ public class ContainerService {
     public void registerContainer(RegistrationRequest registrationRequest) {
         allContainers.add(new Container(registrationRequest.getProviderId(), registrationRequest.getContainerId(), registrationRequest.getInstance()));
     }
+
+    public Boolean exists(String containerId) {
+        return allContainers.findByContainerId(containerId) != null;
+    }
 }
