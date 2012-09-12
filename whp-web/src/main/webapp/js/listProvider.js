@@ -1,30 +1,12 @@
-function hideActivateColumnIfAllAreActive() {
-    $('[type=activate-provider]').show();
-    if ($('a[type=activate-link]:visible').length == 0) {
-        $('[type=activate-provider]').hide();
-    }
-}
-
-function hideResetPasswordColumnIfAllAreInActive() {
-    $('[type=reset-password]').show();
-    if ($('a[type=reset-password-link]:visible').length == 0) {
-        $('[type=reset-password]').hide();
-    }
-}
-
-
 function addResetPasswordLink(userName) {
-    $('tr[providerId=' + userName + '] td[type=reset-password]').html(
+    $('tr[providerId=' + userName + '] td[type=action-on-provider]').html(
         "<a type='reset-password-link' data-toggle='modal' href='#resetPasswordModal'>Reset Password</a>");
-    $('[type=reset-password]').show();
-    hideActivateColumnIfAllAreActive();
 }
 
 function highlightProviderRow(userName) {
     $('tr[providerId=' + userName + '] td:visible').effect("highlight", {}, 6000);
 }
 function setProviderAsActive(userName) {
-    $('tr[providerId=' + userName + '] td[type=activate-provider] a').remove();
     $('tr[providerId=' + userName + '] td[type=status]').text('Active');
 }
 
@@ -42,8 +24,6 @@ $(function () {
         else {
             $('[type=no-results]').hide();
         }
-        hideActivateColumnIfAllAreActive();
-        hideResetPasswordColumnIfAllAreInActive();
     });
 
     $("#district").combobox();
@@ -65,7 +45,6 @@ $(function () {
     });
     $('#resetPasswordModal').bind('resetPasswordSuccess', function (event, userName) {
         highlightProviderRow(userName);
-        hideResetPasswordColumnIfAllAreInActive();
     });
 });
 

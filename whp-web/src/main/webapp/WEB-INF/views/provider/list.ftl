@@ -66,9 +66,7 @@
                 <th>Secondary Mobile Number</th>
                 <th>Tertiary Mobile Number</th>
                 <th>Status</th>
-                <th type="activate-provider"></th>
-            <#--Reset Password column should always be the last one (we are appending this column dynamically if this column does not exist)-->
-                <th type="reset-password"></th>
+                <th type="action-on-provider"></th>
             </tr>
             </thead>
             <tbody>
@@ -93,17 +91,15 @@
                         Inactive
                     </div>
                 </td>
-                <td type="activate-provider">
+                <td type="action-on-provider">
+                    <div ng-show="item.active">
+                        <a type="reset-password-link" class="reset-password one-line" data-toggle="modal"
+                           href="#resetPasswordModal">Reset Password</a>
+                    </div>
                     <div ng-hide="item.active">
                         <a type="activate-link" data-toggle="modal" href="#activateProviderModal"
                            class="activate-link"
                            userName="{{provider.providerId}}">Activate</a>
-                    </div>
-                </td>
-                <td type="reset-password">
-                    <div ng-show="item.active">
-                        <a type="reset-password-link" class="reset-password one-line" data-toggle="modal"
-                           href="#resetPasswordModal">Reset Password</a>
                     </div>
                 </td>
             </tr>
