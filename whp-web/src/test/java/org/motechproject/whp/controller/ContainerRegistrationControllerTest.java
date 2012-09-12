@@ -94,7 +94,7 @@ public class ContainerRegistrationControllerTest {
 
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance)
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, providerId, null))))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, null))))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
                 .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
@@ -104,7 +104,7 @@ public class ContainerRegistrationControllerTest {
         verify(containerService).registerContainer(captor.capture());
         RegistrationRequest actualRegistrationRequest = captor.getValue();
 
-        assertEquals(providerId, actualRegistrationRequest.getProviderId());
+        assertEquals(providerId.toLowerCase(), actualRegistrationRequest.getProviderId());
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
     }

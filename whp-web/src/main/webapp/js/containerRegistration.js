@@ -21,4 +21,8 @@ $().ready(function() {
 			},
 		}
 	});
+
+    createAutoClosingAlert(".container-registration-message-alert", 5000);
+
+    $("#containerId").focus();
 });

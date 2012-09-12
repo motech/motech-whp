@@ -50,7 +50,7 @@ public class ContainerRegistrationController extends BaseWebController {
             return "containerRegistration/show";
         }
 
-        registrationRequest.setProviderId(loggedInUser(request).getExternalId());
+        registrationRequest.setProviderId(loggedInUser(request).getUserName());
         containerService.registerContainer(registrationRequest);
         out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), request);
         return "redirect:/containerRegistration";

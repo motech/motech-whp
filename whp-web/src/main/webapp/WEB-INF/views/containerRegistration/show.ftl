@@ -3,16 +3,16 @@
 <@layout.defaultLayout "Container-Registration">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
     <#if errors??>
-        <div class="dateUpdated-message-alert row alert alert-info fade in">
-            <button class="close" data-dismiss="alert">&times;</button>
-            ${errors}
-        </div>
+            <div id="container-registration-error" class="container-registration-message-alert row alert alert-error fade in">
+                <button class="close" data-dismiss="alert">&times;</button>
+                ${errors}
+            </div>
     </#if>
     <#if message??>
-        <div id="container-registration-confirmation" class="dateUpdated-message-alert row alert alert-info fade in">
-            <button class="close" data-dismiss="alert">&times;</button>
-            ${message}
-        </div>
+            <div id="container-registration-confirmation" class="container-registration-message-alert row alert alert-info fade in">
+                <button class="close" data-dismiss="alert">&times;</button>
+                ${message}
+            </div>
     </#if>
         <div id="container-registration">
             <form id="container-registration-form" action="<@spring.url '/containerRegistration/register'/>" input method="POST" submitOnEnterKey="true"
