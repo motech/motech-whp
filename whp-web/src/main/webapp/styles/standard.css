@@ -616,6 +616,11 @@ pre {
 .page-link {
     text-decoration: underline;
 }
+.page-link-disabled {
+    text-decoration: underline;
+    display: inline;
+    color: #808080;
+}
 .current-page-info {
    display: inline-block;
 }
