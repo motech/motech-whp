@@ -12,6 +12,8 @@ import org.openqa.selenium.support.How;
 
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.motechproject.whp.functional.framework.MyPageFactory.initElements;
 
 @Ignore("Ignored until pagination is completed on Provider page")
@@ -104,6 +106,8 @@ public class ListProvidersPage extends LoggedInUserPage {
 
     public ListProvidersPage activateProvider(String password) throws InterruptedException {
         providerActivation.activateProvider(providerUnderTest, password);
+        assertFalse(providerActivation.hasActivateButton(providerUnderTest));
+        assertTrue(providerActivation.hasActiveStatus(providerUnderTest));
         return this;
     }
 

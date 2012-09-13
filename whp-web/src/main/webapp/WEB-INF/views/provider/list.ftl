@@ -54,7 +54,7 @@
     <#assign pageNo=1/>
 </#if>
 <div class="results">
-    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="3" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="10" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="providerList">
             <thead>
             <tr>

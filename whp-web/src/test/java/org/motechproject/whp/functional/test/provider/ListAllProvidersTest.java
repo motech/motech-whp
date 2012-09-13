@@ -85,7 +85,6 @@ public class ListAllProvidersTest extends BaseTest {
         String provider2Password = "passwordForProvider2";
         System.out.println("Activating provider :" + provider2.getProviderId());
         builder.build(provider2.getProviderId(), true).activateProvider(provider2Password);
-        assertTrue(builder.build(provider2.getProviderId(), true).isProviderActive());
 
         LoginPage loginPage = builder.build(provider2.getProviderId(), true).logout();
         loginPage.loginAsProvider(provider2.getProviderId(), provider2Password).logout();

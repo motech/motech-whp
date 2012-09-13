@@ -13,6 +13,9 @@ public class ListProviderFilter extends HtmlSection {
     @FindBy(how = How.ID, using = "providerId")
     protected WebElement providerId;
 
+    @FindBy(how = How.ID, using = "district-autocomplete")
+    protected WebElement district;
+
     @FindBy(how = How.ID, using = "search")
     protected WebElement submit;
 
@@ -27,10 +30,15 @@ public class ListProviderFilter extends HtmlSection {
     }
 
     public void searchBy(String district, String providerId, boolean expectingResult) {
+
+        this.district.clear();
+        this.district.sendKeys(district);
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
+        javascriptExecutor.executeScript("$('#district').val('" + district + "');");
+
         this.providerId.clear();
         this.providerId.sendKeys(providerId.toLowerCase());
-        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) webDriver;
-        javascriptExecutor.executeScript("$('#district').val('" + district + "');"); // can't set select box directly as it is hidden
+
         this.submit.click();
         if (expectingResult) {
             waitForElementWithCSSToLoad("provider-row");
