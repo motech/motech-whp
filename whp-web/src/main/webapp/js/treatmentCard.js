@@ -29,9 +29,9 @@ function setUpTreatmentCardTable() {
         }
         else if ($(this).hasClass('round-icon')) {
             $(this).removeClass('round-icon');
-            $(this).addClass('tick-icon');
-            $(this).attr('currentPillStatus', '1');
-            $($(this).find('div')[0]).html('&#10004;');
+            $(this).addClass('dash-icon');
+            $(this).attr('currentPillStatus', '0');
+            $($(this).find('div')[0]).html('-');
         }
         else {
             $(this).removeClass('dash-icon');
