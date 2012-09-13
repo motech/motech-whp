@@ -63,7 +63,7 @@ public class TreatmentUpdateOrchestrator {
 
         patient.clearDoseInterruptionsForUpdate();
         for (LocalDate doseDate : allDoseDates) {
-            if ((dateAdherenceMap.get(doseDate) == null || dateAdherenceMap.get(doseDate).equals(PillStatus.NotTaken))) {
+            if ((dateAdherenceMap.get(doseDate) == null || !dateAdherenceMap.get(doseDate).equals(PillStatus.Taken))) {
                 patient.dosesMissedSince(doseDate);
             } else {
                 patient.dosesResumedOnAfterBeingInterrupted(doseDate);
