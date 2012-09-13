@@ -1,8 +1,6 @@
 package org.motechproject.whp.user.service;
 
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.paginator.response.PageResults;
-import org.motechproject.paginator.service.Paging;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
@@ -12,14 +10,15 @@ import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
-import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
@@ -68,11 +67,14 @@ public class ProviderService {
     }
 
     public List<Provider> fetchBy(String district, String providerId) {
+        if(StringUtils.isEmpty(providerId) && StringUtils.isEmpty(district)){
+            return allProviders.getAll();
+        }
+
         if (StringUtils.isEmpty(providerId)) {
             return fetchBy(district);
-        } else {
-            return allProviders.findByDistrictAndProviderId(district, providerId);
         }
+        return allProviders.findByDistrictAndProviderId(district, providerId);
     }
 
     public List<Provider> fetchBy(String district) {

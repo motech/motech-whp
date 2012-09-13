@@ -45,33 +45,12 @@ public class ProviderController extends BaseWebController {
         List<District> districtList = allDistrictsCache.getAll();
         String district = districtList.get(0).getName();
         String providerId = "";
-        if(request.getParameterMap().isEmpty())
-            initQueryModel(uiModel, district, providerId);
-        else
-            addQueryParametersToUiModel(uiModel, request);
-
-        prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
-        return "provider/list";
-    }
-
-    private void addQueryParametersToUiModel(Model uiModel, HttpServletRequest request) throws IOException {
-        String providerPaginationId = "provider_pagination";
-        uiModel.addAttribute("pageNo", request.getParameter(providerPaginationId+"-pageNo"));
-        uiModel.addAttribute("rowsPerPage", request.getParameter(providerPaginationId+"-rowsPerPage"));
-
-        String searchCriteriaJson = request.getParameter(providerPaginationId + "-searchCriteria");
-        HashMap<String, String> searchCriteria = new ObjectMapper().readValue(searchCriteriaJson, HashMap.class);
-        uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
-        uiModel.addAttribute(SELECTED_DISTRICT, searchCriteria.get(SELECTED_DISTRICT));
-        uiModel.addAttribute(PROVIDER_ID, searchCriteria.get(PROVIDER_ID));
-    }
-
-    @RequestMapping(value = "search", method = RequestMethod.GET)
-    public String searchMatchingProviders(@RequestParam("selectedDistrict") String district, @RequestParam("selectedProvider") String providerId, Model uiModel) {
         initQueryModel(uiModel, district, providerId);
+
         prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
         return "provider/list";
     }
+
 
     @RequestMapping(value = "byDistrict/{districtName}", method = RequestMethod.GET)
     public String allProvidersForDistrict(@PathVariable("districtName") String districtName, Model uiModel) {

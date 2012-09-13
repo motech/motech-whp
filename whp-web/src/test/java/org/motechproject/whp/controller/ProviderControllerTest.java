@@ -92,12 +92,6 @@ public class ProviderControllerTest {
     }
 
     @Test
-    public void shouldLoadProviderSearchPage_verifyViewMappingForPOST() throws Exception {
-        String viewName = providerController.searchMatchingProviders("districtA", "providerId", uiModel);
-        assertEquals("provider/list", viewName);
-    }
-
-    @Test
     public void shouldFetchAllProvidersForDistrict() throws Exception {
         List<Provider> providers = emptyList();
         when(providerService.fetchBy("Begusarai")).thenReturn(providers);

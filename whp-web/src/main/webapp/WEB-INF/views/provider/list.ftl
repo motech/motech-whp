@@ -5,13 +5,12 @@
 <#include "../user/resetPassword.ftl">
 
 <@layout.defaultLayout "MoTeCH-WHP">
-<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 <div id="search-section" class="row well">
     <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
         Pane</a></h3>
 
     <div id="search-pane">
-        <@paginator.filter id="provider_pagination_filter">
+        <@paginator.filter id="provider_pagination_filter" pagination_id = "provider_pagination">
             <table>
                 <tr>
                     <td>
@@ -20,9 +19,9 @@
 
                             <div class="controls">
                                 <select id="district" name="selectedDistrict">
+                                    <option value = "" ></option>
                                     <#list districts as district>
-                                        <option <#if selectedDistrict == district.name> selected </#if>
-                                                                                        value="${district.name}">${district.name}</option>
+                                        <option value="${district.name}"   ng-selected="{{isSelected('${district.name}', searchCriteria.selectedDistrict, 'district')}}">${district.name}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -34,7 +33,7 @@
 
                             <div class="controls">
                                 <input class="input-large pull-down-5px" type="text" name='selectedProvider' id="providerId"
-                                       value="${selectedProvider!}" autofocus="autofocus"/>
+                                       ng-model="searchCriteria.selectedProvider" autofocus="autofocus"/>
                             </div>
                         </div>
                     </td>
@@ -55,8 +54,7 @@
     <#assign pageNo=1/>
 </#if>
 <div class="results">
-    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="3" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles"
-      currentPage=pageNo>
+    <@paginator.paginate id="provider_pagination" filterSectionId="provider_pagination_filter" entity="provider" rowsPerPage="3" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="providerList">
             <thead>
             <tr>
@@ -112,4 +110,5 @@
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
     <@resetPassword/>
     <@activateProvider/>
+<script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listProvider.js'/>"></script>
 </@layout.defaultLayout>
