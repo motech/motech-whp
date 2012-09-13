@@ -694,15 +694,34 @@
                     <printSummary>true</printSummary>
                     <includes>
                         <include>**/*Test.java</include>
+                        <include>**/*IT.java</include>
+                        <include>**/*TestPart.java</include>
                     </includes>
                     <excludes>
-                        <exclude>**/*IT.java</exclude>
-                        <exclude>**/*TestPart.java</exclude>
                         <exclude>**/functional/**/*Test.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
-            <!--Drop all DBs-->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>delete-all-dbs</id>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <target unless="skipTests">
+                                <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -721,6 +740,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!--IDE-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
