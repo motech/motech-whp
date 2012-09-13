@@ -29,7 +29,7 @@ public class ContainerServiceTest {
 
     @Test
     public void shouldRegisterAContainer() {
-        String providerId = "provider_one";
+        String providerId = "PROVIDER_ONE";
         String containerId = "1234567890";
         String instance = Instance.IN_TREATMENT.getDisplayText();
 
@@ -39,7 +39,7 @@ public class ContainerServiceTest {
         verify(allContainers).add(captor.capture());
         Container actualContainer = captor.getValue();
 
-        assertEquals(providerId, actualContainer.getProviderId());
+        assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
         assertEquals(containerId, actualContainer.getContainerId());
         assertEquals(instance, actualContainer.getInstance());
     }

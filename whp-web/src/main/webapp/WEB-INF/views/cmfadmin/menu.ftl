@@ -19,5 +19,13 @@
             <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data to excel</a>
         <li>
         <li class="divider"></li>
+        <li class="nav-header">
+            <b>Container Tracking</b>
+        </li>
+        <li>
+            <a href="/whp/containerRegistration">Container Registration</a>
+        <li>
+        <li class="divider"></li>
+
     </ul>
 </div>

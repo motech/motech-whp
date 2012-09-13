@@ -18,6 +18,19 @@
             <form id="container-registration-form" action="<@spring.url '/containerRegistration/register'/>" input method="POST" submitOnEnterKey="true"
                   class="">
                 <table>
+                    <#if isCMFAdmin>
+                    <tr>
+                        <td>
+                            <div class="control-group">
+                                <label class="control-label">Provider ID*</label>
+
+                                <div class="controls">
+                                    <input id="providerId" class="span" name="providerId" type="text"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </#if>
                     <tr>
                         <td>
                             <div class="control-group">
@@ -28,8 +41,8 @@
                                 </div>
                             </div>
                         </td>
-                        </tr>
-                        <tr>
+                    </tr>
+                    <tr>
                         <td>
                             <div class="control-group">
                                 <label class="control-label">Instance*</label>
@@ -44,8 +57,8 @@
                                 </div>
                             </div>
                         </td>
-</tr>
-<tr>
+                    </tr>
+                    <tr>
                         <td>
                             <div class="control-group pull-down">
                                 <div class="controls">
@@ -57,7 +70,7 @@
                             </div>
                         </td>
                     </tr>
-                    </table>
+                </table>
             </form>
         </div>
 </@layout.defaultLayout>

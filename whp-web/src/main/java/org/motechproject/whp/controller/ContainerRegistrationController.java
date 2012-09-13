@@ -6,6 +6,7 @@ import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
 import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,7 @@ import static org.motechproject.flash.Flash.out;
 public class ContainerRegistrationController extends BaseWebController {
 
     public static final String INSTANCES = "instances";
+    public static final String IS_CMF_ADMIN = "isCMFAdmin";
     private ContainerService containerService;
     private RegistrationRequestValidator registrationRequestValidator;
 
@@ -37,23 +39,36 @@ public class ContainerRegistrationController extends BaseWebController {
     @RequestMapping(method = RequestMethod.GET)
     public String show(Model uiModel, HttpServletRequest request) {
         populateWithInstances(uiModel, request);
+        populateUserRole(uiModel,request);
 
         return "containerRegistration/show";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request) {
+    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest servletRequest) {
+        populateProviderId(registrationRequest, servletRequest);
+
+        if (hasErrors(uiModel, registrationRequest, servletRequest)) return "containerRegistration/show";
+
+        containerService.registerContainer(registrationRequest);
+
+        out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), servletRequest);
+        return "redirect:/containerRegistration";
+    }
+
+    private void populateProviderId(RegistrationRequest registrationRequest, HttpServletRequest request) {
+        if(!isCMFAdmin(request))
+            registrationRequest.setProviderId(loggedInUser(request).getUserName());
+    }
+
+    private boolean hasErrors(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest request) {
         List<String> errors = registrationRequestValidator.validate(registrationRequest);
         if (!errors.isEmpty()) {
             uiModel.addAttribute("errors", StringUtils.join(errors, ","));
             show(uiModel, request);
-            return "containerRegistration/show";
+            return true;
         }
-
-        registrationRequest.setProviderId(loggedInUser(request).getUserName());
-        containerService.registerContainer(registrationRequest);
-        out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), request);
-        return "redirect:/containerRegistration";
+        return false;
     }
 
     private void populateWithInstances(Model uiModel, HttpServletRequest request) {
@@ -66,6 +81,14 @@ public class ContainerRegistrationController extends BaseWebController {
         if (isNotBlank(messages)) {
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
+    }
+
+    private void populateUserRole(Model uiModel,HttpServletRequest request) {
+        uiModel.addAttribute(IS_CMF_ADMIN, isCMFAdmin(request));
+    }
+
+    private boolean isCMFAdmin(HttpServletRequest request) {
+        return loggedInUser(request).getRoles().contains(WHPRole.CMF_ADMIN.name());
     }
 }
 

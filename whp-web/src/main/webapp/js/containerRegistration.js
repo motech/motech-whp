@@ -9,6 +9,9 @@ $().ready(function() {
                          	maxlength: 10,
                          	digits: true
                          },
+            providerId: {
+                    required: true,
+            },
 		},
 		messages: {
 			containerId: {
@@ -16,6 +19,9 @@ $().ready(function() {
 				minlength: "Container Id must be of 10 digits in length",
 				maxlength: "Container Id must be of 10 digits in length"
 			},
+		    providerId: {
+		        required: "Please enter the provider id"
+		    },
 			instance: {
 				required: "Please select the instance"
 			},
@@ -23,6 +29,5 @@ $().ready(function() {
 	});
 
     createAutoClosingAlert(".container-registration-message-alert", 5000);
-
-    $("#containerId").focus();
+    $('input:text:first').focus();
 });

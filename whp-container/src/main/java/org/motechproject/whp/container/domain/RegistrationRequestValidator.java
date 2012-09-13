@@ -22,10 +22,15 @@ public class RegistrationRequestValidator {
     public List<String> validate(RegistrationRequest registrationRequest) {
         String containerId = registrationRequest.getContainerId();
         String instance = registrationRequest.getInstance();
+        String providerId = registrationRequest.getProviderId();
 
         ArrayList<String> errors = new ArrayList<>();
-        if(!StringUtils.isNumeric(containerId) || containerId.length() != 10)
+        if(!StringUtils.isNumeric(containerId) || containerId.length() != 10) {
             errors.add("Container Id must be of 10 digits in length");
+        }
+
+        if(StringUtils.isBlank(providerId))
+            errors.add(String.format("Invalid provider id : %s", providerId));
 
         if(!Instance.isValid(instance))
             errors.add(String.format("Invalid instance : %s", instance));

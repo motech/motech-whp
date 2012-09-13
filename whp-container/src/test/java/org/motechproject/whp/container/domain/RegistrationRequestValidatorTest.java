@@ -23,6 +23,7 @@ public class RegistrationRequestValidatorTest {
         initMocks(this);
         registrationRequestValidator = new RegistrationRequestValidator(containerService);
     }
+
     @Test
     public void shouldValidateDuplicateContainerId() {
         String containerID = "1234567890";
@@ -54,7 +55,15 @@ public class RegistrationRequestValidatorTest {
         RegistrationRequest request = new RegistrationRequest("P0001", "1234567890", "invalid_instance");
         List<String> invalidInstanceErrors = registrationRequestValidator.validate(request);
         assertEquals(1, invalidInstanceErrors.size());
-            assertEquals("Invalid instance : invalid_instance", invalidInstanceErrors.get(0));
+        assertEquals("Invalid instance : invalid_instance", invalidInstanceErrors.get(0));
     }
 
+    @Test
+    public void shouldValidatePresenceOfProviderId() {
+        RegistrationRequest registrationRequest = new RegistrationRequest("", "1234567890", Instance.IN_TREATMENT.getDisplayText());
+        List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
+        assertEquals(1, validationErrors.size());
+        assertEquals("Invalid provider id : ", validationErrors.get(0));
+    }
 }
