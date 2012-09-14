@@ -1,13 +1,21 @@
 package org.motechproject.whp.container.service;
 
+import freemarker.template.TemplateException;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
+import org.motechproject.whp.remedi.service.RemediService;
+
+import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -16,32 +24,38 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ContainerServiceTest {
+public class ContainerServiceTest extends BaseUnitTest {
     @Mock
     private AllContainers allContainers;
+    @Mock
+    private RemediService remediService;
     private ContainerService containerService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerService = new ContainerService(allContainers);
+        containerService = new ContainerService(allContainers, remediService);
     }
 
     @Test
-    public void shouldRegisterAContainer() {
-        String providerId = "PROVIDER_ONE";
+    public void shouldRegisterAContainer() throws IOException, TemplateException {
+        DateTime dateModified = DateUtil.now();
+        mockCurrentDate(dateModified);
+        String providerId = "provider_one";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        SputumTrackingInstance instance = SputumTrackingInstance.IN_TREATMENT;
 
-        containerService.registerContainer(new RegistrationRequest(providerId, containerId, instance));
+        containerService.registerContainer(new RegistrationRequest(providerId, containerId, instance.getDisplayText()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
         Container actualContainer = captor.getValue();
-
         assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
         assertEquals(containerId, actualContainer.getContainerId());
         assertEquals(instance, actualContainer.getInstance());
+
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, dateModified);
+        verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
     }
 
     @Test

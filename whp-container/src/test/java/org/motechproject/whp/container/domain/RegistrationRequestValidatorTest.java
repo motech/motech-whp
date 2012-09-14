@@ -31,7 +31,7 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidateDuplicateContainerId() {
-        String containerID = "1234567890";
+        String containerID = "12345678910";
         RegistrationRequest registrationRequest = new RegistrationRequest("P0001", containerID, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(containerService.exists(containerID)).thenReturn(true);
 
@@ -65,7 +65,7 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidatePresenceOfProviderId() {
-        RegistrationRequest registrationRequest = new RegistrationRequest("", "1234567890", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        RegistrationRequest registrationRequest = new RegistrationRequest("", "12345678910", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
         assertEquals(1, validationErrors.size());

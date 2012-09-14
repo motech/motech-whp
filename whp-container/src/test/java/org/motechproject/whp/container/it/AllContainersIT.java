@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -24,7 +25,7 @@ public class AllContainersIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        container = new Container("P00001", "1234567890", "pre-treatment");
+        container = new Container("P00001", "1234567890", SputumTrackingInstance.PRE_TREATMENT);
     }
 
     @Test
@@ -35,6 +36,6 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
-        assertEquals("pre-treatment", containerReturned.getInstance());
+        assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 }

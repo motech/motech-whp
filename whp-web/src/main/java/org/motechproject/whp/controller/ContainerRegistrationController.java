@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import freemarker.template.TemplateException;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.RegistrationRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ public class ContainerRegistrationController extends BaseWebController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest servletRequest) {
+    public String register(Model uiModel, RegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
         populateProviderId(registrationRequest, servletRequest);
 
         if (hasErrors(uiModel, registrationRequest, servletRequest)) return "containerRegistration/show";
