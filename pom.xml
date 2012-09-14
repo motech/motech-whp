@@ -51,7 +51,7 @@
         <repository>
             <id>spring-repo</id>
             <name>Spring Maven Repository</name>
-            <url>http://maven.springframework.org/snapshot</url>
+            <url>http://maven.springframework.org/milestone</url>
             <releases>
                 <updatePolicy>daily</updatePolicy>
             </releases>
