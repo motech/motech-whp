@@ -3,6 +3,7 @@ package org.motechproject.whp.container.domain;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class RegistrationRequestValidator {
 
     private ContainerService containerService;
+    private SputumTrackingProperties sputumTrackingProperties;
 
     @Autowired
-    public RegistrationRequestValidator(ContainerService containerService) {
+    public RegistrationRequestValidator(ContainerService containerService, SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
+        this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
     public List<String> validate(RegistrationRequest registrationRequest) {
@@ -25,8 +28,9 @@ public class RegistrationRequestValidator {
         String providerId = registrationRequest.getProviderId();
 
         ArrayList<String> errors = new ArrayList<>();
-        if(!StringUtils.isNumeric(containerId) || containerId.length() != 10) {
-            errors.add("Container Id must be of 10 digits in length");
+        int containerIdMaxLength = sputumTrackingProperties.getContainerIdMaxLength();
+        if(!StringUtils.isNumeric(containerId) || containerId.length() != containerIdMaxLength) {
+            errors.add(String.format("Container Id must be of %s digits in length", containerIdMaxLength));
         }
 
         if(StringUtils.isBlank(providerId))
