@@ -6,6 +6,7 @@ import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
 import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,18 +28,21 @@ public class ContainerRegistrationController extends BaseWebController {
 
     public static final String INSTANCES = "instances";
     public static final String IS_CMF_ADMIN = "isCMFAdmin";
+    public static final String CONTAINER_ID_MAX_LENGTH = "containerIdMaxLength";
     private ContainerService containerService;
     private RegistrationRequestValidator registrationRequestValidator;
+    private SputumTrackingProperties sputumTrackingProperties;
 
     @Autowired
-    public ContainerRegistrationController(ContainerService containerService, RegistrationRequestValidator registrationRequestValidator) {
+    public ContainerRegistrationController(ContainerService containerService, RegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
         this.registrationRequestValidator = registrationRequestValidator;
+        this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String show(Model uiModel, HttpServletRequest request) {
-        populateWithInstances(uiModel, request);
+        populateViewDetails(uiModel, request);
         populateUserRole(uiModel,request);
 
         return "containerRegistration/show";
@@ -71,7 +75,7 @@ public class ContainerRegistrationController extends BaseWebController {
         return false;
     }
 
-    private void populateWithInstances(Model uiModel, HttpServletRequest request) {
+    private void populateViewDetails(Model uiModel, HttpServletRequest request) {
         ArrayList<String> instances = new ArrayList<>();
         for (Instance instance : Instance.values())
             instances.add(instance.getDisplayText());
@@ -81,6 +85,7 @@ public class ContainerRegistrationController extends BaseWebController {
         if (isNotBlank(messages)) {
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
+        uiModel.addAttribute(CONTAINER_ID_MAX_LENGTH, sputumTrackingProperties.getContainerIdMaxLength());
     }
 
     private void populateUserRole(Model uiModel,HttpServletRequest request) {

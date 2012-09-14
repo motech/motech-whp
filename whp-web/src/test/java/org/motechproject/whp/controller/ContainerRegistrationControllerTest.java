@@ -12,6 +12,7 @@ import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Instance;
 import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.user.domain.WHPRole;
 
 import java.util.ArrayList;
@@ -28,16 +29,20 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 public class ContainerRegistrationControllerTest {
     public static final String CONTRIB_FLASH_OUT_PREFIX = "flash.out.";
     public static final String CONTRIB_FLASH_IN_PREFIX = "flash.in.";
+    public static final int CONTAINER_ID_MAX_LENGTH = 11;
     private ContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
     @Mock
     private RegistrationRequestValidator registrationRequestValidator;
+    @Mock
+    private SputumTrackingProperties sputumTrackingProperties;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerRegistrationController = new ContainerRegistrationController(containerService, registrationRequestValidator);
+        when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
+        containerRegistrationController = new ContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 
     @Test
@@ -53,9 +58,10 @@ public class ContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute("instances", instances))
                 .andExpect(model().attribute("isCMFAdmin", true))
+                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(forwardedUrl("containerRegistration/show"));
     }
 
@@ -68,7 +74,7 @@ public class ContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(model().attribute("isCMFAdmin", false))
                 .andExpect(forwardedUrl("containerRegistration/show"));

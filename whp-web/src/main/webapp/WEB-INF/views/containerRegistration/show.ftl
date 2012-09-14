@@ -37,7 +37,7 @@
                                 <label class="control-label">Container ID*</label>
 
                                 <div class="controls">
-                                    <input id="containerId" class="span" name="containerId" type="text" maxlength="10" />
+                                    <input id="containerId" class="span" name="containerId" type="text" maxlength="${containerIdMaxLength}" />
                                 </div>
                             </div>
                         </td>
