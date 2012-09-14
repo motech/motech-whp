@@ -29,6 +29,6 @@ public class ContainerRegistrationTest extends BaseTest {
 
     @Test
     public void shouldRegisterAContainer() {
-        providerPage.registerContainer();
+        providerPage.registerContainer("12345678910", "Pre-treatment");
     }
 }

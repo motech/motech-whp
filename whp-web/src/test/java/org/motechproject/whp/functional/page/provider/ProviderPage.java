@@ -42,10 +42,10 @@ public class ProviderPage extends ListPatientsPage {
 
     }
 
-    public ContainerRegistrationPage registerContainer() {
+    public ContainerRegistrationPage registerContainer(String containerId, String instance) {
         webDriver.findElement(By.id("register-container")).click();
         ContainerRegistrationPage containerRegistrationPage = MyPageFactory.initElements(webDriver, ContainerRegistrationPage.class);
-        containerRegistrationPage.registerContainer("1234567890", "Pre-treatment");
+        containerRegistrationPage.registerContainer(containerId, instance);
         return containerRegistrationPage;
     }
 
