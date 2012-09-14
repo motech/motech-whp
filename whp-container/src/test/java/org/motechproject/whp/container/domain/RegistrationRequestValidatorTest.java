@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidateDuplicateContainerId() {
-        String containerID = "12345678910";
-        RegistrationRequest registrationRequest = new RegistrationRequest("P0001", containerID, Instance.IN_TREATMENT.getDisplayText());
+        String containerID = "1234567890";
+        RegistrationRequest registrationRequest = new RegistrationRequest("P0001", containerID, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(containerService.exists(containerID)).thenReturn(true);
 
         List<String> errors = registrationRequestValidator.validate(registrationRequest);
@@ -43,12 +44,12 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidateContainerId() {
-        RegistrationRequest request = new RegistrationRequest("P0001", "12345", Instance.IN_TREATMENT.getDisplayText());
+        RegistrationRequest request = new RegistrationRequest("P0001", "12345", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> invalidLengthErrors = registrationRequestValidator.validate(request);
         assertEquals(1, invalidLengthErrors.size());
         assertEquals("Container Id must be of 11 digits in length", invalidLengthErrors.get(0));
 
-        request = new RegistrationRequest("P0001", "123456789a", Instance.IN_TREATMENT.getDisplayText());
+        request = new RegistrationRequest("P0001", "123456789a", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> nonNumericErrors = registrationRequestValidator.validate(request);
         assertEquals(1, nonNumericErrors.size());
         assertEquals("Container Id must be of 11 digits in length", nonNumericErrors.get(0));
@@ -64,7 +65,7 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidatePresenceOfProviderId() {
-        RegistrationRequest registrationRequest = new RegistrationRequest("", "12345678910", Instance.IN_TREATMENT.getDisplayText());
+        RegistrationRequest registrationRequest = new RegistrationRequest("", "1234567890", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
         assertEquals(1, validationErrors.size());

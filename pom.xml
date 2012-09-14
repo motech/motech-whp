@@ -34,6 +34,7 @@
         <module>whp-web</module>
         <module>whp-reporting</module>
         <module>whp-container</module>
+        <module>whp-remedi</module>
     </modules>
 
     <repositories>

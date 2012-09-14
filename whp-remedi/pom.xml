@@ -8,14 +8,11 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>whp-container</artifactId>
-    <name>whp-container</name>
-
+    <name>whp-remedi</name>
+    <artifactId>whp-remedi</artifactId>
     <properties>
         <build.dir>../build</build.dir>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -25,6 +22,7 @@
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-refdata</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
@@ -33,13 +31,34 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-server-api</artifactId>
+            <groupId>org.motechproject.contrib-whp</groupId>
+            <artifactId>motech-http-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jar-test-classes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

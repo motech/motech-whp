@@ -6,8 +6,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.domain.Instance;
 import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -31,7 +31,7 @@ public class ContainerServiceTest {
     public void shouldRegisterAContainer() {
         String providerId = "PROVIDER_ONE";
         String containerId = "1234567890";
-        String instance = Instance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
 
         containerService.registerContainer(new RegistrationRequest(providerId, containerId, instance));
 

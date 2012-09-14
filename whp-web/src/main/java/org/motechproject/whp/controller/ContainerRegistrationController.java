@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.RegistrationRequest;
-import org.motechproject.whp.container.domain.Instance;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
@@ -77,8 +77,8 @@ public class ContainerRegistrationController extends BaseWebController {
 
     private void populateViewDetails(Model uiModel, HttpServletRequest request) {
         ArrayList<String> instances = new ArrayList<>();
-        for (Instance instance : Instance.values())
-            instances.add(instance.getDisplayText());
+        for (SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.values())
+            instances.add(sputumTrackingInstance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
