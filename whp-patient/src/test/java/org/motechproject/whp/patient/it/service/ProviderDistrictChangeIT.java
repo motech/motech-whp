@@ -52,7 +52,7 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
         providerRequest.setDistrict(newDistrict);
         providerService.registerProvider(providerRequest);
 
-        Thread.sleep(1000L); //sleep until patient update job is over
+        Thread.sleep(1500L); //sleep until patient update job is over
 
         //assert that patients got the new district
         Patient patient1 = patientService.findByPatientId(patientId1);

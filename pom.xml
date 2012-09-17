@@ -23,6 +23,7 @@
     <modules>
         <module>whp-common</module>
         <module>whp-refdata</module>
+        <!--<module>whp-data-importer</module>-->
         <module>whp-user</module>
         <module>whp-adherence-capture</module>
         <module>whp-patient</module>
@@ -35,6 +36,7 @@
         <module>whp-reporting</module>
         <module>whp-container</module>
         <module>whp-remedi</module>
+        <module>whp-container-mapping</module>
     </modules>
 
     <repositories>
