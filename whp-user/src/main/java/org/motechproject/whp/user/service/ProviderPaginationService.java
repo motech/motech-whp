@@ -1,5 +1,6 @@
 package org.motechproject.whp.user.service;
 
+import org.apache.log4j.Logger;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.security.service.MotechUser;
@@ -14,11 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import static java.util.Arrays.asList;
-
 @Service
 public class ProviderPaginationService implements Paging {
 
+    private Logger logger = Logger.getLogger(ProviderPaginationService.class);
     private ProviderService providerService;
     private AllProviders allProviders;
 
@@ -50,7 +50,13 @@ public class ProviderPaginationService implements Paging {
 
         List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
         for (Provider provider : matchingProviders) {
-            providerRows.add(new ProviderRow(provider, users.get(provider.getProviderId()).isActive()));
+            boolean isActive = false;
+            if(users.containsKey(provider.getProviderId()))
+                isActive = users.get(provider.getProviderId()).isActive();
+            else
+                logger.error(String.format("No motech user found for provider: %s", provider.getProviderId()));
+
+            providerRows.add(new ProviderRow(provider, isActive));
         }
         return providerRows;
     }
