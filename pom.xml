@@ -305,14 +305,15 @@
 
             <!--Contrib and delivery-->
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-http-client</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-paginator</artifactId>
                 <version>${motech.contrib.version}</version>
+                <classifier>classes</classifier>
             </dependency>
             <dependency>
                 <groupId>org.motechproject</groupId>
@@ -336,32 +337,32 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-flash-scope</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-bulk-export-import</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-web-security</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-validation</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>case-service</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.contrib-whp</groupId>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>openrosa-registration-service</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>

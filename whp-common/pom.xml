@@ -19,7 +19,7 @@
             <artifactId>motech-platform-common-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-validation</artifactId>
         </dependency>
     </dependencies>

@@ -24,7 +24,7 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-bulk-export-import</artifactId>
         </dependency>
         <dependency>

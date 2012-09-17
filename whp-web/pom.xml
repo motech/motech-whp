@@ -77,7 +77,7 @@
             <artifactId>spring-js-resources</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-paginator</artifactId>
             <version>0.13-SNAPSHOT</version>
             <type>war</type>
@@ -149,12 +149,12 @@
             <artifactId>whp-application-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-flash-scope</artifactId>
             <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.contrib-whp</groupId>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-diagnostics</artifactId>
             <version>${motech.contrib.version}</version>
         </dependency>
@@ -237,7 +237,7 @@
                     <warName>whp-${version}</warName>
                     <overlays>
                         <overlay>
-                            <groupId>org.motechproject.contrib-whp</groupId>
+                            <groupId>org.motechproject.whp-contrib</groupId>
                             <artifactId>motech-paginator</artifactId>
                             <excludes>
                                 <exclude>**/motech-paginator-jquery.js</exclude>
