@@ -220,6 +220,11 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-container-mapping</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-application-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -289,11 +294,11 @@
                 <artifactId>whp-remedi</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--<dependency>-->
-            <!--<groupId>org.motechproject.whp</groupId>-->
-            <!--<artifactId>whp-data-importer</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-data-importer</artifactId>
+            <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-treatment-card</artifactId>

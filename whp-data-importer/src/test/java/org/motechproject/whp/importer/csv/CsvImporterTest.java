@@ -1,5 +1,6 @@
 package org.motechproject.whp.importer.csv;
 
+import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -7,22 +8,29 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.mapping.domain.ContainerRange;
+import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
+import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -34,7 +42,8 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllProviders allProviders;
     @Autowired
     AllTreatmentCategories allTreatmentCategories;
-
+    @Autowired
+    AllProviderContainerMappings allProviderContainerMappings;
     @Before
     public void setUp() {
         allPatients.removeAll();
@@ -153,11 +162,27 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
     }
 
+    @Test
+    public void shouldLoadContainerMapping() throws Exception {
+        String[] arguments = new String[3];
+        arguments[0] = "ContainerMapping";
+        arguments[1] = getContainerMappingCsv();
+        CsvImporter.main(arguments);
+
+        List<ProviderContainerMapping> mappings = allProviderContainerMappings.getAll();
+        assertThat(mappings.size(), Is.is(2));
+        assertThat(mappings.get(0).getProviderId(), Is.is("john"));
+        assertThat(mappings.get(0).getContainerRanges(), hasItem(new ContainerRange(101, 200)));
+        assertThat(mappings.get(1).getProviderId(), Is.is("raj"));
+        assertThat(mappings.get(1).getContainerRanges(), hasItem(new ContainerRange(201, 300)));
+    }
+
     @After
     public void tearDown() {
         allPatients.removeAll();
         allTreatmentCategories.removeAll();
         allProviders.removeAll();
+        allProviderContainerMappings.removeAll();
     }
 
     private String getPatientCsv() {
@@ -166,6 +191,10 @@ public class CsvImporterTest extends SpringIntegrationTest {
 
     private String getProviderCsv() {
         return CsvImporterTest.class.getClassLoader().getResource("providerRecords.csv").getPath();
+    }
+
+    private String getContainerMappingCsv() {
+        return CsvImporterTest.class.getClassLoader().getResource("containerMapping.csv").getPath();
     }
 
 }

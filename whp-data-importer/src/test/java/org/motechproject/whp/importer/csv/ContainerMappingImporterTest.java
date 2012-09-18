@@ -1,7 +1,10 @@
 package org.motechproject.whp.importer.csv;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.importer.csv.request.ContainerMappingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,8 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
@@ -20,6 +23,8 @@ public class ContainerMappingImporterTest {
     @Autowired
     ContainerMappingImporter containerMappingImporter;
 
+    @Autowired
+    AllProviderContainerMappings allProviderContainerMappings;
 
     @Test
     public void shouldValidateContainerMappingRequest(){
@@ -41,4 +46,24 @@ public class ContainerMappingImporterTest {
     }
 
 
+    @Test
+    public void shouldAddContainerMappingToRepository(){
+        ContainerMappingRequest containerMappingRequest1 = new ContainerMappingRequest("1", "101", "200");
+        ContainerMappingRequest containerMappingRequest2 = new ContainerMappingRequest("2", "201", "300");
+
+        List requests = new ArrayList();
+        requests.add(containerMappingRequest1);
+        requests.add(containerMappingRequest2);
+
+        containerMappingImporter.post(requests);
+
+        assertThat(allProviderContainerMappings.getAll().size(), is(2));
+    }
+
+
+    @Before
+    @After
+    public void deleteExistingContainerMappings() {
+        allProviderContainerMappings.removeAll();
+    }
 }

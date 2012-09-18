@@ -10,6 +10,7 @@
     <import resource="classpath*:applicationWHPValidationContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
+    <import resource="classpath*:applicationContainerMappingContext.xml"/>
 
     <import resource="classpath*:applicationBulkImportContext.xml"/>
 
