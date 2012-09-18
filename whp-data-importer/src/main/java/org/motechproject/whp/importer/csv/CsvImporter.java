@@ -73,6 +73,13 @@ enum ImportType {
             logger.info("Importing patient records from file : " + importFile);
             csvDataImporter.importData("patientRecordImporter", importFile);
         }
+    }, ContainerMapping {
+        @Override
+        void importData(String importFile, CSVDataImporter csvDataImporter) {
+            ImporterLogger logger = new ImporterLogger();
+            logger.info("Importing patient records from file : " + importFile);
+            csvDataImporter.importData("containerMappingImporter", importFile);
+        }
     }, ProviderTest {
         @Override
         void importData(String importFile, CSVDataImporter csvDataImporter) {

@@ -23,7 +23,7 @@
     <modules>
         <module>whp-common</module>
         <module>whp-refdata</module>
-        <!--<module>whp-data-importer</module>-->
+        <module>whp-data-importer</module>
         <module>whp-user</module>
         <module>whp-adherence-capture</module>
         <module>whp-patient</module>
