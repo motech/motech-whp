@@ -1,6 +1,7 @@
 package org.motechproject.whp.importer.csv;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
@@ -17,6 +18,7 @@ import static junit.framework.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
+@Ignore("Not required anymore")
 public class ProviderRecordImporterTest extends SpringIntegrationTest {
     @Autowired
     AllProviders allProviders;

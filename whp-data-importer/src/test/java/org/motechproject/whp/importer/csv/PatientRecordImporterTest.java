@@ -3,6 +3,7 @@ package org.motechproject.whp.importer.csv;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
@@ -20,6 +21,7 @@ import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
+@Ignore("Not required anymore")
 public class PatientRecordImporterTest {
 
     @Autowired

@@ -2,6 +2,7 @@ package org.motechproject.whp.importer.csv;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@Ignore("Not required anymore")
 public class PatientRecordImporterUnitTest {
 
     @Mock
