@@ -655,3 +655,8 @@ pre {
     font-family: inherit;
     line-height: inherit;
 }
+
+.javascript-warning {
+    font-weight: bold;
+    text-align: center;
+}

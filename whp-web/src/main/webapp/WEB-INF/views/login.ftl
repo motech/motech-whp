@@ -2,11 +2,7 @@
 <#import "layout/default.ftl" as layout>
 <@layout.defaultLayout "Login">
 
-<div class="span12" id="loginForm">
-    </br>
-    </br>
-    </br>
-    </br>
+<div class="row-fluid" id="loginForm">
     <#if RequestParameters.login_error?exists>
         <div id="loginError" class="alert alert-error row">${Session.loginFailure}</div>
     </#if>

@@ -14,12 +14,18 @@
         <#include "header.ftl"/>
 </div>
 <div class="container-fluid">
+
     <div class="row-fluid">
         <div class="span2">
             <#include "../itadmin/menu.ftl"/>
         </div>
 
         <div class="span8" id="mainContent">
+            <noscript>
+                <div class="row alert alert-error  javascript-warning">Javascript is not enabled in your browser. The application will not work
+                    properly. Please contact your administrator
+                </div>
+            </noscript>
             <!--Body content-->
             <#nested/>
         </div>
