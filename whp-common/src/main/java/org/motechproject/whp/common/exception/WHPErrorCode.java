@@ -19,7 +19,10 @@ public enum WHPErrorCode {
     NULL_VALUE_IN_ADDRESS("Invalid address : null value"),
 
     FIELD_VALIDATION_FAILED("Field Validation failed"),
-    WEB_ACCOUNT_REGISTRATION_ERROR("Error occured while tying to register user");
+    WEB_ACCOUNT_REGISTRATION_ERROR("Error occured while tying to register user"),
+
+    INVALID_CONTAINER_ID("No such container id in motech"),
+    SPUTUM_LAB_RESULT_IS_INCOMPLETE("Lab results are incomplete");
 
     private String message;
 
