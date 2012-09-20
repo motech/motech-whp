@@ -24,6 +24,7 @@ public class ProviderContainerMappingService {
 
     public Boolean isValidContainerForProvider(String providerId, String containerId) {
         ProviderContainerMapping providerContainerMapping = allProviderContainerMappings.findByProviderId(providerId);
+        if(providerContainerMapping == null) return false;
         return Lambda.exists(providerContainerMapping.getContainerRanges(), whichIncludes(Long.parseLong(containerId)));
     }
 

@@ -64,4 +64,25 @@ public class ProviderContainerMappingServiceTest {
 
         assertFalse(providerContainerMappingService.isValidContainerForProvider(providerId, containerId));
     }
+
+    @Test
+    public void shouldReturnFalseWhenThereAreNoContainerMappingsForProvider() {
+        String providerId = "providerId";
+        String containerId = "123";
+        ProviderContainerMapping providerContainerMapping = mock(ProviderContainerMapping.class);
+
+        when(allProviderContainerMappings.findByProviderId(providerId)).thenReturn(providerContainerMapping);
+
+        assertFalse(providerContainerMappingService.isValidContainerForProvider(providerId, containerId));
+    }
+
+    @Test
+    public void shouldReturnFalseWhenProviderDoesNotExists() {
+        String providerId = "providerId";
+        String containerId = "123";
+
+        when(allProviderContainerMappings.findByProviderId(providerId)).thenReturn(null);
+
+        assertFalse(providerContainerMappingService.isValidContainerForProvider(providerId, containerId));
+    }
 }

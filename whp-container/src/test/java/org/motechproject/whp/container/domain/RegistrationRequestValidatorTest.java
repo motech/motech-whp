@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.container.contract.RegistrationRequest;
+import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -12,8 +13,8 @@ import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -26,6 +27,8 @@ public class RegistrationRequestValidatorTest {
     private SputumTrackingProperties sputumTrackingProperties;
     @Mock
     private ProviderService providerService;
+    @Mock
+    private ProviderContainerMappingService providerContainerMappingService;
     private RegistrationRequestValidator registrationRequestValidator;
     private Provider validProvider;
 
@@ -35,7 +38,7 @@ public class RegistrationRequestValidatorTest {
         initMocks(this);
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(11);
         when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
-        registrationRequestValidator = new RegistrationRequestValidator(containerService, providerService, sputumTrackingProperties);
+        registrationRequestValidator = new RegistrationRequestValidator(containerService, providerService, providerContainerMappingService, sputumTrackingProperties);
     }
 
     @Test
@@ -81,8 +84,12 @@ public class RegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderExists() {
-        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), "11111111111", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        String containerId = "11111111111";
+        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
+
         List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
 
         verify(providerService).findByProviderId(validProvider.getProviderId());
         assertTrue(validationErrors.isEmpty());
@@ -97,5 +104,42 @@ public class RegistrationRequestValidatorTest {
         verify(providerService).findByProviderId(unregisteredProviderId);
         assertTrue(!validationErrors.isEmpty());
         assertTrue(validationErrors.contains("Provider not registered : UnregisteredProviderId"));
+    }
+
+    @Test
+    public void shouldValidateProviderIdContainerMappingSuccessfully_whenProviderExists() {
+        String containerId = "11111111111";
+        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
+
+        List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(providerService).findByProviderId(validProvider.getProviderId());
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    public void shouldValidateProviderIdContainerMappingWithErrors_whenProviderExists() {
+        String containerId = "11111111111";
+        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(false);
+
+        List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(providerService).findByProviderId(validProvider.getProviderId());
+        assertTrue(!validationErrors.isEmpty());
+        assertTrue(validationErrors.contains("Invalid container id : " + containerId));
+    }
+
+    @Test
+    public void shouldNotValidateProviderIdContainerMapping_whenProviderDoesNotExist() {
+        String unregisteredProviderId = "UnregisteredProviderId";
+        String containerId = "11111111111";
+        RegistrationRequest registrationRequest = new RegistrationRequest(unregisteredProviderId, containerId, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+
+        registrationRequestValidator.validate(registrationRequest);
+
+        verify(providerService).findByProviderId(unregisteredProviderId);
+        verify(providerContainerMappingService, never()).isValidContainerForProvider(unregisteredProviderId, containerId);
     }
 }
