@@ -5,23 +5,30 @@
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
+    <link rel="stylesheet" type="text/css"
+          href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 
 </head>
 <body>
 
 <div class="row-fluid" id="headerContent">
-     <#include "header.ftl"/>
+    <#include "header.ftl"/>
 </div>
 
 <div class="container-fluid">
+
     <div class="row-fluid">
         <div class="span2">
             <#include "../cmfadmin/menu.ftl"/>
         </div>
 
         <div class="span10" id="mainContent">
+            <noscript>
+                <div class="row alert alert-error javascript-warning">Javascript is not enabled in your browser. The application will not work
+                    properly. Please contact your administrator
+                </div>
+            </noscript>
             <!--Body content-->
             <#nested/>
         </div>

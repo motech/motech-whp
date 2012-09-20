@@ -657,4 +657,9 @@ pre {
     line-height: inherit;
 }
 
+.javascript-warning {
+    font-weight: bold;
+    text-align: center;
+}
+
 
