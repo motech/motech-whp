@@ -1,17 +1,18 @@
-package org.motechproject.adherence.it.service;
+package org.motechproject.whp.adherence.it.adherence.service;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.adherence.AdherenceLogMapper;
-import org.motechproject.adherence.it.common.SpringIntegrationTest;
-import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.adherence.domain.AdherenceLog;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceLogService;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.it.common.SpringIntegrationTest;
+import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.adherence.service.AdherenceLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class AdherenceLogServiceIT extends SpringIntegrationTest {
 
     @Autowired

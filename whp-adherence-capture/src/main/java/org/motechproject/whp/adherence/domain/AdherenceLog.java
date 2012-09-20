@@ -1,4 +1,4 @@
-package org.motechproject.adherence.domain;
+package org.motechproject.whp.adherence.domain;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.ektorp.support.TypeDiscriminator;

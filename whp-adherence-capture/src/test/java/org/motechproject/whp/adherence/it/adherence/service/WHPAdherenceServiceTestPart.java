@@ -1,10 +1,10 @@
-package org.motechproject.whp.adherence.it.service;
+package org.motechproject.whp.adherence.it.adherence.service;
 
 import org.ektorp.CouchDbConnector;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;

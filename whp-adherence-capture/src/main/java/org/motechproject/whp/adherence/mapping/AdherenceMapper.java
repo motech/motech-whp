@@ -1,7 +1,7 @@
 package org.motechproject.whp.adherence.mapping;
 
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;

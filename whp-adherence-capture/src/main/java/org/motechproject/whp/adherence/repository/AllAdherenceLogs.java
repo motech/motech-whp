@@ -1,4 +1,4 @@
-package org.motechproject.adherence.repository;
+package org.motechproject.whp.adherence.repository;
 
 import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
@@ -6,8 +6,8 @@ import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.dao.MotechBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

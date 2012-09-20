@@ -1,9 +1,8 @@
 package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
-import org.motechproject.adherence.service.AdherenceLogService;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;

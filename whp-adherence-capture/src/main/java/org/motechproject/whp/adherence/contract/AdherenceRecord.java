@@ -1,4 +1,4 @@
-package org.motechproject.adherence.contract;
+package org.motechproject.whp.adherence.contract;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;

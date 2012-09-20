@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;

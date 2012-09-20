@@ -2,12 +2,25 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-    <import resource="classpath*:applicationAdherenceContext.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
+
+    <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.adherence"/>
+
+    <bean id="adherenceDbInstance" class="org.ektorp.impl.StdCouchDbInstance">
+        <constructor-arg>
+            <bean id="httpClient" class="org.ektorp.spring.HttpClientFactoryBean"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="adherenceDbConnector" class="org.ektorp.impl.StdCouchDbConnector">
+        <constructor-arg value="motech-tb-adherence"/>
+        <constructor-arg ref="adherenceDbInstance"/>
+    </bean>
 </beans>

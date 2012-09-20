@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>whp-container-mapping</name>
     <artifactId>whp-container-mapping</artifactId>
     <properties>
         <build.dir>../build</build.dir>

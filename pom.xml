@@ -27,7 +27,6 @@
         <module>whp-user</module>
         <module>whp-adherence-capture</module>
         <module>whp-patient</module>
-        <module>whp-tb-adherence</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
         <module>whp-webservice</module>

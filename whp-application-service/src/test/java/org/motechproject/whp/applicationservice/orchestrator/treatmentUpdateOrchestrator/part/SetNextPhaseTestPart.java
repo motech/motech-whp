@@ -1,12 +1,9 @@
 package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrchestrator.part;
 
-import junit.framework.Assert;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.refdata.domain.Phase;
 

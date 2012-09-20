@@ -1,10 +1,10 @@
-package org.motechproject.adherence.service;
+package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.AdherenceLogMapper;
-import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.adherence.domain.AdherenceLog;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

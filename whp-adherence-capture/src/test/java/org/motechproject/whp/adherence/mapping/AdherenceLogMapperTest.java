@@ -1,10 +1,10 @@
-package org.motechproject.adherence;
+package org.motechproject.whp.adherence.mapping;
 
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.adherence.contract.AdherenceRecord;
-import org.motechproject.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
 
 import java.util.List;
 

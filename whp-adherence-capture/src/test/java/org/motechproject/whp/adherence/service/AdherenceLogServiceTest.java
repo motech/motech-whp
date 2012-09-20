@@ -1,11 +1,11 @@
-package org.motechproject.adherence.service;
+package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;

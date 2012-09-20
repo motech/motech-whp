@@ -1,6 +1,6 @@
 package org.motechproject.whp.adherence.mapping;
 
-import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 

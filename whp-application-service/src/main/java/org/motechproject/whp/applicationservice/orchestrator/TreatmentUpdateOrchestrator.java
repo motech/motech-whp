@@ -1,7 +1,7 @@
 package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
-import org.motechproject.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
