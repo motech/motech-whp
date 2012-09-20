@@ -14,11 +14,11 @@ public class APIKeyValidator extends NamedConstraintValidator {
 
     public static final String API_KEY_VALIDATION = "api_key_validation";
 
-    private Properties whpAPIValidationProperties;
+    private Properties remediProperties;
 
     @Autowired
-    public APIKeyValidator(@Qualifier("whpAPIValidationProperty") Properties whpAPIValidationProperty) {
-        this.whpAPIValidationProperties = whpAPIValidationProperty;
+    public APIKeyValidator(@Qualifier("remediProperty") Properties remediProperty) {
+        this.remediProperties = remediProperty;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class APIKeyValidator extends NamedConstraintValidator {
         field.setAccessible(true);
         try {
             String  api_key = field.get(target).toString();
-            if (!whpAPIValidationProperties.getProperty("remedi.api.key", "").equals(api_key)) {
+            if (!remediProperties.getProperty("remedi.api.key", "").equals(api_key)) {
                 String message = String.format("%s:%s", "api_key", "is invalid.");
                 errors.rejectValue(field.getName(), "403 Forbidden", message);
             }

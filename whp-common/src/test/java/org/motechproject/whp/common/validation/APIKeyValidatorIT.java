@@ -19,7 +19,7 @@ import static junit.framework.Assert.assertEquals;
 @ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
 public class APIKeyValidatorIT extends SpringIntegrationTest {
 
-    private Properties whpAPIValidationProperty;
+    private Properties remediProperty;
     private TestClass testObject;
     private BeanPropertyBindingResult errors;
     private APIKeyValidator requestValidator;
@@ -27,12 +27,12 @@ public class APIKeyValidatorIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        whpAPIValidationProperty = new Properties();
-        whpAPIValidationProperty.setProperty("remedi.api.key", "remediAPIKey");
+        remediProperty = new Properties();
+        remediProperty.setProperty("remedi.api.key", "remediAPIKey");
 
         testObject = new TestClass();
         errors = new BeanPropertyBindingResult(testObject, "test");
-        requestValidator = new APIKeyValidator(whpAPIValidationProperty);
+        requestValidator = new APIKeyValidator(remediProperty);
     }
 
     @Test
