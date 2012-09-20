@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping("/ivr/callback")
-public class IvrFlashingController {
+public class IvrFlashingController extends BaseWebController {
     private IvrCallService ivrCallService;
 
     @Autowired
