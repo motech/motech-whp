@@ -13,7 +13,7 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
@@ -32,7 +32,7 @@ public class SputumLabResultsWebServiceTest {
     private SputumLabResultsWebService sputumLabResultsWebService;
 
     @Mock
-    private AllContainers allContainers;
+    private ContainerService containerService;
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
@@ -40,7 +40,7 @@ public class SputumLabResultsWebServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        sputumLabResultsWebService = spy(new SputumLabResultsWebService(allContainers));
+        sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService));
         sputumLabResultsWebService.setResponseMessageBuilder(mock(ResponseMessageBuilder.class));
     }
 
@@ -62,7 +62,7 @@ public class SputumLabResultsWebServiceTest {
                 "</update>\n" +
                 "</case>";
 
-        when(allContainers.findByContainerId(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -87,7 +87,6 @@ public class SputumLabResultsWebServiceTest {
 
     @Test
     public void shouldValidateSputumLabResultsWebRequest_forUnknownContainerId(){
-
         expectWHPRuntimeException(WHPErrorCode.INVALID_CONTAINER_ID);
 
         String invalidContainerId = "12651654165465";
@@ -101,7 +100,7 @@ public class SputumLabResultsWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(allContainers.findByContainerId(invalidContainerId)).thenReturn(null);
+        when(containerService.getContainer(invalidContainerId)).thenReturn(null);
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -122,11 +121,29 @@ public class SputumLabResultsWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(allContainers.findByContainerId(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
 
         sputumLabResultsWebService.updateCase(request);
     }
 
+
+    @Test
+    public void shouldUpdateContainerWithLabResults(){
+        String containerId = "12651654165465";
+        SputumLabResultsWebRequest request = new SputumLabResultsWebRequestBuilder().withCase_id(containerId)
+                .withDate_modified("03/04/2012 11:23:40")
+                .withSmear_test_date_1("01/03/2012")
+                .withSmear_test_result_1("Positive")
+                .withSmear_test_date_2("01/03/2012")
+                .withSmear_test_result_2("Positive")
+                .withLab_name("XYZ")
+                .withLab_number("1234")
+                .build();
+
+        Container container = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT);
+
+        when(containerService.getContainer(containerId)).thenReturn(container);
+    }
 
     private void expectWHPRuntimeException(final WHPErrorCode errorCode) {
         exceptionThrown.expect(WHPRuntimeException.class);

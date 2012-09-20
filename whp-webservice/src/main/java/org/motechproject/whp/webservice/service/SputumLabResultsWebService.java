@@ -6,6 +6,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sputumLabResults/**")
 public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebRequest>{
 
-    AllContainers allContainers;
+    private ContainerService containerService;
 
     @Autowired
-    public SputumLabResultsWebService(AllContainers allContainers) {
+    public SputumLabResultsWebService(ContainerService containerService) {
         super(SputumLabResultsWebRequest.class);
-        this.allContainers = allContainers;
+        this.containerService = containerService;
     }
 
     public void updateCase(SputumLabResultsWebRequest sputumLabResultsWebRequest) {
@@ -29,7 +30,7 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
             throw new WHPRuntimeException(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
         }
 
-        Container container = allContainers.findByContainerId(sputumLabResultsWebRequest.getCase_id());
+        Container container = containerService.getContainer(sputumLabResultsWebRequest.getCase_id());
         if(container ==null){
             throw new WHPRuntimeException(WHPErrorCode.INVALID_CONTAINER_ID);
         }

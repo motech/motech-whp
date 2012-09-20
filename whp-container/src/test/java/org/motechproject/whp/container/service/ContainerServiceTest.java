@@ -2,6 +2,7 @@ package org.motechproject.whp.container.service;
 
 import freemarker.template.TemplateException;
 import org.joda.time.DateTime;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,9 +20,10 @@ import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ContainerServiceTest extends BaseUnitTest {
@@ -67,5 +69,23 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertFalse(containerService.exists("non-existent-containerId"));
 
         verify(allContainers).findByContainerId(containerId);
+        verify(allContainers).findByContainerId("non-existent-containerId");
+    }
+
+    @Test
+    public void shouldGetContainerByContainerId(){
+        String containerId = "containerId";
+        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT);
+        when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
+
+        Container container = containerService.getContainer(containerId);
+
+        assertThat(container, is(expectedContainer));
+        verify(allContainers).findByContainerId(containerId);
+    }
+
+    @After
+    public void verifyNoMoreInteractionsOnMocks() {
+        verifyNoMoreInteractions(allContainers);
     }
 }

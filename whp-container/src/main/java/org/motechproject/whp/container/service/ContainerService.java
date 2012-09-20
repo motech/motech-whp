@@ -37,4 +37,8 @@ public class ContainerService {
     public boolean exists(String containerId) {
         return allContainers.findByContainerId(containerId) != null;
     }
+
+    public Container getContainer(String containerId) {
+        return allContainers.findByContainerId(containerId);
+    }
 }
