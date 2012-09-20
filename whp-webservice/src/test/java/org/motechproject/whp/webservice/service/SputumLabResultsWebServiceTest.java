@@ -9,13 +9,13 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
-import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.casexml.service.exception.CaseError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
+import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.http.MediaType;
@@ -91,7 +91,7 @@ public class SputumLabResultsWebServiceTest {
 
     @Test
     public void shouldValidateSputumLabResultsWebRequest_forUnknownContainerId(){
-        expectWHPRuntimeException(WHPErrorCode.INVALID_CONTAINER_ID);
+        expectWHPCaseException(WHPErrorCode.INVALID_CONTAINER_ID);
 
         String invalidContainerId = "12651654165465";
         SputumLabResultsWebRequest request = new SputumLabResultsWebRequestBuilder().withCase_id(invalidContainerId)
@@ -112,7 +112,7 @@ public class SputumLabResultsWebServiceTest {
     @Test
     public void shouldValidateSputumLabResultsWebRequest_forIncompleteLabResults(){
 
-        expectWHPRuntimeException(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
+        expectWHPCaseException(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
 
         String containerId = "12651654165465";
         SputumLabResultsWebRequest request = new SputumLabResultsWebRequestBuilder().withCase_id(containerId)
@@ -159,13 +159,13 @@ public class SputumLabResultsWebServiceTest {
         assertThat(container.getLabResults().getSmearTestResult2(), is(request.getSmear_test_result_2()));
     }
 
-    private void expectWHPRuntimeException(final WHPErrorCode errorCode) {
-        exceptionThrown.expect(WHPRuntimeException.class);
-        exceptionThrown.expect(new TypeSafeMatcher<WHPRuntimeException>() {
+    private void expectWHPCaseException(final WHPErrorCode errorCode) {
+        exceptionThrown.expect(WHPCaseException.class);
+        exceptionThrown.expect(new TypeSafeMatcher<WHPCaseException>() {
             @Override
-            public boolean matchesSafely(WHPRuntimeException e) {
-                for (WHPError whpError : e.getErrors()) {
-                    if (whpError.getErrorCode().equals(errorCode)) {
+            public boolean matchesSafely(WHPCaseException caseException) {
+                for (CaseError caseError : caseException.getErrors()) {
+                    if (caseError.getCode().equals(errorCode.name())) {
                         return true;
                     }
                 }

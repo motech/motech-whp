@@ -9,15 +9,21 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 public class WHPCaseException extends CaseException {
 
     public WHPCaseException(WHPRuntimeException exception) {
-        super(exception.getMessage(), HttpStatus.BAD_REQUEST, buildErrorMessages(exception));
+        super(exception.getMessage(), HttpStatus.BAD_REQUEST, buildErrorMessages(exception.getErrors()));
     }
 
-    private static List<CaseError> buildErrorMessages(WHPRuntimeException exception) {
+    public WHPCaseException(WHPError whpError) {
+        super(whpError.getMessage(), HttpStatus.BAD_REQUEST, buildErrorMessages(asList(whpError)));
+    }
+
+    private static List<CaseError> buildErrorMessages(List<WHPError> whpErrors) {
         List<CaseError> errors = new ArrayList<CaseError>();
-        for (WHPError whpError : exception.getErrors()) {
+        for (WHPError whpError : whpErrors) {
             errors.add(new CaseError(whpError.getErrorCode().name(), whpError.getMessage()));
         }
         return errors;
