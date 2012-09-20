@@ -199,11 +199,6 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-tb-adherence</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-adherence-capture</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -336,11 +331,6 @@
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-platform-server-api</artifactId>
                 <version>${motech.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-tb-adherence</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp-contrib</groupId>

@@ -28,10 +28,6 @@
             <artifactId>whp-patient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-tb-adherence</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-bulk-export-import</artifactId>
         </dependency>
