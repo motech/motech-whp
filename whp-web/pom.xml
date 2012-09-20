@@ -79,7 +79,6 @@
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-paginator</artifactId>
-            <version>0.13-SNAPSHOT</version>
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
@@ -151,12 +150,14 @@
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-flash-scope</artifactId>
-            <version>${motech.contrib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-web-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-diagnostics</artifactId>
-            <version>${motech.contrib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
