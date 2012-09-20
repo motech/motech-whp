@@ -34,7 +34,7 @@ public class ContainerService {
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
     }
 
-    public Boolean exists(String containerId) {
+    public boolean exists(String containerId) {
         return allContainers.findByContainerId(containerId) != null;
     }
 }

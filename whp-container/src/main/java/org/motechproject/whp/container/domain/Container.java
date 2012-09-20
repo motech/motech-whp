@@ -15,6 +15,8 @@ public class Container extends MotechBaseDataObject {
 
     private String providerId;
 
+    private LabResults labResults;
+
     // Required for ektorp
     public Container() {
     }
