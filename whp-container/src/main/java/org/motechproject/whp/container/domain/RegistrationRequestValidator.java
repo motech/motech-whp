@@ -5,6 +5,7 @@ import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,12 @@ public class RegistrationRequestValidator {
 
     private ContainerService containerService;
     private SputumTrackingProperties sputumTrackingProperties;
+    private ProviderService providerService;
 
     @Autowired
-    public RegistrationRequestValidator(ContainerService containerService, SputumTrackingProperties sputumTrackingProperties) {
+    public RegistrationRequestValidator(ContainerService containerService, ProviderService providerService, SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
+        this.providerService = providerService;
         this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
@@ -36,6 +39,9 @@ public class RegistrationRequestValidator {
 
         if(StringUtils.isBlank(providerId))
             errors.add(String.format("Invalid provider id : %s", providerId));
+
+        if(providerService.findByProviderId(providerId) == null)
+            errors.add(String.format("Provider not registered : %s", providerId));
 
         if(!SputumTrackingInstance.isValid(instance))
             errors.add(String.format("Invalid instance : %s", instance));

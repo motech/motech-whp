@@ -11,6 +11,7 @@
     <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationRemediContext.xml"/>
+    <import resource="classpath*:applicationUserContext.xml"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.container"/>

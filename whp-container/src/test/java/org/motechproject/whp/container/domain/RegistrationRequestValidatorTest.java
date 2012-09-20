@@ -7,68 +7,95 @@ import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.now;
 
 public class RegistrationRequestValidatorTest {
     @Mock
     private ContainerService containerService;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
+    @Mock
+    private ProviderService providerService;
     private RegistrationRequestValidator registrationRequestValidator;
+    private Provider validProvider;
 
     @Before
     public void setUp() {
+        validProvider = new Provider("validProvider", "123", "dist", now());
         initMocks(this);
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(11);
-        registrationRequestValidator = new RegistrationRequestValidator(containerService, sputumTrackingProperties);
+        when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
+        registrationRequestValidator = new RegistrationRequestValidator(containerService, providerService, sputumTrackingProperties);
     }
 
     @Test
     public void shouldValidateDuplicateContainerId() {
         String containerID = "12345678910";
-        RegistrationRequest registrationRequest = new RegistrationRequest("P0001", containerID, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), containerID, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(containerService.exists(containerID)).thenReturn(true);
 
         List<String> errors = registrationRequestValidator.validate(registrationRequest);
 
         verify(containerService).exists(containerID);
-        assertEquals(1, errors.size());
-        assertEquals("Container Id already exists.", errors.get(0));
+        assertTrue(errors.contains("Container Id already exists."));
     }
 
     @Test
-    public void shouldValidateContainerId() {
-        RegistrationRequest request = new RegistrationRequest("P0001", "12345", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+    public void shouldValidateContainerId_notHavingStipulatedNumberOfDigits() {
+        RegistrationRequest request = new RegistrationRequest(validProvider.getProviderId(), "12345", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> invalidLengthErrors = registrationRequestValidator.validate(request);
-        assertEquals(1, invalidLengthErrors.size());
-        assertEquals("Container Id must be of 11 digits in length", invalidLengthErrors.get(0));
+        assertTrue(invalidLengthErrors.contains("Container Id must be of 11 digits in length"));
+    }
 
-        request = new RegistrationRequest("P0001", "123456789a", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+    @Test
+    public void shouldValidateContainerId_havingNonNumericCharacters() {
+        RegistrationRequest request = new RegistrationRequest(validProvider.getProviderId(), "123456789a", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> nonNumericErrors = registrationRequestValidator.validate(request);
-        assertEquals(1, nonNumericErrors.size());
-        assertEquals("Container Id must be of 11 digits in length", nonNumericErrors.get(0));
+        assertTrue(nonNumericErrors.contains("Container Id must be of 11 digits in length"));
     }
 
     @Test
     public void shouldValidateInstance() {
-        RegistrationRequest request = new RegistrationRequest("P0001", "12345678910", "invalid_instance");
+        RegistrationRequest request = new RegistrationRequest(validProvider.getProviderId(), "12345678910", "invalid_instance");
         List<String> invalidInstanceErrors = registrationRequestValidator.validate(request);
-        assertEquals(1, invalidInstanceErrors.size());
-        assertEquals("Invalid instance : invalid_instance", invalidInstanceErrors.get(0));
+        assertTrue(invalidInstanceErrors.contains("Invalid instance : invalid_instance"));
     }
 
     @Test
-    public void shouldValidatePresenceOfProviderId() {
+    public void shouldValidatePresenceOfProviderId_whenProviderIdIsUndefined() {
         RegistrationRequest registrationRequest = new RegistrationRequest("", "12345678910", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
-        assertEquals(1, validationErrors.size());
-        assertEquals("Invalid provider id : ", validationErrors.get(0));
+        assertTrue(validationErrors.contains("Invalid provider id : "));
+    }
+
+    @Test
+    public void shouldValidatePresenceOfProviderId_whenProviderExists() {
+        RegistrationRequest registrationRequest = new RegistrationRequest(validProvider.getProviderId(), "11111111111", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(providerService).findByProviderId(validProvider.getProviderId());
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    public void shouldValidatePresenceOfProviderId_whenProviderDoesNotExist() {
+        String unregisteredProviderId = "UnregisteredProviderId";
+        RegistrationRequest registrationRequest = new RegistrationRequest(unregisteredProviderId, "11111111111", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        List<String> validationErrors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(providerService).findByProviderId(unregisteredProviderId);
+        assertTrue(!validationErrors.isEmpty());
+        assertTrue(validationErrors.contains("Provider not registered : UnregisteredProviderId"));
     }
 }
