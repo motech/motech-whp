@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assert.assertNotNull;
 
 @ContextConfiguration(locations = "classpath*:/applicationContainerMappingContext.xml")
 public class AllProviderContainerMappingsIT extends SpringIntegrationTest{
@@ -39,17 +40,31 @@ public class AllProviderContainerMappingsIT extends SpringIntegrationTest{
 
     @Test
     public void shouldAddProviderContainerMapping(){
-        allProviderContainerMappings.add(providerContainerMapping);
+        addAndMarkForDeletion(providerContainerMapping);
 
         assertThat(allProviderContainerMappings.getAll(), hasItem(providerContainerMapping));
         assertEquals(3, allProviderContainerMappings.get(providerContainerMapping.getId()).getContainerRanges().size());
-
-        markForDeletion(providerContainerMapping);
     }
 
+    @Test
+    public void shouldFindProviderContainerMapping() {
+        addAndMarkForDeletion(providerContainerMapping);
+
+        ProviderContainerMapping containerMapping = allProviderContainerMappings.findByProviderId(providerId);
+
+        assertNotNull(containerMapping);
+        assertEquals(3, containerMapping.getContainerRanges().size());
+        assertEquals(100, containerMapping.getContainerRanges().get(0).getFrom());
+        assertEquals(199, containerMapping.getContainerRanges().get(0).getTo());
+    }
 
     @Override
     public CouchDbConnector getDBConnector() {
      return couchDbConnector;
+    }
+
+    private void addAndMarkForDeletion(ProviderContainerMapping providerContainerMapping) {
+        allProviderContainerMappings.add(providerContainerMapping);
+        markForDeletion(providerContainerMapping);
     }
 }

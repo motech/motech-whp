@@ -6,7 +6,7 @@ import org.motechproject.importer.annotation.Validate;
 import org.motechproject.importer.domain.ValidationResponse;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
-import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
+import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
 import org.motechproject.whp.importer.csv.mapper.ContainerMappingRequestMapper;
 import org.motechproject.whp.importer.csv.request.ContainerMappingRequest;
@@ -24,13 +24,13 @@ public class ContainerMappingImporter {
 
     private RequestValidator validator;
     private ContainerMappingRequestMapper mapper;
-    private AllProviderContainerMappings allProviderContainerMappings;
+    private ProviderContainerMappingService providerContainerMappingService;
 
     @Autowired
-    public ContainerMappingImporter(RequestValidator validator, ContainerMappingRequestMapper containerMappingRequestMapper, AllProviderContainerMappings allProviderContainerMappings) {
+    public ContainerMappingImporter(RequestValidator validator, ContainerMappingRequestMapper containerMappingRequestMapper, ProviderContainerMappingService providerContainerMappingService) {
         this.validator = validator;
         this.mapper = containerMappingRequestMapper;
-        this.allProviderContainerMappings = allProviderContainerMappings;
+        this.providerContainerMappingService = providerContainerMappingService;
     }
 
     @Validate
@@ -56,7 +56,7 @@ public class ContainerMappingImporter {
         for (Object object : objects) {
             try {
                 ProviderContainerMapping providerContainerMapping = mapper.map((ContainerMappingRequest) object);
-                allProviderContainerMappings.add(providerContainerMapping);
+                providerContainerMappingService.add(providerContainerMapping);
                 importerLogger.info("Storing container mapping with provider id :" + providerContainerMapping.getProviderId());
             } catch (Exception exception) {
                 importerLogger.error(exception);
