@@ -41,4 +41,8 @@ public class ContainerService {
     public Container getContainer(String containerId) {
         return allContainers.findByContainerId(containerId);
     }
+
+    public void update(Container container) {
+        allContainers.update(container);
+    }
 }

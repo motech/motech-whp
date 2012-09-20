@@ -5,8 +5,8 @@ import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebRequest>{
 
     private ContainerService containerService;
+    private SputumLabResultsMapper sputumLabResultsMapper;
 
     @Autowired
-    public SputumLabResultsWebService(ContainerService containerService) {
+    public SputumLabResultsWebService(ContainerService containerService, SputumLabResultsMapper sputumLabResultsMapper) {
         super(SputumLabResultsWebRequest.class);
         this.containerService = containerService;
+        this.sputumLabResultsMapper = sputumLabResultsMapper;
     }
 
     public void updateCase(SputumLabResultsWebRequest sputumLabResultsWebRequest) {
@@ -35,6 +37,8 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
             throw new WHPRuntimeException(WHPErrorCode.INVALID_CONTAINER_ID);
         }
 
+        sputumLabResultsMapper.map(sputumLabResultsWebRequest, container);
+        containerService.update(container);
     }
 
     public void createCase(SputumLabResultsWebRequest ccCase) throws CaseException {

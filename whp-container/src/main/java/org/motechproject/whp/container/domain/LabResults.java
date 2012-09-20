@@ -9,4 +9,6 @@ public class LabResults {
     private String smearTestResult1;
     private LocalDate smearTestDate2;
     private String smearTestResult2;
+    private  String labName;
+    private String labNumber;
 }

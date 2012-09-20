@@ -16,13 +16,17 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
+import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.http.MediaType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.joda.time.LocalDate.parse;
+import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -40,7 +44,7 @@ public class SputumLabResultsWebServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService));
+        sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService, new SputumLabResultsMapper()));
         sputumLabResultsWebService.setResponseMessageBuilder(mock(ResponseMessageBuilder.class));
     }
 
@@ -143,6 +147,16 @@ public class SputumLabResultsWebServiceTest {
         Container container = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT);
 
         when(containerService.getContainer(containerId)).thenReturn(container);
+
+        sputumLabResultsWebService.updateCase(request);
+
+        ArgumentCaptor<Container> containerArgumentCaptor = ArgumentCaptor.forClass(Container.class);
+        verify(containerService).update(containerArgumentCaptor.capture());
+
+        assertThat(container.getLabResults().getSmearTestDate1(), is(parse(request.getSmear_test_date_1(), forPattern(DATE_FORMAT))));
+        assertThat(container.getLabResults().getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));
+        assertThat(container.getLabResults().getSmearTestResult1(), is(request.getSmear_test_result_1()));
+        assertThat(container.getLabResults().getSmearTestResult2(), is(request.getSmear_test_result_2()));
     }
 
     private void expectWHPRuntimeException(final WHPErrorCode errorCode) {

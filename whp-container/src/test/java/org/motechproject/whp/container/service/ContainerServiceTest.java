@@ -84,6 +84,15 @@ public class ContainerServiceTest extends BaseUnitTest {
         verify(allContainers).findByContainerId(containerId);
     }
 
+    @Test
+    public void shouldUpdateContainer(){
+        Container container = new Container("providerId", "containerId", SputumTrackingInstance.IN_TREATMENT);
+
+        containerService.update(container);
+
+        verify(allContainers).update(container);
+    }
+
     @After
     public void verifyNoMoreInteractionsOnMocks() {
         verifyNoMoreInteractions(allContainers);

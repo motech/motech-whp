@@ -55,6 +55,8 @@ public class AllContainersIT extends SpringIntegrationTest {
         labResults.setSmearTestDate2(new LocalDate());
         labResults.setSmearTestResult1("Positive");
         labResults.setSmearTestResult2("Positive");
+        labResults.setLabName("labName");
+        labResults.setLabNumber("labNumber");
 
         containerFromDB.setLabResults(labResults);
 
