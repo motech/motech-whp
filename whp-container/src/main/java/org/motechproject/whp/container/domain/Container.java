@@ -4,6 +4,7 @@ import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 @Data
@@ -18,7 +19,7 @@ public class Container extends MotechBaseDataObject {
 
     private LabResults labResults;
 
-    private DateTime creationDate;
+    private DateTime creationTime;
 
     // Required for ektorp
     public Container() {
@@ -28,11 +29,11 @@ public class Container extends MotechBaseDataObject {
         this.providerId = providerId;
         this.containerId = containerId;
         this.instance = instance;
-        this.creationDate= creationTime;
+        this.creationTime = creationTime;
+
     }
 
-
-    public DateTime getCreationDate() {
-        return creationDate;
+    public void setCreationTime(DateTime creationTime) {
+        this.creationTime = DateUtil.setTimeZone(creationTime);
     }
 }

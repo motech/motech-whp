@@ -45,7 +45,7 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
-        assertEquals(now, containerReturned.getCreationDate());
+        assertEquals(now, containerReturned.getCreationTime());
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 
@@ -67,10 +67,11 @@ public class AllContainersIT extends SpringIntegrationTest {
         containerFromDB.setLabResults(labResults);
 
         allContainers.update(containerFromDB);
+        markForDeletion(containerFromDB);
 
         Container containerWithLabResults = allContainers.findByContainerId(containerId);
 
-        assertEquals(now, containerWithLabResults.getCreationDate());
+        assertEquals(now, containerWithLabResults.getCreationTime());
         assertThat(containerWithLabResults.getLabResults(), is(labResults));
     }
 }

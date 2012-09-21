@@ -54,7 +54,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container actualContainer = captor.getValue();
         assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
         assertEquals(containerId, actualContainer.getContainerId());
-        assertEquals(creationDate, actualContainer.getCreationDate());
+        assertEquals(creationDate, actualContainer.getCreationTime());
         assertEquals(instance, actualContainer.getInstance());
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationDate);

@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -90,7 +92,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBodyWithValidationErrors.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().xml("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">\n    <message nature=\"submit_error\">Lab results are incomplete</message>\n    <errors>\n        <error>\n            <code>SPUTUM_LAB_RESULT_IS_INCOMPLETE</code>\n            <message>Lab results are incomplete</message>\n        </error>\n    </errors>\n</OpenRosaResponse>"));
+                .andExpect(content().string(allOf(containsString("<message nature=\"submit_error\">Lab results are incomplete</message>"), containsString("<message>Lab results are incomplete</message>"))));
     }
 
     @Test
@@ -112,7 +114,8 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBodyWithValidationErrors.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().xml("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">\n    <message nature=\"submit_error\">field:api_key:value should not be null:field:api_key:api_key:is invalid.:field:update_type:must match \"lab_results\":field:update_type:value should not be null</message>\n    <errors>\n        <error>\n            <code>FIELD_VALIDATION_FAILED</code>\n            <message>field:api_key:value should not be null</message>\n        </error>\n        <error>\n            <code>FIELD_VALIDATION_FAILED</code>\n            <message>field:api_key:api_key:is invalid.</message>\n        </error>\n        <error>\n            <code>FIELD_VALIDATION_FAILED</code>\n            <message>field:update_type:must match \"lab_results\"</message>\n        </error>\n        <error>\n            <code>FIELD_VALIDATION_FAILED</code>\n            <message>field:update_type:value should not be null</message>\n        </error>\n    </errors>\n</OpenRosaResponse>"));
+                .andExpect(content().string(allOf(containsString("<message nature=\"submit_error\">field:api_key:value should not be null:field:api_key:api_key:is invalid.:field:update_type:must match \"lab_results\":field:update_type:value should not be null</message>"))));
+
     }
 
 }
