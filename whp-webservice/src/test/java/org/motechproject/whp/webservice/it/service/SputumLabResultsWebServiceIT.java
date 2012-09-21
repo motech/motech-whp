@@ -65,8 +65,8 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
         assertThat(container.getLabResults().getSmearTestDate1().toString(DATE_FORMAT), is("01/03/2012"));
         assertThat(container.getLabResults().getSmearTestDate2().toString(DATE_FORMAT), is("01/03/2012"));
-        assertThat(container.getLabResults().getSmearTestResult1(), is("Positive"));
-        assertThat(container.getLabResults().getSmearTestResult2(), is("Positive"));
+        assertThat(container.getLabResults().getSmearTestResult1().value(), is("Positive"));
+        assertThat(container.getLabResults().getSmearTestResult2().value(), is("Positive"));
         assertThat(container.getLabResults().getLabName(), is("XYZ"));
         assertThat(container.getLabResults().getLabNumber(), is("1234"));
     }
