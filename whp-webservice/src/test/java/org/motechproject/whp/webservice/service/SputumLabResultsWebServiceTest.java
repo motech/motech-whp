@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
 import org.motechproject.casexml.service.exception.CaseError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -41,10 +42,13 @@ public class SputumLabResultsWebServiceTest {
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
 
+    @Mock
+    private RequestValidator validator;
+
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService, new SputumLabResultsMapper()));
+        sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService, new SputumLabResultsMapper(), validator));
         sputumLabResultsWebService.setResponseMessageBuilder(mock(ResponseMessageBuilder.class));
     }
 

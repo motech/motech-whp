@@ -7,6 +7,8 @@ import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.whp.common.validation.APIKeyValidator;
 
+import javax.validation.constraints.Pattern;
+
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
@@ -26,6 +28,7 @@ public class SputumLabResultsWebRequest {
 
 
     @NotNullOrEmpty
+    @Pattern(regexp = "lab_results")
     private String update_type;
 
     @DateTimeFormat(pattern = DATE_FORMAT)

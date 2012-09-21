@@ -5,8 +5,10 @@ import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
@@ -24,12 +26,14 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
 
     private ContainerService containerService;
     private SputumLabResultsMapper sputumLabResultsMapper;
+    private RequestValidator validator;
 
     @Autowired
-    public SputumLabResultsWebService(ContainerService containerService, SputumLabResultsMapper sputumLabResultsMapper) {
+    public SputumLabResultsWebService(ContainerService containerService, SputumLabResultsMapper sputumLabResultsMapper, RequestValidator validator) {
         super(SputumLabResultsWebRequest.class);
         this.containerService = containerService;
         this.sputumLabResultsMapper = sputumLabResultsMapper;
+        this.validator = validator;
     }
 
     public void updateCase(SputumLabResultsWebRequest sputumLabResultsWebRequest) {
@@ -40,6 +44,12 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
         Container container = containerService.getContainer(sputumLabResultsWebRequest.getCase_id());
         if(container ==null){
             throwWHPCaseException(INVALID_CONTAINER_ID);
+        }
+
+        try {
+            validator.validate(sputumLabResultsWebRequest, UpdateScope.simpleUpdateScope);
+        }catch (WHPRuntimeException e){
+            throw new WHPCaseException(e);
         }
 
         sputumLabResultsMapper.map(sputumLabResultsWebRequest, container);
