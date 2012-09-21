@@ -65,7 +65,7 @@
         for (int i=responsesGotSoFar.size()-1; i>=0; i--) {
     %>
     <div class="well" style="position: relative;">
-    <pre><%=responsesGotSoFar.get(i)%></pre>
+    <pre><textarea rows="20" cols="200" style="width: 880px; height: 370px;" disabled="true"><%=responsesGotSoFar.get(i)%></textarea></pre>
     </div>
     <br/>
     <%
