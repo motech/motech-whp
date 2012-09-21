@@ -38,8 +38,8 @@ public class SputumLabResultsMapperTest {
 
         assertThat(labResults.getSmearTestDate1(), is(parse(request.getSmear_test_date_1(), forPattern(DATE_FORMAT))));
         assertThat(labResults.getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));
-        assertThat(labResults.getSmearTestResult1(), is(request.getSmear_test_result_1()));
-        assertThat(labResults.getSmearTestResult2(), is(request.getSmear_test_result_2()));
+        assertThat(labResults.getSmearTestResult1().value(), is(request.getSmear_test_result_1()));
+        assertThat(labResults.getSmearTestResult2().value(), is(request.getSmear_test_result_2()));
         assertThat(labResults.getLabName(), is(request.getLab_name()));
         assertThat(labResults.getLabNumber(), is(request.getLab_number()));
     }

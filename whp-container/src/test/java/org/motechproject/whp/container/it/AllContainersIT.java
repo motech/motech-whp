@@ -7,6 +7,7 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,8 +54,8 @@ public class AllContainersIT extends SpringIntegrationTest {
         LabResults labResults = new LabResults();
         labResults.setSmearTestDate1(new LocalDate());
         labResults.setSmearTestDate2(new LocalDate());
-        labResults.setSmearTestResult1("Positive");
-        labResults.setSmearTestResult2("Positive");
+        labResults.setSmearTestResult1(SmearTestResult.Positive);
+        labResults.setSmearTestResult2(SmearTestResult.Positive);
         labResults.setLabName("labName");
         labResults.setLabNumber("labNumber");
 

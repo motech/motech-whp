@@ -3,9 +3,11 @@ package org.motechproject.whp.webservice.request;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.DateTimeFormat;
+import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.whp.common.validation.APIKeyValidator;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 
 import javax.validation.constraints.Pattern;
 
@@ -34,11 +36,13 @@ public class SputumLabResultsWebRequest {
     @DateTimeFormat(pattern = DATE_FORMAT)
     private String smear_test_date_1;
 
+    @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_1;
 
     @DateTimeFormat(pattern = DATE_FORMAT)
     private String smear_test_date_2;
 
+    @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_2;
 
     private String lab_name;
