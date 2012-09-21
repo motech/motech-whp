@@ -10,6 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
 import org.motechproject.casexml.service.exception.CaseError;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
@@ -70,7 +71,7 @@ public class SputumLabResultsWebServiceTest {
                 "</update>\n" +
                 "</case>";
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now()));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -129,7 +130,7 @@ public class SputumLabResultsWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now()));
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -148,7 +149,7 @@ public class SputumLabResultsWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        Container container = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT);
+        Container container = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
 
         when(containerService.getContainer(containerId)).thenReturn(container);
 

@@ -41,8 +41,8 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldRegisterAContainer() throws IOException, TemplateException {
-        DateTime dateModified = DateUtil.now();
-        mockCurrentDate(dateModified);
+        DateTime creationDate = DateUtil.now();
+        mockCurrentDate(creationDate);
         String providerId = "provider_one";
         String containerId = "1234567890";
         SputumTrackingInstance instance = SputumTrackingInstance.IN_TREATMENT;
@@ -54,9 +54,10 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container actualContainer = captor.getValue();
         assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
         assertEquals(containerId, actualContainer.getContainerId());
+        assertEquals(creationDate, actualContainer.getCreationDate());
         assertEquals(instance, actualContainer.getInstance());
 
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, dateModified);
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationDate);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
     }
 
@@ -73,9 +74,9 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetContainerByContainerId(){
+    public void shouldGetContainerByContainerId() {
         String containerId = "containerId";
-        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT);
+        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
         when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
 
         Container container = containerService.getContainer(containerId);
@@ -85,8 +86,8 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldUpdateContainer(){
-        Container container = new Container("providerId", "containerId", SputumTrackingInstance.IN_TREATMENT);
+    public void shouldUpdateContainer() {
+        Container container = new Container("providerId", "containerId", SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
 
         containerService.update(container);
 

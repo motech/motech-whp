@@ -28,10 +28,12 @@ public class ContainerService {
 
     public void registerContainer(RegistrationRequest registrationRequest) throws IOException, TemplateException {
         SputumTrackingInstance instance = SputumTrackingInstance.getInstanceForValue(registrationRequest.getInstance());
-        Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance);
+        DateTime creationTime = DateUtil.now();
+
+        Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime);
         allContainers.add(container);
 
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), DateUtil.now());
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
     }
 

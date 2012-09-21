@@ -1,8 +1,10 @@
 package org.motechproject.whp.container.it;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
@@ -22,6 +24,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     @Autowired
     AllContainers allContainers;
     private Container container;
+    private DateTime now;
 
     private void addAndMarkForDeletion(Container container) {
         allContainers.add(container);
@@ -30,7 +33,8 @@ public class AllContainersIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        container = new Container("P00001", "1234567890", SputumTrackingInstance.PRE_TREATMENT);
+        now = DateUtil.now();
+        container = new Container("P00001", "1234567890", SputumTrackingInstance.PRE_TREATMENT, now);
     }
 
     @Test
@@ -41,11 +45,12 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
+        assertEquals(now, containerReturned.getCreationDate());
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 
     @Test
-    public void shouldUpdateLabResults(){
+    public void shouldUpdateLabResults() {
         addAndMarkForDeletion(container);
 
         String containerId = "1234567890";
@@ -65,6 +70,7 @@ public class AllContainersIT extends SpringIntegrationTest {
 
         Container containerWithLabResults = allContainers.findByContainerId(containerId);
 
+        assertEquals(now, containerWithLabResults.getCreationDate());
         assertThat(containerWithLabResults.getLabResults(), is(labResults));
     }
 }
