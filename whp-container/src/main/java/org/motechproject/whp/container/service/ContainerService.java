@@ -2,6 +2,7 @@ package org.motechproject.whp.container.service;
 
 import freemarker.template.TemplateException;
 import org.joda.time.DateTime;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.container.contract.RegistrationRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -30,7 +31,7 @@ public class ContainerService {
         Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance);
         allContainers.add(container);
 
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), DateTime.now());
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), DateUtil.now());
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
     }
 

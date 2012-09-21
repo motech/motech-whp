@@ -1,6 +1,7 @@
 package org.motechproject.whp.importer.csv;
 
 import org.joda.time.DateTime;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
@@ -94,7 +95,7 @@ public class ProviderRecordImporter {
     }
 
     private ProviderRequest mapToProviderRequest(ImportProviderRequest importProviderRequest) {
-        ProviderRequest providerRequest = new ProviderRequest(importProviderRequest.getProviderId(), importProviderRequest.getDistrict(), importProviderRequest.getPrimaryMobile(), DateTime.now());
+        ProviderRequest providerRequest = new ProviderRequest(importProviderRequest.getProviderId(), importProviderRequest.getDistrict(), importProviderRequest.getPrimaryMobile(), DateUtil.now());
         providerRequest.setSecondaryMobile(importProviderRequest.getSecondaryMobile());
         providerRequest.setTertiaryMobile(importProviderRequest.getTertiaryMobile());
         return providerRequest;
