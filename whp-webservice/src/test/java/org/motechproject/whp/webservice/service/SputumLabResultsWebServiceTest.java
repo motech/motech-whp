@@ -159,8 +159,8 @@ public class SputumLabResultsWebServiceTest {
 
         assertThat(container.getLabResults().getSmearTestDate1(), is(parse(request.getSmear_test_date_1(), forPattern(DATE_FORMAT))));
         assertThat(container.getLabResults().getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));
-        assertThat(container.getLabResults().getSmearTestResult1(), is(request.getSmear_test_result_1()));
-        assertThat(container.getLabResults().getSmearTestResult2(), is(request.getSmear_test_result_2()));
+        assertThat(container.getLabResults().getSmearTestResult1().value(), is(request.getSmear_test_result_1()));
+        assertThat(container.getLabResults().getSmearTestResult2().value(), is(request.getSmear_test_result_2()));
     }
 
     private void expectWHPCaseException(final WHPErrorCode errorCode) {
