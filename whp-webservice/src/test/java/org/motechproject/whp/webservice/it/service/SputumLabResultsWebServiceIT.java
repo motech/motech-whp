@@ -15,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
@@ -88,9 +89,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBodyWithValidationErrors.getBytes()).contentType(MediaType.APPLICATION_XML))
-                .andExpect(status().isBadRequest());
-                //.andExpect(content().string("<OpenRosaResponse xmlns=\\\"http://openrosa.org/http/response\\\">\\n    <message nature=\\\"submit_error\\\">Lab results are incomplete</message>\\n    <errors>\\n        <error>\\n            <code>SPUTUM_LAB_RESULT_IS_INCOMPLETE</code>\\n            <message>Lab results are incomplete</message>\\n        </error>\\n    </errors>\\n</OpenRosaResponse>\\n\""));
-        
-
+                .andExpect(status().isBadRequest())
+                .andExpect(content().xml("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">\n    <message nature=\"submit_error\">Lab results are incomplete</message>\n    <errors>\n        <error>\n            <code>SPUTUM_LAB_RESULT_IS_INCOMPLETE</code>\n            <message>Lab results are incomplete</message>\n        </error>\n    </errors>\n</OpenRosaResponse>"));
     }
 }
