@@ -1,4 +1,4 @@
-package org.motechproject.whp.common.validation;
+package org.motechproject.whp.webservice.validation;
 
 import org.motechproject.validation.validator.root.NamedConstraintValidator;
 import org.springframework.beans.factory.annotation.Autowired;

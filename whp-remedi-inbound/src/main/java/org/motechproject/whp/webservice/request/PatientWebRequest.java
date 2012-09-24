@@ -5,7 +5,7 @@ import org.motechproject.validation.constraints.*;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.refdata.domain.*;
-import org.motechproject.whp.common.validation.APIKeyValidator;
+import org.motechproject.whp.webservice.validation.APIKeyValidator;
 import org.motechproject.whp.user.validation.ProviderIdValidator;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 

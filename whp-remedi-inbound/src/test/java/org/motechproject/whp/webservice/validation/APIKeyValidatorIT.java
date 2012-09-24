@@ -1,4 +1,4 @@
-package org.motechproject.whp.common.validation;
+package org.motechproject.whp.webservice.validation;
 
 import lombok.Data;
 import org.ektorp.CouchDbConnector;

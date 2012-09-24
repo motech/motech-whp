@@ -4,7 +4,7 @@ import lombok.Data;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.common.validation.APIKeyValidator;
+import org.motechproject.whp.webservice.validation.APIKeyValidator;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
