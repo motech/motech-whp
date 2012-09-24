@@ -6,10 +6,12 @@
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
         <version>0.4-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>whp-remedi</name>
-    <artifactId>whp-remedi</artifactId>
+    <name>whp-remedi-inbound</name>
+    <artifactId>whp-remedi-inbound</artifactId>
+    <groupId>org.motechproject.whp</groupId>
     <properties>
         <build.dir>../build</build.dir>
     </properties>
@@ -17,31 +19,49 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-refdata</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-common</artifactId>
-            <scope>test</scope>
             <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-container</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-ivr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
-            <artifactId>motech-http-client</artifactId>
+            <artifactId>case-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>openrosa-registration-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test-mvc</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-http-client</artifactId>
         </dependency>
     </dependencies>
     <build>

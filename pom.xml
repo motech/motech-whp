@@ -29,12 +29,12 @@
         <module>whp-patient</module>
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
-        <module>whp-webservice</module>
+        <module>whp-remedi-outbound</module>
         <module>whp-ivr</module>
+        <module>whp-remedi-inbound</module>
         <module>whp-web</module>
         <module>whp-reporting</module>
         <module>whp-container</module>
-        <module>whp-remedi</module>
         <module>whp-container-mapping</module>
     </modules>
 
@@ -264,12 +264,12 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-webservice</artifactId>
+                <artifactId>whp-remedi-inbound</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-webservice</artifactId>
+                <artifactId>whp-remedi-inbound</artifactId>
                 <version>${project.version}</version>
                 <classifier>tests</classifier>
                 <scope>test</scope>
@@ -285,7 +285,7 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-remedi</artifactId>
+                <artifactId>whp-remedi-outbound</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

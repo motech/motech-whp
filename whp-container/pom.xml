@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-remedi</artifactId>
+            <artifactId>whp-remedi-outbound</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
