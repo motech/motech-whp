@@ -20,7 +20,6 @@ public class SputumLabResultsWebRequest {
     @NotNullOrEmpty
     private String case_id;
 
-    @NotNullOrEmpty
     @NamedConstraint(name = APIKeyValidator.API_KEY_VALIDATION)
     private String api_key;
 

@@ -96,12 +96,12 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnErrorResponseOnValidationError_forEmptyUpdateTypeAndApiKey() throws Exception {
+    public void shouldReturnErrorResponseOnValidationError_forInvalidApiKey() throws Exception {
         String requestBodyWithValidationErrors = "<?xml version=\"1.0\"?>\n" +
                 "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"12345\" date_modified=\"03/04/2012\n" +
                 "11:23:40\" user_id=\"system\" api_key=\"\">\n" +
                 "<update>\n" +
-                "<update_type></update_type>\n" +
+                "<update_type>lab_results</update_type>\n" +
                 "<smear_test_date_1>01/03/2012</smear_test_date_1>\n" +
                 "<smear_test_result_1>Positive</smear_test_result_1>\n" +
                 "<smear_test_date_2>01/03/2012</smear_test_date_2>\n" +
@@ -114,7 +114,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBodyWithValidationErrors.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(allOf(containsString("<message nature=\"submit_error\">field:api_key:value should not be null:field:api_key:api_key:is invalid.:field:update_type:must match \"lab_results\":field:update_type:value should not be null</message>"))));
+                .andExpect(content().string(containsString("<message nature=\"submit_error\">field:api_key:api_key:is invalid.</message>")));
 
     }
 
