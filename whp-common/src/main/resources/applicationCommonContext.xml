@@ -10,7 +10,7 @@
     <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
     <import resource="classpath*:applicationValidationContext.xml"/>
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
-    <context:property-placeholder location="classpath*:*.properties"/>
+    <context:property-placeholder location="classpath*:couchdb.properties,dozer.properties,remedi.properties,osgi.properties,activemq.properties,whp.properties" ignore-unresolvable="true"/>
     <context:component-scan base-package="org.motechproject.whp.common"/>
 
     <bean id="whpDbConnector" class="org.ektorp.impl.StdCouchDbConnector">

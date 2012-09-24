@@ -7,7 +7,7 @@
 
     <import resource="classpath*:applicationContextHttpClient.xml"/>
 
-    <context:property-placeholder location="classpath*:*.properties"/>
+    <context:property-placeholder location="classpath*:httpClient.properties,dozer.properties,remedi.properties" ignore-unresolvable="true"/>
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.remedi"/>
 </beans>
