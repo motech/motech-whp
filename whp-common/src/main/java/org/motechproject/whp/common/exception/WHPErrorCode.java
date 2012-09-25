@@ -22,7 +22,8 @@ public enum WHPErrorCode {
     WEB_ACCOUNT_REGISTRATION_ERROR("Error occured while tying to register user"),
 
     INVALID_CONTAINER_ID("No such container id in motech"),
-    SPUTUM_LAB_RESULT_IS_INCOMPLETE("Lab results are incomplete");
+    SPUTUM_LAB_RESULT_IS_INCOMPLETE("Lab results are incomplete"),
+    CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE("All the fields are mandatory");
 
     private String message;
 
