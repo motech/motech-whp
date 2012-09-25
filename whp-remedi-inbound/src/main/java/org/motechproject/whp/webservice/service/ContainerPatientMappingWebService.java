@@ -5,8 +5,11 @@ import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +21,13 @@ import static org.motechproject.whp.common.exception.WHPErrorCode.CONTAINER_PATI
 public class ContainerPatientMappingWebService extends CaseService<ContainerPatientMappingWebRequest>{
 
     private ContainerService containerService;
+    private PatientService patientService;
 
-    public ContainerPatientMappingWebService(ContainerService containerService) {
+    @Autowired
+    public ContainerPatientMappingWebService(ContainerService containerService, PatientService patientService) {
         super(ContainerPatientMappingWebRequest.class);
         this.containerService = containerService;
+        this.patientService = patientService;
     }
 
     @Override
@@ -38,8 +44,17 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if(!containerService.exists(containerPatientMappingWebRequest.getCase_id())){
             throw new WHPCaseException(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
         }
-        // If patient is not registered bomb
-        // if container is not registered bomb
+
+        Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
+        if(null == patient) {
+            throw new WHPCaseException(new WHPError(WHPErrorCode.PATIENT_NOT_FOUND));
+        } else if(patient.getCurrentTreatment()==null || !patient.getCurrentTreatment().getTbId().equals(containerPatientMappingWebRequest.getTb_id())){
+            throw new WHPCaseException(new WHPError(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
+        }
+
+
+
+
         // if container doesn't have lab results bomb
         // if is Patient.getCurrentTreatment() is closed bomb
     }

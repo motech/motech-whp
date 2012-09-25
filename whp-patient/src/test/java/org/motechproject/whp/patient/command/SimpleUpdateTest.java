@@ -74,7 +74,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
         patientRequest.setCase_id("wrongCaseId");
 
-        expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+        expectWHPRuntimeException(WHPErrorCode.INVALID_PATIENT_CASE_ID);
         simpleUpdate.apply(patientRequest);
         verify(allPatients, never()).update(patient);
     }

@@ -184,14 +184,14 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionForUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+        expectWHPRuntimeException(WHPErrorCode.INVALID_PATIENT_CASE_ID);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields().withCaseId("invalidCaseId").build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
     }
 
     @Test
     public void shouldThrowExceptionForTreatmentUpdateWhenPatientWithGivenCaseIdDoesNotExist() {
-        expectWHPRuntimeException(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+        expectWHPRuntimeException(WHPErrorCode.INVALID_PATIENT_CASE_ID);
         PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForOpenNewTreatment().withCaseId("invalidCaseId").build();
         commandFactory.updateFor(UpdateScope.openTreatment).apply(patientRequest);
     }

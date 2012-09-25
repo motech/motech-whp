@@ -94,7 +94,7 @@ public class PatientService {
         Patient patient = allPatients.findByPatientId(patientId);
         List<WHPErrorCode> errors = new ArrayList<>();
         if (patient == null) {
-            errors.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+            errors.add(WHPErrorCode.INVALID_PATIENT_CASE_ID);
             return false;
         } else if (!patient.hasCurrentTreatment()) {
             errors.add(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);

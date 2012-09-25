@@ -13,7 +13,7 @@ public enum WHPErrorCode {
 
     DUPLICATE_CASE_ID("Patient with the same case-id is already registered"),
     DUPLICATE_PROVIDER_ID("Provider with the same provider-id is already registered"),
-    CASE_ID_DOES_NOT_EXIST("Invalid case-id. No such patient"),
+    INVALID_PATIENT_CASE_ID("Invalid case-id. No such patient"),
     NO_EXISTING_TREATMENT_FOR_CASE("Case does not have any current treatment"),
     NULL_VALUE_IN_WEIGHT_STATISTICS("Invalid weight statistics : null value"),
     NULL_VALUE_IN_ADDRESS("Invalid address : null value"),
@@ -23,7 +23,8 @@ public enum WHPErrorCode {
 
     INVALID_CONTAINER_ID("No such container id in motech"),
     SPUTUM_LAB_RESULT_IS_INCOMPLETE("Lab results are incomplete"),
-    CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE("All the fields are mandatory");
+    CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE("All the fields are mandatory"),
+    PATIENT_NOT_FOUND("No such patient is registered in WHP");
 
     private String message;
 

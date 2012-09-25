@@ -1,8 +1,15 @@
 package org.motechproject.whp.webservice.it.service;
 
+import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.webservice.service.ContainerPatientMappingWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +27,25 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     ContainerPatientMappingWebService containerPatientMappingWebService;
+
+    @Autowired
+    AllPatients allPatients;
+
+    @Autowired
+    AllContainers allContainers;
+
+    @Before
+    public void setup() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.setPatientId("cha01102001");
+        patient.getCurrentTreatment().setTbId("cha01102001");
+        allPatients.add(patient);
+
+        Container container = new Container("provierId", "12651654165465", null, DateTime.now());
+        allContainers.add(container);
+
+        markForDeletion(patient, container);
+    }
 
     @Test
     public void shouldReturnSuccessResponse_forXMLRequest() throws Exception {

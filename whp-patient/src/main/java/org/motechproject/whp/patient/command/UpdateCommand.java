@@ -21,7 +21,7 @@ public abstract class UpdateCommand {
 
     protected boolean noCurrentTreatmentExists(Patient patient, List<WHPErrorCode> errorCodes) {
         if (patient == null) {
-            errorCodes.add(WHPErrorCode.CASE_ID_DOES_NOT_EXIST);
+            errorCodes.add(WHPErrorCode.INVALID_PATIENT_CASE_ID);
             return true;
         }
         if (!patient.hasCurrentTreatment()) {
