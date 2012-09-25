@@ -48,7 +48,7 @@ public class ContainerRegistrationRequestValidatorTest {
         List<String> errors = registrationRequestValidator.validate(registrationRequest);
 
         verify(containerService).exists(containerID);
-        assertTrue(errors.contains("Container Id already exists."));
+        assertTrue(errors.contains("Container Id already registered."));
     }
 
     @Test

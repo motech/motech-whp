@@ -54,7 +54,7 @@ public class ContainerRegistrationRequestValidator {
             errors.add(String.format("Invalid instance : %s", instance));
 
         if (containerService.exists(containerId))
-            errors.add("Container Id already exists.");
+            errors.add("Container Id already registered.");
 
         return errors;
     }
