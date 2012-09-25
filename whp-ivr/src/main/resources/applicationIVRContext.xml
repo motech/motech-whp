@@ -7,7 +7,7 @@
 
 
     <!--<context:property-placeholder location="classpath*:*.properties" ignore-unresolvable="true"/>-->
-    <context:property-placeholder location="classpath*:httpClient.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath*:httpclient.properties" ignore-unresolvable="true"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationServiceContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>

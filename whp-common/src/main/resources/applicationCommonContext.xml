@@ -17,7 +17,7 @@
     <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:activemq.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:httpClient.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:httpclient.properties" ignore-unresolvable="true"/>
 
     <context:component-scan base-package="org.motechproject.whp.common"/>
 

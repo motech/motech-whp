@@ -7,7 +7,7 @@
 
     <import resource="classpath*:applicationContextHttpClient.xml"/>
 
-    <context:property-placeholder location="classpath*:httpClient.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath*:httpclient.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:remedi.properties" ignore-unresolvable="true"/>
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.remedi"/>
