@@ -235,7 +235,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <warName>whp-${version}</warName>
+                    <warName>whp-${project.version}</warName>
                     <overlays>
                         <overlay>
                             <groupId>org.motechproject.whp-contrib</groupId>
@@ -404,7 +404,7 @@
                                 <contextPath>/whp</contextPath>
                             </webAppConfig>
                             <webApp>
-                                target/whp-${version}.war
+                                target/whp-${project.version}.war
                             </webApp>
                             <stopKey>secret</stopKey>
                             <stopPort>6667</stopPort>
@@ -523,7 +523,7 @@
                                 <contextPath>/whp</contextPath>
                             </webAppConfig>
                             <webApp>
-                                target/whp-${version}.war
+                                target/whp-${project.version}.war
                             </webApp>
                             <stopKey>secret</stopKey>
                             <stopPort>6667</stopPort>
