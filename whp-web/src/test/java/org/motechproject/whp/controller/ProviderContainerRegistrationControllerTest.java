@@ -8,14 +8,15 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
-import org.motechproject.whp.container.contract.RegistrationRequest;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.RegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -26,43 +27,45 @@ import static org.springframework.test.web.server.request.MockMvcRequestBuilders
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class ContainerRegistrationControllerTest {
+public class ProviderContainerRegistrationControllerTest {
+
     public static final String CONTRIB_FLASH_OUT_PREFIX = "flash.out.";
     public static final String CONTRIB_FLASH_IN_PREFIX = "flash.in.";
     public static final int CONTAINER_ID_MAX_LENGTH = 11;
-    private ContainerRegistrationController containerRegistrationController;
+    private ProviderContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
     @Mock
     private RegistrationRequestValidator registrationRequestValidator;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
+    private String providerId;
+    List<String> INSTANCES = new ArrayList<>();
 
     @Before
     public void setUp() {
         initMocks(this);
+        INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
+        INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        providerId = "providerId";
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new ContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+        containerRegistrationController = new ProviderContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 
     @Test
     public void shouldDisplayTheContainerRegistrationPageWithAppropriateControls() throws Exception {
-        ArrayList<String> instances = new ArrayList<>();
-        instances.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
-        instances.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
 
         ArrayList<String> roles = new ArrayList<>();
-        roles.add(WHPRole.CMF_ADMIN.name());
+        roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(containerRegistrationController).build()
-                .perform(get("/containerRegistration")
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
+                .perform(get("/containerRegistration/by_provider")
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
-                .andExpect(model().attribute("instances", instances))
-                .andExpect(model().attribute("isCMFAdmin", true))
+                .andExpect(model().size(2))
+                .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
-                .andExpect(forwardedUrl("containerRegistration/show"));
+                .andExpect(forwardedUrl("containerRegistration/showForProvider"));
     }
 
     @Test
@@ -71,13 +74,12 @@ public class ContainerRegistrationControllerTest {
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(containerRegistrationController).build()
-                .perform(get("/containerRegistration").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
+                .perform(get("/containerRegistration/by_provider").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
-                .andExpect(model().attribute("isCMFAdmin", false))
-                .andExpect(forwardedUrl("containerRegistration/show"));
+                .andExpect(forwardedUrl("containerRegistration/showForProvider"));
     }
 
     @Test
@@ -89,24 +91,26 @@ public class ContainerRegistrationControllerTest {
         ArrayList<String> errors = new ArrayList<>();
         errors.add("some error 1");
         errors.add("some error 2");
-        when(registrationRequestValidator.validate(any(RegistrationRequest.class))).thenReturn(errors);
+        when(registrationRequestValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(containerRegistrationController).build()
-                .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance)
+                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", instance)
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("errors", "some error 1,some error 2"))
-                .andExpect(forwardedUrl("containerRegistration/show"));
+                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
+                .andExpect(model().attribute("instances", INSTANCES))
+                .andExpect(forwardedUrl("containerRegistration/showForProvider"));
 
-        ArgumentCaptor<RegistrationRequest> captor = ArgumentCaptor.forClass(RegistrationRequest.class);
+        ArgumentCaptor<ContainerRegistrationRequest> captor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
         verify(registrationRequestValidator).validate(captor.capture());
-        RegistrationRequest request = captor.getValue();
+        ContainerRegistrationRequest request = captor.getValue();
         assertEquals(providerId.toLowerCase(), request.getProviderId());
 
-        verify(containerService, never()).registerContainer(any(RegistrationRequest.class));
+        verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
     }
 
     @Test
@@ -119,44 +123,18 @@ public class ContainerRegistrationControllerTest {
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(containerRegistrationController).build()
-                .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance)
+                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", instance)
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
                 .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
-                .andExpect(redirectedUrl("/containerRegistration"));
+                .andExpect(redirectedUrl("/containerRegistration/by_provider"));
 
-        ArgumentCaptor<RegistrationRequest> captor = ArgumentCaptor.forClass(RegistrationRequest.class);
+        ArgumentCaptor<ContainerRegistrationRequest> captor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
         verify(containerService).registerContainer(captor.capture());
-        RegistrationRequest actualRegistrationRequest = captor.getValue();
+        ContainerRegistrationRequest actualRegistrationRequest = captor.getValue();
 
         assertEquals(providerId.toLowerCase(), actualRegistrationRequest.getProviderId());
-        assertEquals(containerId, actualRegistrationRequest.getContainerId());
-        assertEquals(instance, actualRegistrationRequest.getInstance());
-    }
-
-    @Test
-    public void shouldRegisterTheContainerGivenTheDetailsForACMFAdmin() throws Exception {
-        String providerId = "P00011";
-        String containerId = "1234567890";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
-
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add(WHPRole.CMF_ADMIN.name());
-
-        standaloneSetup(containerRegistrationController).build()
-                .perform(post("/containerRegistration/register").param("containerId", containerId).param("instance", instance).param("providerId", providerId)
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
-                .andExpect(status().isOk())
-                .andExpect(model().size(1))
-                .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
-                .andExpect(redirectedUrl("/containerRegistration"));
-
-        ArgumentCaptor<RegistrationRequest> captor = ArgumentCaptor.forClass(RegistrationRequest.class);
-        verify(containerService).registerContainer(captor.capture());
-        RegistrationRequest actualRegistrationRequest = captor.getValue();
-
-        assertEquals(providerId, actualRegistrationRequest.getProviderId());
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
     }

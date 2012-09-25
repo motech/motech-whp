@@ -9,7 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.container.contract.RegistrationRequest;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -47,7 +47,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         String containerId = "1234567890";
         SputumTrackingInstance instance = SputumTrackingInstance.IN_TREATMENT;
 
-        containerService.registerContainer(new RegistrationRequest(providerId, containerId, instance.getDisplayText()));
+        containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());

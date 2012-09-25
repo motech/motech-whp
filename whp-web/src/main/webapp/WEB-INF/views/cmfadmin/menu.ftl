@@ -23,7 +23,7 @@
             <b>Container Tracking</b>
         </li>
         <li>
-            <a href="/whp/containerRegistration">Container Registration</a>
+            <a href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
         <li>
         <li class="divider"></li>
 

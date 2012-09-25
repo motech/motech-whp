@@ -3,7 +3,7 @@ package org.motechproject.whp.container.service;
 import freemarker.template.TemplateException;
 import org.joda.time.DateTime;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.container.contract.RegistrationRequest;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -26,7 +26,7 @@ public class ContainerService {
         this.remediService = remediService;
     }
 
-    public void registerContainer(RegistrationRequest registrationRequest) throws IOException, TemplateException {
+    public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
         SputumTrackingInstance instance = SputumTrackingInstance.getInstanceForValue(registrationRequest.getInstance());
         DateTime creationTime = DateUtil.now();
 

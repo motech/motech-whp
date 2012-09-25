@@ -1,7 +1,7 @@
 package org.motechproject.whp.container.domain;
 
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.whp.container.contract.RegistrationRequest;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
@@ -30,7 +30,7 @@ public class RegistrationRequestValidator {
         this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
-    public List<String> validate(RegistrationRequest registrationRequest) {
+    public List<String> validate(ContainerRegistrationRequest registrationRequest) {
         String containerId = registrationRequest.getContainerId();
         String instance = registrationRequest.getInstance();
         String providerId = registrationRequest.getProviderId();

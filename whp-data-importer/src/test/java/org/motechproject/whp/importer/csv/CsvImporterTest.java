@@ -44,6 +44,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllTreatmentCategories allTreatmentCategories;
     @Autowired
     AllProviderContainerMappings allProviderContainerMappings;
+
     @Before
     public void setUp() {
         allPatients.removeAll();
@@ -172,9 +173,9 @@ public class CsvImporterTest extends SpringIntegrationTest {
         List<ProviderContainerMapping> mappings = allProviderContainerMappings.getAll();
         assertThat(mappings.size(), Is.is(2));
         assertThat(mappings.get(0).getProviderId(), Is.is("john"));
-        assertThat(mappings.get(0).getContainerRanges(), hasItem(new ContainerRange(101, 200)));
+        assertThat(mappings.get(0).getContainerRanges(), hasItem(new ContainerRange(20000000001L, 30000000000L)));
         assertThat(mappings.get(1).getProviderId(), Is.is("raj"));
-        assertThat(mappings.get(1).getContainerRanges(), hasItem(new ContainerRange(201, 300)));
+        assertThat(mappings.get(1).getContainerRanges(), hasItem(new ContainerRange(10000000000L, 20000000000L)));
     }
 
     @After
