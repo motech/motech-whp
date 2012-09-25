@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.core.Is.is;
 
 public class AdminContainerMappingTest {
 
@@ -14,6 +13,6 @@ public class AdminContainerMappingTest {
         ContainerRange containerRange = new ContainerRange(100, 200);
         adminContainerMapping.add(containerRange);
 
-        assertThat(adminContainerMapping.getContainerRange(), is(containerRange));
+        assertThat(adminContainerMapping.getContainerRanges(), hasItem(containerRange));
     }
 }

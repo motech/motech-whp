@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 
@@ -39,6 +40,7 @@ public class AllAdminContainerMappingsIT extends SpringIntegrationTest {
         addAndMarkForDeletion(adminContainerMapping);
 
         assertThat(allAdminContainerMappings.getAll(), hasItem(adminContainerMapping));
+        assertEquals(3, allAdminContainerMappings.get(adminContainerMapping.getId()).getContainerRanges().size());
     }
 
     @Override
