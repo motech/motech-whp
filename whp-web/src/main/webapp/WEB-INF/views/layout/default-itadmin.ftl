@@ -22,9 +22,7 @@
 
         <div class="span8" id="mainContent">
             <noscript>
-                <div class="row alert alert-error  javascript-warning">Javascript is not enabled in your browser. The application will not work
-                    properly. Please contact your administrator
-                </div>
+                <div class="row alert alert-error  javascript-warning">Please enable Java Script in your browser for the application to work properly. Please contact WHP administrator if you need assistance</div>
             </noscript>
             <!--Body content-->
             <#nested/>
