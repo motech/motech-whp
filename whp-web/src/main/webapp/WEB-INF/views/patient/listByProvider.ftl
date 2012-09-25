@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default.ftl" as layout>
+<#import "../layout/default-with-sidebar.ftl" as layout>
 <#include "../layout/legend.ftl">
-<@layout.defaultLayout "Patient List">
+<@layout.defaultLayout title="Patient List" entity="provider">
     <#if message?exists && (message?length>0)>
     <div class="adherence-message-alert row text-center alert alert-info fade in">
         <button class="close" data-dismiss="alert">&times;</button>
@@ -9,9 +9,6 @@
         <#assign message=""/>
     </div>
     </#if>
-<div class="row">
-    <span class="pull-left"><a id="register-container" href="/whp/containerRegistration/by_provider"><u><b>Container Registration</b></u></a></span>
-</div>
 <div class="row">
     <span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>
 <@legend key1="paused" value1="Current Treatment Paused" />

@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default.ftl" as layout>
-<@layout.defaultLayout "Container-Registration">
+<#import "../layout/default-with-sidebar.ftl" as layout>
+<@layout.defaultLayout title="Container-Registration" entity="provider">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
     <#if errors??>
             <div id="container-registration-error" class="container-registration-message-alert row alert alert-error fade in">

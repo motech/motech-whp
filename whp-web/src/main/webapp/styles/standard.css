@@ -112,17 +112,13 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
     text-decoration: underline;
 }
 
-#numberSelect {
-    text-align: center;
-}
-
 .disable-remarks {
     resize: none;
 }
 
 #weeklyAdherenceForm label {
     text-align: left;
-    margin-left: 20px;
+    width:375px;
 }
 
 #legend-container {
