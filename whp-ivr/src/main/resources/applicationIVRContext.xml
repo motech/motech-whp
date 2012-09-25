@@ -6,8 +6,8 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
-    <context:property-placeholder location="classpath*:dozer.properties" ignore-unresolvable="true"/>
-
+    <!--<context:property-placeholder location="classpath*:*.properties" ignore-unresolvable="true"/>-->
+    <context:property-placeholder location="classpath*:httpClient.properties" ignore-unresolvable="true"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationServiceContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
