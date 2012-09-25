@@ -20,10 +20,10 @@ import static org.motechproject.flash.Flash.out;
 
 @Controller
 @RequestMapping(value = "/containerRegistration/by_cmfAdmin")
-public class CmfAdminContainerRegistrationController extends ContainerRegistrationController {
+public class CMFAdminContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public CmfAdminContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
+    public CMFAdminContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
         super(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 

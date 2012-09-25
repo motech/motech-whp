@@ -8,6 +8,7 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -35,7 +36,7 @@ public class CmfAdminContainerRegistrationControllerTest {
     public static final String CONTRIB_FLASH_OUT_PREFIX = "flash.out.";
     public static final String CONTRIB_FLASH_IN_PREFIX = "flash.in.";
     public static final int CONTAINER_ID_MAX_LENGTH = 11;
-    private CmfAdminContainerRegistrationController containerRegistrationController;
+    private CMFAdminContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
     @Mock
@@ -51,7 +52,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
         INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+        containerRegistrationController = new CMFAdminContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 
     @Test
@@ -116,9 +117,9 @@ public class CmfAdminContainerRegistrationControllerTest {
         String containerId = "123456789a";
         String instance = "invalid_instance";
 
-        ArrayList<String> errors = new ArrayList<>();
-        errors.add("some error 1");
-        errors.add("some error 2");
+        List<ErrorWithParameters> errors = new ArrayList<>();
+        errors.add(new ErrorWithParameters("some error 1"));
+        errors.add(new ErrorWithParameters("some error 2"));
         when(registrationRequestValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
 
         ArrayList<String> roles = new ArrayList<>();
@@ -128,7 +129,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(post("/containerRegistration/by_cmfAdmin/register").param("containerId", containerId).param("instance", instance)
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("errors", "some error 1,some error 2"))
+                .andExpect(model().attribute("errors", errors))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(forwardedUrl("containerRegistration/showForCmfAdmin"));

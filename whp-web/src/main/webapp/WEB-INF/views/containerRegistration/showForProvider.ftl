@@ -5,7 +5,9 @@
     <#if errors??>
             <div id="container-registration-error" class="container-registration-message-alert row alert alert-error fade in">
                 <button class="close" data-dismiss="alert">&times;</button>
-                ${errors}
+                <#list errors as error>
+                    <div><@spring.messageArgs code=error.code args=error.parameters/></div>
+                </#list>
             </div>
     </#if>
     <#if message??>

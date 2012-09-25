@@ -8,6 +8,7 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
@@ -88,9 +89,9 @@ public class ProviderContainerRegistrationControllerTest {
         String containerId = "123456789a";
         String instance = "invalid_instance";
 
-        ArrayList<String> errors = new ArrayList<>();
-        errors.add("some error 1");
-        errors.add("some error 2");
+        ArrayList<ErrorWithParameters> errors = new ArrayList<>();
+        errors.add(new ErrorWithParameters("a", "b"));
+        errors.add(new ErrorWithParameters("a", "b"));
         when(registrationRequestValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
 
         ArrayList<String> roles = new ArrayList<>();
@@ -100,7 +101,7 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", instance)
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("errors", "some error 1,some error 2"))
+                .andExpect(model().attribute("errors", errors))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));

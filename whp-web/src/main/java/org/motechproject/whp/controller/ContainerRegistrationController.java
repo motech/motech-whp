@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
@@ -31,9 +32,9 @@ public abstract class ContainerRegistrationController extends BaseWebController 
     }
 
     protected boolean hasErrors(Model uiModel, ContainerRegistrationRequest registrationRequest, HttpServletRequest request) {
-        List<String> errors = registrationRequestValidator.validate(registrationRequest);
+        List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
         if (!errors.isEmpty()) {
-            uiModel.addAttribute("errors", StringUtils.join(errors, ","));
+            uiModel.addAttribute("errors", errors);
             return true;
         }
         return false;

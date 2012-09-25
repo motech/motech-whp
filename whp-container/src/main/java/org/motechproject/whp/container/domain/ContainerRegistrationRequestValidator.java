@@ -1,6 +1,7 @@
 package org.motechproject.whp.container.domain;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.String.valueOf;
+
 
 @Component
 public class ContainerRegistrationRequestValidator {
@@ -30,31 +34,31 @@ public class ContainerRegistrationRequestValidator {
         this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
-    public List<String> validate(ContainerRegistrationRequest registrationRequest) {
+    public List<ErrorWithParameters> validate(ContainerRegistrationRequest registrationRequest) {
         String containerId = registrationRequest.getContainerId();
         String instance = registrationRequest.getInstance();
         String providerId = registrationRequest.getProviderId();
 
-        ArrayList<String> errors = new ArrayList<>();
+        ArrayList<ErrorWithParameters> errors = new ArrayList<>();
         int containerIdMaxLength = sputumTrackingProperties.getContainerIdMaxLength();
         if (!StringUtils.isNumeric(containerId) || containerId.length() != containerIdMaxLength) {
-            errors.add(String.format("Container Id must be of %s digits in length", containerIdMaxLength));
+            errors.add(new ErrorWithParameters("container.id.length.error", valueOf(containerIdMaxLength)));
         }
 
         if (StringUtils.isBlank(providerId))
-            errors.add(String.format("Invalid provider id : %s", providerId));
+            errors.add(new ErrorWithParameters("provider.id.invalid.error", providerId));
 
         if (isProviderExists(providerId)) {
             if (!providerContainerMappingService.isValidContainerForProvider(providerId, containerId))
-                errors.add(String.format("Invalid container id : %s", containerId));
+                errors.add(new ErrorWithParameters("container.id.invalid.error", containerId));
         } else
-            errors.add(String.format("Provider not registered : %s", providerId));
+            errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
 
         if (!SputumTrackingInstance.isValid(instance))
-            errors.add(String.format("Invalid instance : %s", instance));
+            errors.add(new ErrorWithParameters("invalid.instance.error", instance));
 
         if (containerService.exists(containerId))
-            errors.add("Container Id already registered.");
+            errors.add(new ErrorWithParameters("container.already.registered.error"));
 
         return errors;
     }
