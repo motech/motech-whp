@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-itadmin.ftl" as layout>
-<@layout.defaultLayout "Create CMF Admin Account">
+<#import "../layout/default-with-sidebar.ftl" as layout>
+<@layout.defaultLayout entity="itadmin" title="Create CMF Admin Account" >
 <div class="span12 row" id="createCmfAdmin">
     </br>
     <form action="<@spring.url '/cmfAdmin/create'/>" id="createCmfAdminForm" submitOnEnterKey="true" method="POST"

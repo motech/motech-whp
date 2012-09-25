@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-cmfadmin.ftl" as layout>
+<#import "../layout/default-with-sidebar.ftl" as layout>
 <#include "../layout/legend.ftl">
-<@layout.defaultLayout "Patient List">
+<@layout.defaultLayout title="Patient List" entity="cmfadmin">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 

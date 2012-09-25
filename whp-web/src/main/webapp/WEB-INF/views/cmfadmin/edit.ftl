@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-itadmin.ftl" as layout>
-<@layout.defaultLayout "Edit CMF Admin Account">
+<#import "../layout/default-with-sidebar.ftl" as layout>
+<@layout.defaultLayout title="Edit CMF Admin Account" entity="itadmin">
 
 <div class="span12">
     <form action="<@spring.url '/cmfAdmin/edit'/>" id="editCmfAdminForm" submitOnEnterKey="true" method="POST"

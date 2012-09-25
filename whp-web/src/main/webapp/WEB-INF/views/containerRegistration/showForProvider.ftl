@@ -17,9 +17,8 @@
             </div>
     </#if>
         <div id="container-registration">
-            <form id="container-registration-form" action="<@spring.url '/containerRegistration/by_provider/register'/>" input method="POST" submitOnEnterKey="true"
-                  class="">
-                <table>
+            <form id="container-registration-form" autocomplete="off" action="<@spring.url '/containerRegistration/by_provider/register'/>"  class="row well form-horizontal" input method="POST" submitOnEnterKey="true">
+                <table class="controls">
                     <tr>
                         <td>
                             <div class="control-group">

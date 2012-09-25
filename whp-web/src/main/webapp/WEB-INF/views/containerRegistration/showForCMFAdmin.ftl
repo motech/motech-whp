@@ -1,11 +1,13 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default.ftl" as layout>
-<@layout.defaultLayout "Container-Registration">
+<#import "../layout/default-with-sidebar.ftl" as layout>
+<@layout.defaultLayout title="Container-Registration" entity="cmfadmin">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
     <#if errors??>
             <div id="container-registration-error" class="container-registration-message-alert row alert alert-error fade in">
                 <button class="close" data-dismiss="alert">&times;</button>
-                ${errors}
+                <#list errors as error>
+                    <div><@spring.messageArgs code=error.code args=error.parameters/></div>
+                </#list>
             </div>
     </#if>
     <#if message??>
@@ -15,20 +17,8 @@
             </div>
     </#if>
         <div id="container-registration">
-            <form id="container-registration-form" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true">
-                <table>
-                     <tr>
-                        <div class="control-group">
-                            <td>
-                                <input type="radio" class="radio controls" name="containerRegistrationMode"
-                                       checked="true" value="ON_BEHALF_OF_PROVIDER"> Register on behalf of provider</input>
-                            </td>
-                            <td>
-                                <input type="radio" class="radio controls" name="containerRegistrationMode"
-                                       value="NEW_CONTAINER"> Register a new container</input>
-                            </td>
-                        </div>
-                    </tr>
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="row well form-horizontal">
+                <table class="controls">
                     <tr>
                         <td>
                             <div class="control-group">
@@ -68,13 +58,29 @@
                         </td>
                     </tr>
                     <tr>
+                        <div class="control-group row">
+                            <td>
+                                <input type="radio" class="radio controls" name="containerRegistrationMode"
+                                       checked="true" value="ON_BEHALF_OF_PROVIDER"> Register on behalf of provider</input>
+                            </td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="control-group row">
+                            <td>
+                                <input type="radio" class="radio controls" name="containerRegistrationMode"
+                                       value="NEW_CONTAINER"> Register a new container</input>
+                            </td>
+                        </div>
+                    </tr>
+                    <tr>
                         <td>
                             <div class="control-group pull-down">
                                 <div class="controls">
                                     <button type="submit" id="registerButton" class="btn btn-primary form-button-center">
                                         Register
                                     </button>
-                                    <a id="back" class="padding-left" href="<@spring.url ''/>">Back</a>
+                                    <a id="back" class="btn btn-primary padding-left" href="<@spring.url ''/>">Back</a>
                                 </div>
                             </div>
                         </td>

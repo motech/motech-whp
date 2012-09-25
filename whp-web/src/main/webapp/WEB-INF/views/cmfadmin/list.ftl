@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-itadmin.ftl" as layout>
+<#import "../layout/default-with-sidebar.ftl" as layout>
 <#include "../user/resetPassword.ftl">
-<@layout.defaultLayout "MoTeCH-WHP">
+<@layout.defaultLayout title="MoTeCH-WHP" entity="itadmin">
 <script type="text/javascript"
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 

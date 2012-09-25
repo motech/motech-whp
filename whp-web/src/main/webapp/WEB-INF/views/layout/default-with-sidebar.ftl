@@ -1,13 +1,14 @@
 <#import "/spring.ftl" as spring />
-<#macro defaultLayout title="WHP">
+<#macro defaultLayout entity title="WHP" >
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
     <link rel="stylesheet" type="text/css"
           href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 </head>
 <body>
@@ -20,7 +21,7 @@
 
     <div class="row-fluid">
         <div class="span2">
-            <#include "../cmfadmin/menu.ftl"/>
+            <#include "../${entity}/menu.ftl"/>
         </div>
 
         <div class="span10" id="mainContent">

@@ -1,10 +1,10 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-itadmin.ftl" as layout>
+<#import "../layout/default-with-sidebar.ftl" as layout>
 <#import "../paginator.ftl" as paginator>
 <#include "../user/activateProvider.ftl">
 <#include "../user/resetPassword.ftl">
 
-<@layout.defaultLayout "MoTeCH-WHP">
+<@layout.defaultLayout title="MoTeCH-WHP" entity="itadmin">
 <div id="search-section" class="row well">
     <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
         Pane</a></h3>
