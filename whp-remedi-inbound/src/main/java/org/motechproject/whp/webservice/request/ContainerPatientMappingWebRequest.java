@@ -41,9 +41,7 @@ public class ContainerPatientMappingWebRequest {
 
     public boolean isWellFormed() {
         return StringUtils.isNotEmpty(case_id)
-                && StringUtils.isNotEmpty(api_key)
                 && StringUtils.isNotEmpty(date_modified)
-                && StringUtils.isNotEmpty(update_type)
                 && StringUtils.isNotEmpty(patient_id)
                 && StringUtils.isNotEmpty(tb_id)
                 && smear_sample_instance != null;

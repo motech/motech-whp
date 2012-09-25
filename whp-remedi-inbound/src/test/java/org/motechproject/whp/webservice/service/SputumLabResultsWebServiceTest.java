@@ -1,15 +1,10 @@
 package org.motechproject.whp.webservice.service;
 
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
-import org.motechproject.casexml.service.exception.CaseError;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
@@ -17,7 +12,6 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
-import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.http.MediaType;
@@ -33,15 +27,12 @@ import static org.springframework.test.web.server.request.MockMvcRequestBuilders
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class SputumLabResultsWebServiceTest {
+public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
 
     private SputumLabResultsWebService sputumLabResultsWebService;
 
     @Mock
     private ContainerService containerService;
-
-    @Rule
-    public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Mock
     private RequestValidator validator;
@@ -162,25 +153,6 @@ public class SputumLabResultsWebServiceTest {
         assertThat(container.getLabResults().getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));
         assertThat(container.getLabResults().getSmearTestResult1().value(), is(request.getSmear_test_result_1()));
         assertThat(container.getLabResults().getSmearTestResult2().value(), is(request.getSmear_test_result_2()));
-    }
-
-    private void expectWHPCaseException(final WHPErrorCode errorCode) {
-        exceptionThrown.expect(WHPCaseException.class);
-        exceptionThrown.expect(new TypeSafeMatcher<WHPCaseException>() {
-            @Override
-            public boolean matchesSafely(WHPCaseException caseException) {
-                for (CaseError caseError : caseException.getErrors()) {
-                    if (caseError.getCode().equals(errorCode.name())) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-            }
-        });
     }
 
 
