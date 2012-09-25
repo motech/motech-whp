@@ -14,9 +14,7 @@ import org.motechproject.whp.user.service.ProviderService;
 import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 
