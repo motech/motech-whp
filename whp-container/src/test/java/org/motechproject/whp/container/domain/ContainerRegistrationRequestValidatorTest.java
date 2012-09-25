@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 
-public class RegistrationRequestValidatorTest {
+public class ContainerRegistrationRequestValidatorTest {
     @Mock
     private ContainerService containerService;
     @Mock
@@ -27,7 +27,7 @@ public class RegistrationRequestValidatorTest {
     private ProviderService providerService;
     @Mock
     private ProviderContainerMappingService providerContainerMappingService;
-    private RegistrationRequestValidator registrationRequestValidator;
+    private ContainerRegistrationRequestValidator registrationRequestValidator;
     private Provider validProvider;
 
     @Before
@@ -36,7 +36,7 @@ public class RegistrationRequestValidatorTest {
         initMocks(this);
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(11);
         when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
-        registrationRequestValidator = new RegistrationRequestValidator(containerService, providerService, providerContainerMappingService, sputumTrackingProperties);
+        registrationRequestValidator = new ContainerRegistrationRequestValidator(containerService, providerService, providerContainerMappingService, sputumTrackingProperties);
     }
 
     @Test

@@ -15,9 +15,20 @@
             </div>
     </#if>
         <div id="container-registration">
-            <form id="container-registration-form" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true"
-                  class="">
+            <form id="container-registration-form" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true">
                 <table>
+                     <tr>
+                        <div class="control-group">
+                            <td>
+                                <input type="radio" class="radio controls" name="containerRegistrationMode"
+                                       checked="true" value="ON_BEHALF_OF_PROVIDER"> Register on behalf of provider</input>
+                            </td>
+                            <td>
+                                <input type="radio" class="radio controls" name="containerRegistrationMode"
+                                       value="NEW_CONTAINER"> Register a new container</input>
+                            </td>
+                        </div>
+                    </tr>
                     <tr>
                         <td>
                             <div class="control-group">

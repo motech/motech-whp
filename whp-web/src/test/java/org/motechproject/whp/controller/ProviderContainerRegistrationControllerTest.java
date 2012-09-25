@@ -9,7 +9,7 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.RegistrationRequestValidator;
+import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -36,7 +36,7 @@ public class ProviderContainerRegistrationControllerTest {
     @Mock
     private ContainerService containerService;
     @Mock
-    private RegistrationRequestValidator registrationRequestValidator;
+    private ContainerRegistrationRequestValidator registrationRequestValidator;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
     private String providerId;

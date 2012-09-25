@@ -1,13 +1,11 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.RegistrationRequestValidator;
+import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
-import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 
 @Controller
@@ -28,7 +22,7 @@ import static org.motechproject.flash.Flash.out;
 public class ProviderContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public ProviderContainerRegistrationController(ContainerService containerService, RegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
+    public ProviderContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
         super(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 

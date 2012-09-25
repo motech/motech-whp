@@ -8,13 +8,17 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
+import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.RegistrationRequestValidator;
+import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
+import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +35,11 @@ public class CmfAdminContainerRegistrationControllerTest {
     public static final String CONTRIB_FLASH_OUT_PREFIX = "flash.out.";
     public static final String CONTRIB_FLASH_IN_PREFIX = "flash.in.";
     public static final int CONTAINER_ID_MAX_LENGTH = 11;
-    private CMFAdminContainerRegistrationController containerRegistrationController;
+    private CmfAdminContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
     @Mock
-    private RegistrationRequestValidator registrationRequestValidator;
+    private ContainerRegistrationRequestValidator registrationRequestValidator;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
 
@@ -47,7 +51,35 @@ public class CmfAdminContainerRegistrationControllerTest {
         INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
         INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new CMFAdminContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+    }
+
+    @Test
+    public void shouldConvertRequestParamsToCmfAdminContainerRegistrationRequest() throws Exception {
+        containerRegistrationController = spy(containerRegistrationController);
+
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add(WHPRole.CMF_ADMIN.name());
+
+        String containerId = "containerId";
+        String providerId = "providerId";
+        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        standaloneSetup(containerRegistrationController).build()
+                .perform(post("/containerRegistration/by_cmfAdmin/register")
+                        .param("containerId", containerId)
+                        .param("instance", instance)
+                        .param("providerId", providerId)
+                        .param("containerRegistrationMode", "NEW_CONTAINER")
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))));
+
+        ArgumentCaptor<CmfAdminContainerRegistrationRequest> argumentCaptor = ArgumentCaptor.forClass(CmfAdminContainerRegistrationRequest.class);
+        verify(containerRegistrationController).register(any(Model.class), argumentCaptor.capture(), any(HttpServletRequest.class));
+
+        CmfAdminContainerRegistrationRequest request = argumentCaptor.getValue();
+        assertEquals(ContainerRegistrationMode.NEW_CONTAINER, request.getContainerRegistrationMode());
+        assertEquals(providerId, request.getProviderId());
+        assertEquals(containerId, request.getContainerId());
+        assertEquals(instance, request.getInstance());
     }
 
     @Test

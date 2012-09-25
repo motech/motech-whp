@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class RegistrationRequestValidator {
+public class ContainerRegistrationRequestValidator {
 
     private ContainerService containerService;
     private ProviderContainerMappingService providerContainerMappingService;
@@ -22,8 +22,8 @@ public class RegistrationRequestValidator {
     private ProviderService providerService;
 
     @Autowired
-    public RegistrationRequestValidator(ContainerService containerService, ProviderService providerService,
-                                        ProviderContainerMappingService providerContainerMappingService, SputumTrackingProperties sputumTrackingProperties) {
+    public ContainerRegistrationRequestValidator(ContainerService containerService, ProviderService providerService,
+                                                 ProviderContainerMappingService providerContainerMappingService, SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
         this.providerService = providerService;
         this.providerContainerMappingService = providerContainerMappingService;

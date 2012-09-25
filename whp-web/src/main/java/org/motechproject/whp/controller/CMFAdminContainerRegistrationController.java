@@ -1,11 +1,10 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
-import org.motechproject.whp.container.domain.RegistrationRequestValidator;
+import org.motechproject.whp.container.domain.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
-import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 
 @Controller
 @RequestMapping(value = "/containerRegistration/by_cmfAdmin")
-public class CMFAdminContainerRegistrationController extends ContainerRegistrationController {
+public class CmfAdminContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public CMFAdminContainerRegistrationController(ContainerService containerService, RegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
+    public CmfAdminContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
         super(containerService, registrationRequestValidator, sputumTrackingProperties);
     }
 
@@ -39,7 +34,7 @@ public class CMFAdminContainerRegistrationController extends ContainerRegistrati
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, ContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
+    public String register(Model uiModel, CmfAdminContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
         if (hasErrors(uiModel, registrationRequest, servletRequest))
             return show(uiModel, servletRequest);
 
