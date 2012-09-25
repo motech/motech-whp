@@ -1,8 +1,5 @@
 package org.motechproject.whp.container.mapping.service;
 
-import ch.lambdaj.Lambda;
-import ch.lambdaj.function.matcher.LambdaJMatcher;
-import org.motechproject.whp.container.mapping.domain.ContainerRange;
 import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +21,8 @@ public class ProviderContainerMappingService {
 
     public Boolean isValidContainerForProvider(String providerId, String containerId) {
         ProviderContainerMapping providerContainerMapping = allProviderContainerMappings.findByProviderId(providerId);
-        if(providerContainerMapping == null) return false;
-        return Lambda.exists(providerContainerMapping.getContainerRanges(), whichIncludes(Long.parseLong(containerId)));
-    }
-
-    private LambdaJMatcher<Boolean> whichIncludes(final long containerId) {
-        return new LambdaJMatcher<Boolean>() {
-            @Override
-            public boolean matches(Object o) {
-                ContainerRange range = (ContainerRange) o;
-                return range.includes(containerId);
-            }
-        };
+        if(providerContainerMapping == null)
+            return false;
+        return providerContainerMapping.hasContainerId(Long.parseLong(containerId));
     }
 }

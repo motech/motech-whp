@@ -14,4 +14,9 @@ public class AllAdminContainerMappings extends MotechBaseRepository<AdminContain
     public AllAdminContainerMappings(@Qualifier("whpDbConnector") CouchDbConnector db) {
         super(AdminContainerMapping.class, db);
     }
+
+
+    public AdminContainerMapping get() {
+        return getAll().get(0);
+    }
 }

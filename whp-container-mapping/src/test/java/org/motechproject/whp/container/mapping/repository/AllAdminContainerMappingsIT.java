@@ -40,7 +40,7 @@ public class AllAdminContainerMappingsIT extends SpringIntegrationTest {
         addAndMarkForDeletion(adminContainerMapping);
 
         assertThat(allAdminContainerMappings.getAll(), hasItem(adminContainerMapping));
-        assertEquals(3, allAdminContainerMappings.get(adminContainerMapping.getId()).getContainerRanges().size());
+        assertEquals(3, allAdminContainerMappings.get().getContainerRanges().size());
     }
 
     @Override

@@ -4,17 +4,18 @@ import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.motechproject.model.MotechBaseDataObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @TypeDiscriminator("doc.type == 'ProviderContainerMapping'")
 @Data
 public class ProviderContainerMapping extends MotechBaseDataObject {
     private String providerId;
-    private List<ContainerRange> containerRanges = new ArrayList<>();
+    private ContainerRanges containerRanges = new ContainerRanges();
 
     public ProviderContainerMapping add(ContainerRange containerRange) {
         containerRanges.add(containerRange);
         return this;
+    }
+
+    public boolean hasContainerId(long containerId) {
+        return containerRanges.hasContainerId(containerId);
     }
 }

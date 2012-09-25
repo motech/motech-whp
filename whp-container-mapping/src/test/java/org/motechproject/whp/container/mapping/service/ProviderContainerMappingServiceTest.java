@@ -42,9 +42,7 @@ public class ProviderContainerMappingServiceTest {
         String providerId = "providerId";
         String containerId = "1234";
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
-        ArrayList<ContainerRange> containerRanges = new ArrayList<>();
-        containerRanges.add(new ContainerRange(1000, 2000));
-        providerContainerMapping.setContainerRanges(containerRanges);
+        providerContainerMapping.add(new ContainerRange(1000, 2000));
 
         when(allProviderContainerMappings.findByProviderId(providerId)).thenReturn(providerContainerMapping);
 
@@ -56,9 +54,7 @@ public class ProviderContainerMappingServiceTest {
         String providerId = "providerId";
         String containerId = "123";
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
-        ArrayList<ContainerRange> containerRanges = new ArrayList<>();
-        containerRanges.add(new ContainerRange(1000, 2000));
-        providerContainerMapping.setContainerRanges(containerRanges);
+        providerContainerMapping.add(new ContainerRange(1000, 2000));
 
         when(allProviderContainerMappings.findByProviderId(providerId)).thenReturn(providerContainerMapping);
 
