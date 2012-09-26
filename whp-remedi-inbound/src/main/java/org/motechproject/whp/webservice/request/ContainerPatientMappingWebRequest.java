@@ -38,12 +38,4 @@ public class ContainerPatientMappingWebRequest {
 
     @Enumeration(type = SampleInstance.class)
     private String smear_sample_instance;
-
-    public boolean isWellFormed() {
-        return StringUtils.isNotEmpty(case_id)
-                && StringUtils.isNotEmpty(date_modified)
-                && StringUtils.isNotEmpty(patient_id)
-                && StringUtils.isNotEmpty(tb_id)
-                && smear_sample_instance != null;
-    }
 }

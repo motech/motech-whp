@@ -4,7 +4,9 @@ import org.motechproject.casexml.service.CaseService;
 import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -24,12 +26,14 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
 
     private ContainerService containerService;
     private PatientService patientService;
+    private RequestValidator beanValidator;
 
     @Autowired
-    public ContainerPatientMappingWebService(ContainerService containerService, PatientService patientService) {
+    public ContainerPatientMappingWebService(ContainerService containerService, PatientService patientService, RequestValidator beanValidator) {
         super(ContainerPatientMappingWebRequest.class);
         this.containerService = containerService;
         this.patientService = patientService;
+        this.beanValidator = beanValidator;
     }
 
     @Override
@@ -72,7 +76,9 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
     }
 
     private void validateCaseXml(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
-        if(!containerPatientMappingWebRequest.isWellFormed()) {
+        try {
+            beanValidator.validate(containerPatientMappingWebRequest, "");
+        } catch (RuntimeException e) {
             throw new WHPCaseException(new WHPError(CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE));
         }
     }

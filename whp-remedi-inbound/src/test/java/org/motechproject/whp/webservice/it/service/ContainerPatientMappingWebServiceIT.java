@@ -58,7 +58,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
                 "<update_type>patient_mapping</update_type>\n" +
                 "<patient_id>cha01102001</patient_id>\n" +
                 "<tb_id>cha01102001</tb_id>\n" +
-                "<smear_sample_instance>Pre-Treatment</smear_sample_instance>\n" +
+                "<smear_sample_instance>PreTreatment</smear_sample_instance>\n" +
                 "</update>\n" +
                 "</case>";
 

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.service.ContainerService;
@@ -32,10 +33,13 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest{
     @Mock
     private PatientService patientService;
 
+    @Mock
+    private RequestValidator beanValidator;
+
     @Before
     public void setup() {
         initMocks(this);
-        webService = new ContainerPatientMappingWebService(containerService, patientService);
+        webService = new ContainerPatientMappingWebService(containerService, patientService, beanValidator);
     }
 
     @Test
