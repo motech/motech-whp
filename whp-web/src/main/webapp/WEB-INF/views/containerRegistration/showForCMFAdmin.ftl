@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-sidebar.ftl" as layout>
-<@layout.defaultLayout "Container-Registration">
+<@layout.defaultLayout title="Container-Registration" entity="cmfadmin">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
     <#if errors??>
             <div id="container-registration-error" class="container-registration-message-alert row alert alert-error fade in">
@@ -16,8 +16,10 @@
                 ${message}
             </div>
     </#if>
+        <h3>Container Registration</h3>
+        <hr/>
         <div id="container-registration">
-            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="row well form-horizontal">
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="row well form-horizontal span9">
                 <table class="controls">
                     <tr>
                         <td>

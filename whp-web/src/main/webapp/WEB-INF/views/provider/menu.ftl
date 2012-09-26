@@ -3,7 +3,7 @@
     <br/>
     <ul class="nav nav-list">
         <li class="nav-header">
-            <b>Patients</b>
+            <b>Patient List</b>
         </li>
         <li>
             <a id="nav-patients" href="/whp/">Patients</a>
