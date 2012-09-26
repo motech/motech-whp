@@ -1,7 +1,6 @@
 package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
