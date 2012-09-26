@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -41,7 +42,9 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         patient.getCurrentTreatment().setTbId("cha01102001");
         allPatients.add(patient);
 
-        Container container = new Container("provierId", "12651654165465", null, DateTime.now());
+        Container container = new Container("providerId", "12651654165465", null, DateTime.now());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
         allContainers.add(container);
 
         markForDeletion(patient, container);

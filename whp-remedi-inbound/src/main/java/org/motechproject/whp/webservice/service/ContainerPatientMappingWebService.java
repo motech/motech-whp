@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static org.motechproject.whp.common.exception.WHPErrorCode.CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE;
+import static org.motechproject.whp.common.exception.WHPErrorCode.*;
+import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 @Controller
 @RequestMapping("/containerPatientMapping/**")
@@ -32,35 +33,34 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
 
     @Override
     public void closeCase(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) throws CaseException {
-        throw new CaseException("containerPatientMapping does not support Create Case", HttpStatus.NOT_IMPLEMENTED);
+        throw new CaseException("containerPatientMapping does not support Create Case", NOT_IMPLEMENTED);
     }
 
     @Override
     public void updateCase(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) throws CaseException {
+        // If XML is malformed: bomb
         if(!containerPatientMappingWebRequest.isWellFormed()) {
             throw new WHPCaseException(new WHPError(CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE));
         }
 
+        // If container is not registered or doesn't contain lab results: bomb
         if(!containerService.exists(containerPatientMappingWebRequest.getCase_id())){
-            throw new WHPCaseException(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
+            throw new WHPCaseException(new WHPError(INVALID_CONTAINER_ID));
+        } else if(containerService.getContainer(containerPatientMappingWebRequest.getCase_id()).getLabResults() == null) {
+            throw new WHPCaseException(new WHPError(NO_LAB_RESULTS_IN_CONTAINER));
         }
 
+        // If patient is not registered or doesn't have an ongoing treatment: bomb
         Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
         if(null == patient) {
-            throw new WHPCaseException(new WHPError(WHPErrorCode.PATIENT_NOT_FOUND));
+            throw new WHPCaseException(new WHPError(PATIENT_NOT_FOUND));
         } else if(patient.getCurrentTreatment()==null || !patient.getCurrentTreatment().getTbId().equals(containerPatientMappingWebRequest.getTb_id())){
-            throw new WHPCaseException(new WHPError(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE));
+            throw new WHPCaseException(new WHPError(NO_EXISTING_TREATMENT_FOR_CASE));
         }
-
-
-
-
-        // if container doesn't have lab results bomb
-        // if is Patient.getCurrentTreatment() is closed bomb
     }
 
     @Override
     public void createCase(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) throws CaseException {
-        throw new CaseException("containerPatientMapping does not support Create Case", HttpStatus.NOT_IMPLEMENTED);
+        throw new CaseException("containerPatientMapping does not support Create Case", NOT_IMPLEMENTED);
     }
 }

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -74,6 +75,25 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest{
 
         verify(patientService, times(1)).findByPatientId(anyString());
 
+    }
+
+    @Test
+    public void shouldNotPerformContainerPatientMapping_whenContainerDoesNotHaveLabResults() {
+        expectWHPCaseException(WHPErrorCode.NO_LAB_RESULTS_IN_CONTAINER);
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        request.setTb_id(patient.getCurrentTreatment().getTbId());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+        webService.updateCase(request);
+
+        verify(patientService, times(1)).findByPatientId(anyString());
+        verify(containerService, times(1)).getContainer(request.getCase_id());
     }
 
     private ContainerPatientMappingWebRequest buildTestRequest() {
