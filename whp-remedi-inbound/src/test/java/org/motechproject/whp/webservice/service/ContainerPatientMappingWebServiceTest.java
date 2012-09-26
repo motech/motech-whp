@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
@@ -109,6 +110,26 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest{
 
         verify(patientService, times(1)).findByPatientId(anyString());
         verify(containerService, times(1)).getContainer(request.getCase_id());
+    }
+
+    @Test
+    public void shouldNotPerformContainerPatientMapping_whenPatientDoesNotHaveOngoingTherapy() {
+        expectWHPCaseException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+        webService.updateCase(request);
+
+        verify(patientService, times(1)).findByPatientId(anyString());
     }
 
     private ContainerPatientMappingWebRequest buildTestRequest() {

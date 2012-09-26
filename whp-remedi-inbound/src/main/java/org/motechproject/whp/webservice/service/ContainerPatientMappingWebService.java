@@ -6,6 +6,7 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -38,26 +39,42 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
 
     @Override
     public void updateCase(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) throws CaseException {
-        // If XML is malformed: bomb
-        if(!containerPatientMappingWebRequest.isWellFormed()) {
-            throw new WHPCaseException(new WHPError(CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE));
-        }
+        validateCaseXml(containerPatientMappingWebRequest);
+        validateContainer(containerPatientMappingWebRequest);
+        validatePatient(containerPatientMappingWebRequest);
+        validateTreatment(containerPatientMappingWebRequest);
+    }
 
-        // If container is not registered or doesn't contain lab results: bomb
+    private void validateTreatment(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+        Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
+        Treatment currentTreatment = patient.getCurrentTreatment();
+        if(patient.getCurrentTherapy().isClosed()) {
+             throw new WHPCaseException(new WHPError(TREATMENT_ALREADY_CLOSED));
+        }
+        if(currentTreatment ==null || !currentTreatment.getTbId().equals(containerPatientMappingWebRequest.getTb_id())){
+            throw new WHPCaseException(new WHPError(NO_EXISTING_TREATMENT_FOR_CASE));
+        }
+    }
+
+    private void validatePatient(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+        Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
+        if(null == patient) {
+            throw new WHPCaseException(new WHPError(PATIENT_NOT_FOUND));
+        }
+    }
+
+    private void validateContainer(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
         if(!containerService.exists(containerPatientMappingWebRequest.getCase_id())){
             throw new WHPCaseException(new WHPError(INVALID_CONTAINER_ID));
         } else if(containerService.getContainer(containerPatientMappingWebRequest.getCase_id()).getLabResults() == null) {
             throw new WHPCaseException(new WHPError(NO_LAB_RESULTS_IN_CONTAINER));
         }
+    }
 
-        // If patient is not registered or doesn't have an ongoing treatment: bomb
-        Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
-        if(null == patient) {
-            throw new WHPCaseException(new WHPError(PATIENT_NOT_FOUND));
-        } else if(patient.getCurrentTreatment()==null || !patient.getCurrentTreatment().getTbId().equals(containerPatientMappingWebRequest.getTb_id())){
-            throw new WHPCaseException(new WHPError(NO_EXISTING_TREATMENT_FOR_CASE));
+    private void validateCaseXml(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+        if(!containerPatientMappingWebRequest.isWellFormed()) {
+            throw new WHPCaseException(new WHPError(CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE));
         }
-
     }
 
     @Override
