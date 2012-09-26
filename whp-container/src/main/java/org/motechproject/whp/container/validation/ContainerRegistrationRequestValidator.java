@@ -1,4 +1,4 @@
-package org.motechproject.whp.container.domain;
+package org.motechproject.whp.container.validation;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.error.ErrorWithParameters;
@@ -21,16 +21,15 @@ import static java.lang.String.valueOf;
 public class ContainerRegistrationRequestValidator {
 
     private ContainerService containerService;
-    private ProviderContainerMappingService providerContainerMappingService;
+
     private SputumTrackingProperties sputumTrackingProperties;
     private ProviderService providerService;
 
     @Autowired
     public ContainerRegistrationRequestValidator(ContainerService containerService, ProviderService providerService,
-                                                 ProviderContainerMappingService providerContainerMappingService, SputumTrackingProperties sputumTrackingProperties) {
+                                                 SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
         this.providerService = providerService;
-        this.providerContainerMappingService = providerContainerMappingService;
         this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
@@ -48,14 +47,11 @@ public class ContainerRegistrationRequestValidator {
         if (StringUtils.isBlank(providerId))
             errors.add(new ErrorWithParameters("provider.id.invalid.error", providerId));
 
-        if (isProviderExists(providerId)) {
-            if (!providerContainerMappingService.isValidContainerForProvider(providerId, containerId))
-                errors.add(new ErrorWithParameters("container.id.invalid.error", containerId));
-        } else
-            errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
-
         if (!SputumTrackingInstance.isValid(instance))
             errors.add(new ErrorWithParameters("invalid.instance.error", instance));
+
+        if (!isProviderExists(providerId))
+            errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
 
         if (containerService.exists(containerId))
             errors.add(new ErrorWithParameters("container.already.registered.error"));
