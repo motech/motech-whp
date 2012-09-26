@@ -5,6 +5,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.refdata.domain.ContainerStatus;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 @Data
@@ -21,6 +22,8 @@ public class Container extends MotechBaseDataObject {
 
     private DateTime creationTime;
 
+    private ContainerStatus status;
+
     // Required for ektorp
     public Container() {
     }
@@ -30,7 +33,7 @@ public class Container extends MotechBaseDataObject {
         this.containerId = containerId;
         this.instance = instance;
         this.creationTime = creationTime;
-
+        this.status = ContainerStatus.Open;
     }
 
     public void setCreationTime(DateTime creationTime) {

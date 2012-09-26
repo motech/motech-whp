@@ -57,6 +57,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         } else if(patient.getCurrentTreatment()==null || !patient.getCurrentTreatment().getTbId().equals(containerPatientMappingWebRequest.getTb_id())){
             throw new WHPCaseException(new WHPError(NO_EXISTING_TREATMENT_FOR_CASE));
         }
+
     }
 
     @Override
