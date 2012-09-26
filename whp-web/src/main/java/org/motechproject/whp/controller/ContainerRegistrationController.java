@@ -1,12 +1,11 @@
 package org.motechproject.whp.controller;
 
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.container.validation.ContainerRegistrationValidator;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.ui.Model;
 
@@ -22,17 +21,17 @@ public abstract class ContainerRegistrationController extends BaseWebController 
     public static final String INSTANCES = "instances";
     public static final String CONTAINER_ID_MAX_LENGTH = "containerIdMaxLength";
     protected ContainerService containerService;
-    protected ContainerRegistrationRequestValidator registrationRequestValidator;
+    protected ContainerRegistrationValidator containerRegistrationValidator;
     protected SputumTrackingProperties sputumTrackingProperties;
 
-    public ContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
+    public ContainerRegistrationController(ContainerService containerService, ContainerRegistrationValidator containerRegistrationValidator, SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
-        this.registrationRequestValidator = registrationRequestValidator;
+        this.containerRegistrationValidator = containerRegistrationValidator;
         this.sputumTrackingProperties = sputumTrackingProperties;
     }
 
-    protected boolean hasErrors(Model uiModel, ContainerRegistrationRequest registrationRequest, HttpServletRequest request) {
-        List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
+    protected boolean validate(Model uiModel, ContainerRegistrationRequest registrationRequest) {
+        List<ErrorWithParameters> errors = containerRegistrationValidator.validate(registrationRequest);
         if (!errors.isEmpty()) {
             uiModel.addAttribute("errors", errors);
             return true;

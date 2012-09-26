@@ -3,9 +3,9 @@ package org.motechproject.whp.controller;
 import freemarker.template.TemplateException;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +22,8 @@ import static org.motechproject.flash.Flash.out;
 public class ProviderContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public ProviderContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
-        super(containerService, registrationRequestValidator, sputumTrackingProperties);
+    public ProviderContainerRegistrationController(ContainerService containerService, ProviderContainerRegistrationValidator providerContainerRegistrationValidator, SputumTrackingProperties sputumTrackingProperties) {
+        super(containerService, providerContainerRegistrationValidator, sputumTrackingProperties);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -36,7 +36,7 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
     public String register(Model uiModel, ContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
         populateProviderId(registrationRequest, servletRequest);
 
-        if (hasErrors(uiModel, registrationRequest, servletRequest)) {
+        if (validate(uiModel, registrationRequest)) {
             return show(uiModel, servletRequest);
         }
 

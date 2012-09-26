@@ -28,7 +28,7 @@ public class ContainerRegistrationRequestValidatorTest {
     private ProviderService providerService;
     @Mock
     private ProviderContainerMappingService providerContainerMappingService;
-    private ContainerRegistrationRequestValidator registrationRequestValidator;
+    private CommonContainerRegistrationValidator registrationRequestValidator;
     private Provider validProvider;
 
     @Before
@@ -37,7 +37,7 @@ public class ContainerRegistrationRequestValidatorTest {
         initMocks(this);
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(11);
         when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
-        registrationRequestValidator = new ContainerRegistrationRequestValidator(containerService, providerService, sputumTrackingProperties);
+        registrationRequestValidator = new CommonContainerRegistrationValidator(containerService, providerService, sputumTrackingProperties);
     }
 
     @Test

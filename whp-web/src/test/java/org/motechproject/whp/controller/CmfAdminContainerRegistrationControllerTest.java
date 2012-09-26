@@ -12,9 +12,9 @@ import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.ui.Model;
@@ -36,11 +36,11 @@ public class CmfAdminContainerRegistrationControllerTest {
     public static final String CONTRIB_FLASH_OUT_PREFIX = "flash.out.";
     public static final String CONTRIB_FLASH_IN_PREFIX = "flash.in.";
     public static final int CONTAINER_ID_MAX_LENGTH = 11;
-    private CMFAdminContainerRegistrationController containerRegistrationController;
+    private CmfAdminContainerRegistrationController containerRegistrationController;
     @Mock
     private ContainerService containerService;
     @Mock
-    private ContainerRegistrationRequestValidator registrationRequestValidator;
+    private CmfAdminContainerRegistrationValidator containerRegistrationValidator;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
 
@@ -52,7 +52,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
         INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new CMFAdminContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         List<ErrorWithParameters> errors = new ArrayList<>();
         errors.add(new ErrorWithParameters("some error 1"));
         errors.add(new ErrorWithParameters("some error 2"));
-        when(registrationRequestValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
+        when(containerRegistrationValidator.validate(any(CmfAdminContainerRegistrationRequest.class))).thenReturn(errors);
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
@@ -134,7 +134,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(forwardedUrl("containerRegistration/showForCmfAdmin"));
 
-        verify(registrationRequestValidator).validate(any(ContainerRegistrationRequest.class));
+        verify(containerRegistrationValidator).validate(any(CmfAdminContainerRegistrationRequest.class));
         verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
     }
 

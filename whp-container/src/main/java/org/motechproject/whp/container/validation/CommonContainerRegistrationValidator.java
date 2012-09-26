@@ -18,16 +18,15 @@ import static java.lang.String.valueOf;
 
 
 @Component
-public class ContainerRegistrationRequestValidator {
+public class CommonContainerRegistrationValidator {
 
     private ContainerService containerService;
-
     private SputumTrackingProperties sputumTrackingProperties;
     private ProviderService providerService;
 
     @Autowired
-    public ContainerRegistrationRequestValidator(ContainerService containerService, ProviderService providerService,
-                                                 SputumTrackingProperties sputumTrackingProperties) {
+    public CommonContainerRegistrationValidator(ContainerService containerService, ProviderService providerService,
+                                                SputumTrackingProperties sputumTrackingProperties) {
         this.containerService = containerService;
         this.providerService = providerService;
         this.sputumTrackingProperties = sputumTrackingProperties;

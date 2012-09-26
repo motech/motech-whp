@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import freemarker.template.TemplateException;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.ContainerRegistrationRequestValidator;
+import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,13 @@ import static org.motechproject.flash.Flash.out;
 
 @Controller
 @RequestMapping(value = "/containerRegistration/by_cmfAdmin")
-public class CMFAdminContainerRegistrationController extends ContainerRegistrationController {
+public class CmfAdminContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public CMFAdminContainerRegistrationController(ContainerService containerService, ContainerRegistrationRequestValidator registrationRequestValidator, SputumTrackingProperties sputumTrackingProperties) {
-        super(containerService, registrationRequestValidator, sputumTrackingProperties);
+    public CmfAdminContainerRegistrationController(ContainerService containerService,
+                                                   CmfAdminContainerRegistrationValidator cmfAdminContainerRegistrationValidator,
+                                                   SputumTrackingProperties sputumTrackingProperties) {
+        super(containerService, cmfAdminContainerRegistrationValidator, sputumTrackingProperties);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -34,7 +36,7 @@ public class CMFAdminContainerRegistrationController extends ContainerRegistrati
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(Model uiModel, CmfAdminContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
-        if (hasErrors(uiModel, registrationRequest, servletRequest))
+        if (validate(uiModel, registrationRequest))
             return show(uiModel, servletRequest);
 
         containerService.registerContainer(registrationRequest);

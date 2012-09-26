@@ -10,9 +10,9 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.ContainerRegistrationRequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
 
@@ -37,7 +37,7 @@ public class ProviderContainerRegistrationControllerTest {
     @Mock
     private ContainerService containerService;
     @Mock
-    private ContainerRegistrationRequestValidator registrationRequestValidator;
+    private ProviderContainerRegistrationValidator containerRegistrationValidator;
     @Mock
     private SputumTrackingProperties sputumTrackingProperties;
     private String providerId;
@@ -50,7 +50,7 @@ public class ProviderContainerRegistrationControllerTest {
         INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
         providerId = "providerId";
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new ProviderContainerRegistrationController(containerService, registrationRequestValidator, sputumTrackingProperties);
+        containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class ProviderContainerRegistrationControllerTest {
         ArrayList<ErrorWithParameters> errors = new ArrayList<>();
         errors.add(new ErrorWithParameters("a", "b"));
         errors.add(new ErrorWithParameters("a", "b"));
-        when(registrationRequestValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
+        when(containerRegistrationValidator.validate(any(ContainerRegistrationRequest.class))).thenReturn(errors);
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
@@ -107,7 +107,7 @@ public class ProviderContainerRegistrationControllerTest {
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
 
         ArgumentCaptor<ContainerRegistrationRequest> captor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
-        verify(registrationRequestValidator).validate(captor.capture());
+        verify(containerRegistrationValidator).validate(captor.capture());
         ContainerRegistrationRequest request = captor.getValue();
         assertEquals(providerId.toLowerCase(), request.getProviderId());
 
