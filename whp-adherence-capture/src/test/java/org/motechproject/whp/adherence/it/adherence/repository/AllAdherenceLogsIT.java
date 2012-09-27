@@ -16,6 +16,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class AllAdherenceLogsIT extends SpringIntegrationTest {
@@ -61,6 +62,80 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         assertArrayEquals(
                 new AdherenceLog[]{toBeFound},
                 allAdherenceLogs.findLogsBy("externalId", "treatmentId", today).toArray()
+        );
+    }
+
+    @Test
+    public void shouldReturnTakenLogsWhenFindingLogsAsOfGivenDate() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
+        toBeFound.status(1);
+        addAll(toBeFound);
+        assertArrayEquals(
+                new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
+                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+        );
+    }
+
+    @Test
+    public void shouldReturnNotTakenLogsWhenFindingLogsAsOfGivenDate() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
+        toBeFound.status(2);
+
+        addAll(toBeFound);
+        assertArrayEquals(
+                new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
+                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+        );
+    }
+
+    @Test
+    public void shouldNotReturnUnknownLogsWhenFindingLogsAsOfGivenDate() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
+        toBeFound.status(0);
+
+        addAll(toBeFound);
+        assertTrue(allAdherenceLogs.findLogsAsOf(today, 0, 1).isEmpty());
+    }
+
+    @Test
+    public void shouldPageAdherenceRecordsReturnedWhenFindingLogsByDate() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog logToBeFoundForPatient1 = new AdherenceLog("externalId1", "treatmentId1", today);
+        AdherenceLog logToBeFoundForPatient2 = new AdherenceLog("externalId2", "treatmentId2", today);
+        logToBeFoundForPatient1.status(1);
+        logToBeFoundForPatient2.status(1);
+
+        addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
+        assertArrayEquals(
+                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1)},
+                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+        );
+        assertArrayEquals(
+                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient2)},
+                allAdherenceLogs.findLogsAsOf(today, 1, 1).toArray()
+        );
+    }
+
+    @Test
+    public void shouldReturnLogsForAllPatientsWhenFindingLogsAsOfGivenDate() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog logToBeFoundForPatient1 = new AdherenceLog("externalId1", "treatmentId1", today);
+        AdherenceLog logToBeFoundForPatient2 = new AdherenceLog("externalId2", "treatmentId2", today);
+        logToBeFoundForPatient1.status(1);
+        logToBeFoundForPatient2.status(1);
+
+        addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
+        assertArrayEquals(
+                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1), new AdherenceRecord(logToBeFoundForPatient2)},
+                allAdherenceLogs.findLogsAsOf(today, 0, 2).toArray()
         );
     }
 

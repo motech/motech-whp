@@ -2,6 +2,7 @@ package org.motechproject.whp.adherence.contract;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,14 @@ public class AdherenceRecord {
         this.externalId = externalId;
         this.treatmentId = treatmentId;
         this.doseDate = doseDate;
+    }
+
+    public AdherenceRecord(AdherenceLog adherenceLog) {
+        super();
+        this.externalId = adherenceLog.externalId();
+        this.doseDate = adherenceLog.doseDate();
+        this.treatmentId = adherenceLog.treatmentId();
+        this.status = adherenceLog.status();
     }
 
     public AdherenceRecord status(int status) {
