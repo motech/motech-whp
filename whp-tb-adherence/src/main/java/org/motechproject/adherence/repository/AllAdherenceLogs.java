@@ -60,7 +60,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return singleResult(db.queryView(q, AdherenceLog.class));
     }
 
-    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog') {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
+    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog' && doc.status !== 0 ) {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
     public List<AdherenceRecord> findLogsAsOf(LocalDate asOf, int pageNumber, int pageSize) {
         ViewQuery q = createQuery("by_dosageDate").endKey(asOf).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
