@@ -21,6 +21,15 @@ public enum SputumTrackingInstance {
         return null;
     }
 
+    public static SputumTrackingInstance getInstanceByName(String name) {
+        for(SputumTrackingInstance instance : values()) {
+            if(instance.name().equals(name)) {
+                return instance;
+            }
+        }
+        return null;
+    }
+
     public static boolean isValid(String text) {
         for(SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.values())
             if(sputumTrackingInstance.getDisplayText().toUpperCase().equals(text.toUpperCase()))

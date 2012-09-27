@@ -4,6 +4,7 @@ import org.motechproject.casexml.service.CaseService;
 import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
@@ -34,11 +35,17 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
     }
 
     @Override
-    public void updateCase(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) throws CaseException {
-        WHPError validationError = containerPatientMappingRequestValidator.validate(containerPatientMappingWebRequest);
+    public void updateCase(ContainerPatientMappingWebRequest request) throws CaseException {
+        WHPError validationError = containerPatientMappingRequestValidator.validate(request);
         if (null != validationError) {
             throw new WHPCaseException(validationError);
         }
+        map(request.getCase_id(), request.getPatient_id());
+    }
+
+    private void map(String containerId, String patient_id) {
+        Container container = containerService.getContainer(containerId);
+        container.mapWith(patient_id);
     }
 
     @Override
