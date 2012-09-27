@@ -605,6 +605,18 @@ pre {
 .pull-down-5px {
     margin-top: 5px;
 }
+
+.margin-bottom-10px {
+    margin-bottom: 10px;
+}
+.margin-left-3px {
+    margin-left: 3px;
+}
+
+.margin-left-15px {
+    margin-left:15px;
+}
+
 .padding-left {
     padding-left: 5px;
 }

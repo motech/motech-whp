@@ -22,15 +22,16 @@
             <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="row well form-horizontal span9">
                 <table class="controls">
                     <tr>
-                        <td>
-                            <div class="control-group">
-                                <label class="control-label">Provider ID*</label>
+                            <td>
+								<div class="control-group row margin-bottom-10px margin-left-3px">
+									<input type="radio" class="radio controls" name="containerRegistrationMode"
+										   checked="true" value="ON_BEHALF_OF_PROVIDER">  Register on behalf of provider</input>
 
-                                <div class="controls">
-                                    <input id="providerId" class="span" name="providerId" type="text"/>
-                                </div>
-                            </div>
-                        </td>
+									<span class = "margin-left-15px"><input type="radio" class="radio" name="containerRegistrationMode"
+										   value="NEW_CONTAINER">  Register a new container</input>
+									</span>
+								</div>
+                            </td>
                     </tr>
                     <tr>
                         <td>
@@ -39,6 +40,17 @@
 
                                 <div class="controls">
                                     <input id="containerId" class="span" name="containerId" type="text" maxlength="${containerIdMaxLength}" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="control-group">
+                                <label class="control-label">Provider ID*</label>
+
+                                <div class="controls">
+                                    <input id="providerId" class="span" name="providerId" type="text"/>
                                 </div>
                             </div>
                         </td>
@@ -58,22 +70,6 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
-                    <tr>
-                        <div class="control-group row">
-                            <td>
-                                <input type="radio" class="radio controls" name="containerRegistrationMode"
-                                       checked="true" value="ON_BEHALF_OF_PROVIDER"> Register on behalf of provider</input>
-                            </td>
-                        </div>
-                    </tr>
-                    <tr>
-                        <div class="control-group row">
-                            <td>
-                                <input type="radio" class="radio controls" name="containerRegistrationMode"
-                                       value="NEW_CONTAINER"> Register a new container</input>
-                            </td>
-                        </div>
                     </tr>
                     <tr>
                         <td>
