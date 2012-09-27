@@ -22,7 +22,9 @@ import static org.motechproject.flash.Flash.out;
 public class ProviderContainerRegistrationController extends ContainerRegistrationController {
 
     @Autowired
-    public ProviderContainerRegistrationController(ContainerService containerService, ProviderContainerRegistrationValidator providerContainerRegistrationValidator, SputumTrackingProperties sputumTrackingProperties) {
+    public ProviderContainerRegistrationController(ContainerService containerService,
+                                                   ProviderContainerRegistrationValidator providerContainerRegistrationValidator,
+                                                   SputumTrackingProperties sputumTrackingProperties) {
         super(containerService, providerContainerRegistrationValidator, sputumTrackingProperties);
     }
 
@@ -33,7 +35,8 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(Model uiModel, ContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
+    public String register(Model uiModel, ContainerRegistrationRequest registrationRequest,
+                           HttpServletRequest servletRequest) throws IOException, TemplateException {
         populateProviderId(registrationRequest, servletRequest);
 
         if (validate(uiModel, registrationRequest)) {
