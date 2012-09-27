@@ -70,7 +70,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                         .param("containerId", containerId)
                         .param("instance", instance)
                         .param("providerId", providerId)
-                        .param("containerRegistrationMode", "NEW_CONTAINER")
+                        .param("containerRegistrationMode", ContainerRegistrationMode.NEW_CONTAINER.name())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))));
 
         ArgumentCaptor<CmfAdminContainerRegistrationRequest> argumentCaptor = ArgumentCaptor.forClass(CmfAdminContainerRegistrationRequest.class);
