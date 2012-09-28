@@ -36,6 +36,7 @@
         <module>whp-reporting</module>
         <module>whp-container</module>
         <module>whp-container-mapping</module>
+        <module>whp-container-dashboard</module>
     </modules>
 
     <repositories>
@@ -168,6 +169,11 @@
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-container</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-container-dashboard</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

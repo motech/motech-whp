@@ -9,16 +9,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>whp-container-mapping</name>
-    <artifactId>whp-container-mapping</artifactId>
+    <name>whp-container-dashboard</name>
+    <artifactId>whp-container-dashboard</artifactId>
     <properties>
         <build.dir>../build</build.dir>
     </properties>
+
 
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-container</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
         </dependency>
     </dependencies>
 
