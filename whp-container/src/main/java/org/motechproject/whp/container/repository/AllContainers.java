@@ -27,7 +27,7 @@ public class AllContainers extends MotechBaseRepository<Container> {
     }
 
     @View(name = "find_by_patient_id_and_instance", map = "function(doc) {if (doc.type ==='Container') {emit([doc.patientId, doc.mappingInstance], doc._id);}}")
-    public Container findBy(String patientId, String instanceName) {
+    public Container findByPatientIdAndInstanceName(String patientId, String instanceName) {
         if (patientId == null || instanceName == null)
             return null;
         ViewQuery find_by_patient_id_and_instance = createQuery("find_by_patient_id_and_instance").startKey(ComplexKey.of(patientId.toLowerCase(), instanceName)).endKey(ComplexKey.of(patientId.toLowerCase(), instanceName)).includeDocs(true);

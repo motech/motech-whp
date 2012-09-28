@@ -60,14 +60,14 @@ public class AllContainersIT extends SpringIntegrationTest {
         container.mapWith(patientId, instance);
         allContainers.update(container);
 
-        Container containerReturned = allContainers.findBy(patientId, instance.name());
+        Container containerReturned = allContainers.findByPatientIdAndInstanceName(patientId, instance.name());
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
         assertEquals(patientId, containerReturned.getPatientId());
         assertEquals(instance, containerReturned.getMappingInstance());
 
-        containerReturned = allContainers.findBy(patientId, SputumTrackingInstance.PreTreatment.name());
+        containerReturned = allContainers.findByPatientIdAndInstanceName(patientId, SputumTrackingInstance.PreTreatment.name());
         assertNull(containerReturned);
     }
 

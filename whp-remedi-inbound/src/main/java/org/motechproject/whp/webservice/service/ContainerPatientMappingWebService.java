@@ -46,7 +46,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
     }
 
     private void map(ContainerPatientMappingWebRequest request) {
-        Container alreadyMapped = containerService.findBy(request.getPatient_id(), request.getSmear_sample_instance());
+        Container alreadyMapped = containerService.findByPatientIdAndInstanceName(request.getPatient_id(), request.getSmear_sample_instance());
         if (alreadyMapped != null) {
             Patient patient = patientService.findByPatientId(request.getPatient_id());
             if(isDuplicateRequest(request, alreadyMapped, patient)) {
