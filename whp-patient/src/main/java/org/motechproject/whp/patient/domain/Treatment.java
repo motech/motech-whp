@@ -117,6 +117,7 @@ public class Treatment {
         return WHPDate.date(startDate).value();
     }
 
+    @JsonIgnore
     public SmearTestResult getPreTreatmentSmearTestResult() {
         return smearTestResults.getPreTreatmentResult();
     }

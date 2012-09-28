@@ -56,6 +56,7 @@ public class SmearTestRecord {
         return SmearTestResult.Indeterminate;
     }
 
+    @JsonIgnore
     public boolean isPreTreatmentRecord() {
         return smear_sample_instance == SampleInstance.PreTreatment;
     }

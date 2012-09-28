@@ -419,6 +419,7 @@ public class Patient extends MotechBaseDataObject {
         getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
     }
 
+    @JsonIgnore
     public SmearTestResult getPreTreatmentSputumResult() {
         return getCurrentTherapy().getPreTreatmentSputumResult();
     }

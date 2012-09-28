@@ -80,6 +80,7 @@ public class SmearTestResults {
         return Collections.unmodifiableList(all);
     }
 
+    @JsonIgnore
     public SmearTestResult getPreTreatmentResult() {
         for(SmearTestRecord smearTestRecord : all) {
             if(smearTestRecord.isPreTreatmentRecord())
