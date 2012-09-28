@@ -36,7 +36,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         this.container = new Container();
         container.setContainerId("12345");
         container.setProviderId("providerId");
-        container.setInstance(SputumTrackingInstance.IN_TREATMENT);
+        container.setInstance(SputumTrackingInstance.InTreatment);
 
         allContainers.add(container);
         markForDeletion(container);

@@ -43,7 +43,7 @@ public class Container extends MotechBaseDataObject {
     }
 
     public void mapWith(String patientId) {
-        setPatientId(patientId);
+        setPatientId(patientId.toLowerCase());
         setStatus(ContainerStatus.Closed);
     }
 

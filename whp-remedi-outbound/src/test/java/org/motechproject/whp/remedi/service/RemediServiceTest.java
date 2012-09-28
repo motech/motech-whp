@@ -32,7 +32,7 @@ public class RemediServiceTest {
     }
     @Test
     public void shouldSendContainerRegistrationDetails() throws IOException, TemplateException {
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", SputumTrackingInstance.PRE_TREATMENT, DateUtil.now());
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", SputumTrackingInstance.PreTreatment, DateUtil.now());
         String xmlRequestToBeSent = "xml Request";
 
         when(remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel)).thenReturn(xmlRequestToBeSent);

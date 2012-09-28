@@ -6,6 +6,7 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
 import static org.motechproject.whp.common.exception.WHPErrorCode.*;
@@ -33,7 +34,17 @@ public class ContainerPatientMappingRequestValidator {
         if (null == validationError) {
             validationError = validateTreatment(containerPatientMappingWebRequest);
         }
+        if(null == validationError) {
+            validationError = validateInstance(containerPatientMappingWebRequest);
+        }
         return validationError;
+    }
+
+    private WHPError validateInstance(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+        if(!SputumTrackingInstance.isValidMappingInstance(containerPatientMappingWebRequest.getSmear_sample_instance())) {
+            return new WHPError(INVALID_SPUTUM_TEST_INSTANCE);
+        }
+        return null;
     }
 
     private WHPError validateTreatment(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {

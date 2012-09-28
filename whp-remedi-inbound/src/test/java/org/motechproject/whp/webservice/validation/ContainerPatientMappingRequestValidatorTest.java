@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -43,7 +44,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPerformContainerPatientMapping_whenContainerIsNotRegistered() {
+    public void shouldReturnValidationError_whenContainerIsNotRegistered() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
 
         when(containerService.exists(any(String.class))).thenReturn(false);
@@ -56,7 +57,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPerformContainerPatientMapping_whenPatientIsNotRegistered() {
+    public void shouldReturnValidationError_whenPatientIsNotRegistered() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
         Container container = new Container();
         container.setContainerId(request.getCase_id());
@@ -75,8 +76,9 @@ public class ContainerPatientMappingRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPerformContainerPatientMapping_whenTbIdIsInvalid() {
+    public void shouldReturnValidationError_whenTbIdIsInvalid() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
+        request.setTb_id("TbId");
         Container container = new Container();
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
@@ -97,7 +99,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPerformContainerPatientMapping_whenContainerDoesNotHaveLabResults() {
+    public void shouldReturnValidationError_whenContainerDoesNotHaveLabResults() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
         Container container = new Container();
         container.setContainerId(request.getCase_id());
@@ -112,7 +114,29 @@ public class ContainerPatientMappingRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotPerformContainerPatientMapping_whenPatientDoesNotHaveOngoingTherapy() {
+    public void shouldReturnValidationError_whenSputumTestInstanceIsInvalid() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        request.setSmear_sample_instance(SputumTrackingInstance.InTreatment.name());
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentTreatment().setTbId(request.getTb_id());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+        WHPError validationError = validator.validate(request);
+
+        assertEquals(INVALID_SPUTUM_TEST_INSTANCE, validationError.getErrorCode());
+    }
+
+    @Test
+    public void shouldReturnValidationError_whenPatientDoesNotHaveOngoingTherapy() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
         Container container = new Container();
         container.setContainerId(request.getCase_id());
@@ -137,7 +161,7 @@ public class ContainerPatientMappingRequestValidatorTest {
                 .withDateModified(now().toString())
                 .withInstance(SampleInstance.PreTreatment.name())
                 .withPatientId("patient")
-                .withTbId("tbId")
+                .withTbId("tbid")
                 .build();
     }
 }

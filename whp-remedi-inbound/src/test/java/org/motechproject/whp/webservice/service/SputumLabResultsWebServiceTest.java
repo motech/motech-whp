@@ -62,7 +62,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 "</update>\n" +
                 "</case>";
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now()));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now()));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -121,7 +121,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now()));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now()));
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -140,7 +140,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        Container container = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
+        Container container = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now());
 
         when(containerService.getContainer(containerId)).thenReturn(container);
 

@@ -94,7 +94,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_OnBehalfOfProvider() throws Exception {
         String containerId = "10000000000";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
@@ -131,7 +131,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_ForNewContainer() throws Exception {
         String containerId = "30000000000";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());

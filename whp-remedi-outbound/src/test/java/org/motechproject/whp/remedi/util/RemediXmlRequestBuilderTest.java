@@ -26,8 +26,8 @@ public class RemediXmlRequestBuilderTest {
     @Test
     public void shouldBuildXmlFromTemplate_forSuppliedContainerRegistrationModel() throws IOException, TemplateException, SAXException {
         DateTime now = DateUtil.now();
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("123456", "raj", SputumTrackingInstance.PRE_TREATMENT, now);
-        assertXMLEqual(getExpectedXml("123456", "raj", SputumTrackingInstance.PRE_TREATMENT, now), remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel));
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("123456", "raj", SputumTrackingInstance.PreTreatment, now);
+        assertXMLEqual(getExpectedXml("123456", "raj", SputumTrackingInstance.PreTreatment, now), remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel));
     }
 
     private String getExpectedXml(String containerId, String providerId, SputumTrackingInstance caseType, DateTime dateModified) {

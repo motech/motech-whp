@@ -19,7 +19,7 @@ public class ContainerTest {
     @Test
     public void shouldCloseLifecycle_uponMappingWithPatient() {
         Container container = new Container();
-        String patientId = "patientId";
+        String patientId = "patientid";
         container.mapWith(patientId);
         assertEquals(patientId, container.getPatientId());
         assertEquals(ContainerStatus.Closed, container.getStatus());
@@ -28,7 +28,7 @@ public class ContainerTest {
     @Test
     public void shouldOpenLifecycle_uponUnMappingFromPatient() {
         Container container = new Container();
-        container.mapWith("patientId");
+        container.mapWith("patientid");
         container.unMap();
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertNull(container.getPatientId());

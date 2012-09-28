@@ -48,4 +48,8 @@ public class ContainerService {
     public void update(Container container) {
         allContainers.update(container);
     }
+
+    public Container findByPatientId(String patientId) {
+        return allContainers.findByPatientId(patientId);
+    }
 }

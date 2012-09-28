@@ -82,7 +82,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Test
     public void shouldRegisterContainer() throws Exception {
         String containerId = "10000000000";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         List<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());

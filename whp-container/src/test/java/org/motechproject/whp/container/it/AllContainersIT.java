@@ -34,7 +34,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     @Before
     public void setUp() {
         now = DateUtil.now();
-        container = new Container("P00001", "1234567890", SputumTrackingInstance.PRE_TREATMENT, now);
+        container = new Container("P00001", "1234567890", SputumTrackingInstance.PreTreatment, now);
     }
 
     @Test
@@ -46,6 +46,21 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
         assertEquals(now, containerReturned.getCreationTime());
+        assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
+    }
+
+    @Test
+    public void shouldFindContainerByPatientId() {
+        addAndMarkForDeletion(container);
+        String patientId = "patientid";
+        container.mapWith(patientId);
+        allContainers.update(container);
+        Container containerReturned = allContainers.findByPatientId(patientId);
+
+        assertNotNull(containerReturned);
+        assertEquals("1234567890", containerReturned.getContainerId());
+        assertEquals("P00001", containerReturned.getProviderId());
+        assertEquals(patientId, containerReturned.getPatientId());
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 
@@ -71,7 +86,6 @@ public class AllContainersIT extends SpringIntegrationTest {
 
         Container containerWithLabResults = allContainers.findByContainerId(containerId);
 
-        assertEquals(now, containerWithLabResults.getCreationTime());
         assertThat(containerWithLabResults.getLabResults(), is(labResults));
     }
 }

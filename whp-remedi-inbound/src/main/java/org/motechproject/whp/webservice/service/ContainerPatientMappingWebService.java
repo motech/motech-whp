@@ -6,6 +6,7 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -40,12 +41,29 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if (null != validationError) {
             throw new WHPCaseException(validationError);
         }
-        map(request.getCase_id(), request.getPatient_id());
+        map(request);
     }
 
-    private void map(String containerId, String patient_id) {
-        Container container = containerService.getContainer(containerId);
-        container.mapWith(patient_id);
+    private void map(ContainerPatientMappingWebRequest request) {
+        Container alreadyMapped = containerService.findByPatientId(request.getPatient_id());
+        if (alreadyMapped != null) {
+            Patient patient = patientService.findByPatientId(request.getPatient_id());
+            if(isDuplicateRequest(request, alreadyMapped, patient)) {
+                return;
+            }
+            alreadyMapped.unMap();
+            containerService.update(alreadyMapped);
+        }
+        Container container = containerService.getContainer(request.getCase_id());
+        container.mapWith(request.getPatient_id());
+        containerService.update(container);
+    }
+
+    private boolean isDuplicateRequest(ContainerPatientMappingWebRequest request, Container container, Patient patient) {
+        return container.getContainerId().equals(request.getCase_id())
+                && container.getPatientId().equals(request.getPatient_id())
+                && patient.getCurrentTreatment().getTbId().equals(request.getTb_id())
+                && container.getInstance().name().equals(request.getSmear_sample_instance());
     }
 
     @Override

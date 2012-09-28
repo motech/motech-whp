@@ -9,8 +9,7 @@ import static org.junit.Assert.assertTrue;
 public class SputumTrackingInstanceTest {
     @Test
     public void shouldValidateGivenInstanceText() {
-        assertTrue(SputumTrackingInstance.isValid(SputumTrackingInstance.IN_TREATMENT.getDisplayText()));
-        assertTrue(SputumTrackingInstance.isValid(SputumTrackingInstance.IN_TREATMENT.getDisplayText().toLowerCase()));
-        assertFalse(SputumTrackingInstance.isValid("invalid_instance"));
+        assertTrue(SputumTrackingInstance.isValidRegistrationInstance(SputumTrackingInstance.InTreatment.getDisplayText()));
+        assertFalse(SputumTrackingInstance.isValidRegistrationInstance("invalid_instance"));
     }
 }

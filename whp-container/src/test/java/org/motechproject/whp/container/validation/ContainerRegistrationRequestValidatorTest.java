@@ -43,7 +43,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidateDuplicateContainerId() {
         String containerID = "12345678910";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerID, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerID, SputumTrackingInstance.InTreatment.getDisplayText());
         when(containerService.exists(containerID)).thenReturn(true);
 
         List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
@@ -54,14 +54,14 @@ public class ContainerRegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidateContainerId_notHavingStipulatedNumberOfDigits() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345", SputumTrackingInstance.InTreatment.getDisplayText());
         List<ErrorWithParameters> invalidLengthErrors = registrationRequestValidator.validate(request);
         assertTrue(invalidLengthErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
     }
 
     @Test
     public void shouldValidateContainerId_havingNonNumericCharacters() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "123456789a", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "123456789a", SputumTrackingInstance.InTreatment.getDisplayText());
         List<ErrorWithParameters> nonNumericErrors = registrationRequestValidator.validate(request);
         assertTrue(nonNumericErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
     }
@@ -75,7 +75,7 @@ public class ContainerRegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderIdIsUndefined() {
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest("", "12345678910", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest("", "12345678910", SputumTrackingInstance.InTreatment.getDisplayText());
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
         assertTrue(validationErrors.contains(new ErrorWithParameters("provider.id.invalid.error", "")));
     }
@@ -83,7 +83,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderExists() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.InTreatment.getDisplayText());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
 
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
@@ -96,7 +96,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderDoesNotExist() {
         String unregisteredProviderId = "UnregisteredProviderId";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, "11111111111", SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, "11111111111", SputumTrackingInstance.InTreatment.getDisplayText());
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
         verify(providerService).findByProviderId(unregisteredProviderId);

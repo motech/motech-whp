@@ -45,7 +45,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         mockCurrentDate(creationDate);
         String providerId = "provider_one";
         String containerId = "1234567890";
-        SputumTrackingInstance instance = SputumTrackingInstance.IN_TREATMENT;
+        SputumTrackingInstance instance = SputumTrackingInstance.InTreatment;
 
         containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText()));
 
@@ -76,7 +76,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldGetContainerByContainerId() {
         String containerId = "containerId";
-        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
+        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now());
         when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
 
         Container container = containerService.getContainer(containerId);
@@ -87,7 +87,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer() {
-        Container container = new Container("providerId", "containerId", SputumTrackingInstance.IN_TREATMENT, DateUtil.now());
+        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now());
 
         containerService.update(container);
 

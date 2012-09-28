@@ -23,4 +23,12 @@ public class AllContainers extends MotechBaseRepository<Container> {
         ViewQuery find_by_containerId = createQuery("by_containerId").key(containerId.toLowerCase()).includeDocs(true);
         return singleResult(db.queryView(find_by_containerId, Container.class));
     }
+
+    @GenerateView
+    public Container findByPatientId(String patientId) {
+        if (patientId == null)
+            return null;
+        ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
+        return singleResult(db.queryView(find_by_patientId, Container.class));
+    }
 }

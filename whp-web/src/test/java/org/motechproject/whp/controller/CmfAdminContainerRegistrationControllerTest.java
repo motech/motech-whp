@@ -49,8 +49,8 @@ public class CmfAdminContainerRegistrationControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
-        INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        INSTANCES.add(SputumTrackingInstance.PreTreatment.getDisplayText());
+        INSTANCES.add(SputumTrackingInstance.InTreatment.getDisplayText());
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
         containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
     }
@@ -64,7 +64,7 @@ public class CmfAdminContainerRegistrationControllerTest {
 
         String containerId = "containerId";
         String providerId = "providerId";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
@@ -142,7 +142,7 @@ public class CmfAdminContainerRegistrationControllerTest {
     public void shouldRegisterTheContainerGivenTheDetails() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
@@ -167,7 +167,7 @@ public class CmfAdminContainerRegistrationControllerTest {
     public void shouldRegisterTheContainerGivenTheDetailsForACMFAdmin() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());

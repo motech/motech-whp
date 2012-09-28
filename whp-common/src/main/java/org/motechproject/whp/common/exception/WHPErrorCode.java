@@ -25,7 +25,8 @@ public enum WHPErrorCode {
     SPUTUM_LAB_RESULT_IS_INCOMPLETE("Lab results are incomplete"),
     CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE("All the fields are mandatory"),
     PATIENT_NOT_FOUND("No such patient is registered in WHP"),
-    NO_LAB_RESULTS_IN_CONTAINER("The container does not contain lab results");
+    NO_LAB_RESULTS_IN_CONTAINER("The container does not contain lab results"),
+    INVALID_SPUTUM_TEST_INSTANCE("The sputum test instance is invalid");
 
     private String message;
 

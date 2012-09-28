@@ -41,7 +41,7 @@ public abstract class ContainerRegistrationController extends BaseWebController 
 
     protected void populateViewDetails(Model uiModel, HttpServletRequest request) {
         ArrayList<String> instances = new ArrayList<>();
-        for (SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.values())
+        for (SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.REGISTRATION_INSTANCES)
             instances.add(sputumTrackingInstance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
 

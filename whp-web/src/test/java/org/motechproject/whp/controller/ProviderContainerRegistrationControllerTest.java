@@ -46,8 +46,8 @@ public class ProviderContainerRegistrationControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        INSTANCES.add(SputumTrackingInstance.PRE_TREATMENT.getDisplayText());
-        INSTANCES.add(SputumTrackingInstance.IN_TREATMENT.getDisplayText());
+        INSTANCES.add(SputumTrackingInstance.PreTreatment.getDisplayText());
+        INSTANCES.add(SputumTrackingInstance.InTreatment.getDisplayText());
         providerId = "providerId";
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
         containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
@@ -118,7 +118,7 @@ public class ProviderContainerRegistrationControllerTest {
     public void shouldRegisterTheContainerGivenTheDetails() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.IN_TREATMENT.getDisplayText();
+        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());

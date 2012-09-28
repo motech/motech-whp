@@ -3,7 +3,6 @@ package org.motechproject.whp.container.validation;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -46,7 +45,7 @@ public class CommonContainerRegistrationValidator {
         if (StringUtils.isBlank(providerId))
             errors.add(new ErrorWithParameters("provider.id.invalid.error", providerId));
 
-        if (!SputumTrackingInstance.isValid(instance))
+        if (!SputumTrackingInstance.isValidRegistrationInstance(instance))
             errors.add(new ErrorWithParameters("invalid.instance.error", instance));
 
         if (!isProviderExists(providerId))

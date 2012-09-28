@@ -1,7 +1,10 @@
 package org.motechproject.whp.refdata.domain;
 
 public enum SputumTrackingInstance {
-    PRE_TREATMENT("Pre-treatment"), IN_TREATMENT("In-treatment");
+    PreTreatment("Pre-treatment"), InTreatment("In-treatment"), EndIP("End of Intensive Phase"), ExtendedIP("Extended IP"), TwoMonthsIntoCP("Two Months Into CP"), EndTreatment("End Treatment");;
+
+    public static SputumTrackingInstance[] REGISTRATION_INSTANCES = {PreTreatment, InTreatment};
+    public static SputumTrackingInstance[] MAPPING_INSTANCES = {PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment};
 
     private String displayText;
 
@@ -21,19 +24,26 @@ public enum SputumTrackingInstance {
         return null;
     }
 
-    public static SputumTrackingInstance getInstanceByName(String name) {
-        for(SputumTrackingInstance instance : values()) {
-            if(instance.name().equals(name)) {
-                return instance;
-            }
-        }
-        return null;
+    public static boolean isValidRegistrationInstance(String text) {
+        return isValid(text, REGISTRATION_INSTANCES);
     }
 
-    public static boolean isValid(String text) {
-        for(SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.values())
-            if(sputumTrackingInstance.getDisplayText().toUpperCase().equals(text.toUpperCase()))
+    public static boolean isValidMappingInstance(String text) {
+        return isValid(text, MAPPING_INSTANCES);
+    }
+
+    private static boolean isValid(String text, SputumTrackingInstance[] instances) {
+        for(SputumTrackingInstance sputumTrackingInstance : instances)
+            if(sputumTrackingInstance.getDisplayText().equals(text) || sputumTrackingInstance.name().equals(text))
                 return true;
         return false;
+    }
+
+    public static SputumTrackingInstance getInstanceByName(String name) {
+        for(SputumTrackingInstance instance : SputumTrackingInstance.values()) {
+            if(instance.name().equals(name))
+                return instance;
+        }
+        return null;
     }
 }

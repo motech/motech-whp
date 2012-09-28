@@ -21,7 +21,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.container.contract.ContainerRegistrationMode.NEW_CONTAINER;
 import static org.motechproject.whp.container.contract.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
-import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.IN_TREATMENT;
+import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.InTreatment;
 
 public class CmfAdminContainerRegistrationValidatorTest {
 
@@ -49,7 +49,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forValidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, IN_TREATMENT.getDisplayText(),containerRegistrationMode);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(true);
@@ -66,7 +66,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forInvalidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, IN_TREATMENT.getDisplayText(),containerRegistrationMode);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(false);
@@ -86,7 +86,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
         ContainerRegistrationMode containerRegistrationMode = ON_BEHALF_OF_PROVIDER;
         CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
                 validProvider.getProviderId(),
-                containerId, IN_TREATMENT.getDisplayText(),
+                containerId, InTreatment.getDisplayText(),
                 containerRegistrationMode);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
@@ -106,7 +106,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
         CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 CONTAINER_ID,
-                IN_TREATMENT.getDisplayText(),
+                InTreatment.getDisplayText(),
                 containerRegistrationMode);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
@@ -126,7 +126,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
         CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 CONTAINER_ID,
-                IN_TREATMENT.getDisplayText(),
+                InTreatment.getDisplayText(),
                 containerRegistrationMode);
 
         ArrayList<ErrorWithParameters> errors = new ArrayList<>();
