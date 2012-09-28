@@ -327,6 +327,7 @@ public class Therapy {
         return startDate != null;
     }
 
+    @JsonIgnore
     public SmearTestResult getPreTreatmentSputumResult() {
         for(Treatment treatment : getTreatments()){
             if(treatment.hasPreTreatmentResult())
