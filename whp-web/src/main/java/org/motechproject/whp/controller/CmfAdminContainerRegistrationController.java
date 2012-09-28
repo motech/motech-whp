@@ -31,7 +31,7 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
     @RequestMapping(method = RequestMethod.GET)
     public String show(Model uiModel, HttpServletRequest request) {
         populateViewDetails(uiModel, request);
-        return "containerRegistration/showForCmfAdmin";
+        return "containerRegistration/showForCMFAdmin";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
