@@ -79,4 +79,20 @@ public class SmearTestResults {
     public List<SmearTestRecord> getAll() {
         return Collections.unmodifiableList(all);
     }
+
+    public SmearTestResult getPreTreatmentResult() {
+        for(SmearTestRecord smearTestRecord : all) {
+            if(smearTestRecord.isPreTreatmentRecord())
+                return smearTestRecord.cumulativeResult();
+        }
+        return null;
+    }
+
+    public boolean hasPreTreatmentResult() {
+        for(SmearTestRecord smearTestRecord : all) {
+            if(smearTestRecord.isPreTreatmentRecord())
+                return true;
+        }
+        return false;
+    }
 }

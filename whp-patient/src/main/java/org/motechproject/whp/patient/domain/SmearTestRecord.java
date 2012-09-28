@@ -47,4 +47,16 @@ public class SmearTestRecord {
     public boolean isOfInstance(SampleInstance sampleInstance) {
         return this.smear_sample_instance.equals(sampleInstance);
     }
+
+    public SmearTestResult cumulativeResult() {
+        if(smear_test_result_1 == SmearTestResult.Positive || smear_test_result_2 == SmearTestResult.Positive)
+            return SmearTestResult.Positive;
+        if(smear_test_result_1 == SmearTestResult.Negative || smear_test_result_2 == SmearTestResult.Negative)
+            return SmearTestResult.Negative;
+        return SmearTestResult.Indeterminate;
+    }
+
+    public boolean isPreTreatmentRecord() {
+        return smear_sample_instance == SampleInstance.PreTreatment;
+    }
 }

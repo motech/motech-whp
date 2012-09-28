@@ -8,6 +8,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.util.CollectionUtils;
 
@@ -116,4 +117,11 @@ public class Treatment {
         return WHPDate.date(startDate).value();
     }
 
+    public SmearTestResult getPreTreatmentSmearTestResult() {
+        return smearTestResults.getPreTreatmentResult();
+    }
+
+    public boolean hasPreTreatmentResult() {
+        return smearTestResults.hasPreTreatmentResult();
+    }
 }
