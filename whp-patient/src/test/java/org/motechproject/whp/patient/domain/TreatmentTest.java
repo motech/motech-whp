@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
@@ -124,4 +125,30 @@ public class TreatmentTest {
 
         verify(smearTestResults).getPreTreatmentResult();
     }
+
+    @Test
+    public void shouldReturnIfPreTreatmentWeightRecordExists(){
+        WeightStatistics weightStatistics = mock(WeightStatistics.class);
+        when(weightStatistics.hasPreTreatmentWeightRecord()).thenReturn(true);
+        Treatment treatment = new TreatmentBuilder().withWeightStatistics(weightStatistics).build();
+
+        assertTrue(treatment.hasPreTreatmentWeightRecord());
+
+        verify(weightStatistics).hasPreTreatmentWeightRecord();
+    }
+
+    @Test
+    public void shouldReturnPreTreatmentWeightRecord(){
+        WeightStatistics weightStatistics = mock(WeightStatistics.class);
+        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        when(weightStatistics.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
+
+        Treatment treatment = new TreatmentBuilder().withWeightStatistics(weightStatistics).build();
+
+        assertEquals(weightStatisticsRecord, treatment.getPreTreatmentWeightRecord());
+
+        verify(weightStatistics).getPreTreatmentWeightRecord();
+    }
+
+
 }

@@ -80,5 +80,12 @@ public class WeightStatistics {
         return Collections.unmodifiableList(weightStatisticsRecords);
     }
 
+    public boolean hasPreTreatmentWeightRecord() {
+        return getPreTreatmentWeightRecord() != null;
+    }
 
+    @JsonIgnore
+    public WeightStatisticsRecord getPreTreatmentWeightRecord() {
+        return resultForInstance(SampleInstance.PreTreatment);
+    }
 }

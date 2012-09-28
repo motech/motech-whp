@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
@@ -244,5 +245,23 @@ public class TherapyTest {
         //verify(currentTreatment).hasPreTreatmentResult();
         verify(currentTreatment).getPreTreatmentSmearTestResult();
         verify(olderTreatment).hasPreTreatmentResult();
+    }
+    @Test
+    public void shouldReturnPretreatmentWeightRecord(){
+        Treatment currentTreatment = mock(Treatment.class);
+        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        WeightStatisticsRecord olderTreatmentWeightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        when(currentTreatment.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
+
+        Treatment olderTreatment = mock(Treatment.class);
+        when(olderTreatment.getPreTreatmentWeightRecord()).thenReturn(olderTreatmentWeightStatisticsRecord);
+        when(olderTreatment.hasPreTreatmentWeightRecord()).thenReturn(false);
+
+        Therapy therapy = new TherapyBuilder().withTreatment(olderTreatment).withTreatment(currentTreatment).build();
+
+        assertEquals(weightStatisticsRecord, therapy.getPreTreatmentWeightRecord());
+
+        verify(currentTreatment).getPreTreatmentWeightRecord();
+        verify(olderTreatment).hasPreTreatmentWeightRecord();
     }
 }
