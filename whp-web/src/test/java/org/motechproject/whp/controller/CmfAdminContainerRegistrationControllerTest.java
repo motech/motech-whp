@@ -95,7 +95,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(model().size(2))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
-                .andExpect(forwardedUrl("containerRegistration/showForCmfAdmin"));
+                .andExpect(forwardedUrl("containerRegistration/showForCMFAdmin"));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().size(3))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
-                .andExpect(forwardedUrl("containerRegistration/showForCmfAdmin"));
+                .andExpect(forwardedUrl("containerRegistration/showForCMFAdmin"));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(model().attribute("errors", errors))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(model().attribute("instances", INSTANCES))
-                .andExpect(forwardedUrl("containerRegistration/showForCmfAdmin"));
+                .andExpect(forwardedUrl("containerRegistration/showForCMFAdmin"));
 
         verify(containerRegistrationValidator).validate(any(CmfAdminContainerRegistrationRequest.class));
         verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
