@@ -125,4 +125,13 @@ public class Treatment {
     public boolean hasPreTreatmentResult() {
         return smearTestResults.hasPreTreatmentResult();
     }
+
+    @JsonIgnore
+    public WeightStatisticsRecord getPreTreatmentWeightRecord() {
+        return weightStatistics.getPreTreatmentWeightRecord();
+    }
+
+    public boolean hasPreTreatmentWeightRecord() {
+        return weightStatistics.hasPreTreatmentWeightRecord();
+    }
 }

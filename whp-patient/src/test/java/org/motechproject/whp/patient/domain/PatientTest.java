@@ -7,10 +7,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.refdata.domain.*;
 
 import java.util.List;
 
@@ -476,6 +473,17 @@ public class PatientTest {
 
         assertEquals(Positive, smearTestResult);
         verify(therapy).getPreTreatmentSputumResult();
+    }
+
+    @Test
+    public void shouldGetPreTreatmentWeightRecord(){
+        Therapy therapy = mock(Therapy.class);
+        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        when(therapy.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
+        Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
+
+        assertEquals(weightStatisticsRecord, patient.getPreTreatmentWeightRecord());
+        verify(therapy).getPreTreatmentWeightRecord();
     }
 
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {

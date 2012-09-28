@@ -423,4 +423,9 @@ public class Patient extends MotechBaseDataObject {
     public SmearTestResult getPreTreatmentSputumResult() {
         return getCurrentTherapy().getPreTreatmentSputumResult();
     }
+
+    @JsonIgnore
+    public WeightStatisticsRecord getPreTreatmentWeightRecord() {
+        return getCurrentTherapy().getPreTreatmentWeightRecord();
+    }
 }

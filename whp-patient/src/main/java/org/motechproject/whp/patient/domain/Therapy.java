@@ -335,4 +335,13 @@ public class Therapy {
         }
         return currentTreatment.getPreTreatmentSmearTestResult();
     }
+
+    @JsonIgnore
+    public WeightStatisticsRecord getPreTreatmentWeightRecord() {
+        for(Treatment treatment : getTreatments()){
+            if(treatment.hasPreTreatmentWeightRecord())
+                return treatment.getPreTreatmentWeightRecord();
+        }
+        return currentTreatment.getPreTreatmentWeightRecord();
+    }
 }

@@ -90,10 +90,6 @@ public class SmearTestResults {
     }
 
     public boolean hasPreTreatmentResult() {
-        for(SmearTestRecord smearTestRecord : all) {
-            if(smearTestRecord.isPreTreatmentRecord())
-                return true;
-        }
-        return false;
+        return getPreTreatmentResult() != null;
     }
 }
