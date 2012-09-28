@@ -10,6 +10,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertTrue;
 
 public class SmearTestResultsTest {
 
@@ -87,5 +88,27 @@ public class SmearTestResultsTest {
         assertEquals(expectedDate2, smearTestRecord.getSmear_test_date_2());
         assertEquals(expectedResult1, smearTestRecord.getSmear_test_result_1());
         assertEquals(expectedResult2, smearTestRecord.getSmear_test_result_2());
+    }
+
+    @Test
+    public void shouldGetPreTreatmentSmearTestResult(){
+        SmearTestResults smearTestResults = new SmearTestResults();
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Negative, DateUtil.today(), SmearTestResult.Negative);
+        smearTestResults.add(endIpSmearTestRecord);
+        smearTestResults.add(pretreatmentSmearTestRecord);
+
+        assertEquals(SmearTestResult.Positive, smearTestResults.getPreTreatmentResult());
+    }
+
+    @Test
+    public void shouldReturnIfPreTreatmentSmearTestResultExists(){
+        SmearTestResults smearTestResults = new SmearTestResults();
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        smearTestResults.add(endIpSmearTestRecord);
+        smearTestResults.add(pretreatmentSmearTestRecord);
+
+        assertTrue(smearTestResults.hasPreTreatmentResult());
     }
 }

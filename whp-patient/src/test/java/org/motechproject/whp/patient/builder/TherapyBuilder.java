@@ -63,4 +63,7 @@ public class TherapyBuilder {
         return this;
     }
 
+    public TherapyBuilder withOlderTreatment(Treatment olderTreatment) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

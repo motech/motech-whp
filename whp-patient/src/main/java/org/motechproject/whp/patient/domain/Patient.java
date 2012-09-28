@@ -12,10 +12,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.refdata.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -420,5 +417,9 @@ public class Patient extends MotechBaseDataObject {
 
     public void revertAutoCompleteOfLastPhase() {
         getCurrentTherapy().getLastCompletedPhase().setEndDate(null);
+    }
+
+    public SmearTestResult getPreTreatmentSputumResult() {
+        return getCurrentTherapy().getPreTreatmentSputumResult();
     }
 }

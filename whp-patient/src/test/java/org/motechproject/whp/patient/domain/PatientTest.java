@@ -9,6 +9,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Gender;
 import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
@@ -24,6 +28,7 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
 import static org.motechproject.whp.refdata.domain.Phase.EIP;
 import static org.motechproject.whp.refdata.domain.Phase.IP;
+import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 
 public class PatientTest {
 
@@ -461,6 +466,18 @@ public class PatientTest {
         assertEquals(previousPhase, patient.getCurrentPhase()); // Phase transition shouldn't happen as it was reverted
     }
 
+    @Test
+    public void shouldGetPretreatmentCumulativeSmearTestResult(){
+        Therapy therapy = mock(Therapy.class);
+        when(therapy.getPreTreatmentSputumResult()).thenReturn(Positive);
+        Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
+
+        SmearTestResult smearTestResult = patient.getPreTreatmentSputumResult();
+
+        assertEquals(Positive, smearTestResult);
+        verify(therapy).getPreTreatmentSputumResult();
+    }
+
     private LocalDate date(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth);
     }
@@ -468,5 +485,4 @@ public class PatientTest {
     private DateTime dateTime(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth).toDateTimeAtCurrentTime();
     }
-
 }

@@ -9,8 +9,10 @@ import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.refdata.domain.Phase.*;
+import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 
 public class TherapyTest {
 
@@ -223,5 +225,25 @@ public class TherapyTest {
 
         assertEquals(newDate(2012, 4, 1), patient.getLastCompletedPhase().getStartDate());
         assertEquals(26, patient.getCurrentTherapy().getTotalDosesToHaveBeenTakenTillLastSunday());
+    }
+
+    @Test
+    public void shouldReturnPretreatmentSputumResult(){
+        Treatment currentTreatment = mock(Treatment.class);
+        when(currentTreatment.getPreTreatmentSmearTestResult()).thenReturn(Positive);
+        when(currentTreatment.hasPreTreatmentResult()).thenReturn(true);
+
+        Treatment olderTreatment = mock(Treatment.class);
+        when(olderTreatment.getPreTreatmentSmearTestResult()).thenReturn(null);
+        when(olderTreatment.hasPreTreatmentResult()).thenReturn(false);
+
+        Therapy therapy = new TherapyBuilder().withTreatment(olderTreatment).withTreatment(currentTreatment).build();
+
+        assertEquals(Positive, therapy.getPreTreatmentSputumResult());
+
+        verify(currentTreatment).hasPreTreatmentResult();
+        verify(currentTreatment).getPreTreatmentSmearTestResult();
+        verify(olderTreatment).hasPreTreatmentResult();
+        verify(olderTreatment).getPreTreatmentSmearTestResult();
     }
 }

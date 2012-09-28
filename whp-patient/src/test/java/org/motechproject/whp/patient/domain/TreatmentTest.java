@@ -5,9 +5,11 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 
@@ -101,4 +103,25 @@ public class TreatmentTest {
         assertFalse(treatment.isDateInTreatment(new LocalDate(2012, 5, 2)));
     }
 
+    @Test
+    public void shouldReturnIfPreTreatmentSmearTestResultExists(){
+        SmearTestResults smearTestResults = mock(SmearTestResults.class);
+        when(smearTestResults.hasPreTreatmentResult()).thenReturn(true);
+        Treatment treatment = new TreatmentBuilder().withSmearTestResults(smearTestResults).build();
+
+        assertTrue(treatment.hasPreTreatmentResult());
+
+        verify(smearTestResults).hasPreTreatmentResult();
+    }
+
+    @Test
+    public void shouldReturnPreTreatmentSmearTestResult(){
+        SmearTestResults smearTestResults = mock(SmearTestResults.class);
+        when(smearTestResults.getPreTreatmentResult()).thenReturn(SmearTestResult.Positive);
+        Treatment treatment = new TreatmentBuilder().withSmearTestResults(smearTestResults).build();
+
+        assertEquals(SmearTestResult.Positive, treatment.getPreTreatmentSmearTestResult());
+
+        verify(smearTestResults).getPreTreatmentResult();
+    }
 }

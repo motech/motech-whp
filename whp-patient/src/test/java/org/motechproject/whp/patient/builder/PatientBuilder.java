@@ -182,4 +182,9 @@ public class PatientBuilder {
         patient.getCurrentTherapy().setPatientAge(age);
         return this;
     }
+
+    public PatientBuilder withTherapy(Therapy therapy) {
+        patient.setCurrentTherapy(therapy);
+        return this;
+    }
 }

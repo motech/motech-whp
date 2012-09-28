@@ -326,4 +326,12 @@ public class Therapy {
     public boolean hasStarted() {
         return startDate != null;
     }
+
+    public SmearTestResult getPreTreatmentSputumResult() {
+        for(Treatment treatment : getTreatments()){
+            if(treatment.hasPreTreatmentResult())
+                return treatment.getPreTreatmentSmearTestResult();
+        }
+        return null;
+    }
 }
