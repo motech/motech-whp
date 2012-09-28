@@ -53,15 +53,16 @@ public class AllContainersIT extends SpringIntegrationTest {
     public void shouldFindContainerByPatientId() {
         addAndMarkForDeletion(container);
         String patientId = "patientid";
-        container.mapWith(patientId);
+        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
+        container.mapWith(patientId, instance);
         allContainers.update(container);
-        Container containerReturned = allContainers.findByPatientId(patientId);
+        Container containerReturned = allContainers.findByPatientId(patientId, instance);
 
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
         assertEquals(patientId, containerReturned.getPatientId());
-        assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
+        assertEquals(instance, containerReturned.getMappingInstance());
     }
 
     @Test

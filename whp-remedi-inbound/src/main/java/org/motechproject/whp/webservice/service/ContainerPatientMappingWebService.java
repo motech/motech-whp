@@ -8,6 +8,7 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 import org.motechproject.whp.webservice.validation.ContainerPatientMappingRequestValidator;
@@ -45,7 +46,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
     }
 
     private void map(ContainerPatientMappingWebRequest request) {
-        Container alreadyMapped = containerService.findByPatientId(request.getPatient_id());
+        Container alreadyMapped = containerService.findByPatientId(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
         if (alreadyMapped != null) {
             Patient patient = patientService.findByPatientId(request.getPatient_id());
             if(isDuplicateRequest(request, alreadyMapped, patient)) {
@@ -55,7 +56,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             containerService.update(alreadyMapped);
         }
         Container container = containerService.getContainer(request.getCase_id());
-        container.mapWith(request.getPatient_id());
+        container.mapWith(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
         containerService.update(container);
     }
 
@@ -63,7 +64,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         return container.getContainerId().equals(request.getCase_id())
                 && container.getPatientId().equals(request.getPatient_id())
                 && patient.getCurrentTreatment().getTbId().equals(request.getTb_id())
-                && container.getInstance().name().equals(request.getSmear_sample_instance());
+                && container.getMappingInstance().name().equals(request.getSmear_sample_instance());
     }
 
     @Override

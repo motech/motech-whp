@@ -5,6 +5,7 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class AllContainers extends MotechBaseRepository<Container> {
     }
 
     @GenerateView
-    public Container findByPatientId(String patientId) {
+    public Container findByPatientId(String patientId, SputumTrackingInstance instance) {
         if (patientId == null)
             return null;
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);

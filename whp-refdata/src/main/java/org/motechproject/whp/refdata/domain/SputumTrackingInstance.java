@@ -1,10 +1,13 @@
 package org.motechproject.whp.refdata.domain;
 
+import static java.util.Arrays.asList;
+
 public enum SputumTrackingInstance {
     PreTreatment("Pre-treatment"), InTreatment("In-treatment"), EndIP("End of Intensive Phase"), ExtendedIP("Extended IP"), TwoMonthsIntoCP("Two Months Into CP"), EndTreatment("End Treatment");;
 
     public static SputumTrackingInstance[] REGISTRATION_INSTANCES = {PreTreatment, InTreatment};
     public static SputumTrackingInstance[] MAPPING_INSTANCES = {PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment};
+    public static SputumTrackingInstance[] IN_TREATMENT_INSTANCES = {EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment};
 
     private String displayText;
 
@@ -45,5 +48,9 @@ public enum SputumTrackingInstance {
                 return instance;
         }
         return null;
+    }
+
+    public static SputumTrackingInstance getTrackingInstanceType(SputumTrackingInstance mappingInstance) {
+        return asList(IN_TREATMENT_INSTANCES).contains(mappingInstance) ? InTreatment : PreTreatment;
     }
 }

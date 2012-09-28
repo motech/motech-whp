@@ -47,7 +47,8 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         container.setLabResults(labResults);
         allContainers.add(container);
 
-        markForDeletion(patient, container);
+        markForDeletion(container);
+        markForDeletion(patient);
     }
 
     @Test
