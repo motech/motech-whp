@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -50,19 +51,22 @@ public class AllContainersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFindContainerByPatientId() {
+    public void shouldFindContainerByPatientIdAndInstance() {
         addAndMarkForDeletion(container);
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         container.mapWith(patientId, instance);
         allContainers.update(container);
-        Container containerReturned = allContainers.findByPatientId(patientId, instance);
 
+        Container containerReturned = allContainers.findBy(patientId, instance.name());
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
         assertEquals(patientId, containerReturned.getPatientId());
         assertEquals(instance, containerReturned.getMappingInstance());
+
+        containerReturned = allContainers.findBy(patientId, SputumTrackingInstance.PreTreatment.name());
+        assertNull(containerReturned);
     }
 
     @Test

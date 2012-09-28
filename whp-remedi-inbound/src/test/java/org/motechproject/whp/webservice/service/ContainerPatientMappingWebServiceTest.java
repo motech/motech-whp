@@ -155,7 +155,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(nextContainer.getContainerId())).thenReturn(nextContainer);
         when(containerService.getContainer(previousContainer.getContainerId())).thenReturn(previousContainer);
-        when(containerService.findByPatientId(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()))).thenReturn(previousContainer);
+        when(containerService.findBy(request.getPatient_id(), request.getSmear_sample_instance())).thenReturn(previousContainer);
 
         webService.updateCase(request);
 
@@ -186,7 +186,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(container.getContainerId())).thenReturn(container);
-        when(containerService.findByPatientId(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()))).thenReturn(container);
+        when(containerService.findBy(request.getPatient_id(), request.getSmear_sample_instance())).thenReturn(container);
 
         webService.updateCase(request);
 
@@ -218,7 +218,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(previousContainer.getContainerId())).thenReturn(previousContainer);
         when(containerService.getContainer(nextContainer.getContainerId())).thenReturn(nextContainer);
-        when(containerService.findByPatientId(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()))).thenReturn(previousContainer);
+        when(containerService.findBy(request.getPatient_id(), previousContainerInstance.name())).thenReturn(previousContainer);
 
         webService.updateCase(request);
 
@@ -228,6 +228,46 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         assertEquals(previousContainerInstance, previousContainer.getMappingInstance());
 
         //Should Map Patient with new container as it is for a different instance
+        assertEquals(request.getPatient_id(), nextContainer.getPatientId());
+        assertEquals(ContainerStatus.Closed, nextContainer.getStatus());
+        assertEquals(SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), nextContainer.getMappingInstance());
+    }
+
+    @Test
+    public void shouldUnMapPreviousContainerAndCreateNewMapping_forSamePatientTreatment_withContainerHavingSameInstance() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+
+        // Existing Patient-Container mapping
+        Container previousContainer = new Container();
+        String previousContainerId = "previousContainer";
+        previousContainer.setContainerId(previousContainerId);
+        SputumTrackingInstance previousContainerInstance = SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance());
+        previousContainer.mapWith(request.getPatient_id(), previousContainerInstance);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.setPatientId(request.getPatient_id());
+        patient.getCurrentTreatment().setTbId(request.getTb_id());
+
+        // Newly arrived Patient-Container mapping with different instance
+        Container nextContainer = new Container();
+        nextContainer.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        nextContainer.setLabResults(labResults);
+
+        when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(previousContainer.getContainerId())).thenReturn(previousContainer);
+        when(containerService.getContainer(nextContainer.getContainerId())).thenReturn(nextContainer);
+        when(containerService.findBy(request.getPatient_id(), previousContainerInstance.name())).thenReturn(previousContainer);
+
+        webService.updateCase(request);
+
+        //Should UnMap Patient from previous container as it was for same instance
+        assertNotSame(request.getPatient_id(), previousContainer.getPatientId());
+        assertEquals(ContainerStatus.Open, previousContainer.getStatus());
+        assertNull(previousContainer.getMappingInstance());
+
+        //Should Map Patient with new container
         assertEquals(request.getPatient_id(), nextContainer.getPatientId());
         assertEquals(ContainerStatus.Closed, nextContainer.getStatus());
         assertEquals(SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), nextContainer.getMappingInstance());

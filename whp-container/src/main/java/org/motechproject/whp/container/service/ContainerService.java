@@ -49,7 +49,7 @@ public class ContainerService {
         allContainers.update(container);
     }
 
-    public Container findByPatientId(String patientId, SputumTrackingInstance instance) {
-        return allContainers.findByPatientId(patientId,instance);
+    public Container findBy(String patientId, String instanceName) {
+        return allContainers.findBy(patientId, instanceName);
     }
 }
