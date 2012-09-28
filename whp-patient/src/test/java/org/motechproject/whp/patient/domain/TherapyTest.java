@@ -231,7 +231,7 @@ public class TherapyTest {
     public void shouldReturnPretreatmentSputumResult(){
         Treatment currentTreatment = mock(Treatment.class);
         when(currentTreatment.getPreTreatmentSmearTestResult()).thenReturn(Positive);
-        when(currentTreatment.hasPreTreatmentResult()).thenReturn(true);
+        //when(currentTreatment.hasPreTreatmentResult()).thenReturn(true);
 
         Treatment olderTreatment = mock(Treatment.class);
         when(olderTreatment.getPreTreatmentSmearTestResult()).thenReturn(null);
@@ -241,9 +241,8 @@ public class TherapyTest {
 
         assertEquals(Positive, therapy.getPreTreatmentSputumResult());
 
-        verify(currentTreatment).hasPreTreatmentResult();
+        //verify(currentTreatment).hasPreTreatmentResult();
         verify(currentTreatment).getPreTreatmentSmearTestResult();
         verify(olderTreatment).hasPreTreatmentResult();
-        verify(olderTreatment).getPreTreatmentSmearTestResult();
     }
 }

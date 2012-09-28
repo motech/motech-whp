@@ -333,6 +333,6 @@ public class Therapy {
             if(treatment.hasPreTreatmentResult())
                 return treatment.getPreTreatmentSmearTestResult();
         }
-        return null;
+        return currentTreatment.getPreTreatmentSmearTestResult();
     }
 }
