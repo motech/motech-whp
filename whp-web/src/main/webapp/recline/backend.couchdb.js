@@ -138,10 +138,12 @@ this.recline.Backend.CouchDB = this.recline.Backend.CouchDB || {};
             var url = self.view_url;
             var q = _.extend(query_options, norm_q);
 
+            url = url + "?" + $.param(q)
+
             var jqxhr = self._makeRequest({
                 url: url,
-                data: JSON.stringify(q),
-                dataType: self.options.dataType,
+                //data: JSON.stringify(q),
+                dataType: self.options.dataType
             });
             return jqxhr;
         }
@@ -205,7 +207,7 @@ this.recline.Backend.CouchDB = this.recline.Backend.CouchDB || {};
         cdb.mapping().done(function(result) {
             var row = result.rows[0];
             var keys = [];
-            if (view_url.search("include_docs") !== -1) {
+            if (row['doc']) {
                 keys = _.keys(row['doc']);
                 keys = _.filter(keys, function (k) { return k.charAt(0) !== '_' });
             }
@@ -286,9 +288,9 @@ this.recline.Backend.CouchDB = this.recline.Backend.CouchDB || {};
         var query_options = dataset.query_options;
 
         var cdb = new my.CouchDBWrapper(db_url, view_url);
-        var cdb_q = cdb._normalizeQuery(queryObj, query_options);
+        var cdb_q = cdb._normalizeQuery(queryObj, {});
 
-        cdb.query(queryObj, query_options).done(function(records){
+        cdb.query(queryObj, {}).done(function(records){
 
             var query_result = { hits: [], total: 0 };
             _.each(records.rows, function(record) {
