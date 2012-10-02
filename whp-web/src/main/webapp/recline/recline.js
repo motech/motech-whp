@@ -8,7 +8,7 @@ this.recline.Backend.Ckan = this.recline.Backend.Ckan || {};
     // This provides connection to the CKAN DataStore (v2)
     //
     // General notes
-    // 
+    //
     // * Every dataset must have an id equal to its resource id on the CKAN instance
     // * You should set the CKAN API endpoint for requests by setting API_ENDPOINT value on this module (recline.Backend.Ckan.API_ENDPOINT)
 
@@ -156,7 +156,7 @@ this.recline.Backend.CSV = this.recline.Backend.CSV || {};
     //
     // @return The CSV parsed as an array
     // @type Array
-    // 
+    //
     // @param {String} s The string to convert
     // @param {Object} options Options for loading CSV including
     // 	  @param {Boolean} [trim=false] If set to True leading and trailing
@@ -256,7 +256,7 @@ this.recline.Backend.CSV = this.recline.Backend.CSV || {};
     };
 
     // ### serializeCSV
-    // 
+    //
     // Convert an Object or a simple array of arrays into a Comma
     // Separated Values string.
     //
@@ -264,15 +264,15 @@ this.recline.Backend.CSV = this.recline.Backend.CSV || {};
     //
     // @return The array serialized as a CSV
     // @type String
-    // 
+    //
     // @param {Object or Array} dataToSerialize The Object or array of arrays to convert. Object structure must be as follows:
     //
     //     {
-    //       fields: [ {id: .., ...}, {id: ..., 
+    //       fields: [ {id: .., ...}, {id: ...,
     //       records: [ { record }, { record }, ... ]
     //       ... // more attributes we do not care about
     //     }
-    // 
+    //
     // @param {object} options Options for serializing the CSV file including
     //   delimiter and quotechar (see parseCSV options parameter above for
     //   details on these).
@@ -383,7 +383,7 @@ this.recline.Backend.DataProxy = this.recline.Backend.DataProxy || {};
     // URL for the dataproxy
     my.dataproxy_url = 'http://jsonpdataproxy.appspot.com';
     // Timeout for dataproxy (after this time if no response we error)
-    // Needed because use JSONP so do not receive e.g. 500 errors 
+    // Needed because use JSONP so do not receive e.g. 500 errors
     my.timeout = 5000;
 
     // ## load
@@ -421,7 +421,7 @@ this.recline.Backend.DataProxy = this.recline.Backend.DataProxy || {};
     };
 
     // ## _wrapInTimeout
-    // 
+    //
     // Convenience method providing a crude way to catch backend errors on JSONP calls.
     // Many of backends use JSONP and so will not get error messages and this is
     // a crude way to catch those errors.
@@ -458,7 +458,7 @@ this.recline.Backend.ElasticSearch = this.recline.Backend.ElasticSearch || {};
     //
     // @param {String} endpoint: url for ElasticSearch type/table, e.g. for ES running
     // on http://localhost:9200 with index twitter and type tweet it would be:
-    // 
+    //
     // <pre>http://localhost:9200/twitter/tweet</pre>
     //
     // @param {Object} options: set of options such as:
@@ -615,7 +615,7 @@ this.recline.Backend.ElasticSearch = this.recline.Backend.ElasticSearch || {};
     };
 
 
-    // ## Recline Connectors 
+    // ## Recline Connectors
     //
     // Requires URL of ElasticSearch endpoint to be specified on the dataset
     // via the url attribute.
@@ -701,7 +701,7 @@ this.recline.Backend.ElasticSearch = this.recline.Backend.ElasticSearch || {};
 
 
 // ### makeRequest
-// 
+//
 // Just $.ajax but in any headers in the 'headers' attribute of this
 // Backend instance. Example:
 //
@@ -735,7 +735,7 @@ this.recline.Backend.GDocs = this.recline.Backend.GDocs || {};
     my.__type__ = 'gdocs';
 
     // ## Google spreadsheet backend
-    // 
+    //
     // Fetch data from a Google Docs spreadsheet.
     //
     // Dataset must have a url attribute pointing to the Gdocs or its JSON feed e.g.
@@ -806,7 +806,7 @@ this.recline.Backend.GDocs = this.recline.Backend.GDocs || {};
     // columnsToUse: list of columns to use (specified by field names)
     // colTypes: dictionary (with column names as keys) specifying types (e.g. range, percent for use in conversion).
     // :return: tabular data object (hash with keys: field and data).
-    // 
+    //
     // Issues: seems google docs return columns in rows in random order and not even sure whether consistent across rows.
     my.parseData = function(gdocsSpreadsheet, options) {
         var options  = options || {};
@@ -1264,7 +1264,7 @@ this.recline.Model = this.recline.Model || {};
         },
 
         // ### _normalizeRecordsAndFields
-        // 
+        //
         // Get a proper set of fields and records from incoming set of fields and records either of which may be null or arrays or objects
         //
         // e.g. fields = ['a', 'b', 'c'] and records = [ [1,2,3] ] =>
@@ -1410,7 +1410,7 @@ this.recline.Model = this.recline.Model || {};
         // ### getFieldsSummary
         //
         // Get a summary for each field in the form of a `Facet`.
-        // 
+        //
         // @return null as this is async function. Provides deferred/promise interface.
         getFieldsSummary: function() {
             var self = this;
@@ -1457,7 +1457,7 @@ this.recline.Model = this.recline.Model || {};
 
 
 // ## <a id="record">A Record</a>
-// 
+//
 // A single record (or row) in the dataset
     my.Record = Backbone.Model.extend({
         constructor: function Record() {
@@ -1465,7 +1465,7 @@ this.recline.Model = this.recline.Model || {};
         },
 
         // ### initialize
-        // 
+        //
         // Create a Record
         //
         // You usually will not do this directly but will have records created by
@@ -1762,7 +1762,7 @@ this.recline.View = this.recline.View || {};
 // * model: recline.Model.Dataset
 // * state: (optional) configuration hash of form:
 //
-//        { 
+//        {
 //          group: {column name for x-axis},
 //          series: [{column name for series A}, {column name series B}, ... ],
 //          graphType: 'line'
@@ -1830,7 +1830,7 @@ this.recline.View = this.recline.View || {};
             // * The relevant div that graph attaches to his hidden at the moment of creating the plot -- Flot will complain with
             //
             //   Uncaught Invalid dimensions for plot, width = 0, height = 0
-            // * There is no data for the plot -- either same error or may have issues later with errors like 'non-existent node-value' 
+            // * There is no data for the plot -- either same error or may have issues later with errors like 'non-existent node-value'
             var areWeVisible = !jQuery.expr.filters.hidden(this.el[0]);
             if ((!areWeVisible || this.model.records.length === 0)) {
                 this.needToRedraw = true;
@@ -2306,7 +2306,7 @@ this.recline.View = this.recline.View || {};
             // compute field widths (-20 for first menu col + 10px for padding on each col and finally 16px for the scrollbar)
             var fullWidth = self.el.width() - 20 - 10 * numFields - this.scrollbarDimensions.width;
             var width = parseInt(Math.max(50, fullWidth / numFields));
-            // if columns extend outside viewport then remainder is 0 
+            // if columns extend outside viewport then remainder is 0
             var remainder = Math.max(fullWidth - numFields * width,0);
             _.each(this.fields, function(field, idx) {
                 // add the remainder to the first field width so we make up full col
@@ -2339,7 +2339,7 @@ this.recline.View = this.recline.View || {};
         },
 
         // ### _scrollbarSize
-        // 
+        //
         // Measure width of a vertical scrollbar and height of a horizontal scrollbar.
         //
         // @return: { width: pixelWidth, height: pixelHeight }
@@ -2561,7 +2561,7 @@ this.recline.View = this.recline.View || {};
         // ### infobox
         //
         // Function to create infoboxes used in popups. The default behaviour is very simple and just lists all attributes.
-        // 
+        //
         // Users should override this function to customize behaviour i.e.
         //
         //     view = new View({...});
@@ -3036,7 +3036,7 @@ this.recline.View = this.recline.View || {};
 // ## MultiView
 //
 // Manage multiple views together along with query editor etc. Usage:
-// 
+//
 // <pre>
 // var myExplorer = new model.recline.MultiView({
 //   model: {{recline.Model.Dataset instance}}
@@ -3044,10 +3044,10 @@ this.recline.View = this.recline.View || {};
 //   views: {{dataset views}}
 //   state: {{state configuration -- see below}}
 // });
-// </pre> 
+// </pre>
 //
 // ### Parameters
-// 
+//
 // **model**: (required) recline.model.Dataset instance.
 //
 // **el**: (required) DOM element to bind to. NB: the element already
@@ -3080,7 +3080,7 @@ this.recline.View = this.recline.View || {};
 //
 // **sidebarViews**: (optional) the sidebar views (Filters, Fields) for
 // MultiView to show. This is an array of view hashes. If not provided
-// initialize with (recline.View.)FilterEditor and Fields views (with obvious 
+// initialize with (recline.View.)FilterEditor and Fields views (with obvious
 // id and labels!).
 //
 // <pre>
@@ -3118,7 +3118,7 @@ this.recline.View = this.recline.View || {};
 // </pre>
 //
 // Note that at present we do *not* serialize information about the actual set
-// of views in use -- e.g. those specified by the views argument -- but instead 
+// of views in use -- e.g. those specified by the views argument -- but instead
 // expect either that the default views are fine or that the client to have
 // initialized the MultiView with the relevant views themselves.
     my.MultiView = Backbone.View.extend({
@@ -3349,7 +3349,7 @@ this.recline.View = this.recline.View || {};
         },
 
         // create a state object for this view and do the job of
-        // 
+        //
         // a) initializing it from both data passed in and other sources (e.g. hash url)
         //
         // b) ensure the state object is updated in responese to changes in subviews, query etc.
@@ -4345,7 +4345,8 @@ this.recline.View = this.recline.View || {};
             });
             var templated = Mustache.render(this.template, tmplData);
             this.el.html(templated);
-            this.el.find('.collapse').collapse('hide');
+            if(this.el.find('.collapse').length > 0)
+                this.el.find('.collapse').collapse('hide');
         },
         onShowHide: function(e) {
             e.preventDefault();

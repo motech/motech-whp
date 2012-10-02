@@ -8,16 +8,16 @@
     http://www.tuckey.org/urlrewrite/
 
 -->
-<urlrewrite>
+<urlrewrite use-query-string = "true">
 
     <rule>
         <note>
             The rule means that requests to /test/status/ will be redirected to /rewrite-status
             the url will be rewritten.
         </note>
-        <from>/database/(.*)$</from>
-        <to type="redirect">http://localhost:5984/$1</to>
 
+        <from>/database/(.*)$</from>
+        <to type="proxy">http://localhost:5984/$1</to>
     </rule>
 
 
