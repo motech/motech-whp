@@ -173,6 +173,14 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-container</artifactId>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+                <type>jar</type>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-container-dashboard</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -504,6 +512,7 @@
                 <artifactId>jackson-mapper-asl</artifactId>
                 <version>1.9.9</version>
             </dependency>
+
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>

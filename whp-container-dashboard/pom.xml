@@ -27,10 +27,15 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-container</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
         </dependency>
     </dependencies>
-
-
 
 </project>

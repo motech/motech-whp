@@ -9,13 +9,10 @@ import org.motechproject.whp.patient.domain.Patient;
 
 @TypeDiscriminator("doc.type == 'ContainerDashboardRow'")
 @Data
-public class ContainerDashboardRow extends MotechBaseDataObject{
+public class ContainerDashboardRow extends MotechBaseDataObject {
 
     private Container container;
 
     private Patient patient;
-
-
-
 
 }

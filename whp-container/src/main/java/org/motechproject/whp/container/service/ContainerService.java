@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.now;
+
 @Service
 public class ContainerService {
 
@@ -29,7 +31,7 @@ public class ContainerService {
 
     public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
         SputumTrackingInstance instance = SputumTrackingInstance.getInstanceForValue(registrationRequest.getInstance());
-        DateTime creationTime = DateUtil.now();
+        DateTime creationTime = now();
 
         Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime);
         allContainers.add(container);

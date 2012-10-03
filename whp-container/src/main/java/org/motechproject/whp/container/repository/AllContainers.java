@@ -6,6 +6,9 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.event.EventRelay;
+import org.motechproject.event.MotechEvent;
+import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.domain.Container;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,9 +18,13 @@ import java.util.List;
 
 @Repository
 public class AllContainers extends MotechBaseRepository<Container> {
+
+    private EventRelay eventRelay;
+
     @Autowired
-    public AllContainers(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
+    public AllContainers(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventRelay eventRelay) {
         super(Container.class, dbCouchDbConnector);
+        this.eventRelay = eventRelay;
     }
 
     @GenerateView
@@ -34,5 +41,17 @@ public class AllContainers extends MotechBaseRepository<Container> {
             return null;
         ViewQuery find_by_patient_id = createQuery("by_patientId").key(patientId).includeDocs(true);
         return db.queryView(find_by_patient_id, Container.class);
+    }
+
+    @Override
+    public void add(Container entity) {
+        super.add(entity);
+        eventRelay.sendEventMessage(buildContainerEvent(WHPContainerConstants.CONTAINER_ADDED_SUBJECT, entity));
+    }
+
+    private MotechEvent buildContainerEvent(String subject, Container container) {
+        MotechEvent motechEvent = new MotechEvent(subject);
+        motechEvent.getParameters().put(WHPContainerConstants.CONTAINER_ADDED_CONTAINER, container);
+        return motechEvent;
     }
 }
