@@ -56,7 +56,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             containerService.update(alreadyMapped);
         }
         Container container = containerService.getContainer(request.getCase_id());
-        container.mapWith(request.getPatient_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
+        container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
         containerService.update(container);
     }
 

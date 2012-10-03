@@ -30,6 +30,8 @@ public class Container extends MotechBaseDataObject {
 
     private String patientId;
 
+    private String tbId;
+
     // Required for ektorp
     public Container() {
         this.status = ContainerStatus.Open;
@@ -48,7 +50,8 @@ public class Container extends MotechBaseDataObject {
         this.creationTime = DateUtil.setTimeZone(creationTime);
     }
 
-    public void mapWith(String patientId, SputumTrackingInstance mappingInstance) {
+    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance) {
+        this.tbId = tbId;
         setPatientId(patientId.toLowerCase());
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
@@ -58,6 +61,7 @@ public class Container extends MotechBaseDataObject {
     public void unMap() {
         setPatientId(null);
         setMappingInstance(null);
+        setTbId(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
     }
@@ -65,4 +69,5 @@ public class Container extends MotechBaseDataObject {
     private void updateCurrentTrackingStatus() {
         currentTrackingInstance = mappingInstance == null ? instance : SputumTrackingInstance.getTrackingInstanceType(mappingInstance);
     }
+
 }

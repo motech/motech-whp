@@ -57,7 +57,7 @@ public class AllContainersIT extends SpringIntegrationTest {
         addAndMarkForDeletion(container);
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        container.mapWith(patientId, instance);
+        container.mapWith(patientId, "", instance);
         allContainers.update(container);
 
         Container containerReturned = allContainers.findByPatientIdAndInstanceName(patientId, instance.name());
