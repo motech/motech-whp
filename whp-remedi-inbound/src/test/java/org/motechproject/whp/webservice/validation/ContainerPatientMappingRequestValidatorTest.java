@@ -90,11 +90,12 @@ public class ContainerPatientMappingRequestValidatorTest {
         when(containerService.exists(request.getCase_id())).thenReturn(true);
 
         Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentTreatment().setTbId("123");
         when(patientService.findByPatientId(anyString())).thenReturn(patient);
         WHPError validationError = validator.validate(request);
 
         verify(patientService, times(2)).findByPatientId(anyString());
-        assertEquals(NO_EXISTING_TREATMENT_FOR_CASE, validationError.getErrorCode());
+        assertEquals(NO_SUCH_TREATMENT_EXISTS, validationError.getErrorCode());
 
     }
 
@@ -133,26 +134,6 @@ public class ContainerPatientMappingRequestValidatorTest {
         WHPError validationError = validator.validate(request);
 
         assertEquals(INVALID_SPUTUM_TEST_INSTANCE, validationError.getErrorCode());
-    }
-
-    @Test
-    public void shouldReturnValidationError_whenPatientDoesNotHaveOngoingTherapy() {
-        ContainerPatientMappingWebRequest request = buildTestRequest();
-        Container container = new Container();
-        container.setContainerId(request.getCase_id());
-        LabResults labResults = new LabResults();
-        container.setLabResults(labResults);
-
-        when(containerService.exists(request.getCase_id())).thenReturn(true);
-        when(containerService.getContainer(anyString())).thenReturn(container);
-
-        Patient patient = new PatientBuilder().withDefaults().build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
-        when(patientService.findByPatientId(anyString())).thenReturn(patient);
-        WHPError validationError = validator.validate(request);
-
-        verify(patientService, times(2)).findByPatientId(anyString());
-        assertEquals(TREATMENT_ALREADY_CLOSED, validationError.getErrorCode());
     }
 
     private ContainerPatientMappingWebRequest buildTestRequest() {

@@ -528,4 +528,40 @@ public class PatientTest {
         assertThat(patient.getAllTreatments(), hasItems(treatment1, treatment2, currentTreatment));
         assertThat(patient.getAllTreatments().size(), is(3));
     }
+
+    @Test
+    public void shouldCheckForTbIdAmongTreatmentsAcrossAllTherapies() {
+        String currentTherapyCurrentTreatment = "currentTherapyCurrentTreatment";
+        String currentTherapyPreviousTreatment = "CurrentTherapyPreviousTreatment";
+        String closedTherapyCurrentTreatment = "ClosedTherapyCurrentTreatment";
+        String closedTherapyPreviousTreatment = "ClosedTherapyPreviousTreatment";
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+
+        // Current Therapy
+        Treatment closedTreatment = new TreatmentBuilder().withDefaults().build();
+        closedTreatment.setTbId(currentTherapyPreviousTreatment);
+        closedTreatment.close(TreatmentOutcome.Cured, now());
+        patient.getCurrentTherapy().addTreatment(closedTreatment, now());
+
+        // Historised Therapy
+        Therapy closedTherapy = new Therapy(new TreatmentCategory(), DiseaseClass.E, 25);
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().build();
+        currentTreatment.setTbId(closedTherapyCurrentTreatment);
+        closedTreatment = new TreatmentBuilder().withDefaults().build();
+        closedTreatment.setTbId(closedTherapyPreviousTreatment);
+        closedTreatment.close(TreatmentOutcome.Cured, now());
+        closedTherapy.addTreatment(closedTreatment, now());
+        closedTherapy.addTreatment(currentTreatment, now());
+
+        Treatment dummy = new TreatmentBuilder().withDefaults().build();
+        patient.addTreatment(dummy, closedTherapy, now());
+        patient.getCurrentTreatment().setTbId(currentTherapyCurrentTreatment);
+
+        //Assertions
+        assertTrue(patient.hasTreatment(currentTherapyCurrentTreatment));
+        assertTrue(patient.hasTreatment(currentTherapyPreviousTreatment));
+        assertTrue(patient.hasTreatment(closedTherapyCurrentTreatment));
+        assertTrue(patient.hasTreatment(closedTherapyPreviousTreatment));
+    }
 }

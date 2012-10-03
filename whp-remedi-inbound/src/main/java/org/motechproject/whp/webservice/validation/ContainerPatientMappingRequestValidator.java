@@ -49,12 +49,8 @@ public class ContainerPatientMappingRequestValidator {
 
     private WHPError validateTreatment(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
         Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
-        Treatment currentTreatment = patient.getCurrentTreatment();
-        if (patient.getCurrentTherapy().isClosed()) {
-            return new WHPError(TREATMENT_ALREADY_CLOSED);
-        }
-        if (currentTreatment == null || !currentTreatment.getTbId().equals(containerPatientMappingWebRequest.getTb_id())) {
-            return new WHPError(NO_EXISTING_TREATMENT_FOR_CASE);
+        if (!patient.hasTreatment(containerPatientMappingWebRequest.getTb_id())) {
+            return new WHPError(NO_SUCH_TREATMENT_EXISTS);
         }
         return null;
     }

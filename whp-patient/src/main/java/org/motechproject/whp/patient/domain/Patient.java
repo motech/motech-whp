@@ -433,4 +433,13 @@ public class Patient extends MotechBaseDataObject {
         treatments.add(currentTherapy.getCurrentTreatment());
         return treatments;
     }
+
+    public boolean hasTreatment(String tbId) {
+        for (Therapy therapy : therapyHistory) {
+            if(therapy.hasTreatment(tbId)) {
+                return true;
+            }
+        }
+        return currentTherapy.hasTreatment(tbId);
+    }
 }

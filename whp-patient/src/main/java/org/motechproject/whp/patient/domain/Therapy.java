@@ -344,4 +344,13 @@ public class Therapy {
         }
         return currentTreatment.getPreTreatmentWeightRecord();
     }
+
+    public boolean hasTreatment(String tbId) {
+        for(Treatment treatment : treatments) {
+            if(treatment.getTbId().equals(tbId.toLowerCase())) {
+                return true;
+            }
+        }
+        return currentTreatment.getTbId().equals(tbId.toLowerCase());
+    }
 }
