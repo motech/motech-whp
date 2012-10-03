@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -34,6 +35,7 @@ public class AllContainersIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
+
         now = DateUtil.now();
         container = new Container("P00001", "1234567890", SputumTrackingInstance.PreTreatment, now);
     }
@@ -46,11 +48,11 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
         assertEquals("P00001", containerReturned.getProviderId());
-        assertEquals(now, containerReturned.getCreationTime());
+        assertEquals(now.toString(WHPDate.DATE_TIME_FORMAT), containerReturned.getCreationTime().toString(WHPDate.DATE_TIME_FORMAT));
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 
-    @Test
+    @   Test
     public void shouldFindContainerByPatientIdAndInstance() {
         addAndMarkForDeletion(container);
         String patientId = "patientid";
