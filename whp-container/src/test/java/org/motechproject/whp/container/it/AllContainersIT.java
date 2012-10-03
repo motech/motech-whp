@@ -2,6 +2,7 @@ package org.motechproject.whp.container.it;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -15,8 +16,11 @@ import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -52,23 +56,25 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
     }
 
-    @   Test
-    public void shouldFindContainerByPatientIdAndInstance() {
+    @Test
+    public void shouldListContainersByPatientId() {
         addAndMarkForDeletion(container);
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         container.mapWith(patientId, "", instance);
         allContainers.update(container);
 
-        Container containerReturned = allContainers.findByPatientIdAndInstanceName(patientId, instance.name());
-        assertNotNull(containerReturned);
-        assertEquals("1234567890", containerReturned.getContainerId());
-        assertEquals("P00001", containerReturned.getProviderId());
-        assertEquals(patientId, containerReturned.getPatientId());
-        assertEquals(instance, containerReturned.getMappingInstance());
+        List<Container> containers = allContainers.findByPatientId(patientId);
+        assertNotNull(containers);
+        assertEquals(1, containers.size());
+        Container container = containers.get(0);
+        assertEquals("1234567890", container.getContainerId());
+        assertEquals("P00001", container.getProviderId());
+        assertEquals(patientId, container.getPatientId());
+        assertEquals(instance, container.getMappingInstance());
 
-        containerReturned = allContainers.findByPatientIdAndInstanceName(patientId, SputumTrackingInstance.PreTreatment.name());
-        assertNull(containerReturned);
+        containers = allContainers.findByPatientId("nonExistentPatient");
+        assertTrue(containers.isEmpty());
     }
 
     @Test

@@ -69,5 +69,4 @@ public class Container extends MotechBaseDataObject {
     private void updateCurrentTrackingStatus() {
         currentTrackingInstance = mappingInstance == null ? instance : SputumTrackingInstance.getTrackingInstanceType(mappingInstance);
     }
-
 }

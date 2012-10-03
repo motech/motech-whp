@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AllContainers extends MotechBaseRepository<Container> {
     @Autowired
@@ -26,11 +28,11 @@ public class AllContainers extends MotechBaseRepository<Container> {
         return singleResult(db.queryView(find_by_containerId, Container.class));
     }
 
-    @View(name = "find_by_patient_id_and_instance", map = "function(doc) {if (doc.type ==='Container') {emit([doc.patientId, doc.mappingInstance], doc._id);}}")
-    public Container findByPatientIdAndInstanceName(String patientId, String instanceName) {
-        if (patientId == null || instanceName == null)
+    @GenerateView
+    public List<Container> findByPatientId(String patientId) {
+        if (patientId == null)
             return null;
-        ViewQuery find_by_patient_id_and_instance = createQuery("find_by_patient_id_and_instance").startKey(ComplexKey.of(patientId.toLowerCase(), instanceName)).endKey(ComplexKey.of(patientId.toLowerCase(), instanceName)).includeDocs(true);
-        return singleResult(db.queryView(find_by_patient_id_and_instance, Container.class));
+        ViewQuery find_by_patient_id = createQuery("by_patientId").key(patientId).includeDocs(true);
+        return db.queryView(find_by_patient_id, Container.class);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class ContainerService {
@@ -49,7 +50,7 @@ public class ContainerService {
         allContainers.update(container);
     }
 
-    public Container findByPatientIdAndInstanceName(String patientId, String instanceName) {
-        return allContainers.findByPatientIdAndInstanceName(patientId, instanceName);
+    public List<Container> findByPatientId(String patientId) {
+        return allContainers.findByPatientId(patientId);
     }
 }
