@@ -113,8 +113,8 @@ public class PatientRecordValidator {
     }
 
     private void validateTreatmentFields(Patient patient, ImportPatientRequest request, List<String> errors) {
-        if (patient.getTreatments().size() != 0) {
-            errors.add("Should have no history of treatments, but has count as " + patient.getTreatments().size());
+        if (patient.getTreatmentHistory().size() != 0) {
+            errors.add("Should have no history of treatments, but has count as " + patient.getTreatmentHistory().size());
         }
 
         Treatment treatment = patient.getCurrentTreatment();

@@ -343,12 +343,9 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public List<Treatment> getTreatments() {
+    public List<Treatment> getTreatmentHistory() {
         ArrayList<Treatment> treatments = new ArrayList<>();
         treatments.addAll(currentTherapy.getTreatments());
-        for (Therapy therapy : therapyHistory) {
-            treatments.addAll(therapy.getTreatments());
-        }
         return treatments;
     }
 

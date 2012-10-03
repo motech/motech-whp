@@ -84,7 +84,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         patientWebService.createCase(patientWebRequest);
 
         Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-        for (Treatment treatment : recordedPatient.getTreatments()) {
+        for (Treatment treatment : recordedPatient.getTreatmentHistory()) {
             assertNotNull(recordedPatient.getCurrentTherapy());
         }
     }
