@@ -511,4 +511,21 @@ public class PatientTest {
         assertThat(patient.getTreatmentHistory(), hasItems(treatment1, treatment2));
         assertThat(patient.getTreatmentHistory().size(), is(2));
     }
+
+    @Test
+    public void shouldGetAllTreatmentsFromCurrentTherapy(){
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        Treatment treatment1 = patient.getCurrentTreatment();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
+        patient.addTreatment(treatment2, dateTime(2012, 1, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+
+        assertThat(patient.getAllTreatments(), hasItems(treatment1, treatment2, currentTreatment));
+        assertThat(patient.getAllTreatments().size(), is(3));
+    }
 }

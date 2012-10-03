@@ -113,8 +113,7 @@ public class PatientInfo {
     }
 
     private void setTestResults(Patient patient) {
-        List<Treatment> treatments = patient.getTreatmentHistory();
-        treatments.add(patient.getCurrentTreatment());
+        List<Treatment> treatments = patient.getAllTreatments();
         WeightStatistics weightStatistics = new WeightStatistics();
         SmearTestResults smearTestResults = new SmearTestResults();
         for (Treatment treatment : treatments) {
