@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DashboardHandler {
+public class ContainerDashboardHandler {
 
     private ContainerDashboardService containerDashboardService;
 
     @Autowired
-    public DashboardHandler(ContainerDashboardService containerDashboardService) {
+    public ContainerDashboardHandler(ContainerDashboardService containerDashboardService) {
         this.containerDashboardService = containerDashboardService;
     }
 

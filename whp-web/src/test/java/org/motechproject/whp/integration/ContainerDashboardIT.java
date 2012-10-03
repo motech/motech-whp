@@ -11,7 +11,6 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.container.builder.ContainerRegistrationRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
-import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.service.ContainerService;
@@ -26,7 +25,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)

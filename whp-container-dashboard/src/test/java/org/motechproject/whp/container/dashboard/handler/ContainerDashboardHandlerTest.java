@@ -13,24 +13,24 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.container.WHPContainerConstants.CONTAINER_ADDED_CONTAINER;
 
-public class DashboardHandlerTest {
+public class ContainerDashboardHandlerTest {
 
     @Mock
     private ContainerDashboardService containerDashboardService;
 
-    private DashboardHandler dashboardHandler;
+    private ContainerDashboardHandler containerDashboardHandler;
 
     @Before
     public void setup() {
         initMocks(this);
-        dashboardHandler = new DashboardHandler(containerDashboardService);
+        containerDashboardHandler = new ContainerDashboardHandler(containerDashboardService);
     }
 
     @Test
     public void shouldCreateNewDashboardPageWhenContainerAdded() {
         MotechEvent event = new DashboardEventsBuilder().containerAddedEvent();
 
-        dashboardHandler.onContainerAdded(event);
+        containerDashboardHandler.onContainerAdded(event);
 
         Container container = (Container) event.getParameters().get(CONTAINER_ADDED_CONTAINER);
         verify(containerDashboardService).createDashboardRow(container);
