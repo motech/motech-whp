@@ -51,8 +51,8 @@ public class Container extends MotechBaseDataObject {
     }
 
     public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance) {
-        this.tbId = tbId;
         setPatientId(patientId.toLowerCase());
+        setTbId(tbId);
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
         updateCurrentTrackingStatus();
@@ -60,8 +60,8 @@ public class Container extends MotechBaseDataObject {
 
     public void unMap() {
         setPatientId(null);
-        setMappingInstance(null);
         setTbId(null);
+        setMappingInstance(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
     }

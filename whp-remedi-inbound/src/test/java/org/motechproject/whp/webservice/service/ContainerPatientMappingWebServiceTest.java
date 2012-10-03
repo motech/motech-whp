@@ -58,6 +58,57 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     }
 
     @Test
+    public void shouldNotUnMapContainerFromPreviousPatient_uponMappingValidationFailure() {
+        expectWHPCaseException(NO_LAB_RESULTS_IN_CONTAINER);
+
+        Container container = new Container();
+        String oldPatientId = "oldPatientId";
+        SputumTrackingInstance instance = SputumTrackingInstance.EndIP;
+
+
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        container.setContainerId(request.getCase_id());
+        String tbId = request.getTb_id();
+        container.mapWith(oldPatientId, tbId, instance);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(container.getContainerId())).thenReturn(container);
+
+        webService.updateCase(request);
+
+        assertEquals(oldPatientId, container.getPatientId());
+        assertEquals(ContainerStatus.Closed, container.getStatus());
+        assertEquals(instance, container.getMappingInstance());
+        assertEquals(tbId, container.getTbId());
+    }
+
+    @Test
+    public void shouldNotPerformAnyChanges_uponDuplicateMappingRequest() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        String tbId = request.getTb_id();
+        SputumTrackingInstance instance = SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance());
+        container.mapWith(request.getPatient_id(), tbId, instance);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.setPatientId(request.getPatient_id());
+        patient.getCurrentTreatment().setTbId(tbId);
+
+        when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(container.getContainerId())).thenReturn(container);
+        when(containerService.findByPatientId(request.getPatient_id())).thenReturn(asList(container));
+
+        webService.updateCase(request);
+
+        verify(containerService, never()).update(any(Container.class));
+    }
+
+    @Test
     public void shouldMapNewContainerWithNewPatient() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
         Container container = new Container();
@@ -113,57 +164,6 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         assertEquals(ContainerStatus.Closed, fetchedContainer.getStatus());
         assertEquals(SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), fetchedContainer.getMappingInstance());
         assertEquals(tbId, fetchedContainer.getTbId());
-    }
-
-    @Test
-    public void shouldNotUnMapContainerFromPreviousPatient_uponMappingValidationFailure() {
-        expectWHPCaseException(NO_LAB_RESULTS_IN_CONTAINER);
-
-        Container container = new Container();
-        String oldPatientId = "oldPatientId";
-        SputumTrackingInstance instance = SputumTrackingInstance.EndIP;
-
-
-        ContainerPatientMappingWebRequest request = buildTestRequest();
-        container.setContainerId(request.getCase_id());
-        String tbId = request.getTb_id();
-        container.mapWith(oldPatientId, tbId, instance);
-
-        when(containerService.exists(request.getCase_id())).thenReturn(true);
-        when(containerService.getContainer(container.getContainerId())).thenReturn(container);
-
-        webService.updateCase(request);
-
-        assertEquals(oldPatientId, container.getPatientId());
-        assertEquals(ContainerStatus.Closed, container.getStatus());
-        assertEquals(instance, container.getMappingInstance());
-        assertEquals(tbId, container.getTbId());
-    }
-
-    @Test
-    public void shouldNotPerformAnyChanges_uponDuplicateMappingRequest() {
-        ContainerPatientMappingWebRequest request = buildTestRequest();
-        Container container = new Container();
-        container.setContainerId(request.getCase_id());
-        LabResults labResults = new LabResults();
-        container.setLabResults(labResults);
-
-        String tbId = request.getTb_id();
-        SputumTrackingInstance instance = SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance());
-        container.mapWith(request.getPatient_id(), tbId, instance);
-
-        Patient patient = new PatientBuilder().withDefaults().build();
-        patient.setPatientId(request.getPatient_id());
-        patient.getCurrentTreatment().setTbId(tbId);
-
-        when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
-        when(containerService.exists(request.getCase_id())).thenReturn(true);
-        when(containerService.getContainer(container.getContainerId())).thenReturn(container);
-        when(containerService.findByPatientId(request.getPatient_id())).thenReturn(asList(container));
-
-        webService.updateCase(request);
-
-        verify(containerService, never()).update(any(Container.class));
     }
 
     @Test
