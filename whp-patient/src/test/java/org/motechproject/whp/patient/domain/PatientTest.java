@@ -12,6 +12,7 @@ import org.motechproject.whp.refdata.domain.*;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -43,13 +44,13 @@ public class PatientTest {
         Treatment firstTreatment = patient.getCurrentTreatment();
         patient.addTreatment(treatment(), now());
 
-        assertArrayEquals(new Object[]{firstTreatment}, patient.getTreatments().toArray());
+        assertArrayEquals(new Object[]{firstTreatment}, patient.getTreatmentHistory().toArray());
     }
 
     @Test
     public void shouldNotHaveAnyHistoryWhenTreatmentHasNeverBeenUpdated() {
         Patient patientWithOneTreatment = patient();
-        assertTrue(patientWithOneTreatment.getTreatments().isEmpty());
+        assertTrue(patientWithOneTreatment.getTreatmentHistory().isEmpty());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class PatientTest {
         Treatment treatment = patient.getCurrentTreatment();
         patient.addTreatment(treatment(), now());
 
-        assertArrayEquals(new Object[]{treatment}, patient.getTreatments().toArray());
+        assertArrayEquals(new Object[]{treatment}, patient.getTreatmentHistory().toArray());
     }
 
     @Test
@@ -492,5 +493,22 @@ public class PatientTest {
 
     private DateTime dateTime(int year, int monthOfYear, int dayOfMonth) {
         return new LocalDate(year, monthOfYear, dayOfMonth).toDateTimeAtCurrentTime();
+    }
+
+    @Test
+    public void shouldGetTreatmentHistoryFromCurrentTherapy(){
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
+        Treatment treatment1 = patient.getCurrentTreatment();
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
+        patient.addTreatment(treatment2, dateTime(2012, 1, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+
+        assertThat(patient.getTreatmentHistory(), hasItems(treatment1, treatment2));
+        assertThat(patient.getTreatmentHistory().size(), is(2));
     }
 }
