@@ -1,5 +1,6 @@
 package org.motechproject.whp.container.dashboard.service;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
 import org.motechproject.whp.container.domain.Container;
@@ -42,9 +43,20 @@ public class ContainerDashboardService {
 
     public void updateDashboardRow(Container container) {
         ContainerDashboardRow dashboardRow = allContainerDashboardRows.findByContainerId(container.getContainerId());
+        dashboardRow.setProvider(provider(container));
         dashboardRow.setPatient(patient(container));
 
         allContainerDashboardRows.update(dashboardRow);
+    }
+
+    public void updateProviderInformation(Provider provider) {
+        List<ContainerDashboardRow> allRowsBelongingToProvider = allContainerDashboardRows.withProviderId(provider.getProviderId());
+        if (CollectionUtils.isNotEmpty(allRowsBelongingToProvider)) {
+            for (ContainerDashboardRow containerDashboardRow : allRowsBelongingToProvider) {
+                containerDashboardRow.setProvider(provider);
+            }
+            allContainerDashboardRows.updateAll(allRowsBelongingToProvider);
+        }
     }
 
     private Provider provider(Container container) {

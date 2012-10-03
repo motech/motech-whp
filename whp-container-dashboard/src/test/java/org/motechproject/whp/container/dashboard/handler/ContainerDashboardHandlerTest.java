@@ -8,10 +8,13 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.whp.container.dashboard.builder.DashboardEventsBuilder;
 import org.motechproject.whp.container.dashboard.service.ContainerDashboardService;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.user.WHPUserConstants;
+import org.motechproject.whp.user.domain.Provider;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.container.WHPContainerConstants.CONTAINER_KEY;
+import static org.motechproject.whp.user.WHPUserConstants.PROVIDER_KEY;
 
 public class ContainerDashboardHandlerTest {
 
@@ -44,5 +47,15 @@ public class ContainerDashboardHandlerTest {
 
         Container container = (Container) event.getParameters().get(CONTAINER_KEY);
         verify(containerDashboardService).updateDashboardRow(container);
+    }
+
+    @Test
+    public void shouldUpdateExistingDashboardPageWhenProviderGotUpdated(){
+        MotechEvent event = new DashboardEventsBuilder().providerUpdatedEvent();
+
+        containerDashboardHandler.onProviderUpdated(event);
+
+        Provider provider = (Provider) event.getParameters().get(PROVIDER_KEY);
+        verify(containerDashboardService).updateProviderInformation(provider);
     }
 }

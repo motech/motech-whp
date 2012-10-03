@@ -27,7 +27,7 @@ public abstract class TimedRunner {
             try {
                 run();
                 return;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 try {
                     Thread.sleep(intervalSleep);
                     continue;

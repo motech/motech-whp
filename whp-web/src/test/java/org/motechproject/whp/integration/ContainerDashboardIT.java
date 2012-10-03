@@ -8,8 +8,10 @@ import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
+import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.builder.ContainerRegistrationRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
@@ -18,6 +20,8 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.user.builder.ProviderBuilder;
+import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.service.ContainerPatientMappingWebService;
@@ -95,7 +99,7 @@ public class ContainerDashboardIT {
             @Override
             protected void run() {
                 assertNotNull(allContainerDashboardRows.findByContainerId("containerId").getPatient());
-                assertEquals("patientId", allContainerDashboardRows.findByContainerId("containerId").getPatient().getPatientId());
+                assertEquals("patientid", allContainerDashboardRows.findByContainerId("containerId").getPatient().getPatientId());
             }
         }.executeWithTimeout();
 
@@ -103,7 +107,24 @@ public class ContainerDashboardIT {
 
     @Test
     public void shouldUpdateDashboardPageWhenProviderIsUpdated() {
+        Container container = new ContainerBuilder().withDefaults().withProviderId("providerId").withContainerId("containerId").build();
+        Provider provider = new ProviderBuilder().withDefaults().withProviderId("providerId").build();
+        ContainerDashboardRow row = new ContainerDashboardRow();
+        row.setContainer(container);
+        row.setProvider(provider);
 
+        allProviders.add(provider);
+        allContainerDashboardRows.add(row);
+
+        provider.setDistrict("district");
+        allProviders.update(provider);
+
+        new TimedRunner() {
+            @Override
+            protected void run() {
+                assertEquals("district", allContainerDashboardRows.findByContainerId("containerId").getProvider().getDistrict());
+            }
+        }.executeWithTimeout();
     }
 
     @Test
