@@ -15,7 +15,7 @@ public class AdminContainerMappingSeed {
 
     @Seed(priority = 0, version = "3.0")
     public void load() {
-        ContainerRange range = new ContainerRange(90000000010L, 90000000020L);
+        ContainerRange range = new ContainerRange(90000000010L, 90000000100L);
         AdminContainerMapping mapping = new AdminContainerMapping();
         mapping.add(range);
         allAdminContainerMappings.add(mapping);
