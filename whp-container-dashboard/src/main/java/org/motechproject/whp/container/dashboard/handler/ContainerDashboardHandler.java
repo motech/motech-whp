@@ -20,7 +20,13 @@ public class ContainerDashboardHandler {
 
     @MotechListener(subjects = WHPContainerConstants.CONTAINER_ADDED_SUBJECT)
     public void onContainerAdded(MotechEvent event) {
-        Container container = (Container) event.getParameters().get(WHPContainerConstants.CONTAINER_ADDED_CONTAINER);
+        Container container = (Container) event.getParameters().get(WHPContainerConstants.CONTAINER_KEY);
         containerDashboardService.createDashboardRow(container);
+    }
+
+    @MotechListener(subjects = WHPContainerConstants.CONTAINER_UPDATED_SUBJECT)
+    public void onContainerUpdated(MotechEvent event) {
+        Container container = (Container) event.getParameters().get(WHPContainerConstants.CONTAINER_KEY);
+        containerDashboardService.updateDashboardRow(container);
     }
 }

@@ -32,18 +32,30 @@ public class AllContainersTest {
     public void shouldRaiseEventToIndicateContainerGotAdded() {
         AllContainers allContainers = new AllContainers(couchDbConnector, eventRelay);
         Container container = mock(Container.class);
+
         allContainers.add(container);
 
-        assertTrue(eventRaisedWithCorrectSubject());
+        assertTrue(eventRaisedWithCorrectSubject(WHPContainerConstants.CONTAINER_ADDED_SUBJECT));
         assertTrue(eventRaisedWithContainerAsParameter(container));
     }
 
-    private boolean eventRaisedWithCorrectSubject() {
+    @Test
+    public void shouldRaiseEventToIndicateContainerGotUpdated() {
+        AllContainers allContainers = new AllContainers(couchDbConnector, eventRelay);
+        Container container = mock(Container.class);
+
+        allContainers.update(container);
+
+        assertTrue(eventRaisedWithCorrectSubject(WHPContainerConstants.CONTAINER_UPDATED_SUBJECT));
+        assertTrue(eventRaisedWithContainerAsParameter(container));
+    }
+
+    private boolean eventRaisedWithCorrectSubject(String subject) {
         ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
         verify(eventRelay).sendEventMessage(captor.capture());
         MotechEvent raisedEvent = captor.getValue();
 
-        return WHPContainerConstants.CONTAINER_ADDED_SUBJECT.equals(raisedEvent.getSubject());
+        return subject.equals(raisedEvent.getSubject());
     }
 
     private boolean eventRaisedWithContainerAsParameter(Container container) {
@@ -51,6 +63,6 @@ public class AllContainersTest {
         verify(eventRelay).sendEventMessage(captor.capture());
         MotechEvent raisedEvent = captor.getValue();
 
-        return container.equals(raisedEvent.getParameters().get(WHPContainerConstants.CONTAINER_ADDED_CONTAINER));
+        return container.equals(raisedEvent.getParameters().get(WHPContainerConstants.CONTAINER_KEY));
     }
 }

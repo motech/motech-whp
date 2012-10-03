@@ -3,6 +3,8 @@ package org.motechproject.whp.container.dashboard.service;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ public class ContainerDashboardService {
 
     AllContainerDashboardRows allContainerDashboardRows;
     AllProviders allProviders;
+    AllPatients allPatients;
 
     @Autowired
-    public ContainerDashboardService(AllContainerDashboardRows allContainerDashboardRows, AllProviders allProviders) {
+    public ContainerDashboardService(AllContainerDashboardRows allContainerDashboardRows, AllProviders allProviders, AllPatients allPatients) {
         this.allContainerDashboardRows = allContainerDashboardRows;
         this.allProviders = allProviders;
+        this.allPatients = allPatients;
     }
 
     public List<ContainerDashboardRow> allContainerDashboardRows() {
@@ -36,9 +40,24 @@ public class ContainerDashboardService {
         allContainerDashboardRows.add(row);
     }
 
+    public void updateDashboardRow(Container container) {
+        ContainerDashboardRow dashboardRow = allContainerDashboardRows.findByContainerId(container.getContainerId());
+        dashboardRow.setPatient(patient(container));
+
+        allContainerDashboardRows.update(dashboardRow);
+    }
+
     private Provider provider(Container container) {
         if (isNotBlank(container.getProviderId())) {
             return allProviders.findByProviderId(container.getProviderId());
+        } else {
+            return null;
+        }
+    }
+
+    private Patient patient(Container container) {
+        if (isNotBlank(container.getPatientId())) {
+            return allPatients.findByPatientId(container.getPatientId());
         } else {
             return null;
         }

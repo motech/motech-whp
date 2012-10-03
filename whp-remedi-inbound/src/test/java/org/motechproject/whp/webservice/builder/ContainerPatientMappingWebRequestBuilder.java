@@ -4,12 +4,25 @@ package org.motechproject.whp.webservice.builder;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
+import static org.motechproject.util.DateUtil.now;
+
 public class ContainerPatientMappingWebRequestBuilder {
 
     private ContainerPatientMappingWebRequest mappingWebRequest = new ContainerPatientMappingWebRequest();
 
     public ContainerPatientMappingWebRequest build() {
         return mappingWebRequest;
+    }
+
+    public ContainerPatientMappingWebRequestBuilder withDefaults() {
+        withCaseId("caseId")
+                .withDateModified("03/04/2012 11:23:40")
+                .withInstance(SampleInstance.PreTreatment.name())
+                .withTbId("tbId")
+                .withPatientId("patientId");
+        mappingWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        mappingWebRequest.setUpdate_type("patient_mapping");
+        return this;
     }
 
     public ContainerPatientMappingWebRequestBuilder withCaseId(String caseId) {
@@ -27,12 +40,12 @@ public class ContainerPatientMappingWebRequestBuilder {
         return this;
     }
 
-    public ContainerPatientMappingWebRequestBuilder withTbId(String tbId){
+    public ContainerPatientMappingWebRequestBuilder withTbId(String tbId) {
         mappingWebRequest.setTb_id(tbId);
         return this;
     }
 
-    public ContainerPatientMappingWebRequestBuilder withInstance(String instance){
+    public ContainerPatientMappingWebRequestBuilder withInstance(String instance) {
         mappingWebRequest.setSmear_sample_instance(instance);
         return this;
     }

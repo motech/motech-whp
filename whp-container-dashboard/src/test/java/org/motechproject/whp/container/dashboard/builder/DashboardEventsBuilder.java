@@ -9,7 +9,7 @@ public class DashboardEventsBuilder {
 
     public MotechEvent containerAddedEvent() {
         MotechEvent event = new MotechEvent(WHPContainerConstants.CONTAINER_ADDED_SUBJECT);
-        event.getParameters().put(WHPContainerConstants.CONTAINER_ADDED_CONTAINER, new Container());
+        event.getParameters().put(WHPContainerConstants.CONTAINER_KEY, new Container());
         return event;
     }
 }

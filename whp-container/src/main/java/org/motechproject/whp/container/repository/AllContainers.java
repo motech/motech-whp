@@ -49,9 +49,15 @@ public class AllContainers extends MotechBaseRepository<Container> {
         eventRelay.sendEventMessage(buildContainerEvent(WHPContainerConstants.CONTAINER_ADDED_SUBJECT, entity));
     }
 
+    @Override
+    public void update(Container entity) {
+        super.update(entity);
+        eventRelay.sendEventMessage(buildContainerEvent(WHPContainerConstants.CONTAINER_UPDATED_SUBJECT, entity));
+    }
+
     private MotechEvent buildContainerEvent(String subject, Container container) {
         MotechEvent motechEvent = new MotechEvent(subject);
-        motechEvent.getParameters().put(WHPContainerConstants.CONTAINER_ADDED_CONTAINER, container);
+        motechEvent.getParameters().put(WHPContainerConstants.CONTAINER_KEY, container);
         return motechEvent;
     }
 }

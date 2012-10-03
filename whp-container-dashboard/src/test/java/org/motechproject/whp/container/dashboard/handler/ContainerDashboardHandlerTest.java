@@ -11,7 +11,7 @@ import org.motechproject.whp.container.domain.Container;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.container.WHPContainerConstants.CONTAINER_ADDED_CONTAINER;
+import static org.motechproject.whp.container.WHPContainerConstants.CONTAINER_KEY;
 
 public class ContainerDashboardHandlerTest {
 
@@ -32,7 +32,17 @@ public class ContainerDashboardHandlerTest {
 
         containerDashboardHandler.onContainerAdded(event);
 
-        Container container = (Container) event.getParameters().get(CONTAINER_ADDED_CONTAINER);
+        Container container = (Container) event.getParameters().get(CONTAINER_KEY);
         verify(containerDashboardService).createDashboardRow(container);
+    }
+
+    @Test
+    public void shouldUpdateExistingDashboardPageWhenContainerGotUpdated() {
+        MotechEvent event = new DashboardEventsBuilder().containerAddedEvent();
+
+        containerDashboardHandler.onContainerUpdated(event);
+
+        Container container = (Container) event.getParameters().get(CONTAINER_KEY);
+        verify(containerDashboardService).updateDashboardRow(container);
     }
 }
