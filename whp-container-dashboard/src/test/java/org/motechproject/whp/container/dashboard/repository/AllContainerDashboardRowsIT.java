@@ -7,6 +7,7 @@ import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerDashboardContext.xml")
@@ -94,5 +94,39 @@ public class AllContainerDashboardRowsIT {
 
         assertNotNull(allContainerDashboardRows.get(containerDashboardRow1.getId()).getProvider());
         assertNotNull(allContainerDashboardRows.get(containerDashboardRow2.getId()).getProvider());
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenNoDashboardRowsPresent() {
+        assertTrue(allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(1, 1).isEmpty());
+    }
+
+    @Test
+    public void shouldReturnOnlyPretreatmentContainerDashboardRows() {
+        ContainerDashboardRow containerDashboardRow = new ContainerDashboardRow();
+        Container container = ContainerBuilder.newContainer().withDefaults().build();
+        container.setCurrentTrackingInstance(SputumTrackingInstance.PreTreatment);
+        containerDashboardRow.setContainer(container);
+
+        allContainerDashboardRows.add(containerDashboardRow);
+        assertTrue(allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(0, 1).isEmpty());
+    }
+
+    @Test
+    public void shouldReturnPretreatmentContainerDashboardRowsInAPagedFashion() {
+        ContainerDashboardRow containerDashboardRow1 = new ContainerDashboardRow();
+        Container container1 = ContainerBuilder.newContainer().withDefaults().build();
+        container1.setCurrentTrackingInstance(SputumTrackingInstance.PreTreatment);
+        containerDashboardRow1.setContainer(container1);
+        allContainerDashboardRows.add(containerDashboardRow1);
+
+        ContainerDashboardRow containerDashboardRow2 = new ContainerDashboardRow();
+        Container container2 = ContainerBuilder.newContainer().withDefaults().build();
+        container2.setCurrentTrackingInstance(SputumTrackingInstance.PreTreatment);
+        containerDashboardRow2.setContainer(container2);
+        allContainerDashboardRows.add(containerDashboardRow2);
+
+        assertEquals(containerDashboardRow1, allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(0, 1).get(0));
+        assertEquals(containerDashboardRow2, allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(1, 1).get(0));
     }
 }

@@ -41,4 +41,10 @@ public class AllContainerDashboardRows extends MotechBaseRepository<ContainerDas
         ViewQuery findByContainerId = createQuery("find_by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         return db.queryView(findByContainerId, ContainerDashboardRow.class);
     }
+
+    @View(name = "pre_treatment_rows", map = "function(doc) {if (doc.type ==='ContainerDashboardRow' && doc.container.currentTrackingInstance && doc.container.currentTrackingInstance === 'PreTreatment') {emit(null, doc._id);}}")
+    public List<ContainerDashboardRow> getAllPretreatmentContainerDashboardRows(Integer skip, Integer limit) {
+        ViewQuery findByContainerId = createQuery("pre_treatment_rows").skip(skip).limit(limit).includeDocs(true);
+        return db.queryView(findByContainerId, ContainerDashboardRow.class);
+    }
 }
