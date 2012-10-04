@@ -173,5 +173,4 @@ public class PatientInfoTest {
         PatientInfo patientInfo = new PatientInfo(patient);
         assertFalse(patientInfo.isShowAlert());
     }
-
 }

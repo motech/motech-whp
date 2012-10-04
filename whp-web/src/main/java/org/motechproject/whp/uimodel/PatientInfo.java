@@ -113,16 +113,8 @@ public class PatientInfo {
     }
 
     private void setTestResults(Patient patient) {
-        List<Treatment> treatments = patient.getAllTreatments();
-        WeightStatistics weightStatistics = new WeightStatistics();
-        SmearTestResults smearTestResults = new SmearTestResults();
-        for (Treatment treatment : treatments) {
-            for (WeightStatisticsRecord weightStatisticsRecord : treatment.getWeightStatistics().getAll())
-                weightStatistics.add(weightStatisticsRecord);
-            for (SmearTestRecord smearTestRecord : treatment.getSmearTestResults().getAll())
-                smearTestResults.add(smearTestRecord);
-        }
-
+        WeightStatistics weightStatistics = patient.getCurrentTherapy().getAggregatedWeightStatistics();
+        SmearTestResults smearTestResults = patient.getCurrentTherapy().getAggregatedSmearTestResults();
         testResults = new TestResults(smearTestResults, weightStatistics);
     }
 }

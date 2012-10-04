@@ -1,18 +1,24 @@
 package org.motechproject.whp.patient.domain;
 
+import org.hamcrest.core.Is;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
+import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.TherapyStatus;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.refdata.domain.Phase.*;
+import static org.motechproject.whp.refdata.domain.SampleInstance.*;
+import static org.motechproject.whp.refdata.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 
 public class TherapyTest {
@@ -229,39 +235,122 @@ public class TherapyTest {
     }
 
     @Test
-    public void shouldReturnPretreatmentSputumResult(){
-        Treatment currentTreatment = mock(Treatment.class);
-        when(currentTreatment.getPreTreatmentSmearTestResult()).thenReturn(Positive);
-        //when(currentTreatment.hasPreTreatmentResult()).thenReturn(true);
+    public void shouldReturnLatestPretreatmentSputumResult() {
+        SmearTestResults smearTestResultsForTreatment1 = new SmearTestResults();
+        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
 
-        Treatment olderTreatment = mock(Treatment.class);
-        when(olderTreatment.getPreTreatmentSmearTestResult()).thenReturn(null);
-        when(olderTreatment.hasPreTreatmentResult()).thenReturn(false);
+        SmearTestResults smearTestResultsForTreatment2 = new SmearTestResults();
+        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
 
-        Therapy therapy = new TherapyBuilder().withTreatment(olderTreatment).withTreatment(currentTreatment).build();
+        SmearTestResults smearTestResultsForCurrentTreatment = new SmearTestResults();
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive));
 
-        assertEquals(Positive, therapy.getPreTreatmentSputumResult());
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment1).build();
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment2).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForCurrentTreatment).build();
 
-        //verify(currentTreatment).hasPreTreatmentResult();
-        verify(currentTreatment).getPreTreatmentSmearTestResult();
-        verify(olderTreatment).hasPreTreatmentResult();
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment1).withTreatment(treatment2).withTreatment(currentTreatment).build();
+
+        assertThat(therapy.getPreTreatmentSputumResult(), is(Negative));
     }
+
+
+
+
     @Test
-    public void shouldReturnPretreatmentWeightRecord(){
-        Treatment currentTreatment = mock(Treatment.class);
-        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
-        WeightStatisticsRecord olderTreatmentWeightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
-        when(currentTreatment.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
+    public void shouldReturnPretreatmentWeightRecord() {
+        WeightStatistics weightStatisticsForTreatment1 = new WeightStatistics();
+        weightStatisticsForTreatment1.add(new WeightStatisticsRecord(PreTreatment, 50.0, DateUtil.today()));
+        weightStatisticsForTreatment1.add(new WeightStatisticsRecord(ExtendedIP, 55.0, DateUtil.today()));
 
-        Treatment olderTreatment = mock(Treatment.class);
-        when(olderTreatment.getPreTreatmentWeightRecord()).thenReturn(olderTreatmentWeightStatisticsRecord);
-        when(olderTreatment.hasPreTreatmentWeightRecord()).thenReturn(false);
+        WeightStatistics weightStatisticsForTreatment2 = new WeightStatistics();
+        weightStatisticsForTreatment2.add(new WeightStatisticsRecord(EndIP, 60.0, DateUtil.today()));
+        weightStatisticsForTreatment2.add(new WeightStatisticsRecord(ExtendedIP, 65.0, DateUtil.today()));
 
-        Therapy therapy = new TherapyBuilder().withTreatment(olderTreatment).withTreatment(currentTreatment).build();
+        WeightStatistics weightStatisticsForCurrentTreatment = new WeightStatistics();
+        weightStatisticsForCurrentTreatment.add(new WeightStatisticsRecord(PreTreatment, 70.0, DateUtil.today()));
+        weightStatisticsForCurrentTreatment.add(new WeightStatisticsRecord(TwoMonthsIntoCP, 75.0, DateUtil.today()));
 
-        assertEquals(weightStatisticsRecord, therapy.getPreTreatmentWeightRecord());
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForTreatment1).build();
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForTreatment2).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForCurrentTreatment).build();
 
-        verify(currentTreatment).getPreTreatmentWeightRecord();
-        verify(olderTreatment).hasPreTreatmentWeightRecord();
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment1).withTreatment(treatment2).withTreatment(currentTreatment).build();
+
+        assertThat(therapy.getPreTreatmentWeightRecord(), is(weightStatisticsForCurrentTreatment.resultForInstance(PreTreatment)));
+    }
+
+    @Test
+    public void shouldGetAllTreatmentsWithCurrentTreatment() {
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().build();
+
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment1).withTreatment(treatment2).withTreatment(currentTreatment).build();
+
+        assertThat(therapy.getAllTreatments(), hasItems(treatment1, treatment2, currentTreatment));
+        assertThat(therapy.getAllTreatments().size(), Is.is(3));
+    }
+
+    @Test
+    public void shouldGetAggregateSmearTestResults() {
+        SmearTestResults smearTestResultsForTreatment1 = new SmearTestResults();
+        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+
+        SmearTestResults smearTestResultsForTreatment2 = new SmearTestResults();
+        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+
+        SmearTestResults smearTestResultsForCurrentTreatment = new SmearTestResults();
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment1).build();
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment2).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForCurrentTreatment).build();
+
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment1).withTreatment(treatment2).withTreatment(currentTreatment).build();
+
+        SmearTestResults smearTestResults = therapy.getAggregatedSmearTestResults();
+        assertThat(smearTestResults.resultForInstance(PreTreatment), is(smearTestResultsForCurrentTreatment.resultForInstance(PreTreatment)));
+        assertThat(smearTestResults.resultForInstance(ExtendedIP), is(smearTestResultsForTreatment2.resultForInstance(ExtendedIP)));
+        assertThat(smearTestResults.resultForInstance(TwoMonthsIntoCP), is(smearTestResultsForCurrentTreatment.resultForInstance(TwoMonthsIntoCP)));
+        assertThat(smearTestResults.resultForInstance(EndIP), is(smearTestResultsForTreatment2.resultForInstance(EndIP)));
+
+        assertThat(smearTestResults.size(), is(4));
+    }
+
+    @Test
+    public void shouldGetAggregatedWeightStatistics() {
+        WeightStatistics weightStatisticsForTreatment1 = new WeightStatistics();
+        weightStatisticsForTreatment1.add(new WeightStatisticsRecord(PreTreatment, 50.0, DateUtil.today()));
+        weightStatisticsForTreatment1.add(new WeightStatisticsRecord(ExtendedIP, 55.0, DateUtil.today()));
+
+        WeightStatistics weightStatisticsForTreatment2 = new WeightStatistics();
+        weightStatisticsForTreatment2.add(new WeightStatisticsRecord(EndIP, 60.0, DateUtil.today()));
+        weightStatisticsForTreatment2.add(new WeightStatisticsRecord(ExtendedIP, 65.0, DateUtil.today()));
+
+        WeightStatistics weightStatisticsForCurrentTreatment = new WeightStatistics();
+        weightStatisticsForCurrentTreatment.add(new WeightStatisticsRecord(PreTreatment, 70.0, DateUtil.today()));
+        weightStatisticsForCurrentTreatment.add(new WeightStatisticsRecord(TwoMonthsIntoCP, 75.0, DateUtil.today()));
+
+        Treatment treatment1 = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForTreatment1).build();
+        Treatment treatment2 = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForTreatment2).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withWeightStatistics(weightStatisticsForCurrentTreatment).build();
+
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment1).withTreatment(treatment2).withTreatment(currentTreatment).build();
+
+        WeightStatistics weightStatistics = therapy.getAggregatedWeightStatistics();
+        assertThat(weightStatistics.resultForInstance(PreTreatment), is(weightStatisticsForCurrentTreatment.resultForInstance(PreTreatment)));
+        assertThat(weightStatistics.resultForInstance(ExtendedIP), is(weightStatisticsForTreatment2.resultForInstance(ExtendedIP)));
+        assertThat(weightStatistics.resultForInstance(TwoMonthsIntoCP), is(weightStatisticsForCurrentTreatment.resultForInstance(TwoMonthsIntoCP)));
+        assertThat(weightStatistics.resultForInstance(EndIP), is(weightStatisticsForTreatment2.resultForInstance(EndIP)));
+
+        assertThat(weightStatistics.size(),is(4));
     }
 }
