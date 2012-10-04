@@ -4,8 +4,10 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 
+import java.io.Serializable;
+
 @Data
-public class LabResults {
+public class LabResults implements Serializable {
     private LocalDate smearTestDate1;
     private SmearTestResult smearTestResult1;
     private LocalDate smearTestDate2;

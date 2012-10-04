@@ -51,11 +51,11 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             for (Container container : mappedToPatient) {
                 if (isDuplicateRequest(request, container)) {
                     return;
-                } else if (!isContainerInstanceMappingChanged(request, container)) {
+                } else if (isMappedOnSameInstance(request, container)) {
                     container.unMap();
+                    containerService.update(container);
                     break;
                 }
-                containerService.update(container);
             }
         }
         Container container = containerService.getContainer(request.getCase_id());
@@ -63,9 +63,8 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         containerService.update(container);
     }
 
-    private boolean isContainerInstanceMappingChanged(ContainerPatientMappingWebRequest request, Container container) {
-        return !container.getContainerId().equals(request.getCase_id())
-                && !container.getMappingInstance().name().equals(request.getSmear_sample_instance());
+    private boolean isMappedOnSameInstance(ContainerPatientMappingWebRequest request, Container container) {
+        return container.getContainerId().equals(request.getCase_id()) || container.getMappingInstance().name().equals(request.getSmear_sample_instance());
     }
 
     private boolean isDuplicateRequest(ContainerPatientMappingWebRequest request, Container container) {

@@ -11,7 +11,7 @@ public class ContainerTest {
 
     @Test
     public void shouldHaveStatusAsOpenUponCreation() {
-        Container container = new Container();
+        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertNull(container.getPatientId());
     }
