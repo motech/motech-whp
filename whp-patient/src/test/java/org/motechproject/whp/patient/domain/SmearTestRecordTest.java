@@ -36,7 +36,7 @@ public class SmearTestRecordTest {
         assertThat(negativePositiveTreatmentRecord.cumulativeResult(), is(SmearTestResult.Positive));
 
         assertThat(negativeNegativeTreatmentRecord.cumulativeResult(), is(SmearTestResult.Negative));
-        assertThat(negativeIndeterminateTreatmentRecord.cumulativeResult(), is(SmearTestResult.Negative));
+        assertThat(negativeIndeterminateTreatmentRecord.cumulativeResult(), is(SmearTestResult.Indeterminate));
 
         assertThat(indeterminateIndeterminateTreatmentRecord.cumulativeResult(), is(SmearTestResult.Indeterminate));
     }
