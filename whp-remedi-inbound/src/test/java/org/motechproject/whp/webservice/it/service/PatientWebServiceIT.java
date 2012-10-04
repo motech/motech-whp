@@ -270,6 +270,60 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
     }
 
+    @Test
+    public void shouldPerformSimpleUpdateOnClosedTreatment_havingCurrentlyOpenTreatment() {
+        // Creating a patient
+        String caseId = "12341234";
+        String tbId = "elevenDigit";
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+
+        // Closing current treatment by transferring patient out
+        PatientWebRequest closeTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withTbId(tbId)
+                .withCaseId(caseId).withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
+                .build();
+
+        patientWebService.updateCase(closeTreatmentRequest);
+
+        // Opening a new treatment by transferring patient in
+        PatientWebRequest transferInRequest = new PatientWebRequestBuilder()
+                .withDefaultsForTransferIn()
+                .withCaseId(caseId)
+                .withDate_Modified(now())
+                .build();
+        Provider newProvider = new Provider(transferInRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
+        allProviders.add(newProvider);
+        patientWebService.updateCase(transferInRequest);
+
+        // Updating historised closed treatment
+        String resultDate = "04/09/2012";
+        SmearTestResult testResult = SmearTestResult.Positive;
+        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
+                .withSimpleUpdateFields()
+                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name())
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.updateCase(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(caseId);
+
+        // TODO: Get treatment from patient by ID for verification
+        /*SmearTestRecord smearTestRecord = updatedPatient.getCurrentTreatment().getSmearTestResults().resultForInstance(sampleInstance);
+        assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_2());*/
+
+    }
+
     @After
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());

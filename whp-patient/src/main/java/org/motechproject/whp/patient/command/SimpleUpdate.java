@@ -40,6 +40,7 @@ public class SimpleUpdate extends UpdateCommand {
         if (noCurrentTreatmentExists(patient, errorCodes))
             return false;
         Treatment currentTreatment = patient.getCurrentTreatment();
+        // TODO: Fork following condition if TB_ID in request is not for current treatment
         if (!currentTreatment.getTbId().equalsIgnoreCase(patientRequest.getTb_id())) {
             errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
             return false;
