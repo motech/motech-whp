@@ -6,11 +6,12 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SmearTestResults {
+public class SmearTestResults implements Serializable {
 
     @JsonProperty
     private List<SmearTestRecord> all = new ArrayList<SmearTestRecord>();

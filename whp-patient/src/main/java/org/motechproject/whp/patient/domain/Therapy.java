@@ -11,6 +11,7 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.refdata.domain.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between
 import static org.motechproject.whp.refdata.domain.SampleInstance.PreTreatment;
 
 @Data
-public class Therapy {
+public class Therapy implements Serializable {
 
     private String uid;
 
@@ -331,7 +332,7 @@ public class Therapy {
     @JsonIgnore
     public SmearTestResult getPreTreatmentSputumResult() {
         SmearTestRecord pretreatmentSmearTestRecord = getAggregatedSmearTestResults().resultForInstance(PreTreatment);
-        if(pretreatmentSmearTestRecord == null) {
+        if (pretreatmentSmearTestRecord == null) {
             return null;
         }
         return pretreatmentSmearTestRecord.cumulativeResult();
@@ -339,12 +340,12 @@ public class Therapy {
 
     @JsonIgnore
     public WeightStatisticsRecord getPreTreatmentWeightRecord() {
-       return getAggregatedWeightStatistics().resultForInstance(PreTreatment);
+        return getAggregatedWeightStatistics().resultForInstance(PreTreatment);
     }
 
     public boolean hasTreatment(String tbId) {
-        for(Treatment treatment : treatments) {
-            if(treatment.getTbId().equals(tbId.toLowerCase())) {
+        for (Treatment treatment : treatments) {
+            if (treatment.getTbId().equals(tbId.toLowerCase())) {
                 return true;
             }
         }

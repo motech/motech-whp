@@ -4,12 +4,14 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.collections.BoundPriorityQueue;
+import org.motechproject.whp.common.domain.TreatmentWeek;
+
+import java.io.Serializable;
 
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrBefore;
 
-public class PillTakenSummaries {
+public class PillTakenSummaries implements Serializable {
 
     public static final int SIZE = 2;
     @JsonProperty
@@ -55,7 +57,7 @@ public class PillTakenSummaries {
     }
 
     @Data
-    private static class PillTakenSummary implements Comparable<PillTakenSummary> {
+    private static class PillTakenSummary implements Comparable<PillTakenSummary>, Serializable {
 
         private int doseCount;
         private LocalDate sundayDate;

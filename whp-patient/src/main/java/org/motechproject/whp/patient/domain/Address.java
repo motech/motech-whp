@@ -5,13 +5,14 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 @Data
-public class Address {
+public class Address implements Serializable {
 
     private String address_location;
     private String address_landmark;
@@ -55,11 +56,11 @@ public class Address {
         addIfNotNull(address, address_district);
         addIfNotNull(address, address_state);
 
-        return StringUtils.join(address,", ");
+        return StringUtils.join(address, ", ");
     }
 
     private void addIfNotNull(List<String> address, String element) {
-        if(isNotBlank(element))
+        if (isNotBlank(element))
             address.add(element);
     }
 

@@ -2,11 +2,12 @@ package org.motechproject.whp.common.collections;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BoundPriorityQueue<T extends Comparable<T>> {
+public class BoundPriorityQueue<T extends Comparable<T>> implements Serializable {
 
     @JsonProperty
     private List<T> list = new ArrayList<>();

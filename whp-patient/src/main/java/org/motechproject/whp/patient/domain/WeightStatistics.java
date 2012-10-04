@@ -5,11 +5,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class WeightStatistics {
+public class WeightStatistics implements Serializable {
 
     @JsonProperty
     private List<WeightStatisticsRecord> weightStatisticsRecords = new ArrayList<WeightStatisticsRecord>();

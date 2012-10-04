@@ -12,10 +12,11 @@ import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class Treatment {
+public class Treatment implements Serializable {
 
     private String providerId;
     private String providerDistrict;

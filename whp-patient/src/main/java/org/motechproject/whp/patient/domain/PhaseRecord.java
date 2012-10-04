@@ -7,8 +7,10 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
+import java.io.Serializable;
+
 @Data
-public class PhaseRecord {
+public class PhaseRecord implements Serializable {
 
     private LocalDate startDate;
     private LocalDate endDate;

@@ -25,8 +25,12 @@ public class ContainerBuilder {
         return this;
     }
 
+    public ContainerBuilder withPatientId(String patientId) {
+        container.setPatientId(patientId);
+        return this;
+    }
+
     public Container build() {
         return container;
     }
-
 }

@@ -5,10 +5,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.motechproject.whp.common.collections.UniqueElementList;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhaseTransitions {
+public class PhaseTransitions implements Serializable {
 
     @Getter
     private List<Phase> transitions = new UniqueElementList<>();

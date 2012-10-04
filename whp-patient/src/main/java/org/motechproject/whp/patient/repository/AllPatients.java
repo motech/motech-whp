@@ -6,8 +6,11 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.event.EventRelay;
+import org.motechproject.event.MotechEvent;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.patient.WHPPatientConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,9 +25,12 @@ import java.util.List;
 public class AllPatients extends MotechBaseRepository<Patient> {
 
 
+    private EventRelay eventRelay;
+
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
+    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventRelay eventRelay) {
         super(Patient.class, dbCouchDbConnector);
+        this.eventRelay = eventRelay;
     }
 
     @Override
@@ -47,6 +53,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             throw new WHPRuntimeException(errorCodes);
         }
         super.update(patient);
+        eventRelay.sendEventMessage(patientUpdatedEvent(patient));
     }
 
     @GenerateView
@@ -84,12 +91,19 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return db.queryView(query, Patient.class);
     }
 
-
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
+
+
         @Override
         public int compare(Patient patient1, Patient patient2) {
             return patient1.getFirstName().compareTo(patient2.getFirstName());
         }
+    }
+
+    private MotechEvent patientUpdatedEvent(Patient patient) {
+        MotechEvent event = new MotechEvent(WHPPatientConstants.PATIENT_UPDATED_SUBJECT);
+        event.getParameters().put(WHPPatientConstants.PATIENT_KEY, patient);
+        return event;
     }
 
 }

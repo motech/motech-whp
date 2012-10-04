@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.user.domain.Provider;
@@ -115,14 +116,25 @@ public class ContainerDashboardServiceTest {
     public void shouldUpdateProviderInformationForAllRowsMappedToTheProvider() {
         ContainerDashboardRow rowToBeUpdated1 = new ContainerDashboardRow();
         ContainerDashboardRow rowToBeUpdated2 = new ContainerDashboardRow();
-        ContainerDashboardRow rowToBeIgnored = new ContainerDashboardRow();
 
-        when(allContainerDashboardRows.getAll()).thenReturn(asList(rowToBeUpdated1, rowToBeUpdated2, rowToBeIgnored));
         when(allContainerDashboardRows.withProviderId("providerid")).thenReturn(asList(rowToBeUpdated1, rowToBeUpdated2));
 
         Provider provider = new Provider();
         provider.setProviderId("providerId");
         containerDashboardService.updateProviderInformation(provider);
+
+        verify(allContainerDashboardRows).updateAll(asList(rowToBeUpdated1, rowToBeUpdated2));
+    }
+
+    @Test
+    public void shouldUpdatePatientInformationForAllRowsMappedToThePatient() {
+        ContainerDashboardRow rowToBeUpdated1 = new ContainerDashboardRow();
+        ContainerDashboardRow rowToBeUpdated2 = new ContainerDashboardRow();
+
+        when(allContainerDashboardRows.withPatientId("patientid")).thenReturn(asList(rowToBeUpdated1, rowToBeUpdated2));
+
+        Patient patient = new PatientBuilder().withDefaults().withPatientId("patientId").build();
+        containerDashboardService.updatePatientInformation(patient);
 
         verify(allContainerDashboardRows).updateAll(asList(rowToBeUpdated1, rowToBeUpdated2));
     }

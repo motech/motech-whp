@@ -1,4 +1,4 @@
-package org.motechproject.whp.user.repository;
+package org.motechproject.whp.patient.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.junit.Before;
@@ -7,42 +7,42 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.event.EventRelay;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.user.WHPUserConstants;
-import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.patient.WHPPatientConstants;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class AllProvidersTest {
-
+public class AllPatientsTest {
     @Mock
     private EventRelay eventRelay;
 
     @Mock
     private CouchDbConnector dbConnector;
 
-    private AllProviders allProviders;
+    private AllPatients allPatients;
 
     @Before
     public void setup() {
         initMocks(this);
-        allProviders = new AllProviders(dbConnector, eventRelay);
+        allPatients = new AllPatients(dbConnector, eventRelay);
     }
 
     @Test
-    public void shouldRaiseEventWhenProviderIsUpdated() {
-        Provider provider = new Provider();
-        allProviders.update(provider);
+    public void shouldRaiseEventWhenPatientIsUpdated() {
+        Patient patient = new PatientBuilder().withDefaults().build();
+        allPatients.update(patient);
 
-        assertTrue(eventRaisedWithSubject(WHPUserConstants.PROVIDER_UPDATED_SUBJECT));
-        assertTrue(eventRaisedWithParameter(WHPUserConstants.PROVIDER_KEY, provider));
+        assertTrue(eventRaisedWithSubject(WHPPatientConstants.PATIENT_UPDATED_SUBJECT));
+        assertTrue(eventRaisedWithParameter(WHPPatientConstants.PATIENT_KEY, patient));
     }
 
-    private boolean eventRaisedWithSubject(String providerUpdatedSubject) {
+    private boolean eventRaisedWithSubject(String patientUpdatedSubject) {
         ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
         verify(eventRelay).sendEventMessage(captor.capture());
-        return providerUpdatedSubject.equals(captor.getValue().getSubject());
+        return patientUpdatedSubject.equals(captor.getValue().getSubject());
     }
 
     private boolean eventRaisedWithParameter(String key, Object value) {

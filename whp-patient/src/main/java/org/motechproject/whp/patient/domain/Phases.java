@@ -7,12 +7,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.util.DateUtil.today;
 
-public class Phases {
+public class Phases implements Serializable {
 
     @JsonProperty
     @Getter

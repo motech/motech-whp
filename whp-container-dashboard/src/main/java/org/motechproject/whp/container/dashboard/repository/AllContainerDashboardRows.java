@@ -35,4 +35,10 @@ public class AllContainerDashboardRows extends MotechBaseRepository<ContainerDas
         ViewQuery findByContainerId = createQuery("find_by_providerId").key(providerId.toLowerCase()).includeDocs(true);
         return db.queryView(findByContainerId, ContainerDashboardRow.class);
     }
+
+    @View(name = "find_by_patientId", map = "function(doc) {if (doc.type ==='ContainerDashboardRow' && doc.patient) {emit(doc.patient.patientId, doc._id);}}")
+    public List<ContainerDashboardRow> withPatientId(String patientId) {
+        ViewQuery findByContainerId = createQuery("find_by_patientId").key(patientId.toLowerCase()).includeDocs(true);
+        return db.queryView(findByContainerId, ContainerDashboardRow.class);
+    }
 }

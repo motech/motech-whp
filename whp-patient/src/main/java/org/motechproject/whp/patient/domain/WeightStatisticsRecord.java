@@ -6,10 +6,11 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class WeightStatisticsRecord {
+public class WeightStatisticsRecord implements Serializable {
 
     private SampleInstance weight_instance;
     private Double weight;

@@ -59,6 +59,16 @@ public class ContainerDashboardService {
         }
     }
 
+    public void updatePatientInformation(Patient patient) {
+        List<ContainerDashboardRow> allRowsBelongingToPatient = allContainerDashboardRows.withPatientId(patient.getPatientId());
+        if (CollectionUtils.isNotEmpty(allRowsBelongingToPatient)) {
+            for (ContainerDashboardRow containerDashboardRow : allRowsBelongingToPatient) {
+                containerDashboardRow.setPatient(patient);
+            }
+            allContainerDashboardRows.updateAll(allRowsBelongingToPatient);
+        }
+    }
+
     private Provider provider(Container container) {
         if (isNotBlank(container.getProviderId())) {
             return allProviders.findByProviderId(container.getProviderId());

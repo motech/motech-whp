@@ -5,10 +5,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.refdata.domain.Phase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhaseRecords {
+public class PhaseRecords implements Serializable {
 
     @JsonProperty
     private Map<String, PhaseRecord> phaseRecords = new HashMap<>();

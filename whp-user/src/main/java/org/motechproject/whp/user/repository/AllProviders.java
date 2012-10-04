@@ -33,7 +33,7 @@ public class AllProviders extends MotechBaseRepository<Provider> {
     @Override
     public void update(Provider entity) {
         super.update(entity);
-        MotechEvent event = providerEvent(entity);
+        MotechEvent event = providerUpdatedEvent(entity);
         eventRelay.sendEventMessage(event);
     }
 
@@ -70,8 +70,8 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         return singleResult(db.queryView(q, Provider.class));
     }
 
-    private MotechEvent providerEvent(Object provider) {
-        MotechEvent event = new MotechEvent(WHPUserConstants.PROVIDER_ADDED_SUBJECT);
+    private MotechEvent providerUpdatedEvent(Provider provider) {
+        MotechEvent event = new MotechEvent(WHPUserConstants.PROVIDER_UPDATED_SUBJECT);
         event.getParameters().put(WHPUserConstants.PROVIDER_KEY, provider);
         return event;
     }

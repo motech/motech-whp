@@ -5,6 +5,8 @@ import org.motechproject.event.annotations.MotechListener;
 import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.dashboard.service.ContainerDashboardService;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.patient.WHPPatientConstants;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.user.WHPUserConstants;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,15 @@ public class ContainerDashboardHandler {
         containerDashboardService.updateDashboardRow(container);
     }
 
-    @MotechListener(subjects = WHPUserConstants.PROVIDER_ADDED_SUBJECT)
+    @MotechListener(subjects = WHPUserConstants.PROVIDER_UPDATED_SUBJECT)
     public void onProviderUpdated(MotechEvent event) {
         Provider provider = (Provider) event.getParameters().get(WHPUserConstants.PROVIDER_KEY);
         containerDashboardService.updateProviderInformation(provider);
+    }
+
+    @MotechListener(subjects = WHPPatientConstants.PATIENT_UPDATED_SUBJECT)
+    public void onPatientUpdated(MotechEvent event) {
+        Patient patient = (Patient) event.getParameters().get(WHPPatientConstants.PATIENT_KEY);
+        containerDashboardService.updatePatientInformation(patient);
     }
 }

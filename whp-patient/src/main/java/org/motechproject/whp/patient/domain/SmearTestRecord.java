@@ -7,10 +7,11 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class SmearTestRecord {
+public class SmearTestRecord implements Serializable {
 
     private SampleInstance smear_sample_instance;
     private LocalDate smear_test_date_1;
@@ -49,9 +50,9 @@ public class SmearTestRecord {
     }
 
     public SmearTestResult cumulativeResult() {
-        if(smear_test_result_1 == SmearTestResult.Positive || smear_test_result_2 == SmearTestResult.Positive)
+        if (smear_test_result_1 == SmearTestResult.Positive || smear_test_result_2 == SmearTestResult.Positive)
             return SmearTestResult.Positive;
-        if(smear_test_result_1 == SmearTestResult.Indeterminate || smear_test_result_2 == SmearTestResult.Indeterminate)
+        if (smear_test_result_1 == SmearTestResult.Indeterminate || smear_test_result_2 == SmearTestResult.Indeterminate)
             return SmearTestResult.Indeterminate;
         return SmearTestResult.Negative;
     }
