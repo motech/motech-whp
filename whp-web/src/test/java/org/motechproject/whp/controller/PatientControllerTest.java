@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.domain.WeeklyAdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.util.WHPDate;
@@ -81,7 +81,7 @@ public class PatientControllerTest extends BaseControllerTest {
 
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
-    private List<WeeklyAdherenceAuditLog> weeklyAdherenceAuditLogs;
+    private List<AuditLog> auditLogs;
 
 
     @Before
@@ -101,8 +101,8 @@ public class PatientControllerTest extends BaseControllerTest {
         when(allDistrictsCache.getAll()).thenReturn(districts);
         cmfAdminRemarks = mock(List.class);
         when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
-        weeklyAdherenceAuditLogs = mock(List.class);
-        when(providerRemarksService.getRemarks(patient)).thenReturn(weeklyAdherenceAuditLogs);
+        auditLogs = mock(List.class);
+        when(providerRemarksService.getRemarks(patient)).thenReturn(auditLogs);
     }
 
     private void setupMessageSource() {
@@ -134,7 +134,7 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().size(5))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("cmfAdminRemarks", cmfAdminRemarks))
-                .andExpect(model().attribute("providerRemarks", weeklyAdherenceAuditLogs))
+                .andExpect(model().attribute("providerRemarks", auditLogs))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
     }
@@ -189,7 +189,7 @@ public class PatientControllerTest extends BaseControllerTest {
         String remark = "remark";
         List<TherapyRemark> cmfAdminRemarks = mock(List.class);
         when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
-        List<WeeklyAdherenceAuditLog> providerRemarks = mock(List.class);
+        List<AuditLog> providerRemarks = mock(List.class);
         when(providerRemarksService.getRemarks(patient)).thenReturn(providerRemarks);
 
         String view = patientController.addRemark(uiModel,patient.getPatientId(), remark, request);

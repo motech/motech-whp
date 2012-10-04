@@ -25,7 +25,7 @@ public class AuditAdherenceTestPart extends WHPAdherenceServiceTestPart {
             patient.startTherapy(adherenceList.firstDoseTakenOn());
         }
         adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
-        assertEquals(1, allWeeklyAdherenceAuditLogs.getAll().size());
+        assertEquals(1, allAuditLogs.getAll().size());
     }
 
     @Test
