@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,11 +20,11 @@ import static org.junit.Assert.*;
 public class AllAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired
-    AllAuditLogs allAuditLogs;
+    AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
 
     @Test
     public void shouldLogAuditWithCreationTime() {
-        List<AuditLog> auditLogs = allAuditLogs.getAll();
+        List<AuditLog> auditLogs = allWeeklyAdherenceAuditLogs.getAll();
         assertEquals(0, auditLogs.size());
 
         AuditLog auditLog = new AuditLog()
@@ -39,9 +39,9 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
         DateTime creationTime = auditLog.getCreationTime();
         assertNotNull(creationTime);
 
-        allAuditLogs.add(auditLog);
+        allWeeklyAdherenceAuditLogs.add(auditLog);
 
-        auditLogs = allAuditLogs.getAll();
+        auditLogs = allWeeklyAdherenceAuditLogs.getAll();
         assertEquals(creationTime, auditLogs.get(0).getCreationTime());
         assertTrue(auditLog.equals(auditLogs.get(0)));
     }
@@ -58,12 +58,12 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
         AuditLog auditLog3 = getLogFor(tbIds.get(0), "dose taken", now.plusMonths(1));
         AuditLog auditLogForTbIdNotInMatchCriteria = getLogFor("tbId3", "dose taken", now.minusMonths(1));
 
-        allAuditLogs.add(auditLog1);
-        allAuditLogs.add(auditLog2);
-        allAuditLogs.add(auditLog3);
-        allAuditLogs.add(auditLogForTbIdNotInMatchCriteria);
+        allWeeklyAdherenceAuditLogs.add(auditLog1);
+        allWeeklyAdherenceAuditLogs.add(auditLog2);
+        allWeeklyAdherenceAuditLogs.add(auditLog3);
+        allWeeklyAdherenceAuditLogs.add(auditLogForTbIdNotInMatchCriteria);
 
-        List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(tbIds);
+        List<AuditLog> result = allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(tbIds);
 
         assertThat(result, is(asList(auditLog3, auditLog2, auditLog1)));
     }
@@ -77,11 +77,11 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
         AuditLog auditLogWithBlankRemarkValue = getLogFor(tbId, "", now);
         AuditLog auditLogWithNullRemarkValue = getLogFor(tbId, null, now);
 
-        allAuditLogs.add(auditLog);
-        allAuditLogs.add(auditLogWithBlankRemarkValue);
-        allAuditLogs.add(auditLogWithNullRemarkValue);
+        allWeeklyAdherenceAuditLogs.add(auditLog);
+        allWeeklyAdherenceAuditLogs.add(auditLogWithBlankRemarkValue);
+        allWeeklyAdherenceAuditLogs.add(auditLogWithNullRemarkValue);
 
-        List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(asList(tbId));
+        List<AuditLog> result = allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(asList(tbId));
 
         assertThat(result, is(asList(auditLog)));
 
@@ -102,6 +102,6 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
     @After
     public void tearDown(){
         super.after();
-        markForDeletion(allAuditLogs.getAll().toArray());
+        markForDeletion(allWeeklyAdherenceAuditLogs.getAll().toArray());
     }
 }

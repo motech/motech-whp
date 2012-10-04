@@ -18,10 +18,10 @@ import java.util.Comparator;
 import java.util.List;
 
 @Repository
-public class AllAuditLogs extends MotechBaseRepository<AuditLog> {
+public class AllWeeklyAdherenceAuditLogs extends MotechBaseRepository<AuditLog> {
 
     @Autowired
-    public AllAuditLogs(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
+    public AllWeeklyAdherenceAuditLogs(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(AuditLog.class, dbCouchDbConnector);
     }
 

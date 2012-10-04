@@ -8,7 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -30,12 +30,12 @@ public class ProviderRemarksServiceTest {
     ProviderRemarksService providerRemarksService;
 
     @Mock
-    AllAuditLogs allAuditLogs;
+    AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerRemarksService = new ProviderRemarksService(allAuditLogs);
+        providerRemarksService = new ProviderRemarksService(allWeeklyAdherenceAuditLogs);
     }
 
     @Test
@@ -55,14 +55,14 @@ public class ProviderRemarksServiceTest {
         patient.addTreatment(treatmentUnderCurrentTherapy2,now);
 
         List<AuditLog> auditLogs = mock(List.class);
-        when(allAuditLogs.findByTbIdsWithRemarks(any(List.class))).thenReturn(auditLogs);
+        when(allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(any(List.class))).thenReturn(auditLogs);
 
         List<AuditLog> remarks = providerRemarksService.getRemarks(patient);
 
         assertThat(remarks, is(auditLogs));
 
         ArgumentCaptor<List> argumentCaptor  = ArgumentCaptor.forClass(List.class);
-        verify(allAuditLogs).findByTbIdsWithRemarks(argumentCaptor.capture());
+        verify(allWeeklyAdherenceAuditLogs).findByTbIdsWithRemarks(argumentCaptor.capture());
 
         List<String> tbIds = argumentCaptor.getValue();
         assertThat(tbIds, hasItem(tbId1));

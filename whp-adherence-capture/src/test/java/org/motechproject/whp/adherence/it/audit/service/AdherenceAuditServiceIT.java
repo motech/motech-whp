@@ -8,7 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.builder.AdherenceDataBuilder;
@@ -35,7 +35,7 @@ public class AdherenceAuditServiceIT extends SpringIntegrationTest {
     Patient patient;
 
     @Autowired
-    private AllAuditLogs allAdherenceAuditLogs;
+    private AllWeeklyAdherenceAuditLogs allAdherenceWeeklyAdherenceAuditLogs;
     @Autowired
     private AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
 
@@ -105,7 +105,7 @@ public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
     @After
     public void tearDown() {
-        markForDeletion(allAdherenceAuditLogs.getAll().toArray());
+        markForDeletion(allAdherenceWeeklyAdherenceAuditLogs.getAll().toArray());
         markForDeletion(allDailyAdherenceAuditLogs.getAll().toArray());
     }
 }
