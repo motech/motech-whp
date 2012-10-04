@@ -294,13 +294,6 @@
                 <classifier>classes</classifier>
             </dependency>
             <dependency>
-                <groupId>org.motechproject.whp-contrib</groupId>
-                <artifactId>motech-paginator</artifactId>
-                <version>${motech.contrib.version}</version>
-                <type>war</type>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-testing-utils</artifactId>
                 <version>${motech.version}</version>
