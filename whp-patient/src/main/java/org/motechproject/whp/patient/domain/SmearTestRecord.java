@@ -51,9 +51,9 @@ public class SmearTestRecord {
     public SmearTestResult cumulativeResult() {
         if(smear_test_result_1 == SmearTestResult.Positive || smear_test_result_2 == SmearTestResult.Positive)
             return SmearTestResult.Positive;
-        if(smear_test_result_1 == SmearTestResult.Negative || smear_test_result_2 == SmearTestResult.Negative)
-            return SmearTestResult.Negative;
-        return SmearTestResult.Indeterminate;
+        if(smear_test_result_1 == SmearTestResult.Indeterminate || smear_test_result_2 == SmearTestResult.Indeterminate)
+            return SmearTestResult.Indeterminate;
+        return SmearTestResult.Negative;
     }
 
     @JsonIgnore
