@@ -1,7 +1,7 @@
 package org.motechproject.whp.remarks;
 
-import org.motechproject.whp.adherence.audit.domain.AuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.domain.WeeklyAdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import java.util.List;
 @Component
 public class ProviderRemarksService {
 
-    AllAuditLogs allAuditLogs;
+    AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
 
     @Autowired
-    public ProviderRemarksService(AllAuditLogs allAuditLogs) {
+    public ProviderRemarksService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs) {
 
-        this.allAuditLogs = allAuditLogs;
+        this.allWeeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs;
     }
-    public List<AuditLog> getRemarks(Patient patient) {
+    public List<WeeklyAdherenceAuditLog> getRemarks(Patient patient) {
         List<Treatment> treatmentsUnderCurrentTherapy = patient.getCurrentTherapy().getTreatments();
         treatmentsUnderCurrentTherapy.add(patient.getCurrentTreatment());
 
@@ -29,7 +29,7 @@ public class ProviderRemarksService {
             tbIds.add(treatment.getTbId());
         }
 
-        return allAuditLogs.findByTbIdsWithRemarks(tbIds);
+        return allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(tbIds);
 
     }
 }

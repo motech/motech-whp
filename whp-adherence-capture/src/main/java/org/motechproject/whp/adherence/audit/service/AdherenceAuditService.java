@@ -1,9 +1,9 @@
 package org.motechproject.whp.adherence.audit.service;
 
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.domain.WeeklyAdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
@@ -17,18 +17,18 @@ import java.util.List;
 @Service
 public class AdherenceAuditService {
 
-    private AllAuditLogs allAuditLogs;
+    private AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
     private AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
 
     @Autowired
-    public AdherenceAuditService(AllAuditLogs allAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs) {
-        this.allAuditLogs = allAuditLogs;
+    public AdherenceAuditService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs) {
+        this.allWeeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs;
         this.allDailyAdherenceAuditLogs = allDailyAdherenceAuditLogs;
     }
 
     public void auditWeeklyAdherence(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
-        AuditLog auditLog = new AuditLog()
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog = new WeeklyAdherenceAuditLog()
                 .withNumberOfDosesTaken(weeklyAdherenceSummary.getDosesTaken())
                 .withProviderId(currentTreatment.getProviderId())
                 .withRemark(auditParams.getRemarks() == null ? auditParams.getRemarks() : auditParams.getRemarks().trim())
@@ -36,11 +36,11 @@ public class AdherenceAuditService {
                 .sourceOfChange(auditParams.getSourceOfChange().name())
                 .withPatientId(weeklyAdherenceSummary.getPatientId())
                 .withTbId(currentTreatment.getTbId());
-        allAuditLogs.add(auditLog);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog);
     }
 
-    public List<AuditLog> fetchWeeklyAuditLogs() {
-        return allAuditLogs.getAll();
+    public List<WeeklyAdherenceAuditLog> fetchWeeklyAuditLogs() {
+        return allWeeklyAdherenceAuditLogs.getAll();
     }
 
     public void auditDailyAdherence(Patient patient, List<Adherence> adherenceData, AuditParams auditParams) {

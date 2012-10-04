@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.domain.AuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllAuditLogs;
+import org.motechproject.whp.adherence.audit.domain.WeeklyAdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,14 +20,14 @@ import static org.junit.Assert.*;
 public class AllAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired
-    AllAuditLogs allAuditLogs;
+    AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
 
     @Test
     public void shouldLogAuditWithCreationTime() {
-        List<AuditLog> auditLogs = allAuditLogs.getAll();
-        assertEquals(0, auditLogs.size());
+        List<WeeklyAdherenceAuditLog> weeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs.getAll();
+        assertEquals(0, weeklyAdherenceAuditLogs.size());
 
-        AuditLog auditLog = new AuditLog()
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog = new WeeklyAdherenceAuditLog()
                 .withNumberOfDosesTaken(1)
                 .withProviderId("raj")
                 .withRemark("dose taken")
@@ -36,14 +36,14 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
                 .withPatientId("aha0100009")
                 .withTbId("elevenDigit");
 
-        DateTime creationTime = auditLog.getCreationTime();
+        DateTime creationTime = weeklyAdherenceAuditLog.getCreationTime();
         assertNotNull(creationTime);
 
-        allAuditLogs.add(auditLog);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog);
 
-        auditLogs = allAuditLogs.getAll();
-        assertEquals(creationTime, auditLogs.get(0).getCreationTime());
-        assertTrue(auditLog.equals(auditLogs.get(0)));
+        weeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs.getAll();
+        assertEquals(creationTime, weeklyAdherenceAuditLogs.get(0).getCreationTime());
+        assertTrue(weeklyAdherenceAuditLog.equals(weeklyAdherenceAuditLogs.get(0)));
     }
 
 
@@ -53,19 +53,19 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
 
         List<String> tbIds = asList("tbId1", "tbId2");
 
-        AuditLog auditLog1 = getLogFor(tbIds.get(0), "dose taken", now.minusMonths(1));
-        AuditLog auditLog2 = getLogFor(tbIds.get(1), "dose taken", now);
-        AuditLog auditLog3 = getLogFor(tbIds.get(0), "dose taken", now.plusMonths(1));
-        AuditLog auditLogForTbIdNotInMatchCriteria = getLogFor("tbId3", "dose taken", now.minusMonths(1));
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog1 = getLogFor(tbIds.get(0), "dose taken", now.minusMonths(1));
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog2 = getLogFor(tbIds.get(1), "dose taken", now);
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog3 = getLogFor(tbIds.get(0), "dose taken", now.plusMonths(1));
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLogForTbIdNotInMatchCriteria = getLogFor("tbId3", "dose taken", now.minusMonths(1));
 
-        allAuditLogs.add(auditLog1);
-        allAuditLogs.add(auditLog2);
-        allAuditLogs.add(auditLog3);
-        allAuditLogs.add(auditLogForTbIdNotInMatchCriteria);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog1);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog2);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog3);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLogForTbIdNotInMatchCriteria);
 
-        List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(tbIds);
+        List<WeeklyAdherenceAuditLog> result = allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(tbIds);
 
-        assertThat(result, is(asList(auditLog3, auditLog2, auditLog1)));
+        assertThat(result, is(asList(weeklyAdherenceAuditLog3, weeklyAdherenceAuditLog2, weeklyAdherenceAuditLog1)));
     }
 
     @Test
@@ -73,35 +73,35 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
         String tbId = "tbId1";
         DateTime now = DateUtil.now();
 
-        AuditLog auditLog = getLogFor(tbId, "dose taken", now.minusMonths(1));
-        AuditLog auditLogWithBlankRemarkValue = getLogFor(tbId, "", now);
-        AuditLog auditLogWithNullRemarkValue = getLogFor(tbId, null, now);
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog = getLogFor(tbId, "dose taken", now.minusMonths(1));
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLogWithBlankRemarkValue = getLogFor(tbId, "", now);
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLogWithNullRemarkValue = getLogFor(tbId, null, now);
 
-        allAuditLogs.add(auditLog);
-        allAuditLogs.add(auditLogWithBlankRemarkValue);
-        allAuditLogs.add(auditLogWithNullRemarkValue);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLog);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLogWithBlankRemarkValue);
+        allWeeklyAdherenceAuditLogs.add(weeklyAdherenceAuditLogWithNullRemarkValue);
 
-        List<AuditLog> result = allAuditLogs.findByTbIdsWithRemarks(asList(tbId));
+        List<WeeklyAdherenceAuditLog> result = allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(asList(tbId));
 
-        assertThat(result, is(asList(auditLog)));
+        assertThat(result, is(asList(weeklyAdherenceAuditLog)));
 
     }
 
-    private AuditLog getLogFor(String tbId, String remark, DateTime creationTime) {
-        AuditLog auditLog=new AuditLog()
+    private WeeklyAdherenceAuditLog getLogFor(String tbId, String remark, DateTime creationTime) {
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog =new WeeklyAdherenceAuditLog()
                 .withNumberOfDosesTaken(1)
                 .withProviderId("raj")
                 .withRemark(remark)
                 .withPatientId("patient1")
                 .withTbId(tbId);
-        auditLog.setCreationTime(creationTime);
+        weeklyAdherenceAuditLog.setCreationTime(creationTime);
 
-        return auditLog;
+        return weeklyAdherenceAuditLog;
     }
 
     @After
     public void tearDown(){
         super.after();
-        markForDeletion(allAuditLogs.getAll().toArray());
+        markForDeletion(allWeeklyAdherenceAuditLogs.getAll().toArray());
     }
 }

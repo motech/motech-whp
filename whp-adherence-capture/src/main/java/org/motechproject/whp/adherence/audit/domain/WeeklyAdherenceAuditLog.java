@@ -10,7 +10,7 @@ import org.motechproject.util.DateUtil;
 
 @TypeDiscriminator("doc.type == 'AuditLog'")
 @Data
-public class AuditLog extends MotechBaseDataObject {
+public class WeeklyAdherenceAuditLog extends MotechBaseDataObject {
 
     @JsonProperty
     private DateTime creationTime = DateUtil.now();
@@ -33,7 +33,7 @@ public class AuditLog extends MotechBaseDataObject {
         return numberOfDosesTaken;
     }
 
-    public AuditLog withNumberOfDosesTaken(int doses) {
+    public WeeklyAdherenceAuditLog withNumberOfDosesTaken(int doses) {
         numberOfDosesTaken = doses;
         return this;
     }
@@ -42,7 +42,7 @@ public class AuditLog extends MotechBaseDataObject {
         return remark;
     }
 
-    public AuditLog withRemark(String remark) {
+    public WeeklyAdherenceAuditLog withRemark(String remark) {
         this.remark = remark;
         return this;
     }
@@ -51,7 +51,7 @@ public class AuditLog extends MotechBaseDataObject {
         return this.sourceOfChange;
     }
 
-    public AuditLog sourceOfChange(String sourceOfChange) {
+    public WeeklyAdherenceAuditLog sourceOfChange(String sourceOfChange) {
         this.sourceOfChange = sourceOfChange;
         return this;
     }
@@ -60,7 +60,7 @@ public class AuditLog extends MotechBaseDataObject {
         return this.patientId;
     }
 
-    public AuditLog withPatientId(String patientId) {
+    public WeeklyAdherenceAuditLog withPatientId(String patientId) {
         this.patientId = patientId;
         return this;
     }
@@ -69,12 +69,12 @@ public class AuditLog extends MotechBaseDataObject {
         return this.tbId;
     }
 
-    public AuditLog withTbId(String tbId) {
+    public WeeklyAdherenceAuditLog withTbId(String tbId) {
         this.tbId = tbId;
         return this;
     }
 
-    public AuditLog withProviderId(String providerId) {
+    public WeeklyAdherenceAuditLog withProviderId(String providerId) {
         this.providerId = providerId;
         return this;
     }
@@ -83,7 +83,7 @@ public class AuditLog extends MotechBaseDataObject {
         return providerId;
     }
 
-    public AuditLog withUser(String user) {
+    public WeeklyAdherenceAuditLog withUser(String user) {
         this.user = user;
         return this;
     }
@@ -105,18 +105,18 @@ public class AuditLog extends MotechBaseDataObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AuditLog auditLog = (AuditLog) o;
+        WeeklyAdherenceAuditLog weeklyAdherenceAuditLog = (WeeklyAdherenceAuditLog) o;
 
-        if (numberOfDosesTaken != auditLog.numberOfDosesTaken) return false;
-        if (creationTime != null ? !creationTime.equals(auditLog.creationTime) : auditLog.creationTime != null)
+        if (numberOfDosesTaken != weeklyAdherenceAuditLog.numberOfDosesTaken) return false;
+        if (creationTime != null ? !creationTime.equals(weeklyAdherenceAuditLog.creationTime) : weeklyAdherenceAuditLog.creationTime != null)
             return false;
-        if (patientId != null ? !patientId.equals(auditLog.patientId) : auditLog.patientId != null) return false;
-        if (providerId != null ? !providerId.equals(auditLog.providerId) : auditLog.providerId != null) return false;
-        if (remark != null ? !remark.equals(auditLog.remark) : auditLog.remark != null) return false;
-        if (sourceOfChange != null ? !sourceOfChange.equals(auditLog.sourceOfChange) : auditLog.sourceOfChange != null)
+        if (patientId != null ? !patientId.equals(weeklyAdherenceAuditLog.patientId) : weeklyAdherenceAuditLog.patientId != null) return false;
+        if (providerId != null ? !providerId.equals(weeklyAdherenceAuditLog.providerId) : weeklyAdherenceAuditLog.providerId != null) return false;
+        if (remark != null ? !remark.equals(weeklyAdherenceAuditLog.remark) : weeklyAdherenceAuditLog.remark != null) return false;
+        if (sourceOfChange != null ? !sourceOfChange.equals(weeklyAdherenceAuditLog.sourceOfChange) : weeklyAdherenceAuditLog.sourceOfChange != null)
             return false;
-        if (tbId != null ? !tbId.equals(auditLog.tbId) : auditLog.tbId != null) return false;
-        if (user != null ? !user.equals(auditLog.user) : auditLog.user != null) return false;
+        if (tbId != null ? !tbId.equals(weeklyAdherenceAuditLog.tbId) : weeklyAdherenceAuditLog.tbId != null) return false;
+        if (user != null ? !user.equals(weeklyAdherenceAuditLog.user) : weeklyAdherenceAuditLog.user != null) return false;
 
         return true;
     }
