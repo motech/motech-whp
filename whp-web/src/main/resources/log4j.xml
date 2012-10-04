@@ -6,27 +6,27 @@
         <layout class="org.apache.log4j.PatternLayout"/>
     </appender>
 
-    <logger name="org.springframework">
+    <logger name="org.springframework" additivity="false">
         <level value="warn"/>
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org.springframework.jms.listener">
+    <logger name="org.springframework.jms.listener" additivity="false">
         <level value="fatal"/>
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org.ektorp">
+    <logger name="org.ektorp" additivity="false">
         <level value="warn"/>
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org.motechproject">
+    <logger name="org.motechproject" additivity="false">
         <level value="info"/>
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org.motechproject.whp.controller">
+    <logger name="org.motechproject.whp.controller" additivity="false">
         <level value="error"/>
         <appender-ref ref="console"/>
     </logger>
