@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.refdata.domain.*;
 
@@ -15,9 +16,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
@@ -452,7 +451,7 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldRevertAutoPhaseCompletion_whenCurrentPhaseBecomesIncomplete(){
+    public void shouldRevertAutoPhaseCompletion_whenCurrentPhaseBecomesIncomplete() {
         Patient patient = patient();
         patient.startTherapy(new LocalDate(2012, 3, 1));
         PhaseRecord previousPhase = patient.getCurrentPhase();
@@ -465,7 +464,7 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldGetPretreatmentCumulativeSmearTestResult(){
+    public void shouldGetPretreatmentCumulativeSmearTestResult() {
         Therapy therapy = mock(Therapy.class);
         when(therapy.getPreTreatmentSputumResult()).thenReturn(Positive);
         Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
@@ -477,7 +476,7 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldGetPreTreatmentWeightRecord(){
+    public void shouldGetPreTreatmentWeightRecord() {
         Therapy therapy = mock(Therapy.class);
         WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
         when(therapy.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
@@ -496,7 +495,7 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldGetTreatmentHistoryFromCurrentTherapy(){
+    public void shouldGetTreatmentHistoryFromCurrentTherapy() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         Treatment treatment1 = patient.getCurrentTreatment();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
@@ -513,7 +512,7 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldGetAllTreatmentsFromCurrentTherapy(){
+    public void shouldGetAllTreatmentsFromCurrentTherapy() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         Treatment treatment1 = patient.getCurrentTreatment();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
@@ -527,6 +526,41 @@ public class PatientTest {
 
         assertThat(patient.getAllTreatments(), hasItems(treatment1, treatment2, currentTreatment));
         assertThat(patient.getAllTreatments().size(), is(3));
+    }
+
+    @Test
+    public void shouldGetTreatmentStartDateOfTreatmentWithTBId() {
+        LocalDate today = DateUtil.today();
+
+        Treatment treatment = new TreatmentBuilder().withDefaults().withStartDate(today).withTbId("tbId").build();
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment).build();
+        Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
+
+        assertEquals(today, patient.getTreatmentStartDate("tbId"));
+    }
+
+    @Test
+    public void shouldReturnNullAsTreatmentStartDateWhenTBIdIsUnknown() {
+        LocalDate today = DateUtil.today();
+
+        Treatment treatment = new TreatmentBuilder().withDefaults().withStartDate(today).withTbId("tbId").build();
+        Therapy therapy = new TherapyBuilder().withTreatment(treatment).build();
+        Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
+
+        assertEquals(null, patient.getTreatmentStartDate("unkownTbId"));
+    }
+
+    @Test
+    public void shouldFetchTreatmentStartDateFromTreatmentOfAHistoricalTherapy() {
+        LocalDate today = DateUtil.today();
+
+        Treatment treatment = new TreatmentBuilder().withDefaults().withTbId("tbId").withStartDate(today.minusDays(1)).build();
+        Therapy historicalTherapy = new TherapyBuilder().withTreatmentStartingOn(treatment, today.minusDays(1)).build();
+        Therapy currentTherapy = new TherapyBuilder().build();
+
+        Patient patient = new PatientBuilder().withDefaults().withTherapy(currentTherapy).build();
+        patient.setTherapyHistory(asList(historicalTherapy));
+        assertEquals(today.minusDays(1), patient.getTreatmentStartDate("tbId"));
     }
 
     @Test

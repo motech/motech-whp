@@ -15,6 +15,7 @@ import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.refdata.domain.Phase.*;
 import static org.motechproject.whp.refdata.domain.SampleInstance.*;
@@ -258,8 +259,6 @@ public class TherapyTest {
     }
 
 
-
-
     @Test
     public void shouldReturnPretreatmentWeightRecord() {
         WeightStatistics weightStatisticsForTreatment1 = new WeightStatistics();
@@ -351,6 +350,39 @@ public class TherapyTest {
         assertThat(weightStatistics.resultForInstance(TwoMonthsIntoCP), is(weightStatisticsForCurrentTreatment.resultForInstance(TwoMonthsIntoCP)));
         assertThat(weightStatistics.resultForInstance(EndIP), is(weightStatisticsForTreatment2.resultForInstance(EndIP)));
 
-        assertThat(weightStatistics.size(),is(4));
+        assertThat(weightStatistics.size(), is(4));
+    }
+
+    @Test
+    public void shouldFetchStartDateOfTreatment() {
+        LocalDate today = DateUtil.today();
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(today).withTbId("tbId").build();
+
+        Therapy therapy = new TherapyBuilder().withTreatment(currentTreatment).build();
+        assertEquals(today, therapy.getTreatmentStartDate("tbId"));
+    }
+
+    @Test
+    public void shouldReturnNullIfTbIdIsUnknown() {
+        LocalDate today = DateUtil.today();
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(today).withTbId("tbId").build();
+
+        Therapy therapy = new TherapyBuilder().withTreatment(currentTreatment).build();
+        assertNull(therapy.getTreatmentStartDate("unknownTbId"));
+    }
+
+    @Test
+    public void shouldFetchStartDateOfAHistoricalTreatment() {
+        LocalDate today = DateUtil.today();
+
+        Treatment historicalTreatment = new TreatmentBuilder().withDefaults().withStartDate(today.minusDays(1)).withTbId("tbId1").build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(today).withTbId("tbId2").build();
+
+        Therapy therapy = new TherapyBuilder().withTreatmentStartingOn(historicalTreatment, historicalTreatment.getStartDate()).build();
+        therapy.addTreatment(currentTreatment, now());
+
+        assertEquals(today.minusDays(1), therapy.getTreatmentStartDate("tbId1"));
     }
 }

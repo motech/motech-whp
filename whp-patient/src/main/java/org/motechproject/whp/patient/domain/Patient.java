@@ -432,11 +432,16 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public boolean hasTreatment(String tbId) {
+        return null != getTreatmentStartDate(tbId);
+    }
+
+    @JsonIgnore
+    public LocalDate getTreatmentStartDate(String tbId) {
         for (Therapy therapy : therapyHistory) {
-            if(therapy.hasTreatment(tbId)) {
-                return true;
+            if (null != therapy.getTreatmentStartDate(tbId)) {
+                return therapy.getTreatmentStartDate(tbId);
             }
         }
-        return currentTherapy.hasTreatment(tbId);
+        return null == currentTherapy ? null : currentTherapy.getTreatmentStartDate(tbId);
     }
 }

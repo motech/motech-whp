@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.builder;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.refdata.domain.DiseaseClass;
@@ -63,7 +64,8 @@ public class TherapyBuilder {
         return this;
     }
 
-    public TherapyBuilder withOlderTreatment(Treatment olderTreatment) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public TherapyBuilder withTreatmentStartingOn(Treatment treatment, LocalDate startDate) {
+        therapy.addTreatment(treatment, DateUtil.newDateTime(startDate));
+        return this;
     }
 }

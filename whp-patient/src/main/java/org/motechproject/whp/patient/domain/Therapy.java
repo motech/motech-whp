@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -344,12 +345,7 @@ public class Therapy implements Serializable {
     }
 
     public boolean hasTreatment(String tbId) {
-        for (Treatment treatment : treatments) {
-            if (treatment.getTbId().equals(tbId.toLowerCase())) {
-                return true;
-            }
-        }
-        return currentTreatment.getTbId().equals(tbId.toLowerCase());
+        return null != getTreatmentStartDate(tbId);
     }
 
     @JsonIgnore
@@ -379,5 +375,27 @@ public class Therapy implements Serializable {
                 weightStatistics.add(weightStatisticsRecord);
         }
         return weightStatistics;
+    }
+
+    @JsonIgnore
+    public LocalDate getTreatmentStartDate(String tbId) {
+        if (StringUtils.isEmpty(tbId)) {
+            return null;
+        } else if (null != historicalTreatmentStartDate(tbId)) {
+            return historicalTreatmentStartDate(tbId);
+        } else if (null != currentTreatment && tbId.equalsIgnoreCase(currentTreatment.getTbId())) {
+            return currentTreatment.getStartDate();
+        } else {
+            return null;
+        }
+    }
+
+    private LocalDate historicalTreatmentStartDate(String tbId) {
+        for (Treatment treatment : treatments) {
+            if (treatment.getTbId().equals(tbId.toLowerCase())) {
+                return treatment.getStartDate();
+            }
+        }
+        return null;
     }
 }
