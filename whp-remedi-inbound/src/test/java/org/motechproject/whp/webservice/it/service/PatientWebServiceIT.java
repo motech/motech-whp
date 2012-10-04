@@ -8,7 +8,10 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
@@ -29,6 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.util.DateUtil.today;
 
 @ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
 public class PatientWebServiceIT extends SpringIntegrationTest {
@@ -221,6 +226,48 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
 
         assertFalse(updatedPatient.getCurrentTreatment().isPaused());
+    }
+
+    @Test
+    public void shouldPerformSimpleUpdateOnClosedTreatment() {
+        // Creating a patient
+        String caseId = "12341234";
+        String tbId = "elevenDigit";
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+
+        // Closing current treatment
+        PatientWebRequest closeTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withTbId(tbId)
+                .withCaseId(caseId).withTreatmentOutcome(TreatmentOutcome.Cured.name())
+                .build();
+
+        patientWebService.updateCase(closeTreatmentRequest);
+
+        // Updating current closed treatment
+        String resultDate = "04/09/2012";
+        SmearTestResult testResult = SmearTestResult.Positive;
+        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
+                .withSimpleUpdateFields()
+                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name())
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.updateCase(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(caseId);
+
+        SmearTestRecord smearTestRecord = updatedPatient.getCurrentTreatment().getSmearTestResults().resultForInstance(sampleInstance);
+        assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
     }
 
     @After

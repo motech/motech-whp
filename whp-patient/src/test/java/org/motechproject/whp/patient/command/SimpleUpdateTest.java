@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.command;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -7,14 +8,21 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
+import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
+import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.service.ProviderService;
 
+import static org.joda.time.DateTime.now;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.today;
 
 public class SimpleUpdateTest extends BaseUnitTest {
 
@@ -90,6 +98,26 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("elevenDigit");
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
+
+        simpleUpdate.apply(patientRequest);
+        verify(allPatients).update(patient);
+    }
+
+    @Test
+    public void shouldPerformUpdateForSmearTestResults_forPatientWithClosedTreatment() {
+        Patient patient = new PatientBuilder().withDefaults()
+                .withTbId("elevenDigit")
+                .build();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+
+        PatientRequest patientRequest = new PatientRequest();
+        SmearTestResults str = new SmearTestResults();
+        str.add(new SmearTestRecord(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative));
+        patientRequest.setSmearTestResults(str);
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("elevenDigit");
+
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         simpleUpdate.apply(patientRequest);
         verify(allPatients).update(patient);
