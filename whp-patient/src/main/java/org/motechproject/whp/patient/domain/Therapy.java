@@ -351,6 +351,7 @@ public class Therapy {
         return currentTreatment.getTbId().equals(tbId.toLowerCase());
     }
 
+    @JsonIgnore
     public List<Treatment> getAllTreatments() {
         List<Treatment> treatments = new ArrayList<>();
         treatments.addAll(getTreatments());
@@ -358,6 +359,7 @@ public class Therapy {
         return treatments;
     }
 
+    @JsonIgnore
     public SmearTestResults getAggregatedSmearTestResults() {
         SmearTestResults smearTestResults = new SmearTestResults();
         for (Treatment treatment : getAllTreatments()) {
@@ -367,6 +369,7 @@ public class Therapy {
         return smearTestResults;
     }
 
+    @JsonIgnore
     public WeightStatistics getAggregatedWeightStatistics() {
         List<Treatment> treatments = getAllTreatments();
         WeightStatistics weightStatistics = new WeightStatistics();
