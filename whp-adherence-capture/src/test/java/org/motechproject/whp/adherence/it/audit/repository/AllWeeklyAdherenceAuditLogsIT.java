@@ -13,11 +13,12 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
-public class AllAuditLogsIT extends SpringIntegrationTest {
+public class AllWeeklyAdherenceAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired
     AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
@@ -85,6 +86,34 @@ public class AllAuditLogsIT extends SpringIntegrationTest {
 
         assertThat(result, is(asList(auditLog)));
 
+    }
+
+    @Test
+    public void shouldGetAuditLogsByCreationDate(){
+        DateTime today = DateUtil.now();
+        DateTime yesterday = new DateTime().now().minusDays(1);
+
+        AuditLog auditLog1 = getLogFor("tbId1", "test", today);
+        AuditLog auditLog2 = getLogFor("tbId2", "test", today);
+        AuditLog auditLog3 = getLogFor("tbId3", "test", yesterday);
+        AuditLog auditLog4 = getLogFor("tbId4", "test", yesterday);
+
+        allWeeklyAdherenceAuditLogs.add(auditLog1);
+        allWeeklyAdherenceAuditLogs.add(auditLog2);
+        allWeeklyAdherenceAuditLogs.add(auditLog3);
+        allWeeklyAdherenceAuditLogs.add(auditLog4);
+
+        List<AuditLog> allLogsAsOfToday = allWeeklyAdherenceAuditLogs.findLogsAsOf(today, 0, 10);
+        assertThat(allLogsAsOfToday, hasItems(auditLog1, auditLog2, auditLog3, auditLog4));
+        assertThat(allLogsAsOfToday.size(), is(4));
+
+        List<AuditLog> lastTwoLogsAsOfToday = allWeeklyAdherenceAuditLogs.findLogsAsOf(today, 1, 2);
+        assertThat(lastTwoLogsAsOfToday, hasItems(auditLog1, auditLog2));
+        assertThat(lastTwoLogsAsOfToday.size(), is(2));
+
+        List<AuditLog> logsAsOfYesterday = allWeeklyAdherenceAuditLogs.findLogsAsOf(yesterday, 0, 3);
+        assertThat(logsAsOfYesterday, hasItems(auditLog3, auditLog4));
+        assertThat(logsAsOfYesterday.size(), is(2));
     }
 
     private AuditLog getLogFor(String tbId, String remark, DateTime creationTime) {

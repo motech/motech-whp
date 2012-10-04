@@ -1,18 +1,15 @@
 package org.motechproject.whp.adherence.audit.repository;
 
-import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
+import org.joda.time.DateTime;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +29,12 @@ public class AllWeeklyAdherenceAuditLogs extends MotechBaseRepository<AuditLog> 
 
         sortLogsChronologically(auditLogs);
         return auditLogs;
+    }
+
+    @View(name = "by_creationTime", map = "function(doc) {if (doc.type =='AuditLog') {emit(doc.creationTime, doc._id);}}")
+    public List<AuditLog> findLogsAsOf(DateTime asOf, int pageNumber, int pageSize) {
+        ViewQuery q = createQuery("by_creationTime").endKey(asOf).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true).includeDocs(true);
+        return db.queryView(q, AuditLog.class);
     }
 
     private void sortLogsChronologically(List<AuditLog> auditLogs) {
