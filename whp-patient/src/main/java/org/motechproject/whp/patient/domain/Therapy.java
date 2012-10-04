@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
+import static org.motechproject.whp.refdata.domain.SampleInstance.PreTreatment;
 
 @Data
 public class Therapy {
@@ -329,20 +330,16 @@ public class Therapy {
 
     @JsonIgnore
     public SmearTestResult getPreTreatmentSputumResult() {
-        for(Treatment treatment : getTreatments()){
-            if(treatment.hasPreTreatmentResult())
-                return treatment.getPreTreatmentSmearTestResult();
+        SmearTestRecord pretreatmentSmearTestRecord = getAggregatedSmearTestResults().resultForInstance(PreTreatment);
+        if(pretreatmentSmearTestRecord == null) {
+            return null;
         }
-        return currentTreatment.getPreTreatmentSmearTestResult();
+        return pretreatmentSmearTestRecord.cumulativeResult();
     }
 
     @JsonIgnore
     public WeightStatisticsRecord getPreTreatmentWeightRecord() {
-        for(Treatment treatment : getTreatments()){
-            if(treatment.hasPreTreatmentWeightRecord())
-                return treatment.getPreTreatmentWeightRecord();
-        }
-        return currentTreatment.getPreTreatmentWeightRecord();
+       return getAggregatedWeightStatistics().resultForInstance(PreTreatment);
     }
 
     public boolean hasTreatment(String tbId) {
@@ -352,5 +349,31 @@ public class Therapy {
             }
         }
         return currentTreatment.getTbId().equals(tbId.toLowerCase());
+    }
+
+    public List<Treatment> getAllTreatments() {
+        List<Treatment> treatments = new ArrayList<>();
+        treatments.addAll(getTreatments());
+        treatments.add(getCurrentTreatment());
+        return treatments;
+    }
+
+    public SmearTestResults getAggregatedSmearTestResults() {
+        SmearTestResults smearTestResults = new SmearTestResults();
+        for (Treatment treatment : getAllTreatments()) {
+            for (SmearTestRecord smearTestRecord : treatment.getSmearTestResults().getAll())
+                smearTestResults.add(smearTestRecord);
+        }
+        return smearTestResults;
+    }
+
+    public WeightStatistics getAggregatedWeightStatistics() {
+        List<Treatment> treatments = getAllTreatments();
+        WeightStatistics weightStatistics = new WeightStatistics();
+        for (Treatment treatment : treatments) {
+            for (WeightStatisticsRecord weightStatisticsRecord : treatment.getWeightStatistics().getAll())
+                weightStatistics.add(weightStatisticsRecord);
+        }
+        return weightStatistics;
     }
 }
