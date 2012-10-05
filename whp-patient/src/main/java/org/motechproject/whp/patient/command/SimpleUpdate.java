@@ -37,11 +37,13 @@ public class SimpleUpdate extends UpdateCommand {
     }
 
     public boolean canPerformSimpleUpdate(Patient patient, PatientRequest patientRequest, List<WHPErrorCode> errorCodes) {
-        if (noCurrentTreatmentExists(patient, errorCodes))
+        String tbId = patientRequest.getTb_id();
+        if(patient == null) {
+            errorCodes.add(WHPErrorCode.INVALID_PATIENT_CASE_ID);
             return false;
-        Treatment currentTreatment = patient.getCurrentTreatment();
-        if (!currentTreatment.getTbId().equalsIgnoreCase(patientRequest.getTb_id())) {
-            errorCodes.add(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        }
+        if(!patient.hasTreatment(tbId)) {
+            errorCodes.add(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
             return false;
         }
         return true;

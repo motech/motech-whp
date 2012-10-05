@@ -398,4 +398,15 @@ public class Therapy implements Serializable {
         }
         return null;
     }
+
+    public Treatment getTreatmentBy(String tbId) {
+        if (getAllTreatments() != null && !getAllTreatments().isEmpty()) {
+            for (Treatment treatment : getAllTreatments()) {
+                if (treatment.getTbId().equals(tbId.toLowerCase())) {
+                    return treatment;
+                }
+            }
+        }
+        return null;
+    }
 }

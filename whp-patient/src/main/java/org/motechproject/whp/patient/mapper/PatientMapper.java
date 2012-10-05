@@ -44,18 +44,18 @@ public class PatientMapper {
     }
 
     public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
-        Treatment currentTreatment = patient.getCurrentTreatment();
-        Therapy currentTherapy = patient.getCurrentTherapy();
+        Treatment treatment = patient.getTreatmentBy(patientRequest.getTb_id());
+        Therapy therapy = patient.getTherapyHaving(patientRequest.getTb_id());
 
         if (patientRequest.getAge() != null)
-            currentTherapy.setPatientAge(patientRequest.getAge());
+            therapy.setPatientAge(patientRequest.getAge());
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
         if (patientRequest.getTb_registration_number() != null)
             patient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
 
-        setPatientAddress(currentTreatment, patientRequest.getAddress());
-        updateTestResults(patientRequest, currentTreatment);
+        setPatientAddress(treatment, patientRequest.getAddress());
+        updateTestResults(patientRequest, treatment);
 
         patient.setLastModifiedDate(patientRequest.getDate_modified());
 

@@ -20,6 +20,7 @@ import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
@@ -138,7 +139,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenSimpleUpdateOnPatientIsTriedWithWrongTbId() {
-        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("tbId")
@@ -509,6 +510,54 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patient.dosesResumedOnAfterBeingInterrupted(today.plusDays(3));
 
         assertEquals(today.plusDays(1), patient.getCurrentTherapy().getDoseInterruptions().get(0).endDate());
+    }
+
+    @Test
+    public void shouldPerformSimpleUpdate_onAnyTreatmentAcrossTherapiesForPatient() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+
+        PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        String oldTbId = closeTreatmentUpdateRequest.getTb_id();
+        commandFactory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
+
+        String newProviderId = "new-provider-id";
+        String newDistrict = "newDistrict";
+
+        allProviders.add(new ProviderBuilder()
+                .withDefaults()
+                .withProviderId(newProviderId)
+                .withDistrict(newDistrict)
+                .build());
+
+        PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
+                .withMandatoryFieldsForOpenNewTreatment()
+                .withProviderId(newProviderId)
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withTbId("newTbId")
+                .build();
+        commandFactory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);
+
+        LocalDate today = today();
+        SmearTestResult testResult = SmearTestResult.Positive;
+        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
+                .withSimpleUpdateFields()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withSmearTestResults(sampleInstance, today, testResult, today, testResult)
+                .withTbId(oldTbId)
+                .build();
+        commandFactory.updateFor(UpdateScope.simpleUpdate).apply(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
+
+        SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(oldTbId).getSmearTestResults().resultForInstance(sampleInstance);
+        assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
+        assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
     }
 
 

@@ -444,4 +444,30 @@ public class Patient extends MotechBaseDataObject {
         }
         return null == currentTherapy ? null : currentTherapy.getTreatmentStartDate(tbId);
     }
+
+    public Treatment getTreatmentBy(String tbId) {
+        for (Therapy therapy : getAllTherapies()) {
+            Treatment treatment = therapy.getTreatmentBy(tbId);
+            if (treatment != null) {
+                return treatment;
+            }
+        }
+        return null;
+    }
+
+    private List<Therapy> getAllTherapies() {
+        List<Therapy> allTherapies = new ArrayList<>();
+        allTherapies.addAll(therapyHistory);
+        allTherapies.add(currentTherapy);
+        return allTherapies;
+    }
+
+    public Therapy getTherapyHaving(String tbId) {
+        for (Therapy therapy : getAllTherapies()) {
+            if(therapy.hasTreatment(tbId.toLowerCase())){
+                return  therapy;
+            }
+        }
+        return null;
+    }
 }
