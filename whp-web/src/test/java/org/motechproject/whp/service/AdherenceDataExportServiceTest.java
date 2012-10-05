@@ -58,7 +58,7 @@ public class AdherenceDataExportServiceTest {
         List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));
         when(adherenceAuditService.allAuditLogs(1)).thenReturn(auditLogs);
 
-        List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceAuditLogSummaries(pageNo);
+        List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceReport(pageNo);
 
         List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", new WHPDate(now()).value(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB"));
 
