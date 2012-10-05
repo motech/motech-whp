@@ -44,7 +44,6 @@ public class PatientMapper {
     }
 
     public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
-        // TODO: Fork currentTreatment if TB_ID in request is not for current treatment
         Treatment currentTreatment = patient.getCurrentTreatment();
         Therapy currentTherapy = patient.getCurrentTherapy();
 
