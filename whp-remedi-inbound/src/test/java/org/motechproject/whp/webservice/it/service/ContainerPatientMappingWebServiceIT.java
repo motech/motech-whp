@@ -79,6 +79,6 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
                 "</case>";
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post("/containerPatientMapping/process").body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isBadRequest())
-                .andExpect(content().string(allOf(containsString("<message nature=\"submit_error\">" + WHPErrorCode.CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE.getMessage() + "</message>"))));
+                .andExpect(content().string(allOf(containsString("field:case_id:value should not be null"), containsString("field:smear_sample_instance:The value should be one of : [PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment]"))));
     }
 }

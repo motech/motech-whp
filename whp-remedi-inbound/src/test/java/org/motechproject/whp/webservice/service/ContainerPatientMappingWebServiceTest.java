@@ -16,6 +16,7 @@ import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
+import org.motechproject.whp.webservice.validation.ContainerPatientMappingRequestValidator;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
@@ -28,6 +29,7 @@ import static org.motechproject.whp.common.exception.WHPErrorCode.INVALID_CONTAI
 import static org.motechproject.whp.common.exception.WHPErrorCode.NO_LAB_RESULTS_IN_CONTAINER;
 
 public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
+    private ContainerPatientMappingRequestValidator validator;
     private ContainerPatientMappingWebService webService;
 
     @Mock
@@ -37,12 +39,14 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     private PatientService patientService;
 
     @Mock
-    private RequestValidator beanValidator;
+    private RequestValidator requestValidator;
+
 
     @Before
     public void setup() {
         initMocks(this);
-        webService = new ContainerPatientMappingWebService(containerService, patientService, beanValidator);
+        validator = new ContainerPatientMappingRequestValidator(containerService, patientService, requestValidator);
+        webService = new ContainerPatientMappingWebService(containerService, validator);
     }
 
     @Test

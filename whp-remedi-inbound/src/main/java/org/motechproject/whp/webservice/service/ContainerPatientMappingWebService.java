@@ -3,10 +3,10 @@ package org.motechproject.whp.webservice.service;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.casexml.service.exception.CaseException;
 import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -24,22 +24,20 @@ import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 public class ContainerPatientMappingWebService extends CaseService<ContainerPatientMappingWebRequest> {
 
     private ContainerService containerService;
-    private RequestValidator beanValidator;
-    private final ContainerPatientMappingRequestValidator containerPatientMappingRequestValidator;
+    private ContainerPatientMappingRequestValidator containerPatientMappingRequestValidator;
 
     @Autowired
-    public ContainerPatientMappingWebService(ContainerService containerService, PatientService patientService, RequestValidator beanValidator) {
+    public ContainerPatientMappingWebService(ContainerService containerService, ContainerPatientMappingRequestValidator validator) {
         super(ContainerPatientMappingWebRequest.class);
         this.containerService = containerService;
-        this.beanValidator = beanValidator;
-        containerPatientMappingRequestValidator = new ContainerPatientMappingRequestValidator(containerService, patientService, beanValidator);
+        this.containerPatientMappingRequestValidator = validator;
     }
 
     @Override
     public void updateCase(ContainerPatientMappingWebRequest request) throws CaseException {
-        WHPError validationError = containerPatientMappingRequestValidator.validate(request);
-        if (null != validationError) {
-            throw new WHPCaseException(validationError);
+        List<WHPError> validationErrors = containerPatientMappingRequestValidator.validate(request);
+        if (validationErrors != null && !validationErrors.isEmpty()) {
+            throw new WHPCaseException(new WHPRuntimeException(validationErrors, WHPErrorCode.FIELD_VALIDATION_FAILED.getMessage()));
         }
         map(request);
     }

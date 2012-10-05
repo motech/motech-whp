@@ -10,7 +10,7 @@ import java.util.List;
 
 public class WHPRuntimeException extends RuntimeException {
 
-    private final List<WHPError> errors = new ArrayList<WHPError>();
+    private List<WHPError> errors = new ArrayList<WHPError>();
 
     public WHPRuntimeException(WHPErrorCode errorCode) {
         this.errors.add(new WHPError(errorCode));
@@ -20,10 +20,15 @@ public class WHPRuntimeException extends RuntimeException {
         this.errors.add(new WHPError(errorCode, message));
     }
 
-    public WHPRuntimeException(List<WHPErrorCode> errors) {
-        for (WHPErrorCode errorCode : errors) {
+    public WHPRuntimeException(List<WHPErrorCode> errorCodes) {
+        for (WHPErrorCode errorCode : errorCodes) {
             this.errors.add(new WHPError(errorCode));
         }
+    }
+
+    public WHPRuntimeException(List<WHPError> errors, String message) {
+        super(message);
+        this.errors = errors;
     }
 
     public WHPRuntimeException(Errors errors) {

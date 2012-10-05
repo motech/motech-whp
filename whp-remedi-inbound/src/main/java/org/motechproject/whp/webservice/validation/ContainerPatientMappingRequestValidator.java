@@ -1,83 +1,78 @@
 package org.motechproject.whp.webservice.validation;
 
 import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.motechproject.whp.common.exception.WHPErrorCode.*;
 
+@Component
 public class ContainerPatientMappingRequestValidator {
 
     private ContainerService containerService;
     private PatientService patientService;
     private RequestValidator beanValidator;
 
+    @Autowired
     public ContainerPatientMappingRequestValidator(ContainerService containerService, PatientService patientService, RequestValidator beanValidator) {
         this.containerService = containerService;
         this.patientService = patientService;
         this.beanValidator = beanValidator;
     }
 
-    public WHPError validate(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
-        WHPError validationError = validateCaseXml(containerPatientMappingWebRequest);
-        if (null == validationError) {
-            validationError = validateContainer(containerPatientMappingWebRequest);
-        }
-        if (null == validationError) {
-            validationError = validatePatient(containerPatientMappingWebRequest);
-        }
-        if (null == validationError) {
-            validationError = validateTreatment(containerPatientMappingWebRequest);
-        }
-        if(null == validationError) {
-            validationError = validateInstance(containerPatientMappingWebRequest);
-        }
-        return validationError;
+    public List<WHPError> validate(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+        ArrayList<WHPError> validationErrors = new ArrayList<WHPError>();
+        validateCaseXml(containerPatientMappingWebRequest, validationErrors);
+        validateContainer(containerPatientMappingWebRequest, validationErrors);
+        validatePatient(containerPatientMappingWebRequest, validationErrors);
+        validateTreatment(containerPatientMappingWebRequest, validationErrors);
+        validateInstance(containerPatientMappingWebRequest, validationErrors);
+        return validationErrors;
     }
 
-    private WHPError validateInstance(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
-        if(!SputumTrackingInstance.isValidMappingInstance(containerPatientMappingWebRequest.getSmear_sample_instance())) {
-            return new WHPError(INVALID_SPUTUM_TEST_INSTANCE);
+    private void validateInstance(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
+        if (!SputumTrackingInstance.isValidMappingInstance(containerPatientMappingWebRequest.getSmear_sample_instance())) {
+            validationErrors.add(new WHPError(INVALID_SPUTUM_TEST_INSTANCE));
         }
-        return null;
     }
 
-    private WHPError validateTreatment(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+    private void validateTreatment(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
         Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
-        if (!patient.hasTreatment(containerPatientMappingWebRequest.getTb_id())) {
-            return new WHPError(NO_SUCH_TREATMENT_EXISTS);
+        if (patient != null && !patient.hasTreatment(containerPatientMappingWebRequest.getTb_id())) {
+            validationErrors.add(new WHPError(NO_SUCH_TREATMENT_EXISTS));
         }
-        return null;
     }
 
-    private WHPError validatePatient(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+    private void validatePatient(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
         Patient patient = patientService.findByPatientId(containerPatientMappingWebRequest.getPatient_id());
         if (null == patient) {
-            return new WHPError(PATIENT_NOT_FOUND);
+            validationErrors.add(new WHPError(PATIENT_NOT_FOUND));
         }
-        return null;
     }
 
-    private WHPError validateContainer(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+    private void validateContainer(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
         if (!containerService.exists(containerPatientMappingWebRequest.getCase_id())) {
-            return new WHPError(INVALID_CONTAINER_ID);
+            validationErrors.add(new WHPError(INVALID_CONTAINER_ID));
         } else if (containerService.getContainer(containerPatientMappingWebRequest.getCase_id()).getLabResults() == null) {
-            return new WHPError(NO_LAB_RESULTS_IN_CONTAINER);
+            validationErrors.add(new WHPError(NO_LAB_RESULTS_IN_CONTAINER));
         }
-        return null;
     }
 
-    private WHPError validateCaseXml(ContainerPatientMappingWebRequest containerPatientMappingWebRequest) {
+    private void validateCaseXml(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
         try {
             beanValidator.validate(containerPatientMappingWebRequest, "");
         } catch (RuntimeException e) {
-            return new WHPError(CONTAINER_PATIENT_MAPPING_IS_INCOMPLETE);
+            validationErrors.addAll(((WHPRuntimeException) e).getErrors());
         }
-        return null;
     }
 }

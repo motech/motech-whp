@@ -1,7 +1,9 @@
 package org.motechproject.whp.common.exception;
 
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang.StringUtils;
 
+@EqualsAndHashCode
 public class WHPError {
 
     private WHPErrorCode errorCode;

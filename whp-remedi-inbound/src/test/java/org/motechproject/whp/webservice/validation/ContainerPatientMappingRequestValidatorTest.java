@@ -13,15 +13,16 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
-import static junit.framework.Assert.assertEquals;
+import java.util.List;
+
+import static junit.framework.Assert.assertTrue;
 import static org.joda.time.DateTime.now;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.exception.WHPErrorCode.*;
 
@@ -48,11 +49,11 @@ public class ContainerPatientMappingRequestValidatorTest {
         ContainerPatientMappingWebRequest request = buildTestRequest();
 
         when(containerService.exists(any(String.class))).thenReturn(false);
+        when(patientService.findByPatientId(anyString())).thenReturn(null);
 
-        WHPError validationError = validator.validate(request);
+        List<WHPError> validationErrors = validator.validate(request);
 
-        verify(containerService, times(1)).exists(anyString());
-        assertEquals(INVALID_CONTAINER_ID, validationError.getErrorCode());
+        assertTrue(validationErrors.contains(new WHPError(INVALID_CONTAINER_ID)));
 
     }
 
@@ -69,10 +70,9 @@ public class ContainerPatientMappingRequestValidatorTest {
 
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(patientService.findByPatientId(anyString())).thenReturn(null);
-        WHPError validationError = validator.validate(request);
+        List<WHPError> validationErrors = validator.validate(request);
 
-        verify(patientService, times(1)).findByPatientId(anyString());
-        assertEquals(PATIENT_NOT_FOUND, validationError.getErrorCode());
+        assertTrue(validationErrors.contains(new WHPError(PATIENT_NOT_FOUND)));
     }
 
     @Test
@@ -92,10 +92,9 @@ public class ContainerPatientMappingRequestValidatorTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.getCurrentTreatment().setTbId("123");
         when(patientService.findByPatientId(anyString())).thenReturn(patient);
-        WHPError validationError = validator.validate(request);
+        List<WHPError> validationErrors = validator.validate(request);
 
-        verify(patientService, times(2)).findByPatientId(anyString());
-        assertEquals(NO_SUCH_TREATMENT_EXISTS, validationError.getErrorCode());
+        assertTrue(validationErrors.contains(new WHPError(NO_SUCH_TREATMENT_EXISTS)));
 
     }
 
@@ -108,10 +107,9 @@ public class ContainerPatientMappingRequestValidatorTest {
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(anyString())).thenReturn(container);
 
-        WHPError validationError = validator.validate(request);
+        List<WHPError> validationErrors = validator.validate(request);
 
-        verify(containerService, times(1)).getContainer(request.getCase_id());
-        assertEquals(NO_LAB_RESULTS_IN_CONTAINER, validationError.getErrorCode());
+        assertTrue(validationErrors.contains(new WHPError(NO_LAB_RESULTS_IN_CONTAINER)));
     }
 
     @Test
@@ -131,9 +129,9 @@ public class ContainerPatientMappingRequestValidatorTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.getCurrentTreatment().setTbId(request.getTb_id());
         when(patientService.findByPatientId(anyString())).thenReturn(patient);
-        WHPError validationError = validator.validate(request);
+        List<WHPError> validationErrors = validator.validate(request);
 
-        assertEquals(INVALID_SPUTUM_TEST_INSTANCE, validationError.getErrorCode());
+        assertTrue(validationErrors.contains(new WHPError(INVALID_SPUTUM_TEST_INSTANCE)));
     }
 
     private ContainerPatientMappingWebRequest buildTestRequest() {
