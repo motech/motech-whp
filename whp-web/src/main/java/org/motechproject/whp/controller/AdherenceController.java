@@ -33,7 +33,6 @@ import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.c
 
 @Controller
 @RequestMapping(value = "/adherence")
-@ExcelDataSource(name = "adherence")
 public class AdherenceController extends BaseWebController {
 
     private PatientService patientService;
@@ -71,11 +70,6 @@ public class AdherenceController extends BaseWebController {
 
         Flash.out(WHPConstants.NOTIFICATION_MESSAGE, "Adherence Saved For Patient : " + patientId, httpServletRequest);
         return "redirect:/";
-    }
-
-    @DataProvider
-    public List<Adherence> adherenceReport(int pageNumber) {
-        return adherenceService.allAdherenceData(pageNumber - 1, 10000);
     }
 
     private WeeklyAdherenceSummary weeklyAdherenceSummary(WeeklyAdherenceForm weeklyAdherenceForm) {

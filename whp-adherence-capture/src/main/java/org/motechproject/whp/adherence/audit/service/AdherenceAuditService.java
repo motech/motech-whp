@@ -1,10 +1,14 @@
 package org.motechproject.whp.adherence.audit.service;
 
+import org.joda.time.DateTime;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
-import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
+import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
@@ -19,11 +23,13 @@ public class AdherenceAuditService {
 
     private AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
     private AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
+    private AllAdherenceAuditLogs allAdherenceAuditLogs;
 
     @Autowired
-    public AdherenceAuditService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs) {
+    public AdherenceAuditService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs, AllAdherenceAuditLogs allAdherenceAuditLogs) {
         this.allWeeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs;
         this.allDailyAdherenceAuditLogs = allDailyAdherenceAuditLogs;
+        this.allAdherenceAuditLogs = allAdherenceAuditLogs;
     }
 
     public void auditWeeklyAdherence(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
@@ -58,5 +64,9 @@ public class AdherenceAuditService {
 
     public List<DailyAdherenceAuditLog> fetchDailyAuditLogs() {
         return allDailyAdherenceAuditLogs.getAll();
+    }
+
+    public List<AdherenceAuditLog> allAuditLogs(int pageNumber) {
+        return allAdherenceAuditLogs.findLogsAsOf(DateUtil.now(), pageNumber - 1, 10000);
     }
 }

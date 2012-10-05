@@ -65,11 +65,6 @@ public class WHPAdherenceService {
         }
     }
 
-    public List<Adherence> allAdherenceData(int pageNumber, int pageSize) {
-        List<AdherenceRecord> adherenceData = adherenceLogService.adherence(DateUtil.today(), pageNumber, pageSize);
-        return new AdherenceMapper().map(adherenceData);
-    }
-
     public void addOrUpdateLogsByDoseDate(List<Adherence> adherenceList, Patient patient, AuditParams auditParams) {
         List<AdherenceRecord> adherenceData = AdherenceRecordMapper.map(adherenceList);
         adherenceLogService.addOrUpdateLogsByDoseDate(adherenceData, patient.getPatientId());
