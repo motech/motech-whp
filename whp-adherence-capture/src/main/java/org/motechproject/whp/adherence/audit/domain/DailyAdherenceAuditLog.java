@@ -13,6 +13,20 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 @TypeDiscriminator("doc.type == 'DailyAdherenceAuditLog'")
 public class DailyAdherenceAuditLog extends MotechBaseDataObject {
 
+    public DailyAdherenceAuditLog() {
+
+    }
+
+    public DailyAdherenceAuditLog(String patientId, String tbId, LocalDate pillDate, PillStatus pillStatus, String user, String sourceOfChange, DateTime creationTime) {
+        this.patientId = patientId;
+        this.tbId = tbId;
+        this.pillDate = pillDate;
+        this.pillStatus = pillStatus;
+        this.user = user;
+        this.sourceOfChange = sourceOfChange;
+        this.creationTime = creationTime;
+    }
+
     private String patientId;
 
     private String tbId;
