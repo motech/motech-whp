@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 
@@ -21,12 +22,19 @@ import static org.junit.Assert.assertNull;
 public class SputumTrackingDashboardRowTest {
 
 
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
     private DateTime now = DateUtil.now();
 
     @Test
     public void shouldExtractContainerID() {
         String containerId = "containerId";
+        String labName = "MyOwnLab";
         LabResults labResults = new LabResults();
+        labResults.setLabName(labName);
+        labResults.setSmearTestResult1(SmearTestResult.Positive);
+        labResults.setSmearTestDate1(now.toLocalDate());
+        labResults.setSmearTestResult2(SmearTestResult.Negative);
+        labResults.setSmearTestDate2(now.toLocalDate().plusDays(1));
 
         Container container = new Container();
         container.setContainerId(containerId);
@@ -49,12 +57,16 @@ public class SputumTrackingDashboardRowTest {
         SputumTrackingDashboardRow row = new SputumTrackingDashboardRow(containerDashboardRow);
 
         assertEquals(containerId, row.getContainerId());
-        assertEquals(now.toLocalDate(), row.getContainerIssuedOn());
-        assertEquals(now.toLocalDate(), row.getConsultation());
+        assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getContainerIssuedOn());
+        assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultation());
         assertEquals(patientId, row.getPatientId());
         assertEquals(district, row.getDistrict());
         assertEquals(providerId, row.getProviderId());
-        assertEquals(labResults, row.getLabResults());
+        assertEquals(labName, row.getLabName());
+        assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultationOneDate());
+        assertEquals(now.toLocalDate().plusDays(1).toString(DATE_FORMAT), row.getConsultationTwoDate());
+        assertEquals(SmearTestResult.Positive.name(), row.getConsultationOneResult());
+        assertEquals(SmearTestResult.Negative.name(), row.getConsultationTwoResult());
     }
 
     @Test

@@ -1,24 +1,21 @@
 package org.motechproject.whp.controller;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
-import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +44,6 @@ public class ProviderController extends BaseWebController {
         String providerId = "";
         initQueryModel(uiModel, district, providerId);
 
-        prepareResultsModel(uiModel, providerService.fetchBy(district, providerId));
         return "provider/list";
     }
 

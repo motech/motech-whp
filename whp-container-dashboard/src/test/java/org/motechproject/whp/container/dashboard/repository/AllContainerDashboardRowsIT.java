@@ -115,6 +115,24 @@ public class AllContainerDashboardRowsIT {
     }
 
     @Test
+    public void shouldReturnCountOfAllPretreatmentContainerDashboardRows() {
+        ContainerDashboardRow containerDashboardRow = new ContainerDashboardRow();
+        Container container = ContainerBuilder.newContainer().withDefaults().build();
+        container.setCurrentTrackingInstance(SputumTrackingInstance.PreTreatment);
+        containerDashboardRow.setContainer(container);
+
+        ContainerDashboardRow containerDashboardRow2 = new ContainerDashboardRow();
+        Container container2 = ContainerBuilder.newContainer().withDefaults().build();
+        container2.setCurrentTrackingInstance(SputumTrackingInstance.InTreatment);
+        containerDashboardRow2.setContainer(container2);
+
+        allContainerDashboardRows.add(containerDashboardRow);
+        allContainerDashboardRows.add(containerDashboardRow2);
+
+        assertEquals(1, allContainerDashboardRows.numberOfPreTreatmentRows());
+    }
+
+    @Test
     public void shouldReturnPretreatmentContainerDashboardRowsInAPagedFashion() {
         ContainerDashboardRow containerDashboardRow1 = new ContainerDashboardRow();
         Container container1 = ContainerBuilder.newContainer().withDefaults().build();

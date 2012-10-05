@@ -2,6 +2,7 @@ package org.motechproject.whp.container.dashboard.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
+import org.ektorp.ViewResult;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
@@ -46,5 +47,15 @@ public class AllContainerDashboardRows extends MotechBaseRepository<ContainerDas
     public List<ContainerDashboardRow> getAllPretreatmentContainerDashboardRows(Integer skip, Integer limit) {
         ViewQuery findByContainerId = createQuery("pre_treatment_rows").skip(skip).limit(limit).includeDocs(true);
         return db.queryView(findByContainerId, ContainerDashboardRow.class);
+    }
+
+    @View(name = "number_of_pre_treatment_rows", map = "function(doc) {if (doc.type === 'ContainerDashboardRow' && doc.container.currentTrackingInstance && doc.container.currentTrackingInstance === 'PreTreatment') {emit(null, doc._id);}}", reduce = "_count")
+    public int numberOfPreTreatmentRows() {
+        ViewQuery numberOfPreTreatmentRows = createQuery("number_of_pre_treatment_rows").reduce(true);
+        ViewResult viewResult = db.queryView(numberOfPreTreatmentRows);
+        for (ViewResult.Row row : viewResult) {
+            return row.getValueAsInt();
+        }
+        return 0;
     }
 }

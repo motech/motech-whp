@@ -24,11 +24,12 @@ public class SputumTrackingDashboardService implements Paging<SputumTrackingDash
     @Override
     public PageResults<SputumTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerDashboardRow> allRows = allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(startIndex, rowsPerPage);
+        List<ContainerDashboardRow> rowsForPage = allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(startIndex, rowsPerPage);
+        int totalRows = allContainerDashboardRows.numberOfPreTreatmentRows();
         PageResults pageResults = new PageResults();
-        pageResults.setTotalRows(allRows.size());
+        pageResults.setTotalRows(totalRows);
         pageResults.setPageNo(pageNumber);
-        pageResults.setResults(prepareResultsModel(allRows));
+        pageResults.setResults(prepareResultsModel(rowsForPage));
         return pageResults;
 
     }

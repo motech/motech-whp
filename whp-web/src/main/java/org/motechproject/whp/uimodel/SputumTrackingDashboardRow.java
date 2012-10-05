@@ -14,14 +14,19 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 public class SputumTrackingDashboardRow {
 
     public static final String DIAGNOSIS_POSITIVE = "Positive";
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
     private String containerId;
-    private LocalDate containerIssuedOn;
-    private LabResults labResults;
-    private LocalDate consultation;
+    private String containerIssuedOn;
+    private String consultationOneDate;
+    private String consultationTwoDate;
+    private String consultationOneResult;
+    private String consultationTwoResult;
+    private String consultation;
     private String diagnosis;
     private String patientId;
     private String district;
     private String providerId;
+    private String labName;
 
     public SputumTrackingDashboardRow(ContainerDashboardRow containerDashboardRow) {
         Container container = containerDashboardRow.getContainer();
@@ -41,15 +46,30 @@ public class SputumTrackingDashboardRow {
     private void extractPatientInformation(Patient patient, String tbId) {
         if (patient != null) {
             patientId = patient.getPatientId();
-            consultation = patient.getTreatmentStartDate(tbId);
+            consultation = inDesiredFormat(patient.getTreatmentStartDate(tbId));
         }
     }
 
     private void extractContainerInformation(Container container) {
         containerId = container.getContainerId();
-        containerIssuedOn = container.getCreationTime().toLocalDate();
-        labResults = container.getLabResults();
+        containerIssuedOn = inDesiredFormat(container.getCreationTime().toLocalDate());
+        populateLabResultsData(container.getLabResults());
+
         if (isNotBlank(container.getTbId()))
             diagnosis = DIAGNOSIS_POSITIVE;
+    }
+
+    private void populateLabResultsData(LabResults labResults) {
+        if(labResults != null) {
+            labName = labResults.getLabName();
+            consultationOneDate = inDesiredFormat(labResults.getSmearTestDate1());
+            consultationTwoDate = inDesiredFormat(labResults.getSmearTestDate2());
+            consultationOneResult = labResults.getSmearTestResult1().name();
+            consultationTwoResult = labResults.getSmearTestResult2().name();
+        }
+    }
+
+    private String inDesiredFormat(LocalDate date) {
+        return date.toString(DATE_FORMAT);
     }
 }

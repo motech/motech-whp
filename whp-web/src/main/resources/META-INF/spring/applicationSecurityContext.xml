@@ -37,6 +37,7 @@
         <intercept-url pattern="/patients/addRemark/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/treatmentcard/**/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/containerRegistration/by_cmfAdmin/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/sputum-tracking/pre-treatment/**" access="hasRole('CMF_ADMIN')" requires-channel="any"/>
 
         <!--Only IT Admin-->
         <intercept-url pattern="/itadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>

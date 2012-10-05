@@ -25,6 +25,9 @@
         <li>
             <a href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
         <li>
+        <li>
+            <a href="/whp/sputum-tracking/pre-treatment">Sputum Tracking Dashboard</a>
+        <li>
         <li class="divider"></li>
 
     </ul>

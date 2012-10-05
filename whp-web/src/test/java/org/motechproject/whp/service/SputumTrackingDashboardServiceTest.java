@@ -40,6 +40,7 @@ public class SputumTrackingDashboardServiceTest {
         row1.setContainer(new Container("provider1", "containerId1", SputumTrackingInstance.PreTreatment, DateTime.now()));
         ContainerDashboardRow row2 = new ContainerDashboardRow();
         row2.setContainer(new Container("provider2", "containerId2", SputumTrackingInstance.PreTreatment, DateTime.now()));
+        when(allContainerDashboardRows.numberOfPreTreatmentRows()).thenReturn(2);
         when(allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(0, 1)).thenReturn(asList(new ContainerDashboardRow[]{row1}));
         when(allContainerDashboardRows.getAllPretreatmentContainerDashboardRows(1, 1)).thenReturn(asList(new ContainerDashboardRow[]{row2}));
 
@@ -48,7 +49,10 @@ public class SputumTrackingDashboardServiceTest {
 
         verify(allContainerDashboardRows).getAllPretreatmentContainerDashboardRows(0, 1);
         verify(allContainerDashboardRows).getAllPretreatmentContainerDashboardRows(0, 1);
+        assertEquals(new Integer(2), sputumTrackingDashboardRowPageResults1.getTotalRows());
+        assertEquals(new Integer(2), sputumTrackingDashboardRowPageResults2.getTotalRows());
         assertEquals(1, sputumTrackingDashboardRowPageResults1.getResults().size());
+        assertEquals(1, sputumTrackingDashboardRowPageResults2.getResults().size());
         assertEquals("containerId1", sputumTrackingDashboardRowPageResults1.getResults().get(0).getContainerId());
         assertEquals("containerId2", sputumTrackingDashboardRowPageResults2.getResults().get(0).getContainerId());
     }
