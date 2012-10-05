@@ -5,8 +5,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+
 @Data
-public class PhaseTransition {
+public class PhaseTransition implements Serializable {
 
     private Phase phase;
 

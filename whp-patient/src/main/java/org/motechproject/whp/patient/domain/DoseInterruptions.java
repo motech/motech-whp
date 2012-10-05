@@ -5,11 +5,12 @@ import org.motechproject.whp.common.exception.WHPDomainException;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class DoseInterruptions extends ArrayList<DoseInterruption> {
+public class DoseInterruptions extends ArrayList<DoseInterruption> implements Serializable {
 
     public DoseInterruptions() {
     }

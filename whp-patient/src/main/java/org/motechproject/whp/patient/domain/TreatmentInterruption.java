@@ -1,18 +1,17 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static org.motechproject.util.DateUtil.*;
 
 @Data
-public class TreatmentInterruption {
+public class TreatmentInterruption implements Serializable {
 
     @JsonProperty
     private LocalDate pauseDate;

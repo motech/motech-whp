@@ -107,7 +107,7 @@ public class AllContainerDashboardRowsIT {
     public void shouldReturnOnlyPretreatmentContainerDashboardRows() {
         ContainerDashboardRow containerDashboardRow = new ContainerDashboardRow();
         Container container = ContainerBuilder.newContainer().withDefaults().build();
-        container.setCurrentTrackingInstance(SputumTrackingInstance.PreTreatment);
+        container.setCurrentTrackingInstance(SputumTrackingInstance.InTreatment);
         containerDashboardRow.setContainer(container);
 
         allContainerDashboardRows.add(containerDashboardRow);

@@ -4,11 +4,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> {
+public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> implements Serializable {
 
     public TreatmentInterruptions() {
     }

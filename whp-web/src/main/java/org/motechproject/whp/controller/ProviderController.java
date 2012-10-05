@@ -26,10 +26,10 @@ public class ProviderController extends BaseWebController {
     private ProviderService providerService;
     private AllDistricts allDistrictsCache;
 
-    public static final String PROVIDER_LIST = "providerList";
-    private static final String DISTRICT_LIST = "districts";
-    private static final String PROVIDER_ID = "selectedProvider";
-    private static final String SELECTED_DISTRICT = "selectedDistrict";
+    private static final String PROVIDER_LIST = "providerList";
+    public static final String DISTRICT_LIST = "districts";
+    public static final String PROVIDER_ID = "selectedProvider";
+    public static final String SELECTED_DISTRICT = "selectedDistrict";
 
     @Autowired
     public ProviderController(ProviderService providerService, AllDistricts allDistrictsCache) {

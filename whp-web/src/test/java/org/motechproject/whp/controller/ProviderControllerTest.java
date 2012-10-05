@@ -9,7 +9,6 @@ import org.motechproject.whp.refdata.domain.District;
 import org.motechproject.whp.refdata.repository.AllDistricts;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,11 +83,14 @@ public class ProviderControllerTest {
 
     @Test
     public void shouldLoadProviderSearchPage_withProvidersByFirstDistrict() throws Exception {
-        List<Provider> expectedList = Arrays.asList(provider1, provider3);
-        when(providerService.fetchBy("districtA", "")).thenReturn(expectedList);
+
+        List<District> expectedList = Arrays.asList(new District("d1"), new District("d2"));
+        when(allDistricts.getAll()).thenReturn(expectedList);
 
         providerController.loadProviderSearchPage(uiModel, request);
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_LIST), eq(wrapIntoProviderRows(expectedList)));
+        verify(uiModel).addAttribute(eq(providerController.DISTRICT_LIST), eq(expectedList));
+        verify(uiModel).addAttribute(eq(providerController.SELECTED_DISTRICT), eq("d1"));
+        verify(uiModel).addAttribute(eq(providerController.PROVIDER_ID), eq(""));
     }
 
     @Test
@@ -102,13 +104,5 @@ public class ProviderControllerTest {
                 .andExpect(model().size(1))
                 .andExpect(model().attribute("providerList", providers))
                 .andExpect(view().name("provider/listByDistrict"));
-    }
-
-    private List<ProviderRow> wrapIntoProviderRows(List<Provider> providerList) {
-        List<ProviderRow> providerRows = new ArrayList<>();
-        for (Provider provider : providerList) {
-            providerRows.add(new ProviderRow(provider, true));
-        }
-        return providerRows;
     }
 }

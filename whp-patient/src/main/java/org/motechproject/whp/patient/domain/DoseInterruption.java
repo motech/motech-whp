@@ -6,11 +6,13 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
+import java.io.Serializable;
+
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrAfter;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
-public class DoseInterruption implements Comparable<DoseInterruption> {
+public class DoseInterruption implements Comparable<DoseInterruption>, Serializable {
 
     @JsonProperty
     private LocalDate startDate;
