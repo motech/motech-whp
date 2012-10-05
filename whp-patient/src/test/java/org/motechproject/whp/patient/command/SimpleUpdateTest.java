@@ -55,7 +55,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("elevenDigit");
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        expectWHPRuntimeException(WHPErrorCode.NO_EXISTING_TREATMENT_FOR_CASE);
+        expectWHPRuntimeException(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
         simpleUpdate.apply(patientRequest);
         verify(allPatients, never()).update(patient);
     }
@@ -71,7 +71,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("wrongTbId");
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
-        expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
+        expectWHPRuntimeException(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
         simpleUpdate.apply(patientRequest);
         verify(allPatients, never()).update(patient);
     }
@@ -113,6 +113,25 @@ public class SimpleUpdateTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();
         str.add(new SmearTestRecord(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative));
+        patientRequest.setSmearTestResults(str);
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("elevenDigit");
+
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
+        simpleUpdate.apply(patientRequest);
+        verify(allPatients).update(patient);
+    }
+
+    @Test
+    public void shouldPerformSimpleUpdateForEmptySmearTestResults() {
+        Patient patient = new PatientBuilder().withDefaults()
+                .withTbId("elevenDigit")
+                .build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        SmearTestResults str = new SmearTestResults();
+        str.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null));
         patientRequest.setSmearTestResults(str);
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
