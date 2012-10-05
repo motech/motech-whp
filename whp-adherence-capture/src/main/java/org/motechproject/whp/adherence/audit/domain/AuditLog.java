@@ -8,9 +8,23 @@ import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 
-@TypeDiscriminator("doc.type == 'AuditLog'")
 @Data
+@TypeDiscriminator("doc.type == 'AuditLog'")
 public class AuditLog extends MotechBaseDataObject {
+
+    public AuditLog() {
+    }
+
+    public AuditLog(DateTime creationTime, int numberOfDosesTaken, String remark, String sourceOfChange, String patientId, String tbId, String providerId, String user) {
+        this.creationTime = creationTime;
+        this.numberOfDosesTaken = numberOfDosesTaken;
+        this.remark = remark;
+        this.sourceOfChange = sourceOfChange;
+        this.patientId = patientId;
+        this.tbId = tbId;
+        this.providerId = providerId;
+        this.user = user;
+    }
 
     @JsonProperty
     private DateTime creationTime = DateUtil.now();
