@@ -24,7 +24,7 @@ public class AdherenceDataExportService {
     }
 
     @DataProvider
-    public List<AdherenceLogSummary> adherenceAuditLogSummaries(int pageNo) {
+    public List<AdherenceLogSummary> adherenceReport(int pageNo) {
         return map(adherenceAuditService.allAuditLogs(pageNo));
     }
 
