@@ -45,9 +45,22 @@ public class PatientSummaryMapper {
         patientSummary.setVillage(extractVillage(patient));
         patientSummary.setProviderId(extractProviderId(patient));
         patientSummary.setProviderDistrict(extractProviderDistrict(patient));
-        patientSummary.setPreTreatmentSputumResult(patient.getPreTreatmentSputumResult().name());
-        patientSummary.setPreTreatmentWeight(patient.getPreTreatmentWeightRecord().getWeight().toString());
+        patientSummary.setPreTreatmentSputumResult(extractPreTreatmentSputumResult(patient));
+        patientSummary.setPreTreatmentWeight(extractPreTreatmentWeightStatistics(patient));
         return patientSummary;
+    }
+
+    private String extractPreTreatmentWeightStatistics(Patient patient) {
+        if(patient.getPreTreatmentWeightRecord() ==null)
+            return null;
+        return patient.getPreTreatmentWeightRecord().getWeight().toString();
+    }
+
+    private String extractPreTreatmentSputumResult(Patient patient) {
+        if(patient.getPreTreatmentSputumResult() == null)
+            return null;
+
+        return patient.getPreTreatmentSputumResult().name();
     }
 
     private String extractProviderDistrict(Patient patient) {
