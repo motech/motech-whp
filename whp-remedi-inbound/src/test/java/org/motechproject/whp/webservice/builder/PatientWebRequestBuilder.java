@@ -213,4 +213,9 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setSmear_test_result_2(result);
         return this;
     }
+
+    public PatientWebRequestBuilder withPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
+        patientWebRequest.setPatientAddress(houseNumber, landmark, block, village, district, state);
+        return this;
+    }
 }

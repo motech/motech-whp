@@ -9,7 +9,6 @@ public enum WHPErrorCode {
     TREATMENT_ALREADY_PAUSED("Current treatment is already paused"),
     TREATMENT_ALREADY_CLOSED("Current treatment is already closed"),
     TREATMENT_NOT_CLOSED("Current treatment is not closed"),
-    NULL_VALUE_IN_SMEAR_TEST_RESULTS("Invalid smear test results : null value"),
 
     DUPLICATE_CASE_ID("Patient with the same case-id is already registered"),
     DUPLICATE_PROVIDER_ID("Provider with the same provider-id is already registered"),

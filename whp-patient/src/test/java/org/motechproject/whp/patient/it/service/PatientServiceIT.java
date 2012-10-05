@@ -153,7 +153,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldThrowExceptionWhenPatientIsUpdatedWithOnlyOneSmearTestResults() {
-        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
+        expectWHPRuntimeException(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withTbId("elevenDigit")
@@ -162,22 +162,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
                 .withSmearTestResults(SampleInstance.PreTreatment, today(), Positive, null, null)
-                .withTbId("elevenDigit")
-                .build();
-        commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenPatientIsUpdatedWithoutAnySmearTestResults() {
-        expectWHPRuntimeException(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withTbId("elevenDigit")
-                .withCaseId(PATIENT_ID)
-                .build();
-        patientService.createPatient(patientRequest);
-        PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
-                .withSmearTestResults(SampleInstance.PreTreatment, null, null, null, null)
                 .withTbId("elevenDigit")
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
@@ -558,6 +542,33 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
+    }
+
+    @Test
+    public void shouldPerformSimpleUpdate_ForEmptySmearTestResults() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(patientRequest);
+
+        PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
+                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withSmearTestResults(SampleInstance.PreTreatment, null, null, null, null)
+                .withTbId(patientRequest.getTb_id())
+                .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
+                .withWeightStatistics(SampleInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
+                .build();
+        simpleUpdateRequest.setPatientInfo(PATIENT_ID, null, null, null, null, "9087654321", null)
+                .setTreatmentData(null, patientRequest.getTb_id(), null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
+
+        commandFactory.updateFor(UpdateScope.simpleUpdate).apply(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
+
+        SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(patientRequest.getTb_id()).getSmearTestResults().latestResult();
+        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertNull(smearTestRecord.getSmear_test_result_1());
+        assertNull(smearTestRecord.getSmear_test_result_2());
+        assertNull(smearTestRecord.getSmear_test_date_1());
+        assertNull(smearTestRecord.getSmear_test_date_2());
     }
 
 

@@ -43,13 +43,10 @@ public class SmearTestResultsMapper {
     }
 
     private SmearTestResult mapTestResult(String result) {
-        return (SmearTestResult) stringToEnumeration.convert(
-                result,
-                SmearTestResult.class
-        );
+        return null != result ? (SmearTestResult) stringToEnumeration.convert(result, SmearTestResult.class) : null;
     }
 
     private LocalDate stringToLocalDate(String string) {
-        return DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate();
+        return null != string ? DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate() : null;
     }
 }

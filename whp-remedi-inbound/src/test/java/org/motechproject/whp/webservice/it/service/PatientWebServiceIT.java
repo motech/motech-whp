@@ -96,17 +96,17 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatient() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                                                                            .withTbId("elevenDigit")
-                                                                            .withCaseId("12341234")
-                                                                            .build();
+                .withTbId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
         patientWebService.createCase(patientWebRequest);
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields()
-                                                                                 .withCaseId("12341234")
-                                                                                 .withTbId("elevenDigit")
-                                                                                 .build();
+                .withCaseId("12341234")
+                .withTbId("elevenDigit")
+                .build();
         patientWebService.updateCase(simpleUpdateWebRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
@@ -170,17 +170,17 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldUpdatePatientTreatment() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                                                                            .withTbId("elevenDigit")
-                                                                            .withCaseId("12341234")
-                                                                            .build();
+                .withTbId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
         patientWebService.createCase(patientWebRequest);
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
         patientWebRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields()
-                                                                                 .withTbId("elevenDigit")
-                                                                                 .withCaseId("12341234")
-                                                                                 .build();
+                .withTbId("elevenDigit")
+                .withCaseId("12341234")
+                .build();
         patientWebService.updateCase(patientWebRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
@@ -319,6 +319,43 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
+    }
+
+    @Test
+    public void shouldPerformSimpleUpdateForEmptySmearTestResults() {
+        // Creating a patient
+        String caseId = "12341234";
+        String tbId = "elevenDigit";
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+
+        SampleInstance sampleInstance = SampleInstance.PreTreatment;
+        PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
+                .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
+                .withSmearTestResults(sampleInstance.name(), null, null, null, null)
+                .withWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+        patientWebRequest.setTreatmentData(null, simpleUpdateRequest.getTb_id(), null, null, "50", null);
+        simpleUpdateRequest.setDate_modified("15/10/2010 10:10:10");
+        simpleUpdateRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        simpleUpdateRequest.setPatientInfo(simpleUpdateRequest.getCase_id(), null, null, null, null, "9087654321", null);
+
+        patientWebService.updateCase(simpleUpdateRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(caseId);
+
+        SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(tbId).getSmearTestResults().resultForInstance(sampleInstance);
+        assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
+        assertNull(smearTestRecord.getSmear_test_result_1());
+        assertNull(smearTestRecord.getSmear_test_result_2());
+        assertNull(smearTestRecord.getSmear_test_date_1());
+        assertNull(smearTestRecord.getSmear_test_date_2());
     }
 
     @After

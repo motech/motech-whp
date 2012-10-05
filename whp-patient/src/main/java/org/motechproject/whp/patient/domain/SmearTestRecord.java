@@ -32,11 +32,19 @@ public class SmearTestRecord implements Serializable {
 
     @JsonIgnore
     public boolean isValid(List<WHPErrorCode> validationErrors) {
-        boolean isFilled = smear_sample_instance != null && smear_test_date_1 != null && smear_test_result_1 != null && smear_test_date_2 != null && smear_test_result_2 != null;
+        boolean isFilled = smear_sample_instance != null && (allResultsNonNull() || allResultsNull());
         if (!isFilled) {
-            validationErrors.add(WHPErrorCode.NULL_VALUE_IN_SMEAR_TEST_RESULTS);
+            validationErrors.add(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
         }
         return isFilled;
+    }
+
+    private boolean allResultsNull() {
+        return smear_test_date_1 == null && smear_test_result_1 == null && smear_test_date_2 == null && smear_test_result_2 == null;
+    }
+
+    private boolean allResultsNonNull() {
+        return smear_test_date_1 != null && smear_test_result_1 != null && smear_test_date_2 != null && smear_test_result_2 != null;
     }
 
     @JsonIgnore
