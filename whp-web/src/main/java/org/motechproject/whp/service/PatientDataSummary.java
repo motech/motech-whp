@@ -3,8 +3,6 @@ package org.motechproject.whp.service;
 import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
-import org.motechproject.export.annotation.Footer;
-import org.motechproject.export.annotation.Header;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.mapper.PatientSummaryMapper;
@@ -31,12 +29,13 @@ public class PatientDataSummary {
         this.patientService = patientService;
     }
 
-    @Header(span = 3)
+    //ToDo- Vishal - Verify if Header/footer is available in older motech platform version used in motech-whp-0.3.
+    //@Header(span = 3)
     public List<String> patientSummaryHeader() {
         return asList("Generated as on " + new WHPDate(today()).value());
     }
 
-    @Footer(span = 3)
+    //@Footer(span = 3)
     public List<String> patientSummaryFooter() {
         LocalDate lastSunday = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
         return asList("* Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
