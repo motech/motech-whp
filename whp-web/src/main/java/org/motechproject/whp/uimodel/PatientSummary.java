@@ -1,9 +1,9 @@
 package org.motechproject.whp.uimodel;
 
 import lombok.Setter;
-import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.ExportValue;
-import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.refdata.domain.Gender;
+import org.motechproject.whp.refdata.domain.PatientType;
 
 
 @Setter
@@ -27,6 +27,8 @@ public class PatientSummary {
     private Integer cumulativeMissedDoses;
     private String treatmentOutcome;
     private String treatmentClosingDate;
+    private String preTreatmentSputumResult;
+    private String preTreatmentWeight;
 
     @ExportValue(index = 0)
     public String getName() {
@@ -73,47 +75,57 @@ public class PatientSummary {
         return treatmentCategory;
     }
 
-    @ExportValue(index = 9, column = "TB Registration Date")
+    @ExportValue(index = 9)
+    public String getPreTreatmentSputumResult() {
+        return preTreatmentSputumResult;
+    }
+
+    @ExportValue(index = 10, column = "Pre Treatment Weight (kgs)")
+    public String getPreTreatmentWeight() {
+        return preTreatmentWeight;
+    }
+
+    @ExportValue(index = 11, column = "TB Registration Date")
     public String getTbRegistrationDate() {
         return tbRegistrationDate;
     }
 
-    @ExportValue(index = 10)
+    @ExportValue(index = 12)
     public String getTreatmentStartDate() {
         return treatmentStartDate;
     }
 
-    @ExportValue(index = 11)
+    @ExportValue(index = 13)
     public String getDiseaseClass() {
         return diseaseClass;
     }
 
-    @ExportValue(index = 12)
+    @ExportValue(index = 14)
     public PatientType getPatientType() {
         return patientType;
     }
 
-    @ExportValue(index = 13, column = "IP Treatment Progress")
+    @ExportValue(index = 15, column = "IP Treatment Progress")
     public String getIpTreatmentProgress() {
         return ipTreatmentProgress;
     }
 
-    @ExportValue(index = 14, column = "CP Treatment Progress")
+    @ExportValue(index = 16, column = "CP Treatment Progress")
     public String getCpTreatmentProgress() {
         return cpTreatmentProgress;
     }
 
-    @ExportValue(index = 15, column = "Cumulative Missed Doses *")
+    @ExportValue(index = 17, column = "Cumulative Missed Doses *")
     public Integer getCumulativeMissedDoses() {
         return cumulativeMissedDoses;
     }
 
-    @ExportValue(index = 16)
+    @ExportValue(index = 18)
     public String getTreatmentOutcome() {
         return treatmentOutcome;
     }
 
-    @ExportValue(index = 17)
+    @ExportValue(index = 19)
     public String getTreatmentClosingDate() {
         return treatmentClosingDate;
     }

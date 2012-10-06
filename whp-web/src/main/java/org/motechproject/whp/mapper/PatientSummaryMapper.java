@@ -3,7 +3,6 @@ package org.motechproject.whp.mapper;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +15,6 @@ public class PatientSummaryMapper {
 
     public PatientSummaryMapper() {
     }
-
 
     public List<PatientSummary> map(List<Patient> patientList) {
         List<PatientSummary> patientSummaryList = new ArrayList<>();
@@ -46,7 +44,8 @@ public class PatientSummaryMapper {
         patientSummary.setTreatmentOutcome(extractTreatmentOutcome(patient));
         patientSummary.setVillage(extractVillage(patient));
         patientSummary.setProviderId(extractProviderId(patient));
-        patientSummary.setProviderDistrict("");
+        patientSummary.setPreTreatmentSputumResult(patient.getPreTreatmentSputumResult().name());
+        patientSummary.setPreTreatmentWeight(patient.getPreTreatmentWeightRecord().getWeight().toString());
         return patientSummary;
     }
 
