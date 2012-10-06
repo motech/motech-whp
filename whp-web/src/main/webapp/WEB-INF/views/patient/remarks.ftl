@@ -17,7 +17,7 @@
             </h5>
 
             <div>
-                <pre><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
+                <pre class="inherit-style"><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
             </div>
             <br/>
         </div>
@@ -35,7 +35,7 @@
             </h5>
 
             <div>
-                <pre><#transform html_escape>${providerRemark.remark()}</#transform></pre>
+                <pre class="inherit-style"><#transform html_escape>${providerRemark.remark()}</#transform></pre>
             </div>
             <br/>
         </div>

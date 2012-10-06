@@ -611,3 +611,47 @@ pre {
 .padding-left {
     padding-left: 5px;
 }
+
+.page-link {
+    text-decoration: underline;
+}
+.page-link-disabled {
+    text-decoration: underline;
+    display: inline;
+    color: #808080;
+}
+.current-page-info {
+   display: inline-block;
+}
+
+.current-page {
+    width: 30px;
+    height: 15px;
+}
+.goto-page {
+    padding-left: 10px;
+    color: chocolate;
+    display: inline-block;
+}
+.result-count-info {
+    line-height: 33px;
+}
+
+#container-registration-form label.error {
+    color: red;
+}
+
+#container-registration-form .span.error {
+    border: 2px solid red;
+}
+
+#container-registration-form #instance.error {
+    border: 2px solid red;
+}
+
+.inherit-style {
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+    line-height: inherit;
+}
