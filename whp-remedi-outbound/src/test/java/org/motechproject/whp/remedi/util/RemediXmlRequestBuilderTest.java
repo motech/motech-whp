@@ -4,7 +4,9 @@ import freemarker.template.TemplateException;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
@@ -13,14 +15,20 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RemediXmlRequestBuilderTest {
     public static final String REMEDI_API_KEY = "123456";
     RemediXmlRequestBuilder remediXmlRequestBuilder;
+    @Mock
+    private RemediProperties remediProperties;
+
     @Before
     public void setUp() {
-        remediXmlRequestBuilder = new RemediXmlRequestBuilder();
-        remediXmlRequestBuilder.setApiKey(REMEDI_API_KEY);
+        initMocks(this);
+        when(remediProperties.getApiKey()).thenReturn(REMEDI_API_KEY);
+        remediXmlRequestBuilder = new RemediXmlRequestBuilder(remediProperties);
     }
 
     @Test

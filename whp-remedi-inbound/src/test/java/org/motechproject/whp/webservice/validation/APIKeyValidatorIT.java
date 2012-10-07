@@ -7,11 +7,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.testing.utils.SpringIntegrationTest;
 import org.motechproject.validation.constraints.NamedConstraint;
+import org.motechproject.whp.common.service.RemediProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
-
-import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -19,7 +19,8 @@ import static junit.framework.Assert.assertEquals;
 @ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
 public class APIKeyValidatorIT extends SpringIntegrationTest {
 
-    private Properties remediProperty;
+    @Autowired
+    private RemediProperties remediProperties;
     private TestClass testObject;
     private BeanPropertyBindingResult errors;
     private APIKeyValidator requestValidator;
@@ -27,17 +28,14 @@ public class APIKeyValidatorIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-        remediProperty = new Properties();
-        remediProperty.setProperty("remedi.api.key", "remediAPIKey");
-
         testObject = new TestClass();
         errors = new BeanPropertyBindingResult(testObject, "test");
-        requestValidator = new APIKeyValidator(remediProperty);
+        requestValidator = new APIKeyValidator(remediProperties);
     }
 
     @Test
     public void shouldPassValidationIfAPIKeyIsValid() throws NoSuchFieldException {
-        testObject.setApi_key("remediAPIKey");
+        testObject.setApi_key(remediProperties.getApiKey());
         requestValidator.validateField(testObject, testObject.getClass().getField("api_key"), errors);
         assertEquals(0, errors.getAllErrors().size());
     }

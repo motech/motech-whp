@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.util.RemediXmlRequestBuilder;
@@ -21,15 +22,18 @@ public class RemediServiceTest {
     RemediXmlRequestBuilder remediXmlRequestBuilder;
     @Mock
     HttpClientService httpClientService;
+    @Mock
+    RemediProperties remediProperties;
     RemediService remediService;
     private final String remediUrl = "remediUrl";
-
 
     @Before
     public void setUp() {
         initMocks(this);
-        remediService = new RemediService(httpClientService, remediXmlRequestBuilder, remediUrl);
+        when(remediProperties.getUrl()).thenReturn(remediUrl);
+        remediService = new RemediService(httpClientService, remediXmlRequestBuilder, remediProperties);
     }
+
     @Test
     public void shouldSendContainerRegistrationDetails() throws IOException, TemplateException {
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", SputumTrackingInstance.PreTreatment, DateUtil.now());

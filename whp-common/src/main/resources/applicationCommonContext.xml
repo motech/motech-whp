@@ -12,7 +12,6 @@
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
     <context:property-placeholder location="classpath:couchdb.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:remedi.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:osgi.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:activemq.properties" ignore-unresolvable="true"/>

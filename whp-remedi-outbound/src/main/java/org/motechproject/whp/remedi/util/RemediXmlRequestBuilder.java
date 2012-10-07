@@ -3,8 +3,9 @@ package org.motechproject.whp.remedi.util;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.CharArrayWriter;
@@ -14,12 +15,13 @@ import java.util.HashMap;
 @Component
 public class RemediXmlRequestBuilder {
 
-    @Value("${remedi.api.key}")
-    private String apiKey;
+    private RemediProperties remediProperties;
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    @Autowired
+    public RemediXmlRequestBuilder(RemediProperties remediProperties) {
+        this.remediProperties = remediProperties;
     }
+
     public String buildTemplatedXmlFor(ContainerRegistrationModel containerRegistrationModel) throws IOException, TemplateException {
         HashMap<String, Object> modelMap = new HashMap();
         modelMap.put("containerRegistrationModel", containerRegistrationModel);
@@ -42,7 +44,6 @@ public class RemediXmlRequestBuilder {
     }
 
     private void populateApiKey(HashMap<String, Object> modelMap) {
-        modelMap.put("apiKey", apiKey);
+        modelMap.put("apiKey", remediProperties.getApiKey());
     }
-
 }

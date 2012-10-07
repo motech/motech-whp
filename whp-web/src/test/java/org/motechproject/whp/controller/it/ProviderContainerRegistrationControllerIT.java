@@ -8,6 +8,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.mapping.domain.ContainerRange;
@@ -22,7 +23,6 @@ import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 import org.motechproject.whp.webservice.service.ProviderWebService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
@@ -59,6 +59,9 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Autowired
     private HttpClientService httpClientService;
 
+    @Autowired
+    private RemediProperties remediProperties;
+
     private final String providerId = "provider";
 
     private String remediUrl;
@@ -66,6 +69,8 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
     @Before
     public void setUp() {
+        remediUrl = remediProperties.getUrl();
+        apiKey = remediProperties.getApiKey();
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
         providerContainerMapping.add(new ContainerRange(10000000000L, 20000000000L));
         providerContainerMapping.setProviderId(providerId);
@@ -112,15 +117,5 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         verify(httpClientService, times(1)).post(remediUrl, expectedContainerRegistrationXML);
 
         markForDeletion(container);
-    }
-
-    @Value("${remedi.url}")
-    public void setRemediUrl(String remediUrl) {
-        this.remediUrl = remediUrl;
-    }
-
-    @Value("${remedi.api.key}")
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
     }
 }

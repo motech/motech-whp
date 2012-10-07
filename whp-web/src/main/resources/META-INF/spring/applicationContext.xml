@@ -13,7 +13,6 @@
     <context:property-placeholder location="classpath*:whp.properties" ignore-unresolvable="true" order="0"/>
     <context:property-placeholder location="classpath*:ivr.properties" ignore-unresolvable="true" order="0"/>
     <context:property-placeholder location="classpath*:dozer.properties" ignore-unresolvable="true" order="0"/>
-    <context:property-placeholder location="classpath*:remedi.properties" ignore-unresolvable="true" order="0"/>
     <context:property-placeholder location="classpath*:seed.properties"  ignore-unresolvable="true" order="0"/>
     <context:property-placeholder location="classpath*:spring-batch-diagnostics.properties" ignore-unresolvable="true" order="0"/>
     <context:property-placeholder location="classpath*:activemq.properties" ignore-unresolvable="true" order="0"/>
