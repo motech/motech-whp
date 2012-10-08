@@ -13,7 +13,7 @@ public class AdminContainerMappingSeed {
     @Autowired
     private AllAdminContainerMappings allAdminContainerMappings;
 
-    @Seed(priority = 0, version = "3.0")
+    @Seed(priority = 0, version = "4.0")
     public void load() {
         ContainerRange range = new ContainerRange(90000000010L, 90000000100L);
         AdminContainerMapping mapping = new AdminContainerMapping();
