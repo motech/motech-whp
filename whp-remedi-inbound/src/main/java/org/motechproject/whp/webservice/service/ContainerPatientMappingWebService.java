@@ -39,37 +39,13 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if (validationErrors != null && !validationErrors.isEmpty()) {
             throw new WHPCaseException(new WHPRuntimeException(validationErrors, WHPErrorCode.FIELD_VALIDATION_FAILED.getMessage()));
         }
-        map(request);
-    }
-
-    private void map(ContainerPatientMappingWebRequest request) {
-        List<Container> mappedToPatient = containerService.findByPatientId(request.getPatient_id());
-
-        if (mappedToPatient != null && !mappedToPatient.isEmpty()) {
-            for (Container container : mappedToPatient) {
-                if (isDuplicateRequest(request, container)) {
-                    return;
-                } else if (isMappedOnSameInstance(request, container)) {
-                    container.unMap();
-                    containerService.update(container);
-                    break;
-                }
-            }
-        }
         Container container = containerService.getContainer(request.getCase_id());
-        container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
+        if (!request.isMappingRequest()) {
+            container.unMap();
+        } else {
+            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
+        }
         containerService.update(container);
-    }
-
-    private boolean isMappedOnSameInstance(ContainerPatientMappingWebRequest request, Container container) {
-        return container.getContainerId().equals(request.getCase_id()) || container.getMappingInstance().name().equals(request.getSmear_sample_instance());
-    }
-
-    private boolean isDuplicateRequest(ContainerPatientMappingWebRequest request, Container container) {
-        return container.getContainerId().equals(request.getCase_id())
-                && container.getPatientId().equals(request.getPatient_id())
-                && container.getTbId().equals(request.getTb_id())
-                && container.getMappingInstance().name().equals(request.getSmear_sample_instance());
     }
 
     @Override

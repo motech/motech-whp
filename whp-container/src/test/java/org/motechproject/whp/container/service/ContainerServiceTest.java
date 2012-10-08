@@ -90,24 +90,6 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetMappedContainersByPatientId() {
-        Container mappedContainer1 = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now());
-        String patientId = "patient";
-        mappedContainer1.mapWith(patientId, "tbid1", SputumTrackingInstance.PreTreatment);
-
-        Container mappedContainer2 = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now());
-        mappedContainer2.mapWith(patientId, "tbid2", SputumTrackingInstance.EndIP);
-        when(allContainers.findByPatientId(patientId)).thenReturn(asList(new Container[]{mappedContainer1, mappedContainer2}));
-
-        List<Container> mappedContainers = containerService.findByPatientId(patientId);
-
-        assertNotNull(mappedContainers);
-        assertFalse(mappedContainers.isEmpty());
-        assertEquals(2, mappedContainers.size());
-        verify(allContainers, times(1)).findByPatientId(patientId);
-    }
-
-    @Test
     public void shouldUpdateContainer() {
         Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now());
 

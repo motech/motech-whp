@@ -14,6 +14,7 @@ import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
 public class ContainerPatientMappingWebRequest {
+    private static final String EMPTY_STRING = "";
 
     @NotNullOrEmpty
     private String case_id;
@@ -29,12 +30,16 @@ public class ContainerPatientMappingWebRequest {
     @Pattern(regexp = "patient_mapping")
     private String update_type;
 
-    @NotNullOrEmpty
     private String patient_id;
 
-    @NotNullOrEmpty
     private String tb_id;
 
-    @Enumeration(type = SampleInstance.class)
+    @Enumeration(type = SampleInstance.class, validateEmptyString = false)
     private String smear_sample_instance;
+
+    public boolean isMappingRequest() {
+        return !(getPatient_id().equals(EMPTY_STRING)
+                && getTb_id().equals(EMPTY_STRING)
+                && getSmear_sample_instance().equals(EMPTY_STRING));
+    }
 }

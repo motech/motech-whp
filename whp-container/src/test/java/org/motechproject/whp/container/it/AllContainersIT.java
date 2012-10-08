@@ -57,27 +57,6 @@ public class AllContainersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldListContainersByPatientId() {
-        addAndMarkForDeletion(container);
-        String patientId = "patientid";
-        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        container.mapWith(patientId, "", instance);
-        allContainers.update(container);
-
-        List<Container> containers = allContainers.findByPatientId(patientId);
-        assertNotNull(containers);
-        assertEquals(1, containers.size());
-        Container container = containers.get(0);
-        assertEquals("1234567890", container.getContainerId());
-        assertEquals("P00001", container.getProviderId());
-        assertEquals(patientId, container.getPatientId());
-        assertEquals(instance, container.getMappingInstance());
-
-        containers = allContainers.findByPatientId("nonExistentPatient");
-        assertTrue(containers.isEmpty());
-    }
-
-    @Test
     public void shouldUpdateLabResults() {
         addAndMarkForDeletion(container);
 

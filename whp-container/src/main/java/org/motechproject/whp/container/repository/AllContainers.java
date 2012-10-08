@@ -35,14 +35,6 @@ public class AllContainers extends MotechBaseRepository<Container> {
         return singleResult(db.queryView(find_by_containerId, Container.class));
     }
 
-    @GenerateView
-    public List<Container> findByPatientId(String patientId) {
-        if (patientId == null)
-            return null;
-        ViewQuery find_by_patient_id = createQuery("by_patientId").key(patientId).includeDocs(true);
-        return db.queryView(find_by_patient_id, Container.class);
-    }
-
     @Override
     public void add(Container entity) {
         super.add(entity);

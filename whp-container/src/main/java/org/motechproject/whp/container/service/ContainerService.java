@@ -51,8 +51,4 @@ public class ContainerService {
     public void update(Container container) {
         allContainers.update(container);
     }
-
-    public List<Container> findByPatientId(String patientId) {
-        return allContainers.findByPatientId(patientId);
-    }
 }

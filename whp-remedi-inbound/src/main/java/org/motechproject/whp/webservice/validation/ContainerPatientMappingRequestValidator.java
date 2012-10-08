@@ -34,9 +34,11 @@ public class ContainerPatientMappingRequestValidator {
         ArrayList<WHPError> validationErrors = new ArrayList<WHPError>();
         validateCaseXml(containerPatientMappingWebRequest, validationErrors);
         validateContainer(containerPatientMappingWebRequest, validationErrors);
-        validatePatient(containerPatientMappingWebRequest, validationErrors);
-        validateTreatment(containerPatientMappingWebRequest, validationErrors);
-        validateInstance(containerPatientMappingWebRequest, validationErrors);
+        if (containerPatientMappingWebRequest.isMappingRequest()) {
+            validatePatient(containerPatientMappingWebRequest, validationErrors);
+            validateTreatment(containerPatientMappingWebRequest, validationErrors);
+            validateInstance(containerPatientMappingWebRequest, validationErrors);
+        }
         return validationErrors;
     }
 
