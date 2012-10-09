@@ -344,7 +344,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         SampleInstance sampleInstance = SampleInstance.PreTreatment;
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .withSmearTestResults(sampleInstance.name(), null, null, null, null, null, null)
+                .withSmearTestResults(sampleInstance.name(), "", "", "", "", "", "")
                 .withWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
                 .withTbId(tbId)
                 .withCaseId(caseId)

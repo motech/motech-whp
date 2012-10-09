@@ -20,6 +20,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     PatientService patientService;
     RequestValidator validator;
     PatientRequestMapper patientRequestMapper;
+    private static final String EMPTY_STRING = "";
 
     @Autowired
     public PatientWebService(
@@ -40,12 +41,26 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     @Override
     public void updateCase(PatientWebRequest patientWebRequest) {
         try {
+            formatEmptySmearTestResults(patientWebRequest);
             UpdateScope updateScope = patientWebRequest.updateScope();
             validator.validate(patientWebRequest, updateScope.name());
             patientService.update(patientRequestMapper.map(patientWebRequest));
         } catch (WHPRuntimeException e) {
             throw new WHPCaseException(e);
         }
+    }
+
+    private void formatEmptySmearTestResults(PatientWebRequest patientWebRequest) {
+        patientWebRequest.setSmear_test_date_1(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_date_1()));
+        patientWebRequest.setSmear_test_date_2(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_date_2()));
+        patientWebRequest.setSmear_test_result_1(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_result_1()));
+        patientWebRequest.setSmear_test_result_2(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_result_2()));
+        patientWebRequest.setLab_number(replaceEmptyStringWithNull(patientWebRequest.getLab_number()));
+        patientWebRequest.setLab_name(replaceEmptyStringWithNull(patientWebRequest.getLab_name()));
+    }
+
+    private String replaceEmptyStringWithNull(String fieldValue) {
+        return (fieldValue == null || fieldValue.equals(EMPTY_STRING)) ? null : fieldValue;
     }
 
     @Override
