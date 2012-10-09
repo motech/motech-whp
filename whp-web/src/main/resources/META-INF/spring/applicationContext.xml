@@ -19,8 +19,6 @@
 
     <cache:annotation-driven cache-manager="compositeCacheManager" />
 
-
-
     <bean id="compositeCacheManager" class="org.springframework.cache.support.CompositeCacheManager">
         <property name="cacheManagers">
             <array>
@@ -42,6 +40,7 @@
     <import resource="classpath*:applicationContext-Paginator.xml"/>
     <import resource="classpath*:applicationWebServiceContext.xml"/>
     <import resource="classpath*:applicationContainerContext.xml"/>
+    <import resource="classpath*:applicationContainerTrackingContext.xml"/>
     <import resource="classpath*:applicationContext-Diagnostics.xml"/>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

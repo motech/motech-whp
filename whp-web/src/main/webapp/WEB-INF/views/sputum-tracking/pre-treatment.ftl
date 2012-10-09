@@ -7,7 +7,7 @@
     <#assign pageNo=1/>
 </#if>
 <div class="results">
-    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="" entity="sputum_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="" entity="container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList">
             <thead>
             <tr>

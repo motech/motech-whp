@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.container.builder.ContainerBuilder;
-import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
-import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
+import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -59,7 +59,7 @@ public class ContainerDashboardIT {
     AllProviders allProviders;
 
     @Autowired
-    AllContainerDashboardRows allContainerDashboardRows;
+    AllContainerTrackingRecords allContainerTrackingRecords;
 
     @Test
     public void shouldCreateDashboardPageWhenContainerIsCreated() throws IOException, TemplateException {
@@ -69,7 +69,7 @@ public class ContainerDashboardIT {
         new TimedRunner() {
             @Override
             protected void run() {
-                assertNotNull(allContainerDashboardRows.findByContainerId(container.getContainerId()));
+                assertNotNull(allContainerTrackingRecords.findByContainerId(container.getContainerId()));
             }
         }.executeWithTimeout();
     }
@@ -88,8 +88,8 @@ public class ContainerDashboardIT {
         new TimedRunner() {
             @Override
             protected void run() {
-                assertNotNull(allContainerDashboardRows.findByContainerId("containerId").getPatient());
-                assertEquals("patientid", allContainerDashboardRows.findByContainerId("containerId").getPatient().getPatientId());
+                assertNotNull(allContainerTrackingRecords.findByContainerId("containerId").getPatient());
+                assertEquals("patientid", allContainerTrackingRecords.findByContainerId("containerId").getPatient().getPatientId());
             }
         }.executeWithTimeout();
 
@@ -99,12 +99,12 @@ public class ContainerDashboardIT {
     public void shouldUpdateDashboardPageWhenProviderIsUpdated() {
         Container container = new ContainerBuilder().withDefaults().withProviderId("providerId").withContainerId("containerId").build();
         Provider provider = new ProviderBuilder().withDefaults().withProviderId("providerId").build();
-        ContainerDashboardRow row = new ContainerDashboardRow();
+        ContainerTrackingRecord row = new ContainerTrackingRecord();
         row.setContainer(container);
         row.setProvider(provider);
 
         allProviders.add(provider);
-        allContainerDashboardRows.add(row);
+        allContainerTrackingRecords.add(row);
 
         provider.setDistrict("district");
         allProviders.update(provider);
@@ -112,7 +112,7 @@ public class ContainerDashboardIT {
         new TimedRunner() {
             @Override
             protected void run() {
-                assertEquals("district", allContainerDashboardRows.findByContainerId("containerId").getProvider().getDistrict());
+                assertEquals("district", allContainerTrackingRecords.findByContainerId("containerId").getProvider().getDistrict());
             }
         }.executeWithTimeout();
     }
@@ -122,12 +122,12 @@ public class ContainerDashboardIT {
         Container container = new ContainerBuilder().withDefaults().withPatientId("patientId").withContainerId("containerId").build();
         Patient patient = new PatientBuilder().withDefaults().withPatientId("patientId").withFirstName("name").build();
 
-        ContainerDashboardRow row = new ContainerDashboardRow();
+        ContainerTrackingRecord row = new ContainerTrackingRecord();
         row.setContainer(container);
         row.setPatient(patient);
 
         allPatients.add(patient);
-        allContainerDashboardRows.add(row);
+        allContainerTrackingRecords.add(row);
 
         patient.setFirstName("differentName");
         allPatients.update(patient);
@@ -135,7 +135,7 @@ public class ContainerDashboardIT {
         new TimedRunner() {
             @Override
             protected void run() {
-                assertEquals("differentName", allContainerDashboardRows.findByContainerId("containerId").getPatient().getFirstName());
+                assertEquals("differentName", allContainerTrackingRecords.findByContainerId("containerId").getPatient().getFirstName());
             }
         }.executeWithTimeout();
     }
@@ -145,6 +145,6 @@ public class ContainerDashboardIT {
         allPatients.removeAll();
         allProviders.removeAll();
         allContainers.removeAll();
-        allContainerDashboardRows.removeAll();
+        allContainerTrackingRecords.removeAll();
     }
 }
