@@ -1,11 +1,12 @@
 package org.motechproject.whp.webservice.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.PatientRequestMapper;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
@@ -20,7 +21,6 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     PatientService patientService;
     RequestValidator validator;
     PatientRequestMapper patientRequestMapper;
-    private static final String EMPTY_STRING = "";
 
     @Autowired
     public PatientWebService(
@@ -60,7 +60,7 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
     }
 
     private String replaceEmptyStringWithNull(String fieldValue) {
-        return (fieldValue == null || fieldValue.equals(EMPTY_STRING)) ? null : fieldValue;
+        return StringUtils.isEmpty(fieldValue) ? null : fieldValue;
     }
 
     @Override
