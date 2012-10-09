@@ -108,6 +108,10 @@ public class PatientWebRequest {
     @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_2;
 
+    private String lab_name;
+
+    private String lab_number;
+
     @Enumeration(type = SampleInstance.class)
     private String weight_instance;
 
@@ -177,12 +181,14 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2) {
+    public PatientWebRequest setSmearTestResults(String smear_sample_instance_1, String smear_test_date_1, String smear_result_1, String smear_test_date_2, String smear_result_2, String labName, String lab_number) {
         this.smear_sample_instance = smear_sample_instance_1;
         this.smear_test_date_1 = smear_test_date_1;
         this.smear_test_result_1 = smear_result_1;
         this.smear_test_date_2 = smear_test_date_2;
         this.smear_test_result_2 = smear_result_2;
+        this.lab_name = labName;
+        this.lab_number = lab_number;
         return this;
     }
 

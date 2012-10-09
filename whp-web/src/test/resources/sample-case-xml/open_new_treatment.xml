@@ -9,6 +9,8 @@
         <smear_test_result_1>Positive</smear_test_result_1>
         <smear_test_date_2>01/03/2012</smear_test_date_2>
         <smear_test_result_2>Positive</smear_test_result_2>
+        <lab_name>Maxim laborotories Pvt. Ltd.</lab_name>
+        <lab_number>KA51H3436</lab_number>
         <weight_instance>PreTreatment</weight_instance>
         <weight>80</weight>
         <disease_class>P</disease_class>

@@ -26,6 +26,8 @@ public class TestResultsTest {
     WeightStatistics weightStatistics;
     SampleInstance sampleInstance;
     SmearTestResults smearTestResults;
+    String labName = "labName";
+    String labNumber = "labNumber";
 
     @Before
     public void setup() {
@@ -40,10 +42,12 @@ public class TestResultsTest {
         this.date2 = "03/01/2012";
         weightStatistics = new WeightStatistics();
         sampleInstance = PreTreatment;
+        String labName = "labName";
+        String labNumber = "labNumber";
 
         weightStatistics.add(new WeightStatisticsRecord(sampleInstance, new Double(weight), new LocalDate(2012, 1, 1)));
         smearTestResults = new SmearTestResults();
-        smearTestResults.add(new SmearTestRecord(sampleInstance, date1, result1, date2, result2));
+        smearTestResults.add(new SmearTestRecord(sampleInstance, date1, result1, date2, result2, labName, labNumber));
     }
 
     @Test
@@ -53,7 +57,7 @@ public class TestResultsTest {
         assertThat(1, is(testResults.size()));
 
         TestResult testResult = testResults.get(0);
-        assertTestResult(testResult, sampleInstance, date1, result1, date2, result2, String.valueOf(weight));
+        assertTestResult(testResult, sampleInstance, date1, result1, date2, result2, labName, labNumber, String.valueOf(weight));
     }
 
 
@@ -65,7 +69,7 @@ public class TestResultsTest {
 
         TestResult testResult = testResults.get(0);
 
-        assertTestResult(testResult, sampleInstance, date1, result1, date2, result2, "");
+        assertTestResult(testResult, sampleInstance, date1, result1, date2, result2, labName, labNumber, "");
 
     }
 
@@ -77,7 +81,7 @@ public class TestResultsTest {
 
         TestResult testResult = testResults.get(0);
 
-        assertTestResult(testResult, sampleInstance, "", "", "", "", weight);
+        assertTestResult(testResult, sampleInstance, "", "", "", "", "", "", weight);
     }
 
     @Test
@@ -114,12 +118,14 @@ public class TestResultsTest {
         assertThat(testResults.get(2).getSampleInstance(), is(EndTreatment.value()));
     }
 
-    private void assertTestResult(TestResult testResult, SampleInstance expectedSampleInstance, String expectedDate1, String expectedResult1, String expectedDate2, String expectedResult2, String expectedWeight) {
+    private void assertTestResult(TestResult testResult, SampleInstance expectedSampleInstance, String expectedDate1, String expectedResult1, String expectedDate2, String expectedResult2, String expectedLabName, String expectedLabNumber, String expectedWeight) {
         assertThat(testResult.getSampleInstance(), is(expectedSampleInstance.value()));
         assertThat(testResult.getSmearTestDate1(), is(expectedDate1));
         assertThat(testResult.getSmearTestResult1(), is(expectedResult1));
         assertThat(testResult.getSmearTestDate2(), is(expectedDate2));
         assertThat(testResult.getSmearTestResult2(), is(expectedResult2));
         assertThat(testResult.getWeight(), is(expectedWeight));
+        assertThat(testResult.getLabName(), is(expectedLabName));
+        assertThat(testResult.getLabNumber(), is(expectedLabNumber));
     }
 }

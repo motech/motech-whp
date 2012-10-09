@@ -252,9 +252,11 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         String resultDate = "04/09/2012";
         SmearTestResult testResult = SmearTestResult.Positive;
         SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        String labName = "Maxim";
+        String labNumber = "11234556";
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withSimpleUpdateFields()
-                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name())
+                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name(), labName, labNumber)
                 .withTbId(tbId)
                 .withCaseId(caseId)
                 .build();
@@ -267,6 +269,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
+        assertEquals(labName, smearTestRecord.getLabName());
+        assertEquals(labNumber, smearTestRecord.getLabNumber());
     }
 
     @Test
@@ -304,9 +308,11 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         String resultDate = "04/09/2012";
         SmearTestResult testResult = SmearTestResult.Positive;
         SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        String labName = "Maxim";
+        String labNumber = "11234556";
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withSimpleUpdateFields()
-                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name())
+                .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name(), labName, labNumber)
                 .withTbId(tbId)
                 .withCaseId(caseId)
                 .build();
@@ -319,6 +325,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_2());
+        assertEquals(labName, smearTestRecord.getLabName());
+        assertEquals(labNumber, smearTestRecord.getLabNumber());
     }
 
     @Test
@@ -336,7 +344,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         SampleInstance sampleInstance = SampleInstance.PreTreatment;
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .withSmearTestResults(sampleInstance.name(), null, null, null, null)
+                .withSmearTestResults(sampleInstance.name(), null, null, null, null, null, null)
                 .withWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
                 .withTbId(tbId)
                 .withCaseId(caseId)

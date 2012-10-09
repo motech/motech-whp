@@ -11,7 +11,7 @@ public class SmearTestInstancesTest {
 
     @Test
     public void shouldAddANewSmearTestResults_ForPreTreatment() {
-        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null);
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null);
 
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(preTreatmentRecord);
@@ -22,8 +22,8 @@ public class SmearTestInstancesTest {
 
     @Test
     public void shouldAddSmearTestResults_ForBothPreTreatment_AndEndTreatment() {
-        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null);
-        SmearTestRecord endTreatmentRecord = new SmearTestRecord(SampleInstance.EndTreatment, null, null, null, null);
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null);
+        SmearTestRecord endTreatmentRecord = new SmearTestRecord(SampleInstance.EndTreatment, null, null, null, null, null, null);
 
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(preTreatmentRecord);
@@ -36,8 +36,8 @@ public class SmearTestInstancesTest {
 
     @Test
     public void shouldUpdateCurrentSmearTestResults_ForPreTreatment() {
-        SmearTestRecord oldPreTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2010, 10, 10), null, null, null);
-        SmearTestRecord newPreTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2012, 12, 12), null, null, null);
+        SmearTestRecord oldPreTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2010, 10, 10), null, null, null, null, null);
+        SmearTestRecord newPreTreatmentRecord = new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2012, 12, 12), null, null, null, null, null);
 
         SmearTestResults smearTestResults = new SmearTestResults();
 

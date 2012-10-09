@@ -238,16 +238,16 @@ public class TherapyTest {
     @Test
     public void shouldReturnLatestPretreatmentSputumResult() {
         SmearTestResults smearTestResultsForTreatment1 = new SmearTestResults();
-        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive));
-        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         SmearTestResults smearTestResultsForTreatment2 = new SmearTestResults();
-        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
-        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         SmearTestResults smearTestResultsForCurrentTreatment = new SmearTestResults();
-        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative));
-        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative, "labName", "labNumber"));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         Treatment treatment1 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment1).build();
         Treatment treatment2 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment2).build();
@@ -298,16 +298,16 @@ public class TherapyTest {
     @Test
     public void shouldGetAggregateSmearTestResults() {
         SmearTestResults smearTestResultsForTreatment1 = new SmearTestResults();
-        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive));
-        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
+        smearTestResultsForTreatment1.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         SmearTestResults smearTestResultsForTreatment2 = new SmearTestResults();
-        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
-        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(EndIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
+        smearTestResultsForTreatment2.add(new SmearTestRecord(ExtendedIP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         SmearTestResults smearTestResultsForCurrentTreatment = new SmearTestResults();
-        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative));
-        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(PreTreatment, DateUtil.today(), Negative, DateUtil.today(), Negative, "labName", "labNumber"));
+        smearTestResultsForCurrentTreatment.add(new SmearTestRecord(TwoMonthsIntoCP, DateUtil.today(), Positive, DateUtil.today(), Positive, "labName", "labNumber"));
 
         Treatment treatment1 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment1).build();
         Treatment treatment2 = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResultsForTreatment2).build();

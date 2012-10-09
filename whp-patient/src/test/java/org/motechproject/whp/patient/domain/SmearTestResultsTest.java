@@ -18,8 +18,8 @@ public class SmearTestResultsTest {
     public void shouldAddANewSmearTestResultPreservingOrder() {
         SmearTestResults smearTestResults = new SmearTestResults();
 
-        SmearTestRecord SmearTestRecord1 = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
-        SmearTestRecord SmearTestRecord2 = new SmearTestRecord(SampleInstance.ExtendedIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord SmearTestRecord1 = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord SmearTestRecord2 = new SmearTestRecord(SampleInstance.ExtendedIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
 
         smearTestResults.add(SmearTestRecord1);
         smearTestResults.add(SmearTestRecord2);
@@ -40,8 +40,8 @@ public class SmearTestResultsTest {
         SmearTestResult anotherInstanceResult2 = SmearTestResult.Negative;
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord oldSmearTestRecord1 = new SmearTestRecord(toBeUpdatedInstance, new LocalDate(2010, 10, 10), SmearTestResult.Negative, new LocalDate(2010, 11, 15), SmearTestResult.Positive);
-        SmearTestRecord oldSmearTestRecord2 = new SmearTestRecord(anotherInstance, anotherInstanceDate1, anotherInstanceResult1, anotherInstanceDate2, anotherInstanceResult2);
+        SmearTestRecord oldSmearTestRecord1 = new SmearTestRecord(toBeUpdatedInstance, new LocalDate(2010, 10, 10), SmearTestResult.Negative, new LocalDate(2010, 11, 15), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord oldSmearTestRecord2 = new SmearTestRecord(anotherInstance, anotherInstanceDate1, anotherInstanceResult1, anotherInstanceDate2, anotherInstanceResult2, "labName", "labNumber");
         smearTestResults.add(oldSmearTestRecord1);
         smearTestResults.add(oldSmearTestRecord2);
 
@@ -49,7 +49,7 @@ public class SmearTestResultsTest {
         LocalDate newTestDate2 = new LocalDate(2010, 12, 20);
         SmearTestResult newResult1 = SmearTestResult.Negative;
         SmearTestResult newResult2 = SmearTestResult.Positive;
-        SmearTestRecord newSmearTestRecord = new SmearTestRecord(toBeUpdatedInstance, newTestDate1, newResult1, newTestDate2, newResult2);
+        SmearTestRecord newSmearTestRecord = new SmearTestRecord(toBeUpdatedInstance, newTestDate1, newResult1, newTestDate2, newResult2, "labName", "labNumber");
         smearTestResults.add(newSmearTestRecord);
 
         assertEquals(2, smearTestResults.size());
@@ -61,18 +61,18 @@ public class SmearTestResultsTest {
     public void shouldReturnLastResultInList() {
         SmearTestResults smearTestResults = new SmearTestResults();
 
-        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive));
+        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
         assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SampleInstance.PreTreatment));
 
-        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive));
+        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
         assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SampleInstance.EndIP));
     }
 
     @Test
     public void shouldReturnSmearTestResultForGivenSampleInstance() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
 
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
@@ -93,8 +93,8 @@ public class SmearTestResultsTest {
     @Test
     public void shouldGetPreTreatmentSmearTestResult(){
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Negative, DateUtil.today(), SmearTestResult.Negative);
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Negative, DateUtil.today(), SmearTestResult.Negative, "labName", "labNumber");
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
 
@@ -104,8 +104,8 @@ public class SmearTestResultsTest {
     @Test
     public void shouldReturnIfPreTreatmentSmearTestResultExists(){
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive);
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
 

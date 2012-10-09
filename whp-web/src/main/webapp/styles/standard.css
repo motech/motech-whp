@@ -346,7 +346,7 @@ div.buttons a, div.buttons button {
     width: 470px;
 }
 
-#patientList th, #providerList th, #cmfAdminList th, #smearTestDetails, #sampleInstance, #weight, #patientDetails, #providerDetails, #treatmentDetails {
+#patientList th, #providerList th, #cmfAdminList th, #smearTestDetails, #sampleInstance, #labName, #labNumber, #weight, #patientDetails, #providerDetails, #treatmentDetails {
     background-color: #43A1DA;
     color: white;
 }

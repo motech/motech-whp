@@ -90,8 +90,9 @@ public class PatientRequest {
                                               LocalDate smearTestDate1,
                                               SmearTestResult smear_result_1,
                                               LocalDate smearTestDate2,
-                                              SmearTestResult smearResult2) {
-        this.smearTestResults.add(new SmearTestRecord(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2));
+                                              SmearTestResult smearResult2,
+                                              String labName, String labNumber) {
+        this.smearTestResults.add(new SmearTestRecord(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2, labName, labNumber));
         return this;
     }
 

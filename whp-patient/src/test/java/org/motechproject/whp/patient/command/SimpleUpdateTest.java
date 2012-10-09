@@ -112,7 +112,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();
-        str.add(new SmearTestRecord(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative));
+        str.add(new SmearTestRecord(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber"));
         patientRequest.setSmearTestResults(str);
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
@@ -131,7 +131,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();
-        str.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null));
+        str.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null));
         patientRequest.setSmearTestResults(str);
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");

@@ -48,4 +48,18 @@ public class SmearTestResultsMapperTest {
         SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
         assertEquals(Positive, result.get(0).getSmear_test_result_2());
     }
+
+    @Test
+    public void shouldMapLabName() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withLabName("LabName").build();
+        SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
+        assertEquals("LabName", result.get(0).getLabName());
+    }
+
+    @Test
+    public void shouldMapLabNumber() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withLabNumber("LabNumber").build();
+        SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
+        assertEquals("LabNumber", result.get(0).getLabNumber());
+    }
 }

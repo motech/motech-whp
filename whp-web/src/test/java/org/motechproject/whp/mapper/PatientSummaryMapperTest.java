@@ -48,7 +48,7 @@ public class PatientSummaryMapperTest {
     public void shouldHandleNullPretreatmentSputumAndWeightResult(){
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive));
+        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber"));
 
         WeightStatistics weightStatistics = new WeightStatistics();
         weightStatistics.add(new WeightStatisticsRecord(SampleInstance.ExtendedIP, 10.0, DateUtil.today()));

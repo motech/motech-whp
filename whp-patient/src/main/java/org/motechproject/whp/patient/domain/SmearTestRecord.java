@@ -18,16 +18,20 @@ public class SmearTestRecord implements Serializable {
     private SmearTestResult smear_test_result_1;
     private LocalDate smear_test_date_2;
     private SmearTestResult smear_test_result_2;
+    private String labName;
+    private String labNumber;
 
     public SmearTestRecord() {
     }
 
-    public SmearTestRecord(SampleInstance sampleInstance, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2) {
+    public SmearTestRecord(SampleInstance sampleInstance, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2, String labName, String labNumber) {
         this.smear_sample_instance = sampleInstance;
         this.smear_test_date_1 = testDate1;
         this.smear_test_result_1 = result1;
         this.smear_test_date_2 = testDate2;
         this.smear_test_result_2 = result2;
+        this.labName = labName;
+        this.labNumber = labNumber;
     }
 
     @JsonIgnore

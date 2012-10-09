@@ -6,6 +6,7 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.Phase;
 import org.motechproject.whp.user.domain.Provider;
+import org.springframework.jca.cci.core.support.CommAreaRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,8 @@ public class PatientInfo {
     private String longestDoseInterruption;
 
     private boolean showAlert;
+    private String providerDistrict;
+    private static final String COMMA = ", ";
 
     public PatientInfo(Patient patient, Provider provider) {
         initializePatientInfo(patient);
@@ -64,6 +67,7 @@ public class PatientInfo {
 
     private void initializeProviderInfo(Provider provider) {
         providerMobileNumber = provider.getPrimaryMobile();
+        providerDistrict = provider.getDistrict();
     }
 
     private void initializePatientInfo(Patient patient) {
@@ -85,8 +89,11 @@ public class PatientInfo {
         diseaseClass = latestTherapy.getDiseaseClass().value();
         treatmentCategoryName = latestTherapy.getTreatmentCategory().getName();
         treatmentCategoryCode = latestTherapy.getTreatmentCategory().getCode();
-        address = currentTreatment.getPatientAddress().toString();
-        addressState = currentTreatment.getPatientAddress().getAddress_state();
+        Address patientAddress = currentTreatment.getPatientAddress();
+        address = patientAddress.getAddress_location() + COMMA + patientAddress.getAddress_landmark() + COMMA + patientAddress.getAddress_block();
+        addressVillage = patientAddress.getAddress_village();
+        addressDistrict = patientAddress.getAddress_district();
+        addressState = patientAddress.getAddress_state();
         nextPhaseName = patient.getCurrentTherapy().getPhases().getNextPhase();
         phasesNotPossibleToTransitionTo = mapPhaseNameToString(patient);
         nearingPhaseTransition = patient.isNearingPhaseTransition();
@@ -94,8 +101,6 @@ public class PatientInfo {
         currentPhase = patient.getCurrentTherapy().getCurrentPhase();
         remainingDosesInCurrentPhase = patient.getRemainingDosesInCurrentPhase();
         lastCompletedPhase = patient.getCurrentTherapy().getLastCompletedPhase();
-        addressVillage = currentTreatment.getPatientAddress().getAddress_village();
-        addressDistrict = currentTreatment.getPatientAddress().getAddress_district();
         currentTreatmentPaused = patient.isCurrentTreatmentPaused();
         currentTreatmentClosed = patient.isCurrentTreatmentClosed();
         longestDoseInterruption = patient.getLongestDoseInterruption();

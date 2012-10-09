@@ -52,9 +52,9 @@ public class SmearTestResults implements Serializable {
         return this.all.isEmpty();
     }
 
-    public void add(SampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result) {
+    public void add(SampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result, String labName, String labNumber) {
         if (smearSampleInstance != null) {
-            this.add(new SmearTestRecord(smearSampleInstance, test1Date, test1Result, test2Date, test2Result));
+            this.add(new SmearTestRecord(smearSampleInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber));
         }
     }
 

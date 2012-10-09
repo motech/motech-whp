@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.user.domain.Provider;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,7 +49,7 @@ public class PatientInfoTest {
     public void setup() {
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null));
+        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null));
 
         WeightStatistics weightStatistics = new WeightStatistics();
         weightStatistics.add(new WeightStatisticsRecord(SampleInstance.PreTreatment, 20.0, new LocalDate(2012, 1, 1)));
@@ -116,7 +117,7 @@ public class PatientInfoTest {
         assertThat(patientInfo.getDiseaseClass(), is(diseaseClass.value()));
         assertThat(patientInfo.getTreatmentCategoryName(), is(treatmentCategory));
         assertThat(patientInfo.getTreatmentCategoryCode(), is(treatmentCategoryCode));
-        assertThat(patientInfo.getAddress(), is("houseNo, landmark, block, village, district, state"));
+        assertThat(patientInfo.getAddress(), is("houseNo, landmark, block"));
         assertThat(patientInfo.getAddressState(), is("state"));
         assertThat(patientInfo.getAddressDistrict(), is("district"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
@@ -129,7 +130,7 @@ public class PatientInfoTest {
 
         SmearTestResults smearTestResults = new SmearTestResults();
         SampleInstance newSampleInstance = SampleInstance.ExtendedIP;
-        smearTestResults.add(new SmearTestRecord(newSampleInstance, null, null, null, null));
+        smearTestResults.add(new SmearTestRecord(newSampleInstance, null, null, null, null, null, null));
 
         WeightStatistics weightStatistics = new WeightStatistics();
         weightStatistics.add(new WeightStatisticsRecord(SampleInstance.ExtendedIP, 20.0, new LocalDate(2012, 1, 1)));

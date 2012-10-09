@@ -52,22 +52,6 @@
                     <td id="longestTreatmentInterruption">${patient.longestDoseInterruption} (in weeks)</td>
                 </tr>
             </table>
-            <table class="table table-bordered default-arrow word-wrap table-striped">
-                <tr>
-                    <th id="providerDetails" colspan="2">Provider Details</th>
-                </tr>
-
-                <tr>
-                    <th>Provider ID</th>
-                    <td>${patient.providerId!}</td>
-                </tr>
-
-                <tr>
-                    <th>Mobile Number</th>
-                    <td>${patient.providerMobileNumber!}</td>
-                </tr>
-
-            </table>
         </div>
 
         <div class="pull-right patient-info-right-pane">
@@ -86,10 +70,6 @@
                         <th>Name</th>
                         <td>${patient.firstName!} ${patient.lastName!}</td>
                     </tr>
-                    <tr>
-                        <th>State</th>
-                        <td>${patient.addressState!}</td>
-                    </tr>
 
                     <tr>
                         <th>Gender</th>
@@ -107,34 +87,71 @@
                     </tr>
 
                     <tr>
+                        <th>Village</th>
+                        <td>${patient.addressVillage!}</td>
+                    </tr>
+
+                    <tr>
+                        <th>District</th>
+                        <td>${patient.addressDistrict!}</td>
+                    </tr>
+
+                    <tr>
+                        <th>State</th>
+                        <td>${patient.addressState!}</td>
+                    </tr>
+
+                    <tr>
                         <th>Mobile Number</th>
                         <td>${patient.phoneNumber!}</td>
                     </tr>
                 </table>
             </div>
-            <table class="table table-bordered text-center table-striped">
-                <tr>
-                    <th id="sampleInstance" rowspan="2">Sample Instance</th>
-                    <th id="smearTestDetails" colspan="4">Smear Test Results</th>
-                    <th id="weight" rowspan="2">Weight</th>
-                </tr>
-                <tr>
-                    <th>Date 1</th>
-                    <th>Result 1</th>
-                    <th>Date 2</th>
-                    <th>Result 2</th>
-                </tr>
-            <#list patient.testResults as testResult>
-                <tr>
-                    <td>${testResult.sampleInstance}</td>
-                    <td>${testResult.smearTestDate1}</td>
-                    <td>${testResult.smearTestResult1}</td>
-                    <td>${testResult.smearTestDate2}</td>
-                    <td>${testResult.smearTestResult2}</td>
-                    <td>${testResult.weight}</td>
-                </tr>
-            </#list>
-            </table>
         </div>
+        <table class="table table-bordered default-arrow word-wrap table-striped">
+            <tr>
+                <th id="providerDetails" colspan="3">Provider Details</th>
+            </tr>
+
+            <tr>
+                <th>Provider ID</th>
+                <th>Mobile Number</th>
+                <th>Provider District</th>
+            </tr>
+
+            <tr>
+                <td>${patient.providerId!}</td>
+                <td>${patient.providerMobileNumber!}</td>
+                <td>${patient.providerDistrict!}</td>
+            </tr>
+
+        </table>
+        <table class="table table-bordered text-center table-striped">
+            <tr>
+                <th id="sampleInstance" rowspan="2">Sample Instance</th>
+                <th id="labName" rowspan="2">DMC</th>
+                <th id="labNumber" rowspan="2">Lab No.</th>
+                <th id="smearTestDetails" colspan="4">Smear Test Results</th>
+                <th id="weight" rowspan="2">Weight</th>
+            </tr>
+            <tr>
+                <th>Date 1</th>
+                <th>Result 1</th>
+                <th>Date 2</th>
+                <th>Result 2</th>
+            </tr>
+        <#list patient.testResults as testResult>
+            <tr>
+                <td>${testResult.sampleInstance}</td>
+                <td>${testResult.labName}</td>
+                <td>${testResult.labNumber}</td>
+                <td>${testResult.smearTestDate1}</td>
+                <td>${testResult.smearTestResult1}</td>
+                <td>${testResult.smearTestDate2}</td>
+                <td>${testResult.smearTestResult2}</td>
+                <td>${testResult.weight}</td>
+            </tr>
+        </#list>
+        </table>
     </div>
 </div>

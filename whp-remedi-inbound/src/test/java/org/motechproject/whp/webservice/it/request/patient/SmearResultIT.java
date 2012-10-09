@@ -23,7 +23,7 @@ public class SmearResultIT extends BasePatientIT {
 
     @Test
     public void shouldNotThrowException_WhenSmearTestResultsIsNull_ForUpdateScope() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withSmearTestResults(null, null, null, null, null).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withSimpleUpdateFields().withSmearTestResults(null, null, null, null, null, null, null).build();
         validator.validate(webRequest, UpdateScope.simpleUpdateScope);
     }
 

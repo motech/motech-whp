@@ -32,7 +32,9 @@ public class TestResultTest {
         this.date2 = "29/06/2012";
         SmearTestResult result2 = SmearTestResult.Negative;
         this.result2 = result2.value();
-        smearTestRecord = new SmearTestRecord(sampleInstance, date1, result1, date2, result2);
+        String labName = "labName";
+        String labNumber = "labNumber";
+        smearTestRecord = new SmearTestRecord(sampleInstance, date1, result1, date2, result2, labName, labNumber);
         weight = "20.0";
         weightStatisticsRecord = new WeightStatisticsRecord(sampleInstance, Double.valueOf(weight), new LocalDate(2012, 1, 1));
     }
@@ -57,7 +59,7 @@ public class TestResultTest {
 
     @Test
     public void shouldSetEmptyStringWhenTestResultValueFieldsAreNull() {
-        SmearTestRecord smearTestRecord = new SmearTestRecord(sampleInstance, null, null, null, null);
+        SmearTestRecord smearTestRecord = new SmearTestRecord(sampleInstance, null, null, null, null, null, null);
 
         TestResult testResult = new TestResult(sampleInstance, smearTestRecord, weightStatisticsRecord);
 

@@ -30,7 +30,9 @@ public class SmearTestResultsMapper {
             LocalDate test2Date = stringToLocalDate(patientWebRequest.getSmear_test_date_2());
             SmearTestResult test1Result = mapTestResult(patientWebRequest.getSmear_test_result_1());
             SmearTestResult test2Result = mapTestResult(patientWebRequest.getSmear_test_result_2());
-            smearTestResults.add(smearSampleInstance, test1Date, test1Result, test2Date, test2Result);
+            String labName = patientWebRequest.getLab_name();
+            String labNumber = patientWebRequest.getLab_number();
+            smearTestResults.add(smearSampleInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber);
         }
         return smearTestResults;
     }

@@ -22,7 +22,8 @@
         <div><label class="tc-label">State</label> <label class="tc-value">${patient.addressState}</label></div>
         <div><label class="tc-label">City/District with code</label>
             <label class="tc-value">${patient.addressDistrict}&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
-        <label class="tc-label">Name</label><label class="tc-value name">${patient.firstName!} ${patient.lastName!}</label>
+        <label class="tc-label">Name</label><label
+            class="tc-value name">${patient.firstName!} ${patient.lastName!}</label>
 
         <div>
             <label class="tc-label">Sex</label><label class="tc-value">${patient.gender!}</label>
@@ -32,7 +33,8 @@
             <label class="tc-label">Occupation</label>
         </div>
         <div>
-            <label class="tc-label">Complete Address</label><label class="tc-value">${patient.address!}</label>
+            <label class="tc-label">Complete Address</label><label class="tc-value">${patient.address!}
+            , ${patient.addressVillage} , ${patient.addressDistrict} , ${patient.addressState}</label>
         </div>
         <div>
             <label class="tc-label">Phone Number</label><label class="tc-value">${patient.phoneNumber!}</label>
@@ -84,6 +86,7 @@
     </div>
 </div>
 <br/>
+
 <div id="test-results-pause-provider-history" class="relative-size">
     <div class="pull-left">
     <#if treatmentCard.treatmentHistories?has_content>
@@ -142,8 +145,8 @@
         <#list patient.testResults as testResult>
             <tr>
                 <td>${testResult.sampleInstance}</td>
-                <td></td>
-                <td></td>
+                <td>${testResult.labName}</td>
+                <td>${testResult.labNumber}</td>
                 <td>${testResult.smearTestDate1}</td>
                 <td>${testResult.smearTestResult1}</td>
                 <td>${testResult.smearTestDate2}</td>
@@ -183,15 +186,15 @@
             <th>Reason for missed doses</th>
             <th>Outcome of retrieval action</th>
         </tr>
-        <#list 1..7 as i>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </#list>
+    <#list 1..7 as i>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </#list>
     </table>
 </div>
 <div class="chemoprophylaxis">
@@ -202,12 +205,12 @@
             <th>No.</th>
             <th>Chemoprophylaxis</th>
         </tr>
-        <#list 1..5 as i>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </#list>
+    <#list 1..5 as i>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </#list>
     </table>
 </div>
 <div class="additional-treatments">
@@ -252,18 +255,18 @@
 </div>
 </body>
 <script type="text/javascript">
-    if(parseInt($('#test-results-pause-provider-history').css('height'))>400) {
+    if (parseInt($('#test-results-pause-provider-history').css('height')) > 400) {
         $('#ip-card').addClass('page-break');
-        <#if treatmentCard.CPAdherenceSectionValid>
-            $('.actions-for-missed-doses').addClass('page-break');
-        </#if>
-        }
-    else  {
-        <#if treatmentCard.IPAdherenceSectionValid || treatmentCard.CPAdherenceSectionValid>
-            $('#cp-card').addClass('page-break');
-        <#else>
-            $('.actions-for-missed-doses').addClass('page-break');
-        </#if>
+    <#if treatmentCard.CPAdherenceSectionValid>
+        $('.actions-for-missed-doses').addClass('page-break');
+    </#if>
+    }
+    else {
+    <#if treatmentCard.IPAdherenceSectionValid || treatmentCard.CPAdherenceSectionValid>
+        $('#cp-card').addClass('page-break');
+    <#else>
+        $('.actions-for-missed-doses').addClass('page-break');
+    </#if>
     }
 
     window.print();
