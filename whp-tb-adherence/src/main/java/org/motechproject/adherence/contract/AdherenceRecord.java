@@ -2,7 +2,7 @@ package org.motechproject.adherence.contract;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.adherence.domain.AdherenceLog;
 
 import java.util.HashMap;
 import java.util.Map;
