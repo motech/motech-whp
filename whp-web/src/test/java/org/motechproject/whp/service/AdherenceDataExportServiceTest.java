@@ -10,6 +10,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.uimodel.AdherenceLogSummary;
 
@@ -31,12 +32,15 @@ public class AdherenceDataExportServiceTest {
     @Mock
     AdherenceAuditService adherenceAuditService;
 
+    @Mock
+    WHPAdherenceService adherenceService;
+
     private AdherenceDataExportService adherenceDataExportService;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        adherenceDataExportService = new AdherenceDataExportService(adherenceAuditService);
+        adherenceDataExportService = new AdherenceDataExportService(adherenceAuditService, adherenceService);
     }
 
     @Test
@@ -58,7 +62,7 @@ public class AdherenceDataExportServiceTest {
         List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));
         when(adherenceAuditService.allAuditLogs(1)).thenReturn(auditLogs);
 
-        List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceReport(pageNo);
+        List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceAuditReport(pageNo);
 
         List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", new WHPDate(now()).value(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB"));
 

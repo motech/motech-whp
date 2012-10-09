@@ -4,6 +4,8 @@ import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
+import org.motechproject.whp.adherence.domain.Adherence;
+import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.uimodel.AdherenceLogSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +19,24 @@ import java.util.List;
 public class AdherenceDataExportService {
 
     private AdherenceAuditService adherenceAuditService;
+    private WHPAdherenceService adherenceService;
 
     @Autowired
-    public AdherenceDataExportService(AdherenceAuditService adherenceAuditService) {
+    public AdherenceDataExportService(AdherenceAuditService adherenceAuditService, WHPAdherenceService adherenceService) {
         this.adherenceAuditService = adherenceAuditService;
+        this.adherenceService = adherenceService;
     }
 
     @DataProvider
-    public List<AdherenceLogSummary> adherenceReport(int pageNo) {
+    public List<AdherenceLogSummary> adherenceAuditReport(int pageNo) {
         return map(adherenceAuditService.allAuditLogs(pageNo));
     }
+
+    @DataProvider
+    public List<Adherence> adherenceReport(int pageNumber) {
+        return adherenceService.allAdherenceData(pageNumber - 1, 10000);
+    }
+
 
     List<AdherenceLogSummary> map(List<AdherenceAuditLog> adherenceAuditLogs) {
         List<AdherenceLogSummary> adherenceLogSummaries = new ArrayList<>();

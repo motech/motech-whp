@@ -13,10 +13,13 @@
             <b>Downloads</b>
         </li>
         <li>
-            <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data to excel</a>
+            <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data</a>
         <li>
         <li>
-            <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data to excel</a>
+            <a href="/whp/reports/adherence/adherenceAuditReport.xls">All adherence audit data</a>
+        <li>
+        <li>
+            <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data</a>
         <li>
         <li class="divider"></li>
     </ul>
