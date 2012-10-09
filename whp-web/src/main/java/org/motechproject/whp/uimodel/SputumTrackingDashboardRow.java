@@ -27,6 +27,7 @@ public class SputumTrackingDashboardRow {
     private String district;
     private String providerId;
     private String labName;
+    private String containerStatus;
 
     public SputumTrackingDashboardRow(ContainerDashboardRow containerDashboardRow) {
         Container container = containerDashboardRow.getContainer();
@@ -53,6 +54,7 @@ public class SputumTrackingDashboardRow {
     private void extractContainerInformation(Container container) {
         containerId = container.getContainerId();
         containerIssuedOn = inDesiredFormat(container.getCreationTime().toLocalDate());
+        containerStatus = container.getStatus().name();
         populateLabResultsData(container.getLabResults());
 
         if (isNotBlank(container.getTbId()))

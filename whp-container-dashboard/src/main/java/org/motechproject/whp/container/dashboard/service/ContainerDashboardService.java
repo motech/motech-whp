@@ -45,6 +45,7 @@ public class ContainerDashboardService {
         ContainerDashboardRow dashboardRow = allContainerDashboardRows.findByContainerId(container.getContainerId());
         dashboardRow.setProvider(provider(container));
         dashboardRow.setPatient(patient(container));
+        dashboardRow.setContainer(container);
 
         allContainerDashboardRows.update(dashboardRow);
     }

@@ -2,7 +2,7 @@
 <#import "../layout/default-with-sidebar.ftl" as layout>
 <#import "../paginator.ftl" as paginator>
 
-<@layout.defaultLayout title="MoTeCH-WHP" entity="itadmin">
+<@layout.defaultLayout title="MoTeCH-WHP" entity="cmfadmin">
 <#if !pageNo??>
     <#assign pageNo=1/>
 </#if>
@@ -23,6 +23,7 @@
                 <th>Patient ID</th>
                 <th>District</th>
                 <th>Provider Id</th>
+                <th>Container Status</th>
             </tr>
             </thead>
             <tbody>
@@ -40,9 +41,10 @@
                 <td>{{item.patientId}}</td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
+                <td>{{item.containerStatus}}</td>
             </tr>
             <tr type="no-results" class="hide">
-                 <td class="warning text-center" colspan="11"></td>
+                 <td class="warning text-center" colspan="12"></td>
             </tr>
             </tbody>
         </table>

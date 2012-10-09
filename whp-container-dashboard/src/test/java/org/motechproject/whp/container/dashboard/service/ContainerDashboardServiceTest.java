@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.container.dashboard.model.ContainerDashboardRow;
 import org.motechproject.whp.container.dashboard.repository.AllContainerDashboardRows;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -110,6 +111,31 @@ public class ContainerDashboardServiceTest {
 
         containerDashboardService.updateDashboardRow(container);
         isProviderRefreshed(provider);
+    }
+
+    @Test
+    public void shouldRefreshContainerInformationInDashboardRowWhenContainerUpdated() {
+        Container container = new Container();
+        String patientId = "patientId";
+        String providerId = "providerId";
+        container.setPatientId(patientId);
+        container.setProviderId(providerId);
+
+        container.setContainerId(existingContainer(patientId, providerId).getContainerId());
+        LabResults labResults = new LabResults();
+        labResults.setLabName("myLabName");
+        container.setLabResults(labResults);
+
+        containerDashboardService.updateDashboardRow(container);
+
+        isContainerRefreshed(container);
+    }
+
+    private void isContainerRefreshed(Container container) {
+        ArgumentCaptor<ContainerDashboardRow> captor = ArgumentCaptor.forClass(ContainerDashboardRow.class);
+        verify(allContainerDashboardRows).update(captor.capture());
+        ContainerDashboardRow dashboardRow = captor.getValue();
+        assertEquals(container.getLabResults().getLabName(), dashboardRow.getContainer().getLabResults().getLabName());
     }
 
     @Test

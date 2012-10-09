@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.refdata.domain.ContainerStatus;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
@@ -26,8 +27,9 @@ public class SputumTrackingDashboardRowTest {
     private DateTime now = DateUtil.now();
 
     @Test
-    public void shouldExtractContainerID() {
+    public void shouldExtractRequiredDetailsFromContainerDashboardRow() {
         String containerId = "containerId";
+        ContainerStatus containerStatus = ContainerStatus.Open;
         String labName = "MyOwnLab";
         LabResults labResults = new LabResults();
         labResults.setLabName(labName);
@@ -38,6 +40,7 @@ public class SputumTrackingDashboardRowTest {
 
         Container container = new Container();
         container.setContainerId(containerId);
+        container.setStatus(containerStatus);
         container.setTbId("tbid");
         container.setCreationTime(now);
         container.setLabResults(labResults);
@@ -57,6 +60,7 @@ public class SputumTrackingDashboardRowTest {
         SputumTrackingDashboardRow row = new SputumTrackingDashboardRow(containerDashboardRow);
 
         assertEquals(containerId, row.getContainerId());
+        assertEquals(containerStatus.name(), row.getContainerStatus());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getContainerIssuedOn());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultation());
         assertEquals(patientId, row.getPatientId());
