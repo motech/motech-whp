@@ -6,11 +6,9 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.event.EventRelay;
-import org.motechproject.event.MotechEvent;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.patient.WHPPatientConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,16 +19,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
+
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> {
 
 
-    private EventRelay eventRelay;
+    private EventContext eventContext;
 
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventRelay eventRelay) {
+    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventContext eventContext) {
         super(Patient.class, dbCouchDbConnector);
-        this.eventRelay = eventRelay;
+        this.eventContext = eventContext;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             throw new WHPRuntimeException(errorCodes);
         }
         super.update(patient);
-        eventRelay.sendEventMessage(patientUpdatedEvent(patient));
+        eventContext.send(PATIENT_UPDATED_SUBJECT, patient);
     }
 
     @GenerateView
@@ -98,12 +98,6 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         public int compare(Patient patient1, Patient patient2) {
             return patient1.getFirstName().compareTo(patient2.getFirstName());
         }
-    }
-
-    private MotechEvent patientUpdatedEvent(Patient patient) {
-        MotechEvent event = new MotechEvent(WHPPatientConstants.PATIENT_UPDATED_SUBJECT);
-        event.getParameters().put(WHPPatientConstants.PATIENT_KEY, patient);
-        return event;
     }
 
 }

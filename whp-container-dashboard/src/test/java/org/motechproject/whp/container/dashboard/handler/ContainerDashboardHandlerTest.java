@@ -13,9 +13,6 @@ import org.motechproject.whp.user.domain.Provider;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.container.WHPContainerConstants.CONTAINER_KEY;
-import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_KEY;
-import static org.motechproject.whp.user.WHPUserConstants.PROVIDER_KEY;
 
 public class ContainerDashboardHandlerTest {
 
@@ -36,7 +33,7 @@ public class ContainerDashboardHandlerTest {
 
         containerDashboardHandler.onContainerAdded(event);
 
-        Container container = (Container) event.getParameters().get(CONTAINER_KEY);
+        Container container = (Container) event.getParameters().get("0");
         verify(containerDashboardService).createDashboardRow(container);
     }
 
@@ -46,7 +43,7 @@ public class ContainerDashboardHandlerTest {
 
         containerDashboardHandler.onContainerUpdated(event);
 
-        Container container = (Container) event.getParameters().get(CONTAINER_KEY);
+        Container container = (Container) event.getParameters().get("0");
         verify(containerDashboardService).updateDashboardRow(container);
     }
 
@@ -56,7 +53,7 @@ public class ContainerDashboardHandlerTest {
 
         containerDashboardHandler.onProviderUpdated(event);
 
-        Provider provider = (Provider) event.getParameters().get(PROVIDER_KEY);
+        Provider provider = (Provider) event.getParameters().get("0");
         verify(containerDashboardService).updateProviderInformation(provider);
     }
 
@@ -66,7 +63,7 @@ public class ContainerDashboardHandlerTest {
 
         containerDashboardHandler.onPatientUpdated(event);
 
-        Patient patient = (Patient) event.getParameters().get(PATIENT_KEY);
+        Patient patient = (Patient) event.getParameters().get("0");
         verify(containerDashboardService).updatePatientInformation(patient);
     }
 }

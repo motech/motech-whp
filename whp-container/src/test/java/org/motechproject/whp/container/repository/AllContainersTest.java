@@ -3,14 +3,11 @@ package org.motechproject.whp.container.repository;
 import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.event.EventRelay;
-import org.motechproject.event.MotechEvent;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.domain.Container;
 
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -21,7 +18,7 @@ public class AllContainersTest {
     private CouchDbConnector couchDbConnector;
 
     @Mock
-    private EventRelay eventRelay;
+    private EventContext eventContext;
 
     @Before
     public void setup() {
@@ -30,39 +27,21 @@ public class AllContainersTest {
 
     @Test
     public void shouldRaiseEventToIndicateContainerGotAdded() {
-        AllContainers allContainers = new AllContainers(couchDbConnector, eventRelay);
+        AllContainers allContainers = new AllContainers(couchDbConnector, eventContext);
         Container container = mock(Container.class);
 
         allContainers.add(container);
 
-        assertTrue(eventRaisedWithCorrectSubject(WHPContainerConstants.CONTAINER_ADDED_SUBJECT));
-        assertTrue(eventRaisedWithContainerAsParameter(container));
+        verify(eventContext).send(WHPContainerConstants.CONTAINER_ADDED_SUBJECT, container);
     }
 
     @Test
     public void shouldRaiseEventToIndicateContainerGotUpdated() {
-        AllContainers allContainers = new AllContainers(couchDbConnector, eventRelay);
+        AllContainers allContainers = new AllContainers(couchDbConnector, eventContext);
         Container container = mock(Container.class);
 
         allContainers.update(container);
 
-        assertTrue(eventRaisedWithCorrectSubject(WHPContainerConstants.CONTAINER_UPDATED_SUBJECT));
-        assertTrue(eventRaisedWithContainerAsParameter(container));
-    }
-
-    private boolean eventRaisedWithCorrectSubject(String subject) {
-        ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
-        verify(eventRelay).sendEventMessage(captor.capture());
-        MotechEvent raisedEvent = captor.getValue();
-
-        return subject.equals(raisedEvent.getSubject());
-    }
-
-    private boolean eventRaisedWithContainerAsParameter(Container container) {
-        ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
-        verify(eventRelay).sendEventMessage(captor.capture());
-        MotechEvent raisedEvent = captor.getValue();
-
-        return container.equals(raisedEvent.getParameters().get(WHPContainerConstants.CONTAINER_KEY));
+        verify(eventContext).send(WHPContainerConstants.CONTAINER_UPDATED_SUBJECT, container);
     }
 }

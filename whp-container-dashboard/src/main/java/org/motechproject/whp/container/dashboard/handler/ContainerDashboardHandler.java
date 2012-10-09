@@ -24,25 +24,25 @@ public class ContainerDashboardHandler {
 
     @MotechListener(subjects = WHPContainerConstants.CONTAINER_ADDED_SUBJECT)
     public void onContainerAdded(MotechEvent event) {
-        Container container = (Container) event.getParameters().get(WHPContainerConstants.CONTAINER_KEY);
+        Container container = (Container) event.getParameters().get("0");
         containerDashboardService.createDashboardRow(container);
     }
 
     @MotechListener(subjects = WHPContainerConstants.CONTAINER_UPDATED_SUBJECT)
     public void onContainerUpdated(MotechEvent event) {
-        Container container = (Container) event.getParameters().get(WHPContainerConstants.CONTAINER_KEY);
+        Container container = (Container) event.getParameters().get("0");
         containerDashboardService.updateDashboardRow(container);
     }
 
     @MotechListener(subjects = WHPUserConstants.PROVIDER_UPDATED_SUBJECT)
     public void onProviderUpdated(MotechEvent event) {
-        Provider provider = (Provider) event.getParameters().get(WHPUserConstants.PROVIDER_KEY);
+        Provider provider = (Provider) event.getParameters().get("0");
         containerDashboardService.updateProviderInformation(provider);
     }
 
     @MotechListener(subjects = WHPPatientConstants.PATIENT_UPDATED_SUBJECT)
     public void onPatientUpdated(MotechEvent event) {
-        Patient patient = (Patient) event.getParameters().get(WHPPatientConstants.PATIENT_KEY);
+        Patient patient = (Patient) event.getParameters().get("0");
         containerDashboardService.updatePatientInformation(patient);
     }
 }

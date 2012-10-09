@@ -3,21 +3,18 @@ package org.motechproject.whp.user.repository;
 import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.event.EventRelay;
-import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.user.WHPUserConstants;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.user.domain.Provider;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.user.WHPUserConstants.PROVIDER_UPDATED_SUBJECT;
 
 public class AllProvidersTest {
 
     @Mock
-    private EventRelay eventRelay;
+    private EventContext eventContext;
 
     @Mock
     private CouchDbConnector dbConnector;
@@ -27,7 +24,7 @@ public class AllProvidersTest {
     @Before
     public void setup() {
         initMocks(this);
-        allProviders = new AllProviders(dbConnector, eventRelay);
+        allProviders = new AllProviders(dbConnector, eventContext);
     }
 
     @Test
@@ -35,19 +32,7 @@ public class AllProvidersTest {
         Provider provider = new Provider();
         allProviders.update(provider);
 
-        assertTrue(eventRaisedWithSubject(WHPUserConstants.PROVIDER_UPDATED_SUBJECT));
-        assertTrue(eventRaisedWithParameter(WHPUserConstants.PROVIDER_KEY, provider));
+        verify(eventContext).send(PROVIDER_UPDATED_SUBJECT, provider);
     }
 
-    private boolean eventRaisedWithSubject(String providerUpdatedSubject) {
-        ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
-        verify(eventRelay).sendEventMessage(captor.capture());
-        return providerUpdatedSubject.equals(captor.getValue().getSubject());
-    }
-
-    private boolean eventRaisedWithParameter(String key, Object value) {
-        ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
-        verify(eventRelay).sendEventMessage(captor.capture());
-        return value.equals(captor.getValue().getParameters().get(key));
-    }
 }

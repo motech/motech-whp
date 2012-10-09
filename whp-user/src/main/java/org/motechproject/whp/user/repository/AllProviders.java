@@ -7,11 +7,9 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.BusinessIdNotUniqueException;
 import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.event.EventRelay;
-import org.motechproject.event.MotechEvent;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.user.WHPUserConstants;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,22 +17,23 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static org.motechproject.whp.user.WHPUserConstants.PROVIDER_UPDATED_SUBJECT;
+
 @Repository
 public class AllProviders extends MotechBaseRepository<Provider> {
 
-    private EventRelay eventRelay;
+    private EventContext eventContext;
 
     @Autowired
-    public AllProviders(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventRelay eventRelay) {
+    public AllProviders(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventContext eventContext) {
         super(Provider.class, dbCouchDbConnector);
-        this.eventRelay = eventRelay;
+        this.eventContext = eventContext;
     }
 
     @Override
-    public void update(Provider entity) {
-        super.update(entity);
-        MotechEvent event = providerUpdatedEvent(entity);
-        eventRelay.sendEventMessage(event);
+    public void update(Provider provider) {
+        super.update(provider);
+        eventContext.send(PROVIDER_UPDATED_SUBJECT, provider);
     }
 
     @GenerateView
@@ -68,11 +67,5 @@ public class AllProviders extends MotechBaseRepository<Provider> {
     public Provider findByMobileNumber(String mobileNumber) {
         ViewQuery q = createQuery("find_by_mobile_number").key(mobileNumber).includeDocs(true);
         return singleResult(db.queryView(q, Provider.class));
-    }
-
-    private MotechEvent providerUpdatedEvent(Provider provider) {
-        MotechEvent event = new MotechEvent(WHPUserConstants.PROVIDER_UPDATED_SUBJECT);
-        event.getParameters().put(WHPUserConstants.PROVIDER_KEY, provider);
-        return event;
     }
 }
