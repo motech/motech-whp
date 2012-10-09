@@ -7,7 +7,7 @@
     <#assign pageNo=1/>
 </#if>
 <div class="results">
-    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="" entity="sputum_tracking_dashboard_row" rowsPerPage="1" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="" entity="sputum_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList">
             <thead>
             <tr>
@@ -38,7 +38,7 @@
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.consultation}}</td>
                 <td>{{item.diagnosis}}</td>
-                <td>{{item.patientId}}</td>
+                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}' />">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
