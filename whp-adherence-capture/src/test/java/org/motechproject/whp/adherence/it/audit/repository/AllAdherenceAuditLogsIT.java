@@ -1,6 +1,5 @@
 package org.motechproject.whp.adherence.it.audit.repository;
 
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
@@ -65,7 +64,7 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
     }
 
     private AdherenceAuditLog getLog(AuditLog weeklyAuditLog) {
-        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(weeklyAuditLog.getPatientId(), weeklyAuditLog.getTbId(), weeklyAuditLog.getCreationTime().toDateTime(UTC), weeklyAuditLog.getCreationTime().toDateTime(DateTimeZone.UTC), weeklyAuditLog.getUser(), weeklyAuditLog.getNumberOfDosesTaken(), null, weeklyAuditLog.getSourceOfChange());
+        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(weeklyAuditLog.getPatientId(), weeklyAuditLog.getTbId(), weeklyAuditLog.getCreationTime().toDateTime(UTC), null, weeklyAuditLog.getUser(), weeklyAuditLog.getNumberOfDosesTaken(), null, weeklyAuditLog.getSourceOfChange());
         return expectedAdherenceAuditLog;
     }
 
