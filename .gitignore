@@ -24,3 +24,4 @@ web/src/main/webapp/emulator/.fuse*
 .ant-targets-build.xml
 commits-master
 commits-release
+overlays/
