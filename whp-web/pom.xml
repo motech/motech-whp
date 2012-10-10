@@ -472,13 +472,8 @@
                                     </systemProperties>
                                     <runOrder>reversealphabetical</runOrder>
                                     <includes>
-                                        <include>**/functional/test/serial/**/*.java</include>
+                                        <include>**/functional/test/serial/*.java</include>
                                     </includes>
-                                    <excludes>
-                                        <exclude>**/*Test.java</exclude>
-                                        <exclude>**/*TestPart.java</exclude>
-                                        <exclude>**/*IT.java</exclude>
-                                    </excludes>
                                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                                 </configuration>
                             </execution>

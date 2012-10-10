@@ -43,7 +43,7 @@ public class ProviderPage extends ListPatientsPage {
     }
 
     public ContainerRegistrationPage registerContainer(String containerId, String instance) {
-        webDriver.findElement(By.id("register-container")).click();
+        webDriver.findElement(By.id("nav-containers")).click();
         ContainerRegistrationPage containerRegistrationPage = MyPageFactory.initElements(webDriver, ContainerRegistrationPage.class);
         containerRegistrationPage.registerContainer(containerId, instance);
         return containerRegistrationPage;

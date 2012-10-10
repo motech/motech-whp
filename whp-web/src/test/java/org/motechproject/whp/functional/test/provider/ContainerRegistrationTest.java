@@ -1,5 +1,6 @@
 package org.motechproject.whp.functional.test.provider;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.functional.data.TestProvider;
 import org.motechproject.whp.functional.framework.BaseTest;
@@ -28,6 +29,7 @@ public class ContainerRegistrationTest extends BaseTest {
     }
 
     @Test
+    @Ignore
     public void shouldRegisterAContainer() {
         providerPage.registerContainer("12345678910", "Pre-treatment");
     }

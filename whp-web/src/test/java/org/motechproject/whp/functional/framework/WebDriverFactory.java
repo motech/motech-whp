@@ -3,6 +3,7 @@ package org.motechproject.whp.functional.framework;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -18,12 +19,16 @@ public class WebDriverFactory {
     }
 
     private enum Driver {
+
         FIREFOX("firefox") {
             @Override
             WebDriver give() {
+                FirefoxBinary binary = buildFireFoxBinary();
+
                 FirefoxProfile firefoxProfile = new FirefoxProfile();
                 firefoxProfile.setEnableNativeEvents(false);
-                FirefoxDriver firefoxDriver = new FirefoxDriver(firefoxProfile);
+
+                FirefoxDriver firefoxDriver = new FirefoxDriver(binary, firefoxProfile);
                 firefoxDriver.manage().window().maximize();
                 return firefoxDriver;
             }
@@ -73,6 +78,14 @@ public class WebDriverFactory {
         public String toString() {
             return name;
         }
+    }
+
+    private static FirefoxBinary buildFireFoxBinary() {
+        FirefoxBinary binary = new FirefoxBinary();
+        if (null != System.getProperty("importal.xvfb.id")) {
+            binary.setEnvironmentProperty("DISPLAY", System.getProperty("importal.xvfb.id"));
+        }
+        return binary;
     }
 
     public static WebDriver getInstance() {

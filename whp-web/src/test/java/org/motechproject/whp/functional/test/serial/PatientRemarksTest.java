@@ -1,4 +1,4 @@
-package org.motechproject.whp.functional.test.patient;
+package org.motechproject.whp.functional.test.serial;
 
 import org.joda.time.DateTime;
 import org.junit.Before;

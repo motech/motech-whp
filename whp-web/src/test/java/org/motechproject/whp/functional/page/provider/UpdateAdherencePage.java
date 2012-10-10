@@ -40,6 +40,7 @@ public class UpdateAdherencePage extends Page {
         adherenceWarning = WebDriverFactory.createWebElement(adherenceWarning);
         adherenceCaption = WebDriverFactory.createWebElement(adherenceCaption);
         numberOfDosesTaken = WebDriverFactory.createWebElement(numberOfDosesTaken);
+        patientRemarks = WebDriverFactory.createWebElement(patientRemarks);
     }
 
     public UpdateAdherencePage(WebDriver webDriver) {
