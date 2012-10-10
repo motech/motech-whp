@@ -25,7 +25,6 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.InTreatment;
 import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.PreTreatment;
@@ -179,8 +178,8 @@ public class AllContainerTrackingRecordsIT {
 
         List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(queryParams, skip, limit);
 
-        assertThat(results, hasItem(expectedContainerTrackingRecord));
         assertThat(results.size(), is(1));
+        assertEquals(results.get(0).getId(), expectedContainerTrackingRecord.getId());
     }
 
     @Test
