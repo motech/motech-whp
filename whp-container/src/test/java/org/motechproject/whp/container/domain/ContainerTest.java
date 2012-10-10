@@ -67,7 +67,7 @@ public class ContainerTest {
     }
 
     @Test
-    public void shouldUpadteTbId_uponMapping() {
+    public void shouldUpdateTbId_uponMapping() {
 
         Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
         String patientId = "patientid";
@@ -77,5 +77,25 @@ public class ContainerTest {
 
         assertEquals(tbId, container.getTbId());
 
+    }
+
+    @Test
+    public void shouldHaveDefaultReasonForClosureForClosedStatus_uponMapping() {
+
+        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
+        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
+
+        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
+    }
+
+
+    @Test
+    public void shouldNotHaveReasonForClosureForOpenStatus_uponUnMapping() {
+
+        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
+        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
+        container.unMap();
+
+        assertNull(container.getReasonForClosure());
     }
 }

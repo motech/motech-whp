@@ -32,6 +32,8 @@ public class Container extends MotechBaseDataObject {
 
     private String tbId;
 
+    private String reasonForClosure;
+
     // Required for ektorp
     public Container() {
         this.status = ContainerStatus.Open;
@@ -55,6 +57,7 @@ public class Container extends MotechBaseDataObject {
         setTbId(tbId);
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
+        setReasonForClosure(ContainerConstants.REASON_FOR_CLOSURE_AFTER_MAPPED);
         updateCurrentTrackingStatus();
     }
 
@@ -64,6 +67,7 @@ public class Container extends MotechBaseDataObject {
         setMappingInstance(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
+        setReasonForClosure(ContainerConstants.DEFAULT_REASON_FOR_CLOSURE);
     }
 
     private void updateCurrentTrackingStatus() {

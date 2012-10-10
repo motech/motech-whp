@@ -29,6 +29,7 @@ public class ContainerTrackingDashboardRowTest {
     @Test
     public void shouldExtractRequiredDetailsFromContainerDashboardRow() {
         String containerId = "containerId";
+        String reasonForClosure = "Container lost";
         ContainerStatus containerStatus = ContainerStatus.Open;
         String labName = "MyOwnLab";
         LabResults labResults = new LabResults();
@@ -44,6 +45,7 @@ public class ContainerTrackingDashboardRowTest {
         container.setTbId("tbid");
         container.setCreationTime(now);
         container.setLabResults(labResults);
+        container.setReasonForClosure(reasonForClosure);
 
         ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
         containerTrackingRecord.setContainer(container);
@@ -61,6 +63,7 @@ public class ContainerTrackingDashboardRowTest {
 
         assertEquals(containerId, row.getContainerId());
         assertEquals(containerStatus.name(), row.getContainerStatus());
+        assertEquals(reasonForClosure, row.getReasonForClosure());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getContainerIssuedOn());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultation());
         assertEquals(patientId, row.getPatientId());
@@ -103,6 +106,32 @@ public class ContainerTrackingDashboardRowTest {
         ContainerTrackingRecord row = new ContainerTrackingRecord();
         row.setContainer(containerNotMappedToPatient);
         assertNull(new ContainerTrackingDashboardRow(row).getConsultation());
+    }
+
+    @Test
+    public void shouldReturnActionAsOpenForContainerWithStatusAsClosed() {
+
+        Container container=new Container();
+        container.setStatus(ContainerStatus.Open);
+        container.setCreationTime(now);
+
+        ContainerTrackingRecord row = new ContainerTrackingRecord();
+        row.setContainer(container);
+
+        assertEquals("Close",new ContainerTrackingDashboardRow(row).getAction());
+    }
+
+    @Test
+    public void shouldReturnActionAsCloseForContainerWithStatusAsOpen() {
+
+        Container container=new Container();
+        container.setStatus(ContainerStatus.Closed);
+        container.setCreationTime(now);
+
+        ContainerTrackingRecord row = new ContainerTrackingRecord();
+        row.setContainer(container);
+
+        assertEquals("Open",new ContainerTrackingDashboardRow(row).getAction());
     }
 
     private Therapy therapy() {

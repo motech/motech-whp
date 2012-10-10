@@ -28,6 +28,7 @@ public class ContainerTrackingDashboardRow {
     private String providerId;
     private String labName;
     private String containerStatus;
+    private String reasonForClosure;
 
     public ContainerTrackingDashboardRow(ContainerTrackingRecord containerTrackingRecord) {
         Container container = containerTrackingRecord.getContainer();
@@ -55,6 +56,7 @@ public class ContainerTrackingDashboardRow {
         containerId = container.getContainerId();
         containerIssuedOn = inDesiredFormat(container.getCreationTime().toLocalDate());
         containerStatus = container.getStatus().name();
+        reasonForClosure = container.getReasonForClosure();
         populateLabResultsData(container.getLabResults());
 
         if (isNotBlank(container.getTbId()))
@@ -73,5 +75,10 @@ public class ContainerTrackingDashboardRow {
 
     private String inDesiredFormat(LocalDate date) {
         return date.toString(DATE_FORMAT);
+    }
+
+    public String getAction()
+    {
+        return containerStatus.equals("Closed") ? "Open" : "Close";
     }
 }
