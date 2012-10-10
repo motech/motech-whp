@@ -1,24 +1,47 @@
 package org.motechproject.whp.container.tracking.repository;
 
-import org.ektorp.CouchDbConnector;
+import com.github.ldriscoll.ektorplucene.CustomLuceneResult;
+import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
+import com.github.ldriscoll.ektorplucene.util.IndexUploader;
+import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.View;
-import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
-public class AllContainerTrackingRecords extends MotechBaseRepository<ContainerTrackingRecord> {
+public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<ContainerTrackingRecord> {
+
+    private static final String VIEW_NAME = "ContainerTracking";
+    private static final String SEARCH_FUNCTION = "findByCriteria";
+    private static final String INDEX_FUNCTION = "function(doc) { " +
+            "var index=new Document(); " +
+            "index.add(doc.provider.providerId, {field: 'providerId'}); " +
+            "index.add(doc.provider.providerDistrict, {field: 'providerDistrict'});" +
+            "index.add(doc.container.status, {field: 'containerStatus'});" +
+            "index.add(doc.container.creationTime, {field: 'containerIssuedDate', type : 'date'});" +
+            "index.add(doc.container.instance, {field: 'containerInstance'}); " +
+
+            "if(doc.container.labResults != undefined) { "+
+                "index.add(doc.container.labResults.smearTestResult1, {field: 'smearTestResult1'}); "+
+                "index.add(doc.container.labResults.smearTestResult2, {field: 'smearTestResult2'}); "+
+            "} "+
+
+            "return index;" +
+            "}";
 
     @Autowired
-    public AllContainerTrackingRecords(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
-        super(ContainerTrackingRecord.class, dbCouchDbConnector);
+    public AllContainerTrackingRecords(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
+        super(ContainerTrackingRecord.class, whpLuceneAwareCouchDbConnector);
+        IndexUploader uploader = new IndexUploader();
+        uploader.updateSearchFunctionIfNecessary(db, VIEW_NAME, SEARCH_FUNCTION, INDEX_FUNCTION);
     }
 
     @View(name = "find_by_containerId", map = "function(doc) {if (doc.type ==='ContainerTrackingRecord') {emit(doc.container.containerId, doc._id);}}")
@@ -57,5 +80,13 @@ public class AllContainerTrackingRecords extends MotechBaseRepository<ContainerT
             return row.getValueAsInt();
         }
         return 0;
+    }
+
+    public List<ContainerTrackingRecord> filter(Map<String, String> queryParams, int skip, int limit) {
+        return super.filter(queryParams, skip, limit, VIEW_NAME, SEARCH_FUNCTION);
+    }
+
+    protected TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
+        return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
     }
 }

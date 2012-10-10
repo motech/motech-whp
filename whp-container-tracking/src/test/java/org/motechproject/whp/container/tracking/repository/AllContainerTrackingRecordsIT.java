@@ -1,12 +1,11 @@
 package org.motechproject.whp.container.tracking.repository;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.container.builder.ContainerBuilder;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -15,14 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerTrackingContext.xml")
-@Ignore("ignored due to build failure")
 public class AllContainerTrackingRecordsIT {
 
     @Autowired
@@ -148,5 +151,38 @@ public class AllContainerTrackingRecordsIT {
 
         assertEquals(containerTrackingRecord1, allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(0, 1).get(0));
         assertEquals(containerTrackingRecord2, allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(1, 1).get(0));
+    }
+
+    @Test
+    public void shouldFilterContainerTrackingRecordsByInstanceAndProviderId(){
+        Map<String, String> queryParams = new HashMap<>();
+        String providerId = "providerId";
+        queryParams.put("providerId", providerId);
+        queryParams.put("containerInstance", "PreTreatment");
+        SputumTrackingInstance preTreatment = SputumTrackingInstance.PreTreatment;
+        String districtName = "East Champaran";
+
+        ContainerTrackingRecord expectedContainerTrackingRecord = createContainerTrackingRecord(providerId, districtName, preTreatment);
+
+        allContainerTrackingRecords.add(expectedContainerTrackingRecord);
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId, districtName, SputumTrackingInstance.EndTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord("anotherProvider", districtName, SputumTrackingInstance.PreTreatment));
+
+        int skip = 0;
+        int limit = 10;
+
+        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(queryParams, skip, limit);
+
+        assertThat(results, hasItem(expectedContainerTrackingRecord));
+        assertThat(results.size(), is(1));
+    }
+
+    private ContainerTrackingRecord createContainerTrackingRecord(String providerId, String districtName, SputumTrackingInstance instance) {
+        ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
+        Container container = ContainerBuilder.newContainer().withDefaults().withProviderId(providerId).withInstance(instance).build();
+        Provider provider = new ProviderBuilder().withDefaults().withDistrict(districtName).withProviderId(providerId).build();
+        containerTrackingRecord.setContainer(container);
+        containerTrackingRecord.setProvider(provider);
+        return containerTrackingRecord;
     }
 }

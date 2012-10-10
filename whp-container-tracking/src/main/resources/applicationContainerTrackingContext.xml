@@ -10,4 +10,10 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.container.tracking"/>
+
+    <bean id="whpLuceneAwareCouchDbConnector" class="com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector">
+        <constructor-arg value="motech-whp"/>
+        <constructor-arg ref="whpDbInstance"/>
+    </bean>
+
 </beans>

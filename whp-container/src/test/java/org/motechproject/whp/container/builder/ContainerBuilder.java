@@ -1,6 +1,7 @@
 package org.motechproject.whp.container.builder;
 
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 public class ContainerBuilder {
 
@@ -27,6 +28,11 @@ public class ContainerBuilder {
 
     public ContainerBuilder withPatientId(String patientId) {
         container.setPatientId(patientId);
+        return this;
+    }
+
+    public ContainerBuilder withInstance(SputumTrackingInstance instance) {
+        container.setInstance(instance);
         return this;
     }
 
