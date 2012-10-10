@@ -23,7 +23,7 @@ import static junit.framework.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerTrackingContext.xml")
 @Ignore("ignored due to build failure")
-public class AllContainerDashboardRowsIT {
+public class AllContainerTrackingRecordsIT {
 
     @Autowired
     AllContainerTrackingRecords allContainerTrackingRecords;

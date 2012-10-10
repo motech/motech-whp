@@ -9,7 +9,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.user.WHPUserConstants;
 import org.motechproject.whp.user.domain.Provider;
 
-public class DashboardEventsBuilder {
+public class ContainerTrackingEventsBuilder {
 
     public MotechEvent containerAddedEvent() {
         MotechEvent event = new MotechEvent(WHPContainerConstants.CONTAINER_ADDED_SUBJECT);

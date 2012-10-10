@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.container.tracking.builder.DashboardEventsBuilder;
+import org.motechproject.whp.container.tracking.builder.ContainerTrackingEventsBuilder;
 import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.patient.domain.Patient;
@@ -29,7 +29,7 @@ public class ContainerTrackingEventHandlerTest {
 
     @Test
     public void shouldCreateNewDashboardPageWhenContainerAdded() {
-        MotechEvent event = new DashboardEventsBuilder().containerAddedEvent();
+        MotechEvent event = new ContainerTrackingEventsBuilder().containerAddedEvent();
 
         containerTrackingEventHandler.onContainerAdded(event);
 
@@ -39,7 +39,7 @@ public class ContainerTrackingEventHandlerTest {
 
     @Test
     public void shouldUpdateExistingDashboardPageWhenContainerGotUpdated() {
-        MotechEvent event = new DashboardEventsBuilder().containerAddedEvent();
+        MotechEvent event = new ContainerTrackingEventsBuilder().containerAddedEvent();
 
         containerTrackingEventHandler.onContainerUpdated(event);
 
@@ -49,7 +49,7 @@ public class ContainerTrackingEventHandlerTest {
 
     @Test
     public void shouldUpdateExistingDashboardPageWhenProviderGotUpdated() {
-        MotechEvent event = new DashboardEventsBuilder().providerUpdatedEvent();
+        MotechEvent event = new ContainerTrackingEventsBuilder().providerUpdatedEvent();
 
         containerTrackingEventHandler.onProviderUpdated(event);
 
@@ -59,7 +59,7 @@ public class ContainerTrackingEventHandlerTest {
 
     @Test
     public void shouldUpdateExistingDashboardPageWhenPatientGotUpdated() {
-        MotechEvent event = new DashboardEventsBuilder().patientUpdatedEvent();
+        MotechEvent event = new ContainerTrackingEventsBuilder().patientUpdatedEvent();
 
         containerTrackingEventHandler.onPatientUpdated(event);
 
