@@ -1,6 +1,10 @@
 package org.motechproject.whp.container.builder;
 
+import org.joda.time.DateTime;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.LabResults;
+import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 public class ContainerBuilder {
@@ -38,5 +42,31 @@ public class ContainerBuilder {
 
     public Container build() {
         return container;
+    }
+
+    public ContainerBuilder withSmearTestResult1(SmearTestResult smearTestResult) {
+        if(container.getLabResults() == null){
+            container.setLabResults(new LabResults());
+        }
+        container.getLabResults().setSmearTestResult1(smearTestResult);
+        return this;
+    }
+
+    public ContainerBuilder withSmearTestResult2(SmearTestResult smearTestResult) {
+        if(container.getLabResults() == null){
+            container.setLabResults(new LabResults());
+        }
+        container.getLabResults().setSmearTestResult2(smearTestResult);
+        return this;
+    }
+
+    public ContainerBuilder withStatus(ContainerStatus status) {
+        container.setStatus(status);
+        return this;
+    }
+
+    public ContainerBuilder withCreatedDateTime(DateTime dateTime) {
+        container.setCreationTime(dateTime);
+        return this;
     }
 }

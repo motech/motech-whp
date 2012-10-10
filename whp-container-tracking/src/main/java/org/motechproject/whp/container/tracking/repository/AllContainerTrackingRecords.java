@@ -24,7 +24,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     private static final String INDEX_FUNCTION = "function(doc) { " +
             "var index=new Document(); " +
             "index.add(doc.provider.providerId, {field: 'providerId'}); " +
-            "index.add(doc.provider.providerDistrict, {field: 'providerDistrict'});" +
+            "index.add(doc.provider.district, {field: 'district'});" +
             "index.add(doc.container.status, {field: 'containerStatus'});" +
             "index.add(doc.container.creationTime, {field: 'containerIssuedDate', type : 'date'});" +
             "index.add(doc.container.instance, {field: 'containerInstance'}); " +
