@@ -23,12 +23,9 @@ public class WebDriverFactory {
         FIREFOX("firefox") {
             @Override
             WebDriver give() {
-                FirefoxBinary binary = buildFireFoxBinary();
-
                 FirefoxProfile firefoxProfile = new FirefoxProfile();
                 firefoxProfile.setEnableNativeEvents(false);
-
-                FirefoxDriver firefoxDriver = new FirefoxDriver(binary, firefoxProfile);
+                FirefoxDriver firefoxDriver = new FirefoxDriver(firefoxProfile);
                 firefoxDriver.manage().window().maximize();
                 return firefoxDriver;
             }
