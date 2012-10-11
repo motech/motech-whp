@@ -1,20 +1,15 @@
-<div>
-    <br/>
-    <br/>
-    <ul class="nav nav-list">
-        <li class="nav-header">
-            <b>Patient List</b>
-        </li>
-        <li>
-            <a id="nav-patients" href="/whp/">Patients</a>
-        </li>
-        <li class="divider"></li>
-        <li class="nav-header">
-            <b>Containers</b>
-        </li>
-        <li>
-            <a id="nav-containers" href="/whp//containerRegistration/by_provider">Container Registration</a>
-        <li>
-        <li class="divider"></li>
-    </ul>
-</div>
+<ul class="nav pull-left">
+    <li><a id="nav-patients" href="/whp/">Patients</a></li>
+</ul>
+
+<ul class="nav pull-left">
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Container<b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
+            <li>
+                <a id="nav-containers" href="/whp//containerRegistration/by_provider">Container Registration<b class="caret"></b></a>
+            <li>
+        </ul>
+    </li>
+</ul>
+

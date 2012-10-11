@@ -1,4 +1,5 @@
 <#import "/spring.ftl" as spring />
+<#import "header.ftl" as header/>
 <#macro defaultLayout title="WHP">
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
 <body>
 <div>
     <div class="row-fluid" id="headerContent">
-        <#include "header.ftl"/>
+        <@header.header/>
     </div>
 
     <div id="bodyContent" class="container">

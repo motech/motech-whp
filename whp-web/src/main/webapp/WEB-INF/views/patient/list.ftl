@@ -6,13 +6,12 @@
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 <div>
-    <div class="row well" id="search-section">
+    <div class="row-fluid well" id="search-section">
         <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
             Pane</a></h3>
 
         <div id="search-pane">
-            <form id="searchForm" action="<@spring.url '/patients/search'/>" input method="POST" submitOnEnterKey="true"
-                  class="">
+            <form id="searchForm" action="<@spring.url '/patients/search'/>" input method="POST" submitOnEnterKey="true">
                 <table>
                     <tr>
                         <td>
