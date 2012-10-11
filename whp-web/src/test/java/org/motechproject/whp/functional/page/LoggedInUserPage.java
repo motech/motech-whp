@@ -1,7 +1,5 @@
 package org.motechproject.whp.functional.page;
 
-import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +17,7 @@ public class LoggedInUserPage extends Page {
     @FindBy(how = How.ID, using = "welcome-message")
     private WebElement welcomeDiv;
 
-    @FindBy(how = How.LINK_TEXT, using = "Logout")
+    @FindBy(how = How.ID, using = "logout")
     private WebElement logoutLink;
 
     @FindBy(how = How.ID, using = "changePasswordLink")

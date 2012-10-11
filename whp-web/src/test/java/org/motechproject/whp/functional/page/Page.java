@@ -3,7 +3,6 @@ package org.motechproject.whp.functional.page;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.page.admin.CreateCmfAdminPage;
 import org.motechproject.whp.functional.page.admin.ListAllCmfAdminsPage;
-import org.motechproject.whp.functional.page.admin.listprovider.ListProvidersPage;
 import org.motechproject.whp.functional.page.provider.ProviderPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +18,7 @@ public abstract class Page extends HtmlSection {
 
     private Logger logger = LoggerFactory.getLogger(Page.class);
 
-    @FindBy(how = How.LINK_TEXT, using = "Logout")
+    @FindBy(how = How.ID, using = "logout")
     private WebElement logoutLink;
 
     public Page(WebDriver webDriver) {
@@ -31,7 +30,7 @@ public abstract class Page extends HtmlSection {
 
     public LoginPage logout() {
         createWebElement(logoutLink).click();
-        waitUntilElementIsNotPresent(By.linkText("Logout"));
+        waitUntilElementIsNotPresent(By.id("logout"));
         return getLoginPage(webDriver);
     }
 
