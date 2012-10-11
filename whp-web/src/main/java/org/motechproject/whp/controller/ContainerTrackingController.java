@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value="/sputum-tracking")
@@ -34,12 +33,10 @@ public class ContainerTrackingController {
         return "redirect:/sputum-tracking/pre-treatment";
     }
 
-/*
-    @RequestMapping(value="/pre-treatment")
+    @RequestMapping(value="/pre-treatment", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel){
-        uiModel.addReason()
+
         return "/sputum-tracking/pre-treatment";
     }
-*/
 
 }

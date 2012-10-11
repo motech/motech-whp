@@ -37,11 +37,6 @@ public class ContainerTrackingControllerTest {
     }
 
     @Test
-    public void shouldRedirectToDashBoardAfterProcessingRequest() throws Exception {
-        standaloneSetup(containerTrackingController).build().perform(post("/sputum-tracking/reasonForClosure")).andExpect(view().name("redirect:/sputum-tracking/pre-treatment"));
-    }
-
-    @Test
     public void shouldCallUpdateReasonForClosure() throws Exception {
 
         String containerId = "containerId";
@@ -58,6 +53,4 @@ public class ContainerTrackingControllerTest {
         verify(containerService, times(1)).update(container);
 
     }
-
-
 }

@@ -9,6 +9,11 @@ $(function () {
         else {
             $('[type=no-results]').hide();
         }
+
+        $(".setReasonForClosure").click(function() {
+            var containerId = $(this).parents('tr').attr('containerid');
+            $('#setReason input[name=containerId]').val(containerId);
+        });
     });
 });
 

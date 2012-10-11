@@ -1,6 +1,6 @@
 <form class="modal hide fade" id="setReason" method="POST" action="<@spring.url '/sputum-tracking/updateReasonForClosure'/>"
       xmlns="http://www.w3.org/1999/html">
-    <input type="hidden" id="containerId" name="containerId" value="${item.containerId}"/>
+    <input id="containerId" name="containerId" value=""/>
 
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
@@ -16,11 +16,11 @@
                             <label class="control-label">Reason*</label>
 
                             <div class="controls">
-                                <select id="reason" name="selectedReason">
-                                <#list reasons as reason>
-                                    <option  value="${reason.name}">${reason.name}</option>
-                                </#list>
-                                </select>
+                                <#--<select id="reason" name="selectedReason">-->
+                                <#--<#list reasons as reason>-->
+                                    <#--<option value="{{reason.name}}">{{reason.name}}</option>-->
+                                <#--</#list>-->
+                                <#--</select>-->
                             </div>
                         </div>
                     </td>

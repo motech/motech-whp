@@ -6,7 +6,8 @@
     <#if !pageNo??>
         <#assign pageNo=1/>
     </#if>
-    <#include "reasonForClosure.ftl"/>
+<#include "reasonForClosure.ftl"/>
+
 <div class="results">
 
     <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="" entity="container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
@@ -47,16 +48,18 @@
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
-                <td><a id="setDateLink" data-toggle="modal" href="#setReason">{{item.action}}</a></td>
+                <td><a id="setReasonForClosure" class="setReasonForClosure" data-toggle="modal" href="#setReason">{{item.action}}</a></td>
                 <td>{{item.reasonForClosure}}</td>
             </tr>
             <tr type="no-results" class="hide">
                 <td class="warning text-center" colspan="12"></td>
             </tr>
             </tbody>
+
+
         </table>
     </@paginator.paginate>
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
-    <script type="text/javascript"
-            src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
+
 </@layout.defaultLayout>
