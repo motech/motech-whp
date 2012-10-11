@@ -194,6 +194,8 @@ public class AllContainerTrackingRecordsIT {
         queryParams.put("smearTestResult2", Positive.name());
         queryParams.put("containerStatus", ContainerStatus.Open.name());
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
+        queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
+        queryParams.put("diagnosis","Positive");
 
         ContainerTrackingRecord expectedContainerTrackingRecord = new ContainerTrackingRecordBuilder()
                 .withProviderId(providerId)
@@ -203,6 +205,8 @@ public class AllContainerTrackingRecordsIT {
                 .withSmearTestResult2(Positive)
                 .withStatus(ContainerStatus.Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withConsultationDate(DateUtil.newDate(2010, 3, 6))
+                .withDiagnosis("Positive")
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord1 = new ContainerTrackingRecordBuilder()
@@ -213,6 +217,8 @@ public class AllContainerTrackingRecordsIT {
                 .withSmearTestResult2(Positive)
                 .withStatus(ContainerStatus.Closed)
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withConsultationDate(DateUtil.newDate(2012, 3, 6))
+                .withDiagnosis("Negative")
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecordBuilder()
@@ -223,6 +229,7 @@ public class AllContainerTrackingRecordsIT {
                 .withSmearTestResult2(Positive)
                 .withStatus(ContainerStatus.Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2009, 2, 5))
+                .withNoPatientMapping()
                 .build();
 
         allContainerTrackingRecords.add(expectedContainerTrackingRecord);

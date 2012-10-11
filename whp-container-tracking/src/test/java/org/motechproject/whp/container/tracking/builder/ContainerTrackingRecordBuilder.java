@@ -1,6 +1,7 @@
 package org.motechproject.whp.container.tracking.builder;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -54,11 +55,35 @@ public class ContainerTrackingRecordBuilder {
         return this;
     }
 
+    public ContainerTrackingRecordBuilder withConsultationDate(LocalDate consultationDate) {
+        patientBuilder.withCurrentTreatmentStartDate(consultationDate);
+        return this;
+    }
+
     public ContainerTrackingRecord build(){
         containerTrackingRecord.setProvider(providerBuilder.build());
-        containerTrackingRecord.setPatient(patientBuilder.build());
         containerTrackingRecord.setContainer(containerBuilder.build());
+
+        if(patientBuilder != null) {
+            containerTrackingRecord.setPatient(patientBuilder.build());
+        }
+
         return containerTrackingRecord;
+    }
+
+    public ContainerTrackingRecordBuilder withDiagnosis(String diagnosis) {
+        if("Positive".equals(diagnosis))
+            containerBuilder.withTbId("122001212");
+        else
+            containerBuilder.withTbId(null);
+        return this;
+    }
+
+    public ContainerTrackingRecordBuilder withNoPatientMapping() {
+        patientBuilder = null;
+        containerBuilder.withPatientId(null);
+        containerBuilder.withTbId(null);
+        return this;
     }
 }
 

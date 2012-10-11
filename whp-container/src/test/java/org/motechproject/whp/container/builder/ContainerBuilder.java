@@ -69,4 +69,9 @@ public class ContainerBuilder {
         container.setCreationTime(dateTime);
         return this;
     }
+
+    public ContainerBuilder withTbId(String tbId) {
+        container.setTbId(tbId);
+        return this;
+    }
 }
