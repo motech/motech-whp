@@ -23,17 +23,17 @@ public class AllReasonForContainerClosures extends MotechBaseRepository<ReasonFo
 
     public void addOrReplace(ReasonForContainerClosure reasonForContainerClosure) {
         try {
-            super.addOrReplace(reasonForContainerClosure, "name", reasonForContainerClosure.getName());
+            super.addOrReplace(reasonForContainerClosure, "code", reasonForContainerClosure.getCode());
         } catch (BusinessIdNotUniqueException e) {
             throw new WHPRuntimeException(WHPErrorCode.DUPLICATE_PROVIDER_ID);
       }
     }
 
     @GenerateView
-    public ReasonForContainerClosure findByName(String name) {
-        if (name == null)
+    public ReasonForContainerClosure findByCode(String code) {
+        if (code == null)
             return null;
-        ViewQuery find_by_name = createQuery("by_name").key(name).includeDocs(true);
-        return singleResult(db.queryView(find_by_name, ReasonForContainerClosure.class));
+        ViewQuery find_by_code = createQuery("by_code").key(code).includeDocs(true);
+        return singleResult(db.queryView(find_by_code, ReasonForContainerClosure.class));
     }
 }

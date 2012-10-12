@@ -9,12 +9,14 @@ import org.motechproject.model.MotechBaseDataObject;
 public class ReasonForContainerClosure extends MotechBaseDataObject {
 
     private String name;
+    private String code;
 
     //Required for Ektorp
     public ReasonForContainerClosure() {
     }
 
-    public ReasonForContainerClosure(String name) {
+    public ReasonForContainerClosure(String name, String code) {
         this.name = name;
+        this.code = code;
     }
 }

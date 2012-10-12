@@ -670,4 +670,7 @@ pre {
     text-align: center;
 }
 
+#tbNegativeControls {
+    display: none;
+}
 

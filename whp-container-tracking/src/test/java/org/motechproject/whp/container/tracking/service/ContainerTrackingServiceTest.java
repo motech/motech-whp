@@ -4,16 +4,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
+import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosisList;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
+import org.motechproject.whp.refdata.repository.AllAlternateDiagnosisList;
+import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,19 +30,23 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ContainerTrackingServiceTest {
 
+    ContainerTrackingService containerTrackingService;
+
     @Mock
     AllContainerTrackingRecords allContainerTrackingRecords;
     @Mock
     AllProviders allProviders;
     @Mock
     private AllPatients allPatients;
-
-    ContainerTrackingService containerTrackingService;
+    @Mock
+    private AllReasonForContainerClosures allReasonForContainerClosures;
+    @Mock
+    private AllAlternateDiagnosisList allAlternateDiagnosisList;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingService = new ContainerTrackingService(allContainerTrackingRecords, allProviders, allPatients);
+        containerTrackingService = new ContainerTrackingService(allContainerTrackingRecords, allProviders, allPatients, allReasonForContainerClosures, allAlternateDiagnosisList);
     }
 
     @Test
@@ -163,6 +172,28 @@ public class ContainerTrackingServiceTest {
         containerTrackingService.updatePatientInformation(patient);
 
         verify(allContainerTrackingRecords).updateAll(asList(rowToBeUpdated1, rowToBeUpdated2));
+    }
+
+    @Test
+    public void shouldGetAllTheReasonsForContainerClosure() {
+        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
+        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+
+        List<ReasonForContainerClosure> actualReasons = containerTrackingService.getAllClosureReasons();
+
+        assertEquals(reasonForContainerClosures, actualReasons);
+        verify(allReasonForContainerClosures).getAll();
+    }
+
+    @Test
+    public void shouldGetAllTheAlternateDiagnosisListsForContainerClosure() {
+        ArrayList<AlternateDiagnosisList> alternateDiagnosisLists = new ArrayList<>();
+        when(allAlternateDiagnosisList.getAll()).thenReturn(alternateDiagnosisLists);
+
+        List<AlternateDiagnosisList> actualDiagnosisLists = containerTrackingService.getAllAlternateDiagnosisList();
+
+        assertEquals(alternateDiagnosisLists, actualDiagnosisLists);
+        verify(allAlternateDiagnosisList).getAll();
     }
 
     private Container existingContainer(String patientId, String providerId) {

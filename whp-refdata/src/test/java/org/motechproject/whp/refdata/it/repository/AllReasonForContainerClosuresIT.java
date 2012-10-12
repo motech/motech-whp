@@ -23,11 +23,13 @@ public class AllReasonForContainerClosuresIT extends SpringIntegrationTest {
 
     @Test
     public void shouldStoreAndGetAllContainerClosureReasons() {
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number one"));
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number two"));
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number one"));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number one", "1"));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number two", "2"));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("reason number one", "1"));
         assertEquals(2, allReasonForContainerClosures.getAll().size());
         assertEquals("reason number one", allReasonForContainerClosures.getAll().get(0).getName());
         assertEquals("reason number two", allReasonForContainerClosures.getAll().get(1).getName());
+        assertEquals("1", allReasonForContainerClosures.getAll().get(0).getCode());
+        assertEquals("2", allReasonForContainerClosures.getAll().get(1).getCode());
     }
 }

@@ -24,7 +24,7 @@
                 <th>Consulted On</th>
                 <th>Diagnosis</th>
                 <th>Patient ID</th>
-                <th>District</th>
+                <th>Provider District</th>
                 <th>Provider Id</th>
                 <th>Container Status</th>
                 <th>Action</th>
@@ -43,7 +43,7 @@
                 <td>{{item.consultationTwoResult}}</td>
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.consultation}}</td>
-                <td>{{item.diagnosis}}</td>
+                <td id="diagnosis">{{item.diagnosis}}</td>
                 <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}' />">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
@@ -52,7 +52,7 @@
                 <td>{{item.reasonForClosure}}</td>
             </tr>
             <tr type="no-results" class="hide">
-                <td class="warning text-center" colspan="12"></td>
+                <td class="warning text-center" colspan="15"></td>
             </tr>
             </tbody>
 

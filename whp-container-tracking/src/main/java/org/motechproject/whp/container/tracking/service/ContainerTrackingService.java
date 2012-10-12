@@ -1,11 +1,15 @@
 package org.motechproject.whp.container.tracking.service;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
-import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosisList;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
+import org.motechproject.whp.refdata.repository.AllAlternateDiagnosisList;
+import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +25,17 @@ public class ContainerTrackingService {
     AllContainerTrackingRecords allContainerTrackingRecords;
     AllProviders allProviders;
     AllPatients allPatients;
+    AllReasonForContainerClosures allReasonForContainerClosures;
+    AllAlternateDiagnosisList allAlternateDiagnosisList;
 
     @Autowired
-    public ContainerTrackingService(AllContainerTrackingRecords allContainerTrackingRecords, AllProviders allProviders, AllPatients allPatients) {
+    public ContainerTrackingService(AllContainerTrackingRecords allContainerTrackingRecords, AllProviders allProviders, AllPatients allPatients,
+                                    AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosisList allAlternateDiagnosisList) {
         this.allContainerTrackingRecords = allContainerTrackingRecords;
         this.allProviders = allProviders;
         this.allPatients = allPatients;
+        this.allReasonForContainerClosures = allReasonForContainerClosures;
+        this.allAlternateDiagnosisList = allAlternateDiagnosisList;
     }
 
     public List<ContainerTrackingRecord> allContainerDashboardRows() {
@@ -68,6 +77,14 @@ public class ContainerTrackingService {
             }
             allContainerTrackingRecords.updateAll(allRowsBelongingToPatient);
         }
+    }
+
+    public List<ReasonForContainerClosure> getAllClosureReasons() {
+        return allReasonForContainerClosures.getAll();
+    }
+
+    public List<AlternateDiagnosisList> getAllAlternateDiagnosisList() {
+        return allAlternateDiagnosisList.getAll();
     }
 
     private Provider provider(Container container) {
