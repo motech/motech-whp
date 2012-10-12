@@ -1,4 +1,4 @@
-package org.motechproject.whp.controller.it;
+package org.motechproject.whp.it.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ import static org.springframework.test.web.server.request.MockMvcRequestBuilders
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:META-INF/spring/applicationContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:META-INF/spring/applicationContext.xml")
 public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegrationTest {
 
     @Autowired

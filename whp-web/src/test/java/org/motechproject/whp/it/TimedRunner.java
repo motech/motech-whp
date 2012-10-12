@@ -1,4 +1,4 @@
-package org.motechproject.whp.integration;
+package org.motechproject.whp.it;
 
 import static org.junit.Assert.fail;
 
