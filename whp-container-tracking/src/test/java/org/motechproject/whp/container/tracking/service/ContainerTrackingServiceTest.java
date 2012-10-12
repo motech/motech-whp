@@ -11,9 +11,9 @@ import org.motechproject.whp.container.tracking.repository.AllContainerTrackingR
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosisList;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
 import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.repository.AllAlternateDiagnosisList;
+import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -41,12 +41,12 @@ public class ContainerTrackingServiceTest {
     @Mock
     private AllReasonForContainerClosures allReasonForContainerClosures;
     @Mock
-    private AllAlternateDiagnosisList allAlternateDiagnosisList;
+    private AllAlternateDiagnosis allAlternateDiagnosis;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingService = new ContainerTrackingService(allContainerTrackingRecords, allProviders, allPatients, allReasonForContainerClosures, allAlternateDiagnosisList);
+        containerTrackingService = new ContainerTrackingService(allContainerTrackingRecords, allProviders, allPatients, allReasonForContainerClosures, allAlternateDiagnosis);
     }
 
     @Test
@@ -187,13 +187,13 @@ public class ContainerTrackingServiceTest {
 
     @Test
     public void shouldGetAllTheAlternateDiagnosisListsForContainerClosure() {
-        ArrayList<AlternateDiagnosisList> alternateDiagnosisLists = new ArrayList<>();
-        when(allAlternateDiagnosisList.getAll()).thenReturn(alternateDiagnosisLists);
+        ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
+        when(allAlternateDiagnosis.getAll()).thenReturn(alternateDiagnosises);
 
-        List<AlternateDiagnosisList> actualDiagnosisLists = containerTrackingService.getAllAlternateDiagnosisList();
+        List<AlternateDiagnosis> actualDiagnosises = containerTrackingService.getAllAlternateDiagnosis();
 
-        assertEquals(alternateDiagnosisLists, actualDiagnosisLists);
-        verify(allAlternateDiagnosisList).getAll();
+        assertEquals(alternateDiagnosises, actualDiagnosises);
+        verify(allAlternateDiagnosis).getAll();
     }
 
     private Container existingContainer(String patientId, String providerId) {

@@ -6,9 +6,9 @@ import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosisList;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
 import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.repository.AllAlternateDiagnosisList;
+import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -26,16 +26,16 @@ public class ContainerTrackingService {
     AllProviders allProviders;
     AllPatients allPatients;
     AllReasonForContainerClosures allReasonForContainerClosures;
-    AllAlternateDiagnosisList allAlternateDiagnosisList;
+    AllAlternateDiagnosis allAlternateDiagnosis;
 
     @Autowired
     public ContainerTrackingService(AllContainerTrackingRecords allContainerTrackingRecords, AllProviders allProviders, AllPatients allPatients,
-                                    AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosisList allAlternateDiagnosisList) {
+                                    AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
         this.allContainerTrackingRecords = allContainerTrackingRecords;
         this.allProviders = allProviders;
         this.allPatients = allPatients;
         this.allReasonForContainerClosures = allReasonForContainerClosures;
-        this.allAlternateDiagnosisList = allAlternateDiagnosisList;
+        this.allAlternateDiagnosis = allAlternateDiagnosis;
     }
 
     public List<ContainerTrackingRecord> allContainerDashboardRows() {
@@ -83,8 +83,8 @@ public class ContainerTrackingService {
         return allReasonForContainerClosures.getAll();
     }
 
-    public List<AlternateDiagnosisList> getAllAlternateDiagnosisList() {
-        return allAlternateDiagnosisList.getAll();
+    public List<AlternateDiagnosis> getAllAlternateDiagnosis() {
+        return allAlternateDiagnosis.getAll();
     }
 
     private Provider provider(Container container) {

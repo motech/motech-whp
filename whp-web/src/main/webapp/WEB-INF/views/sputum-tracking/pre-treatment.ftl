@@ -6,7 +6,15 @@
     <#if !pageNo??>
         <#assign pageNo=1/>
     </#if>
-<#include "reasonForClosure.ftl"/>
+    <#if errors??>
+        <div id="container-tracking-error" class="container-tracking-message-alert row alert alert-error fade in">
+             <button class="close" data-dismiss="alert">&times;</button>
+             <#list errors as error>
+                 <div><@spring.messageArgs code=error.code args=error.parameters/></div>
+             </#list>
+        </div>
+    </#if>
+    <#include "reasonForClosure.ftl"/>
 
 <div class="results">
 
@@ -48,7 +56,8 @@
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
-                <td><a id="setReasonForClosure" class="setReasonForClosure" data-toggle="modal" href="#setReason">{{item.action}}</a></td>
+                <td><a id="setReasonForClosure" class="setReasonForClosure" data-toggle="modal" href="#setReason">{{item.action}}</a>
+                </td>
                 <td>{{item.reasonForClosure}}</td>
             </tr>
             <tr type="no-results" class="hide">
@@ -60,6 +69,7 @@
         </table>
     </@paginator.paginate>
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
-    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
+    <script type="text/javascript"
+            src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
 
 </@layout.defaultLayout>

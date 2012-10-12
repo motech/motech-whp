@@ -1,5 +1,6 @@
 package org.motechproject.whp.container.domain;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
@@ -53,6 +54,40 @@ public class ContainerTest {
         assertNull(container.getTbId());
         assertEquals(Pending, container.getDiagnosis());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
+    }
+
+    @Test
+    public void shouldUpdateTbId_uponMapping() {
+
+        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
+        String patientId = "patientid";
+        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
+        String tbId = "tbId";
+        container.mapWith(patientId, tbId,instance);
+
+        assertEquals(tbId, container.getTbId());
+
+    }
+
+    @Test
+    @Ignore
+    public void shouldHaveDefaultReasonForClosureForClosedStatus_uponMapping() {
+
+        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
+        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
+
+        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
+    }
+
+
+    @Test
+    @Ignore
+    public void shouldNotHaveReasonForClosureForOpenStatus_uponUnMapping() {
+
+        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
+        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
+        container.unMap();
+
         assertNull(container.getReasonForClosure());
     }
 }

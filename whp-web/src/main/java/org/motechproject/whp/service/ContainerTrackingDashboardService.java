@@ -4,6 +4,7 @@ import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.Properties;
 @Service
 public class ContainerTrackingDashboardService implements Paging<ContainerTrackingDashboardRow> {
     private AllContainerTrackingRecords allContainerTrackingRecords;
+    private ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
     @Autowired
-    public ContainerTrackingDashboardService(AllContainerTrackingRecords allContainerTrackingRecords) {
+    public ContainerTrackingDashboardService(AllContainerTrackingRecords allContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
         this.allContainerTrackingRecords = allContainerTrackingRecords;
+        this.containerTrackingDashboardRowMapper = containerTrackingDashboardRowMapper;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class ContainerTrackingDashboardService implements Paging<ContainerTracki
     private List prepareResultsModel(List<ContainerTrackingRecord> rows) {
         ArrayList<ContainerTrackingDashboardRow> containerTrackingDashboardRows = new ArrayList<>();
         for (ContainerTrackingRecord row : rows)
-            containerTrackingDashboardRows.add(new ContainerTrackingDashboardRow(row));
+            containerTrackingDashboardRows.add(containerTrackingDashboardRowMapper.mapFrom(row));
         return containerTrackingDashboardRows;
     }
 

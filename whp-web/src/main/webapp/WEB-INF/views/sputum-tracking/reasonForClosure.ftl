@@ -1,5 +1,5 @@
 <form class="modal hide fade" id="setReason" method="POST"
-      action="<@spring.url '/sputum-tracking/updateReasonForClosure'/>"
+      action="<@spring.url '/sputum-tracking/close-container'/>"
       xmlns="http://www.w3.org/1999/html">
     <input id="containerId" type="hidden" name="containerId" value=""/>
 
@@ -17,20 +17,20 @@
                             <label class="control-label">Reason*</label>
 
                             <div class="controls">
-                                <select id="reason" name="selectedReason">
+                                <select id="reason" name="reason">
                                     <option value=""></option>
                                 <#list reasons as reason>
                                     <option value="${reason.code}">${reason.name}</option>
                                 </#list>
                                 </select>
                                 <div id="tbNegativeControls">
-                                    <select id="alternateDiagnosis" name="selectedAlternateDiagnosis">
+                                    <select id="alternateDiagnosis" name="alternateDiagnosis">
                                         <option value=""></option>
-                                    <#list alternateDiagnosisList as alternateDiagnosis>
-                                        <option value="${alternateDiagnosis.code}">${alternateDiagnosis.name}</option>
+                                    <#list alternateDiagnosisList as diagnosis>
+                                        <option value="${diagnosis.code}">${diagnosis.name}</option>
                                     </#list>
                                     </select>
-                                    <input class="span 2" data-date-format="dd/mm/yyyy" id="consultationDatePicker" name="consultationDate" type="text" />
+                                    <input class="span 2" data-date-format="dd/mm/yyyy" id="consultationDate" name="consultationDate" type="text" readonly="readonly" />
                                 </div>
                             </div>
                         </div>

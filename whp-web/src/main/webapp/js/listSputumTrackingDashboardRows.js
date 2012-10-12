@@ -15,10 +15,6 @@ $(function () {
             showTbNegativeOptionForPositiveDiagnosis.call(this);
         });
 
-        $("#saveReason").click(function () {
-            resetFormFields();
-        });
-
         $("#close").click(function () {
             resetFormFields();
         });
@@ -35,9 +31,8 @@ $(function () {
             $('#setReason input[name=containerId]').val(containerId);
         }
 
-        var TB_NEGATIVE_OPTION_CODE = "1";
-
         var showTbNegativeOptionForPositiveDiagnosis = function () {
+            var TB_NEGATIVE_OPTION_CODE = "1";
             if ($(this).parents('tr').children('td#diagnosis').text().toLowerCase() === "positive") {
                 $("#reason option[value=TB_NEGATIVE_OPTION_CODE]").attr('disabled', 'disabled').hide();
             }
@@ -48,7 +43,7 @@ $(function () {
     });
 
     var today = new Date();
-    $('#consultationDatePicker').datepicker({maxDate:today, dateFormat:'dd/mm/yy'});
+    $('#consultationDate').datepicker({maxDate:today, dateFormat:'dd/mm/yy'});
 
     $('#reason').change(function () {
         showAlternateDiagnosisTbNegativeIsSelected($(this).val());
@@ -62,5 +57,7 @@ $(function () {
             $("#tbNegativeControls").hide();
         }
     };
+
+    createAutoClosingAlert(".container-tracking-message-alert", 5000);
 });
 

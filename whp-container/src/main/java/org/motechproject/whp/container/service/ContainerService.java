@@ -1,18 +1,27 @@
 package org.motechproject.whp.container.service;
 
 import freemarker.template.TemplateException;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.joda.time.DateTime;
-import org.motechproject.util.DateUtil;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.contract.UpdateReasonForClosureRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
+import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.motechproject.util.DateUtil.now;
@@ -20,13 +29,18 @@ import static org.motechproject.util.DateUtil.now;
 @Service
 public class ContainerService {
 
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
     private AllContainers allContainers;
     private RemediService remediService;
+    private final AllReasonForContainerClosures allReasonForContainerClosures;
+    private final AllAlternateDiagnosis allAlternateDiagnosis;
 
     @Autowired
-    public ContainerService(AllContainers allContainers, RemediService remediService) {
+    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
         this.allContainers = allContainers;
         this.remediService = remediService;
+        this.allReasonForContainerClosures = allReasonForContainerClosures;
+        this.allAlternateDiagnosis = allAlternateDiagnosis;
     }
 
     public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
@@ -50,5 +64,32 @@ public class ContainerService {
 
     public void update(Container container) {
         allContainers.update(container);
+    }
+
+    public void updateReasonForClosure(UpdateReasonForClosureRequest reasonForClosureRequest) {
+        Container container = allContainers.findByContainerId(reasonForClosureRequest.getContainerId());
+
+        ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(reasonForClosureRequest.getReason());
+        container.setReasonForClosure(reasonForContainerClosure.getCode());
+
+        if(reasonForContainerClosure.isTbNegative())
+            populateAlternateDiagnosis(reasonForClosureRequest, container);
+
+        allContainers.update(container);
+    }
+
+    private void populateAlternateDiagnosis(UpdateReasonForClosureRequest reasonForClosureRequest, Container container) {
+        AlternateDiagnosis alternateDiagnosis = allAlternateDiagnosis.findByCode(reasonForClosureRequest.getAlternateDiagnosis());
+        container.setAlternateDiagnosis(alternateDiagnosis.getCode());
+        container.setConsultationDate(parseDate(reasonForClosureRequest.getConsultationDate()));
+    }
+
+    private LocalDate parseDate(String date) {
+        List<String> dateFormats = Arrays.asList(new SimpleDateFormat(DATE_FORMAT).toPattern());
+        try {
+            return new LocalDate(DateUtil.parseDate(date, dateFormats));
+        } catch (DateParseException e) {
+            throw new RuntimeException("Date cannot be parsed");
+        }
     }
 }

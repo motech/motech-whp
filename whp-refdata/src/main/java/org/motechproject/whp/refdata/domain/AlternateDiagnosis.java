@@ -5,17 +5,17 @@ import org.ektorp.support.TypeDiscriminator;
 import org.motechproject.model.MotechBaseDataObject;
 
 @Data
-@TypeDiscriminator("doc.type == 'AlternateDiagnosisList'")
-public class AlternateDiagnosisList extends MotechBaseDataObject {
+@TypeDiscriminator("doc.type == 'AlternateDiagnosis'")
+public class AlternateDiagnosis extends MotechBaseDataObject {
 
     private String name;
     private String code;
 
     //Required for Ektorp
-    public AlternateDiagnosisList() {
+    public AlternateDiagnosis() {
     }
 
-    public AlternateDiagnosisList(String name, String code) {
+    public AlternateDiagnosis(String name, String code) {
         this.name = name;
         this.code = code;
     }

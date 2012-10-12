@@ -3,6 +3,7 @@ package org.motechproject.whp.container.domain;
 import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
@@ -40,6 +41,10 @@ public class Container extends MotechBaseDataObject {
 
     private Diagnosis diagnosis;
 
+    private String alternateDiagnosis;
+
+    private LocalDate consultationDate;
+
     // Required for ektorp
     public Container() {
         this.status = ContainerStatus.Open;
@@ -65,7 +70,6 @@ public class Container extends MotechBaseDataObject {
         setDiagnosis(Positive);
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
-        setReasonForClosure(ContainerConstants.REASON_FOR_CLOSURE_AFTER_MAPPED);
         updateCurrentTrackingStatus();
     }
 
@@ -76,7 +80,6 @@ public class Container extends MotechBaseDataObject {
         setMappingInstance(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
-        setReasonForClosure(ContainerConstants.DEFAULT_REASON_FOR_CLOSURE);
     }
 
     private void updateCurrentTrackingStatus() {

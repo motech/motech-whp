@@ -1,11 +1,12 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosisList;
+import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
+import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
 import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.request.UpdateReasonForClosureRequest;
+import org.motechproject.whp.container.contract.UpdateReasonForClosureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,35 +22,38 @@ public class ContainerTrackingController {
 
     private ContainerService containerService;
     private ContainerTrackingService containerTrackingService;
+    private ReasonForClosureValidator reasonForClosureValidator;
 
     public static final String REASONS = "reasons";
     public static final String ALTERNATE_DIAGNOSIS_LIST = "alternateDiagnosisList";
+    public static final String ERRORS = "errors";
 
     @Autowired
-    public ContainerTrackingController(ContainerService containerService, ContainerTrackingService containerTrackingService) {
+    public ContainerTrackingController(ContainerService containerService, ContainerTrackingService containerTrackingService, ReasonForClosureValidator reasonForClosureValidator) {
         this.containerService = containerService;
         this.containerTrackingService = containerTrackingService;
+        this.reasonForClosureValidator = reasonForClosureValidator;
     }
 
-    @RequestMapping(value = "/reasonForClosure",method = RequestMethod.POST)
-    public String updateReasonForClosure(UpdateReasonForClosureRequest updateReasonForClosureRequest){
+    @RequestMapping(value = "/close-container",method = RequestMethod.POST)
+    public String updateReasonForClosure(Model uiModel, UpdateReasonForClosureRequest updateReasonForClosureRequest){
+        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(updateReasonForClosureRequest);
+        if(!errors.isEmpty()) {
+            uiModel.addAttribute(ERRORS, errors);
+            return showContainerTrackingDashBoard(uiModel);
+        }
 
-        String containerId = updateReasonForClosureRequest.getContainerId();
-
-        Container container = containerService.getContainer(containerId);
-        container.setReasonForClosure(updateReasonForClosureRequest.getReason());
-        containerService.update(container);
-
+        containerService.updateReasonForClosure(updateReasonForClosureRequest);
         return "redirect:/sputum-tracking/pre-treatment";
     }
 
     @RequestMapping(value="/pre-treatment", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel){
         List<ReasonForContainerClosure> allClosureReasons = containerTrackingService.getAllClosureReasons();
-        List<AlternateDiagnosisList> allAlternateDiagnosisList = containerTrackingService.getAllAlternateDiagnosisList();
+        List<AlternateDiagnosis> allAlternateDiagnosis = containerTrackingService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);
-        uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosisList);
+        uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosis);
 
         return "sputum-tracking/pre-treatment";
     }
