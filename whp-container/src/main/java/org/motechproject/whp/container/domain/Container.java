@@ -6,7 +6,11 @@ import org.joda.time.DateTime;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.Diagnosis;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+
+import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
+import static org.motechproject.whp.refdata.domain.Diagnosis.Positive;
 
 @Data
 @TypeDiscriminator("doc.type == 'Container'")
@@ -34,6 +38,8 @@ public class Container extends MotechBaseDataObject {
 
     private String reasonForClosure;
 
+    private Diagnosis diagnosis;
+
     // Required for ektorp
     public Container() {
         this.status = ContainerStatus.Open;
@@ -46,6 +52,7 @@ public class Container extends MotechBaseDataObject {
         this.currentTrackingInstance = this.instance;
         this.creationTime = creationTime;
         this.status = ContainerStatus.Open;
+        this.diagnosis = Pending;
     }
 
     public void setCreationTime(DateTime creationTime) {
@@ -55,6 +62,7 @@ public class Container extends MotechBaseDataObject {
     public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance) {
         setPatientId(patientId.toLowerCase());
         setTbId(tbId);
+        setDiagnosis(Positive);
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
         setReasonForClosure(ContainerConstants.REASON_FOR_CLOSURE_AFTER_MAPPED);
@@ -64,6 +72,7 @@ public class Container extends MotechBaseDataObject {
     public void unMap() {
         setPatientId(null);
         setTbId(null);
+        setDiagnosis(Pending);
         setMappingInstance(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);

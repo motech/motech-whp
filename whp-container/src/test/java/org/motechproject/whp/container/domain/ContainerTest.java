@@ -5,97 +5,54 @@ import org.motechproject.whp.refdata.domain.ContainerStatus;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 import static org.joda.time.DateTime.now;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
+import static org.motechproject.whp.refdata.domain.Diagnosis.Positive;
 
 public class ContainerTest {
 
     @Test
-    public void shouldHaveStatusAsOpenUponCreation() {
+    public void shouldSetDefaultsUponCreation() {
         Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
         assertEquals(ContainerStatus.Open, container.getStatus());
+        assertEquals(Pending, container.getDiagnosis());
         assertNull(container.getPatientId());
+        assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
+        assertNull(container.getTbId());
+        assertNull(container.getReasonForClosure());
     }
 
     @Test
-    public void shouldCloseLifecycle_uponMappingWithPatient() {
+    public void shouldUnMapContainer() {
         Container container = new Container();
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         String tbId = "tbId";
+
         container.mapWith(patientId, tbId, instance);
+
         assertEquals(patientId, container.getPatientId());
         assertEquals(ContainerStatus.Closed, container.getStatus());
         assertEquals(instance, container.getMappingInstance());
         assertEquals(tbId, container.getTbId());
+        assertEquals(Positive, container.getDiagnosis());
+        assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
+        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
     }
 
     @Test
-    public void shouldOpenLifecycle_uponUnMappingFromPatient() {
+    public void shouldMapContainerToPatient() {
         Container container = new Container();
         container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP);
         container.unMap();
+
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertNull(container.getPatientId());
         assertNull(container.getMappingInstance());
         assertNull(container.getTbId());
-    }
-
-    @Test
-    public void shouldUpdateCurrentTrackingInstance_uponMappingWithPatient() {
-        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
-        String patientId = "patientid";
-        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        container.mapWith(patientId, "", instance);
-
-        assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
-    }
-
-    @Test
-    public void shouldRestoreRegistrationInstance_uponUnMappingFromPatient() {
-        Container container = new Container("providerId", "12345678921", SputumTrackingInstance.PreTreatment, now());
-        String patientId = "patientid";
-        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        container.mapWith(patientId, "", instance);
-        container.unMap();
+        assertEquals(Pending, container.getDiagnosis());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
-    }
-
-    @Test
-    public void currentTrackingStatusShouldBeInitializedToInstance_uponCreation() {
-        Container container = new Container("providerId", "12345678921", SputumTrackingInstance.PreTreatment, now());
-        assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
-    }
-
-    @Test
-    public void shouldUpdateTbId_uponMapping() {
-
-        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
-        String patientId = "patientid";
-        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        String tbId = "tbId";
-        container.mapWith(patientId, tbId,instance);
-
-        assertEquals(tbId, container.getTbId());
-
-    }
-
-    @Test
-    public void shouldHaveDefaultReasonForClosureForClosedStatus_uponMapping() {
-
-        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
-        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
-
-        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
-    }
-
-
-    @Test
-    public void shouldNotHaveReasonForClosureForOpenStatus_uponUnMapping() {
-
-        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
-        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
-        container.unMap();
-
         assertNull(container.getReasonForClosure());
     }
 }
