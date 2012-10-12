@@ -39,7 +39,6 @@ public class ContainerTest {
         assertEquals(tbId, container.getTbId());
         assertEquals(Positive, container.getDiagnosis());
         assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
-        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
     }
 
     @Test
