@@ -296,7 +296,6 @@ public class PhaseTransitionTest extends TreatmentUpdateTest {
         assertPatientIsOnCP(testPatient);
     }
 
-
     private void transitionPatient(TestPatient testPatient, TestProvider testProvider, Phase phaseName) {
         AdminPage adminPage = getLoginPage(webDriver).loginAsAdmin();
         ListAllPatientsPage listAllPatientsPage = adminPage.navigateToShowAllPatients();

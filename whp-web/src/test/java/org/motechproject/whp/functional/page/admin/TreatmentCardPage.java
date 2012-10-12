@@ -75,6 +75,7 @@ public class TreatmentCardPage extends PatientDashboardPage {
         try {
             WebElement transitionToEIPLink = webDriver.findElement(By.id(phaseName.name()));
             transitionToEIPLink.click();
+            waitForPageToLoad();
         } catch (NoSuchElementException exception) {
             fail();
         }
