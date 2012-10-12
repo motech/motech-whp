@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
+import org.motechproject.casexml.repository.AllCaseLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
@@ -32,6 +33,9 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
     private SputumLabResultsWebService sputumLabResultsWebService;
 
     @Mock
+    private AllCaseLogs caseLogs;
+
+    @Mock
     private ContainerService containerService;
 
     @Mock
@@ -42,6 +46,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
         initMocks(this);
         sputumLabResultsWebService = spy(new SputumLabResultsWebService(containerService, new SputumLabResultsMapper(), validator));
         sputumLabResultsWebService.setResponseMessageBuilder(mock(ResponseMessageBuilder.class));
+        sputumLabResultsWebService.setAllCaseLogs(caseLogs);
     }
 
     @Test

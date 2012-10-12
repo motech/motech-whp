@@ -44,6 +44,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>case-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>case-service</artifactId>
         </dependency>
         <dependency>

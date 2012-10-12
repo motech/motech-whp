@@ -279,6 +279,11 @@
             <!--Contrib and delivery-->
             <dependency>
                 <groupId>org.motechproject.whp-contrib</groupId>
+                <artifactId>case-common</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-http-client</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>

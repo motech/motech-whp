@@ -42,6 +42,8 @@
     <import resource="classpath*:applicationContainerContext.xml"/>
     <import resource="classpath*:applicationContainerTrackingContext.xml"/>
     <import resource="classpath*:applicationContext-Diagnostics.xml"/>
+    <import resource="classpath*:applicationContext-case.xml"/>
+
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <qualifier value="messageBundleSource"/>
