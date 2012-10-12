@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>whp-whp-treatment-card</name>
+    <name>whp-treatment-card</name>
     <artifactId>whp-treatment-card</artifactId>
     <groupId>org.motechproject.whp</groupId>
     <properties>
