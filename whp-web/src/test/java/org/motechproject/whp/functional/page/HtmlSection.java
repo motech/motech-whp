@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 import static org.openqa.selenium.By.id;
 
 public abstract class HtmlSection {
@@ -32,6 +34,15 @@ public abstract class HtmlSection {
     }
 
     public void postInitialize() {
+    }
+
+    protected void waitForElementToBeVisible(final By by) {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(@Nullable WebDriver webDriver) {
+                return webDriver.findElement(by).isDisplayed();
+            }
+        });
     }
 
     protected void waitForElementWithIdToLoad(final String id) {
