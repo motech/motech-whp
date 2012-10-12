@@ -45,7 +45,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         "}";
 
     @Autowired
-    public AllContainerTrackingRecords(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
+    public AllContainerTrackingRecords(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(ContainerTrackingRecord.class, whpLuceneAwareCouchDbConnector);
         IndexUploader uploader = new IndexUploader();
         uploader.updateSearchFunctionIfNecessary(db, VIEW_NAME, SEARCH_FUNCTION, INDEX_FUNCTION);
