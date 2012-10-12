@@ -10,6 +10,7 @@ import org.motechproject.whp.container.tracking.builder.ContainerTrackingRecordB
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.Diagnosis;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
@@ -189,8 +190,7 @@ public class AllContainerTrackingRecordsIT {
         queryParams.put("providerId", providerId);
         queryParams.put("district", districtName);
         queryParams.put("containerInstance", PreTreatment.name());
-        queryParams.put("smearTestResult1", Positive.name());
-        queryParams.put("smearTestResult2", Positive.name());
+        queryParams.put("cumulativeResult", Positive.name());
         queryParams.put("containerStatus", ContainerStatus.Open.name());
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
         queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
@@ -200,32 +200,29 @@ public class AllContainerTrackingRecordsIT {
                 .withProviderId(providerId)
                 .withInstance(PreTreatment)
                 .withProviderDistrict(districtName)
-                .withSmearTestResult1(Positive)
-                .withSmearTestResult2(Positive)
+                .withCumulativeResult(Positive)
                 .withStatus(ContainerStatus.Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2010, 3, 6))
-                .withDiagnosis("Positive")
+                .withDiagnosis(Diagnosis.Positive)
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord1 = new ContainerTrackingRecordBuilder()
                 .withProviderId(providerId)
                 .withInstance(InTreatment)
                 .withProviderDistrict(districtName)
-                .withSmearTestResult1(Positive)
-                .withSmearTestResult2(Positive)
+                .withCumulativeResult(Positive)
                 .withStatus(ContainerStatus.Closed)
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2012, 3, 6))
-                .withDiagnosis("Negative")
+                .withDiagnosis(Diagnosis.Negative)
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecordBuilder()
                 .withProviderId(providerId)
                 .withInstance(PreTreatment)
                 .withProviderDistrict(districtName)
-                .withSmearTestResult1(Positive)
-                .withSmearTestResult2(Positive)
+                .withCumulativeResult(Positive)
                 .withStatus(ContainerStatus.Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2009, 2, 5))
                 .withNoPatientMapping()

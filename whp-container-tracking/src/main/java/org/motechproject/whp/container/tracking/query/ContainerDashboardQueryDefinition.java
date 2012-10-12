@@ -22,8 +22,7 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
            new QueryField("containerStatus", STRING),
            new RangeField("containerIssuedDate", DATE, "containerIssuedDateFrom", "containerIssuedDateTo"),
            new QueryField("containerInstance", STRING),
-           new QueryField("smearTestResult1", STRING),
-           new QueryField("smearTestResult2", STRING),
+           new QueryField("cumulativeResult", STRING),
            new QueryField("diagnosis", STRING),
            new RangeField("consultationDate", DATE, "consultationDateFrom", "consultationDateTo"),
            cumulativeSmearResult

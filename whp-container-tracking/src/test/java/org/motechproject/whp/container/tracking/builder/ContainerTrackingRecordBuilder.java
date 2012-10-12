@@ -6,6 +6,7 @@ import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.Diagnosis;
 import org.motechproject.whp.refdata.domain.SmearTestResult;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -30,13 +31,8 @@ public class ContainerTrackingRecordBuilder {
         return this;
     }
 
-    public  ContainerTrackingRecordBuilder withSmearTestResult1(SmearTestResult smearTestResult){
-        containerBuilder.withSmearTestResult1(smearTestResult);
-        return this;
-    }
-
-    public  ContainerTrackingRecordBuilder withSmearTestResult2(SmearTestResult smearTestResult){
-        containerBuilder.withSmearTestResult2(smearTestResult);
+    public  ContainerTrackingRecordBuilder withCumulativeResult(SmearTestResult smearTestResult){
+        containerBuilder.withCumulativeResult(smearTestResult);
         return this;
     }
 
@@ -71,11 +67,8 @@ public class ContainerTrackingRecordBuilder {
         return containerTrackingRecord;
     }
 
-    public ContainerTrackingRecordBuilder withDiagnosis(String diagnosis) {
-        if("Positive".equals(diagnosis))
-            containerBuilder.withTbId("122001212");
-        else
-            containerBuilder.withTbId(null);
+    public ContainerTrackingRecordBuilder withDiagnosis(Diagnosis diagnosis) {
+        containerBuilder.withDiagnosis(diagnosis);
         return this;
     }
 

@@ -32,15 +32,10 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
             "index.add(doc.container.instance, {field: 'containerInstance'}); " +
 
             "if(doc.container.labResults != undefined) { "+
-                "index.add(doc.container.labResults.smearTestResult1, {field: 'smearTestResult1'}); "+
-                "index.add(doc.container.labResults.smearTestResult2, {field: 'smearTestResult2'}); "+
+                "index.add(doc.container.labResults.cumulativeResult, {field: 'cumulativeResult'}); "+
             "} "+
 
-            "if(doc.container.tbId != undefined && doc.container.tbId != null) { "+
-                "index.add('Positive', {field: 'diagnosis'}); "+
-            "} else {" +
-                "index.add('Negative', {field: 'diagnosis'}); "+
-            "}"+
+            "index.add(doc.container.diagnosis, {field: 'diagnosis'}); "+
 
             "if(doc.patient != undefined && doc.patient.currentTherapy != undefined && doc.patient.currentTherapy.currentTreatment != undefined) { "+
                 "index.add(doc.patient.currentTherapy.currentTreatment.startDate, {field: 'consultationDate', type : 'date'}); " +
