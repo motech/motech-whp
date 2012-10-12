@@ -7,6 +7,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.View;
+import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.query.ContainerDashboardQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,8 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return super.filter(new ContainerDashboardQueryDefinition(), VIEW_NAME, SEARCH_FUNCTION, filterParams, skip, limit);
     }
 
-    protected TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
+    public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
         return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
     }
 }
+

@@ -51,8 +51,8 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.github.ldriscoll</groupId>
-            <artifactId>ektorplucene</artifactId>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-couchdb-lucene</artifactId>
         </dependency>
     </dependencies>
 </project>

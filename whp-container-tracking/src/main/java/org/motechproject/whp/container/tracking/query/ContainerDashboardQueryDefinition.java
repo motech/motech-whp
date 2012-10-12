@@ -1,10 +1,16 @@
 package org.motechproject.whp.container.tracking.query;
 
+import org.motechproject.couchdb.lucene.query.QueryDefinition;
+import org.motechproject.couchdb.lucene.query.field.Field;
+import org.motechproject.couchdb.lucene.query.field.QueryField;
+import org.motechproject.couchdb.lucene.query.field.RangeField;
+
 import java.util.Arrays;
 import java.util.List;
 
-import static org.motechproject.whp.container.tracking.query.FieldType.DATE;
-import static org.motechproject.whp.container.tracking.query.FieldType.STRING;
+import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
+import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
+
 
 public class ContainerDashboardQueryDefinition implements QueryDefinition {
 
