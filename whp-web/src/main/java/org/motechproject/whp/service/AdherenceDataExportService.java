@@ -45,7 +45,8 @@ public class AdherenceDataExportService {
             adherenceLogSummary.setPatientId(adherenceAuditLog.getPatientId());
             adherenceLogSummary.setTbId(adherenceAuditLog.getTbId());
             adherenceLogSummary.setCreationTime(new WHPDate(adherenceAuditLog.getCreationTime().toLocalDate()).value());
-            adherenceLogSummary.setDoseDate(new WHPDate(adherenceAuditLog.getDoseDate().toLocalDate()).value());
+            if(adherenceAuditLog.getDoseDate() != null)
+                adherenceLogSummary.setDoseDate(new WHPDate(adherenceAuditLog.getDoseDate().toLocalDate()).value());
             adherenceLogSummary.setUserId(adherenceAuditLog.getUserId());
             adherenceLogSummary.setNumberOfDosesTaken(adherenceAuditLog.getNumberOfDosesTaken());
             adherenceLogSummary.setPillStatus(adherenceAuditLog.getPillStatus());

@@ -57,6 +57,19 @@ public class AdherenceDataExportServiceTest {
     }
 
     @Test
+    public void shouldMapFromAdherenceAuditLogToAdherenceSummaryForNullDoseDate() {
+        LocalDate now = now();
+        List<AdherenceAuditLog> adherenceAuditLogList = new ArrayList<>();
+        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "tbId", newDateTime(now), null, "cmfAdmin", 1, Taken, "WEB");
+        adherenceAuditLogList.add(adherenceAuditLog);
+
+        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDate(now()).value(), null, "cmfAdmin", 1, Taken, "WEB");
+
+        List<AdherenceLogSummary> adherenceLogSummaryList = adherenceDataExportService.map(adherenceAuditLogList);
+        assertThat(adherenceLogSummaryList.get(0), Is.is(expectedAdherenceLogSummary));
+    }
+
+    @Test
     public void shouldPageAuditLogSummaries(){
         int pageNo = 1;
         List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));

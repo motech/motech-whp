@@ -56,4 +56,5 @@ public class ContainerTrackingDashboardServiceTest {
         assertEquals("containerId1", sputumTrackingDashboardRowPageResults1.getResults().get(0).getContainerId());
         assertEquals("containerId2", sputumTrackingDashboardRowPageResults2.getResults().get(0).getContainerId());
     }
+
 }

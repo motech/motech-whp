@@ -8,8 +8,6 @@
 
     <import resource="classpath*:applicationPatientContext.xml"/>
 
-    <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
-
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.adherence"/>
 
