@@ -17,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
@@ -160,7 +159,7 @@ public class AllContainerTrackingRecordsIT {
 
     @Test
     public void shouldFilterContainerTrackingRecordsByInstanceAndProviderId() {
-        Map<String, String> queryParams = new HashMap<>();
+        Properties queryParams = new Properties();
         String providerId = "providerId";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "PreTreatment");
@@ -184,7 +183,7 @@ public class AllContainerTrackingRecordsIT {
 
     @Test
     public void shouldFilterContainerTrackingRecordsByAllFilterCriteria() {
-        Map<String, String> queryParams = new HashMap<>();
+        Properties queryParams = new Properties();
         String providerId = "providerId";
         String districtName = "East Champaran";
         queryParams.put("providerId", providerId);

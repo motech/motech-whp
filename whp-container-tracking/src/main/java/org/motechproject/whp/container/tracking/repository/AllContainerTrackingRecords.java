@@ -8,12 +8,13 @@ import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.View;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.container.tracking.query.ContainerDashboardQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 
 @Repository
@@ -92,8 +93,8 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return 0;
     }
 
-    public List<ContainerTrackingRecord> filter(Map<String, String> queryParams, int skip, int limit) {
-        return super.filter(queryParams, skip, limit, VIEW_NAME, SEARCH_FUNCTION);
+    public List<ContainerTrackingRecord> filter(Properties filterParams, int skip, int limit) {
+        return super.filter(new ContainerDashboardQueryDefinition(), VIEW_NAME, SEARCH_FUNCTION, filterParams, skip, limit);
     }
 
     protected TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {

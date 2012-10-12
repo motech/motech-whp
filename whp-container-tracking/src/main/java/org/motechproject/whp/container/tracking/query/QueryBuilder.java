@@ -6,6 +6,7 @@ import java.util.Properties;
 
 public class QueryBuilder {
     public static final String AND = " AND ";
+    public static final String EMPTY_STRING = "";
     private final Properties filterParams;
     private final QueryDefinition queryDefinition;
 
@@ -15,46 +16,30 @@ public class QueryBuilder {
     }
 
     public String build() {
-        List<Criteria> criterias = getQueryCriteria();
-        return getQuery(criterias);
+        List<Criteria> criteria = getQueryCriteria();
+        return getQuery(criteria);
     }
 
-    private String getQuery(List<Criteria> criterias) {
+    private String getQuery(List<Criteria> criteria) {
         StringBuilder builder = new StringBuilder();
-        for (Criteria criteria : criterias) {
-            builder.append(criteria.buildCriteriaString());
+        for (Criteria criterion : criteria) {
+            builder.append(criterion.buildCriteriaString());
             builder.append(AND);
         }
 
         if(builder.length() == 0)
-            return "";
+            return EMPTY_STRING;
 
         return builder.substring(0, builder.lastIndexOf(AND));
     }
 
     private List<Criteria> getQueryCriteria() {
-        List<Criteria> criterias = new ArrayList<>();
-        for (Field field : queryDefinition.queryableFields()) {
-            if (filterParams.containsKey(field.getName()))
-                addQueryCriteria(criterias, field);
-            else if (containsRangeField(field)) {
-                addRangeCriteria(criterias, field);
+        List<Criteria> criteria = new ArrayList<>();
+        for (Field field : queryDefinition.getFields()) {
+            if(field.presentIn(filterParams)) {
+                criteria.add(field.createCriteria(filterParams));
             }
         }
-        return criterias;
-    }
-
-    private boolean containsRangeField(Field field) {
-        return field.isAllowsRange() && filterParams.containsKey(field.getFromName()) && filterParams.containsKey(field.getToName());
-    }
-
-    private void addRangeCriteria(List<Criteria> criterias, Field field) {
-        String from = filterParams.get(field.getFromName()).toString();
-        String to = filterParams.get(field.getToName()).toString();
-        criterias.add(new RangeCriteria(field, from, to));
-    }
-
-    private void addQueryCriteria(List<Criteria> criterias, Field field) {
-        criterias.add(new QueryCriteria(field, filterParams.get(field.getName()).toString()));
+        return criteria;
     }
 }

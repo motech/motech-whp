@@ -2,11 +2,10 @@ package org.motechproject.whp.container.tracking.query;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.container.tracking.query.FieldType.STRING;
@@ -21,9 +20,11 @@ public class QueryBuilderTest {
 
         QueryDefinition queryDefinition = new QueryDefinition() {
             @Override
-            public List<Field> queryableFields() {
-                return asList(new Field("field1", STRING),
-                        new Field("field2", STRING));
+            public List<Field> getFields() {
+                List<Field> fields = new ArrayList<>();
+                fields.add(new QueryField("field1", STRING));
+                fields.add(new QueryField("field2", STRING));
+                return fields;
             }
         };
 
@@ -41,9 +42,11 @@ public class QueryBuilderTest {
 
         QueryDefinition queryDefinition = new QueryDefinition() {
             @Override
-            public List<Field> queryableFields() {
-                return Arrays.asList(new Field("field", STRING, "fieldFrom", "fieldTo"),
-                        new Field("anotherField", STRING));
+            public List<Field> getFields() {
+                List<Field> fields = new ArrayList<Field>();
+                fields.add(new RangeField("field", STRING, "fieldFrom", "fieldTo"));
+                fields.add(new QueryField("anotherField", STRING));
+                return fields;
             }
         };
         QueryBuilder queryBuilder = new QueryBuilder(filterParam, queryDefinition);

@@ -1,11 +1,15 @@
 package org.motechproject.whp.container.tracking.query;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class RangeCriteria implements Criteria {
-    private Field field;
+
+    private RangeField field;
     private String from;
     private String to;
 
-    public RangeCriteria(Field field, String from, String to) {
+    public RangeCriteria(RangeField field, String from, String to) {
         this.field = field;
         this.from = from;
         this.to = to;
