@@ -62,11 +62,7 @@ public class SmearTestRecord implements Serializable {
     }
 
     public SmearTestResult cumulativeResult() {
-        if (smear_test_result_1 == SmearTestResult.Positive || smear_test_result_2 == SmearTestResult.Positive)
-            return SmearTestResult.Positive;
-        if (smear_test_result_1 == SmearTestResult.Indeterminate || smear_test_result_2 == SmearTestResult.Indeterminate)
-            return SmearTestResult.Indeterminate;
-        return SmearTestResult.Negative;
+        return smear_test_result_1.cumulativeResult(smear_test_result_2);
     }
 
     @JsonIgnore

@@ -12,6 +12,11 @@ public class LabResults implements Serializable {
     private SmearTestResult smearTestResult1;
     private LocalDate smearTestDate2;
     private SmearTestResult smearTestResult2;
+    private SmearTestResult cumulativeResult;
     private  String labName;
     private String labNumber;
+
+    public void updateCumulativeResult() {
+        cumulativeResult = smearTestResult1.cumulativeResult(smearTestResult2);
+    }
 }

@@ -13,5 +13,13 @@ public enum SmearTestResult {
     public String value() {
         return value;
     }
+
+    public SmearTestResult cumulativeResult(SmearTestResult smear_test_result_2) {
+        if (this == Positive || smear_test_result_2 == Positive)
+            return Positive;
+        if (this == Indeterminate || smear_test_result_2 == Indeterminate)
+            return Indeterminate;
+        return Negative;
+    }
 }
 

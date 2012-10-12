@@ -11,6 +11,7 @@ import static org.hamcrest.core.Is.is;
 import static org.joda.time.LocalDate.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
 
 public class SputumLabResultsMapperTest {
 
@@ -42,5 +43,7 @@ public class SputumLabResultsMapperTest {
         assertThat(labResults.getSmearTestResult2().value(), is(request.getSmear_test_result_2()));
         assertThat(labResults.getLabName(), is(request.getLab_name()));
         assertThat(labResults.getLabNumber(), is(request.getLab_number()));
+        assertThat(labResults.getCumulativeResult(), is(Positive));
+
     }
 }

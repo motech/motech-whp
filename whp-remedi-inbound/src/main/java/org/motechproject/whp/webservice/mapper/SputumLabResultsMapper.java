@@ -31,6 +31,7 @@ public class SputumLabResultsMapper {
         labResults.setLabName(request.getLab_name());
         labResults.setLabNumber(request.getLab_number());
 
+        labResults.updateCumulativeResult();
         container.setLabResults(labResults);
     }
 
