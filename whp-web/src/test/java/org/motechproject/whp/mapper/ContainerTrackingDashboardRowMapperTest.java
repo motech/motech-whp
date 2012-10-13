@@ -25,6 +25,8 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.Diagnosis.Negative;
+import static org.motechproject.whp.common.domain.Diagnosis.Positive;
 import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
 
 public class ContainerTrackingDashboardRowMapperTest {
@@ -63,6 +65,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         container.setLabResults(labResults);
         container.setReasonForClosure(reasonForClosure);
         container.setAlternateDiagnosis(alternateDiagnosis);
+        container.setDiagnosis(Negative);
 
         ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
         containerTrackingRecord.setContainer(container);
@@ -84,6 +87,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         verify(allAlternateDiagnosis).findByCode(alternateDiagnosis);
         assertEquals(containerId, row.getContainerId());
         assertEquals(containerStatus.name(), row.getContainerStatus());
+        assertEquals(Negative.name(), row.getDiagnosis());
         assertEquals("reason text (alternate diagnosis text)", row.getReasonForClosure());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getContainerIssuedOn());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultation());
@@ -95,6 +99,42 @@ public class ContainerTrackingDashboardRowMapperTest {
         assertEquals(now.toLocalDate().plusDays(1).toString(DATE_FORMAT), row.getConsultationTwoDate());
         assertEquals(SmearTestResult.Positive.name(), row.getConsultationOneResult());
         assertEquals(SmearTestResult.Negative.name(), row.getConsultationTwoResult());
+    }
+
+    @Test
+    public void shouldNotChangeDiagnosisWhenReasonForClosureIsNotTbNegative() {
+        when(allReasonForContainerClosures.findByCode("some non tb negative code")).thenReturn(new ReasonForContainerClosure("some reason", "some non tb negative code"));
+        Container containerNotMappedToProvider = new Container();
+        containerNotMappedToProvider.setCreationTime(now);
+        containerNotMappedToProvider.setReasonForClosure("some non tb negative code");
+        containerNotMappedToProvider.setDiagnosis(Positive);
+
+        ContainerTrackingRecord record = new ContainerTrackingRecord();
+        record.setContainer(containerNotMappedToProvider);
+
+        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record);
+
+        assertNull(row.getProviderId());
+        assertEquals(Positive.name(), row.getDiagnosis());
+    }
+
+    @Test
+    public void shouldChangeDiagnosisToNegativeWhenReasonForClosureIsTbNegative() {
+        when(allReasonForContainerClosures.findByCode(TB_NEGATIVE_CODE)).thenReturn(new ReasonForContainerClosure("some reason", TB_NEGATIVE_CODE));
+        when(allAlternateDiagnosis.findByCode("some alternate")).thenReturn(new AlternateDiagnosis("some reason", "123"));
+        Container containerNotMappedToProvider = new Container();
+        containerNotMappedToProvider.setCreationTime(now);
+        containerNotMappedToProvider.setReasonForClosure(TB_NEGATIVE_CODE);
+        containerNotMappedToProvider.setDiagnosis(Positive);
+        containerNotMappedToProvider.setAlternateDiagnosis("some alternate");
+
+        ContainerTrackingRecord record = new ContainerTrackingRecord();
+        record.setContainer(containerNotMappedToProvider);
+
+        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record);
+
+        assertNull(row.getProviderId());
+        assertEquals(Negative.name(), row.getDiagnosis());
     }
 
     @Test

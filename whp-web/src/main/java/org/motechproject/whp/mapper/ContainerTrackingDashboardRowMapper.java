@@ -2,6 +2,7 @@ package org.motechproject.whp.mapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
@@ -59,6 +60,11 @@ public class ContainerTrackingDashboardRowMapper {
         row.setContainerId(container.getContainerId());
         row.setContainerIssuedOn(inDesiredFormat(container.getCreationTime().toLocalDate()));
         row.setContainerStatus(container.getStatus().name());
+
+        if(container.getDiagnosis() != null) {
+            row.setDiagnosis(container.getDiagnosis().name());
+        }
+
         setReasonForClosure(container);
         populateLabResultsData(container.getLabResults());
 
@@ -73,8 +79,10 @@ public class ContainerTrackingDashboardRowMapper {
         if(!StringUtils.isEmpty(container.getReasonForClosure())) {
             ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(container.getReasonForClosure());
             String reason = reasonForContainerClosure.getName();
-            if(reasonForContainerClosure.getCode().equals(TB_NEGATIVE_CODE))
+            if(reasonForContainerClosure.getCode().equals(TB_NEGATIVE_CODE)) {
                 reason = String.format("%s (%s)", reason, allAlternateDiagnosis.findByCode(container.getAlternateDiagnosis()).getName());
+                row.setDiagnosis(Diagnosis.Negative.name());
+            }
             row.setReasonForClosure(reason);
         }
     }
