@@ -27,7 +27,7 @@ public class ContainerTrackingDashboardService implements Paging<ContainerTracki
     @Override
     public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(startIndex, rowsPerPage);
+        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filter(searchCriteria, startIndex, rowsPerPage);
         int totalRows = allContainerTrackingRecords.numberOfPreTreatmentRows();
         PageResults pageResults = new PageResults();
         pageResults.setTotalRows(totalRows);

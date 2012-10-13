@@ -78,5 +78,12 @@ public class ContainerTrackingRecordBuilder {
         containerBuilder.withTbId(null);
         return this;
     }
+
+    public ContainerTrackingRecordBuilder withDefaults() {
+        patientBuilder.withDefaults();
+        containerBuilder.withDefaults();
+        providerBuilder.withDefaults();
+        return this;
+    }
 }
 

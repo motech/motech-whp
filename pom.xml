@@ -186,6 +186,14 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-container-tracking</artifactId>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+                <type>jar</type>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-container-mapping</artifactId>
                 <version>${project.version}</version>
             </dependency>

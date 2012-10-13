@@ -80,6 +80,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-container-tracking</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
         </dependency>
