@@ -6,8 +6,6 @@ import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
@@ -77,14 +75,6 @@ public class ContainerTrackingService {
             }
             allContainerTrackingRecords.updateAll(allRowsBelongingToPatient);
         }
-    }
-
-    public List<ReasonForContainerClosure> getAllClosureReasons() {
-        return allReasonForContainerClosures.getAll();
-    }
-
-    public List<AlternateDiagnosis> getAllAlternateDiagnosis() {
-        return allAlternateDiagnosis.getAll();
     }
 
     private Provider provider(Container container) {

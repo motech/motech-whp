@@ -1,13 +1,14 @@
 package org.motechproject.whp.container.domain;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
 import static org.motechproject.whp.refdata.domain.Diagnosis.Positive;
 
@@ -25,13 +26,13 @@ public class ContainerTest {
     }
 
     @Test
-    public void shouldUnMapContainer() {
+    public void shouldMapContainerToPatient() {
         Container container = new Container();
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         String tbId = "tbId";
 
-        container.mapWith(patientId, tbId, instance);
+        container.mapWith(patientId, tbId, instance, new ReasonForContainerClosure("some reason", "0"));
 
         assertEquals(patientId, container.getPatientId());
         assertEquals(ContainerStatus.Closed, container.getStatus());
@@ -39,12 +40,14 @@ public class ContainerTest {
         assertEquals(tbId, container.getTbId());
         assertEquals(Positive, container.getDiagnosis());
         assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
+        assertEquals("0", container.getReasonForClosure());
     }
 
     @Test
-    public void shouldMapContainerToPatient() {
+    public void shouldUnMapContainer() {
         Container container = new Container();
-        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP);
+        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP, mock(ReasonForContainerClosure.class));
+
         container.unMap();
 
         assertEquals(ContainerStatus.Open, container.getStatus());
@@ -53,6 +56,7 @@ public class ContainerTest {
         assertNull(container.getTbId());
         assertEquals(Pending, container.getDiagnosis());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
+        assertNull(container.getReasonForClosure());
     }
 
     @Test
@@ -62,31 +66,9 @@ public class ContainerTest {
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         String tbId = "tbId";
-        container.mapWith(patientId, tbId,instance);
+        container.mapWith(patientId, tbId,instance, mock(ReasonForContainerClosure.class));
 
         assertEquals(tbId, container.getTbId());
 
-    }
-
-    @Test
-    @Ignore
-    public void shouldHaveDefaultReasonForClosureForClosedStatus_uponMapping() {
-
-        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
-        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
-
-        assertEquals("Sputum mapped to patient",container.getReasonForClosure());
-    }
-
-
-    @Test
-    @Ignore
-    public void shouldNotHaveReasonForClosureForOpenStatus_uponUnMapping() {
-
-        Container container = new Container("providerId", "12345678900", SputumTrackingInstance.PreTreatment, now());
-        container.mapWith("patientId","tbId",SputumTrackingInstance.PreTreatment);
-        container.unMap();
-
-        assertNull(container.getReasonForClosure());
     }
 }

@@ -5,11 +5,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.motechproject.model.MotechBaseDataObject;
 
+import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
+
 @Data
 @TypeDiscriminator("doc.type == 'ReasonForContainerClosure'")
 public class ReasonForContainerClosure extends MotechBaseDataObject {
 
-    public static final String TB_NEGATIVE_CODE = "1";
     private String name;
     private String code;
 

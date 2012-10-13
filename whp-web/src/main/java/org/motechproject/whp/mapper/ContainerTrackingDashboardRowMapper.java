@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
 
 @Component
 public class ContainerTrackingDashboardRowMapper {
@@ -24,7 +25,6 @@ public class ContainerTrackingDashboardRowMapper {
     private ContainerTrackingDashboardRow row;
     private AllReasonForContainerClosures allReasonForContainerClosures;
     private AllAlternateDiagnosis allAlternateDiagnosis;
-    private static final String TB_NEGATIVE_CODE = "1";
 
     @Autowired
     public ContainerTrackingDashboardRowMapper(AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {

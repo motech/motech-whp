@@ -6,6 +6,9 @@ import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
+import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
+
 @Service
 public class ReasonForContainerClosureSeed {
 
@@ -14,7 +17,8 @@ public class ReasonForContainerClosureSeed {
 
     @Seed(priority = 0, version = "4.0")
     public void load() {
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Diagnosis TB Negative", "1"));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Sputum mapped to patient", CLOSURE_DUE_TO_MAPPING));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Diagnosis TB Negative", TB_NEGATIVE_CODE));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Container lost", "2"));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Invalid Container", "3"));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient lost to follow-up", "4"));

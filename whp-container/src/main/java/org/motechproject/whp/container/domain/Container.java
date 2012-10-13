@@ -8,6 +8,7 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
 import org.motechproject.whp.refdata.domain.Diagnosis;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
@@ -64,13 +65,14 @@ public class Container extends MotechBaseDataObject {
         this.creationTime = DateUtil.setTimeZone(creationTime);
     }
 
-    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance) {
+    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping) {
         setPatientId(patientId.toLowerCase());
         setTbId(tbId);
         setDiagnosis(Positive);
         setMappingInstance(mappingInstance);
         setStatus(ContainerStatus.Closed);
         updateCurrentTrackingStatus();
+        setReasonForClosure(closureReasonForMapping.getCode());
     }
 
     public void unMap() {

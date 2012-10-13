@@ -6,6 +6,6 @@ public class WHPContainerConstants {
     public static final String CONTAINER_ADDED_SUBJECT = "org.motechproject.whp.container.added";
     public static final String CONTAINER_UPDATED_SUBJECT = "org.motechproject.whp.container.updated";
 
-    // Params
-    public static final String CONTAINER_KEY = "org.motechproject.whp.container.container";
+    public static final String TB_NEGATIVE_CODE = "1";
+    public static final String CLOSURE_DUE_TO_MAPPING = "0";
 }

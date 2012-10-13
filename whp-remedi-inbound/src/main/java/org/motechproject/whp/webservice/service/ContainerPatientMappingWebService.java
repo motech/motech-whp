@@ -7,6 +7,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -43,7 +44,8 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if (!request.isMappingRequest()) {
             container.unMap();
         } else {
-            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()));
+            ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
+            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping);
         }
         containerService.update(container);
     }

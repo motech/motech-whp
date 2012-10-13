@@ -1,15 +1,17 @@
 package org.motechproject.whp.container.service;
 
 import freemarker.template.TemplateException;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.contract.UpdateReasonForClosureRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
+import org.motechproject.whp.refdata.domain.Diagnosis;
 import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
@@ -24,7 +26,11 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.*;
+import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
+import static org.motechproject.whp.refdata.domain.ContainerStatus.Closed;
 
 @Service
 public class ContainerService {
@@ -34,6 +40,7 @@ public class ContainerService {
     private RemediService remediService;
     private final AllReasonForContainerClosures allReasonForContainerClosures;
     private final AllAlternateDiagnosis allAlternateDiagnosis;
+
 
     @Autowired
     public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
@@ -66,22 +73,44 @@ public class ContainerService {
         allContainers.update(container);
     }
 
-    public void updateReasonForClosure(UpdateReasonForClosureRequest reasonForClosureRequest) {
+    public void closeContainer(ContainerClosureRequest reasonForClosureRequest) {
         Container container = allContainers.findByContainerId(reasonForClosureRequest.getContainerId());
+
+        if(container == null)
+            return;
 
         ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(reasonForClosureRequest.getReason());
         container.setReasonForClosure(reasonForContainerClosure.getCode());
+        container.setStatus(Closed);
 
         if(reasonForContainerClosure.isTbNegative())
-            populateAlternateDiagnosis(reasonForClosureRequest, container);
+            populateTbNegativeDetails(reasonForClosureRequest, container);
 
         allContainers.update(container);
     }
 
-    private void populateAlternateDiagnosis(UpdateReasonForClosureRequest reasonForClosureRequest, Container container) {
+    public List<ReasonForContainerClosure> getAllClosureReasonsForAdmin() {
+        List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
+        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
+        List reasonsForAdmin = ListUtils.removeAll(allReasons, reasonForMapping);
+        return reasonsForAdmin;
+    }
+
+    public ReasonForContainerClosure getClosureReasonForMapping() {
+        List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
+        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
+        return reasonForMapping.get(0);
+    }
+
+    public List<AlternateDiagnosis> getAllAlternateDiagnosis() {
+        return allAlternateDiagnosis.getAll();
+    }
+
+    private void populateTbNegativeDetails(ContainerClosureRequest reasonForClosureRequest, Container container) {
         AlternateDiagnosis alternateDiagnosis = allAlternateDiagnosis.findByCode(reasonForClosureRequest.getAlternateDiagnosis());
         container.setAlternateDiagnosis(alternateDiagnosis.getCode());
         container.setConsultationDate(parseDate(reasonForClosureRequest.getConsultationDate()));
+        container.setDiagnosis(Diagnosis.Negative);
     }
 
     private LocalDate parseDate(String date) {

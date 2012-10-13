@@ -12,7 +12,9 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.webservice.service.ContainerPatientMappingWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import static junit.framework.Assert.assertNull;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.motechproject.whp.common.exception.WHPErrorCode.NO_LAB_RESULTS_IN_CONTAINER;
+import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -44,6 +47,9 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     AllContainers allContainers;
+
+    @Autowired
+    AllReasonForContainerClosures allReasonForContainerClosures;
     private Patient patient1;
     private Patient patient2;
     private Container container1;
@@ -70,6 +76,10 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         container2.setLabResults(labResults);
         allContainers.add(container2);
 
+        ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("some reason", CLOSURE_DUE_TO_MAPPING);
+        allReasonForContainerClosures.add(reasonForContainerClosure);
+
+        markForDeletion(reasonForContainerClosure);
         markForDeletion(container1, container2);
         markForDeletion(patient1, patient2);
     }
@@ -102,7 +112,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldNotUnMapContainerFromPreviousPatient_uponMappingValidationFailure() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP);
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure());
         container2.setLabResults(null);
         allContainers.update(container1);
         allContainers.update(container2);
@@ -173,7 +183,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldUnMapPatientFromContainer_forUnMappingRequest() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP);
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure());
         allContainers.update(container1);
 
         String unMapContainer1 = buildUnMappingRequestFor(CONTAINER_ID_1);

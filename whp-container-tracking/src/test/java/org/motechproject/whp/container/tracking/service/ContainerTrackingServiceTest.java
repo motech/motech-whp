@@ -140,13 +140,6 @@ public class ContainerTrackingServiceTest {
         isContainerRefreshed(container);
     }
 
-    private void isContainerRefreshed(Container container) {
-        ArgumentCaptor<ContainerTrackingRecord> captor = ArgumentCaptor.forClass(ContainerTrackingRecord.class);
-        verify(allContainerTrackingRecords).update(captor.capture());
-        ContainerTrackingRecord trackingRecord = captor.getValue();
-        assertEquals(container.getLabResults().getLabName(), trackingRecord.getContainer().getLabResults().getLabName());
-    }
-
     @Test
     public void shouldUpdateProviderInformationForAllRowsMappedToTheProvider() {
         ContainerTrackingRecord rowToBeUpdated1 = new ContainerTrackingRecord();
@@ -174,26 +167,11 @@ public class ContainerTrackingServiceTest {
         verify(allContainerTrackingRecords).updateAll(asList(rowToBeUpdated1, rowToBeUpdated2));
     }
 
-    @Test
-    public void shouldGetAllTheReasonsForContainerClosure() {
-        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
-
-        List<ReasonForContainerClosure> actualReasons = containerTrackingService.getAllClosureReasons();
-
-        assertEquals(reasonForContainerClosures, actualReasons);
-        verify(allReasonForContainerClosures).getAll();
-    }
-
-    @Test
-    public void shouldGetAllTheAlternateDiagnosisListsForContainerClosure() {
-        ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
-        when(allAlternateDiagnosis.getAll()).thenReturn(alternateDiagnosises);
-
-        List<AlternateDiagnosis> actualDiagnosises = containerTrackingService.getAllAlternateDiagnosis();
-
-        assertEquals(alternateDiagnosises, actualDiagnosises);
-        verify(allAlternateDiagnosis).getAll();
+    private void isContainerRefreshed(Container container) {
+        ArgumentCaptor<ContainerTrackingRecord> captor = ArgumentCaptor.forClass(ContainerTrackingRecord.class);
+        verify(allContainerTrackingRecords).update(captor.capture());
+        ContainerTrackingRecord trackingRecord = captor.getValue();
+        assertEquals(container.getLabResults().getLabName(), trackingRecord.getContainer().getLabResults().getLabName());
     }
 
     private Container existingContainer(String patientId, String providerId) {

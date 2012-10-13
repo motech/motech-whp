@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.refdata.domain.SampleInstance;
 import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
@@ -38,7 +39,6 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     @Mock
     private RequestValidator requestValidator;
 
-
     @Before
     public void setup() {
         initMocks(this);
@@ -58,7 +58,6 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         verify(containerService, times(1)).exists(anyString());
     }
 
-
     @Test
     public void shouldUnMapContainerForUnMappingRequest() {
         ContainerPatientMappingWebRequest request = buildUnMappingRequest();
@@ -67,7 +66,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
         container.setLabResults(labResults);
-        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP);
+        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP, mock(ReasonForContainerClosure.class));
 
         Patient patient = new PatientBuilder().withDefaults().build();
         String tbId = request.getTb_id();
@@ -85,11 +84,12 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         assertEquals(ContainerStatus.Open, fetchedContainer.getStatus());
         assertNull(fetchedContainer.getMappingInstance());
         assertNull(fetchedContainer.getTbId());
-
     }
 
     @Test
     public void shouldMapContainerWithPatientInstance_forMappingRequest() {
+        ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("some reason", "0");
+
         ContainerPatientMappingWebRequest request = buildMappingRequest();
 
         Container container = new Container();
@@ -103,17 +103,20 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
 
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(container.getContainerId())).thenReturn(container);
+        when(containerService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
         when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
 
         webService.updateCase(request);
 
         verify(containerService, times(2)).getContainer(request.getCase_id());
+        verify(containerService).getClosureReasonForMapping();
 
         Container fetchedContainer = containerService.getContainer(request.getCase_id());
         assertEquals(request.getPatient_id(),fetchedContainer.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer.getStatus());
         assertEquals(request.getSmear_sample_instance(), fetchedContainer.getMappingInstance().name());
         assertEquals(request.getTb_id(),fetchedContainer.getTbId());
+        assertEquals(reasonForContainerClosure.getCode(),fetchedContainer.getReasonForClosure());
     }
 
     private ContainerPatientMappingWebRequest buildMappingRequest() {

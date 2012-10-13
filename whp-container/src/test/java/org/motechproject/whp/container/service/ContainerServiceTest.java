@@ -5,6 +5,7 @@ import org.apache.commons.httpclient.util.DateParseException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,23 +13,24 @@ import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.contract.UpdateReasonForClosureRequest;
+import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -109,7 +111,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     public void shouldUpdateOnlyReasonForClosure() throws DateParseException {
         String reasonCode = "2";
         String containerId = "12345";
-        UpdateReasonForClosureRequest closureRequest = new UpdateReasonForClosureRequest();
+        ContainerClosureRequest closureRequest = new ContainerClosureRequest();
         closureRequest.setReason(reasonCode);
         closureRequest.setContainerId(containerId);
 
@@ -118,7 +120,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container container = new Container();
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
-        containerService.updateReasonForClosure(closureRequest);
+        containerService.closeContainer(closureRequest);
 
         verify(allContainers).findByContainerId(containerId);
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -126,6 +128,24 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container actualContainer = captor.getValue();
 
         assertEquals(reasonForContainerClosure.getCode(), actualContainer.getReasonForClosure());
+        assertEquals(ContainerStatus.Closed, actualContainer.getStatus());
+        assertNull(actualContainer.getAlternateDiagnosis());
+        assertNull(actualContainer.getConsultationDate());
+        assertNull(actualContainer.getDiagnosis());
+    }
+
+    @Test
+    public void shouldNotUpdateReasonForClosureIfContainerIdIsInvalid() throws DateParseException {
+        String containerId = "12345";
+        ContainerClosureRequest closureRequest = new ContainerClosureRequest();
+        closureRequest.setContainerId(containerId);
+
+        when(allContainers.findByContainerId(containerId)).thenReturn(null);
+
+        containerService.closeContainer(closureRequest);
+
+        verify(allContainers).findByContainerId(containerId);
+        verify(allContainers, never()).update(any(Container.class));
     }
 
     @Test
@@ -133,7 +153,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         String reasonCode = "1";
         String alternateDiagnosisCode = "2";
         String containerId = "12345";
-        UpdateReasonForClosureRequest closureRequest = new UpdateReasonForClosureRequest();
+        ContainerClosureRequest closureRequest = new ContainerClosureRequest();
         closureRequest.setReason(reasonCode);
         closureRequest.setAlternateDiagnosis(alternateDiagnosisCode);
         closureRequest.setConsultationDate("25/11/2012");
@@ -147,7 +167,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container container = new Container();
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
-        containerService.updateReasonForClosure(closureRequest);
+        containerService.closeContainer(closureRequest);
 
         verify(allContainers).findByContainerId(containerId);
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -157,6 +177,50 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(reasonForContainerClosure.getCode(), actualContainer.getReasonForClosure());
         assertEquals(alternateDiagnosis.getCode(), actualContainer.getAlternateDiagnosis());
         assertEquals(new LocalDate(2012, 11, 25), actualContainer.getConsultationDate());
+        assertEquals(Diagnosis.Negative, actualContainer.getDiagnosis());
+        assertEquals(ContainerStatus.Closed, actualContainer.getStatus());
+    }
+
+    @Test
+    public void shouldGetAllTheAlternateDiagnosisListsForContainerClosure() {
+        ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
+        when(allAlternateDiagnosis.getAll()).thenReturn(alternateDiagnosises);
+
+        List<AlternateDiagnosis> actualDiagnosises = containerService.getAllAlternateDiagnosis();
+
+        Assert.assertEquals(alternateDiagnosises, actualDiagnosises);
+        verify(allAlternateDiagnosis).getAll();
+    }
+
+    @Test
+    public void shouldGetAllContainerClosureReasonsForAdmin() {
+        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
+        reasonForContainerClosures.add(new ReasonForContainerClosure("not for admin", "0"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
+        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllClosureReasonsForAdmin();
+
+        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
+        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(0).getName());
+        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
+        Assert.assertEquals("2", allClosureReasonsForAdmin.get(0).getCode());
+        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
+    }
+
+    @Test
+    public void shouldGetContainerClosureReasonForMapping() {
+        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
+        reasonForContainerClosures.add(new ReasonForContainerClosure("not for admin", "0"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
+        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+
+        ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
+
+        Assert.assertEquals("not for admin", closureReasonForMapping.getName());
+        Assert.assertEquals("0", closureReasonForMapping.getCode());
     }
 
     @After

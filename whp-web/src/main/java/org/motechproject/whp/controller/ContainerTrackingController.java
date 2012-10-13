@@ -6,7 +6,7 @@ import org.motechproject.whp.container.tracking.service.ContainerTrackingService
 import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
 import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
 import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.container.contract.UpdateReasonForClosureRequest;
+import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,20 +36,20 @@ public class ContainerTrackingController {
     }
 
     @RequestMapping(value = "/close-container",method = RequestMethod.POST)
-    public String updateReasonForClosure(Model uiModel, UpdateReasonForClosureRequest updateReasonForClosureRequest){
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(updateReasonForClosureRequest);
+    public String updateReasonForClosure(Model uiModel, ContainerClosureRequest containerClosureRequest){
+        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
         if(!errors.isEmpty()) {
             uiModel.addAttribute(ERRORS, errors);
             return showContainerTrackingDashBoard(uiModel);
         }
 
-        containerService.updateReasonForClosure(updateReasonForClosureRequest);
+        containerService.closeContainer(containerClosureRequest);
         return "redirect:/sputum-tracking/pre-treatment";
     }
 
     @RequestMapping(value="/pre-treatment", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel){
-        List<ReasonForContainerClosure> allClosureReasons = containerTrackingService.getAllClosureReasons();
+        List<ReasonForContainerClosure> allClosureReasons = containerTrackingService.getAllClosureReasonsForAdmin();
         List<AlternateDiagnosis> allAlternateDiagnosis = containerTrackingService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);

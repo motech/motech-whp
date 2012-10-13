@@ -25,11 +25,11 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
 
 public class ContainerTrackingDashboardRowMapperTest {
 
     public static final String DATE_FORMAT = "dd/MM/yyyy";
-    public static final String TB_NEGATIVE_CODE = "1";
     private DateTime now = DateUtil.now();
     @Mock
     private AllReasonForContainerClosures allReasonForContainerClosures;
