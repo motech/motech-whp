@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class ContainerTrackingDashboardService implements Paging<ContainerTrackingDashboardRow> {
+public class PreTreatmentContainerDashboardService implements Paging<ContainerTrackingDashboardRow> {
     private AllContainerTrackingRecords allContainerTrackingRecords;
     private ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
     @Autowired
-    public ContainerTrackingDashboardService(AllContainerTrackingRecords allContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
+    public PreTreatmentContainerDashboardService(AllContainerTrackingRecords allContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
         this.allContainerTrackingRecords = allContainerTrackingRecords;
         this.containerTrackingDashboardRowMapper = containerTrackingDashboardRowMapper;
     }
@@ -27,11 +27,11 @@ public class ContainerTrackingDashboardService implements Paging<ContainerTracki
     @Override
     public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filter(searchCriteria, startIndex, rowsPerPage);
+        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filterPreTreatmentRecords(searchCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(allContainerTrackingRecords.count(searchCriteria));
+        pageResults.setTotalRows(allContainerTrackingRecords.countPreTreatmentRecords(searchCriteria));
         return pageResults;
     }
 

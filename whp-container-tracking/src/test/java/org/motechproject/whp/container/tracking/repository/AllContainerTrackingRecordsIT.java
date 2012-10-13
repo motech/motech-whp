@@ -26,7 +26,6 @@ import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
-import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.EndTreatment;
 import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.InTreatment;
 import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.PreTreatment;
 
@@ -160,7 +159,7 @@ public class AllContainerTrackingRecordsIT {
     }
 
     @Test
-    public void shouldFilterContainerTrackingRecordsByInstanceAndProviderId() {
+    public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
         Properties queryParams = new Properties();
         String providerId = "providerId";
         queryParams.put("providerId", providerId);
@@ -177,20 +176,19 @@ public class AllContainerTrackingRecordsIT {
         int skip = 0;
         int limit = 10;
 
-        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(queryParams, skip, limit);
+        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filterPreTreatmentRecords(queryParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertEquals(results.get(0).getId(), expectedContainerTrackingRecord.getId());
     }
 
     @Test
-    public void shouldFilterContainerTrackingRecordsByAllFilterCriteria() {
+    public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
         Properties queryParams = new Properties();
         String providerId = "providerId";
         String districtName = "East Champaran";
         queryParams.put("providerId", providerId);
         queryParams.put("district", districtName);
-        queryParams.put("containerInstance", PreTreatment.name());
         queryParams.put("cumulativeResult", Positive.name());
         queryParams.put("containerStatus", ContainerStatus.Open.name());
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
@@ -236,14 +234,14 @@ public class AllContainerTrackingRecordsIT {
         int skip = 0;
         int limit = 10;
 
-        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(queryParams, skip, limit);
+        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filterPreTreatmentRecords(queryParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertThat(results.get(0).getId(), is(expectedContainerTrackingRecord.getId()));
     }
     
     @Test
-    public void shouldCountContainerTrackingRecordRows_forGivenFilter(){
+    public void shouldCountPreTreatmentContainerTrackingRecordRows(){
         String providerId1 = "providerId";
         String providerId2 = "anotherProvider";
         String districtName1 = "East Champaran";
@@ -256,22 +254,14 @@ public class AllContainerTrackingRecordsIT {
         // Assertion 1 for provider1-Instance1
         Properties queryParams = new Properties();
         queryParams.put("providerId", providerId1);
-        queryParams.put("containerInstance", PreTreatment);
-        int recordCount = allContainerTrackingRecords.count(queryParams);
+        int recordCount = allContainerTrackingRecords.countPreTreatmentRecords(queryParams);
         assertEquals(2, recordCount);
 
-        // Assertion 2 for provider1-Instance2
-        queryParams = new Properties();
-        queryParams.put("providerId", providerId1);
-        queryParams.put("containerInstance", EndTreatment);
-        recordCount = allContainerTrackingRecords.count(queryParams);
-        assertEquals(1, recordCount);
 
         // Assertion 3 for provider2-Instance1
         queryParams = new Properties();
         queryParams.put("providerId", providerId2);
-        queryParams.put("containerInstance", PreTreatment);
-        recordCount = allContainerTrackingRecords.count(queryParams);
+        recordCount = allContainerTrackingRecords.countPreTreatmentRecords(queryParams);
         assertEquals(1, recordCount);
     }
 

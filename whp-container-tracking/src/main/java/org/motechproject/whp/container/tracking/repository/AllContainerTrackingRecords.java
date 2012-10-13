@@ -10,6 +10,7 @@ import org.ektorp.support.View;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.query.ContainerDashboardQueryDefinition;
+import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -67,16 +68,20 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return 0;
     }
 
-    public List<ContainerTrackingRecord> filter(Properties filterParams, int skip, int limit) {
-        return super.filter(new ContainerDashboardQueryDefinition(), filterParams, skip, limit);
+    public List<ContainerTrackingRecord> filterPreTreatmentRecords(Properties filterParams, int skip, int limit) {
+        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
+        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
+        return super.filter(queryDefinition, filterParams, skip, limit);
+    }
+
+    public int countPreTreatmentRecords(Properties filterParams) {
+        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
+        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
+        return super.count(queryDefinition, filterParams);
     }
 
     public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
         return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
-    }
-
-    public int count(Properties filterParams) {
-        return super.count(new ContainerDashboardQueryDefinition(), filterParams);
     }
 }
 

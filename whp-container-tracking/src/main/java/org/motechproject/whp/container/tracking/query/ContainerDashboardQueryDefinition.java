@@ -14,13 +14,14 @@ import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 public class ContainerDashboardQueryDefinition implements QueryDefinition {
 
     private final QueryField cumulativeSmearResult = new QueryField("cumulativeSmearResult", STRING);
+    private final QueryField containerInstance = new QueryField("containerInstance", STRING);
 
     List<Field> queryFields = Arrays.asList(
            new QueryField("providerId", STRING),
            new QueryField("providerDistrict", STRING),
            new QueryField("containerStatus", STRING),
            new RangeField("containerIssuedDate", DATE, "containerIssuedDateFrom", "containerIssuedDateTo"),
-           new QueryField("containerInstance", STRING),
+            containerInstance,
            new QueryField("cumulativeResult", STRING),
            new QueryField("diagnosis", STRING),
            new RangeField("consultationDate", DATE, "consultationDateFrom", "consultationDateTo"),
@@ -63,5 +64,9 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
                     "}"+
                     "return index;" +
                 "}";
+    }
+
+    public String getContainerInstanceFieldName(){
+        return containerInstance.getName();
     }
 }

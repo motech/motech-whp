@@ -19,9 +19,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ContainerTrackingDashboardServiceTest {
+public class PreTreatmentContainerDashboardServiceTest {
 
-    ContainerTrackingDashboardService containerTrackingDashboardService;
+    PreTreatmentContainerDashboardService preTreatmentContainerDashboardService;
     @Mock
     private AllContainerTrackingRecords allContainerTrackingRecords;
     @Mock
@@ -30,12 +30,12 @@ public class ContainerTrackingDashboardServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        containerTrackingDashboardService = new ContainerTrackingDashboardService(allContainerTrackingRecords, containerTrackingDashboardRowMapper);
+        preTreatmentContainerDashboardService = new PreTreatmentContainerDashboardService(allContainerTrackingRecords, containerTrackingDashboardRowMapper);
     }
 
     @Test
     public void shouldReturnEntityNameToBePaginatedAsSputumTrackingDashboardRow() {
-        assertEquals("container_tracking_dashboard_row", containerTrackingDashboardService.entityName());
+        assertEquals("container_tracking_dashboard_row", preTreatmentContainerDashboardService.entityName());
     }
 
     @Test
@@ -55,13 +55,13 @@ public class ContainerTrackingDashboardServiceTest {
         int skip = 0;
         int limit = 10;
 
-        when(allContainerTrackingRecords.count(filterParams)).thenReturn(2);
-        when(allContainerTrackingRecords.filter(filterParams, skip, limit)).thenReturn(results);
+        when(allContainerTrackingRecords.countPreTreatmentRecords(filterParams)).thenReturn(2);
+        when(allContainerTrackingRecords.filterPreTreatmentRecords(filterParams, skip, limit)).thenReturn(results);
 
-        PageResults<ContainerTrackingDashboardRow> pageResults = containerTrackingDashboardService.page(1, limit, filterParams);
+        PageResults<ContainerTrackingDashboardRow> pageResults = preTreatmentContainerDashboardService.page(1, limit, filterParams);
 
-        verify(allContainerTrackingRecords).filter(filterParams, skip, limit);
-        verify(allContainerTrackingRecords).count(filterParams);
+        verify(allContainerTrackingRecords).filterPreTreatmentRecords(filterParams, skip, limit);
+        verify(allContainerTrackingRecords).countPreTreatmentRecords(filterParams);
 
         assertEquals(new Integer(2), pageResults.getTotalRows());
         assertEquals(2, pageResults.getResults().size());
