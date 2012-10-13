@@ -28,13 +28,11 @@ public class ContainerTrackingDashboardService implements Paging<ContainerTracki
     public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
         List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filter(searchCriteria, startIndex, rowsPerPage);
-        int totalRows = allContainerTrackingRecords.numberOfPreTreatmentRows();
         PageResults pageResults = new PageResults();
-        pageResults.setTotalRows(totalRows);
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
+        pageResults.setTotalRows(allContainerTrackingRecords.count(searchCriteria));
         return pageResults;
-
     }
 
     private List prepareResultsModel(List<ContainerTrackingRecord> rows) {

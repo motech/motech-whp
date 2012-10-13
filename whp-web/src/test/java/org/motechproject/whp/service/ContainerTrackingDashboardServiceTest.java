@@ -55,13 +55,13 @@ public class ContainerTrackingDashboardServiceTest {
         int skip = 0;
         int limit = 10;
 
-        when(allContainerTrackingRecords.numberOfPreTreatmentRows()).thenReturn(2);
+        when(allContainerTrackingRecords.count(filterParams)).thenReturn(2);
         when(allContainerTrackingRecords.filter(filterParams, skip, limit)).thenReturn(results);
 
         PageResults<ContainerTrackingDashboardRow> pageResults = containerTrackingDashboardService.page(1, limit, filterParams);
 
         verify(allContainerTrackingRecords).filter(filterParams, skip, limit);
-        verify(allContainerTrackingRecords).numberOfPreTreatmentRows();
+        verify(allContainerTrackingRecords).count(filterParams);
 
         assertEquals(new Integer(2), pageResults.getTotalRows());
         assertEquals(2, pageResults.getResults().size());
