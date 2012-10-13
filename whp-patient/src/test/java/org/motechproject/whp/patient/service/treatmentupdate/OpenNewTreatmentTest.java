@@ -10,7 +10,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;

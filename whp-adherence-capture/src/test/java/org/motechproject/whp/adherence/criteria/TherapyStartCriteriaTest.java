@@ -7,7 +7,7 @@ import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.PatientType;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

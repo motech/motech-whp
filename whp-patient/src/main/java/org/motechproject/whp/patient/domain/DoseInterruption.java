@@ -4,7 +4,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import java.io.Serializable;
 

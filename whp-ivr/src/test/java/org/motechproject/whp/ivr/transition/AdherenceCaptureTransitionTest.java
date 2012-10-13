@@ -29,9 +29,9 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.List;

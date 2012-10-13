@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 import static org.joda.time.LocalDate.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class SputumLabResultsMapperTest {
 

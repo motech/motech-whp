@@ -12,7 +12,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import java.util.ArrayList;
 import java.util.List;

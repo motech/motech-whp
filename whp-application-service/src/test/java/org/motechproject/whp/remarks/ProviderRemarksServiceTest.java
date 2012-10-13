@@ -12,8 +12,8 @@ import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditL
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 
 import java.util.List;
 

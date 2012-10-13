@@ -8,7 +8,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.ivr.IvrAudioFiles;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.List;
 import java.util.Properties;

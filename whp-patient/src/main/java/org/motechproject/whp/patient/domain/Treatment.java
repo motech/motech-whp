@@ -4,12 +4,10 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateUtil;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;

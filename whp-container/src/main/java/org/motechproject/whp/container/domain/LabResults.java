@@ -2,7 +2,7 @@ package org.motechproject.whp.container.domain;
 
 import lombok.Data;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import java.io.Serializable;
 

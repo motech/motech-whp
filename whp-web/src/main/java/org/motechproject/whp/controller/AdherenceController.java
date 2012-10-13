@@ -1,23 +1,20 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.export.annotation.DataProvider;
-import org.motechproject.export.annotation.ExcelDataSource;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.domain.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.canUpdate;
 

@@ -16,7 +16,7 @@ import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;

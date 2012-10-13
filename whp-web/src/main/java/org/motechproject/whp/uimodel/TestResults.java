@@ -2,7 +2,7 @@ package org.motechproject.whp.uimodel;
 
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 
 import java.util.ArrayList;
 

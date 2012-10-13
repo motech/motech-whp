@@ -1,8 +1,8 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;

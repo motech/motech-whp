@@ -9,7 +9,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.common.domain.WHPConstants;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.List;
 

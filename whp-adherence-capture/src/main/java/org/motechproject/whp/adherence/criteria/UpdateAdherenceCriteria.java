@@ -4,7 +4,7 @@ package org.motechproject.whp.adherence.criteria;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PatientStatus;
+import org.motechproject.whp.patient.domain.PatientStatus;
 
 public class UpdateAdherenceCriteria {
 

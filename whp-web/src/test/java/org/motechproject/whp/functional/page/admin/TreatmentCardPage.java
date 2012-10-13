@@ -3,7 +3,7 @@ package org.motechproject.whp.functional.page.admin;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;

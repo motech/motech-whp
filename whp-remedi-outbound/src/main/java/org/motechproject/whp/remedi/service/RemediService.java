@@ -25,6 +25,5 @@ public class RemediService {
 
     public void sendContainerRegistrationResponse(ContainerRegistrationModel containerRegistrationModel) throws IOException, TemplateException {
         httpClientService.post(remediUrl, remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel));
-
     }
 }

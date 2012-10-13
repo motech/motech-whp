@@ -2,7 +2,7 @@ package org.motechproject.whp.mapper;
 
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 

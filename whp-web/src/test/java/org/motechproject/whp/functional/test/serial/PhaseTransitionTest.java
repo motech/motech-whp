@@ -9,7 +9,7 @@ import org.motechproject.whp.functional.page.admin.ListAllPatientsPage;
 import org.motechproject.whp.functional.page.admin.TreatmentCardPage;
 import org.motechproject.whp.functional.steps.provideradherence.SubmitAdherenceStep;
 import org.motechproject.whp.functional.test.treatmentupdate.TreatmentUpdateTest;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

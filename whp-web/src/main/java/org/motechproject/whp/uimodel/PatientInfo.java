@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.jca.cci.core.support.CommAreaRecord;
 

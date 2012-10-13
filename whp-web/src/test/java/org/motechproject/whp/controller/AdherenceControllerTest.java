@@ -17,9 +17,9 @@ import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.PatientStatus;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.repository.AllTreatmentCategories;
+import org.motechproject.whp.patient.domain.PatientStatus;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.WeeklyAdherenceForm;
 import org.springframework.ui.Model;
 

@@ -1,12 +1,12 @@
 package org.motechproject.whp.container.builder;
 
 import org.joda.time.DateTime;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
-import org.motechproject.whp.refdata.domain.Diagnosis;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 
 public class ContainerBuilder {
 

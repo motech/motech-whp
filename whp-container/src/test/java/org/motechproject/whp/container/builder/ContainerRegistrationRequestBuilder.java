@@ -1,7 +1,7 @@
 package org.motechproject.whp.container.builder;
 
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 public class ContainerRegistrationRequestBuilder {
 

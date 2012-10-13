@@ -4,7 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.migration.v0.exception.WHPErrorCodeV0;
 import org.springframework.util.CollectionUtils;
 

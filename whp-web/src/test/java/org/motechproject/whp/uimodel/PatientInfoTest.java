@@ -4,14 +4,14 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.*;
 import org.motechproject.whp.user.domain.Provider;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;

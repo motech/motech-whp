@@ -5,7 +5,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import java.util.ArrayList;
 import java.util.HashSet;

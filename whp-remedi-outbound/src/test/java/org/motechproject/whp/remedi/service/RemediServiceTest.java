@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.service.RemediProperties;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.util.RemediXmlRequestBuilder;
 

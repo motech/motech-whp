@@ -6,10 +6,10 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.user.validation.ProviderIdValidator;
 
 import javax.validation.Valid;

@@ -6,16 +6,17 @@ import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.Diagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
-import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
-import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
+import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ import java.util.List;
 import static ch.lambdaj.Lambda.*;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
-import static org.motechproject.whp.refdata.domain.ContainerStatus.Closed;
 
 @Service
 public class ContainerService {

@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.PhaseRecord;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;

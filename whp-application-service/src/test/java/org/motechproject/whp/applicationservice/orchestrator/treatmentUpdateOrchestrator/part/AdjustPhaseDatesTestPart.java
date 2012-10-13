@@ -3,15 +3,12 @@ package org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrc
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.motechproject.whp.refdata.domain.Phase.*;
+import static org.motechproject.whp.common.domain.Phase.*;
 
 public class AdjustPhaseDatesTestPart extends TreatmentUpdateOrchestratorTestPart {
 

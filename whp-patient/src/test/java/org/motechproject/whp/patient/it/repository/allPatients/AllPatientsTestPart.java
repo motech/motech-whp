@@ -2,12 +2,13 @@ package org.motechproject.whp.patient.it.repository.allPatients;
 
 import org.joda.time.DateTime;
 import org.junit.After;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

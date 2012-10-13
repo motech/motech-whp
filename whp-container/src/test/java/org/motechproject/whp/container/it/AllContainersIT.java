@@ -2,25 +2,20 @@ package org.motechproject.whp.container.it;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.List;
-
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;

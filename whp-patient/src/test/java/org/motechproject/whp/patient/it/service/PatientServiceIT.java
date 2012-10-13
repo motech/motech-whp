@@ -18,10 +18,10 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
@@ -42,7 +42,7 @@ import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceIT extends SpringIntegrationTest {

@@ -1,7 +1,11 @@
 package org.motechproject.whp.webservice.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.refdata.domain.*;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 

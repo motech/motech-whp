@@ -7,7 +7,7 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.PatientStatus;
+import org.motechproject.whp.patient.domain.PatientStatus;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertFalse;

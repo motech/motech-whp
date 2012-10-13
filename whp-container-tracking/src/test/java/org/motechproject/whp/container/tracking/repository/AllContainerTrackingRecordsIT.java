@@ -4,14 +4,14 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.tracking.builder.ContainerTrackingRecordBuilder;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
-import org.motechproject.whp.refdata.domain.Diagnosis;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
-import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.InTreatment;
-import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerTrackingContext.xml")

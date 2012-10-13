@@ -1,8 +1,8 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.refdata.domain.District;
-import org.motechproject.whp.refdata.repository.AllDistricts;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.user.uimodel.ProviderRow;

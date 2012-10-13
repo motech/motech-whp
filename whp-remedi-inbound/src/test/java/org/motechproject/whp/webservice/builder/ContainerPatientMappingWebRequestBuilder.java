@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice.builder;
 
 
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
 import static org.motechproject.util.DateUtil.now;

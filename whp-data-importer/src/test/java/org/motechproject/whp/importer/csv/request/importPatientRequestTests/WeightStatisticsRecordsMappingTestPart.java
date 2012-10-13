@@ -3,7 +3,7 @@ package org.motechproject.whp.importer.csv.request.importPatientRequestTests;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

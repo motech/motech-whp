@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;

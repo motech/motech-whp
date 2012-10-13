@@ -2,8 +2,8 @@ package org.motechproject.whp.refdata.seed;
 
 
 import org.motechproject.deliverytools.seed.Seed;
-import org.motechproject.whp.refdata.domain.CmfLocation;
-import org.motechproject.whp.refdata.repository.AllCmfLocations;
+import org.motechproject.whp.common.domain.CmfLocation;
+import org.motechproject.whp.common.repository.AllCmfLocations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

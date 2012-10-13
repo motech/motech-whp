@@ -7,18 +7,19 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateUtil;
-import org.motechproject.whp.refdata.domain.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.common.domain.SampleInstance.PreTreatment;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
-import static org.motechproject.whp.refdata.domain.SampleInstance.PreTreatment;
 
 @Data
 public class Therapy implements Serializable {

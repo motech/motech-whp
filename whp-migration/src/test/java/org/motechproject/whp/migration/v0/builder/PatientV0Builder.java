@@ -3,7 +3,7 @@ package org.motechproject.whp.migration.v0.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.migration.v0.domain.*;
 
 import java.util.Arrays;

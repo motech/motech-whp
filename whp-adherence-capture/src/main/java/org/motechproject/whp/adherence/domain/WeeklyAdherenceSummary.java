@@ -4,7 +4,7 @@ import lombok.Data;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.LinkedList;
 import java.util.List;

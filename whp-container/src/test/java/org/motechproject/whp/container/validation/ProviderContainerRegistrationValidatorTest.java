@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.Provider;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.refdata.domain.SputumTrackingInstance.InTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
 
 public class ProviderContainerRegistrationValidatorTest {
 

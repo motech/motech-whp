@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.today;

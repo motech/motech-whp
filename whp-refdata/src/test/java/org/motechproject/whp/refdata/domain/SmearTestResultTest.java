@@ -1,11 +1,12 @@
 package org.motechproject.whp.refdata.domain;
 
 import org.junit.Test;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.*;
+import static org.motechproject.whp.common.domain.SmearTestResult.*;
 
 public class SmearTestResultTest {
 

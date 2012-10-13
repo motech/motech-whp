@@ -3,6 +3,7 @@ package org.motechproject.whp.webservice.it.request.patient;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.command.UpdateScope;
+import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
@@ -20,21 +21,21 @@ public class GenderIT extends BasePatientIT {
     @Test
     public void shouldNotThrowExceptionWhenGenderIsMale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.M.name()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.M.name()).build();
         validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenGenderIsFemale() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.F.name()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.F.name()).build();
         validator.validate(webRequest, UpdateScope.createScope);
     }
 
     @Test
     public void shouldNotThrowExceptionWhenGenderIsOther() {
         allProviders.add(new Provider("12345", "1234567890", "chambal", DateUtil.now()));
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(org.motechproject.whp.refdata.domain.Gender.O.name()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withDefaults().withProviderId("12345").withGender(Gender.O.name()).build();
         validator.validate(webRequest, UpdateScope.createScope);
     }
 

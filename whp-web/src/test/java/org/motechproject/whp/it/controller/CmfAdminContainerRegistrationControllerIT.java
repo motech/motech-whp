@@ -20,7 +20,7 @@ import org.motechproject.whp.container.mapping.repository.AllAdminContainerMappi
 import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.CmfAdminContainerRegistrationController;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.CmfAdminService;

@@ -3,7 +3,7 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.ContainerStatus;
 
 import static org.junit.Assert.assertEquals;
 

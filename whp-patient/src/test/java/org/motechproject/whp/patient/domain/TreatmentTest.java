@@ -4,10 +4,10 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;

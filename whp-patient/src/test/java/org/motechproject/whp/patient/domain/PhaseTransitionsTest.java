@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static junit.framework.Assert.*;
 

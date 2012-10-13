@@ -5,13 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.error.ErrorWithParameters;
-import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
-import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
+import org.motechproject.whp.container.domain.AlternateDiagnosis;
+import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +28,6 @@ public class ContainerTrackingControllerTest {
 
     @Mock
     ContainerService containerService;
-    @Mock
-    ContainerTrackingService containerTrackingService;
-
-    @Mock
-    ContainerClosureRequest containerClosureRequest;
-
-    @Mock
-    Container container;
 
     @Mock
     private ReasonForClosureValidator reasonForClosureValidator;
@@ -45,7 +35,7 @@ public class ContainerTrackingControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingController = new ContainerTrackingController(containerService, containerTrackingService, reasonForClosureValidator);
+        containerTrackingController = new ContainerTrackingController(containerService, reasonForClosureValidator);
     }
 
     @Test
@@ -53,8 +43,8 @@ public class ContainerTrackingControllerTest {
         ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
         ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
 
-        when(containerTrackingService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
-        when(containerTrackingService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
+        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/pre-treatment"))
@@ -63,8 +53,8 @@ public class ContainerTrackingControllerTest {
                 .andExpect(model().attribute(REASONS, reasons))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
 
-        verify(containerTrackingService).getAllClosureReasonsForAdmin();
-        verify(containerTrackingService).getAllAlternateDiagnosis();
+        verify(containerService).getAllClosureReasonsForAdmin();
+        verify(containerService).getAllAlternateDiagnosis();
     }
 
     @Test
@@ -75,8 +65,8 @@ public class ContainerTrackingControllerTest {
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
         List<AlternateDiagnosis> alternateDiagnosis = new ArrayList<>();
-        when(containerTrackingService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
-        when(containerTrackingService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosis);
+        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosis);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/close-container"))
@@ -87,8 +77,8 @@ public class ContainerTrackingControllerTest {
                 .andExpect(forwardedUrl("sputum-tracking/pre-treatment"));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
-        verify(containerTrackingService).getAllClosureReasonsForAdmin();
-        verify(containerTrackingService).getAllAlternateDiagnosis();
+        verify(containerService).getAllClosureReasonsForAdmin();
+        verify(containerService).getAllAlternateDiagnosis();
     }
 
     @Test

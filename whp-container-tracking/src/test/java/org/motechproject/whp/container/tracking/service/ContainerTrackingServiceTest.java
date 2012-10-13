@@ -6,19 +6,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
+import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
+import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.repository.AllAlternateDiagnosis;
-import org.motechproject.whp.refdata.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

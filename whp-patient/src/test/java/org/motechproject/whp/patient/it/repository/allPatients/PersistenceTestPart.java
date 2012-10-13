@@ -2,11 +2,11 @@ package org.motechproject.whp.patient.it.repository.allPatients;
 
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;

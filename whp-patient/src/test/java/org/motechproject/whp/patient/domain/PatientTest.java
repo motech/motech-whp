@@ -5,10 +5,12 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.refdata.domain.*;
 
 import java.util.List;
 
@@ -23,9 +25,9 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentA
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
-import static org.motechproject.whp.refdata.domain.Phase.EIP;
-import static org.motechproject.whp.refdata.domain.Phase.IP;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.Phase.EIP;
+import static org.motechproject.whp.common.domain.Phase.IP;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class PatientTest {
 

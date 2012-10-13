@@ -4,9 +4,10 @@ import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.validation.constraints.Scope;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.*;
 
 @Data
 public class PatientRequest {

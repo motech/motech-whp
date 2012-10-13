@@ -2,7 +2,7 @@ package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;

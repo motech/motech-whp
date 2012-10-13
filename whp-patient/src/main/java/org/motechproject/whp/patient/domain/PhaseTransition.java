@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;

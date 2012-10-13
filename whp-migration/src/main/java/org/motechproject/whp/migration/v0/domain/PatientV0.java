@@ -8,7 +8,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.migration.v0.exception.WHPErrorCodeV0;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 
 import java.util.ArrayList;
 import java.util.List;

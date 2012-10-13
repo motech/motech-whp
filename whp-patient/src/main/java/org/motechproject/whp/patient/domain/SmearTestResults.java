@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import java.io.Serializable;
 import java.util.ArrayList;

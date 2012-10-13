@@ -3,7 +3,7 @@ package org.motechproject.whp.importer.csv.mapper;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Double.parseDouble;

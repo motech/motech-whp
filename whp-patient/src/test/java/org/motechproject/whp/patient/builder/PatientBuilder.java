@@ -3,8 +3,10 @@ package org.motechproject.whp.patient.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.*;
 
 import java.util.Arrays;
 import java.util.List;

@@ -2,10 +2,10 @@ package org.motechproject.whp.importer.csv.builder;
 
 import org.joda.time.DateTime;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 

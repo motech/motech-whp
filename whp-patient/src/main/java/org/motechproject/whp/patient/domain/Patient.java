@@ -9,10 +9,11 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
-import org.motechproject.whp.refdata.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

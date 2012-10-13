@@ -3,7 +3,7 @@ package org.motechproject.whp.webservice.mapper;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
 import org.springframework.stereotype.Component;
 

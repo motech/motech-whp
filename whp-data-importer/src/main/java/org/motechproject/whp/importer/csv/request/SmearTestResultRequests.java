@@ -5,8 +5,8 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;

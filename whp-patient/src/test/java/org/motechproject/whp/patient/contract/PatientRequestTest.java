@@ -3,13 +3,10 @@ package org.motechproject.whp.patient.contract;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.PatientType;
 
 import static org.junit.Assert.assertEquals;
-import static org.motechproject.whp.patient.contract.TreatmentUpdateScenario.Close;
-import static org.motechproject.whp.patient.contract.TreatmentUpdateScenario.New;
-import static org.motechproject.whp.patient.contract.TreatmentUpdateScenario.Pause;
-import static org.motechproject.whp.refdata.domain.PatientType.*;
+import static org.motechproject.whp.patient.contract.TreatmentUpdateScenario.*;
 
 public class PatientRequestTest {
 

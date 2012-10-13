@@ -11,8 +11,8 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 

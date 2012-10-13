@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.Arrays;
 import java.util.List;

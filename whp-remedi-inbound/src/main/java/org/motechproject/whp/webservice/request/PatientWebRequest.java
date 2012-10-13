@@ -2,12 +2,17 @@ package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.*;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.refdata.domain.*;
-import org.motechproject.whp.webservice.validation.APIKeyValidator;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.PatientType;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.validation.ProviderIdValidator;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
+import org.motechproject.whp.webservice.validation.APIKeyValidator;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;

@@ -2,6 +2,7 @@ package org.motechproject.whp.webservice.it.request.patient;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.command.UpdateScope;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
@@ -29,7 +30,7 @@ public class TreatmentOutcomeIT extends BasePatientIT {
 
     @Test
     public void shouldNotThrowExceptionIfTreatmentOutcomeIsValid() {
-        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome(org.motechproject.whp.refdata.domain.TreatmentOutcome.Cured.name()).build();
+        PatientWebRequest webRequest = new PatientWebRequestBuilder().withOnlyRequiredTreatmentUpdateFields().withTreatmentOutcome(TreatmentOutcome.Cured.name()).build();
         validator.validate(webRequest, UpdateScope.closeTreatmentScope);
     }
 }

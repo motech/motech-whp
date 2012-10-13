@@ -1,12 +1,11 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.whp.common.error.ErrorWithParameters;
-import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
-import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
-import org.motechproject.whp.refdata.domain.AlternateDiagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.domain.AlternateDiagnosis;
+import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,6 @@ public class ContainerTrackingController {
 
 
     private ContainerService containerService;
-    private ContainerTrackingService containerTrackingService;
     private ReasonForClosureValidator reasonForClosureValidator;
 
     public static final String REASONS = "reasons";
@@ -29,9 +27,8 @@ public class ContainerTrackingController {
     public static final String ERRORS = "errors";
 
     @Autowired
-    public ContainerTrackingController(ContainerService containerService, ContainerTrackingService containerTrackingService, ReasonForClosureValidator reasonForClosureValidator) {
+    public ContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator) {
         this.containerService = containerService;
-        this.containerTrackingService = containerTrackingService;
         this.reasonForClosureValidator = reasonForClosureValidator;
     }
 
@@ -49,8 +46,8 @@ public class ContainerTrackingController {
 
     @RequestMapping(value="/pre-treatment", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel){
-        List<ReasonForContainerClosure> allClosureReasons = containerTrackingService.getAllClosureReasonsForAdmin();
-        List<AlternateDiagnosis> allAlternateDiagnosis = containerTrackingService.getAllAlternateDiagnosis();
+        List<ReasonForContainerClosure> allClosureReasons = containerService.getAllClosureReasonsForAdmin();
+        List<AlternateDiagnosis> allAlternateDiagnosis = containerService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosis);

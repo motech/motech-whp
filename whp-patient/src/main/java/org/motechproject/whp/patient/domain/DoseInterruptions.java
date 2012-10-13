@@ -2,7 +2,6 @@ package org.motechproject.whp.patient.domain;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.motechproject.whp.common.exception.WHPDomainException;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;

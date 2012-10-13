@@ -9,10 +9,10 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.TreatmentOutcome;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 

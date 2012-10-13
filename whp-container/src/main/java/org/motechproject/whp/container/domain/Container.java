@@ -6,13 +6,13 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
-import org.motechproject.whp.refdata.domain.Diagnosis;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
-import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
-import static org.motechproject.whp.refdata.domain.Diagnosis.Positive;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
+import static org.motechproject.whp.common.domain.Diagnosis.Positive;
+
 
 @Data
 @TypeDiscriminator("doc.type == 'Container'")

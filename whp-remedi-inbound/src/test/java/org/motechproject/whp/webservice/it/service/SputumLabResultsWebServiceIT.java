@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.service.SputumLabResultsWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

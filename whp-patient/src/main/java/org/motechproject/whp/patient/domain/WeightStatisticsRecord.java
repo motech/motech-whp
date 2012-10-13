@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.refdata.domain.SampleInstance;
 
 import java.io.Serializable;
 import java.util.List;

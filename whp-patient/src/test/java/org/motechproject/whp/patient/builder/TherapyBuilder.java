@@ -5,9 +5,9 @@ import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.DiseaseClass;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import static java.util.Arrays.asList;
 import static org.motechproject.model.DayOfWeek.*;

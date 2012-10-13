@@ -1,16 +1,15 @@
 package org.motechproject.whp.container.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
-import org.motechproject.whp.refdata.domain.ReasonForContainerClosure;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
-import static org.motechproject.whp.refdata.domain.Diagnosis.Pending;
-import static org.motechproject.whp.refdata.domain.Diagnosis.Positive;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
+import static org.motechproject.whp.common.domain.Diagnosis.Positive;
 
 public class ContainerTest {
 

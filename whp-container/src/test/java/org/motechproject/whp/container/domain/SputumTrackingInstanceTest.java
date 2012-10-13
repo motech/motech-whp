@@ -1,7 +1,7 @@
 package org.motechproject.whp.container.domain;
 
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

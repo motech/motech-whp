@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SampleInstance;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;

@@ -7,14 +7,14 @@ import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.motechproject.whp.refdata.domain.SampleInstance.EndIP;
-import static org.motechproject.whp.refdata.domain.SampleInstance.EndTreatment;
-import static org.motechproject.whp.refdata.domain.SampleInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SampleInstance.EndIP;
+import static org.motechproject.whp.common.domain.SampleInstance.EndTreatment;
+import static org.motechproject.whp.common.domain.SampleInstance.PreTreatment;
 
 public class TestResultsTest {
 

@@ -7,7 +7,7 @@ import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.whp.webservice.validation.APIKeyValidator;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import javax.validation.constraints.Pattern;
 

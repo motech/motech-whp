@@ -13,8 +13,8 @@ import org.motechproject.whp.migration.v0.builder.TherapyV0Builder;
 import org.motechproject.whp.migration.v0.builder.TreatmentV0Builder;
 import org.motechproject.whp.migration.v0.domain.*;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.Arrays;
 

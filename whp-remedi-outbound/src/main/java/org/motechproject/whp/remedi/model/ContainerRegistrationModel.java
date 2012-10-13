@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
 import org.motechproject.whp.common.util.WHPDate;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 @Data
 @EqualsAndHashCode

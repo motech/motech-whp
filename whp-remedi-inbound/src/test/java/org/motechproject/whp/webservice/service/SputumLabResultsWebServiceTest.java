@@ -11,7 +11,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;

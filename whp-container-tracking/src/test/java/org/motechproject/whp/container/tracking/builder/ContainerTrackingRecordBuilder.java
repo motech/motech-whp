@@ -5,10 +5,10 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.refdata.domain.ContainerStatus;
-import org.motechproject.whp.refdata.domain.Diagnosis;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
-import org.motechproject.whp.refdata.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 
 public class ContainerTrackingRecordBuilder {

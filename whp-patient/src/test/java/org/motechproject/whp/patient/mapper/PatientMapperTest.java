@@ -8,7 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 

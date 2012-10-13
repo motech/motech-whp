@@ -4,12 +4,10 @@ import org.hamcrest.core.Is;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.refdata.domain.Phase;
-import org.motechproject.whp.refdata.domain.TherapyStatus;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
 
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,10 +15,10 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.*;
-import static org.motechproject.whp.refdata.domain.Phase.*;
-import static org.motechproject.whp.refdata.domain.SampleInstance.*;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Negative;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.Phase.*;
+import static org.motechproject.whp.common.domain.SampleInstance.*;
+import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class TherapyTest {
 

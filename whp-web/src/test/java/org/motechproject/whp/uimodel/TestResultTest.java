@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

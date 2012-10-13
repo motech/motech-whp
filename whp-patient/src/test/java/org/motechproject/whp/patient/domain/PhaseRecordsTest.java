@@ -2,7 +2,7 @@ package org.motechproject.whp.patient.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

@@ -7,12 +7,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.refdata.domain.TreatmentCategory;
-import org.motechproject.whp.refdata.domain.DiseaseClass;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

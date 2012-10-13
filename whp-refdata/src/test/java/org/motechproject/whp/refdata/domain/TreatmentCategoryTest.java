@@ -2,6 +2,8 @@ package org.motechproject.whp.refdata.domain;
 
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.Arrays;
 import java.util.List;

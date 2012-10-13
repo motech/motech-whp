@@ -2,8 +2,8 @@ package org.motechproject.whp.uimodel;
 
 import lombok.Setter;
 import org.motechproject.export.annotation.ExportValue;
-import org.motechproject.whp.refdata.domain.Gender;
-import org.motechproject.whp.refdata.domain.PatientType;
+import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.patient.domain.PatientType;
 
 
 @Setter

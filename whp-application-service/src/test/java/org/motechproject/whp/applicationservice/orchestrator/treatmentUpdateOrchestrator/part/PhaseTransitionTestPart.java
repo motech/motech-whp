@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.patient.domain.PhaseRecord;
-import org.motechproject.whp.refdata.domain.Phase;
+import org.motechproject.whp.common.domain.Phase;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;

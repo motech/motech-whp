@@ -4,8 +4,8 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Negative;
-import static org.motechproject.whp.refdata.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class LabResultsTest {
 

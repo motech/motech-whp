@@ -5,8 +5,8 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.refdata.domain.SampleInstance;
-import org.motechproject.whp.refdata.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.springframework.stereotype.Component;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
