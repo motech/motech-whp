@@ -4,16 +4,24 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
+import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
 import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.ContainerTrackingController.*;
@@ -28,6 +36,17 @@ public class ContainerTrackingControllerTest {
 
     @Mock
     ContainerService containerService;
+    @Mock
+    ContainerTrackingService containerTrackingService;
+
+    @Mock
+    AllDistricts allDistricts;
+
+    @Mock
+    ContainerClosureRequest containerClosureRequest;
+
+    @Mock
+    Container container;
 
     @Mock
     private ReasonForClosureValidator reasonForClosureValidator;
@@ -35,22 +54,28 @@ public class ContainerTrackingControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingController = new ContainerTrackingController(containerService, reasonForClosureValidator);
+        containerTrackingController = new ContainerTrackingController(containerService, reasonForClosureValidator, allDistricts);
     }
 
     @Test
-    public void shouldPopulateReasonsForClosure() throws Exception {
+    public void shouldPopulateUIModelForPreTreatmentDashboard() throws Exception {
         ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
         ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
+        List<District> districts = asList(new District("D1"), new District("D2"));
 
         when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
+        when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/pre-treatment"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(6))
+                .andExpect(model().attribute("diagnosisList", Diagnosis.allNames()))
+                .andExpect(model().attribute("containerStatusList", ContainerStatus.allNames()))
+                .andExpect(model().attribute("labResults", SmearTestResult.allNames()))
                 .andExpect(model().attribute(REASONS, reasons))
+                .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
 
         verify(containerService).getAllClosureReasonsForAdmin();

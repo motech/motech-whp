@@ -1,6 +1,10 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
@@ -19,17 +23,23 @@ import java.util.List;
 public class ContainerTrackingController {
 
 
+    public static final String CONTAINER_STATUS_LIST = "containerStatusList";
+    public static final String DIAGNOSIS_LIST = "diagnosisList";
     private ContainerService containerService;
     private ReasonForClosureValidator reasonForClosureValidator;
+    private AllDistricts allDistricts;
 
     public static final String REASONS = "reasons";
     public static final String ALTERNATE_DIAGNOSIS_LIST = "alternateDiagnosisList";
     public static final String ERRORS = "errors";
+    public String LAB_RESULTS = "labResults";
+    public static final String DISTRICTS = "districts";
 
     @Autowired
-    public ContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator) {
+    public ContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
         this.containerService = containerService;
         this.reasonForClosureValidator = reasonForClosureValidator;
+        this.allDistricts = allDistricts;
     }
 
     @RequestMapping(value = "/close-container",method = RequestMethod.POST)
@@ -51,6 +61,10 @@ public class ContainerTrackingController {
 
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosis);
+        uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
+        uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());
+        uiModel.addAttribute(DIAGNOSIS_LIST, Diagnosis.allNames());
+        uiModel.addAttribute(DISTRICTS, allDistricts.getAll());
 
         return "sputum-tracking/pre-treatment";
     }

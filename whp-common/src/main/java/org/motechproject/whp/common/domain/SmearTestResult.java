@@ -1,5 +1,8 @@
 package org.motechproject.whp.common.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum SmearTestResult {
 
     Positive("Positive"), Negative("Negative"), Indeterminate("Indeterminate / Spoiled / Poor");
@@ -20,6 +23,14 @@ public enum SmearTestResult {
         if (this == Indeterminate || smear_test_result_2 == Indeterminate)
             return Indeterminate;
         return Negative;
+    }
+
+    public static List<String> allNames() {
+        List<String> names = new ArrayList<>();
+        for(SmearTestResult result : SmearTestResult.values()){
+            names.add(result.name());
+        }
+        return names;
     }
 }
 
