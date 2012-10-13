@@ -99,7 +99,7 @@ public class ContainerTrackingControllerTest {
                 .andExpect(model().attribute(ERRORS, errors))
                 .andExpect(model().attribute(REASONS, reasons))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosis))
-                .andExpect(forwardedUrl("sputum-tracking/pre-treatment"));
+                .andExpect(forwardedUrl("sputumTracking/preTreatment"));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
         verify(containerService).getAllClosureReasonsForAdmin();

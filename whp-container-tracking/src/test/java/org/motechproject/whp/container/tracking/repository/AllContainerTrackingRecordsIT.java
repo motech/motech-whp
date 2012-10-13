@@ -194,6 +194,7 @@ public class AllContainerTrackingRecordsIT {
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
         queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
         queryParams.put("diagnosis", Positive.name());
+        queryParams.put("reasonForClosure", "reasonForClosure");
 
         ContainerTrackingRecord expectedContainerTrackingRecord = new ContainerTrackingRecordBuilder()
                 .withProviderId(providerId)
@@ -204,6 +205,7 @@ public class AllContainerTrackingRecordsIT {
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2010, 3, 6))
                 .withDiagnosis(Diagnosis.Positive)
+                .withReasonForClosure("reasonForClosure")
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord1 = new ContainerTrackingRecordBuilder()

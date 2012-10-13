@@ -88,4 +88,9 @@ public class ContainerBuilder {
         container.getLabResults().setCumulativeResult(smearTestResult);
         return this;
     }
+
+    public ContainerBuilder withReasonForClosure(String reasonForClosure) {
+        container.setReasonForClosure(reasonForClosure);
+        return this;
+    }
 }

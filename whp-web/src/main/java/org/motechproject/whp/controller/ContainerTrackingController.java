@@ -66,6 +66,6 @@ public class ContainerTrackingController {
         uiModel.addAttribute(DIAGNOSIS_LIST, Diagnosis.allNames());
         uiModel.addAttribute(DISTRICTS, allDistricts.getAll());
 
-        return "sputum-tracking/pre-treatment";
+        return "sputumTracking/preTreatment";
     }
 }

@@ -85,5 +85,10 @@ public class ContainerTrackingRecordBuilder {
         providerBuilder.withDefaults();
         return this;
     }
+
+    public ContainerTrackingRecordBuilder withReasonForClosure(String reasonForClosure) {
+        containerBuilder.withReasonForClosure(reasonForClosure);
+        return this;
+    }
 }
 
