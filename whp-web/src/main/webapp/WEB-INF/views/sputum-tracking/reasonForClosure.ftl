@@ -17,14 +17,14 @@
                             <label class="control-label">Reason*</label>
 
                             <div class="controls">
-                                <select id="reason" name="reason">
+                                <select id="reason" name="reason" validate="required:true">
                                     <option value=""></option>
                                 <#list reasons as reason>
                                     <option value="${reason.code}">${reason.name}</option>
                                 </#list>
                                 </select>
                                 <div id="tbNegativeControls">
-                                    <select id="alternateDiagnosis" name="alternateDiagnosis">
+                                    <select id="alternateDiagnosis" name="alternateDiagnosis" validate="required:true">
                                         <option value=""></option>
                                     <#list alternateDiagnosisList as diagnosis>
                                         <option value="${diagnosis.code}">${diagnosis.name}</option>

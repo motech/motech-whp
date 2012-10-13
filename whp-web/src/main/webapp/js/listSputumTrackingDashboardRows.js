@@ -59,5 +59,26 @@ $(function () {
     };
 
     createAutoClosingAlert(".container-tracking-message-alert", 5000);
+
+    $.metadata.setType("attr", "validate");
+
+    $("#setReason").validate({
+        rules: {
+            consultationDate: {
+                required: true
+            }
+        },
+        messages: {
+            consultationDate: {
+                required: "Please enter the consultation date"
+            },
+            reason: {
+                required: "Please select the reason"
+            },
+            alternateDiagnosis: {
+                required: "Please select alternate diagnosis"
+            }
+        }
+    });
 });
 

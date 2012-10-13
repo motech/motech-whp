@@ -12,8 +12,8 @@ $().ready(function() {
                          	digits: true
                          },
             providerId: {
-                    required: true,
-            },
+                    required: true
+            }
 		},
 		messages: {
 			containerId: {
@@ -26,7 +26,7 @@ $().ready(function() {
 		    },
 			instance: {
 				required: "Please select the instance"
-			},
+			}
 		}
 	});
 

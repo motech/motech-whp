@@ -674,3 +674,15 @@ pre {
     display: none;
 }
 
+#setReason label.error {
+    color: red;
+}
+
+#setReason #alternateDiagnosis.error {
+    border: 2px solid red;
+}
+
+#setReason #reason.error {
+    border: 2px solid red;
+}
+
