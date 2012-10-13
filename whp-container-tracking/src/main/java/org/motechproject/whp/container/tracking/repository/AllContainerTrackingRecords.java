@@ -96,5 +96,9 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
         return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
     }
+
+    public int count(Properties filterParams) {
+        return super.count(new ContainerDashboardQueryDefinition(), VIEW_NAME, SEARCH_FUNCTION, filterParams);
+    }
 }
 
