@@ -7,6 +7,7 @@ import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.uimodel.AdherenceLogSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class AdherenceDataExportService {
             AdherenceLogSummary adherenceLogSummary = new AdherenceLogSummary();
             adherenceLogSummary.setPatientId(adherenceAuditLog.getPatientId());
             adherenceLogSummary.setTbId(adherenceAuditLog.getTbId());
-            adherenceLogSummary.setCreationTime(new WHPDate(adherenceAuditLog.getCreationTime().toLocalDate()).value());
+            adherenceLogSummary.setCreationTime(new WHPDateTime(adherenceAuditLog.getCreationTime()).value());
             if(adherenceAuditLog.getDoseDate() != null)
                 adherenceLogSummary.setDoseDate(new WHPDate(adherenceAuditLog.getDoseDate().toLocalDate()).value());
             adherenceLogSummary.setUserId(adherenceAuditLog.getUserId());
