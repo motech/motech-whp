@@ -11,7 +11,6 @@ import java.util.List;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
-
 public class ContainerDashboardQueryDefinition implements QueryDefinition {
 
     private final QueryField cumulativeSmearResult = new QueryField("cumulativeSmearResult", STRING);
@@ -29,8 +28,40 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
     );
 
     @Override
-    public List<Field> getFields() {
+    public List<Field> fields() {
         return queryFields;
     }
 
+    @Override
+    public String viewName() {
+        return "ContainerTracking";
+    }
+
+    @Override
+    public String searchFunctionName() {
+        return "findByCriteria";
+    }
+
+    @Override
+    public String indexFunction() {
+        return "function(doc) { " +
+                    "var index=new Document(); " +
+                    "index.add(doc.provider.providerId, {field: 'providerId'}); " +
+                    "index.add(doc.provider.district, {field: 'district'});" +
+                    "index.add(doc.container.status, {field: 'containerStatus'});" +
+                    "index.add(doc.container.creationTime, {field: 'containerIssuedDate', type : 'date'});" +
+                    "index.add(doc.container.instance, {field: 'containerInstance'}); " +
+
+                    "if(doc.container.labResults != undefined) { "+
+                        "index.add(doc.container.labResults.cumulativeResult, {field: 'cumulativeResult'}); "+
+                    "} "+
+
+                    "index.add(doc.container.diagnosis, {field: 'diagnosis'}); "+
+
+                    "if(doc.patient != undefined && doc.patient.currentTherapy != undefined && doc.patient.currentTherapy.currentTreatment != undefined) { "+
+                        "index.add(doc.patient.currentTherapy.currentTreatment.startDate, {field: 'consultationDate', type : 'date'}); " +
+                    "}"+
+                    "return index;" +
+                "}";
+    }
 }

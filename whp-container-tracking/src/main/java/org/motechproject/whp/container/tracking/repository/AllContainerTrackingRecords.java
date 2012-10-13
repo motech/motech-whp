@@ -21,34 +21,12 @@ import java.util.Properties;
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<ContainerTrackingRecord> {
 
-    private static final String VIEW_NAME = "ContainerTracking";
-    private static final String SEARCH_FUNCTION = "findByCriteria";
-    private static final String INDEX_FUNCTION = "function(doc) { " +
-            "var index=new Document(); " +
-            "index.add(doc.provider.providerId, {field: 'providerId'}); " +
-            "index.add(doc.provider.district, {field: 'district'});" +
-            "index.add(doc.container.status, {field: 'containerStatus'});" +
-            "index.add(doc.container.creationTime, {field: 'containerIssuedDate', type : 'date'});" +
-            "index.add(doc.container.instance, {field: 'containerInstance'}); " +
-
-            "if(doc.container.labResults != undefined) { "+
-                "index.add(doc.container.labResults.cumulativeResult, {field: 'cumulativeResult'}); "+
-            "} "+
-
-            "index.add(doc.container.diagnosis, {field: 'diagnosis'}); "+
-
-            "if(doc.patient != undefined && doc.patient.currentTherapy != undefined && doc.patient.currentTherapy.currentTreatment != undefined) { "+
-                "index.add(doc.patient.currentTherapy.currentTreatment.startDate, {field: 'consultationDate', type : 'date'}); " +
-            "}"+
-
-            "return index;" +
-        "}";
-
     @Autowired
     public AllContainerTrackingRecords(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(ContainerTrackingRecord.class, whpLuceneAwareCouchDbConnector);
         IndexUploader uploader = new IndexUploader();
-        uploader.updateSearchFunctionIfNecessary(db, VIEW_NAME, SEARCH_FUNCTION, INDEX_FUNCTION);
+        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
+        uploader.updateSearchFunctionIfNecessary(db, queryDefinition.viewName(), queryDefinition.searchFunctionName(), queryDefinition.indexFunction());
     }
 
     @View(name = "find_by_containerId", map = "function(doc) {if (doc.type ==='ContainerTrackingRecord') {emit(doc.container.containerId, doc._id);}}")
@@ -90,7 +68,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     }
 
     public List<ContainerTrackingRecord> filter(Properties filterParams, int skip, int limit) {
-        return super.filter(new ContainerDashboardQueryDefinition(), VIEW_NAME, SEARCH_FUNCTION, filterParams, skip, limit);
+        return super.filter(new ContainerDashboardQueryDefinition(), filterParams, skip, limit);
     }
 
     public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
@@ -98,7 +76,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     }
 
     public int count(Properties filterParams) {
-        return super.count(new ContainerDashboardQueryDefinition(), VIEW_NAME, SEARCH_FUNCTION, filterParams);
+        return super.count(new ContainerDashboardQueryDefinition(), filterParams);
     }
 }
 
