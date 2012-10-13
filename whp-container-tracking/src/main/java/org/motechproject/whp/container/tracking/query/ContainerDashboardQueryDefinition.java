@@ -18,7 +18,7 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
 
     List<Field> queryFields = Arrays.asList(
            new QueryField("providerId", STRING),
-           new QueryField("providerDistrict", STRING),
+           new QueryField("district", STRING),
            new QueryField("containerStatus", STRING),
            new RangeField("containerIssuedDate", DATE, "containerIssuedDateFrom", "containerIssuedDateTo"),
             containerInstance,

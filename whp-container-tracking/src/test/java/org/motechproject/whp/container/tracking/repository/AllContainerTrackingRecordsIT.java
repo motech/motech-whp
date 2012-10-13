@@ -186,14 +186,14 @@ public class AllContainerTrackingRecordsIT {
     public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
         Properties queryParams = new Properties();
         String providerId = "providerId";
-        String districtName = "East Champaran";
+        String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
         queryParams.put("district", districtName);
         queryParams.put("cumulativeResult", Positive.name());
         queryParams.put("containerStatus", ContainerStatus.Open.name());
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
         queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
-        queryParams.put("diagnosis","Positive");
+        queryParams.put("diagnosis", Positive.name());
 
         ContainerTrackingRecord expectedContainerTrackingRecord = new ContainerTrackingRecordBuilder()
                 .withProviderId(providerId)

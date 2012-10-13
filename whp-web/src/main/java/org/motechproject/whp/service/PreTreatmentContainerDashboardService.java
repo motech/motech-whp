@@ -1,5 +1,6 @@
 package org.motechproject.whp.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
@@ -26,6 +27,16 @@ public class PreTreatmentContainerDashboardService implements Paging<ContainerTr
 
     @Override
     public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
+
+        Properties properties = new Properties();
+        for(Object key : searchCriteria.keySet()){
+            Object value = searchCriteria.get(key);
+            if(!StringUtils.isBlank((String) value)){
+                properties.put(key, value);
+            }
+        }
+        searchCriteria = properties;
+
         int startIndex = (pageNumber - 1) * rowsPerPage;
         List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filterPreTreatmentRecords(searchCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
