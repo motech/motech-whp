@@ -19,10 +19,4 @@ public class ContainerTrackingDashboardRow {
     private String labName;
     private String containerStatus;
     private String reasonForClosure;
-
-    //used in view
-    public String getAction()
-    {
-        return containerStatus.equals("Closed") ? "Open" : "Close";
-    }
 }

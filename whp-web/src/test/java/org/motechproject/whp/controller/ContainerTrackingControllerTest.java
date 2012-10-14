@@ -4,10 +4,7 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.ContainerStatus;
-import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.District;
-import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
@@ -107,7 +104,7 @@ public class ContainerTrackingControllerTest {
     }
 
     @Test
-    public void shouldUpdateReasonForClosure() throws Exception {
+    public void shouldCloseContainer() throws Exception {
         when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<ErrorWithParameters>());
 
         standaloneSetup(containerTrackingController).build()
@@ -116,5 +113,16 @@ public class ContainerTrackingControllerTest {
                 .andExpect(redirectedUrl("/sputum-tracking/pre-treatment"));
 
         verify(containerService).closeContainer(any(ContainerClosureRequest.class));
+    }
+
+    @Test
+    public void shouldOpenContainer() throws Exception {
+        String containerId = "1234";
+        standaloneSetup(containerTrackingController).build()
+                .perform(get("/sputum-tracking/open-container").param("containerId", containerId))
+                .andExpect(status().isOk())
+                .andExpect(redirectedUrl("/sputum-tracking/pre-treatment"));
+
+        verify(containerService).openContainer(containerId);
     }
 }

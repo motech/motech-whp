@@ -15,11 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="/sputum-tracking")
+@RequestMapping(value = "/sputum-tracking")
 public class ContainerTrackingController {
 
 
@@ -42,10 +44,10 @@ public class ContainerTrackingController {
         this.allDistricts = allDistricts;
     }
 
-    @RequestMapping(value = "/close-container",method = RequestMethod.POST)
-    public String updateReasonForClosure(Model uiModel, ContainerClosureRequest containerClosureRequest){
+    @RequestMapping(value = "/close-container", method = RequestMethod.POST)
+    public String updateReasonForClosure(Model uiModel, ContainerClosureRequest containerClosureRequest, HttpServletRequest servletRequest) {
         List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
             uiModel.addAttribute(ERRORS, errors);
             return showContainerTrackingDashBoard(uiModel);
         }
@@ -54,8 +56,15 @@ public class ContainerTrackingController {
         return "redirect:/sputum-tracking/pre-treatment";
     }
 
-    @RequestMapping(value="/pre-treatment", method = RequestMethod.GET)
-    public String showContainerTrackingDashBoard(Model uiModel){
+    @RequestMapping(value = "/open-container", method = RequestMethod.GET)
+    public String openContainer(@RequestParam("containerId") String containerId, HttpServletRequest servletRequest) {
+        containerService.openContainer(containerId);
+
+        return "redirect:/sputum-tracking/pre-treatment";
+    }
+
+    @RequestMapping(value = "/pre-treatment", method = RequestMethod.GET)
+    public String showContainerTrackingDashBoard(Model uiModel) {
         List<ReasonForContainerClosure> allClosureReasons = containerService.getAllClosureReasonsForAdmin();
         List<AlternateDiagnosis> allAlternateDiagnosis = containerService.getAllAlternateDiagnosis();
 

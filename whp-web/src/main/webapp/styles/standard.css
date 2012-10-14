@@ -686,3 +686,14 @@ pre {
     border: 2px solid red;
 }
 
+.Closed .closeContainer {
+    pointer-events: none;
+    cursor: default;
+    color: grey;
+}
+
+.Open .openContainer {
+    pointer-events: none;
+    cursor: default;
+    color: grey;
+}

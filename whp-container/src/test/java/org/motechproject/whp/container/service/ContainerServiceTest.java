@@ -137,12 +137,28 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldNotUpdateReasonForClosureIfContainerIdIsInvalid() throws DateParseException {
+    public void shouldNotCloseIfContainerIdIsInvalid() throws DateParseException {
         String containerId = "12345";
         ContainerClosureRequest closureRequest = new ContainerClosureRequest();
         closureRequest.setContainerId(containerId);
 
         when(allContainers.findByContainerId(containerId)).thenReturn(null);
+
+        containerService.closeContainer(closureRequest);
+
+        verify(allContainers).findByContainerId(containerId);
+        verify(allContainers, never()).update(any(Container.class));
+    }
+
+    @Test
+    public void shouldNotCloseIfContainerIsAlreadyClosed() throws DateParseException {
+        String containerId = "12345";
+        ContainerClosureRequest closureRequest = new ContainerClosureRequest();
+        closureRequest.setContainerId(containerId);
+        Container container = new Container();
+        container.setStatus(ContainerStatus.Closed);
+
+        when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
         containerService.closeContainer(closureRequest);
 
@@ -223,6 +239,47 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         Assert.assertEquals("not for admin", closureReasonForMapping.getName());
         Assert.assertEquals("0", closureReasonForMapping.getCode());
+    }
+
+    @Test
+    public void shouldOpenContainer() {
+        String containerId = "1234";
+        Container container = new Container();
+        container.setStatus(ContainerStatus.Closed);
+        when(allContainers.findByContainerId(containerId)).thenReturn(container);
+
+        containerService.openContainer(containerId);
+
+        verify(allContainers).findByContainerId(containerId);
+        ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
+        verify(allContainers).update(captor.capture());
+        Container actualContainer = captor.getValue();
+
+        assertEquals(ContainerStatus.Open, actualContainer.getStatus());
+    }
+
+    @Test
+    public void shouldNotOpenContainerIfContainerIsInvalid() {
+        String containerId = "1234";
+        when(allContainers.findByContainerId(containerId)).thenReturn(null);
+
+        containerService.openContainer(containerId);
+
+        verify(allContainers).findByContainerId(containerId);
+        verify(allContainers, never()).update(any(Container.class));
+    }
+
+    @Test
+    public void shouldNotOpenContainerIfContainerIsAlreadyOpened() {
+        String containerId = "1234";
+        Container container = new Container();
+        container.setStatus(ContainerStatus.Open);
+        when(allContainers.findByContainerId(containerId)).thenReturn(container);
+
+        containerService.openContainer(containerId);
+
+        verify(allContainers).findByContainerId(containerId);
+        verify(allContainers, never()).update(any(Container.class));
     }
 
     @After

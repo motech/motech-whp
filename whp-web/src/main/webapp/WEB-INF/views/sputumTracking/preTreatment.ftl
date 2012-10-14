@@ -7,131 +7,139 @@
         <#assign pageNo=1/>
     </#if>
     <#if errors??>
-        <div id="container-tracking-error" class="container-tracking-message-alert row alert alert-error fade in">
-             <button class="close" data-dismiss="alert">&times;</button>
-             <#list errors as error>
-                 <div><@spring.messageArgs code=error.code args=error.parameters/></div>
-             </#list>
-        </div>
+    <div id="container-tracking-error" class="container-tracking-message-alert row alert alert-error fade in">
+        <button class="close" data-dismiss="alert">&times;</button>
+        <#list errors as error>
+            <div><@spring.messageArgs code=error.code args=error.parameters/></div>
+        </#list>
+    </div>
     </#if>
+
     <#include "reasonForClosure.ftl"/>
 
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
         Filter section
-            <table>
-                <tr>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Provider ID</label>
-                            <div class="controls">
-                                <input type = "text" id = "providerId" name = "providerId">
-                            </div>
+        <table>
+            <tr>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Provider ID</label>
+
+                        <div class="controls">
+                            <input type="text" id="providerId" name="providerId">
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Container Issue Date</label>
-                            <div class="controls">
-                                <input type = "text" id = "containerIssuedDateFrom" name = "containerIssuedDateFrom">
-                                <input type = "text" id = "containerIssuedDateTo" name = "containerIssuedDateTo">
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Container Issue Date</label>
+
+                        <div class="controls">
+                            <input type="text" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
+                            <input type="text" id="containerIssuedDateTo" name="containerIssuedDateTo">
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Cumulative Lab Result</label>
-                            <div class="controls">
-                                <select id="cumulativeResult" name="cumulativeResult">
-                                    <option value = "" ></option>
-                                    <#list labResults as labResult>
-                                        <option value="${labResult}">${labResult}</option>
-                                    </#list>
-                                </select>
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Cumulative Lab Result</label>
+
+                        <div class="controls">
+                            <select id="cumulativeResult" name="cumulativeResult">
+                                <option value=""></option>
+                                <#list labResults as labResult>
+                                    <option value="${labResult}">${labResult}</option>
+                                </#list>
+                            </select>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Provider District</label>
-                            <div class="controls">
-                                <select id="district" name="district">
-                                    <option value = "" ></option>
-                                    <#list districts as district>
-                                        <option value="${district.name}">${district.name}</option>
-                                    </#list>
-                                </select>
-                            </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Provider District</label>
+
+                        <div class="controls">
+                            <select id="district" name="district">
+                                <option value=""></option>
+                                <#list districts as district>
+                                    <option value="${district.name}">${district.name}</option>
+                                </#list>
+                            </select>
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Container Status</label>
-                            <div class="controls">
-                                <select id="containerStatus" name="containerStatus">
-                                    <option value = "" ></option>
-                                    <#list containerStatusList as containerStatus>
-                                        <option value="${containerStatus}">${containerStatus}</option>
-                                    </#list>
-                                </select>
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Container Status</label>
+
+                        <div class="controls">
+                            <select id="containerStatus" name="containerStatus">
+                                <option value=""></option>
+                                <#list containerStatusList as containerStatus>
+                                    <option value="${containerStatus}">${containerStatus}</option>
+                                </#list>
+                            </select>
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Diagnosis</label>
-                            <div class="controls">
-                                <select id="diagnosis" name="diagnosis">
-                                    <option value = "" ></option>
-                                    <#list diagnosisList as diagnosis>
-                                        <option value="${diagnosis}">${diagnosis}</option>
-                                    </#list>
-                                </select>
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Diagnosis</label>
+
+                        <div class="controls">
+                            <select id="diagnosis" name="diagnosis">
+                                <option value=""></option>
+                                <#list diagnosisList as diagnosis>
+                                    <option value="${diagnosis}">${diagnosis}</option>
+                                </#list>
+                            </select>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Consultation Date</label>
-                            <div class="controls">
-                                <input type = "text" id = "consultationDateFrom" name = "consultationDateFrom">
-                                <input type = "text" id = "consultationDateTo" name = "consultationDateTo">
-                            </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Consultation Date</label>
+
+                        <div class="controls">
+                            <input type="text" id="consultationDateFrom" name="consultationDateFrom">
+                            <input type="text" id="consultationDateTo" name="consultationDateTo">
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
-                            <label class="control-label">Reason for Closure</label>
-                            <div class="controls">
-                                <select id="reasonForClosure" name="reasonForClosure">
-                                    <option value = "" ></option>
-                                    <#list reasons as reason>
-                                        <option value="${reason.name}">${reason.name}</option>
-                                    </#list>
-                                </select>
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Reason for Closure</label>
+
+                        <div class="controls">
+                            <select id="reasonForClosure" name="reasonForClosure">
+                                <option value=""></option>
+                                <#list reasons as reason>
+                                    <option value="${reason.name}">${reason.name}</option>
+                                </#list>
+                            </select>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="control-group pull-down padding-left">
-                            <div class="controls">
-                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
-                            </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="control-group pull-down padding-left">
+                        <div class="controls">
+                            <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
                         </div>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </@paginator.filter>
 </div>
 
 <div class="results">
-
     <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="sputum_tracking_filter" entity="container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList">
             <thead>
@@ -170,7 +178,9 @@
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
-                <td><a id="setReasonForClosure" class="setReasonForClosure" data-toggle="modal" href="#setReason">{{item.action}}</a>
+                <td class="{{item.containerStatus}}">
+                    <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a> /
+                    <a class="openContainer" data-toggle="modal" href="<@spring.url '/sputum-tracking/open-container?containerId={{item.containerId}}' />">Open</a>
                 </td>
                 <td>{{item.reasonForClosure}}</td>
             </tr>

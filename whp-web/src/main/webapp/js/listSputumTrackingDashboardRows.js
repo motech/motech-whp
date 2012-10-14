@@ -10,7 +10,7 @@ $(function () {
             $('[type=no-results]').hide();
         }
 
-        $(".setReasonForClosure").click(function () {
+        $(".closeContainer").click(function () {
             setContainerIdOnClosureForm.call(this);
             showTbNegativeOptionForPositiveDiagnosis.call(this);
         });
@@ -27,7 +27,7 @@ $(function () {
         }
 
         var setContainerIdOnClosureForm = function () {
-            var containerId = $(this).parents('tr').attr('containerid');
+            var containerId = $(this).parents('tr').attr('containerId');
             $('#setReason input[name=containerId]').val(containerId);
         }
 

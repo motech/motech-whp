@@ -77,7 +77,7 @@ public class ContainerService {
     public void closeContainer(ContainerClosureRequest reasonForClosureRequest) {
         Container container = allContainers.findByContainerId(reasonForClosureRequest.getContainerId());
 
-        if(container == null)
+        if(container == null || container.getStatus() == Closed)
             return;
 
         ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(reasonForClosureRequest.getReason());
@@ -105,6 +105,16 @@ public class ContainerService {
 
     public List<AlternateDiagnosis> getAllAlternateDiagnosis() {
         return allAlternateDiagnosis.getAll();
+    }
+
+    public void openContainer(String containerId) {
+        Container container = allContainers.findByContainerId(containerId);
+
+        if(container == null || container.getStatus() == ContainerStatus.Open)
+            return;
+
+        container.setStatus(ContainerStatus.Open);
+        allContainers.update(container);
     }
 
     private void populateTbNegativeDetails(ContainerClosureRequest reasonForClosureRequest, Container container) {
