@@ -687,13 +687,9 @@ pre {
 }
 
 .Closed .closeContainer {
-    pointer-events: none;
-    cursor: default;
-    color: grey;
+    display: none;
 }
 
 .Open .openContainer {
-    pointer-events: none;
-    cursor: default;
-    color: grey;
+    display: none;
 }
