@@ -25,10 +25,10 @@ public enum WHPErrorCode {
     PATIENT_NOT_FOUND("No such patient is registered in WHP"),
     NO_LAB_RESULTS_IN_CONTAINER("The container does not contain lab results"),
     INVALID_SPUTUM_TEST_INSTANCE("The sputum test instance is invalid"),
-    NO_SUCH_TREATMENT_EXISTS("No such treatment exists for patient");
+    NO_SUCH_TREATMENT_EXISTS("No such treatment exists for patient"),
+    INVALID_PHONE_NUMBER("No provider found for the given phone number");
 
     private String message;
-
 
     WHPErrorCode(String message) {
         this.message = message;

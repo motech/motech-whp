@@ -37,6 +37,7 @@
         <module>whp-container</module>
         <module>whp-container-mapping</module>
         <module>whp-container-tracking</module>
+        <module>whp-wgn-inbound</module>
     </modules>
 
     <repositories>
@@ -149,6 +150,11 @@
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-ivr</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-wgn-inbound</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

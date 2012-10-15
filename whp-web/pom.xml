@@ -41,6 +41,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-wgn-inbound</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-container</artifactId>
             <scope>test</scope>
             <classifier>tests</classifier>
