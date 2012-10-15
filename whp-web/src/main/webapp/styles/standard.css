@@ -693,3 +693,15 @@ pre {
 .Open .openContainer {
     display: none;
 }
+
+#consultationDate {
+    margin-top: 6px;
+}
+
+.providerContainer {
+    display: inline;
+}
+
+.newContainer {
+    display: inline;
+}

@@ -24,11 +24,13 @@
                     <tr>
                             <td>
 								<div class="control-group row margin-bottom-10px margin-left-3px">
-									<input type="radio" class="radio controls" name="containerRegistrationMode"
-										   checked="true" value="ON_BEHALF_OF_PROVIDER">  Register on behalf of provider</input>
+									<input type="radio" id="providerContainer" class="radio controls" name="containerRegistrationMode"
+										   checked="true" value="ON_BEHALF_OF_PROVIDER"/>
+                                    <label class="providerContainer" for="providerContainer">  Register on behalf of provider</label>
 
-									<span class = "margin-left-15px"><input type="radio" class="radio" name="containerRegistrationMode"
-										   value="NEW_CONTAINER">  Register a new container</input>
+									<span class = "margin-left-15px">
+                                        <input type="radio" id="newContainer" class="radio" name="containerRegistrationMode" value="NEW_CONTAINER"/>
+                                        <label class="newContainer" for="newContainer">  Register a new container</label>
 									</span>
 								</div>
                             </td>
