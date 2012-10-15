@@ -119,7 +119,7 @@
                             <select id="reasonForClosure" name="reasonForClosure">
                                 <option value=""></option>
                                 <#list reasons as reason>
-                                    <option value="${reason.name}">${reason.name}</option>
+                                    <option value="${reason.code}">${reason.name}</option>
                                 </#list>
                             </select>
                         </div>
