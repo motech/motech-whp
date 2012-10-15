@@ -9,7 +9,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -33,6 +35,16 @@ public class ListAllCmfAdminsPage extends LoggedInUserPage{
 
     public ListAllCmfAdminsPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    @Override
+    protected void waitForPageToLoad() {
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(@Nullable WebDriver webDriver) {
+                return null != webDriver.findElement(By.id("createCmfAdmin-button"));
+            }
+        });
     }
 
     @Override
