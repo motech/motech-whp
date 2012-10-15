@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -246,6 +247,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         String containerId = "1234";
         Container container = new Container();
         container.setStatus(ContainerStatus.Closed);
+        container.setDiagnosis(Diagnosis.Positive);
+        container.setReasonForClosure("Some reason for closure");
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
         containerService.openContainer(containerId);
@@ -256,6 +259,29 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container actualContainer = captor.getValue();
 
         assertEquals(ContainerStatus.Open, actualContainer.getStatus());
+        assertNull(actualContainer.getReasonForClosure());
+    }
+
+    @Test
+    public void shouldResetDiagnosisAndConsultationDateWhileOpeningContainerIfCurrentDiagnosisIsNegative() {
+        String containerId = "1234";
+        Container container = new Container();
+        container.setStatus(ContainerStatus.Closed);
+        container.setDiagnosis(Diagnosis.Negative);
+        container.setReasonForClosure("Some reason for closure");
+        when(allContainers.findByContainerId(containerId)).thenReturn(container);
+
+        containerService.openContainer(containerId);
+
+        verify(allContainers).findByContainerId(containerId);
+        ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
+        verify(allContainers).update(captor.capture());
+        Container actualContainer = captor.getValue();
+
+        assertEquals(ContainerStatus.Open, actualContainer.getStatus());
+        assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
+        assertNull(actualContainer.getReasonForClosure());
+        assertNull(actualContainer.getConsultationDate());
     }
 
     @Test

@@ -14,9 +14,8 @@
                 <tr>
                     <td>
                         <div class="control-group">
-                            <label class="control-label">Reason*</label>
-
                             <div class="controls">
+                                <label class="control-label">Reason*</label>
                                 <select id="reason" name="reason" validate="required:true">
                                     <option value=""></option>
                                 <#list reasons as reason>
@@ -24,12 +23,14 @@
                                 </#list>
                                 </select>
                                 <div id="tbNegativeControls">
+                                    <label class="control-label alternate-diagnosis">Alternate Diagnosis*</label>
                                     <select id="alternateDiagnosis" name="alternateDiagnosis" validate="required:true">
                                         <option value=""></option>
                                     <#list alternateDiagnosisList as diagnosis>
                                         <option value="${diagnosis.code}">${diagnosis.name}</option>
                                     </#list>
                                     </select>
+                                    <label class="control-label">Consultation Date*</label>
                                     <input class="span 2" data-date-format="dd/mm/yyyy" id="consultationDate" name="consultationDate" type="text" readonly="readonly" />
                                 </div>
                             </div>

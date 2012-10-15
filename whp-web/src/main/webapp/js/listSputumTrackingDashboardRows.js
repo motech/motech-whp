@@ -22,6 +22,7 @@ $(function () {
         var resetFormFields = function () {
             $('#reason').val('');
             $('#alternateDiagnosis').val('');
+            $("#alternateDiagnosis-autocomplete").val("");
             $('#consultationDatePicker').val('');
             $("#tbNegativeControls").hide();
         }
@@ -34,10 +35,10 @@ $(function () {
         var showTbNegativeOptionForPositiveDiagnosis = function () {
             var TB_NEGATIVE_OPTION_CODE = "1";
             if ($(this).parents('tr').children('td#diagnosis').text().toLowerCase() === "positive") {
-                $("#reason option[value=TB_NEGATIVE_OPTION_CODE]").attr('disabled', 'disabled').hide();
+                $("#reason option[value=" + TB_NEGATIVE_OPTION_CODE + "]").attr('disabled', 'disabled').hide();
             }
             else {
-                $("#reason option[value=TB_NEGATIVE_OPTION_CODE]").removeAttr('disabled').show();
+                $("#reason option[value=" + TB_NEGATIVE_OPTION_CODE + "]").removeAttr('disabled').show();
             }
         }
     });
@@ -80,5 +81,7 @@ $(function () {
             }
         }
     });
+
+    $("#alternateDiagnosis").combobox();
 });
 

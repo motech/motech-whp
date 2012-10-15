@@ -82,6 +82,8 @@ public class Container extends MotechBaseDataObject {
         setMappingInstance(null);
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
+        setReasonForClosure(null);
+        setConsultationDate(null);
     }
 
     private void updateCurrentTrackingStatus() {

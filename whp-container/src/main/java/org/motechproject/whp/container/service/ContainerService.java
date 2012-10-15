@@ -114,7 +114,16 @@ public class ContainerService {
             return;
 
         container.setStatus(ContainerStatus.Open);
+        container.setReasonForClosure(null);
+        resetContainerDiagnosisData(container);
         allContainers.update(container);
+    }
+
+    private void resetContainerDiagnosisData(Container container) {
+        if(container.getDiagnosis() == Diagnosis.Negative) {
+            container.setDiagnosis(Diagnosis.Pending);
+            container.setConsultationDate(null);
+        }
     }
 
     private void populateTbNegativeDetails(ContainerClosureRequest reasonForClosureRequest, Container container) {

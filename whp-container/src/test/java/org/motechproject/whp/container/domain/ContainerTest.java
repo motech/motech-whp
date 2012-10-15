@@ -1,5 +1,6 @@
 package org.motechproject.whp.container.domain;
 
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
@@ -45,7 +46,8 @@ public class ContainerTest {
     @Test
     public void shouldUnMapContainer() {
         Container container = new Container();
-        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP, mock(ReasonForContainerClosure.class));
+        container.setConsultationDate(new LocalDate());
+        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP, new ReasonForContainerClosure("some reason", "123"));
 
         container.unMap();
 
@@ -56,6 +58,7 @@ public class ContainerTest {
         assertEquals(Pending, container.getDiagnosis());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
         assertNull(container.getReasonForClosure());
+        assertNull(container.getConsultationDate());
     }
 
     @Test
