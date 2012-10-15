@@ -15,17 +15,6 @@ import static org.motechproject.whp.common.domain.Diagnosis.Positive;
 public class ContainerTest {
 
     @Test
-    public void shouldSetDefaultsUponCreation() {
-        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
-        assertEquals(ContainerStatus.Open, container.getStatus());
-        assertEquals(Pending, container.getDiagnosis());
-        assertNull(container.getPatientId());
-        assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
-        assertNull(container.getTbId());
-        assertNull(container.getReasonForClosure());
-    }
-
-    @Test
     public void shouldMapContainerToPatient() {
         Container container = new Container();
         String patientId = "patientid";
@@ -59,18 +48,5 @@ public class ContainerTest {
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
         assertNull(container.getReasonForClosure());
         assertNull(container.getConsultationDate());
-    }
-
-    @Test
-    public void shouldUpdateTbId_uponMapping() {
-
-        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, now());
-        String patientId = "patientid";
-        SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
-        String tbId = "tbId";
-        container.mapWith(patientId, tbId,instance, mock(ReasonForContainerClosure.class));
-
-        assertEquals(tbId, container.getTbId());
-
     }
 }

@@ -31,6 +31,8 @@ import static ch.lambdaj.Lambda.*;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
+import static org.motechproject.whp.common.domain.ContainerStatus.Open;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
 
 @Service
@@ -56,6 +58,9 @@ public class ContainerService {
         DateTime creationTime = now();
 
         Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime);
+        container.setStatus(Open);
+        container.setCurrentTrackingInstance(instance);
+        container.setDiagnosis(Pending);
         allContainers.add(container);
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);

@@ -25,6 +25,8 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.motechproject.whp.common.domain.ContainerStatus.Open;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
@@ -138,7 +140,7 @@ public class AllContainerTrackingRecordsIT {
         queryParams.put("providerId", providerId);
         queryParams.put("district", districtName);
         queryParams.put("cumulativeResult", Positive.name());
-        queryParams.put("containerStatus", ContainerStatus.Open.name());
+        queryParams.put("containerStatus", Open.name());
         queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
         queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
         queryParams.put("diagnosis", Positive.name());
@@ -149,7 +151,7 @@ public class AllContainerTrackingRecordsIT {
                 .withInstance(PreTreatment)
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
-                .withStatus(ContainerStatus.Open)
+                .withStatus(Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2010, 3, 6))
                 .withDiagnosis(Diagnosis.Positive)
@@ -172,7 +174,7 @@ public class AllContainerTrackingRecordsIT {
                 .withInstance(PreTreatment)
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
-                .withStatus(ContainerStatus.Open)
+                .withStatus(Open)
                 .withContainerIssuedDate(DateUtil.newDateTime(2009, 2, 5))
                 .withNoPatientMapping()
                 .build();
@@ -220,6 +222,8 @@ public class AllContainerTrackingRecordsIT {
                 .withProviderId(providerId)
                 .withInstance(instance)
                 .withProviderDistrict(districtName)
+                .withDiagnosis(Pending)
+                .withStatus(Open)
                 .build();
     }
 }

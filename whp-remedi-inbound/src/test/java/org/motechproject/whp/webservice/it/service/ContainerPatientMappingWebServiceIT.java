@@ -24,6 +24,8 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.motechproject.whp.common.domain.ContainerStatus.Open;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.exception.WHPErrorCode.NO_LAB_RESULTS_IN_CONTAINER;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -69,10 +71,14 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
         LabResults labResults = new LabResults();
         container1 = new Container("providerId", CONTAINER_ID_1, null, DateTime.now());
+        container1.setStatus(Open);
+        container1.setDiagnosis(Pending);
         container1.setLabResults(labResults);
         allContainers.add(container1);
 
         container2 = new Container("providerId", CONTAINER_ID_2, null, DateTime.now());
+        container2.setStatus(Open);
+        container2.setDiagnosis(Pending);
         container2.setLabResults(labResults);
         allContainers.add(container2);
 

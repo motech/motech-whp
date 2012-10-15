@@ -37,6 +37,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.ContainerStatus.Open;
+import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 
 public class ContainerServiceTest extends BaseUnitTest {
     private ContainerService containerService;
@@ -53,6 +55,18 @@ public class ContainerServiceTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis);
+    }
+
+    @Test
+    public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
+        containerService.registerContainer(new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText()));
+
+        ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
+        verify(allContainers).add(captor.capture());
+        Container container = captor.getValue();
+        assertEquals(Open, container.getStatus());
+        assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
+        assertEquals(Pending, container.getDiagnosis());
     }
 
     @Test
@@ -282,6 +296,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertNull(actualContainer.getReasonForClosure());
         assertNull(actualContainer.getConsultationDate());
+        assertEquals(Open, actualContainer.getStatus());
     }
 
     @Test
@@ -299,7 +314,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     public void shouldNotOpenContainerIfContainerIsAlreadyOpened() {
         String containerId = "1234";
         Container container = new Container();
-        container.setStatus(ContainerStatus.Open);
+        container.setStatus(Open);
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
         containerService.openContainer(containerId);

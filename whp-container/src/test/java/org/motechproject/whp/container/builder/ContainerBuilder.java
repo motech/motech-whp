@@ -38,6 +38,7 @@ public class ContainerBuilder {
 
     public ContainerBuilder withInstance(SputumTrackingInstance instance) {
         container.setInstance(instance);
+        container.setCurrentTrackingInstance(instance);
         return this;
     }
 

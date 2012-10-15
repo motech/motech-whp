@@ -48,17 +48,13 @@ public class Container extends MotechBaseDataObject {
 
     // Required for ektorp
     public Container() {
-        this.status = ContainerStatus.Open;
     }
 
     public Container(String providerId, String containerId, SputumTrackingInstance instance, DateTime creationTime) {
         this.providerId = providerId;
         this.containerId = containerId;
         this.instance = instance;
-        this.currentTrackingInstance = this.instance;
         this.creationTime = creationTime;
-        this.status = ContainerStatus.Open;
-        this.diagnosis = Pending;
     }
 
     public void setCreationTime(DateTime creationTime) {
