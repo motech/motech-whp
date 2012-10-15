@@ -22,7 +22,7 @@ public abstract class Verification<T> {
 
     protected abstract WHPError verify(T request);
 
-    public VerificationResult verifyResult(T request) {
+    public VerificationResult verifyRequest(T request) {
         VerificationResult result = validateRequest(request);
         if (result.isSuccess()) {
             result.addAllErrors(asList(verify(request)));

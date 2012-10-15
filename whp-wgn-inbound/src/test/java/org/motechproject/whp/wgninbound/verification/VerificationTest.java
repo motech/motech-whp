@@ -34,7 +34,7 @@ public class VerificationTest {
         when(validator.validate(eq(inputValue), anyString())).thenThrow(
                 new WHPRuntimeException(WHPErrorCode.INVALID_PHONE_NUMBER)
         );
-        assertTrue(verification.verifyResult(inputValue).isError());
+        assertTrue(verification.verifyRequest(inputValue).isError());
     }
 
     @Test
@@ -43,8 +43,8 @@ public class VerificationTest {
         verification.setValid(false);
         verification.setError(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
 
-        assertTrue(verification.verifyResult(inputValue).isError());
-        assertEquals(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER), verification.verifyResult(inputValue).getErrors().get(0));
+        assertTrue(verification.verifyRequest(inputValue).isError());
+        assertEquals(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER), verification.verifyRequest(inputValue).getErrors().get(0));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class VerificationTest {
         String inputValue = "value";
         verification.setValid(true);
 
-        assertTrue(verification.verifyResult(inputValue).isSuccess());
+        assertTrue(verification.verifyRequest(inputValue).isSuccess());
     }
 }
 

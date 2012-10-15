@@ -5,11 +5,12 @@ import org.hamcrest.core.AllOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
 import org.motechproject.whp.wgninbound.verification.ProviderVerification;
-import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class WGNVerificationControllerTest {
@@ -41,15 +43,29 @@ public class WGNVerificationControllerTest {
         VerificationResult successResult = new VerificationResult(phoneNumberFromRequestFile);
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
-        when(providerVerification.verifyResult(request)).thenReturn(successResult);
+        when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
         standaloneSetup(wgnVerificationController)
                 .build()
                 .perform(
                         post("/sputumCall/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
                 content().string(containsString("success"))
+        );
+    }
+
+    @Test
+    public void shouldRespondWithBadRequestIfRequestXMLIsInvalid() throws Exception {
+        standaloneSetup(wgnVerificationController)
+                .build()
+                .perform(
+                        post("/sputumCall/provider/verify")
+                                .body(readXML("/inValidProviderAuthorizationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
+                ).andExpect(
+                status().isBadRequest()
         );
     }
 
@@ -62,13 +78,14 @@ public class WGNVerificationControllerTest {
         VerificationResult successResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER), phoneNumberFromRequestFile);
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
-        when(providerVerification.verifyResult(request)).thenReturn(successResult);
+        when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
         standaloneSetup(wgnVerificationController)
                 .build()
                 .perform(
                         post("/sputumCall/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
                 content().string(AllOf.allOf(containsString("failure"), containsString("INVALID_PHONE_NUMBER"), containsString("No provider found for the given phone number")))
         );

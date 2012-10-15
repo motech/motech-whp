@@ -30,7 +30,7 @@ public class ProviderVerificationIT {
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setCall_id("callId");
 
-        VerificationResult result = providerVerification.verifyResult(request);
+        VerificationResult result = providerVerification.verifyRequest(request);
         assertEquals("field:msisdn:value should not be null", result.getErrors().get(0).getMessage());
     }
 
@@ -40,7 +40,7 @@ public class ProviderVerificationIT {
         request.setMsisdn("1234");
         request.setCall_id("callId");
 
-        VerificationResult result = providerVerification.verifyResult(request);
+        VerificationResult result = providerVerification.verifyRequest(request);
         assertEquals("field:msisdn:should be atleast 10 dijits in length", result.getErrors().get(0).getMessage());
     }
 
@@ -49,7 +49,7 @@ public class ProviderVerificationIT {
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn("1234567890");
 
-        VerificationResult result = providerVerification.verifyResult(request);
+        VerificationResult result = providerVerification.verifyRequest(request);
         assertEquals("field:call_id:value should not be null", result.getErrors().get(0).getMessage());
     }
 
@@ -74,7 +74,7 @@ public class ProviderVerificationIT {
         provider.setPrimaryMobile(msisdn);
         allProviders.add(provider);
 
-        assertTrue(providerVerification.verifyResult(request).isSuccess());
+        assertTrue(providerVerification.verifyRequest(request).isSuccess());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ProviderVerificationIT {
         provider.setSecondaryMobile(msisdn);
         allProviders.add(provider);
 
-        assertTrue(providerVerification.verifyResult(request).isSuccess());
+        assertTrue(providerVerification.verifyRequest(request).isSuccess());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class ProviderVerificationIT {
         provider.setTertiaryMobile(msisdn);
         allProviders.add(provider);
 
-        assertTrue(providerVerification.verifyResult(request).isSuccess());
+        assertTrue(providerVerification.verifyRequest(request).isSuccess());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ProviderVerificationIT {
         request.setMsisdn(msisdn);
         request.setCall_id("callId");
 
-        assertEquals(WHPErrorCode.INVALID_PHONE_NUMBER, providerVerification.verifyResult(request).getErrors().get(0).getErrorCode());
+        assertEquals(WHPErrorCode.INVALID_PHONE_NUMBER, providerVerification.verifyRequest(request).getErrors().get(0).getErrorCode());
     }
 
     @After

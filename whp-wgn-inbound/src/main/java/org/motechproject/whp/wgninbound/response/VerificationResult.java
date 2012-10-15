@@ -1,6 +1,6 @@
 package org.motechproject.whp.wgninbound.response;
 
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 import org.motechproject.whp.common.exception.WHPError;
 
 import java.util.ArrayList;
@@ -9,19 +9,19 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
-@EqualsAndHashCode
+@Data
 public class VerificationResult {
 
     private String verifiedValue;
-    private List<WHPError> error = new ArrayList<>();
+    private List<WHPError> errors = new ArrayList<>();
 
     public VerificationResult(String verifiedValue) {
         this.verifiedValue = verifiedValue;
-        error = new ArrayList<>();
+        errors = new ArrayList<>();
     }
 
     public VerificationResult(WHPError whpError, String verifiedValue) {
-        this.error = asList(whpError);
+        this.errors = asList(whpError);
         this.verifiedValue = verifiedValue;
     }
 
@@ -29,21 +29,17 @@ public class VerificationResult {
         if (null != errors) {
             for (WHPError whpError : errors) {
                 if (null != whpError) {
-                    this.error.add(whpError);
+                    this.errors.add(whpError);
                 }
             }
         }
     }
 
     public boolean isError() {
-        return isNotEmpty(error);
+        return isNotEmpty(errors);
     }
 
     public boolean isSuccess() {
         return !isError();
-    }
-
-    public List<WHPError> getErrors() {
-        return error;
     }
 }
