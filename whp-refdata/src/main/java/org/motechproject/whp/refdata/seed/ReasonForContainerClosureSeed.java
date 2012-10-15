@@ -22,7 +22,7 @@ public class ReasonForContainerClosureSeed {
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Container lost", "2"));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Invalid Container", "3"));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient lost to follow-up", "4"));
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient didn’t get sputum tested – no reason stated", "5"));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient did not get sputum tested (no reason stated)", "5"));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient started on TB treatment elsewhere", "6"));
     }
 }

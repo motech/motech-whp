@@ -694,7 +694,7 @@ pre {
     display: none;
 }
 
-#consultationDate {
+.consultationDate {
     margin-top: 6px;
 }
 
