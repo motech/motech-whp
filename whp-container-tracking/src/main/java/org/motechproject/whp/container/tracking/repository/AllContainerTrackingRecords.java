@@ -52,22 +52,6 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return db.queryView(findByContainerId, ContainerTrackingRecord.class);
     }
 
-    @View(name = "pre_treatment_rows", map = "function(doc) {if (doc.type ==='ContainerTrackingRecord' && doc.container.currentTrackingInstance && doc.container.currentTrackingInstance === 'PreTreatment') {emit(null, doc._id);}}")
-    public List<ContainerTrackingRecord> getAllPretreatmentContainerDashboardRows(Integer skip, Integer limit) {
-        ViewQuery findByContainerId = createQuery("pre_treatment_rows").skip(skip).limit(limit).includeDocs(true);
-        return db.queryView(findByContainerId, ContainerTrackingRecord.class);
-    }
-
-    @View(name = "number_of_pre_treatment_rows", map = "function(doc) {if (doc.type === 'ContainerTrackingRecord' && doc.container.currentTrackingInstance && doc.container.currentTrackingInstance === 'PreTreatment') {emit(null, doc._id);}}", reduce = "_count")
-    public int numberOfPreTreatmentRows() {
-        ViewQuery numberOfPreTreatmentRows = createQuery("number_of_pre_treatment_rows").reduce(true);
-        ViewResult viewResult = db.queryView(numberOfPreTreatmentRows);
-        for (ViewResult.Row row : viewResult) {
-            return row.getValueAsInt();
-        }
-        return 0;
-    }
-
     public List<ContainerTrackingRecord> filterPreTreatmentRecords(Properties filterParams, int skip, int limit) {
         ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
         filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
@@ -84,4 +68,3 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
     }
 }
-

@@ -107,58 +107,6 @@ public class AllContainerTrackingRecordsIT {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenNoDashboardRowsPresent() {
-        assertTrue(allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(1, 1).isEmpty());
-    }
-
-    @Test
-    public void shouldReturnOnlyPretreatmentContainerDashboardRows() {
-        ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
-        Container container = ContainerBuilder.newContainer().withDefaults().build();
-        container.setCurrentTrackingInstance(SputumTrackingInstance.InTreatment);
-        containerTrackingRecord.setContainer(container);
-
-        allContainerTrackingRecords.add(containerTrackingRecord);
-        assertTrue(allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(0, 1).isEmpty());
-    }
-
-    @Test
-    public void shouldReturnCountOfAllPretreatmenContainerDashboardRows() {
-        ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
-        Container container = ContainerBuilder.newContainer().withDefaults().build();
-        container.setCurrentTrackingInstance(PreTreatment);
-        containerTrackingRecord.setContainer(container);
-
-        ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecord();
-        Container container2 = ContainerBuilder.newContainer().withDefaults().build();
-        container2.setCurrentTrackingInstance(SputumTrackingInstance.InTreatment);
-        containerTrackingRecord2.setContainer(container2);
-
-        allContainerTrackingRecords.add(containerTrackingRecord);
-        allContainerTrackingRecords.add(containerTrackingRecord2);
-
-        assertEquals(1, allContainerTrackingRecords.numberOfPreTreatmentRows());
-    }
-
-    @Test
-    public void shouldReturnPretreatmentContainerDashboardRowsInAPagedFashion() {
-        ContainerTrackingRecord containerTrackingRecord1 = new ContainerTrackingRecord();
-        Container container1 = ContainerBuilder.newContainer().withDefaults().build();
-        container1.setCurrentTrackingInstance(PreTreatment);
-        containerTrackingRecord1.setContainer(container1);
-        allContainerTrackingRecords.add(containerTrackingRecord1);
-
-        ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecord();
-        Container container2 = ContainerBuilder.newContainer().withDefaults().build();
-        container2.setCurrentTrackingInstance(PreTreatment);
-        containerTrackingRecord2.setContainer(container2);
-        allContainerTrackingRecords.add(containerTrackingRecord2);
-
-        assertEquals(containerTrackingRecord1, allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(0, 1).get(0));
-        assertEquals(containerTrackingRecord2, allContainerTrackingRecords.getAllPretreatmentContainerDashboardRows(1, 1).get(0));
-    }
-
-    @Test
     public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
         Properties queryParams = new Properties();
         String providerId = "providerId";
