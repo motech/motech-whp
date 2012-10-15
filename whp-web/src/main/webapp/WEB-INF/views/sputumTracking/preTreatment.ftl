@@ -36,8 +36,8 @@
                         <label class="control-label">Container Issue Date</label>
 
                         <div class="controls">
-                            <input type="text" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
-                            <input type="text" id="containerIssuedDateTo" name="containerIssuedDateTo">
+                            <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
+                            <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
                         </div>
                     </div>
                 </td>
@@ -199,5 +199,10 @@
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
     <script type="text/javascript"
             src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
-
+    <script type="text/javascript">
+        $('#containerIssuedDateFrom').datepicker({dateFormat:'dd/mm/yy'});
+        $('#containerIssuedDateTo').datepicker({dateFormat:'dd/mm/yy'});
+        $('#consultationDateFrom').datepicker({dateFormat:'dd/mm/yy'});
+        $('#consultationDateTo').datepicker({dateFormat:'dd/mm/yy'});
+    </script>
 </@layout.defaultLayout>
