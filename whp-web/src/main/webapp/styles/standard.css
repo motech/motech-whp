@@ -704,3 +704,6 @@ pre {
 .newContainer {
     display: inline;
 }
+.dates{
+    width:110px;
+}

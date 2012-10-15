@@ -65,7 +65,20 @@
                             </div>
                         </div>
                     </td>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Diagnosis</label>
 
+                            <div class="controls">
+                                <select id="diagnosis" name="diagnosis">
+                                    <option value=""></option>
+                                    <#list diagnosisList as diagnosis>
+                                        <option value="${diagnosis}">${diagnosis}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
 
                 </tr>
                 <tr>
@@ -101,42 +114,20 @@
 
                     <td>
                         <div class="control-group">
-                            <label class="control-label">Diagnosis</label>
-
-                            <div class="controls">
-                                <select id="diagnosis" name="diagnosis">
-                                    <option value=""></option>
-                                    <#list diagnosisList as diagnosis>
-                                        <option value="${diagnosis}">${diagnosis}</option>
-                                    </#list>
-                                </select>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="control-group">
                             <label class="control-label">Consultation Date</label>
 
-                            <div class="controls">
-                                <input type="text" id="consultationDateFrom" name="consultationDateFrom">
-                                <input type="text" id="consultationDateTo" name="consultationDateTo">
-                            </div>
+                                <input class = "dates" type="text" id="consultationDateFrom" name="consultationDateFrom">
+                                <input class = "dates" type="text" id="consultationDateTo" name="consultationDateTo">
                         </div>
                     </td>
                     <td>
                         <div class="control-group">
                             <label class="control-label">Container Issue Date</label>
 
-                            <div class="controls">
-                                <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
-                                <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
-                            </div>
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
                         </div>
                     </td>
-                </tr>
-                <tr>
                     <td>
                         <div class="control-group pull-down padding-left">
                             <div class="controls">
@@ -144,6 +135,7 @@
                             </div>
                         </div>
                     </td>
+
                 </tr>
             </table>
             </div>
