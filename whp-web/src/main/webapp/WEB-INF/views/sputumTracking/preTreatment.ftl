@@ -35,7 +35,7 @@
                                 <select id="district" name="district">
                                     <option value=""></option>
                                     <#list districts as district>
-                                        <option value="${district.name}">${district.name}</option>
+                                        <option value="${district.name}" ng-selected="{{isSelected('${district.name}', searchCriteria.district, 'district')}}">${district.name}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -46,7 +46,8 @@
                             <label class="control-label">Provider ID</label>
 
                             <div class="controls">
-                                <input type="text" id="providerId" name="providerId">
+                                  <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
+
                             </div>
                         </div>
                     </td>
@@ -59,7 +60,7 @@
                                 <select id="cumulativeResult" name="cumulativeResult">
                                     <option value=""></option>
                                     <#list labResults as labResult>
-                                        <option value="${labResult}">${labResult}</option>
+                                        <option value="${labResult}" ng-selected="{{isSelected('${labResult}', searchCriteria.cumulativeResult, 'cumulativeResult')}}">${labResult}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -73,7 +74,7 @@
                                 <select id="diagnosis" name="diagnosis">
                                     <option value=""></option>
                                     <#list diagnosisList as diagnosis>
-                                        <option value="${diagnosis}">${diagnosis}</option>
+                                        <option value="${diagnosis}" ng-selected="{{isSelected('${diagnosis}', searchCriteria.diagnosis, 'diagnosis')}}">${diagnosis}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -90,7 +91,7 @@
                                 <select id="containerStatus" name="containerStatus">
                                     <option value=""></option>
                                     <#list containerStatusList as containerStatus>
-                                        <option value="${containerStatus}">${containerStatus}</option>
+                                        <option value="${containerStatus}" ng-selected="{{isSelected('${containerStatus}', searchCriteria.containerStatus, 'containerStatus')}}">${containerStatus}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -105,7 +106,7 @@
                                 <select id="reasonForClosure" name="reasonForClosure">
                                     <option value=""></option>
                                     <#list reasons as reason>
-                                        <option value="${reason.code}">${reason.name}</option>
+                                        <option value="${reason.code}" ng-selected="{{isSelected('${reason.code}', searchCriteria.reasonForClosure, 'reasonForClosure')}}">${reason.name}</option>
                                     </#list>
                                 </select>
                             </div>
@@ -115,17 +116,16 @@
                     <td>
                         <div class="control-group">
                             <label class="control-label">Consultation Date</label>
-
-                                <input class = "dates" type="text" id="consultationDateFrom" name="consultationDateFrom">
-                                <input class = "dates" type="text" id="consultationDateTo" name="consultationDateTo">
+                                <input class = "dates" type="text" id="consultationDateFrom" name="consultationDateFrom" ng-model = "searchCriteria.consultationDateFrom">
+                                <input class = "dates" type="text" id="consultationDateTo" name="consultationDateTo"  ng-model = "searchCriteria.consultationDateTo">
                         </div>
                     </td>
                     <td>
                         <div class="control-group">
                             <label class="control-label">Container Issue Date</label>
 
-                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
-                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
                         </div>
                     </td>
                     <td>
@@ -204,6 +204,7 @@
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
     <script type="text/javascript">
+    $(function () {
         initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
 
         $('#containerIssuedDateFrom').datepicker({dateFormat:'dd/mm/yy'});
@@ -211,6 +212,7 @@
         $('#consultationDateFrom').datepicker({dateFormat:'dd/mm/yy'});
         $('#consultationDateTo').datepicker({dateFormat:'dd/mm/yy'});
         $("#district").combobox();
+        var providerId = $("#providerId").val();
         $("#providerId").combobox();
 
         $("#district").bind("autocomplete-selected", function (event, ui) {
@@ -223,9 +225,12 @@
             $("#providerId").val($("#providerId-autocomplete").val());
         });
 
+        initProvidersList();
+
         function initProvidersList() {
             $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
                 $("#providerId").html(response);
+                $("#providerId-autocomplete").val(providerId);
             });
         }
         $('#district').bind('keypress', function (event, e) {
@@ -243,5 +248,6 @@
                 return true;
             }
         }
+    });
     </script>
 </@layout.defaultLayout>

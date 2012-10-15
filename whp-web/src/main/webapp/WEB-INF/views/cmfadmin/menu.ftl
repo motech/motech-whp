@@ -32,7 +32,7 @@
                 <a href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
             <li>
             <li>
-                <a href="/whp/sputum-tracking/pre-treatment">Sputum Tracking Dashboard</a>
+                <a href="/whp/sputum-tracking/pre-treatment#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">Sputum Tracking Dashboard</a>
             <li>
         </ul>
     </li>
