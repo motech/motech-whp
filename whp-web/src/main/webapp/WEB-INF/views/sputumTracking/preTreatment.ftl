@@ -1,7 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-sidebar.ftl" as layout>
 <#import "../paginator.ftl" as paginator>
-
 <@layout.defaultLayout title="MoTeCH-WHP" entity="cmfadmin">
     <#if !pageNo??>
         <#assign pageNo=1/>
@@ -22,15 +21,22 @@
         Filter section
         <table>
             <tr>
+
                 <td>
                     <div class="control-group">
-                        <label class="control-label">Provider ID</label>
+                        <label class="control-label">Provider District</label>
 
                         <div class="controls">
-                            <input type="text" id="providerId" name="providerId">
+                            <select id="district" name="district">
+                                <option value=""></option>
+                                <#list districts as district>
+                                    <option value="${district.name}">${district.name}</option>
+                                </#list>
+                            </select>
                         </div>
                     </div>
                 </td>
+
                 <td>
                     <div class="control-group">
                         <label class="control-label">Container Issue Date</label>
@@ -59,15 +65,10 @@
             <tr>
                 <td>
                     <div class="control-group">
-                        <label class="control-label">Provider District</label>
+                        <label class="control-label">Provider ID</label>
 
                         <div class="controls">
-                            <select id="district" name="district">
-                                <option value=""></option>
-                                <#list districts as district>
-                                    <option value="${district.name}">${district.name}</option>
-                                </#list>
-                            </select>
+                            <input type="text" id="providerId" name="providerId">
                         </div>
                     </div>
                 </td>
@@ -204,5 +205,38 @@
         $('#containerIssuedDateTo').datepicker({dateFormat:'dd/mm/yy'});
         $('#consultationDateFrom').datepicker({dateFormat:'dd/mm/yy'});
         $('#consultationDateTo').datepicker({dateFormat:'dd/mm/yy'});
+        $("#district").combobox();
+        $("#providerId").combobox();
+
+        $("#district").bind("autocomplete-selected", function (event, ui) {
+            initProvidersList();
+            $("#district").val($(this).val());
+            $("#providerId-autocomplete").val("");
+        });
+
+        $("#providerId").bind("autocomplete-selected", function (event, ui) {
+            $("#providerId").val($("#providerId-autocomplete").val());
+        });
+
+        function initProvidersList() {
+            $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
+                $("#providerId").html(response);
+            });
+        }
+        $('#district').bind('keypress', function (event, e) {
+            submitOnEnter(e);
+        });
+        $('#providerId').bind('keypress', function (event, e) {
+            submitOnEnter(e);
+        });
+
+        function submitOnEnter(key) {
+            if ((key.which && key.which == 13) || (key.keyCode && key.keyCode == 13)) {
+                $('#searchForm').submit();
+                return false;
+            } else {
+                return true;
+            }
+        }
     </script>
 </@layout.defaultLayout>
