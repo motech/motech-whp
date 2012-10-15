@@ -11,10 +11,16 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
     }
 
     $scope.isSelected = function(value, selected, id){
+        if($rootScope.searchCriteria[id] && $rootScope.searchCriteria[id] == value) {
+            $('#'+ id).val(value);
+            return;
+        }
+
         if(value == selected){
             $('#'+ id).val(selected);
         }
     }
+
 
     $scope.selected = function(value, id){
         $('#' + id).val(value);
