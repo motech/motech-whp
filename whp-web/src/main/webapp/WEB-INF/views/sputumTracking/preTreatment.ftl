@@ -18,125 +18,136 @@
 
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
-        Filter section
-        <table>
-            <tr>
 
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Provider District</label>
 
-                        <div class="controls">
-                            <select id="district" name="district">
-                                <option value=""></option>
-                                <#list districts as district>
-                                    <option value="${district.name}">${district.name}</option>
-                                </#list>
-                            </select>
+       <div class="row-fluid well" id="search-section">
+            <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
+                Pane</a></h3>
+
+            <div id="search-pane">
+            <table>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Provider District</label>
+
+                            <div class="controls">
+                                <select id="district" name="district">
+                                    <option value=""></option>
+                                    <#list districts as district>
+                                        <option value="${district.name}">${district.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Provider ID</label>
 
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Container Issue Date</label>
+                            <div class="controls">
+                                <input type="text" id="providerId" name="providerId">
+                            </div>
+                        </div>
+                    </td>
 
-                        <div class="controls">
-                            <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
-                            <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Cumulative Lab Result</label>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Cumulative Lab Result</label>
 
-                        <div class="controls">
-                            <select id="cumulativeResult" name="cumulativeResult">
-                                <option value=""></option>
-                                <#list labResults as labResult>
-                                    <option value="${labResult}">${labResult}</option>
-                                </#list>
-                            </select>
+                            <div class="controls">
+                                <select id="cumulativeResult" name="cumulativeResult">
+                                    <option value=""></option>
+                                    <#list labResults as labResult>
+                                        <option value="${labResult}">${labResult}</option>
+                                    </#list>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Provider ID</label>
+                    </td>
 
-                        <div class="controls">
-                            <input type="text" id="providerId" name="providerId">
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Container Status</label>
 
-                        <div class="controls">
-                            <select id="containerStatus" name="containerStatus">
-                                <option value=""></option>
-                                <#list containerStatusList as containerStatus>
-                                    <option value="${containerStatus}">${containerStatus}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Diagnosis</label>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Container Status</label>
 
-                        <div class="controls">
-                            <select id="diagnosis" name="diagnosis">
-                                <option value=""></option>
-                                <#list diagnosisList as diagnosis>
-                                    <option value="${diagnosis}">${diagnosis}</option>
-                                </#list>
-                            </select>
+                            <div class="controls">
+                                <select id="containerStatus" name="containerStatus">
+                                    <option value=""></option>
+                                    <#list containerStatusList as containerStatus>
+                                        <option value="${containerStatus}">${containerStatus}</option>
+                                    </#list>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Consultation Date</label>
+                    </td>
 
-                        <div class="controls">
-                            <input type="text" id="consultationDateFrom" name="consultationDateFrom">
-                            <input type="text" id="consultationDateTo" name="consultationDateTo">
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="control-group">
-                        <label class="control-label">Reason for Closure</label>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Reason for Closure</label>
 
-                        <div class="controls">
-                            <select id="reasonForClosure" name="reasonForClosure">
-                                <option value=""></option>
-                                <#list reasons as reason>
-                                    <option value="${reason.code}">${reason.name}</option>
-                                </#list>
-                            </select>
+                            <div class="controls">
+                                <select id="reasonForClosure" name="reasonForClosure">
+                                    <option value=""></option>
+                                    <#list reasons as reason>
+                                        <option value="${reason.code}">${reason.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="control-group pull-down padding-left">
-                        <div class="controls">
-                            <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
+                    </td>
+
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Diagnosis</label>
+
+                            <div class="controls">
+                                <select id="diagnosis" name="diagnosis">
+                                    <option value=""></option>
+                                    <#list diagnosisList as diagnosis>
+                                        <option value="${diagnosis}">${diagnosis}</option>
+                                    </#list>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Consultation Date</label>
+
+                            <div class="controls">
+                                <input type="text" id="consultationDateFrom" name="consultationDateFrom">
+                                <input type="text" id="consultationDateTo" name="consultationDateTo">
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="control-group">
+                            <label class="control-label">Container Issue Date</label>
+
+                            <div class="controls">
+                                <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom">
+                                <input type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group pull-down padding-left">
+                            <div class="controls">
+                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </div>
+            </div>
     </@paginator.filter>
 </div>
 
@@ -198,9 +209,11 @@
         </table>
     </@paginator.paginate>
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
-    <script type="text/javascript"
-            src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
     <script type="text/javascript">
+        initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
+
         $('#containerIssuedDateFrom').datepicker({dateFormat:'dd/mm/yy'});
         $('#containerIssuedDateTo').datepicker({dateFormat:'dd/mm/yy'});
         $('#consultationDateFrom').datepicker({dateFormat:'dd/mm/yy'});
