@@ -12,17 +12,14 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 @Data
 public class VerificationResult {
 
-    private String verifiedValue;
     private List<WHPError> errors = new ArrayList<>();
 
-    public VerificationResult(String verifiedValue) {
-        this.verifiedValue = verifiedValue;
+    public VerificationResult() {
         errors = new ArrayList<>();
     }
 
-    public VerificationResult(WHPError whpError, String verifiedValue) {
+    public VerificationResult(WHPError whpError) {
         this.errors = asList(whpError);
-        this.verifiedValue = verifiedValue;
     }
 
     public void addAllErrors(List<WHPError> errors) {

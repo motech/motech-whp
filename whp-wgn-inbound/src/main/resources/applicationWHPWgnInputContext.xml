@@ -9,6 +9,8 @@
 
     <import resource="classpath*:applicationValidationContext.xml"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:applicationContainerContext.xml"/>
+    <import resource="classpath*:applicationContainerMappingContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
 
     <context:annotation-config/>

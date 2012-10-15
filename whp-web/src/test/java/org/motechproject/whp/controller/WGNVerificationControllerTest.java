@@ -40,7 +40,7 @@ public class WGNVerificationControllerTest {
         String timeFromRequestFile = "14/08/2012 11:20:59";
         String callIdFromRequestFile = "64756435684375";
 
-        VerificationResult successResult = new VerificationResult(phoneNumberFromRequestFile);
+        VerificationResult successResult = new VerificationResult();
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);
@@ -75,7 +75,7 @@ public class WGNVerificationControllerTest {
         String timeFromRequestFile = "14/08/2012 11:20:59";
         String callIdFromRequestFile = "64756435684375";
 
-        VerificationResult successResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER), phoneNumberFromRequestFile);
+        VerificationResult successResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);

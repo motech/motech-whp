@@ -21,13 +21,13 @@ public class ProviderVerification extends Verification<ProviderVerificationReque
     }
 
     @Override
-    protected String getVerifiedValue(ProviderVerificationRequest request) {
-        return request.getMsisdn();
+    protected WHPError verify(ProviderVerificationRequest request) {
+        String phoneNumber = request.getPhoneNumber();
+        return verifyMobileNumber(phoneNumber);
     }
 
-    @Override
-    protected WHPError verify(ProviderVerificationRequest request) {
-        Provider provider = providerService.findByMobileNumber(request.getPhoneNumber());
+    public WHPError verifyMobileNumber(String phoneNumber) {
+        Provider provider = providerService.findByMobileNumber(phoneNumber);
         if (null == provider) {
             return new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER);
         } else {

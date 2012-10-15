@@ -7,6 +7,7 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.wgninbound.request.VerificationRequest;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,7 +31,7 @@ public class VerificationTest {
 
     @Test
     public void shouldReturnResultWithErrorForFailedValidation() {
-        String inputValue = "value";
+        VerificationRequest inputValue = new VerificationRequest();
         when(validator.validate(eq(inputValue), anyString())).thenThrow(
                 new WHPRuntimeException(WHPErrorCode.INVALID_PHONE_NUMBER)
         );
@@ -39,7 +40,7 @@ public class VerificationTest {
 
     @Test
     public void shouldReturnResultWithFalseWhenVerificationFailed() {
-        String inputValue = "value";
+        VerificationRequest inputValue = new VerificationRequest();
         verification.setValid(false);
         verification.setError(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
 
@@ -49,25 +50,18 @@ public class VerificationTest {
 
     @Test
     public void shouldReturnResultWithSuccessWhenVerificationPassed() {
-        String inputValue = "value";
         verification.setValid(true);
-
-        assertTrue(verification.verifyRequest(inputValue).isSuccess());
+        assertTrue(verification.verifyRequest(new VerificationRequest()).isSuccess());
     }
 }
 
-class StubVerification extends Verification<String> {
+class StubVerification extends Verification<VerificationRequest> {
 
     private boolean isValid;
     private WHPError error;
 
     public StubVerification(RequestValidator validator) {
         super(validator);
-    }
-
-    @Override
-    protected String getVerifiedValue(String request) {
-        return request;
     }
 
     public boolean isValid() {
@@ -87,7 +81,7 @@ class StubVerification extends Verification<String> {
     }
 
     @Override
-    protected WHPError verify(String request) {
+    protected WHPError verify(VerificationRequest request) {
         if (!isValid) {
             return error;
         } else

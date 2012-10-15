@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "validate_flashing_request")
 @Setter
 @EqualsAndHashCode
-public class ProviderVerificationRequest extends VerificationRequest {
+public class ContainerVerificationRequest extends VerificationRequest {
 
     @NotNullOrEmpty
     @Size(min = 10, message = "should be atleast 10 dijits in length")
@@ -20,17 +20,18 @@ public class ProviderVerificationRequest extends VerificationRequest {
     @NotNullOrEmpty
     private String call_id;
 
-    private String time;
+    @NotNullOrEmpty
+    private String container_id;
 
     /*Required for spring mvc*/
-    public ProviderVerificationRequest() {
+    public ContainerVerificationRequest() {
     }
 
-    public ProviderVerificationRequest(String msisdn, String time, String call_id) {
+    public ContainerVerificationRequest(String msisdn, String container_id, String call_id) {
         super(msisdn);
         this.msisdn = msisdn;
         this.call_id = call_id;
-        this.time = time;
+        this.container_id = container_id;
     }
 
     @XmlElement(name = "msisdn")
@@ -43,9 +44,9 @@ public class ProviderVerificationRequest extends VerificationRequest {
         return call_id;
     }
 
-    @XmlElement(name = "time")
-    public String getTime() {
-        return time;
+    @XmlElement(name = "container_id")
+    public String getContainer_id() {
+        return container_id;
     }
 
     public void setMsisdn(String msisdn) {

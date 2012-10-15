@@ -54,16 +54,6 @@ public class ProviderVerificationIT {
     }
 
     @Test
-    public void shouldReturnMSIDNAsTheVerifiedValue() {
-        String msisdn = "1234567890";
-        ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-
-        assertEquals(msisdn, providerVerification.getVerifiedValue(request));
-    }
-
-    @Test
     public void shouldReturnSuccessWhenMSIDNIsThePrimaryMobileNumberOfAnyProvider() {
         String msisdn = "1234567890";
         ProviderVerificationRequest request = new ProviderVerificationRequest();
