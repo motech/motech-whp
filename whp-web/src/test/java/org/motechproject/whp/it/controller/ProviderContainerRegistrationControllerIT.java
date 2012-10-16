@@ -71,13 +71,14 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
     private String remediUrl;
     private String apiKey;
+    private ProviderContainerMapping providerContainerMapping;
 
     @Before
     public void setUp() {
         allContainers.removeAll();
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
-        ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
+        providerContainerMapping = new ProviderContainerMapping();
         providerContainerMapping.add(new ContainerRange(10000000000L, 20000000000L));
         providerContainerMapping.setProviderId(providerId);
 
@@ -85,9 +86,11 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().withProviderId(providerId).build();
         providerWebService.createOrUpdate(whpProviderWeb);
+    }
 
-        markForDeletion(providerContainerMapping);
-        markForDeletion(providerService.findByProviderId(providerId));
+    @After
+    public void tearDown() {
+        allProviderContainerMappings.remove(providerContainerMapping);
     }
 
     @Test
