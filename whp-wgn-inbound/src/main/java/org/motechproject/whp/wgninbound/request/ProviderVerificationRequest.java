@@ -2,7 +2,9 @@ package org.motechproject.whp.wgninbound.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
+import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.motechproject.whp.common.util.WHPDateTime;
 
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,12 +16,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ProviderVerificationRequest extends VerificationRequest {
 
     @NotNullOrEmpty
-    @Size(min = 10, message = "should be atleast 10 dijits in length")
+    @Size(min = 10, message = "should be atleast 10 digits in length")
     private String msisdn;
 
     @NotNullOrEmpty
     private String call_id;
 
+    @NotNullOrEmpty
+    @DateTimeFormat(pattern = WHPDateTime.DATE_TIME_FORMAT)
     private String time;
 
     /*Required for spring mvc*/

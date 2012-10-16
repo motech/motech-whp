@@ -8,13 +8,13 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "validate_flashing_request")
+@XmlRootElement(name = "validate_container_id")
 @Setter
 @EqualsAndHashCode
 public class ContainerVerificationRequest extends VerificationRequest {
 
     @NotNullOrEmpty
-    @Size(min = 10, message = "should be atleast 10 dijits in length")
+    @Size(min = 10, message = "should be atleast 10 digits in length")
     private String msisdn;
 
     @NotNullOrEmpty
