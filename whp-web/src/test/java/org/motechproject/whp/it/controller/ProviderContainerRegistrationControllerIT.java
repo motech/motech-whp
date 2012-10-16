@@ -1,5 +1,6 @@
 package org.motechproject.whp.it.controller;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
@@ -14,6 +15,7 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.mapping.domain.ContainerRange;
 import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
+import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
@@ -62,6 +64,9 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Autowired
     private RemediProperties remediProperties;
 
+    @Autowired
+    private AllContainers allContainers;
+
     private final String providerId = "provider";
 
     private String remediUrl;
@@ -69,6 +74,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
     @Before
     public void setUp() {
+        allContainers.removeAll();
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
@@ -117,5 +123,10 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         verify(httpClientService, times(1)).post(remediUrl, expectedContainerRegistrationXML);
 
         markForDeletion(container);
+    }
+
+    @After
+    public void tearDown() {
+        allContainers.removeAll();
     }
 }

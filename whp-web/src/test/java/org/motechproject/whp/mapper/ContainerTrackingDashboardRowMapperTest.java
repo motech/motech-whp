@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Negative;
 import static org.motechproject.whp.common.domain.Diagnosis.Positive;
 import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
@@ -48,7 +49,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         String containerId = "containerId";
         String reasonForClosure = TB_NEGATIVE_CODE;
         String alternateDiagnosis = "456";
-        ContainerStatus containerStatus = ContainerStatus.Open;
+        ContainerStatus containerStatus = Open;
         String labName = "MyOwnLab";
         LabResults labResults = new LabResults();
         labResults.setLabName(labName);
@@ -108,7 +109,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToProvider.setCreationTime(now);
         containerNotMappedToProvider.setReasonForClosure("some non tb negative code");
         containerNotMappedToProvider.setDiagnosis(Positive);
-
+        containerNotMappedToProvider.setStatus(Open);
         ContainerTrackingRecord record = new ContainerTrackingRecord();
         record.setContainer(containerNotMappedToProvider);
 
@@ -127,6 +128,8 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToProvider.setReasonForClosure(TB_NEGATIVE_CODE);
         containerNotMappedToProvider.setDiagnosis(Positive);
         containerNotMappedToProvider.setAlternateDiagnosis("some alternate");
+        containerNotMappedToProvider.setAlternateDiagnosis("some alternate");
+        containerNotMappedToProvider.setStatus(Open);
 
         ContainerTrackingRecord record = new ContainerTrackingRecord();
         record.setContainer(containerNotMappedToProvider);
@@ -141,7 +144,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     public void shouldNotHaveProviderInformationWhenContainerNotMappedToProvider() {
         Container containerNotMappedToProvider = new Container();
         containerNotMappedToProvider.setCreationTime(now);
-
+        containerNotMappedToProvider.setStatus(Open);
         ContainerTrackingRecord record = new ContainerTrackingRecord();
         record.setContainer(containerNotMappedToProvider);
 
@@ -154,6 +157,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerMappedToPatient.setCreationTime(now);
         containerMappedToPatient.setTbId("tbId");
         containerMappedToPatient.setPatientId("patientId");
+        containerMappedToPatient.setStatus(Open);
 
         ContainerTrackingRecord record = new ContainerTrackingRecord();
         record.setContainer(containerMappedToPatient);
@@ -164,6 +168,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     public void shouldNotHaveConsultationDateWhenContainerNotMappedToPatient() {
         Container containerNotMappedToPatient = new Container();
         containerNotMappedToPatient.setCreationTime(now);
+        containerNotMappedToPatient.setStatus(Open);
 
         ContainerTrackingRecord record = new ContainerTrackingRecord();
         record.setContainer(containerNotMappedToPatient);
