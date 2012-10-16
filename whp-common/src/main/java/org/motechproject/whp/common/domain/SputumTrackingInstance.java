@@ -1,5 +1,8 @@
 package org.motechproject.whp.common.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.util.Arrays.asList;
 
 public enum SputumTrackingInstance {
@@ -52,5 +55,13 @@ public enum SputumTrackingInstance {
 
     public static SputumTrackingInstance getTrackingInstanceType(SputumTrackingInstance mappingInstance) {
         return asList(IN_TREATMENT_INSTANCES).contains(mappingInstance) ? InTreatment : PreTreatment;
+    }
+
+    public static List<String> allInTreatmentInstanceNames() {
+        List<String> names = new ArrayList<>();
+        for(SputumTrackingInstance value : IN_TREATMENT_INSTANCES) {
+            names.add(value.displayText);
+        }
+        return names;
     }
 }

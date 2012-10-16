@@ -12,12 +12,18 @@ import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseReposito
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.query.ContainerDashboardQueryDefinition;
+import org.motechproject.whp.container.tracking.query.InTreatmentContainerDashboardQueryDefinition;
+import org.motechproject.whp.container.tracking.query.PreTreatmentContainerDashboardQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<ContainerTrackingRecord> {
@@ -25,6 +31,12 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     @Autowired
     public AllContainerTrackingRecords(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(ContainerTrackingRecord.class, whpLuceneAwareCouchDbConnector);
+        IndexUploader uploader = new IndexUploader();
+        ContainerDashboardQueryDefinition preTreatmentQueryDefinition = getNewQueryDefinition(PreTreatment);
+        uploader.updateSearchFunctionIfNecessary(db, preTreatmentQueryDefinition.viewName(), preTreatmentQueryDefinition.searchFunctionName(), preTreatmentQueryDefinition.indexFunction());
+
+        ContainerDashboardQueryDefinition inTreatmentQueryDefinition = getNewQueryDefinition(InTreatment);
+        uploader.updateSearchFunctionIfNecessary(db, inTreatmentQueryDefinition.viewName(), inTreatmentQueryDefinition.searchFunctionName(), inTreatmentQueryDefinition.indexFunction());
     }
 
     @View(name = "find_by_containerId", map = "function(doc) {if (doc.type ==='ContainerTrackingRecord') {emit(doc.container.containerId, doc._id);}}")
@@ -50,6 +62,37 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     }
 
     public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
-        return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {};
+        return new TypeReference<CustomLuceneResult<ContainerTrackingRecord>>() {
+        };
+    }
+
+    public List<ContainerTrackingRecord> filter(SputumTrackingInstance instance, Properties filterParams, int skip, int limit) {
+        ContainerDashboardQueryDefinition queryDefinition = getNewQueryDefinition(instance);
+        if (queryDefinition != null) {
+            filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
+            return super.filter(queryDefinition, filterParams, skip, limit);
+        }
+        return Collections.emptyList();
+    }
+
+    public int count(SputumTrackingInstance instance, Properties filterParams) {
+        ContainerDashboardQueryDefinition queryDefinition = getNewQueryDefinition(instance);
+        if (queryDefinition != null) {
+
+            filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
+            return super.count(queryDefinition, filterParams);
+        }
+        return 0;
+    }
+
+    private ContainerDashboardQueryDefinition getNewQueryDefinition(SputumTrackingInstance instance) {
+        switch (instance) {
+
+            case PreTreatment:
+                return new PreTreatmentContainerDashboardQueryDefinition();
+            case InTreatment:
+                return new InTreatmentContainerDashboardQueryDefinition();
+        }
+        return null;
     }
 }

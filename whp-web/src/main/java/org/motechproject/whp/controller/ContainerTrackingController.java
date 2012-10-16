@@ -34,8 +34,9 @@ public class ContainerTrackingController {
     public static final String REASONS = "reasons";
     public static final String ALTERNATE_DIAGNOSIS_LIST = "alternateDiagnosisList";
     public static final String ERRORS = "errors";
-    public String LAB_RESULTS = "labResults";
+    public static final String LAB_RESULTS = "labResults";
     public static final String DISTRICTS = "districts";
+    public static final String INSTANCES = "instances";
 
     @Autowired
     public ContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {

@@ -29,11 +29,11 @@ import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTrea
 public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Autowired
-    AllPreTreatmentContainerTrackingRecordsImpl allPreTreatmentContainerTrackingRecords;
+    AllContainerTrackingRecords allContainerTrackingRecords;
 
     @After
     public void tearDown() {
-        allPreTreatmentContainerTrackingRecords.removeAll();
+        allContainerTrackingRecords.removeAll();
     }
 
     @Test
@@ -47,14 +47,14 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
         ContainerTrackingRecord expectedContainerTrackingRecord = createContainerTrackingRecord(providerId, districtName, preTreatment);
 
-        allPreTreatmentContainerTrackingRecords.add(expectedContainerTrackingRecord);
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord(providerId, districtName, SputumTrackingInstance.EndTreatment));
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord("anotherProvider", districtName, PreTreatment));
+        allContainerTrackingRecords.add(expectedContainerTrackingRecord);
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId, districtName, SputumTrackingInstance.EndTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord("anotherProvider", districtName, PreTreatment));
 
         int skip = 0;
         int limit = 10;
 
-        List<ContainerTrackingRecord> results = allPreTreatmentContainerTrackingRecords.filter(queryParams, skip, limit);
+        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertEquals(results.get(0).getId(), expectedContainerTrackingRecord.getId());
@@ -107,14 +107,14 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withNoPatientMapping()
                 .build();
 
-        allPreTreatmentContainerTrackingRecords.add(expectedContainerTrackingRecord);
-        allPreTreatmentContainerTrackingRecords.add(containerTrackingRecord1);
-        allPreTreatmentContainerTrackingRecords.add(containerTrackingRecord2);
+        allContainerTrackingRecords.add(expectedContainerTrackingRecord);
+        allContainerTrackingRecords.add(containerTrackingRecord1);
+        allContainerTrackingRecords.add(containerTrackingRecord2);
 
         int skip = 0;
         int limit = 10;
 
-        List<ContainerTrackingRecord> results = allPreTreatmentContainerTrackingRecords.filter(queryParams, skip, limit);
+        List<ContainerTrackingRecord> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertThat(results.get(0).getId(), is(expectedContainerTrackingRecord.getId()));
@@ -126,22 +126,22 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         String providerId2 = "anotherProvider";
         String districtName1 = "East Champaran";
 
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, SputumTrackingInstance.EndTreatment));
-        allPreTreatmentContainerTrackingRecords.add(createContainerTrackingRecord(providerId2, districtName1, PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, SputumTrackingInstance.EndTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId2, districtName1, PreTreatment));
 
         // Assertion 1 for provider1-Instance1
         Properties queryParams = new Properties();
         queryParams.put("providerId", providerId1);
-        int recordCount = allPreTreatmentContainerTrackingRecords.count(queryParams);
+        int recordCount = allContainerTrackingRecords.count(PreTreatment, queryParams);
         assertEquals(2, recordCount);
 
 
         // Assertion 3 for provider2-Instance1
         queryParams = new Properties();
         queryParams.put("providerId", providerId2);
-        recordCount = allPreTreatmentContainerTrackingRecords.count(queryParams);
+        recordCount = allContainerTrackingRecords.count(PreTreatment, queryParams);
         assertEquals(1, recordCount);
     }
 }

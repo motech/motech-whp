@@ -68,9 +68,9 @@ public class ContainerTrackingControllerTest {
                 .perform(get("/sputum-tracking/pre-treatment"))
                 .andExpect(status().isOk())
                 .andExpect(model().size(6))
-                .andExpect(model().attribute("diagnosisList", Diagnosis.allNames()))
-                .andExpect(model().attribute("containerStatusList", ContainerStatus.allNames()))
-                .andExpect(model().attribute("labResults", SmearTestResult.allNames()))
+                .andExpect(model().attribute(DIAGNOSIS_LIST, Diagnosis.allNames()))
+                .andExpect(model().attribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames()))
+                .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
                 .andExpect(model().attribute(REASONS, reasons))
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
@@ -78,6 +78,28 @@ public class ContainerTrackingControllerTest {
         verify(containerService).getAllClosureReasonsForAdmin();
         verify(containerService).getAllAlternateDiagnosis();
     }
+
+    /*@Test
+    public void shouldPopulateUIModelForInTreatmentDashboard() throws Exception {
+        ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
+        List<District> districts = asList(new District("D1"), new District("D2"));
+
+        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
+        when(allDistricts.getAll()).thenReturn(districts);
+
+        standaloneSetup(containerTrackingController).build()
+                .perform(get("/sputum-tracking/in-treatment"))
+                .andExpect(status().isOk())
+                .andExpect(model().size(6))
+                .andExpect(model().attribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames()))
+                .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.allInTreatmentInstanceNames()))
+                .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
+                .andExpect(model().attribute(REASONS, reasons))
+                .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()));
+
+        verify(containerService).getAllClosureReasonsForAdmin();
+        verify(containerService).getAllAlternateDiagnosis();
+    }*/
 
     @Test
     public void shouldPopulateErrorsIfReasonForClosureRequestFailsValidation() throws Exception {

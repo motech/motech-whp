@@ -3,8 +3,9 @@ package org.motechproject.whp.service;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllInTreatmentContainerTrackingRecordsImpl;
+import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
@@ -13,13 +14,13 @@ import java.util.List;
 import java.util.Properties;
 
 public abstract class ContainerDashboardService  implements Paging<ContainerTrackingDashboardRow> {
+    protected AllContainerTrackingRecords allContainerTrackingRecords;
     protected ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
-    protected abstract Integer count(Properties searchCriteria);
+    protected abstract SputumTrackingInstance getSupportedInstance();
 
-    protected abstract List<ContainerTrackingRecord> filter(Integer rowsPerPage, Properties searchCriteria, int startIndex);
-
-    public ContainerDashboardService(ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
+    public ContainerDashboardService(AllContainerTrackingRecords allContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
+        this.allContainerTrackingRecords = allContainerTrackingRecords;
         this.containerTrackingDashboardRowMapper = containerTrackingDashboardRowMapper;
     }
 
@@ -36,11 +37,11 @@ public abstract class ContainerDashboardService  implements Paging<ContainerTrac
         searchCriteria = properties;
 
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerTrackingRecord> rowsForPage = filter(rowsPerPage, searchCriteria, startIndex);
+        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filter(getSupportedInstance(), searchCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(count(searchCriteria));
+        pageResults.setTotalRows(allContainerTrackingRecords.count(getSupportedInstance(), searchCriteria));
         return pageResults;
     }
 

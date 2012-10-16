@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.whp.container.tracking.builder.ContainerTrackingRecordBuilder;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllInTreatmentContainerTrackingRecordsImpl;
+import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
@@ -26,12 +26,12 @@ public class InTreatmentTestPart {
     private ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
     @Mock
-    private AllInTreatmentContainerTrackingRecordsImpl allInTreatmentContainerTrackingRecords;
+    private AllContainerTrackingRecords allContainerTrackingRecords;
 
     @Before
     public void setup() {
         initMocks(this);
-        inTreatmentContainerDashboardService = new InTreatmentContainerDashboardService(allInTreatmentContainerTrackingRecords, containerTrackingDashboardRowMapper);
+        inTreatmentContainerDashboardService = new InTreatmentContainerDashboardService(allContainerTrackingRecords, containerTrackingDashboardRowMapper);
     }
 
     @Test
@@ -56,13 +56,13 @@ public class InTreatmentTestPart {
         int skip = 0;
         int limit = 10;
 
-        when(allInTreatmentContainerTrackingRecords.count(filterParams)).thenReturn(2);
-        when(allInTreatmentContainerTrackingRecords.filter(filterParams, skip, limit)).thenReturn(results);
+        when(allContainerTrackingRecords.count(InTreatment, filterParams)).thenReturn(2);
+        when(allContainerTrackingRecords.filter(InTreatment, filterParams, skip, limit)).thenReturn(results);
 
         PageResults<ContainerTrackingDashboardRow> pageResults = inTreatmentContainerDashboardService.page(1, limit, filterParams);
 
-        verify(allInTreatmentContainerTrackingRecords).filter(filterParams, skip, limit);
-        verify(allInTreatmentContainerTrackingRecords).count(filterParams);
+        verify(allContainerTrackingRecords).filter(InTreatment, filterParams, skip, limit);
+        verify(allContainerTrackingRecords).count(InTreatment, filterParams);
 
         assertEquals(new Integer(2), pageResults.getTotalRows());
         assertEquals(2, pageResults.getResults().size());
