@@ -1,20 +1,22 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.core.AllOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
+import org.motechproject.whp.wgninbound.verification.ContainerVerification;
 import org.motechproject.whp.wgninbound.verification.ProviderVerification;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -26,12 +28,15 @@ public class WGNVerificationControllerTest {
 
     @Mock
     ProviderVerification providerVerification;
+    @Mock
+    ContainerVerification containerVerification;
+
     WGNVerificationController wgnVerificationController;
 
     @Before
     public void setup() {
         initMocks(this);
-        wgnVerificationController = new WGNVerificationController(providerVerification);
+        wgnVerificationController = new WGNVerificationController(providerVerification, containerVerification);
     }
 
     @Test
@@ -86,9 +91,78 @@ public class WGNVerificationControllerTest {
                         post("/sputumCall/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
+                )
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().string(
+                                allOf(
+                                        containsString("failure"),
+                                        containsString("INVALID_PHONE_NUMBER"),
+                                        containsString("No provider found for the given phone number")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    public void shouldRespondWithSuccessIfVerificationOfContainerPassed() throws Exception {
+        String msisdnFromFile = "0986754322";
+        String containerIdFromFile = "1234567890";
+        String callIdFromFile = "64756435684375";
+
+        ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
+        when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
+
+        standaloneSetup(wgnVerificationController)
+                .build()
+                .perform(
+                        post("/sputumCall/container/verify")
+                                .body(readXML("/validContainerAuthorizationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
-                content().string(AllOf.allOf(containsString("failure"), containsString("INVALID_PHONE_NUMBER"), containsString("No provider found for the given phone number")))
+                content().string(containsString("success"))
         );
+    }
+
+    @Test
+    public void shouldRespondWithFailureIfVerificationOfContainerFailed() throws Exception {
+        String msisdnFromFile = "0986754322";
+        String containerIdFromFile = "1234567890";
+        String callIdFromFile = "64756435684375";
+
+        WHPError whpError = new WHPError(WHPErrorCode.INVALID_CONTAINER_ID);
+        ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
+        when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
+
+        standaloneSetup(wgnVerificationController)
+                .build()
+                .perform(
+                        post("/sputumCall/container/verify")
+                                .body(readXML("/validContainerAuthorizationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
+                )
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().string(
+                                allOf(
+                                        containsString("failure"),
+                                        containsString(whpError.getErrorCode().name()),
+                                        containsString(whpError.getMessage())
+                                )
+                        )
+                );
+    }
+
+    @Test
+    public void shouldRespondWithErrorOnInvalidXMLForContainerRequest() throws Exception {
+        standaloneSetup(wgnVerificationController)
+                .build()
+                .perform(
+                        post("/sputumCall/container/verify")
+                                .body("invalidXMLContent".getBytes())
+                                .contentType(MediaType.APPLICATION_XML)
+                )
+                .andExpect(status().isBadRequest());
     }
 
     private byte[] readXML(String xmlPath) throws IOException {
