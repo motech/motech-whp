@@ -43,7 +43,7 @@ public class RemediXmlRequestBuilderTest {
                 "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"" + containerId + "\" date_modified=\"" + dateModified.toString(WHPDate.DATE_TIME_FORMAT) +"\" user_id=\"system\"\n" +
                 "      api_key=\"" + REMEDI_API_KEY + "\">\n" +
                 "    <create>\n" +
-                "        <case_type>" + caseType.getDisplayText() + "</case_type>\n" +
+                "        <case_type>" + caseType.name() + "</case_type>\n" +
                 "    </create>\n" +
                 "    <update>\n" +
                 "        <provider_id>" + providerId + "</provider_id>\n" +

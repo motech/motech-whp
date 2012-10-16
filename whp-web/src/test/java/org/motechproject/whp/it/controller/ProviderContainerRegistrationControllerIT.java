@@ -93,13 +93,13 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Test
     public void shouldRegisterContainer() throws Exception {
         String containerId = "10000000000";
-        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
+        SputumTrackingInstance inTreatmentInstance = SputumTrackingInstance.InTreatment;
 
         List<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(providerContainerRegistrationController).build()
-                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", instance)
+                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", inTreatmentInstance.getDisplayText())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk());
 
@@ -118,7 +118,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                 "    <update>\n" +
                 "        <provider_id>%s</provider_id>\n" +
                 "    </update>\n" +
-                "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, instance, providerId);
+                "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
 
         verify(httpClientService, times(1)).post(remediUrl, expectedContainerRegistrationXML);
 

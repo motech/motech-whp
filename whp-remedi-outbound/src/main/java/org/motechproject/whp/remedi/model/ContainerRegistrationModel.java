@@ -17,7 +17,7 @@ public class ContainerRegistrationModel {
     public ContainerRegistrationModel(String containerId, String providerId, SputumTrackingInstance caseType, DateTime dateModified) {
         this.containerId = containerId;
         this.providerId = providerId;
-        this.caseType = caseType.getDisplayText();
+        this.caseType = caseType.name();
         this.dateModified = dateModified.toString(WHPDate.DATE_TIME_FORMAT);
     }
 }
