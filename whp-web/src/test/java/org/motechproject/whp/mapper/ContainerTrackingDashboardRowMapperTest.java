@@ -67,6 +67,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         container.setReasonForClosure(reasonForClosure);
         container.setAlternateDiagnosis(alternateDiagnosis);
         container.setDiagnosis(Negative);
+        container.setStatus(Open);
 
         ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
         containerTrackingRecord.setContainer(container);
@@ -106,6 +107,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     public void shouldNotChangeDiagnosisWhenReasonForClosureIsNotTbNegative() {
         when(allReasonForContainerClosures.findByCode("some non tb negative code")).thenReturn(new ReasonForContainerClosure("some reason", "some non tb negative code"));
         Container containerNotMappedToProvider = new Container();
+        containerNotMappedToProvider.setStatus(Open);
         containerNotMappedToProvider.setCreationTime(now);
         containerNotMappedToProvider.setReasonForClosure("some non tb negative code");
         containerNotMappedToProvider.setDiagnosis(Positive);
@@ -124,6 +126,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         when(allReasonForContainerClosures.findByCode(TB_NEGATIVE_CODE)).thenReturn(new ReasonForContainerClosure("some reason", TB_NEGATIVE_CODE));
         when(allAlternateDiagnosis.findByCode("some alternate")).thenReturn(new AlternateDiagnosis("some reason", "123"));
         Container containerNotMappedToProvider = new Container();
+        containerNotMappedToProvider.setStatus(Open);
         containerNotMappedToProvider.setCreationTime(now);
         containerNotMappedToProvider.setReasonForClosure(TB_NEGATIVE_CODE);
         containerNotMappedToProvider.setDiagnosis(Positive);
@@ -143,6 +146,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     @Test
     public void shouldNotHaveProviderInformationWhenContainerNotMappedToProvider() {
         Container containerNotMappedToProvider = new Container();
+        containerNotMappedToProvider.setStatus(Open);
         containerNotMappedToProvider.setCreationTime(now);
         containerNotMappedToProvider.setStatus(Open);
         ContainerTrackingRecord record = new ContainerTrackingRecord();
@@ -154,6 +158,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     @Test
     public void shouldReturnDiagnosisAsPositiveWhenContainerMappedToPatient() {
         Container containerMappedToPatient = new Container();
+        containerMappedToPatient.setStatus(Open);
         containerMappedToPatient.setCreationTime(now);
         containerMappedToPatient.setTbId("tbId");
         containerMappedToPatient.setPatientId("patientId");
@@ -167,6 +172,7 @@ public class ContainerTrackingDashboardRowMapperTest {
     @Test
     public void shouldNotHaveConsultationDateWhenContainerNotMappedToPatient() {
         Container containerNotMappedToPatient = new Container();
+        containerNotMappedToPatient.setStatus(Open);
         containerNotMappedToPatient.setCreationTime(now);
         containerNotMappedToPatient.setStatus(Open);
 
