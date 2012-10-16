@@ -11,25 +11,23 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-@Service
-public class ContainerTrackingService {
+public abstract class ContainerTrackingService {
 
-    AllContainerTrackingRecords allContainerTrackingRecords;
     AllProviders allProviders;
     AllPatients allPatients;
     AllReasonForContainerClosures allReasonForContainerClosures;
     AllAlternateDiagnosis allAlternateDiagnosis;
 
+    protected abstract AllContainerTrackingRecords getRepository();
+
     @Autowired
-    public ContainerTrackingService(AllContainerTrackingRecords allContainerTrackingRecords, AllProviders allProviders, AllPatients allPatients,
+    public ContainerTrackingService(AllProviders allProviders, AllPatients allPatients,
                                     AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
-        this.allContainerTrackingRecords = allContainerTrackingRecords;
         this.allProviders = allProviders;
         this.allPatients = allPatients;
         this.allReasonForContainerClosures = allReasonForContainerClosures;
@@ -37,7 +35,7 @@ public class ContainerTrackingService {
     }
 
     public List<ContainerTrackingRecord> allContainerDashboardRows() {
-        return allContainerTrackingRecords.getAll();
+        return getRepository().getAll();
     }
 
     public void createDashboardRow(Container container) {
@@ -45,35 +43,35 @@ public class ContainerTrackingService {
         row.setContainer(container);
         row.setProvider(provider(container));
 
-        allContainerTrackingRecords.add(row);
+        getRepository().add(row);
     }
 
     public void updateDashboardRow(Container container) {
-        ContainerTrackingRecord trackingRecord = allContainerTrackingRecords.findByContainerId(container.getContainerId());
+        ContainerTrackingRecord trackingRecord = getRepository().findByContainerId(container.getContainerId());
         trackingRecord.setProvider(provider(container));
         trackingRecord.setPatient(patient(container));
         trackingRecord.setContainer(container);
 
-        allContainerTrackingRecords.update(trackingRecord);
+        getRepository().update(trackingRecord);
     }
 
     public void updateProviderInformation(Provider provider) {
-        List<ContainerTrackingRecord> allRowsBelongingToProvider = allContainerTrackingRecords.withProviderId(provider.getProviderId());
+        List<ContainerTrackingRecord> allRowsBelongingToProvider = getRepository().withProviderId(provider.getProviderId());
         if (CollectionUtils.isNotEmpty(allRowsBelongingToProvider)) {
             for (ContainerTrackingRecord containerTrackingRecord : allRowsBelongingToProvider) {
                 containerTrackingRecord.setProvider(provider);
             }
-            allContainerTrackingRecords.updateAll(allRowsBelongingToProvider);
+            getRepository().updateAll(allRowsBelongingToProvider);
         }
     }
 
     public void updatePatientInformation(Patient patient) {
-        List<ContainerTrackingRecord> allRowsBelongingToPatient = allContainerTrackingRecords.withPatientId(patient.getPatientId());
+        List<ContainerTrackingRecord> allRowsBelongingToPatient = getRepository().withPatientId(patient.getPatientId());
         if (CollectionUtils.isNotEmpty(allRowsBelongingToPatient)) {
             for (ContainerTrackingRecord containerTrackingRecord : allRowsBelongingToPatient) {
                 containerTrackingRecord.setPatient(patient);
             }
-            allContainerTrackingRecords.updateAll(allRowsBelongingToPatient);
+            getRepository().updateAll(allRowsBelongingToPatient);
         }
     }
 

@@ -7,6 +7,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.View;
+import org.motechproject.couchdb.lucene.query.QueryDefinition;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
@@ -18,16 +19,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Properties;
 
-
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<ContainerTrackingRecord> {
 
     @Autowired
     public AllContainerTrackingRecords(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(ContainerTrackingRecord.class, whpLuceneAwareCouchDbConnector);
-        IndexUploader uploader = new IndexUploader();
-        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
-        uploader.updateSearchFunctionIfNecessary(db, queryDefinition.viewName(), queryDefinition.searchFunctionName(), queryDefinition.indexFunction());
     }
 
     @View(name = "find_by_containerId", map = "function(doc) {if (doc.type ==='ContainerTrackingRecord') {emit(doc.container.containerId, doc._id);}}")
@@ -50,18 +47,6 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     public List<ContainerTrackingRecord> withPatientId(String patientId) {
         ViewQuery findByContainerId = createQuery("find_by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         return db.queryView(findByContainerId, ContainerTrackingRecord.class);
-    }
-
-    public List<ContainerTrackingRecord> filterPreTreatmentRecords(Properties filterParams, int skip, int limit) {
-        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
-        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
-        return super.filter(queryDefinition, filterParams, skip, limit);
-    }
-
-    public int countPreTreatmentRecords(Properties filterParams) {
-        ContainerDashboardQueryDefinition queryDefinition = new ContainerDashboardQueryDefinition();
-        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
-        return super.count(queryDefinition, filterParams);
     }
 
     public TypeReference<CustomLuceneResult<ContainerTrackingRecord>> getTypeReference() {
