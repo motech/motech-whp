@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AllProviderContainerMappings  extends MotechBaseRepository<ProviderContainerMapping> {
+public class AllProviderContainerMappings extends MotechBaseRepository<ProviderContainerMapping> {
 
     @Autowired
     public AllProviderContainerMappings(@Qualifier("whpDbConnector") CouchDbConnector db) {
@@ -20,6 +20,8 @@ public class AllProviderContainerMappings  extends MotechBaseRepository<Provider
 
     @GenerateView
     public ProviderContainerMapping findByProviderId(String providerId) {
+        if (providerId != null)
+            providerId = providerId.toLowerCase();
         ViewQuery find_by_providerId = createQuery("by_providerId").key(providerId).includeDocs(true);
         return singleResult(db.queryView(find_by_providerId, ProviderContainerMapping.class));
     }

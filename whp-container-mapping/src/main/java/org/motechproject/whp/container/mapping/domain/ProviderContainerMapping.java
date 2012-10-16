@@ -18,4 +18,9 @@ public class ProviderContainerMapping extends MotechBaseDataObject {
     public boolean hasContainerId(long containerId) {
         return containerRanges.hasContainerId(containerId);
     }
+
+    public void setProviderId(String providerId) {
+        if (providerId != null)
+            this.providerId = providerId.toLowerCase();
+    }
 }
