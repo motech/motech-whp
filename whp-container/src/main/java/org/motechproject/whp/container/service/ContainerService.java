@@ -14,7 +14,6 @@ import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
@@ -44,16 +43,14 @@ public class ContainerService {
     private RemediService remediService;
     private final AllReasonForContainerClosures allReasonForContainerClosures;
     private final AllAlternateDiagnosis allAlternateDiagnosis;
-    private ProviderContainerMappingService providerContainerMappingService;
 
 
     @Autowired
-    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis, ProviderContainerMappingService providerContainerMappingService) {
+    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
         this.allContainers = allContainers;
         this.remediService = remediService;
         this.allReasonForContainerClosures = allReasonForContainerClosures;
         this.allAlternateDiagnosis = allAlternateDiagnosis;
-        this.providerContainerMappingService = providerContainerMappingService;
     }
 
     public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
@@ -65,8 +62,6 @@ public class ContainerService {
         container.setCurrentTrackingInstance(instance);
         container.setDiagnosis(Pending);
         allContainers.add(container);
-
-        providerContainerMappingService.addRange(registrationRequest.getProviderId(), registrationRequest.getContainerId());
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);

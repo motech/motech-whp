@@ -2,14 +2,18 @@ package org.motechproject.whp.container.mapping.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.container.mapping.domain.ContainerRange;
 import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ProviderContainerMappingServiceTest {
@@ -31,23 +35,6 @@ public class ProviderContainerMappingServiceTest {
         providerContainerMappingService.add(containerMapping);
 
         verify(allProviderContainerMappings).add(containerMapping);
-    }
-
-    @Test
-    public void shouldAddTheContainerRangeToProviderContainerMappingForGivenProviderId() {
-        String providerId = "providerId";
-        String containerId = "12345";
-        ProviderContainerMapping mapping = new ProviderContainerMapping();
-        when(allProviderContainerMappings.findByProviderId(providerId)).thenReturn(mapping);
-
-        providerContainerMappingService.addRange(providerId, containerId);
-
-        verify(allProviderContainerMappings).findByProviderId(providerId);
-        ArgumentCaptor<ProviderContainerMapping> captor = ArgumentCaptor.forClass(ProviderContainerMapping.class);
-        verify(allProviderContainerMappings).update(captor.capture());
-        ProviderContainerMapping actualMapping = captor.getValue();
-
-        assertTrue(actualMapping.getContainerRanges().hasContainerId(Long.parseLong(containerId)));
     }
 
     @Test

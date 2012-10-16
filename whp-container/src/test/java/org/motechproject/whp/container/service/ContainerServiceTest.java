@@ -20,9 +20,6 @@ import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
-import org.motechproject.whp.container.mapping.domain.ContainerRange;
-import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
@@ -53,13 +50,11 @@ public class ContainerServiceTest extends BaseUnitTest {
     private AllReasonForContainerClosures allReasonForContainerClosures;
     @Mock
     private AllAlternateDiagnosis allAlternateDiagnosis;
-    @Mock
-    private ProviderContainerMappingService providerContainerMappingService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis, providerContainerMappingService);
+        containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis);
     }
 
     @Test
@@ -98,7 +93,6 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
-        verify(providerContainerMappingService).addRange(providerId, containerId);
     }
 
     @Test
