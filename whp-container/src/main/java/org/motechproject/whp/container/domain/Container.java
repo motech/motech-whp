@@ -46,6 +46,8 @@ public class Container extends MotechBaseDataObject {
 
     private LocalDate consultationDate;
 
+    private LocalDate containerIssuedDate;
+
     // Required for ektorp
     public Container() {
     }
@@ -55,6 +57,9 @@ public class Container extends MotechBaseDataObject {
         this.containerId = containerId;
         this.instance = instance;
         this.creationTime = creationTime;
+        this.status = ContainerStatus.Open;
+        this.diagnosis = Pending;
+        this.containerIssuedDate = DateUtil.newDate(creationTime);
     }
 
     public void setCreationTime(DateTime creationTime) {

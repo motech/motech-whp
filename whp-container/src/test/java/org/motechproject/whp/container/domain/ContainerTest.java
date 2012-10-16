@@ -1,7 +1,9 @@
 package org.motechproject.whp.container.domain;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
@@ -13,6 +15,20 @@ import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.Diagnosis.Positive;
 
 public class ContainerTest {
+
+    @Test
+    public void shouldSetDefaultsUponCreation() {
+        DateTime creationTime = now();
+        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, creationTime);
+        assertEquals(ContainerStatus.Open, container.getStatus());
+        assertEquals(Pending, container.getDiagnosis());
+        assertNull(container.getPatientId());
+        assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
+        assertEquals(creationTime, container.getCreationTime());
+        assertEquals(DateUtil.newDate(creationTime), container.getContainerIssuedDate());
+        assertNull(container.getTbId());
+        assertNull(container.getReasonForClosure());
+    }
 
     @Test
     public void shouldMapContainerToPatient() {

@@ -13,7 +13,6 @@ import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
 public class ContainerDashboardQueryDefinition implements QueryDefinition {
 
-    private final QueryField cumulativeSmearResult = new QueryField("cumulativeSmearResult", STRING);
     private final QueryField containerInstance = new QueryField("containerInstance", STRING);
     private final QueryField providerId = new QueryField("providerId", STRING);
     private final QueryField district = new QueryField("district", STRING);
@@ -33,7 +32,6 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
             cumulativeResult,
             diagnosis,
             consultationDate,
-            cumulativeSmearResult,
             reasonForClosure
     );
 
@@ -59,7 +57,7 @@ public class ContainerDashboardQueryDefinition implements QueryDefinition {
                 "index.add(doc.provider.providerId, {field: 'providerId'}); " +
                 "index.add(doc.provider.district, {field: 'district'});" +
                 "index.add(doc.container.status, {field: 'containerStatus'});" +
-                "index.add(doc.container.creationTime, {field: 'containerIssuedDate', type : 'date'});" +
+                "index.add(doc.container.containerIssuedDate, {field: 'containerIssuedDate', type : 'date'});" +
                 "index.add(doc.container.instance, {field: 'containerInstance'}); " +
 
                 "if(doc.container.labResults != undefined) { " +

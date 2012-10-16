@@ -71,8 +71,10 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldRegisterAContainer() throws IOException, TemplateException {
-        DateTime creationDate = DateUtil.now();
-        mockCurrentDate(creationDate);
+        mockCurrentDate(DateUtil.now());
+        DateTime creationTime = DateUtil.now();
+        LocalDate containerIssuedDate = DateUtil.today();
+
         String providerId = "provider_one";
         String containerId = "1234567890";
         SputumTrackingInstance instance = SputumTrackingInstance.InTreatment;
@@ -84,10 +86,12 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container actualContainer = captor.getValue();
         assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
         assertEquals(containerId, actualContainer.getContainerId());
-        assertEquals(creationDate, actualContainer.getCreationTime());
+        assertEquals(creationTime, actualContainer.getCreationTime());
+        assertEquals(containerIssuedDate, actualContainer.getContainerIssuedDate());
         assertEquals(instance, actualContainer.getInstance());
+        assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
 
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationDate);
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
     }
 
