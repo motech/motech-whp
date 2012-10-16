@@ -8,7 +8,6 @@
     <util:properties id="sputumTracking" location="classpath:/sputumTracking.properties"/>
 
     <import resource="classpath*:applicationCommonContext.xml"/>
-    <import resource="classpath*:applicationRefDataContext.xml"/>
     <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationRemediContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
