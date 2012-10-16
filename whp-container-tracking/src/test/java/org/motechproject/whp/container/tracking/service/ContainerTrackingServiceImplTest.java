@@ -10,7 +10,6 @@ import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
-import org.motechproject.whp.container.tracking.repository.AllPreTreatmentContainerTrackingRecordsImpl;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -26,12 +25,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class PreTreatmentContainerTrackingServiceImplTest {
+public class ContainerTrackingServiceImplTest {
 
     ContainerTrackingService containerTrackingService;
 
     @Mock
-    AllPreTreatmentContainerTrackingRecordsImpl allContainerTrackingRecords;
+    AllContainerTrackingRecords allContainerTrackingRecords;
     @Mock
     AllProviders allProviders;
     @Mock
@@ -44,7 +43,7 @@ public class PreTreatmentContainerTrackingServiceImplTest {
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingService = new PreTreatmentContainerTrackingServiceImpl(allContainerTrackingRecords, allProviders, allPatients, allReasonForContainerClosures, allAlternateDiagnosis);
+        containerTrackingService = new ContainerTrackingService(allContainerTrackingRecords, allProviders, allPatients, allReasonForContainerClosures, allAlternateDiagnosis);
     }
 
     @Test

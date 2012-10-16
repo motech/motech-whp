@@ -15,46 +15,27 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class PreTreatmentContainerDashboardService implements Paging<ContainerTrackingDashboardRow> {
+public class PreTreatmentContainerDashboardService extends ContainerDashboardService {
     private AllPreTreatmentContainerTrackingRecordsImpl allPreTreatmentContainerTrackingRecords;
-    private ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
     @Autowired
     public PreTreatmentContainerDashboardService(AllPreTreatmentContainerTrackingRecordsImpl allPreTreatmentContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
+        super(containerTrackingDashboardRowMapper);
         this.allPreTreatmentContainerTrackingRecords = allPreTreatmentContainerTrackingRecords;
-        this.containerTrackingDashboardRowMapper = containerTrackingDashboardRowMapper;
-    }
-
-    @Override
-    public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, Properties searchCriteria) {
-
-        Properties properties = new Properties();
-        for(Object key : searchCriteria.keySet()){
-            Object value = searchCriteria.get(key);
-            if(!StringUtils.isBlank((String) value)){
-                properties.put(key, value);
-            }
-        }
-        searchCriteria = properties;
-
-        int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerTrackingRecord> rowsForPage = allPreTreatmentContainerTrackingRecords.filterPreTreatmentRecords(searchCriteria, startIndex, rowsPerPage);
-        PageResults pageResults = new PageResults();
-        pageResults.setPageNo(pageNumber);
-        pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(allPreTreatmentContainerTrackingRecords.countPreTreatmentRecords(searchCriteria));
-        return pageResults;
-    }
-
-    private List prepareResultsModel(List<ContainerTrackingRecord> rows) {
-        ArrayList<ContainerTrackingDashboardRow> containerTrackingDashboardRows = new ArrayList<>();
-        for (ContainerTrackingRecord row : rows)
-            containerTrackingDashboardRows.add(containerTrackingDashboardRowMapper.mapFrom(row));
-        return containerTrackingDashboardRows;
     }
 
     @Override
     public String entityName() {
-        return "container_tracking_dashboard_row";
+        return "pre_treatment_container_tracking_dashboard_row";
+    }
+
+    @Override
+    protected Integer count(Properties searchCriteria) {
+        return allPreTreatmentContainerTrackingRecords.count(searchCriteria);
+    }
+
+    @Override
+    protected List<ContainerTrackingRecord> filter(Integer rowsPerPage, Properties searchCriteria, int startIndex) {
+        return allPreTreatmentContainerTrackingRecords.filter(searchCriteria, startIndex, rowsPerPage);
     }
 }

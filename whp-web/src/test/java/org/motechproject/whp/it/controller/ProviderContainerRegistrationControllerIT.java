@@ -91,6 +91,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @After
     public void tearDown() {
         allProviderContainerMappings.remove(providerContainerMapping);
+        allContainers.removeAll();
     }
 
     @Test
@@ -126,10 +127,5 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         verify(httpClientService, times(1)).post(remediUrl, expectedContainerRegistrationXML);
 
         markForDeletion(container);
-    }
-
-    @After
-    public void tearDown() {
-        allContainers.removeAll();
     }
 }

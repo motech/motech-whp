@@ -5,6 +5,7 @@ import com.github.ldriscoll.ektorplucene.util.IndexUploader;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.container.tracking.query.ContainerDashboardQueryDefinition;
+import org.motechproject.whp.container.tracking.query.InTreatmentContainerDashboardQueryDefinition;
 import org.motechproject.whp.container.tracking.query.PreTreatmentContainerDashboardQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.Properties;
 
 @Repository
-public class AllPreTreatmentContainerTrackingRecordsImpl extends AllContainerTrackingRecords {
+public class AllInTreatmentContainerTrackingRecordsImpl extends AllContainerTrackingRecords {
 
     @Autowired
-    public AllPreTreatmentContainerTrackingRecordsImpl(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
+    public AllInTreatmentContainerTrackingRecordsImpl(@Qualifier("whpContainerTrackingCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(whpLuceneAwareCouchDbConnector);
         IndexUploader uploader = new IndexUploader();
         ContainerDashboardQueryDefinition queryDefinition = getNewQueryDefinition();
@@ -25,18 +26,18 @@ public class AllPreTreatmentContainerTrackingRecordsImpl extends AllContainerTra
     }
 
     protected ContainerDashboardQueryDefinition getNewQueryDefinition() {
-        return new PreTreatmentContainerDashboardQueryDefinition();
+        return new InTreatmentContainerDashboardQueryDefinition();
     }
 
     public List<ContainerTrackingRecord> filter(Properties filterParams, int skip, int limit) {
         ContainerDashboardQueryDefinition queryDefinition = getNewQueryDefinition();
-        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
+        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.InTreatment.name());
         return super.filter(queryDefinition, filterParams, skip, limit);
     }
 
     public int count(Properties filterParams) {
         ContainerDashboardQueryDefinition queryDefinition = getNewQueryDefinition();
-        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.PreTreatment.name());
+        filterParams.put(queryDefinition.getContainerInstanceFieldName(), SputumTrackingInstance.InTreatment.name());
         return super.count(queryDefinition, filterParams);
     }
 }
