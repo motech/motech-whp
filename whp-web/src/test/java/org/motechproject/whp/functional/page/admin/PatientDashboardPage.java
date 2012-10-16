@@ -15,9 +15,9 @@ import org.openqa.selenium.support.How;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
 import static org.openqa.selenium.By.name;
 
 public class PatientDashboardPage extends Page {
@@ -118,7 +118,7 @@ public class PatientDashboardPage extends Page {
     private void assertRemark(String user, DateTime dateTime, String remark, int position, List<WebElement> remarks, boolean isProviderRemark) {
         assertThat(remarks.size(), is(greaterThan(position)));
         WebElement cmfAdminRemark = remarks.get(position);
-        String adminSays = String.format("%s on %s at %s says:", user.toLowerCase(), dateTime.toString("dd/MM/yyyy"), dateTime.toString("hh:mm a"));
+        String adminSays = user.toLowerCase();
         assertThat(cmfAdminRemark.findElement(By.tagName("h5")).getText(), is(Matchers.containsString(adminSays)));
         assertThat(cmfAdminRemark.findElement(By.tagName("div")).getText(), is(remark));
 
