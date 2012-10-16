@@ -50,10 +50,10 @@ public class ContainerVerification extends Verification<ContainerVerificationReq
     }
 
     private WHPError verifyContainerMapping(Provider provider, String containerId) {
-        if (!mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)) {
-            return new WHPError(WHPErrorCode.INVALID_CONTAINER_ID, "The container Id entered  is invalid");
-        } else if (containerService.exists(containerId)) {
+        if (containerService.exists(containerId)) {
             return new WHPError(WHPErrorCode.CONTAINER_ALREADY_REGISTERED);
+        }else if (!mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)) {
+            return new WHPError(WHPErrorCode.INVALID_CONTAINER_ID, "The container Id entered  is invalid");
         }
         return null;
     }

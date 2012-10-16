@@ -124,6 +124,24 @@ public class ContainerVerificationIT {
     }
 
     @Test
+    public void shouldRespondWithFailureWhenContainerAlreadyRegisteredWhenContainerDoesNotFallUnderProviderRange() {
+        String msisdn = "1234567890";
+        String providerId = "providerId";
+        String containerId = "containerId";
+
+        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
+        allProviders.add(provider);
+
+        when(containerService.exists(containerId)).thenReturn(true);
+        when(mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)).thenReturn(false);
+
+        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(msisdn, containerId, "callId"));
+
+        assertEquals(WHPErrorCode.CONTAINER_ALREADY_REGISTERED, result.getErrors().get(0).getErrorCode());
+        assertEquals("The container Id is already registered", result.getErrors().get(0).getMessage());
+    }
+
+    @Test
     public void shouldRespondWithSuccessWhenContainerCanBeRegisteredByProvider() {
         String msisdn = "1234567890";
         String providerId = "providerId";
