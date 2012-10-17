@@ -28,17 +28,14 @@ public abstract class ContainerDashboardQueryDefinition implements QueryDefiniti
                 "index.add(doc.container.status, {field: 'containerStatus'});" +
                 "index.add(doc.container.containerIssuedDate, {field: 'containerIssuedDate', type : 'date'});" +
                 "index.add(doc.container.instance, {field: 'containerInstance'}); " +
-
-                "if(doc.container.labResults != undefined) { " +
-                    "index.add(doc.container.labResults.cumulativeResult, {field: 'cumulativeResult'}); " +
-                "} " +
-
                 "index.add(doc.container.diagnosis, {field: 'diagnosis'}); " +
                 "index.add(doc.container.reasonForClosure, {field: 'reasonForClosure'}); " +
+                "index.add(doc.container.consultationDate, {field: 'consultationDate', type : 'date'}); " +
 
-                "if(doc.patient != undefined && doc.patient.currentTherapy != undefined && doc.patient.currentTherapy.currentTreatment != undefined) { " +
-                    "index.add(doc.patient.currentTherapy.currentTreatment.startDate, {field: 'consultationDate', type : 'date'}); " +
-                "}" +
+                "if(doc.container.labResults != undefined) { " +
+                "index.add(doc.container.labResults.cumulativeResult, {field: 'cumulativeResult'}); " +
+                "} " +
+
                 "return index;" +
                 "}";
     }

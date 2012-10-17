@@ -1,6 +1,6 @@
 package org.motechproject.whp.container.builder;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SmearTestResult;
@@ -67,8 +67,8 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder withCreatedDateTime(DateTime dateTime) {
-        container.setCreationTime(dateTime);
+    public ContainerBuilder withContainerIssuedDate(LocalDate date) {
+        container.setContainerIssuedDate(date);
         return this;
     }
 
@@ -92,6 +92,11 @@ public class ContainerBuilder {
 
     public ContainerBuilder withReasonForClosure(String reasonForClosure) {
         container.setReasonForClosure(reasonForClosure);
+        return this;
+    }
+
+    public ContainerBuilder withConsultationDate(LocalDate consultationDate) {
+        container.setConsultationDate(consultationDate);
         return this;
     }
 }

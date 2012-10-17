@@ -67,7 +67,8 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("district", districtName);
         queryParams.put("cumulativeResult", Positive.name());
         queryParams.put("containerStatus", Open.name());
-        queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
+        queryParams.put("containerIssuedDateFrom", "01/02/2010");
+        queryParams.put("containerIssuedDateTo", "30/04/2010");
         queryParams.put("reasonForClosure", "reasonForClosure");
 
         ContainerTrackingRecord expectedContainerTrackingRecord = new ContainerTrackingRecordBuilder()
@@ -76,7 +77,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(Open)
-                .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2010, 2, 5))
                 .withReasonForClosure("reasonForClosure")
                 .build();
 
@@ -86,7 +87,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(ContainerStatus.Closed)
-                .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2010, 2, 5))
                 .build();
 
         ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecordBuilder()
@@ -95,7 +96,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(Open)
-                .withContainerIssuedDate(DateUtil.newDateTime(2009, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2009, 2, 5))
                 .withNoPatientMapping()
                 .build();
 

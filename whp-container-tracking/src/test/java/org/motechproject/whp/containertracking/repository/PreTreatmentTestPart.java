@@ -69,8 +69,10 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("district", districtName);
         queryParams.put("cumulativeResult", Positive.name());
         queryParams.put("containerStatus", Open.name());
-        queryParams.put("containerIssuedDate<date>", "[2010-02-01 TO 2010-04-30]");
-        queryParams.put("consultationDate<date>","[2010-02-04 TO 2010-05-01]");
+        queryParams.put("containerIssuedDateFrom", "01/02/2010");
+        queryParams.put("containerIssuedDateTo", "30/04/2010");
+        queryParams.put("consultationDateFrom","04/02/2010");
+        queryParams.put("consultationDateTo","01/05/2010");
         queryParams.put("diagnosis", Positive.name());
         queryParams.put("reasonForClosure", "reasonForClosure");
 
@@ -80,7 +82,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(Open)
-                .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2010, 3, 6))
                 .withDiagnosis(Diagnosis.Positive)
                 .withReasonForClosure("reasonForClosure")
@@ -92,7 +94,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(ContainerStatus.Closed)
-                .withContainerIssuedDate(DateUtil.newDateTime(2010, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2010, 2, 5))
                 .withConsultationDate(DateUtil.newDate(2012, 3, 6))
                 .withDiagnosis(Diagnosis.Negative)
                 .build();
@@ -103,7 +105,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withProviderDistrict(districtName)
                 .withCumulativeResult(Positive)
                 .withStatus(Open)
-                .withContainerIssuedDate(DateUtil.newDateTime(2009, 2, 5))
+                .withContainerIssuedDate(DateUtil.newDate(2009, 2, 5))
                 .withNoPatientMapping()
                 .build();
 

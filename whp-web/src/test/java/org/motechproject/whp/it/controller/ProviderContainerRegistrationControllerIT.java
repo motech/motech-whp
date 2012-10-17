@@ -9,18 +9,17 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.repository.AllContainers;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
-import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
-import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
 import org.motechproject.whp.webservice.service.ProviderWebService;
@@ -33,8 +32,9 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -54,8 +54,6 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
     @Autowired
     private ContainerService containerService;
-    @Autowired
-    private ProviderService providerService;
 
     @ReplaceWithMock
     @Autowired
@@ -86,12 +84,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().withProviderId(providerId).build();
         providerWebService.createOrUpdate(whpProviderWeb);
-    }
-
-    @After
-    public void tearDown() {
-        allProviderContainerMappings.remove(providerContainerMapping);
-        allContainers.removeAll();
+        reset(httpClientService);
     }
 
     @Test
@@ -124,8 +117,16 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
 
-        verify(httpClientService, times(1)).post(remediUrl, expectedContainerRegistrationXML);
+        verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
 
         markForDeletion(container);
     }
+
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(httpClientService);
+        allProviderContainerMappings.remove(providerContainerMapping);
+        allContainers.removeAll();
+    }
+
 }

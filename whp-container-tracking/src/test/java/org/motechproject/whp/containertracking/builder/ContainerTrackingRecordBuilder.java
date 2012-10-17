@@ -1,6 +1,5 @@
 package org.motechproject.whp.containertracking.builder;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
@@ -46,13 +45,13 @@ public class ContainerTrackingRecordBuilder {
         return this;
     }
 
-    public  ContainerTrackingRecordBuilder withContainerIssuedDate(DateTime dateTime){
-        containerBuilder.withCreatedDateTime(dateTime);
+    public  ContainerTrackingRecordBuilder withContainerIssuedDate(LocalDate date){
+        containerBuilder.withContainerIssuedDate(date);
         return this;
     }
 
     public ContainerTrackingRecordBuilder withConsultationDate(LocalDate consultationDate) {
-        patientBuilder.withCurrentTreatmentStartDate(consultationDate);
+        containerBuilder.withConsultationDate(consultationDate);
         return this;
     }
 

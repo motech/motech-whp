@@ -1,5 +1,6 @@
 package org.motechproject.whp.it.controller;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
@@ -37,6 +38,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -167,5 +169,10 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         markForDeletion(container);
+    }
+
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(httpClientService);
     }
 }
