@@ -8,10 +8,7 @@ import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
-import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
-import org.motechproject.whp.user.domain.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,26 +30,27 @@ public class ContainerTrackingDashboardRowMapper {
         this.allAlternateDiagnosis = allAlternateDiagnosis;
     }
 
-    public ContainerTrackingDashboardRow mapFrom(ContainerTrackingRecord containerTrackingRecord) {
+    public ContainerTrackingDashboardRow mapFrom(Container containerTrackingRecord) {
         row = new ContainerTrackingDashboardRow();
-        Container container = containerTrackingRecord.getContainer();
+        Container container = containerTrackingRecord;
 
         extractContainerInformation(container);
-        extractPatientInformation(containerTrackingRecord.getPatient());
-        extractProviderInformation(containerTrackingRecord.getProvider());
+
+        extractPatientInformation(containerTrackingRecord);
+        extractProviderInformation(containerTrackingRecord);
         return row;
     }
 
-    private void extractProviderInformation(Provider provider) {
-        if (provider != null) {
-            row.setProviderId(provider.getProviderId());
-            row.setDistrict(provider.getDistrict());
+    private void extractProviderInformation(Container container) {
+        if (container != null) {
+            row.setProviderId(container.getProviderId());
+            row.setDistrict(container.getDistrict());
         }
     }
 
-    private void extractPatientInformation(Patient patient) {
-        if (patient != null) {
-            row.setPatientId(patient.getPatientId());
+    private void extractPatientInformation(Container container) {
+        if (container != null) {
+            row.setPatientId(container.getPatientId());
         }
     }
 

@@ -1,4 +1,4 @@
-package org.motechproject.whp.containertracking.validation;
+package org.motechproject.whp.container.validation;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;

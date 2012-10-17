@@ -51,10 +51,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-container-tracking</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-api</artifactId>
         </dependency>
@@ -85,13 +81,6 @@
             <artifactId>whp-patient</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-container-tracking</artifactId>
-            <scope>test</scope>
-            <classifier>tests</classifier>
             <type>jar</type>
         </dependency>
         <dependency>

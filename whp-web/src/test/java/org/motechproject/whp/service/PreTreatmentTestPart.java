@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.paginator.response.PageResults;
-import org.motechproject.whp.containertracking.builder.ContainerTrackingRecordBuilder;
-import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.containertracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.container.builder.ContainerBuilder;
+import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
@@ -41,16 +41,16 @@ public class PreTreatmentTestPart {
 
     @Test
     public void shouldFilterContainerTrackingRecordsForGivenFilterCriteria() {
-        ContainerTrackingRecord containerTrackingRecord1 = new ContainerTrackingRecordBuilder().withDefaults().withInstance(PreTreatment).build();
-        ContainerTrackingRecord containerTrackingRecord2 = new ContainerTrackingRecordBuilder().withDefaults().withInstance(PreTreatment).build();
-        List<ContainerTrackingRecord> results = new ArrayList<>();
-        results.add(containerTrackingRecord1);
-        results.add(containerTrackingRecord2);
+        Container container1 = new ContainerBuilder().withDefaults().withInstance(PreTreatment).build();
+        Container container2 = new ContainerBuilder().withDefaults().withInstance(PreTreatment).build();
+        List<Container> results = new ArrayList<>();
+        results.add(container1);
+        results.add(container2);
 
         ContainerTrackingDashboardRow expectedPageResult1 = new ContainerTrackingDashboardRow();
         ContainerTrackingDashboardRow expectedPageResult2 = new ContainerTrackingDashboardRow();
-        when(containerTrackingDashboardRowMapper.mapFrom(containerTrackingRecord1)).thenReturn(expectedPageResult1);
-        when(containerTrackingDashboardRowMapper.mapFrom(containerTrackingRecord2)).thenReturn(expectedPageResult2);
+        when(containerTrackingDashboardRowMapper.mapFrom(container1)).thenReturn(expectedPageResult1);
+        when(containerTrackingDashboardRowMapper.mapFrom(container2)).thenReturn(expectedPageResult2);
 
         Properties filterParams = new Properties();
         int skip = 0;

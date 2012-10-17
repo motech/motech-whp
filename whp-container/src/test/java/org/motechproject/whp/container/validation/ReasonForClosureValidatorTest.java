@@ -1,4 +1,4 @@
-package org.motechproject.whp.containertracking.validation;
+package org.motechproject.whp.container.validation;
 
 import org.junit.Before;
 import org.junit.Test;

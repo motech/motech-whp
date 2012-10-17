@@ -13,12 +13,7 @@ import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
-import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
-import org.motechproject.whp.user.builder.ProviderBuilder;
-import org.motechproject.whp.user.domain.Provider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -69,21 +64,18 @@ public class ContainerTrackingDashboardRowMapperTest {
         container.setDiagnosis(Negative);
         container.setStatus(Open);
 
-        ContainerTrackingRecord containerTrackingRecord = new ContainerTrackingRecord();
-        containerTrackingRecord.setContainer(container);
 
         String patientId = "patientid";
-        Patient patient = new PatientBuilder().withDefaults().withPatientId(patientId).build();
-        containerTrackingRecord.setPatient(patient);
+        container.setPatientId(patientId);
 
         String providerId = "providerid";
         String district = "district";
-        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withDistrict(district).build();
-        containerTrackingRecord.setProvider(provider);
+        container.setProviderId(providerId);
+        container.setDistrict(district);
         when(allReasonForContainerClosures.findByCode(reasonForClosure)).thenReturn(new ReasonForContainerClosure("reason text", reasonForClosure));
         when(allAlternateDiagnosis.findByCode(alternateDiagnosis)).thenReturn(new AlternateDiagnosis("alternate diagnosis text", alternateDiagnosis));
 
-        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerTrackingRecord);
+        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(container);
 
         verify(allReasonForContainerClosures).findByCode(reasonForClosure);
         verify(allAlternateDiagnosis).findByCode(alternateDiagnosis);
@@ -112,10 +104,8 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToProvider.setReasonForClosure("some non tb negative code");
         containerNotMappedToProvider.setDiagnosis(Positive);
         containerNotMappedToProvider.setStatus(Open);
-        ContainerTrackingRecord record = new ContainerTrackingRecord();
-        record.setContainer(containerNotMappedToProvider);
 
-        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record);
+        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerNotMappedToProvider);
 
         assertNull(row.getProviderId());
         assertEquals(Positive.name(), row.getDiagnosis());
@@ -134,10 +124,8 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToProvider.setAlternateDiagnosis("some alternate");
         containerNotMappedToProvider.setStatus(Open);
 
-        ContainerTrackingRecord record = new ContainerTrackingRecord();
-        record.setContainer(containerNotMappedToProvider);
 
-        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record);
+        ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerNotMappedToProvider);
 
         assertNull(row.getProviderId());
         assertEquals(Negative.name(), row.getDiagnosis());
@@ -149,10 +137,8 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToProvider.setStatus(Open);
         containerNotMappedToProvider.setCreationTime(now);
         containerNotMappedToProvider.setStatus(Open);
-        ContainerTrackingRecord record = new ContainerTrackingRecord();
-        record.setContainer(containerNotMappedToProvider);
 
-        assertNull(new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record).getProviderId());
+        assertNull(new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerNotMappedToProvider).getProviderId());
     }
 
     @Test
@@ -164,9 +150,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerMappedToPatient.setPatientId("patientId");
         containerMappedToPatient.setStatus(Open);
 
-        ContainerTrackingRecord record = new ContainerTrackingRecord();
-        record.setContainer(containerMappedToPatient);
-        assertEquals("Positive", new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record).getDiagnosis());
+        assertEquals("Positive", new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerMappedToPatient).getDiagnosis());
     }
 
     @Test
@@ -176,8 +160,6 @@ public class ContainerTrackingDashboardRowMapperTest {
         containerNotMappedToPatient.setCreationTime(now);
         containerNotMappedToPatient.setStatus(Open);
 
-        ContainerTrackingRecord record = new ContainerTrackingRecord();
-        record.setContainer(containerNotMappedToPatient);
-        assertNull(new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(record).getConsultation());
+        assertNull(new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerNotMappedToPatient).getConsultation());
     }
 }

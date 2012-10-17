@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.containertracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
@@ -37,7 +37,7 @@ public abstract class ContainerDashboardService  implements Paging<ContainerTrac
         searchCriteria = properties;
 
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<ContainerTrackingRecord> rowsForPage = allContainerTrackingRecords.filter(getSupportedInstance(), searchCriteria, startIndex, rowsPerPage);
+        List<Container> rowsForPage = allContainerTrackingRecords.filter(getSupportedInstance(), searchCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
@@ -45,9 +45,9 @@ public abstract class ContainerDashboardService  implements Paging<ContainerTrac
         return pageResults;
     }
 
-    private List prepareResultsModel(List<ContainerTrackingRecord> rows) {
+    private List prepareResultsModel(List<Container> rows) {
         ArrayList<ContainerTrackingDashboardRow> containerTrackingDashboardRows = new ArrayList<>();
-        for (ContainerTrackingRecord row : rows)
+        for (Container row : rows)
             containerTrackingDashboardRows.add(containerTrackingDashboardRowMapper.mapFrom(row));
         return containerTrackingDashboardRows;
     }

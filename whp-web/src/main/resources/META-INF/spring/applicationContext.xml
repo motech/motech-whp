@@ -42,7 +42,6 @@
     <import resource="classpath*:applicationWebServiceContext.xml"/>
     <import resource="classpath*:applicationContainerMappingContext.xml"/>
     <import resource="classpath*:applicationContainerContext.xml"/>
-    <import resource="classpath*:applicationContainerTrackingContext.xml"/>
     <import resource="classpath*:applicationContext-Diagnostics.xml"/>
     <import resource="classpath*:applicationContext-case.xml"/>
 
