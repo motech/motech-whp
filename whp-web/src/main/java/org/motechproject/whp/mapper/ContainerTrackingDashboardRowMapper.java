@@ -58,15 +58,18 @@ public class ContainerTrackingDashboardRowMapper {
         row.setContainerId(container.getContainerId());
         row.setContainerIssuedOn(inDesiredFormat(container.getCreationTime().toLocalDate()));
         row.setContainerStatus(container.getStatus().name());
+        if (container.getMappingInstance() != null) {
+            row.setMappingInstance(container.getMappingInstance().name());
+        }
 
-        if(container.getDiagnosis() != null) {
+        if (container.getDiagnosis() != null) {
             row.setDiagnosis(container.getDiagnosis().name());
         }
 
         setReasonForClosure(container);
         populateLabResultsData(container.getLabResults());
 
-        if(container.getConsultationDate() != null)
+        if (container.getConsultationDate() != null)
             row.setConsultation(inDesiredFormat(container.getConsultationDate()));
 
         if (isNotBlank(container.getTbId()))
@@ -74,10 +77,10 @@ public class ContainerTrackingDashboardRowMapper {
     }
 
     private void setReasonForClosure(Container container) {
-        if(!StringUtils.isEmpty(container.getReasonForClosure())) {
+        if (!StringUtils.isEmpty(container.getReasonForClosure())) {
             ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(container.getReasonForClosure());
             String reason = reasonForContainerClosure.getName();
-            if(reasonForContainerClosure.getCode().equals(TB_NEGATIVE_CODE)) {
+            if (reasonForContainerClosure.getCode().equals(TB_NEGATIVE_CODE)) {
                 reason = String.format("%s (%s)", reason, allAlternateDiagnosis.findByCode(container.getAlternateDiagnosis()).getName());
                 row.setDiagnosis(Diagnosis.Negative.name());
             }
@@ -86,7 +89,7 @@ public class ContainerTrackingDashboardRowMapper {
     }
 
     private void populateLabResultsData(LabResults labResults) {
-        if(labResults != null) {
+        if (labResults != null) {
             row.setLabName(labResults.getLabName());
             row.setConsultationOneDate(inDesiredFormat(labResults.getSmearTestDate1()));
             row.setConsultationTwoDate(inDesiredFormat(labResults.getSmearTestDate2()));

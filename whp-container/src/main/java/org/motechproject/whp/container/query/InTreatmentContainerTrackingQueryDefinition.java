@@ -17,6 +17,8 @@ public class InTreatmentContainerTrackingQueryDefinition extends ContainerTracki
     private final RangeField containerIssuedDate = new RangeField("containerIssuedDate", DATE, "containerIssuedDateFrom", "containerIssuedDateTo");
     private final QueryField cumulativeResult = new QueryField("cumulativeResult", STRING);
     private final QueryField reasonForClosure = new QueryField("reasonForClosure", STRING);
+    private final QueryField instance = new QueryField("instance", STRING);
+    private final QueryField mappingInstance = new QueryField("mappingInstance", STRING);
 
     List<Field> queryFields = Arrays.asList(
             providerId,
@@ -25,7 +27,9 @@ public class InTreatmentContainerTrackingQueryDefinition extends ContainerTracki
             district,
             containerStatus,
             containerInstance,
-            reasonForClosure
+            reasonForClosure,
+            instance,
+            mappingInstance
     );
 
     @Override

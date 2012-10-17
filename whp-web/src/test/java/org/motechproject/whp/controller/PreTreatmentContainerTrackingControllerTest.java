@@ -25,15 +25,15 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.controller.ContainerTrackingController.*;
+import static org.motechproject.whp.controller.PreTreatmentContainerTrackingController.*;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class ContainerTrackingControllerTest {
+public class PreTreatmentContainerTrackingControllerTest {
 
-    ContainerTrackingController containerTrackingController;
+    PreTreatmentContainerTrackingController containerTrackingController;
 
     @Mock
     ContainerService containerService;
@@ -55,7 +55,7 @@ public class ContainerTrackingControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingController = new ContainerTrackingController(containerService, reasonForClosureValidator, allDistricts);
+        containerTrackingController = new PreTreatmentContainerTrackingController(containerService, reasonForClosureValidator, allDistricts);
     }
 
     @Test
@@ -64,12 +64,12 @@ public class ContainerTrackingControllerTest {
         ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
-        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
-                .perform(get("/sputum-tracking/pre-treatment"))
+                .perform(get("/sputum-tracking/pre-treatment/dashboard"))
                 .andExpect(status().isOk())
                 .andExpect(model().size(6))
                 .andExpect(model().attribute(DIAGNOSIS_LIST, Diagnosis.allNames()))
@@ -79,31 +79,9 @@ public class ContainerTrackingControllerTest {
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
 
-        verify(containerService).getAllClosureReasonsForAdmin();
+        verify(containerService).getAllPreTreatmentClosureReasonsForAdmin();
         verify(containerService).getAllAlternateDiagnosis();
     }
-
-    /*@Test
-    public void shouldPopulateUIModelForInTreatmentDashboard() throws Exception {
-        ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
-        List<District> districts = asList(new District("D1"), new District("D2"));
-
-        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
-        when(allDistricts.getAll()).thenReturn(districts);
-
-        standaloneSetup(containerTrackingController).build()
-                .perform(get("/sputum-tracking/in-treatment"))
-                .andExpect(status().isOk())
-                .andExpect(model().size(6))
-                .andExpect(model().attribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames()))
-                .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.allInTreatmentInstanceNames()))
-                .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
-                .andExpect(model().attribute(REASONS, reasons))
-                .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()));
-
-        verify(containerService).getAllClosureReasonsForAdmin();
-        verify(containerService).getAllAlternateDiagnosis();
-    }*/
 
     @Test
     public void shouldPopulateErrorsIfReasonForClosureRequestFailsValidation() throws Exception {
@@ -113,11 +91,11 @@ public class ContainerTrackingControllerTest {
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
         List<AlternateDiagnosis> alternateDiagnosis = new ArrayList<>();
-        when(containerService.getAllClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosis);
 
         standaloneSetup(containerTrackingController).build()
-                .perform(post("/sputum-tracking/close-container"))
+                .perform(post("/sputum-tracking/pre-treatment/close-container"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("error")));
 
@@ -129,7 +107,7 @@ public class ContainerTrackingControllerTest {
         when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<ErrorWithParameters>());
 
         standaloneSetup(containerTrackingController).build()
-                .perform(post("/sputum-tracking/close-container"))
+                .perform(post("/sputum-tracking/pre-treatment/close-container"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("success")));
 
@@ -140,7 +118,7 @@ public class ContainerTrackingControllerTest {
     public void shouldOpenContainer() throws Exception {
         String containerId = "1234";
         standaloneSetup(containerTrackingController).build()
-                .perform(get("/sputum-tracking/open-container").param("containerId", containerId))
+                .perform(get("/sputum-tracking/pre-treatment/open-container").param("containerId", containerId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("success"));
 

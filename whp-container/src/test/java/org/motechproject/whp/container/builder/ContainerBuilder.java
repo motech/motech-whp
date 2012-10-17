@@ -104,4 +104,9 @@ public class ContainerBuilder {
         container.setDistrict(districtName);
         return this;
     }
+
+    public ContainerBuilder withMappingInstance(SputumTrackingInstance instance) {
+        container.setMappingInstance(instance);
+        return this;
+    }
 }

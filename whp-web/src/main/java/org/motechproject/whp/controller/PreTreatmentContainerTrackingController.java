@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/sputum-tracking")
-public class ContainerTrackingController {
+@RequestMapping(value = "/sputum-tracking/pre-treatment/")
+public class PreTreatmentContainerTrackingController {
 
 
     public static final String CONTAINER_STATUS_LIST = "containerStatusList";
@@ -37,10 +36,9 @@ public class ContainerTrackingController {
     public static final String ERRORS = "errors";
     public static final String LAB_RESULTS = "labResults";
     public static final String DISTRICTS = "districts";
-    public static final String INSTANCES = "instances";
 
     @Autowired
-    public ContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
+    public PreTreatmentContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
         this.containerService = containerService;
         this.reasonForClosureValidator = reasonForClosureValidator;
         this.allDistricts = allDistricts;
@@ -48,7 +46,7 @@ public class ContainerTrackingController {
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
     @ResponseBody
-    public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest, HttpServletRequest servletRequest) {
+    public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest) {
         List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
         if (!errors.isEmpty())
             return "error";
@@ -65,9 +63,9 @@ public class ContainerTrackingController {
         return "success";
     }
 
-    @RequestMapping(value = "/pre-treatment", method = RequestMethod.GET)
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel) {
-        List<ReasonForContainerClosure> allClosureReasons = containerService.getAllClosureReasonsForAdmin();
+        List<ReasonForContainerClosure> allClosureReasons = containerService.getAllPreTreatmentClosureReasonsForAdmin();
         List<AlternateDiagnosis> allAlternateDiagnosis = containerService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);
@@ -77,6 +75,6 @@ public class ContainerTrackingController {
         uiModel.addAttribute(DIAGNOSIS_LIST, Diagnosis.allNames());
         uiModel.addAttribute(DISTRICTS, allDistricts.getAll());
 
-        return "sputumTracking/preTreatment";
+        return "sputumTracking/preTreatmentDashboard";
     }
 }

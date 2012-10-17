@@ -248,7 +248,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
         when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
 
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllClosureReasonsForAdmin();
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllPreTreatmentClosureReasonsForAdmin();
 
         Assert.assertEquals(2, allClosureReasonsForAdmin.size());
         Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(0).getName());

@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -30,12 +31,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
+import static ch.lambdaj.Lambda.filter;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
+import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
 
 @Service
 public class ContainerService {
@@ -100,10 +103,17 @@ public class ContainerService {
         allContainers.update(container);
     }
 
-    public List<ReasonForContainerClosure> getAllClosureReasonsForAdmin() {
+    public List<ReasonForContainerClosure> getAllPreTreatmentClosureReasonsForAdmin() {
         List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
         List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
         List reasonsForAdmin = ListUtils.removeAll(allReasons, reasonForMapping);
+        return reasonsForAdmin;
+    }
+
+    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasonsForAdmin() {
+        List<ReasonForContainerClosure> preTreatmentClosureReasons = getAllPreTreatmentClosureReasonsForAdmin();
+        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(TB_NEGATIVE_CODE)), preTreatmentClosureReasons);
+        List reasonsForAdmin = ListUtils.removeAll(preTreatmentClosureReasons, reasonForMapping);
         return reasonsForAdmin;
     }
 
