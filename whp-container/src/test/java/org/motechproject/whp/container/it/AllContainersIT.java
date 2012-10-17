@@ -46,7 +46,7 @@ public class AllContainersIT extends SpringIntegrationTest {
 
         assertNotNull(containerReturned);
         assertEquals("1234567890", containerReturned.getContainerId());
-        assertEquals("P00001", containerReturned.getProviderId());
+        assertEquals("p00001", containerReturned.getProviderId());
         assertEquals(now.toString(WHPDate.DATE_TIME_FORMAT), containerReturned.getCreationTime().toString(WHPDate.DATE_TIME_FORMAT));
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
         assertEquals("d1", containerReturned.getDistrict());

@@ -55,7 +55,7 @@ public class Container extends MotechBaseDataObject {
     }
 
     public Container(String providerId, String containerId, SputumTrackingInstance instance, DateTime creationTime, String district) {
-        this.providerId = providerId;
+        setProviderId(providerId);
         this.district = district;
         this.containerId = containerId;
         this.instance = instance;
@@ -70,7 +70,7 @@ public class Container extends MotechBaseDataObject {
     }
 
     public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping) {
-        setPatientId(patientId.toLowerCase());
+        setPatientId(patientId);
         setTbId(tbId);
         setDiagnosis(Positive);
         setMappingInstance(mappingInstance);
@@ -88,6 +88,20 @@ public class Container extends MotechBaseDataObject {
         setStatus(ContainerStatus.Open);
         setReasonForClosure(null);
         setConsultationDate(null);
+    }
+
+    public void setPatientId(String patientId) {
+        if (patientId != null)
+            this.patientId = patientId.toLowerCase();
+        else
+            this.patientId = null;
+    }
+
+    public void setProviderId(String providerId) {
+        if (providerId != null)
+            this.providerId = providerId.toLowerCase();
+        else
+            this.providerId = null;
     }
 
     private void updateCurrentTrackingStatus() {

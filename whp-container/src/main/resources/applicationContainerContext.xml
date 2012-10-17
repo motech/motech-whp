@@ -13,6 +13,11 @@
     <import resource="classpath*:applicationRemediContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
 
+    <bean id="whpContainerCouchDbConnector" class="com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector">
+        <constructor-arg value="motech-whp"/>
+        <constructor-arg ref="whpDbInstance"/>
+    </bean>
+
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.container"/>
 

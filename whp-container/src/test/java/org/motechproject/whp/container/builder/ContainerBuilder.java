@@ -99,4 +99,9 @@ public class ContainerBuilder {
         container.setConsultationDate(consultationDate);
         return this;
     }
+
+    public ContainerBuilder withProviderDistrict(String districtName) {
+        container.setDistrict(districtName);
+        return this;
+    }
 }
