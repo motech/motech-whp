@@ -28,6 +28,8 @@ public class Container extends MotechBaseDataObject {
 
     private String providerId;
 
+    private String district;
+
     private LabResults labResults;
 
     private DateTime creationTime;
@@ -52,8 +54,9 @@ public class Container extends MotechBaseDataObject {
     public Container() {
     }
 
-    public Container(String providerId, String containerId, SputumTrackingInstance instance, DateTime creationTime) {
+    public Container(String providerId, String containerId, SputumTrackingInstance instance, DateTime creationTime, String district) {
         this.providerId = providerId;
+        this.district = district;
         this.containerId = containerId;
         this.instance = instance;
         this.creationTime = creationTime;

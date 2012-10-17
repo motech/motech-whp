@@ -19,6 +19,8 @@ import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,21 +45,24 @@ public class ContainerService {
     private RemediService remediService;
     private final AllReasonForContainerClosures allReasonForContainerClosures;
     private final AllAlternateDiagnosis allAlternateDiagnosis;
+    private ProviderService providerService;
 
 
     @Autowired
-    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis) {
+    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis, ProviderService providerService) {
         this.allContainers = allContainers;
         this.remediService = remediService;
         this.allReasonForContainerClosures = allReasonForContainerClosures;
         this.allAlternateDiagnosis = allAlternateDiagnosis;
+        this.providerService = providerService;
     }
 
     public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
         SputumTrackingInstance instance = SputumTrackingInstance.getInstanceForValue(registrationRequest.getInstance());
         DateTime creationTime = now();
 
-        Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime);
+        Provider provider = providerService.findByProviderId(registrationRequest.getProviderId());
+        Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime, provider.getDistrict());
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);
         container.setDiagnosis(Pending);

@@ -70,13 +70,13 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         allPatients.add(patient2);
 
         LabResults labResults = new LabResults();
-        container1 = new Container("providerId", CONTAINER_ID_1, null, DateTime.now());
+        container1 = new Container("providerId", CONTAINER_ID_1, null, DateTime.now(), "d1");
         container1.setStatus(Open);
         container1.setDiagnosis(Pending);
         container1.setLabResults(labResults);
         allContainers.add(container1);
 
-        container2 = new Container("providerId", CONTAINER_ID_2, null, DateTime.now());
+        container2 = new Container("providerId", CONTAINER_ID_2, null, DateTime.now(), "d1");
         container2.setStatus(Open);
         container2.setDiagnosis(Pending);
         container2.setLabResults(labResults);

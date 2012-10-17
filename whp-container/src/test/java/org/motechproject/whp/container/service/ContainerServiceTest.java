@@ -25,6 +25,8 @@ import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,15 +52,18 @@ public class ContainerServiceTest extends BaseUnitTest {
     private AllReasonForContainerClosures allReasonForContainerClosures;
     @Mock
     private AllAlternateDiagnosis allAlternateDiagnosis;
+    @Mock
+    private ProviderService providerService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis);
+        containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis, providerService);
     }
 
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
+        when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
         containerService.registerContainer(new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -79,6 +84,10 @@ public class ContainerServiceTest extends BaseUnitTest {
         String containerId = "1234567890";
         SputumTrackingInstance instance = SputumTrackingInstance.InTreatment;
 
+        String district = "district1";
+        Provider provider = new Provider(null, null, district, null);
+        when(providerService.findByProviderId(providerId)).thenReturn(provider);
+
         containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -90,9 +99,11 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(containerIssuedDate, actualContainer.getContainerIssuedDate());
         assertEquals(instance, actualContainer.getInstance());
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
+        assertEquals(district, actualContainer.getDistrict());
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
+        verify(providerService).findByProviderId(providerId);
     }
 
     @Test
@@ -110,7 +121,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldGetContainerByContainerId() {
         String containerId = "containerId";
-        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now());
+        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
         when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
 
         Container container = containerService.getContainer(containerId);
@@ -121,7 +132,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer() {
-        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now());
+        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
 
         containerService.update(container);
 

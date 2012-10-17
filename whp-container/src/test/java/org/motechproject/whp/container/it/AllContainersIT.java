@@ -36,7 +36,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     public void setUp() {
 
         now = DateUtil.now();
-        container = new Container("P00001", "1234567890", SputumTrackingInstance.PreTreatment, now);
+        container = new Container("P00001", "1234567890", SputumTrackingInstance.PreTreatment, now, "d1");
     }
 
     @Test
@@ -49,6 +49,7 @@ public class AllContainersIT extends SpringIntegrationTest {
         assertEquals("P00001", containerReturned.getProviderId());
         assertEquals(now.toString(WHPDate.DATE_TIME_FORMAT), containerReturned.getCreationTime().toString(WHPDate.DATE_TIME_FORMAT));
         assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
+        assertEquals("d1", containerReturned.getDistrict());
     }
 
     @Test
