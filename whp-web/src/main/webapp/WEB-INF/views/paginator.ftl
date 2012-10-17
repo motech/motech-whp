@@ -6,18 +6,18 @@
      ng-init="entity='${entity}';contextRoot='${contextRoot}';rowsPerPage='${rowsPerPage}';id='${id}';filterSectionId='${filterSectionId}'">
     <div class="paginator" ng-controller="PaginationCtrl">
         <div>
-            <div class="result-count-info pull-left">
+            <div class="result-count-info pull-left" ng-show="hasResults()">
                 Displaying: {{firstRowCount}} - {{lastRowCount}} of {{data.totalRows}} row(s)
 
             </div>
-            <div class="pull-right">
+            <div class="pull-right" ng-show="hasResults()">
                 <@filterButtons/>
             </div>
         </div>
         <div class="paginator-content">
             <#nested>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" ng-show="hasResults()">
             <@filterButtons/>
         </div>
     </div>

@@ -64,6 +64,10 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         $scope.loadPage();
     }
 
+    $scope.hasResults = function () {
+       return $scope.data.totalRows  > 0;
+    }
+
     $.fn.serializeObject = function () {
         var o = {};
         var a = this.serializeArray();
