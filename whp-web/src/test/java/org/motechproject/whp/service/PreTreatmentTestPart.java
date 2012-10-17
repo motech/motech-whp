@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.paginator.response.PageResults;
-import org.motechproject.whp.container.tracking.builder.ContainerTrackingRecordBuilder;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.containertracking.builder.ContainerTrackingRecordBuilder;
+import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.containertracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 

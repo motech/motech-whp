@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.containertracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 

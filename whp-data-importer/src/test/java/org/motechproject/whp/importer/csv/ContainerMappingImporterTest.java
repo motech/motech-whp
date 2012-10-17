@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.motechproject.whp.container.mapping.repository.AllProviderContainerMappings;
+import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.importer.csv.request.ContainerMappingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

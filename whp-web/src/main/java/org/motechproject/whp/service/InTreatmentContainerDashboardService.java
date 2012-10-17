@@ -1,14 +1,10 @@
 package org.motechproject.whp.service;
 
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
-import org.motechproject.whp.container.tracking.repository.AllContainerTrackingRecords;
+import org.motechproject.whp.containertracking.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Properties;
 
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
 

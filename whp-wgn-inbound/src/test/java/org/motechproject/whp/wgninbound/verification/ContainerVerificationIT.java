@@ -8,7 +8,7 @@ import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
+import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;

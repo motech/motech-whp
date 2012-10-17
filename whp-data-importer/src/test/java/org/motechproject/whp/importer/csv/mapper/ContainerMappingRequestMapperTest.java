@@ -1,8 +1,8 @@
 package org.motechproject.whp.importer.csv.mapper;
 
 import org.junit.Test;
-import org.motechproject.whp.container.mapping.domain.ContainerRange;
-import org.motechproject.whp.container.mapping.domain.ProviderContainerMapping;
+import org.motechproject.whp.containermapping.domain.ContainerRange;
+import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.importer.csv.request.ContainerMappingRequest;
 
 import static org.hamcrest.MatcherAssert.assertThat;

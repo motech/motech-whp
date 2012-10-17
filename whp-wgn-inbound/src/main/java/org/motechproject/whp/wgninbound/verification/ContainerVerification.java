@@ -3,7 +3,7 @@ package org.motechproject.whp.wgninbound.verification;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
+import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;

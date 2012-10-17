@@ -2,9 +2,8 @@ package org.motechproject.whp.container.validation;
 
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
-import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.mapping.service.AdminContainerMappingService;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
+import org.motechproject.whp.containermapping.service.AdminContainerMappingService;
+import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

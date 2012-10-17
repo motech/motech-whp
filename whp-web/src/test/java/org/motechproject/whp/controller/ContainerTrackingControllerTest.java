@@ -12,8 +12,8 @@ import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.tracking.service.ContainerTrackingService;
-import org.motechproject.whp.container.tracking.validation.ReasonForClosureValidator;
+import org.motechproject.whp.containertracking.service.ContainerTrackingService;
+import org.motechproject.whp.containertracking.validation.ReasonForClosureValidator;
 
 import java.util.ArrayList;
 import java.util.List;

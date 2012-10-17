@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
-import org.motechproject.whp.container.mapping.service.AdminContainerMappingService;
-import org.motechproject.whp.container.mapping.service.ProviderContainerMappingService;
+import org.motechproject.whp.containermapping.service.AdminContainerMappingService;
+import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 
 import java.util.ArrayList;

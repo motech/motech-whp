@@ -13,7 +13,7 @@ import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
-import org.motechproject.whp.container.tracking.model.ContainerTrackingRecord;
+import org.motechproject.whp.containertracking.model.ContainerTrackingRecord;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;

@@ -1,9 +1,9 @@
 package org.motechproject.whp.refdata.seed;
 
 import org.motechproject.deliverytools.seed.Seed;
-import org.motechproject.whp.container.mapping.domain.AdminContainerMapping;
-import org.motechproject.whp.container.mapping.domain.ContainerRange;
-import org.motechproject.whp.container.mapping.repository.AllAdminContainerMappings;
+import org.motechproject.whp.containermapping.domain.AdminContainerMapping;
+import org.motechproject.whp.containermapping.domain.ContainerRange;
+import org.motechproject.whp.containermapping.repository.AllAdminContainerMappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
