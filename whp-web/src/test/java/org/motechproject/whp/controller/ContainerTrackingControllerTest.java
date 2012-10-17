@@ -4,7 +4,10 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.*;
+import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.ContainerTrackingController.*;
@@ -115,14 +119,9 @@ public class ContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/close-container"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute(ERRORS, errors))
-                .andExpect(model().attribute(REASONS, reasons))
-                .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosis))
-                .andExpect(forwardedUrl("sputumTracking/preTreatment"));
+                .andExpect(content().string(containsString("error")));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
-        verify(containerService).getAllClosureReasonsForAdmin();
-        verify(containerService).getAllAlternateDiagnosis();
     }
 
     @Test
@@ -132,7 +131,7 @@ public class ContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/close-container"))
                 .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/sputum-tracking/pre-treatment"));
+                .andExpect(content().string(containsString("success")));
 
         verify(containerService).closeContainer(any(ContainerClosureRequest.class));
     }

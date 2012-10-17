@@ -132,7 +132,10 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
     }
 
+    this.loadPage = function() {
+        $scope.loadPage();
+    }
+
     setInitParams();
-    //setSearchCriteria();
     $scope.loadPage();
 }

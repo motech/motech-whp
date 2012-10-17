@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -46,15 +47,14 @@ public class ContainerTrackingController {
     }
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
-    public String updateReasonForClosure(Model uiModel, ContainerClosureRequest containerClosureRequest, HttpServletRequest servletRequest) {
+    @ResponseBody
+    public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest, HttpServletRequest servletRequest) {
         List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
-        if (!errors.isEmpty()) {
-            uiModel.addAttribute(ERRORS, errors);
-            return showContainerTrackingDashBoard(uiModel);
-        }
+        if (!errors.isEmpty())
+            return "error";
 
         containerService.closeContainer(containerClosureRequest);
-        return "redirect:/sputum-tracking/pre-treatment";
+        return "success";
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)

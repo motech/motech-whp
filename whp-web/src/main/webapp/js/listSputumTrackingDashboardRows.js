@@ -83,5 +83,19 @@ $(function () {
     });
 
     $("#alternateDiagnosis").combobox();
+
+    $("#saveReason").click(function() {
+        var dataString = $("#setReason").serialize();
+        $.ajax({
+            type: "POST",
+            url: "/whp/sputum-tracking/close-container",
+            data: dataString,
+            success: function() {
+                angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
+                $('#setReason').modal('hide');
+            }
+        });
+        return false;
+    });
 });
 

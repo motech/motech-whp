@@ -1,6 +1,5 @@
 <#ftl encoding="ISO-8859-5">
-<form class="modal hide fade" id="setReason" method="POST"
-      action="<@spring.url '/sputum-tracking/close-container'/>"
+<form class="modal hide fade" id="setReason" action=""
       xmlns="http://www.w3.org/1999/html">
     <input id="containerId" type="hidden" name="containerId" value=""/>
 
@@ -49,6 +48,6 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-group" data-dismiss="modal" id="close">Close</button>
-        <button type="submit" class="btn btn-group btn-primary" id="saveReason">Save</button>
+        <button type="submit" class="btn btn-group btn-primary" id="saveReason"">Save</button>
     </div>
 </form>
