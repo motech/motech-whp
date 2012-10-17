@@ -6,9 +6,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <context:property-placeholder location="classpath*:motech-web-security.properties" ignore-unresolvable="true"/>
-
-    <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationWebSecurityContext.xml"/>
 
 
