@@ -105,16 +105,8 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
     });
 
 
-    function setSearchCriteria() {
-        if ($scope.filterSectionId) {
-            $rootScope.searchCriteria = $("#" + $scope.filterSectionId).serializeObject();
-        }
-        else
-            $rootScope.searchCriteria = null;
-    }
-
     $rootScope.$on('filterUpdated', function (evt, searchCriteria) {
-        setSearchCriteria();
+        //setSearchCriteria();
         var searchString = JSON.stringify($rootScope.searchCriteria);
         var searchParams = {}
         searchParams[$scope.id + "-searchCriteria"] = searchString;
