@@ -13,18 +13,17 @@ import org.openqa.selenium.WebDriver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerDataSeed {
+public class ContainerDataSeed extends BaseFunctionalTestSeed {
 
-    private List<TestContainer> allContainers;
+    private TestContainers allContainers;
 
     public ContainerDataSeed() {
-        allContainers = new ArrayList<>();
         WebDriver webDriver = WebDriverFactory.getInstance();
         List<TestProvider> providers = providers(webDriver);
         for (TestProvider provider : providers) {
             patient(provider, webDriver);
         }
-        allContainers.addAll(registerContainer(providers.get(0), webDriver));
+        allContainers = registerContainer(providers.get(0), webDriver);
         closeWebDriver(webDriver);
     }
 
@@ -34,7 +33,7 @@ public class ContainerDataSeed {
         webDriver.quit();
     }
 
-    public List<TestContainer> allContainers() {
+    public TestContainers allContainers() {
         return allContainers;
     }
 
@@ -51,14 +50,14 @@ public class ContainerDataSeed {
         return patientDataService.createPatient(provider.getProviderId(), "name", provider.getDistrict());
     }
 
-    private List<TestContainer> registerContainer(TestProvider testProvider, WebDriver webDriver) {
-        List<TestContainer> containers = new ArrayList<>();
+    private TestContainers registerContainer(TestProvider testProvider, WebDriver webDriver) {
         for (TestContainer testContainer : new TestContainers().allRegisteredContainers()) {
+            adjustDate(testContainer.getContainerIssuedDate(), "dd/MM/YYYY");
             AdminPage adminPage = LoginPage.fetch(webDriver).loginAsAdmin();
             ContainerRegistrationPage containerRegistrationPage = adminPage.navigateToContainerRegistrationPage();
             containerRegistrationPage.registerContainer(testContainer.getContainerId(), testProvider.getProviderId(), "Pre-treatment");
             containerRegistrationPage.logout();
         }
-        return containers;
+        return new TestContainers();
     }
 }

@@ -1,6 +1,8 @@
 package org.motechproject.whp.functional.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.whp.functional.framework.MyPageFactory;
+import org.motechproject.whp.functional.framework.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,8 +17,20 @@ public class ContainerDashboardPage extends Page {
     @FindBy(how = How.ID, id = "sputumTrackingDashboardRowsList")
     private WebElement table;
 
+    @FindBy(how = How.ID, id = "containerIssuedDateFrom")
+    private WebElement containerIssuedFrom;
+
+    @FindBy(how = How.ID, id = "containerIssuedDateTo")
+    private WebElement containerIssuedTo;
+
+    @FindBy(how = How.ID, id = "search")
+    private WebElement search;
+
     public ContainerDashboardPage(WebDriver webDriver) {
         super(webDriver);
+        containerIssuedFrom = WebDriverFactory.createWebElement(containerIssuedFrom);
+        containerIssuedTo = WebDriverFactory.createWebElement(containerIssuedTo);
+        search = WebDriverFactory.createWebElement(search);
     }
 
     @Override
@@ -35,5 +49,13 @@ public class ContainerDashboardPage extends Page {
                 return true;
         }
         return false;
+    }
+
+    public ContainerDashboardPage filterByContainerIssuedDate(String fromDate, String toDate) {
+        containerIssuedFrom.sendKeys(fromDate);
+        containerIssuedTo.sendKeys(toDate);
+        search.click();
+        waitForScript(5000);
+        return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
     }
 }

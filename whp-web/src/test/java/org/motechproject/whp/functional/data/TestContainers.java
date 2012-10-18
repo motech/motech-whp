@@ -6,13 +6,16 @@ import static java.util.Arrays.asList;
 
 public class TestContainers {
 
+    public static final String containerIssuedFrom = "02/10/2012";
+    public static final String containerIssuedTo = "04/10/2012";
+
     public TestContainer containerWhichDoesNotMatchDateRange() {
         return new TestContainer()
                 .setContainerId("90000000020")
                 .setProviderId("providerid")
                 .setInstance("Pre-treatment")
                 .setDiagnosis("Positive")
-                .setContainerIssuedDate("03/10/2012")
+                .setContainerIssuedDate("01/10/2012")
                 .setConsultationDate("01/10/2012")
                 .setDistrict("Begusarai")
                 .setStatus("Open")
@@ -82,4 +85,5 @@ public class TestContainers {
                 containerWhichMatchesAllCriteria()
         );
     }
+
 }

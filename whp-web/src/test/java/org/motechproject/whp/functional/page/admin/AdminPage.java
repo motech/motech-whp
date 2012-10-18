@@ -50,7 +50,8 @@ public class AdminPage extends ListAllPatientsPage {
     public ContainerDashboardPage navigateToContainerDashboardPage() {
         webDriver.findElement(By.linkText("Container Tracking")).click();
         waitForElementToBeVisible(By.linkText("Sputum Tracking Dashboard"));
-        createWebElement(webDriver.findElement(By.id("Sputum Tracking Dashboard"))).click();
+        createWebElement(webDriver.findElement(By.linkText("Sputum Tracking Dashboard"))).click();
+        waitForElementWithCSSToLoad("containerId");
         return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
     }
 }
