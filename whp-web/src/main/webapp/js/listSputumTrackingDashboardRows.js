@@ -86,9 +86,10 @@ $(function () {
 
     $("#saveReason").click(function() {
         var dataString = $("#setReason").serialize();
+        var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/close-container";
         $.ajax({
             type: "POST",
-            url: "/whp/sputum-tracking/close-container",
+            url: endpoint,
             data: dataString,
             success: function() {
                 angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
@@ -100,9 +101,10 @@ $(function () {
 
     $(".openContainerLink").click(function() {
         var containerId = $(this).parents("tr").attr("containerId");
+        var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/open-container?containerId=" + containerId;
         $.ajax({
             type: "GET",
-            url: "/whp/sputum-tracking/open-container" + "?containerId=" + containerId,
+            url: endpoint,
             success: function() {
                 angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
             }

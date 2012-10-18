@@ -145,7 +145,7 @@
 
 <div class="results">
     <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="sputum_tracking_filter" entity="pre_treatment_container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
-        <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList">
+        <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList" endpoint="<@spring.url '/sputum-tracking/pre-treatment'/>"/>
             <thead>
             <tr>
                 <th>Container Id</th>
@@ -184,10 +184,10 @@
                 <td>{{item.containerStatus}}</td>
                 <td class="{{item.containerStatus}}">
                     <div class="closeContainer">
-                        <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a>
+                        <a data-toggle="modal" href="#setReason">Close</a>
                     </div>
                     <div class="openContainer">
-                        <a data-toggle="modal" class="openContainerLink" href="#">Open</a>
+                        <a class="openContainerLink" href="#">Open</a>
                     </div>
                 </td>
                 <td>{{item.reasonForClosure}}</td>
@@ -200,6 +200,7 @@
 
         </table>
     </@paginator.paginate>
+</div>
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listSputumTrackingDashboardRows.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>

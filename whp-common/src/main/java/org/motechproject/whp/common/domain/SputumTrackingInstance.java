@@ -60,7 +60,7 @@ public enum SputumTrackingInstance {
     public static List<String> allInTreatmentInstanceNames() {
         List<String> names = new ArrayList<>();
         for(SputumTrackingInstance value : IN_TREATMENT_INSTANCES) {
-            names.add(value.displayText);
+            names.add(value.name());
         }
         return names;
     }
