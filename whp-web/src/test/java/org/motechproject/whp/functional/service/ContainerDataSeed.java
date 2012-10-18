@@ -13,9 +13,9 @@ import org.openqa.selenium.WebDriver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerDataSeed extends BaseFunctionalTestSeed {
+import static java.util.Arrays.asList;
 
-    private TestContainers allContainers;
+public class ContainerDataSeed extends BaseFunctionalTestSeed {
 
     public ContainerDataSeed() {
         WebDriver webDriver = WebDriverFactory.getInstance();
@@ -23,7 +23,8 @@ public class ContainerDataSeed extends BaseFunctionalTestSeed {
         for (TestProvider provider : providers) {
             patient(provider, webDriver);
         }
-        allContainers = registerContainer(providers.get(0), webDriver);
+        registerContainer(new TestContainers().allRegisteredContainers(), providers.get(0), webDriver);
+        registerContainer(asList(new TestContainers().containerWhichDoesNotMatchAutoCompleteField()), providers.get(1), webDriver);
         closeWebDriver(webDriver);
     }
 
@@ -34,7 +35,7 @@ public class ContainerDataSeed extends BaseFunctionalTestSeed {
     }
 
     public TestContainers allContainers() {
-        return allContainers;
+        return new TestContainers();
     }
 
     private List<TestProvider> providers(WebDriver webDriver) {
@@ -50,14 +51,13 @@ public class ContainerDataSeed extends BaseFunctionalTestSeed {
         return patientDataService.createPatient(provider.getProviderId(), "name", provider.getDistrict());
     }
 
-    private TestContainers registerContainer(TestProvider testProvider, WebDriver webDriver) {
-        for (TestContainer testContainer : new TestContainers().allRegisteredContainers()) {
+    private void registerContainer(List<TestContainer> containers, TestProvider testProvider, WebDriver webDriver) {
+        for (TestContainer testContainer : containers) {
             adjustDate(testContainer.getContainerIssuedDate(), "dd/MM/YYYY");
             AdminPage adminPage = LoginPage.fetch(webDriver).loginAsAdmin();
             ContainerRegistrationPage containerRegistrationPage = adminPage.navigateToContainerRegistrationPage();
             containerRegistrationPage.registerContainer(testContainer.getContainerId(), testProvider.getProviderId(), "Pre-treatment");
             containerRegistrationPage.logout();
         }
-        return new TestContainers();
     }
 }

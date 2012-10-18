@@ -8,6 +8,7 @@ public class TestContainers {
 
     public static final String containerIssuedFrom = "02/10/2012";
     public static final String containerIssuedTo = "04/10/2012";
+    public static final String district = "Begusarai";
 
     public TestContainer containerWhichDoesNotMatchDateRange() {
         return new TestContainer()
@@ -79,7 +80,6 @@ public class TestContainers {
 
     public List<TestContainer> allRegisteredContainers() {
         return asList(
-                containerWhichDoesNotMatchAutoCompleteField(),
                 containerWhichDoesNotMatchDateRange(),
                 containerWhichDoesNotMatchDropDownField(),
                 containerWhichMatchesAllCriteria()

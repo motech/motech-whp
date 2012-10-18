@@ -40,6 +40,14 @@ public class SputumTrackingDashboardTest extends BaseTest {
         assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchDateRange().getContainerId()));
         page.logout();
     }
+
+    @Test
+    public void shouldFilterByAnAutoCompleteField() {
+        ContainerDashboardPage page = ContainerDashboardPage.fetch(webDriver);
+        page.filterByDistrict(TestContainers.district);
+        assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchAutoCompleteField().getContainerId()));
+        page.logout();
+    }
 }
 
 

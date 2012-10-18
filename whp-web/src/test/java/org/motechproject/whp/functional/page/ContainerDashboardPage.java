@@ -3,6 +3,7 @@ package org.motechproject.whp.functional.page;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,6 +17,9 @@ public class ContainerDashboardPage extends Page {
 
     @FindBy(how = How.ID, id = "sputumTrackingDashboardRowsList")
     private WebElement table;
+
+    @FindBy(how = How.ID, id = "district")
+    private WebElement district;
 
     @FindBy(how = How.ID, id = "containerIssuedDateFrom")
     private WebElement containerIssuedFrom;
@@ -54,6 +58,13 @@ public class ContainerDashboardPage extends Page {
     public ContainerDashboardPage filterByContainerIssuedDate(String fromDate, String toDate) {
         containerIssuedFrom.sendKeys(fromDate);
         containerIssuedTo.sendKeys(toDate);
+        search.click();
+        waitForScript(5000);
+        return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
+    }
+
+    public ContainerDashboardPage filterByDistrict(String district) {
+        ((JavascriptExecutor) webDriver).executeScript("$('#district').val('" + district + "')");
         search.click();
         waitForScript(5000);
         return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
