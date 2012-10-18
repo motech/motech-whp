@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndIP;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,6 +71,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("containerIssuedDateFrom", "01/02/2010");
         queryParams.put("containerIssuedDateTo", "30/04/2010");
         queryParams.put("reasonForClosure", "reasonForClosure");
+        queryParams.put("mappingInstance", EndIP.name());
 
         Container expectedContainerTrackingRecord = new ContainerBuilder()
                 .withProviderId(providerId)
@@ -79,6 +81,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
                 .withStatus(Open)
                 .withContainerIssuedDate(DateUtil.newDate(2010, 2, 5))
                 .withReasonForClosure("reasonForClosure")
+                .withMappingInstance(EndIP)
                 .build();
 
         Container containerTrackingRecord1 = new ContainerBuilder()
