@@ -27,7 +27,7 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
                 "index.add(doc.district, {field: 'district'});" +
                 "index.add(doc.status, {field: 'containerStatus'});" +
                 "index.add(doc.containerIssuedDate, {field: 'containerIssuedDate', type : 'date'});" +
-                "index.add(doc.instance, {field: 'containerInstance'}); " +
+                "index.add(doc.currentTrackingInstance, {field: 'containerInstance'}); " +
                 "index.add(doc.diagnosis, {field: 'diagnosis'}); " +
                 "index.add(doc.reasonForClosure, {field: 'reasonForClosure'}); " +
                 "index.add(doc.consultationDate, {field: 'consultationDate', type : 'date'}); " +

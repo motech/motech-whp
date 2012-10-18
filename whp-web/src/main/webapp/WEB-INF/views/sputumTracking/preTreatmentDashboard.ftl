@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-menu.ftl" as layout>
 <#import "../paginator.ftl" as paginator>
-<@layout.defaultLayout title="MoTeCH-WHP" entity="cmfadmin">
+<@layout.defaultLayout title="Pre Treatment Containers" entity="cmfadmin">
     <#if !pageNo??>
         <#assign pageNo=1/>
     </#if>
@@ -18,8 +18,7 @@
 
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
-
-
+        <h3>Pre Treatment Containers</h3>
        <div class="row-fluid well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
                 Pane</a></h3>

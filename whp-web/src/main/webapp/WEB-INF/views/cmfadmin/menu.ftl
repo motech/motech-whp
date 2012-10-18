@@ -32,10 +32,10 @@
                 <a href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
             <li>
             <li>
-                <a href="/whp/sputum-tracking/pre-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">Pre Treatment Sputum Tracking Dashboard</a>
+                <a href="/whp/sputum-tracking/pre-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">Pre Treatment Dashboard</a>
             <li>
             <li>
-                <a href="/whp/sputum-tracking/in-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">In Treatment Sputum Tracking Dashboard</a>
+                <a href="/whp/sputum-tracking/in-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">In Treatment Dashboard</a>
             <li>
         </ul>
     </li>
