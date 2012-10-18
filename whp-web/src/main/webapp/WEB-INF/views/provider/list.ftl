@@ -1,5 +1,5 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-with-sidebar.ftl" as layout>
+<#import "../layout/default-with-menu.ftl" as layout>
 <#import "../paginator.ftl" as paginator>
 <#include "../user/activateProvider.ftl">
 <#include "../user/resetPassword.ftl">

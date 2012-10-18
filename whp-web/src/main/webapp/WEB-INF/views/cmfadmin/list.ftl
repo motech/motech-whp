@@ -1,5 +1,5 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-with-sidebar.ftl" as layout>
+<#import "../layout/default-with-menu.ftl" as layout>
 <#include "../user/resetPassword.ftl">
 <@layout.defaultLayout title="MoTeCH-WHP" entity="itadmin">
 <script type="text/javascript"

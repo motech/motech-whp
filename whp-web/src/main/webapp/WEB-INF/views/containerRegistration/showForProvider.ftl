@@ -1,5 +1,5 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-with-sidebar.ftl" as layout>
+<#import "../layout/default-with-menu.ftl" as layout>
 <@layout.defaultLayout title="Container-Registration" entity="provider">
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/containerRegistration.js'/>"></script>
     <#if errors??>

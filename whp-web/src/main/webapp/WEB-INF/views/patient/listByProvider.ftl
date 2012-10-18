@@ -1,5 +1,5 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-with-sidebar.ftl" as layout>
+<#import "../layout/default-with-menu.ftl" as layout>
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout title="Patient List" entity="provider">
     <#if message?exists && (message?length>0)>

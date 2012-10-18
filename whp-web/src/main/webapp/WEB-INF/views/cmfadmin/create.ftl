@@ -1,5 +1,5 @@
 <#import "/spring.ftl" as spring />
-<#import "../layout/default-with-sidebar.ftl" as layout>
+<#import "../layout/default-with-menu.ftl" as layout>
 <@layout.defaultLayout entity="itadmin" title="Create CMF Admin Account" >
 <div class="span12 row" id="createCmfAdmin">
     </br>
