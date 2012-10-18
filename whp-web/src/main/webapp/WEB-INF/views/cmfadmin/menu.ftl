@@ -29,7 +29,7 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Container Tracking <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
             <li>
-                <a href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
+                <a id="register-container" href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
             <li>
             <li>
                 <a href="/whp/sputum-tracking/pre-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">Pre Treatment Dashboard</a>

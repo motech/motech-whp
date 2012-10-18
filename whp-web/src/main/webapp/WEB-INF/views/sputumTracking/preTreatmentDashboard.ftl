@@ -168,7 +168,7 @@
             <tr class="sputum-tracking-dashboard-row" ng-repeat="item in data.results"
                 id="dashboardRows_{{item.containerId}}"
                 containerId="{{item.containerId}}">
-                <td>{{item.containerId}}</td>
+                <td class="containerId">{{item.containerId}}</td>
                 <td>{{item.containerIssuedOn}}</td>
                 <td>{{item.labName}}</td>
                 <td>{{item.consultationOneResult}}</td>

@@ -2,6 +2,7 @@ package org.motechproject.whp.functional.page.admin;
 
 import org.motechproject.whp.functional.framework.MyPageFactory;
 import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.motechproject.whp.functional.page.ContainerDashboardPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ public class AdminPage extends ListAllPatientsPage {
 
     @FindBy(how = How.ID, using = "show-patients")
     private WebElement showPatientsLink;
+    private WebElement containerRegistrationLink;
 
     public AdminPage(WebDriver webDriver) {
         super(webDriver);
@@ -36,5 +38,19 @@ public class AdminPage extends ListAllPatientsPage {
         createWebElement(webDriver.findElement(By.id("show-patients"))).click();
         ListAllPatientsPage listAllPatientsPage = MyPageFactory.initElements(webDriver, ListAllPatientsPage.class);
         return listAllPatientsPage.searchByDistrict("Begusarai");
+    }
+
+    public ContainerRegistrationPage navigateToContainerRegistrationPage() {
+        webDriver.findElement(By.linkText("Container Tracking")).click();
+        waitForElementToBeVisible(By.id("register-container"));
+        createWebElement(webDriver.findElement(By.id("register-container"))).click();
+        return MyPageFactory.initElements(webDriver, ContainerRegistrationPage.class);
+    }
+
+    public ContainerDashboardPage navigateToContainerDashboardPage() {
+        webDriver.findElement(By.linkText("Container Tracking")).click();
+        waitForElementToBeVisible(By.linkText("Sputum Tracking Dashboard"));
+        createWebElement(webDriver.findElement(By.id("Sputum Tracking Dashboard"))).click();
+        return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
     }
 }

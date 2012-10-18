@@ -1,10 +1,8 @@
 package org.motechproject.whp.functional.framework;
 
-import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -16,7 +14,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.functional.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,14 +35,15 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() {
-        createWebDriver();
+        webDriver = createWebDriver();
         logger.info("Using login URL as %s", LoginPage.LOGIN_URL);
         webDriver.get(LoginPage.LOGIN_URL);
     }
 
-    private void createWebDriver() {
+    private WebDriver createWebDriver() {
         try {
-            webDriver = WebDriverFactory.getInstance();
+            WebDriver webDriver = WebDriverFactory.getInstance();
+            return webDriver;
         } catch (WebDriverException e) {
             if (e.getMessage().contains("Unable to bind to locking port")) {
                 createWebDriver();
@@ -53,6 +51,7 @@ public abstract class BaseTest {
                 throw e;
             }
         }
+        return null;
     }
 
     protected String unique(String name) {
