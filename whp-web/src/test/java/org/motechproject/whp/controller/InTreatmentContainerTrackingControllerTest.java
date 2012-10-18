@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.InTreatmentContainerTrackingController.*;
@@ -89,12 +90,9 @@ public class InTreatmentContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/in-treatment/close-container"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute(ERRORS, errors))
-                .andExpect(model().attribute(REASONS, reasons))
-                .andExpect(forwardedUrl("sputumTracking/inTreatmentDashboard"));
+                .andExpect(content().string(containsString("error")));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
-        verify(containerService).getAllInTreatmentClosureReasonsForAdmin();
     }
 
     @Test
@@ -104,7 +102,7 @@ public class InTreatmentContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/in-treatment/close-container"))
                 .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/sputum-tracking/in-treatment/dashboard"));
+                .andExpect(content().string(containsString("success")));
 
         verify(containerService).closeContainer(any(ContainerClosureRequest.class));
     }
@@ -115,7 +113,7 @@ public class InTreatmentContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/in-treatment/open-container").param("containerId", containerId))
                 .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/sputum-tracking/in-treatment/dashboard"));
+                .andExpect(content().string("success"));
 
         verify(containerService).openContainer(containerId);
     }
