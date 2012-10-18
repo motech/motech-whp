@@ -142,7 +142,7 @@ public class ContainerTrackingControllerTest {
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/open-container").param("containerId", containerId))
                 .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/sputum-tracking/pre-treatment"));
+                .andExpect(content().string("success"));
 
         verify(containerService).openContainer(containerId);
     }

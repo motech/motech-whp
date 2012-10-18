@@ -187,7 +187,7 @@
                         <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a>
                     </div>
                     <div class="openContainer">
-                        <a data-toggle="modal" href="<@spring.url '/sputum-tracking/open-container?containerId={{item.containerId}}' />">Open</a>
+                        <a data-toggle="modal" class="openContainerLink" href="#">Open</a>
                     </div>
                 </td>
                 <td>{{item.reasonForClosure}}</td>

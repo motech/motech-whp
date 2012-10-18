@@ -97,5 +97,17 @@ $(function () {
         });
         return false;
     });
+
+    $(".openContainerLink").click(function() {
+        var containerId = $(this).parents("tr").attr("containerId");
+        $.ajax({
+            type: "GET",
+            url: "/whp/sputum-tracking/open-container" + "?containerId=" + containerId,
+            success: function() {
+                angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
+            }
+        });
+        return false;
+    });
 });
 

@@ -58,10 +58,11 @@ public class ContainerTrackingController {
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
+    @ResponseBody
     public String openContainer(@RequestParam("containerId") String containerId, HttpServletRequest servletRequest) {
         containerService.openContainer(containerId);
 
-        return "redirect:/sputum-tracking/pre-treatment";
+        return "success";
     }
 
     @RequestMapping(value = "/pre-treatment", method = RequestMethod.GET)
