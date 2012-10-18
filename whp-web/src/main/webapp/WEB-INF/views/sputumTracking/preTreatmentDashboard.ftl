@@ -184,7 +184,7 @@
                 <td>{{item.containerStatus}}</td>
                 <td class="{{item.containerStatus}}">
                     <div class="closeContainer">
-                        <a data-toggle="modal" href="#setReason">Close</a>
+                        <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a>
                     </div>
                     <div class="openContainer">
                         <a class="openContainerLink" href="#">Open</a>

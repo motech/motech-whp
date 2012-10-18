@@ -1,5 +1,5 @@
 <#ftl encoding="ISO-8859-5">
-<form class="modal hide fade" id="setReason" action=""
+<form class="modal hide fade" id="setReason" action="">
     <input id="containerId" type="hidden" name="containerId" value=""/>
 
 

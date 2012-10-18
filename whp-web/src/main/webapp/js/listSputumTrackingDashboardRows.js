@@ -41,6 +41,19 @@ $(function () {
                 $("#reason option[value=" + TB_NEGATIVE_OPTION_CODE + "]").removeAttr('disabled').show();
             }
         }
+
+        $(".openContainerLink").click(function() {
+            var containerId = $(this).parents("tr").attr("containerId");
+            var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/open-container?containerId=" + containerId;
+            $.ajax({
+                type: "GET",
+                url: endpoint,
+                success: function() {
+                    angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
+                }
+            });
+            return false;
+        });
     });
 
     var today = new Date();
@@ -99,17 +112,6 @@ $(function () {
         return false;
     });
 
-    $(".openContainerLink").click(function() {
-        var containerId = $(this).parents("tr").attr("containerId");
-        var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/open-container?containerId=" + containerId;
-        $.ajax({
-            type: "GET",
-            url: endpoint,
-            success: function() {
-                angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
-            }
-        });
-        return false;
-    });
+
 });
 

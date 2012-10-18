@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class InTreatmentContainerTrackingController {
     }
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
+    @ResponseBody
     public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest) {
         List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
         if (!errors.isEmpty())
@@ -51,6 +53,7 @@ public class InTreatmentContainerTrackingController {
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
+    @ResponseBody
     public String openContainer(@RequestParam("containerId") String containerId) {
         containerService.openContainer(containerId);
         return "success";
