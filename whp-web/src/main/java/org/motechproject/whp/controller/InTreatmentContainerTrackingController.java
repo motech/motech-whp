@@ -41,22 +41,19 @@ public class InTreatmentContainerTrackingController {
     }
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
-    public String updateReasonForClosure(Model uiModel, ContainerClosureRequest containerClosureRequest) {
+    public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest) {
         List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
-        if (!errors.isEmpty()) {
-            uiModel.addAttribute(ERRORS, errors);
-            return showContainerTrackingDashBoard(uiModel);
-        }
+        if (!errors.isEmpty())
+            return "error";
 
         containerService.closeContainer(containerClosureRequest);
-        return "redirect:/sputum-tracking/in-treatment/dashboard";
+        return "success";
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
     public String openContainer(@RequestParam("containerId") String containerId) {
         containerService.openContainer(containerId);
-
-        return "redirect:/sputum-tracking/in-treatment/dashboard";
+        return "success";
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
