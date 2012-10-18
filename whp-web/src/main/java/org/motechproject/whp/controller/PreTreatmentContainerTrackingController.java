@@ -57,7 +57,7 @@ public class PreTreatmentContainerTrackingController {
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
     @ResponseBody
-    public String openContainer(@RequestParam("containerId") String containerId, HttpServletRequest servletRequest) {
+    public String openContainer(@RequestParam("containerId") String containerId) {
         containerService.openContainer(containerId);
 
         return "success";

@@ -8,7 +8,7 @@ import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.containertracking.validation.ReasonForClosureValidator;
+import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
