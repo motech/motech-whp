@@ -9,8 +9,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "validate_container_id")
-@Setter
 @EqualsAndHashCode
+@Setter
 public class ContainerVerificationRequest extends VerificationRequest {
 
     @NotNullOrEmpty
@@ -34,6 +34,7 @@ public class ContainerVerificationRequest extends VerificationRequest {
         this.container_id = container_id;
     }
 
+
     @XmlElement(name = "msisdn")
     public String getMsisdn() {
         return msisdn;
@@ -53,4 +54,5 @@ public class ContainerVerificationRequest extends VerificationRequest {
         super.setMsisdn(msisdn);
         this.msisdn = msisdn;
     }
+
 }

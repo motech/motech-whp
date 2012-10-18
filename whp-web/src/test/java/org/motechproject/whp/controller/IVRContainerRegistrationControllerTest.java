@@ -3,9 +3,16 @@ package org.motechproject.whp.controller;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.mapper.ContainerRegistrationRequestMapper;
+import org.motechproject.whp.mapper.ContainerVerificationRequestMapper;
+import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
@@ -15,28 +22,43 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class WGNVerificationControllerTest {
+public class IVRContainerRegistrationControllerTest {
 
     @Mock
     ProviderVerification providerVerification;
+
     @Mock
     ContainerVerification containerVerification;
 
-    WGNVerificationController wgnVerificationController;
+    @Mock
+    ContainerVerificationRequestMapper containerVerificationRequestMapper;
+
+    @Mock
+    ContainerService containerService;
+
+    @Mock
+    ProviderService providerService;
+
+    IVRContainerRegistrationController IVRContainerRegistrationController;
+
+    @Mock
+    ContainerRegistrationRequestMapper containerRegistrationRequestMapper;
 
     @Before
     public void setup() {
         initMocks(this);
-        wgnVerificationController = new WGNVerificationController(providerVerification, containerVerification);
+        IVRContainerRegistrationController = new IVRContainerRegistrationController(providerVerification, containerVerification, containerService, providerService);
     }
 
     @Test
@@ -50,7 +72,7 @@ public class WGNVerificationControllerTest {
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/provider/verify")
@@ -63,7 +85,7 @@ public class WGNVerificationControllerTest {
 
     @Test
     public void shouldRespondWithBadRequestIfRequestXMLIsInvalid() throws Exception {
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/provider/verify")
@@ -85,7 +107,7 @@ public class WGNVerificationControllerTest {
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/provider/verify")
@@ -113,7 +135,7 @@ public class WGNVerificationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
 
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/container/verify")
@@ -134,7 +156,7 @@ public class WGNVerificationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
 
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/container/verify")
@@ -155,7 +177,7 @@ public class WGNVerificationControllerTest {
 
     @Test
     public void shouldRespondWithErrorOnInvalidXMLForContainerRequest() throws Exception {
-        standaloneSetup(wgnVerificationController)
+        standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
                         post("/sputumCall/container/verify")
@@ -163,6 +185,55 @@ public class WGNVerificationControllerTest {
                                 .contentType(MediaType.APPLICATION_XML)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldRegisterContainerOnSuccessfulValidation() throws Exception {
+
+        String providerId = "providerId";
+        when(providerService.findByMobileNumber("0986754322")).thenReturn(new Provider(providerId, null, null, null));
+
+        when(containerVerification.verifyRequest((ContainerVerificationRequest) anyObject())).thenReturn(new VerificationResult());
+        standaloneSetup(IVRContainerRegistrationController)
+                .build()
+                .perform(
+                        post("/sputumCall/registerContainer")
+                                .body(readXML("/validIVRContainerRegistrationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
+
+                ).andExpect(status().isOk())
+                .andExpect(
+                        content().string(containsString("success"))
+        );
+
+        ArgumentCaptor<ContainerRegistrationRequest> containerRegistrationRequestArgumentCaptor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
+        verify(containerService, times(1)).registerContainer(containerRegistrationRequestArgumentCaptor.capture());
+        assertEquals("PreTreatment", containerRegistrationRequestArgumentCaptor.getValue().getInstance());
+        assertEquals(providerId.toLowerCase(), containerRegistrationRequestArgumentCaptor.getValue().getProviderId());
+        assertEquals("76862367681", containerRegistrationRequestArgumentCaptor.getValue().getContainerId());
+
+    }
+
+    @Test
+    public void shouldNotRegisterContainerForInvalidContainerDetails() throws Exception {
+
+        String providerId = "providerId";
+        when(providerService.findByMobileNumber("0986754322")).thenReturn(new Provider(providerId, null, null, null));
+
+        VerificationResult verificationResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
+        when(containerVerification.verifyRequest((ContainerVerificationRequest) anyObject())).thenReturn(verificationResult);
+        standaloneSetup(IVRContainerRegistrationController)
+                .build()
+                .perform(
+                        post("/sputumCall/registerContainer")
+                                .body(readXML("/validIVRContainerRegistrationRequest.xml"))
+                                .contentType(MediaType.APPLICATION_XML)
+                ).andExpect(status().isOk())
+                .andExpect(
+                        content().string(containsString("failure"))
+                );
+
+        verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
     }
 
     private byte[] readXML(String xmlPath) throws IOException {
