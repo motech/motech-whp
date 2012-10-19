@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +23,8 @@ public class ContainerVerificationRequest extends VerificationRequest {
     private String call_id;
 
     @NotNullOrEmpty
+    @DecimalMax("99999999999")
+    @DecimalMin("10000000000")
     private String container_id;
 
     /*Required for spring mvc*/

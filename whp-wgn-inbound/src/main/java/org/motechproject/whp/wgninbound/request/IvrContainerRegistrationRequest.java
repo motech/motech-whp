@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,6 +20,8 @@ public class IvrContainerRegistrationRequest extends VerificationRequest {
     private String msisdn;
 
     @NotNullOrEmpty
+    @DecimalMax("99999999999")
+    @DecimalMin("10000000000")
     private String container_id;
 
     @NotNullOrEmpty

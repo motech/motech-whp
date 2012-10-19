@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<register_container >
-    <msisdn>0986754322</msisdn >
-    <container_id >76862367681</container_id >
-    <phase >PreTreatment</phase >
+<register_container>
+    <msisdn>0986754322</msisdn>
+    <container_id>76862367681</container_id>
+    <phase >PreTreatment</phase>
     <call_id>64756435684375</call_id>
 </register_container>
