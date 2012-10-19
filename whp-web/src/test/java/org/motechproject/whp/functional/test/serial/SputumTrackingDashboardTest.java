@@ -48,6 +48,19 @@ public class SputumTrackingDashboardTest extends BaseTest {
         assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchAutoCompleteField().getContainerId()));
         page.logout();
     }
+
+    @Test
+    public void shouldFilterByAllFieldsInTheFilterCriteria() {
+        ContainerDashboardPage page = ContainerDashboardPage.fetch(webDriver);
+        page.closeContainer(testContainers.containerWhichDoesNotMatchDropDownField().getContainerId());
+        page.filterBy(TestContainers.district, TestContainers.containerStatus, TestContainers.containerIssuedFrom, TestContainers.containerIssuedTo);
+        assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchAutoCompleteField().getContainerId()));
+        assertFalse(page.hasContainerId(testContainers.containerNotRegistered().getContainerId()));
+        assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchDateRange().getContainerId()));
+        assertFalse(page.hasContainerId(testContainers.containerWhichDoesNotMatchDropDownField().getContainerId()));
+        assertTrue(page.hasContainerId(testContainers.containerWhichMatchesAllCriteria().getContainerId()));
+        page.logout();
+    }
 }
 
 

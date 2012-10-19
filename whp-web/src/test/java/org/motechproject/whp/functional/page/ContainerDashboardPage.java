@@ -2,7 +2,8 @@ package org.motechproject.whp.functional.page;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.functional.framework.MyPageFactory;
-import org.motechproject.whp.functional.framework.WebDriverFactory;
+import org.motechproject.whp.functional.framework.WHPWebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.How;
 
 import java.util.List;
 
+import static org.motechproject.whp.functional.framework.WebDriverFactory.createWebElement;
 import static org.openqa.selenium.By.cssSelector;
 
 public class ContainerDashboardPage extends Page {
@@ -27,14 +29,22 @@ public class ContainerDashboardPage extends Page {
     @FindBy(how = How.ID, id = "containerIssuedDateTo")
     private WebElement containerIssuedTo;
 
+    @FindBy(how = How.ID, id = "diagnosis")
+    private WebElement diagnosis;
+
     @FindBy(how = How.ID, id = "search")
     private WebElement search;
 
     public ContainerDashboardPage(WebDriver webDriver) {
         super(webDriver);
-        containerIssuedFrom = WebDriverFactory.createWebElement(containerIssuedFrom);
-        containerIssuedTo = WebDriverFactory.createWebElement(containerIssuedTo);
-        search = WebDriverFactory.createWebElement(search);
+    }
+
+    @Override
+    public void postInitialize() {
+        containerIssuedFrom = createWebElement(containerIssuedFrom);
+        containerIssuedTo = createWebElement(containerIssuedTo);
+        diagnosis = createWebElement(diagnosis);
+        search = createWebElement(search);
     }
 
     @Override
@@ -47,12 +57,7 @@ public class ContainerDashboardPage extends Page {
     }
 
     public boolean hasContainerId(String containerId) {
-        List<WebElement> tds = table.findElements(cssSelector(".containerId"));
-        for (WebElement td : tds) {
-            if (StringUtils.equals(containerId, td.getText()))
-                return true;
-        }
-        return false;
+        return rowForContainer(containerId) != null;
     }
 
     public ContainerDashboardPage filterByContainerIssuedDate(String fromDate, String toDate) {
@@ -68,5 +73,36 @@ public class ContainerDashboardPage extends Page {
         search.click();
         waitForScript(5000);
         return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
+    }
+
+    public ContainerDashboardPage filterBy(String district, String diagnosis, String containerIssuedFrom, String containerIssuedTo) {
+        this.containerIssuedFrom.sendKeys(containerIssuedFrom);
+        this.containerIssuedTo.sendKeys(containerIssuedTo);
+        ((JavascriptExecutor) webDriver).executeScript("$('#district').val('" + district + "')");
+        ((WHPWebElement) this.diagnosis).select(diagnosis);
+        search.click();
+        waitForScript(5000);
+        return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
+    }
+
+    public ContainerDashboardPage closeContainer(String containerId) {
+        WebElement row = rowForContainer(containerId);
+        if (row != null) {
+            createWebElement(row.findElement(By.linkText("Close"))).click();
+            waitForElementToBeVisible(By.id("reason"));
+            ((WHPWebElement) createWebElement(webDriver.findElement(By.id("reason")))).select("2");
+            webDriver.findElement(By.id("saveReason")).click();
+            waitForScript(5000);
+        }
+        return MyPageFactory.initElements(webDriver, ContainerDashboardPage.class);
+    }
+
+    private WebElement rowForContainer(String containerId) {
+        List<WebElement> trs = table.findElements(cssSelector(".sputum-tracking-dashboard-row"));
+        for (WebElement tr : trs) {
+            if (StringUtils.equals(containerId, tr.findElement(By.cssSelector(".containerId")).getText()))
+                return tr;
+        }
+        return null;
     }
 }

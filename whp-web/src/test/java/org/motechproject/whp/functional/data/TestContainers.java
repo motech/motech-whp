@@ -9,6 +9,7 @@ public class TestContainers {
     public static final String containerIssuedFrom = "02/10/2012";
     public static final String containerIssuedTo = "04/10/2012";
     public static final String district = "Begusarai";
+    public static final String containerStatus = "Open";
 
     public TestContainer containerWhichDoesNotMatchDateRange() {
         return new TestContainer()
@@ -30,11 +31,11 @@ public class TestContainers {
                 .setContainerId("90000000021")
                 .setProviderId("providerid")
                 .setInstance("Pre-treatment")
-                .setDiagnosis("Negative")
+                .setDiagnosis("Positive")
                 .setContainerIssuedDate("03/10/2012")
                 .setConsultationDate("01/10/2012")
                 .setDistrict("Begusarai")
-                .setStatus("Open")
+                .setStatus("Closed")
                 .setLabResult("Positive");
     }
 

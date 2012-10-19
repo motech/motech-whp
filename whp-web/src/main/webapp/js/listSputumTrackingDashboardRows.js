@@ -34,7 +34,7 @@ $(function () {
 
         var showTbNegativeOptionForPositiveDiagnosis = function () {
             var TB_NEGATIVE_OPTION_CODE = "1";
-            if ($(this).parents('tr').children('td#diagnosis').text().toLowerCase() === "positive") {
+            if ($(this).parents('tr').children('td#diagnosisValue').text().toLowerCase() === "positive") {
                 $("#reason option[value=" + TB_NEGATIVE_OPTION_CODE + "]").attr('disabled', 'disabled').hide();
             }
             else {
