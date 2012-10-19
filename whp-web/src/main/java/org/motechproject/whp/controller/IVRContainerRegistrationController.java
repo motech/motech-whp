@@ -5,7 +5,7 @@ import freemarker.template.TemplateException;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.mapper.ContainerRegistrationRequestMapper;
-import org.motechproject.whp.reponse.VerificationErrorResponse;
+import org.motechproject.whp.reponse.ValidationErrorResponse;
 import org.motechproject.whp.reponse.VerificationResponse;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
@@ -80,7 +80,7 @@ public class IVRContainerRegistrationController {
         if (verificationResult.isSuccess()) {
             return new VerificationResponse(verificationResult);
         } else {
-            return new VerificationErrorResponse(verificationResult);
+            return new ValidationErrorResponse(verificationResult);
         }
     }
 }

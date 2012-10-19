@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "validation_result")
-public class VerificationErrorResponse extends VerificationResponse {
+public class ValidationErrorResponse extends VerificationResponse {
 
     @XmlElement
     private List<ValidationErrors.ValidationError> errors;
 
     /*Required for JAXB*/
-    public VerificationErrorResponse() {
+    public ValidationErrorResponse() {
     }
 
-    public VerificationErrorResponse(VerificationResult verificationResult) {
+    public ValidationErrorResponse(VerificationResult verificationResult) {
         super(verificationResult);
         setErrorCode(verificationResult);
     }

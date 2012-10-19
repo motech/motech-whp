@@ -96,8 +96,9 @@ public class PreTreatmentContainerTrackingControllerTest {
 
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/pre-treatment/close-container"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("error")));
+                .andExpect(content().type("application/json;charset=UTF-8"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("some error")));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
     }
