@@ -1,14 +1,15 @@
 package org.motechproject.whp.container.validation;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReasonForClosureValidatorTest {
     ReasonForClosureValidator reasonForClosureValidator;
@@ -22,11 +23,11 @@ public class ReasonForClosureValidatorTest {
     public void shouldValidateWhetherReasonForClosureAndContainerIdArePresent() {
         ContainerClosureRequest containerClosureRequest = new ContainerClosureRequest();
 
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertEquals("container.id.invalid.error", errors.get(0).getCode());
-        assertEquals("container.reason.for.closure.invalid.error", errors.get(1).getCode());
+        assertTrue(StringUtils.contains(errors.get(0), "Container Id must be of"));
+        assertTrue(StringUtils.contains(errors.get(1), "Invalid reason for closure :"));
     }
 
     @Test
@@ -35,11 +36,11 @@ public class ReasonForClosureValidatorTest {
         containerClosureRequest.setContainerId("12345");
         containerClosureRequest.setReason("1");
 
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertEquals("container.alternate.diagnosis.invalid.error", errors.get(0).getCode());
-        assertEquals("container.consultation.date.invalid.error", errors.get(1).getCode());
+        assertTrue(StringUtils.contains(errors.get(0), "Invalid alternate diagnosis "));
+        assertTrue(StringUtils.contains(errors.get(1), "Invalid consultation date"));
     }
 
     @Test
@@ -50,11 +51,11 @@ public class ReasonForClosureValidatorTest {
         containerClosureRequest.setAlternateDiagnosis("alternate one");
         containerClosureRequest.setConsultationDate("22/11/2012");
 
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertEquals("container.alternate.diagnosis.invalid.error", errors.get(0).getCode());
-        assertEquals("container.consultation.date.invalid.error", errors.get(1).getCode());
+        assertTrue(StringUtils.contains(errors.get(0), "Invalid alternate diagnosis "));
+        assertTrue(StringUtils.contains(errors.get(1), "Invalid consultation date"));
     }
 
     @Test
@@ -65,10 +66,10 @@ public class ReasonForClosureValidatorTest {
         containerClosureRequest.setAlternateDiagnosis("123");
         containerClosureRequest.setConsultationDate("11/27/11");
 
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(1, errors.size());
-        assertEquals("container.consultation.date.invalid.error", errors.get(0).getCode());
+        assertTrue(StringUtils.contains(errors.get(0), "Invalid consultation date"));
     }
 
     @Test
@@ -79,9 +80,9 @@ public class ReasonForClosureValidatorTest {
         containerClosureRequest.setAlternateDiagnosis("123");
         containerClosureRequest.setConsultationDate(DateUtil.tomorrow().toString("dd/MM/yyyy"));
 
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(1, errors.size());
-        assertEquals("container.consultation.date.invalid.error", errors.get(0).getCode());
+        assertTrue(StringUtils.contains(errors.get(0), "Invalid consultation date"));
     }
 }

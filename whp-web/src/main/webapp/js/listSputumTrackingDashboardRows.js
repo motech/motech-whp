@@ -43,13 +43,13 @@ $(function () {
             }
         }
 
-        $(".openContainerLink").click(function() {
+        $(".openContainerLink").click(function () {
             var containerId = $(this).parents("tr").attr("containerId");
             var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/open-container?containerId=" + containerId;
             $.ajax({
-                type: "GET",
-                url: endpoint,
-                success: function() {
+                type:"GET",
+                url:endpoint,
+                success:function () {
                     angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
                 }
             });
@@ -78,39 +78,58 @@ $(function () {
     $.metadata.setType("attr", "validate");
 
     $("#setReason").validate({
-        rules: {
-            consultationDate: {
-                required: true
+        rules:{
+            consultationDate:{
+                required:true
             }
         },
-        messages: {
-            consultationDate: {
-                required: "Please enter the consultation date"
+        messages:{
+            consultationDate:{
+                required:"Please enter the consultation date"
             },
-            reason: {
-                required: "Please select the reason"
+            reason:{
+                required:"Please select the reason"
             },
-            alternateDiagnosis: {
-                required: "Please select alternate diagnosis"
+            alternateDiagnosis:{
+                required:"Please select alternate diagnosis"
             }
         }
     });
 
     $("#alternateDiagnosis").combobox();
 
-    $("#saveReason").click(function() {
+    $("#saveReason").click(function () {
         var dataString = $("#setReason").serialize();
         var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/close-container";
         $.ajax({
-            type: "POST",
-            url: endpoint,
-            data: dataString,
-            success: function() {
+            type:"POST",
+            url:endpoint,
+            data:dataString,
+            success:function () {
                 angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
                 $('#setReason').modal('hide');
+            },
+            statusCode: {
+                400 : function(data){
+                    var listOfErrors = JSON.parse(data.responseText).errors;
+                    var allErrors = "";
+                    $.each(listOfErrors, function(index, element){
+                        allErrors += element + "\n";
+                    })
+                    $("#container-tracking-error").html(allErrors);
+                    $("#container-tracking-error").show();
+                }
             }
         });
         return false;
     });
+
+    $('#setReason').bind('hidden', function () {
+        $("#container-tracking-error").hide()
+    });
+
+
+    $("#container-tracking-error").hide()
+
 });
 

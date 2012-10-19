@@ -5,14 +5,6 @@
     <#if !pageNo??>
         <#assign pageNo=1/>
     </#if>
-    <#if errors??>
-    <div id="container-tracking-error" class="container-tracking-message-alert row alert alert-error fade in">
-        <button class="close" data-dismiss="alert">&times;</button>
-        <#list errors as error>
-            <div><@spring.messageArgs code=error.code args=error.parameters/></div>
-        </#list>
-    </div>
-    </#if>
 
     <#include "preTreatmentReasonForClosure.ftl"/>
 

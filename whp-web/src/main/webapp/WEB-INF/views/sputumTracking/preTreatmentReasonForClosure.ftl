@@ -1,7 +1,7 @@
 <#ftl encoding="ISO-8859-5">
 <form class="modal hide fade" id="setReason" action="">
-    <input id="containerId" type="hidden" name="containerId" value=""/>
 
+    <input id="containerId" type="hidden" name="containerId" value=""/>
 
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
@@ -9,6 +9,7 @@
             Reason For Closure [<span id="containerIdDisplay" class="containerIdDisplay" name="containerIdDisplay"></span>]
         </h3>
     </div>
+    <div id="container-tracking-error" class="row alert alert-error"></div>
     <div class="modal-body">
         <div class="control-group">
             <table id="reasonUpdateTable" class="table table-bordered table-condensed">

@@ -8,7 +8,6 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -85,8 +84,8 @@ public class PreTreatmentContainerTrackingControllerTest {
 
     @Test
     public void shouldPopulateErrorsIfReasonForClosureRequestFailsValidation() throws Exception {
-        ArrayList<ErrorWithParameters> errors = new ArrayList<>();
-        errors.add(new ErrorWithParameters("some code", "some error"));
+        List<String> errors = new ArrayList<>();
+        errors.add("some error");
         when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(errors);
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
@@ -98,14 +97,14 @@ public class PreTreatmentContainerTrackingControllerTest {
                 .perform(post("/sputum-tracking/pre-treatment/close-container"))
                 .andExpect(content().type("application/json;charset=UTF-8"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("some error")));
+                .andExpect(content().string(containsString("some")));
 
         verify(reasonForClosureValidator).validate(any(ContainerClosureRequest.class));
     }
 
     @Test
     public void shouldCloseContainer() throws Exception {
-        when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<ErrorWithParameters>());
+        when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<String>());
 
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/pre-treatment/close-container"))

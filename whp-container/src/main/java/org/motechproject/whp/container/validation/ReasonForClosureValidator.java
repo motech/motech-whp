@@ -3,7 +3,6 @@ package org.motechproject.whp.container.validation;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.springframework.stereotype.Component;
 
@@ -17,25 +16,25 @@ public class ReasonForClosureValidator {
 
     public static final String SEPARATOR = "/";
 
-    public List<ErrorWithParameters> validate(ContainerClosureRequest containerClosureRequest) {
-        List<ErrorWithParameters> errors = new ArrayList<>();
+    public List<String> validate(ContainerClosureRequest containerClosureRequest) {
+        List<String> errors = new ArrayList<>();
 
         if (StringUtils.isEmpty(containerClosureRequest.getContainerId()))
-            errors.add(new ErrorWithParameters("container.id.invalid.error", containerClosureRequest.getContainerId()));
+            errors.add("Container Id must be of" + containerClosureRequest.getContainerId() + " digits in length");
 
         if (StringUtils.isEmpty(containerClosureRequest.getReason()))
-            errors.add(new ErrorWithParameters("container.reason.for.closure.invalid.error", containerClosureRequest.getReason()));
+            errors.add("Invalid reason for closure : "+ containerClosureRequest.getReason());
 
         if (StringUtils.equals(containerClosureRequest.getReason(), TB_NEGATIVE_CODE)) {
             if (StringUtils.isEmpty(containerClosureRequest.getAlternateDiagnosis()))
-                errors.add(new ErrorWithParameters("container.alternate.diagnosis.invalid.error", containerClosureRequest.getAlternateDiagnosis()));
+                errors.add("Invalid alternate diagnosis : "+ containerClosureRequest.getAlternateDiagnosis());
             if (StringUtils.isEmpty(containerClosureRequest.getConsultationDate()) || isInvalidFormat(containerClosureRequest.getConsultationDate()))
-                errors.add(new ErrorWithParameters("container.consultation.date.invalid.error", containerClosureRequest.getConsultationDate()));
+                errors.add("Invalid consultation date : "+ containerClosureRequest.getConsultationDate());
         } else {
             if (!StringUtils.isEmpty(containerClosureRequest.getAlternateDiagnosis()))
-                errors.add(new ErrorWithParameters("container.alternate.diagnosis.invalid.error", containerClosureRequest.getAlternateDiagnosis()));
+                errors.add("Invalid alternate diagnosis : "+ containerClosureRequest.getAlternateDiagnosis());
             if (!StringUtils.isEmpty(containerClosureRequest.getConsultationDate()))
-                errors.add(new ErrorWithParameters("container.consultation.date.invalid.error", containerClosureRequest.getConsultationDate()));
+                errors.add("Invalid consultation date : "+ containerClosureRequest.getConsultationDate());
         }
 
         return errors;
@@ -45,7 +44,7 @@ public class ReasonForClosureValidator {
         String[] dateValues = consultationDate.split(SEPARATOR);
         try {
             LocalDate date = new LocalDate(Integer.parseInt(dateValues[2]), Integer.parseInt(dateValues[1]), Integer.parseInt(dateValues[0]));
-            if(date.isAfter(DateUtil.today()))
+            if (date.isAfter(DateUtil.today()))
                 return true;
             return false;
         } catch (Exception e) {

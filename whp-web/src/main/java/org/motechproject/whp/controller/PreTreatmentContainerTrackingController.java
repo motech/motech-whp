@@ -3,7 +3,6 @@ package org.motechproject.whp.controller;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -49,7 +48,7 @@ public class PreTreatmentContainerTrackingController {
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
     @ResponseBody
     public WHPResponse updateReasonForClosure(ContainerClosureRequest containerClosureRequest, HttpServletResponse httpServletResponse) {
-        List<ErrorWithParameters> errors = reasonForClosureValidator.validate(containerClosureRequest);
+        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
         httpServletResponse.setContentType("application/json");
         if (!errors.isEmpty()) {
             httpServletResponse.setStatus(400);

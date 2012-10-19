@@ -2,8 +2,6 @@ package org.motechproject.whp.reponse;
 
 
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 
 import java.util.List;
 
@@ -14,14 +12,14 @@ public class WHPResponse {
     public static final String SUCCESS = "success";
 
     private String status = SUCCESS;
-    private List<ErrorWithParameters> errors;
+    private List<String> errors;
 
     public WHPResponse() {
     }
 
-    public WHPResponse(List<ErrorWithParameters> errors) {
+    public WHPResponse(List<String> errors) {
         this.errors = errors;
-        if (CollectionUtils.isNotEmpty(errors))
+        if (null != errors && !errors.isEmpty())
             status = ERROR;
     }
 }

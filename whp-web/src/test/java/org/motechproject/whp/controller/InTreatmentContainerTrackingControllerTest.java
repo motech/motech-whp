@@ -8,7 +8,6 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.Container;
@@ -80,8 +79,8 @@ public class InTreatmentContainerTrackingControllerTest {
 
     @Test
     public void shouldPopulateErrorsIfReasonForClosureRequestFailsValidation() throws Exception {
-        ArrayList<ErrorWithParameters> errors = new ArrayList<>();
-        errors.add(new ErrorWithParameters("some code", "some error"));
+        List<String> errors = new ArrayList<>();
+        errors.add("some error");
         when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(errors);
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
@@ -97,7 +96,7 @@ public class InTreatmentContainerTrackingControllerTest {
 
     @Test
     public void shouldCloseContainer() throws Exception {
-        when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<ErrorWithParameters>());
+        when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(new ArrayList<String>());
 
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/in-treatment/close-container"))
