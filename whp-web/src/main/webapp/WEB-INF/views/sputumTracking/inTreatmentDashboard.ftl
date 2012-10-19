@@ -58,7 +58,7 @@
                                 <select id="mappingInstance" name="mappingInstance">
                                     <option value=""></option>
                                     <#list instances as instance>
-                                        <option value="${instance}" ng-selected="{{isSelected('${instance}', searchCriteria.mappingInstance, 'mappingInstance')}}">${instance}</option>
+                                        <option value="${instance}" ng-selected="{{isSelected('${instance}', searchCriteria.mappingInstance, 'mappingInstance')}}">${instance.displayText}</option>
                                     </#list>
                                 </select>
                             </div>

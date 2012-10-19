@@ -7,7 +7,9 @@
 
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Reason For Closure</h3>
+        <h3>
+            Reason For Closure [<span id="containerIdDisplay" class="containerIdDisplay" name="containerIdDisplay"></span>]
+        </h3>
     </div>
     <div class="modal-body">
         <div class="control-group">

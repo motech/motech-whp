@@ -59,7 +59,7 @@ public class ContainerTrackingDashboardRowMapper {
         row.setContainerIssuedOn(inDesiredFormat(container.getCreationTime().toLocalDate()));
         row.setContainerStatus(container.getStatus().name());
         if (container.getMappingInstance() != null) {
-            row.setMappingInstance(container.getMappingInstance().name());
+            row.setMappingInstance(container.getMappingInstance().getDisplayText());
         }
 
         if (container.getDiagnosis() != null) {

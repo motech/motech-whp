@@ -63,7 +63,7 @@ public class InTreatmentContainerTrackingController {
     public String showContainerTrackingDashBoard(Model uiModel) {
         List<ReasonForContainerClosure> allClosureReasons = containerService.getAllInTreatmentClosureReasonsForAdmin();
 
-        uiModel.addAttribute(INSTANCES, SputumTrackingInstance.allInTreatmentInstanceNames());
+        uiModel.addAttribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES);
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());
