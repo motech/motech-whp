@@ -13,6 +13,14 @@ $(function () {
         $("#providerId-autocomplete").val("");
     });
 
+    $("#district").bind("invalid-value", function (event, ui) {
+        $("#providerId-autocomplete").val("");
+        $("#providerId").html("");
+        $("#providerId").data('combobox').destroy();
+        $("#providerId").combobox();
+        initProvidersList();
+    });
+
     $("#providerId").bind("autocomplete-selected", function (event, ui) {
         $("#providerId").val($("#providerId-autocomplete").val());
     });

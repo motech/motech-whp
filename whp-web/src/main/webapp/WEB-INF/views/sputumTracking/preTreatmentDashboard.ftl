@@ -10,18 +10,15 @@
 
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
-        <h3>Pre Treatment Containers</h3>
+       <h3>Pre Treatment Containers</h3>
        <div class="row-fluid well" id="search-section">
-            <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
-                Pane</a></h3>
-
+            <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
             <div id="search-pane">
             <table>
                 <tr>
                     <td>
                         <div class="control-group">
                             <label class="control-label">Provider District</label>
-
                             <div class="controls">
                                 <select id="district" name="district">
                                     <option value=""></option>
@@ -35,18 +32,14 @@
                     <td>
                         <div class="control-group">
                             <label class="control-label">Provider ID</label>
-
                             <div class="controls">
                                   <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
-
                             </div>
                         </div>
                     </td>
-
                     <td>
                         <div class="control-group">
                             <label class="control-label">Cumulative Lab Result</label>
-
                             <div class="controls">
                                 <select id="cumulativeResult" name="cumulativeResult">
                                     <option value=""></option>
