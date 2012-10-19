@@ -1,10 +1,30 @@
-var app = angular.module('paginator', []);
+var app = angular.module('whp', []);
 
 function FilterCtrl($scope, $http, $rootScope, $location) {
-    var paramMap = $location.search();
-    if(paramMap[$scope.pagination_id + "-searchCriteria"]) {
-        $rootScope.searchCriteria =  JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
+
+    $scope.initializeFilterForm = function () {
+        var paramMap = $location.search();
+
+        if (paramMap[$scope.pagination_id + "-searchCriteria"]) {
+            $rootScope.searchCriteria = JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
+        }
+
+        /*Initialize the search box*/
+        for (id in $rootScope.searchCriteria) {
+            var element = $('#' + id);
+            if (element) {
+                element.val($rootScope.searchCriteria[id]);
+            }
+        }
+
+        $rootScope.$broadcast("filterUpdated");
     }
+
+
+    $(window).bind('hashchange', function () {
+        $scope.initializeFilterForm();
+    });
+
 
     $scope.applyFilter = function () {
         updateSearchCriteria();
@@ -20,20 +40,23 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         }
     }
 
-    $scope.isSelected = function(value, selected, id){
-        if($rootScope.searchCriteria && $rootScope.searchCriteria[id] != null) {
-            if($rootScope.searchCriteria[id] == value)
-                $('#'+ id).val(value);
+    $scope.isSelected = function (value, selected, id) {
+        if ($rootScope.searchCriteria && $rootScope.searchCriteria[id] != null) {
+            if ($rootScope.searchCriteria[id] == value)
+                $('#' + id).val(value);
             return;
         }
 
-        if(value == selected){
-            $('#'+ id).val(selected);
+        if (value == selected) {
+            $('#' + id).val(selected);
         }
     }
 
 
-    $scope.selected = function(value, id){
+    $scope.selected = function (value, id) {
         $('#' + id).val(value);
     }
+
+    $scope.initializeFilterForm();
 }
+

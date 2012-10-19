@@ -1,4 +1,4 @@
-var app = angular.module('paginator', []);
+var app = angular.module('whp', []);
 
 function PaginationCtrl($scope, $http, $rootScope, $location) {
 

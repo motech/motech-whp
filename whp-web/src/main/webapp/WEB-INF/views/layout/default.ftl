@@ -2,7 +2,7 @@
 <#import "header.ftl" as header/>
 <#macro defaultLayout title="WHP">
 <!DOCTYPE html>
-<html>
+<html ng-app="whp">
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
