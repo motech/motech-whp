@@ -3,6 +3,7 @@ package org.motechproject.whp.wgninbound.request;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.container.service.ContainerService;
@@ -103,7 +104,7 @@ public class ValidatorPoolTest {
     public void shouldVerifyPhaseForInvalidInstance() {
         WHPErrors whpErrors = new WHPErrors();
 
-        validatorPool.verifyPhase("invalid-phase", whpErrors);
+        validatorPool.verifyPhase(SputumTrackingInstance.PreTreatment.getDisplayText(), whpErrors);
 
         assertFalse(whpErrors.isEmpty());
         assertEquals(WHPErrorCode.INVALID_PHASE, whpErrors.get(0).getErrorCode());

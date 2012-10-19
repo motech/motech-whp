@@ -1,7 +1,6 @@
 package org.motechproject.whp.wgninbound.verification;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,7 +114,7 @@ public class ProviderVerificationIT {
         List<WHPError> errors = providerVerification.verify(request);
 
         verify(validatorPool, times(1)).verifyMobileNumber(eq(msisdn), whpErrors.capture());
-        Assert.assertTrue(errors.isEmpty());
+        assertTrue(errors.isEmpty());
     }
 
     private boolean errorContains(String expectedMessage, List<WHPError> errors) {

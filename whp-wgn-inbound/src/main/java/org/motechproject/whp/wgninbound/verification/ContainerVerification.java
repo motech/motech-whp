@@ -19,7 +19,7 @@ public class ContainerVerification extends Verification<ContainerVerificationReq
     protected WHPErrors verify(ContainerVerificationRequest request) {
         WHPErrors whpErrors = new WHPErrors();
         validatorPool.verifyMobileNumber(request.getPhoneNumber(), whpErrors)
-                     .verifyContainerMapping(request.getMsisdn(), request.getContainer_id(), whpErrors);
+                     .verifyContainerMapping(request.getPhoneNumber(), request.getContainer_id(), whpErrors);
         return whpErrors;
     }
 }

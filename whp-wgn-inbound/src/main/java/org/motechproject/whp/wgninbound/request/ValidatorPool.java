@@ -47,7 +47,7 @@ public class ValidatorPool {
     }
 
     public ValidatorPool verifyPhase(String phase, WHPErrors whpErrors) {
-        if (!SputumTrackingInstance.isValidRegistrationInstance(phase))
+        if (!SputumTrackingInstance.isValidRegistrationInstanceName(phase))
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHASE));
         return this;
     }

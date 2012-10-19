@@ -1,6 +1,5 @@
 package org.motechproject.whp.wgninbound.verification;
 
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -39,6 +39,9 @@ public class ContainerRegistrationVerificationIt {
     @Before
     public void setUp() {
         reset(validatorPool);
+        when(validatorPool.verifyMobileNumber(anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
+        when(validatorPool.verifyContainerMapping(anyString(), anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
+        when(validatorPool.verifyPhase(anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
         initMocks(this);
     }
 
@@ -48,7 +51,8 @@ public class ContainerRegistrationVerificationIt {
 
         VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest(emptyMSISDN, "containerId", "callId", "phase"));
 
-        Assert.assertTrue(result.isError());
+        assertTrue(result.isError());
+        assertEquals("field:msisdn:should be atleast 10 digits in length", result.getErrors().get(0).getMessage());
     }
 
     @Test
@@ -57,7 +61,8 @@ public class ContainerRegistrationVerificationIt {
 
         VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", "containerId", emptyCallId, "phase"));
 
-        Assert.assertTrue(result.isError());
+        assertTrue(result.isError());
+        assertEquals("field:call_id:value should not be null", result.getErrors().get(0).getMessage());
     }
 
     @Test
@@ -66,7 +71,8 @@ public class ContainerRegistrationVerificationIt {
 
         VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", emptyContainerId, "callId", "phase"));
 
-        Assert.assertTrue(result.isError());
+        assertTrue(result.isError());
+        assertEquals("field:container_id:value should not be null", result.getErrors().get(0).getMessage());
     }
 
     @Test
@@ -75,7 +81,8 @@ public class ContainerRegistrationVerificationIt {
 
         VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", "containerId", "callId", emptyPhase));
 
-        Assert.assertTrue(result.isError());
+        assertTrue(result.isError());
+        assertEquals("field:phase:value should not be null", result.getErrors().get(0).getMessage());
     }
 
     @Test

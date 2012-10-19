@@ -11,16 +11,20 @@ public class SputumTrackingInstanceTest {
     @Test
     public void shouldValidateGivenInstanceText() {
         assertTrue(SputumTrackingInstance.isValidRegistrationInstance(SputumTrackingInstance.InTreatment.getDisplayText()));
-        assertTrue(SputumTrackingInstance.isValidRegistrationInstance(SputumTrackingInstance.InTreatment.name().toLowerCase()));
-        assertTrue(SputumTrackingInstance.isValidRegistrationInstance(SputumTrackingInstance.InTreatment.name()));
         assertFalse(SputumTrackingInstance.isValidRegistrationInstance("invalid_instance"));
     }
 
     @Test
     public void shouldGetInstanceForGivenValue() {
-        assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceForValue("PreTreatment"));
-        assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceForValue("Pretreatment"));
         assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceForValue("Pre-Treatment"));
         assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceForValue("Pre-treatment"));
+    }
+
+    @Test
+    public void shouldValidateBasedOnInstanceName() {
+        assertTrue(SputumTrackingInstance.isValidRegistrationInstanceName("PreTreatment"));
+        assertTrue(SputumTrackingInstance.isValidRegistrationInstanceName("Pretreatment"));
+        assertFalse(SputumTrackingInstance.isValidRegistrationInstanceName("Pre-treatment"));
+        assertFalse(SputumTrackingInstance.isValidRegistrationInstanceName("Pre-Treatment"));
     }
 }

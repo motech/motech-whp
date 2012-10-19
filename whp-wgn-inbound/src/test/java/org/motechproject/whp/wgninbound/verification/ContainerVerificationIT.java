@@ -1,7 +1,6 @@
 package org.motechproject.whp.wgninbound.verification;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +41,8 @@ public class ContainerVerificationIT {
     @Before
     public void setup() {
         reset(validatorPool);
+        when(validatorPool.verifyMobileNumber(anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
+        when(validatorPool.verifyContainerMapping(anyString(), anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
         initMocks(this);
     }
 
@@ -100,7 +101,7 @@ public class ContainerVerificationIT {
 
         verify(validatorPool).verifyMobileNumber(eq(msisdn), whpErrors.capture());
         verify(validatorPool).verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture());
-        Assert.assertTrue(errors.isEmpty());
+        assertTrue(errors.isEmpty());
     }
 
     private boolean errorContains(String expectedMessage, List<WHPError> errors) {
