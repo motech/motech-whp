@@ -10,6 +10,7 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
@@ -21,9 +22,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,7 +37,7 @@ public class ContainerVerificationIT {
     private ValidatorPool validatorPool;
 
     @Captor
-    ArgumentCaptor<List<WHPError>> whpErrors;
+    ArgumentCaptor<WHPErrors> whpErrors;
 
     @Before
     public void setup() {

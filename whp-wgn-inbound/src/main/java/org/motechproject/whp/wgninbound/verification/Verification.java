@@ -1,6 +1,7 @@
 package org.motechproject.whp.wgninbound.verification;
 
 import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
@@ -28,7 +29,7 @@ public abstract class Verification<T extends VerificationRequest> {
         return result;
     }
 
-    protected abstract List<WHPError> verify(T request);
+    protected abstract WHPErrors verify(T request);
 
     private VerificationResult validateRequest(T request) {
         VerificationResult result = new VerificationResult();

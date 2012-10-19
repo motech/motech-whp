@@ -3,15 +3,12 @@ package org.motechproject.whp.wgninbound.request;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +34,7 @@ public class ValidatorPoolTest {
     @Test
     public void shouldVerifyInvalidMobileNumber() {
         String mobileNumber = "1234567890";
-        ArrayList<WHPError> whpErrors = new ArrayList<>();
+        WHPErrors whpErrors = new WHPErrors();
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(null);
 
         validatorPool.verifyMobileNumber(mobileNumber, whpErrors);
@@ -52,7 +49,7 @@ public class ValidatorPoolTest {
     public void shouldVerifyContainerMappingForInvalidMobileNumber() {
         String mobileNumber = "1234567890";
         String containerId = "containerId";
-        ArrayList<WHPError> whpErrors = new ArrayList<>();
+        WHPErrors whpErrors = new WHPErrors();
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(null);
 
         validatorPool.verifyContainerMapping(mobileNumber, containerId, whpErrors);
@@ -67,7 +64,7 @@ public class ValidatorPoolTest {
     public void shouldVerifyContainerMappingForAlreadyRegisteredContainer() {
         String mobileNumber = "1234567890";
         String containerId = "containerId";
-        ArrayList<WHPError> whpErrors = new ArrayList<>();
+        WHPErrors whpErrors = new WHPErrors();
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
         when(containerService.exists(containerId)).thenReturn(true);
 
@@ -85,7 +82,7 @@ public class ValidatorPoolTest {
         String mobileNumber = "1234567890";
         String containerId = "containerId";
         String providerId = "providerId";
-        ArrayList<WHPError> whpErrors = new ArrayList<>();
+        WHPErrors whpErrors = new WHPErrors();
         Provider provider = new Provider();
         provider.setProviderId(providerId);
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(provider);
@@ -104,7 +101,7 @@ public class ValidatorPoolTest {
 
     @Test
     public void shouldVerifyPhaseForInvalidInstance() {
-        List<WHPError> whpErrors = new ArrayList<>();
+        WHPErrors whpErrors = new WHPErrors();
 
         validatorPool.verifyPhase("invalid-phase", whpErrors);
 

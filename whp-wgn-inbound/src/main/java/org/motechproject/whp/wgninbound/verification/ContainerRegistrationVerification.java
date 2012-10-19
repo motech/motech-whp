@@ -1,14 +1,11 @@
 package org.motechproject.whp.wgninbound.verification;
 
-import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.wgninbound.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ContainerRegistrationVerification extends Verification<IvrContainerRegistrationRequest> {
@@ -20,8 +17,8 @@ public class ContainerRegistrationVerification extends Verification<IvrContainer
     }
 
     @Override
-    protected List<WHPError> verify(IvrContainerRegistrationRequest request) {
-        ArrayList<WHPError> whpErrors = new ArrayList<>();
+    protected WHPErrors verify(IvrContainerRegistrationRequest request) {
+        WHPErrors whpErrors = new WHPErrors();
 
         validatorPool.verifyMobileNumber(request.getPhoneNumber(), whpErrors)
                 .verifyContainerMapping(request.getPhoneNumber(), request.getContainer_id(), whpErrors)

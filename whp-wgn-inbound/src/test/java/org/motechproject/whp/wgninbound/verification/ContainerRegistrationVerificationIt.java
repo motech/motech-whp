@@ -8,15 +8,13 @@ import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
@@ -33,7 +31,7 @@ public class ContainerRegistrationVerificationIt {
     ValidatorPool validatorPool;
 
     @Captor
-    ArgumentCaptor<List<WHPError>> whpErrors;
+    ArgumentCaptor<WHPErrors> whpErrors;
 
     @Autowired
     ContainerRegistrationVerification containerRegistrationVerification;
@@ -91,7 +89,7 @@ public class ContainerRegistrationVerificationIt {
         when(validatorPool.verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture())).thenReturn(validatorPool);
         when(validatorPool.verifyPhase(eq(phase), whpErrors.capture())).thenReturn(validatorPool);
 
-        List<WHPError> errors = containerRegistrationVerification.verify(request);
+        WHPErrors errors = containerRegistrationVerification.verify(request);
 
         assertTrue(errors.isEmpty());
     }

@@ -3,14 +3,13 @@ package org.motechproject.whp.wgninbound.request;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ValidatorPool {
@@ -25,14 +24,14 @@ public class ValidatorPool {
         this.mappingService = mappingService;
     }
 
-    public ValidatorPool verifyMobileNumber(String phoneNumber, List<WHPError> whpErrors) {
+    public ValidatorPool verifyMobileNumber(String phoneNumber, WHPErrors whpErrors) {
         Provider provider = providerService.findByMobileNumber(phoneNumber);
         if (null == provider)
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
         return this;
     }
 
-    public ValidatorPool verifyContainerMapping(String phoneNumber, String containerId, List<WHPError> whpErrors) {
+    public ValidatorPool verifyContainerMapping(String phoneNumber, String containerId, WHPErrors whpErrors) {
         Provider provider = providerService.findByMobileNumber(phoneNumber);
         if (null == provider) {
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
@@ -47,7 +46,7 @@ public class ValidatorPool {
         return this;
     }
 
-    public ValidatorPool verifyPhase(String phase, List<WHPError> whpErrors) {
+    public ValidatorPool verifyPhase(String phase, WHPErrors whpErrors) {
         if (!SputumTrackingInstance.isValidRegistrationInstance(phase))
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHASE));
         return this;

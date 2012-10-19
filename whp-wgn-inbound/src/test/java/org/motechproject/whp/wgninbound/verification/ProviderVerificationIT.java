@@ -10,6 +10,7 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
@@ -37,7 +38,7 @@ public class ProviderVerificationIT {
     ProviderVerification providerVerification;
 
     @Captor
-    ArgumentCaptor<List<WHPError>> whpErrors;
+    ArgumentCaptor<WHPErrors> whpErrors;
 
     @Before
     public void setUp() {

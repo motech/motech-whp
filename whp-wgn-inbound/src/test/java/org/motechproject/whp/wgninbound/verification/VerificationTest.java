@@ -5,14 +5,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
-import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
 import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.request.VerificationRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -65,7 +62,7 @@ public class VerificationTest {
 class StubVerification extends Verification<VerificationRequest> {
 
     private boolean isValid;
-    private List<WHPError> errors;
+    private WHPErrors errors;
 
     public StubVerification(RequestValidator validator, ValidatorPool validatorPool) {
         super(validator, validatorPool);
@@ -81,12 +78,12 @@ class StubVerification extends Verification<VerificationRequest> {
 
     public void setError(WHPError error) {
         if(errors == null)
-            errors = new ArrayList<>();
+            errors = new WHPErrors();
         this.errors.add(error);
     }
 
     @Override
-    protected List<WHPError> verify(VerificationRequest request) {
+    protected WHPErrors verify(VerificationRequest request) {
         if (!isValid) {
             return errors;
         } else
