@@ -73,7 +73,7 @@ public class InTreatmentContainerTrackingControllerTest {
                 .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
                 .andExpect(model().attribute(REASONS, reasons))
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
-                .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.allInTreatmentInstanceNames()));
+                .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES));
 
         verify(containerService).getAllInTreatmentClosureReasonsForAdmin();
     }
