@@ -28,7 +28,7 @@ public class ProviderPagination extends HtmlSection {
         WebElement element = webDriver.findElement(providerWithFocus);
         while (null == element && webDriver.nextLinkEnabled()) {
             webDriver.nextLink().click();
-            waitForScript(4000);
+            waitForScript(7000);
             element = webDriver.findElement(providerWithFocus);
         }
         return element;

@@ -86,7 +86,10 @@ public abstract class HtmlSection {
 
     protected WebElement safeFindElementIn(WebElement webElement, By by) {
         try {
-            return webElement.findElement(by);
+            if (null != webElement)
+                return webElement.findElement(by);
+            else
+                return null;
         } catch (NoSuchElementException e) {
             return null;
         }
