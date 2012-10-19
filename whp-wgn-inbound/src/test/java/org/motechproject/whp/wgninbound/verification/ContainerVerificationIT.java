@@ -1,62 +1,49 @@
 package org.motechproject.whp.wgninbound.verification;
 
-import org.junit.After;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
-import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.user.builder.ProviderBuilder;
-import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
+import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static junit.framework.Assert.assertEquals;
+import java.util.List;
+
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
 public class ContainerVerificationIT {
 
     @Autowired
-    @ReplaceWithMock
-    ProviderVerification providerVerification;
-
-    @Autowired
-    @ReplaceWithMock
-    ProviderContainerMappingService mappingService;
-
-    @Autowired
-    @ReplaceWithMock
-    ContainerService containerService;
-
-    @Autowired
-    AllProviders allProviders;
-
-    @Autowired
     ContainerVerification containerVerification;
+
+    @Autowired
+    @ReplaceWithMock
+    private ValidatorPool validatorPool;
+
+    @Captor
+    ArgumentCaptor<List<WHPError>> whpErrors;
 
     @Before
     public void setup() {
-        reset(providerVerification, mappingService, containerService);
-    }
-
-    @Test
-    public void shouldVerifyMSISDN() {
-        String mobileNumber = "1234567890";
-
-        when(providerVerification.verifyMobileNumber(mobileNumber)).thenReturn(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
-        containerVerification.verify(new ContainerVerificationRequest(mobileNumber, "containerId", "callId"));
-        verify(providerVerification).verifyMobileNumber(mobileNumber);
+        reset(validatorPool);
+        initMocks(this);
     }
 
     @Test
@@ -67,6 +54,17 @@ public class ContainerVerificationIT {
         VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(emptyMSISDN, containerId, "callId"));
 
         assertTrue(result.isError());
+    }
+
+    @Test
+    public void shouldReturnErrorOnMSIDNGreaterThanTenDigitsInLength() {
+        ContainerVerificationRequest request = new ContainerVerificationRequest();
+        request.setMsisdn("1234");
+        request.setCall_id("callId");
+        request.setContainer_id("containerId");
+
+        VerificationResult result = containerVerification.verifyRequest(request);
+        assertTrue(errorContains("field:msisdn:should be atleast 10 digits in length", result.getErrors()));
     }
 
     @Test
@@ -90,75 +88,27 @@ public class ContainerVerificationIT {
     }
 
     @Test
-    public void shouldRespondWithFailureWhenContainerCannotBeRegisteredByProvider() {
+    public void shouldVerifyRequest() {
         String msisdn = "1234567890";
-        String providerId = "providerId";
+        String callId = "callId";
         String containerId = "containerId";
+        ContainerVerificationRequest request = new ContainerVerificationRequest(msisdn, containerId, callId);
 
-        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
-        allProviders.add(provider);
+        when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
+        when(validatorPool.verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture())).thenReturn(validatorPool);
 
-        when(mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)).thenReturn(false);
-        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(msisdn, containerId, "callId"));
+        List<WHPError> errors = containerVerification.verify(request);
 
-        assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, result.getErrors().get(0).getErrorCode());
-        assertEquals("The container Id entered  is invalid", result.getErrors().get(0).getMessage());
+        verify(validatorPool).verifyMobileNumber(eq(msisdn), whpErrors.capture());
+        verify(validatorPool).verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture());
+        Assert.assertTrue(errors.isEmpty());
     }
 
-    @Test
-    public void shouldRespondWithFailureWhenContainerAlreadyRegistered() {
-        String msisdn = "1234567890";
-        String providerId = "providerId";
-        String containerId = "containerId";
-
-        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
-        allProviders.add(provider);
-
-        when(containerService.exists(containerId)).thenReturn(true);
-        when(mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)).thenReturn(true);
-
-        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(msisdn, containerId, "callId"));
-
-        assertEquals(WHPErrorCode.CONTAINER_ALREADY_REGISTERED, result.getErrors().get(0).getErrorCode());
-        assertEquals("The container Id is already registered", result.getErrors().get(0).getMessage());
-    }
-
-    @Test
-    public void shouldRespondWithFailureWhenContainerAlreadyRegisteredWhenContainerDoesNotFallUnderProviderRange() {
-        String msisdn = "1234567890";
-        String providerId = "providerId";
-        String containerId = "containerId";
-
-        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
-        allProviders.add(provider);
-
-        when(containerService.exists(containerId)).thenReturn(true);
-        when(mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)).thenReturn(false);
-
-        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(msisdn, containerId, "callId"));
-
-        assertEquals(WHPErrorCode.CONTAINER_ALREADY_REGISTERED, result.getErrors().get(0).getErrorCode());
-        assertEquals("The container Id is already registered", result.getErrors().get(0).getMessage());
-    }
-
-    @Test
-    public void shouldRespondWithSuccessWhenContainerCanBeRegisteredByProvider() {
-        String msisdn = "1234567890";
-        String providerId = "providerId";
-        String containerId = "containerId";
-
-        Provider provider = new ProviderBuilder().withDefaults().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
-        allProviders.add(provider);
-
-        when(containerService.exists(containerId)).thenReturn(false);
-        when(mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)).thenReturn(true);
-
-        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(msisdn, containerId, "callId"));
-        assertTrue(result.isSuccess());
-    }
-
-    @After
-    public void tearDown() {
-        allProviders.removeAll();
+    private boolean errorContains(String expectedMessage, List<WHPError> errors) {
+        boolean found = false;
+        for (WHPError error : errors) {
+            found |= StringUtils.equals(expectedMessage, error.getMessage());
+        }
+        return found;
     }
 }

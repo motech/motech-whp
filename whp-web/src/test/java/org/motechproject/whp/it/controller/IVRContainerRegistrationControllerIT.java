@@ -42,7 +42,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.s
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:META-INF/spring/applicationContext.xml")
-public class WGNVerificationControllerIT extends SpringIntegrationTest {
+public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest {
 
     @Autowired
     private IVRContainerRegistrationController IVRContainerRegistrationController;

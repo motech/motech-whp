@@ -2,29 +2,25 @@ package org.motechproject.whp.wgninbound.request;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.common.domain.ContainerPhase;
 
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "register_container")
 @Data
 @EqualsAndHashCode
-public class IvrContainerRegistrationRequest {
+public class IvrContainerRegistrationRequest extends VerificationRequest {
 
     @NotNullOrEmpty
     @Size(min = 10, message = "should be atleast 10 digits in length")
     private String msisdn;
 
-
     @NotNullOrEmpty
     private String container_id;
 
     @NotNullOrEmpty
-    @Enumeration(type = ContainerPhase.class)
     private String phase;
 
     @NotNullOrEmpty
@@ -32,6 +28,34 @@ public class IvrContainerRegistrationRequest {
 
     //for Spring MVC
     public IvrContainerRegistrationRequest() {
+    }
+
+    public IvrContainerRegistrationRequest(String msisdn, String container_id, String call_id, String phase) {
+        super(msisdn);
+        this.msisdn = msisdn;
+        this.call_id = call_id;
+        this.container_id = container_id;
+        this.phase = phase;
+    }
+
+    @XmlElement(name = "msisdn")
+    public String getMsisdn() {
+        return msisdn;
+    }
+
+    @XmlElement(name = "call_id")
+    public String getCall_id() {
+        return call_id;
+    }
+
+    @XmlElement(name = "container_id")
+    public String getContainer_id() {
+        return container_id;
+    }
+
+    public void setMsisdn(String msisdn) {
+        super.setMsisdn(msisdn);
+        this.msisdn = msisdn;
     }
 }
 

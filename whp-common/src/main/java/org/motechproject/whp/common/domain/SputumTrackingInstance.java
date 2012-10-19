@@ -24,7 +24,7 @@ public enum SputumTrackingInstance {
 
     public static SputumTrackingInstance getInstanceForValue(String value) {
         for(SputumTrackingInstance instance : SputumTrackingInstance.values()) {
-            if(instance.getDisplayText().equals(value))
+            if(instance.getDisplayText().equalsIgnoreCase(value) || instance.name().equalsIgnoreCase(value))
                 return instance;
         }
         return null;
@@ -36,13 +36,6 @@ public enum SputumTrackingInstance {
 
     public static boolean isValidMappingInstance(String text) {
         return isValid(text, MAPPING_INSTANCES);
-    }
-
-    private static boolean isValid(String text, SputumTrackingInstance[] instances) {
-        for(SputumTrackingInstance sputumTrackingInstance : instances)
-            if(sputumTrackingInstance.getDisplayText().equals(text) || sputumTrackingInstance.name().equals(text))
-                return true;
-        return false;
     }
 
     public static SputumTrackingInstance getInstanceByName(String name) {
@@ -63,5 +56,12 @@ public enum SputumTrackingInstance {
             names.add(value.name());
         }
         return names;
+    }
+
+    private static boolean isValid(String text, SputumTrackingInstance[] instances) {
+        for(SputumTrackingInstance sputumTrackingInstance : instances)
+            if(sputumTrackingInstance.getDisplayText().equalsIgnoreCase(text) || sputumTrackingInstance.name().equalsIgnoreCase(text))
+                return true;
+        return false;
     }
 }

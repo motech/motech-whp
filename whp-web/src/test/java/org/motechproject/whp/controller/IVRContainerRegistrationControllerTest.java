@@ -9,13 +9,13 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.mapper.ContainerRegistrationRequestMapper;
-import org.motechproject.whp.mapper.ContainerVerificationRequestMapper;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
+import org.motechproject.whp.wgninbound.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
+import org.motechproject.whp.wgninbound.verification.ContainerRegistrationVerification;
 import org.motechproject.whp.wgninbound.verification.ContainerVerification;
 import org.motechproject.whp.wgninbound.verification.ProviderVerification;
 import org.springframework.http.MediaType;
@@ -42,9 +42,6 @@ public class IVRContainerRegistrationControllerTest {
     ContainerVerification containerVerification;
 
     @Mock
-    ContainerVerificationRequestMapper containerVerificationRequestMapper;
-
-    @Mock
     ContainerService containerService;
 
     @Mock
@@ -53,12 +50,12 @@ public class IVRContainerRegistrationControllerTest {
     IVRContainerRegistrationController IVRContainerRegistrationController;
 
     @Mock
-    ContainerRegistrationRequestMapper containerRegistrationRequestMapper;
+    ContainerRegistrationVerification containerRegistrationVerification;
 
     @Before
     public void setup() {
         initMocks(this);
-        IVRContainerRegistrationController = new IVRContainerRegistrationController(providerVerification, containerVerification, containerService, providerService);
+        IVRContainerRegistrationController = new IVRContainerRegistrationController(providerVerification, containerVerification, containerRegistrationVerification, containerService, providerService);
     }
 
     @Test
@@ -191,9 +188,19 @@ public class IVRContainerRegistrationControllerTest {
     public void shouldRegisterContainerOnSuccessfulValidation() throws Exception {
 
         String providerId = "providerId";
-        when(providerService.findByMobileNumber("0986754322")).thenReturn(new Provider(providerId, null, null, null));
+        String msisdn = "0986754322";
+        String phase = "PreTreatment";
+        String containerId = "76862367681";
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
+        request.setMsisdn(msisdn);
+        request.setContainer_id(containerId);
+        request.setPhase(phase);
+        request.setCall_id("64756435684375");
+        when(containerRegistrationVerification.verifyRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult());
+        Provider provider = new Provider();
+        provider.setProviderId(providerId);
+        when(providerService.findByMobileNumber(anyString())).thenReturn(provider);
 
-        when(containerVerification.verifyRequest((ContainerVerificationRequest) anyObject())).thenReturn(new VerificationResult());
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
@@ -208,20 +215,21 @@ public class IVRContainerRegistrationControllerTest {
 
         ArgumentCaptor<ContainerRegistrationRequest> containerRegistrationRequestArgumentCaptor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
         verify(containerService, times(1)).registerContainer(containerRegistrationRequestArgumentCaptor.capture());
-        assertEquals("PreTreatment", containerRegistrationRequestArgumentCaptor.getValue().getInstance());
+        assertEquals(phase, containerRegistrationRequestArgumentCaptor.getValue().getInstance());
         assertEquals(providerId.toLowerCase(), containerRegistrationRequestArgumentCaptor.getValue().getProviderId());
-        assertEquals("76862367681", containerRegistrationRequestArgumentCaptor.getValue().getContainerId());
+        assertEquals(containerId, containerRegistrationRequestArgumentCaptor.getValue().getContainerId());
 
     }
 
     @Test
     public void shouldNotRegisterContainerForInvalidContainerDetails() throws Exception {
 
-        String providerId = "providerId";
-        when(providerService.findByMobileNumber("0986754322")).thenReturn(new Provider(providerId, null, null, null));
-
-        VerificationResult verificationResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
-        when(containerVerification.verifyRequest((ContainerVerificationRequest) anyObject())).thenReturn(verificationResult);
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
+        request.setMsisdn("0986754322");
+        request.setContainer_id("76862367681");
+        request.setPhase("Pre-treatment");
+        request.setCall_id("64756435684375");
+        when(containerRegistrationVerification.verifyRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
@@ -233,7 +241,7 @@ public class IVRContainerRegistrationControllerTest {
                         content().string(containsString("failure"))
                 );
 
-        verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
+        verify(containerService, never()).registerContainer((ContainerRegistrationRequest) anyObject());
     }
 
     private byte[] readXML(String xmlPath) throws IOException {

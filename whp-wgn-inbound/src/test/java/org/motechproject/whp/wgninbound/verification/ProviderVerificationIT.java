@@ -1,14 +1,17 @@
 package org.motechproject.whp.wgninbound.verification;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kubek2k.springockito.annotations.ReplaceWithMock;
+import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
+import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,16 +21,29 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
 public class ProviderVerificationIT {
+
+    @Autowired
+    @ReplaceWithMock
+    ValidatorPool validatorPool;
 
     @Autowired
     ProviderVerification providerVerification;
 
-    @Autowired
-    AllProviders allProviders;
+    @Captor
+    ArgumentCaptor<List<WHPError>> whpErrors;
+
+    @Before
+    public void setUp() {
+        reset(validatorPool);
+        initMocks(this);
+    }
 
     @Test
     public void shouldReturnErrorOnEmptyMSIDN() {
@@ -53,9 +69,6 @@ public class ProviderVerificationIT {
     @Test
     public void shouldReturnErrorOnEmptyDateTime() {
         String msisdn = "1234567890";
-        Provider provider = new Provider();
-        provider.setPrimaryMobile(msisdn);
-        allProviders.add(provider);
 
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -69,9 +82,6 @@ public class ProviderVerificationIT {
     @Test
     public void shouldReturnErrorOnInvalidDateTime() {
         String msisdn = "1234567890";
-        Provider provider = new Provider();
-        provider.setPrimaryMobile(msisdn);
-        allProviders.add(provider);
 
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -94,59 +104,17 @@ public class ProviderVerificationIT {
     }
 
     @Test
-    public void shouldReturnSuccessWhenMSIDNIsThePrimaryMobileNumberOfAnyProvider() {
+    public void shouldVerifyRequest() {
         String msisdn = "1234567890";
-        ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-        request.setTime("24/10/1989 12:12:12");
+        String callId = "callId";
+        ProviderVerificationRequest request = new ProviderVerificationRequest(msisdn, "time", callId);
 
-        Provider provider = new Provider();
-        provider.setPrimaryMobile(msisdn);
-        allProviders.add(provider);
+        when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
 
-        assertTrue(providerVerification.verifyRequest(request).isSuccess());
-    }
+        List<WHPError> errors = providerVerification.verify(request);
 
-    @Test
-    public void shouldReturnSuccessWhenMSIDNIsTheSecondaryMobileNumberOfAnyProvider() {
-        String msisdn = "1234567890";
-        ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-        request.setTime("24/10/1989 12:12:12");
-
-        Provider provider = new Provider();
-        provider.setSecondaryMobile(msisdn);
-        allProviders.add(provider);
-
-        assertTrue(providerVerification.verifyRequest(request).isSuccess());
-    }
-
-    @Test
-    public void shouldReturnSuccessWhenMSIDNIsTheTertiaryMobileNumberOfAnyProvider() {
-        String msisdn = "1234567890";
-        ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-        request.setTime("24/10/1989 12:12:12");
-
-        Provider provider = new Provider();
-        provider.setTertiaryMobile(msisdn);
-        allProviders.add(provider);
-
-        assertTrue(providerVerification.verifyRequest(request).isSuccess());
-    }
-
-    @Test
-    public void shouldReturnErrorWhenMSIDNIsNotThePhoneNumberOfAnyProvider() {
-        String msisdn = "1234567890";
-        ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-        request.setTime("24/10/1989 12:12:12");
-
-        assertEquals(WHPErrorCode.INVALID_PHONE_NUMBER, providerVerification.verifyRequest(request).getErrors().get(0).getErrorCode());
+        verify(validatorPool, times(1)).verifyMobileNumber(eq(msisdn), whpErrors.capture());
+        Assert.assertTrue(errors.isEmpty());
     }
 
     private boolean errorContains(String expectedMessage, List<WHPError> errors) {
@@ -155,10 +123,5 @@ public class ProviderVerificationIT {
             found |= StringUtils.equals(expectedMessage, error.getMessage());
         }
         return found;
-    }
-
-    @After
-    public void tearDown() {
-        allProviders.removeAll();
     }
 }

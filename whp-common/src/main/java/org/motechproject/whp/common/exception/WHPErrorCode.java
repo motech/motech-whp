@@ -27,7 +27,8 @@ public enum WHPErrorCode {
     INVALID_SPUTUM_TEST_INSTANCE("The sputum test instance is invalid"),
     NO_SUCH_TREATMENT_EXISTS("No such treatment exists for patient"),
     INVALID_PHONE_NUMBER("No provider found for the given phone number"),
-    CONTAINER_ALREADY_REGISTERED("The container Id is already registered");
+    CONTAINER_ALREADY_REGISTERED("The container Id is already registered"),
+    INVALID_PHASE("Phase should be one of [PreTreatment, InTreatment]");
 
     private String message;
 

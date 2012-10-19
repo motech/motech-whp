@@ -7,7 +7,12 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
+import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.request.VerificationRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,13 +25,15 @@ public class VerificationTest {
 
     @Mock
     RequestValidator validator;
+    @Mock
+    ValidatorPool validatorPool;
 
     StubVerification verification;
 
     @Before
     public void setup() {
         initMocks(this);
-        verification = new StubVerification(validator);
+        verification = new StubVerification(validator, validatorPool);
     }
 
     @Test
@@ -58,10 +65,10 @@ public class VerificationTest {
 class StubVerification extends Verification<VerificationRequest> {
 
     private boolean isValid;
-    private WHPError error;
+    private List<WHPError> errors;
 
-    public StubVerification(RequestValidator validator) {
-        super(validator);
+    public StubVerification(RequestValidator validator, ValidatorPool validatorPool) {
+        super(validator, validatorPool);
     }
 
     public boolean isValid() {
@@ -72,18 +79,16 @@ class StubVerification extends Verification<VerificationRequest> {
         isValid = valid;
     }
 
-    public WHPError getError() {
-        return error;
-    }
-
     public void setError(WHPError error) {
-        this.error = error;
+        if(errors == null)
+            errors = new ArrayList<>();
+        this.errors.add(error);
     }
 
     @Override
-    protected WHPError verify(VerificationRequest request) {
+    protected List<WHPError> verify(VerificationRequest request) {
         if (!isValid) {
-            return error;
+            return errors;
         } else
             return null;
     }
