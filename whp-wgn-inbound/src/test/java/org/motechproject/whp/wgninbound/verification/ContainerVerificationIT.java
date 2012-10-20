@@ -41,8 +41,6 @@ public class ContainerVerificationIT {
     @Before
     public void setup() {
         reset(validatorPool);
-        when(validatorPool.verifyMobileNumber(anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
-        when(validatorPool.verifyContainerMapping(anyString(), anyString(), any(WHPErrors.class))).thenReturn(validatorPool);
         initMocks(this);
     }
 
