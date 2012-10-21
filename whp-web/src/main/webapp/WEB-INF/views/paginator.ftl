@@ -44,9 +44,9 @@
 </div>
 </#macro>
 
-<#macro filter id pagination_id>
+<#macro filter id pagination_id layout="form-inline">
 <div ng-init="pagination_id='${pagination_id}';"  >
-	<form id="${id}" ng-submit="applyFilter()" ng-controller="FilterCtrl" ng-model="searchCriteria" update-filter>
+	<form id="${id}" class="${layout}" ng-submit="applyFilter()" ng-controller="FilterCtrl" ng-model="searchCriteria" update-filter>
 		<#nested>
 	</form>
 </div>

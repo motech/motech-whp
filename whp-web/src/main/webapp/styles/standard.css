@@ -279,7 +279,6 @@ div.buttons a, div.buttons button {
 
 .ui-combobox {
     position: relative;
-    display: inline-block;
 }
 
 .ui-combobox-toggle {
@@ -327,7 +326,11 @@ div.buttons a, div.buttons button {
 #search-pane {
     overflow: hidden;
 }
-
+#container-filter-buttons{
+    display:block;
+    padding-left:0px;
+    margin-left:0px;
+}
 .search-section-header {
     z-index: 1;
     font-size: 1.3em;
@@ -558,6 +561,27 @@ div.buttons a, div.buttons button {
 }
 .inline {
     display: inline;
+}
+.inline-align {
+    display: inline-block;
+    vertical-align: top;
+    width:40%
+}
+fieldset legend {
+    margin-bottom:0px;
+}
+legend + .control-group {
+    margin-top:0px;
+}
+a.ui-widget.ui-button {
+    font-size : 0.94em;
+    margin-right:0px;
+}
+.control-group.date-field{
+    margin-left:0px;
+}
+.control-group.date-field label{
+        width: 22.404255%
 }
 .no-wrap {
     white-space: nowrap;
