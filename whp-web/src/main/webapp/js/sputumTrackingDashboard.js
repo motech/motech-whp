@@ -25,6 +25,10 @@ $(function () {
         $("#providerId").val($("#providerId-autocomplete").val());
     });
 
+    $(".clear-date-button").click(function(){
+        $(this).parents(".input-append").children("input").val("");
+    })
+
     initProvidersList();
 
     function initProvidersList() {

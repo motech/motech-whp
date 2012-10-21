@@ -108,8 +108,14 @@
                         <div class="control-group">
                             <label class="control-label">Container Issue Date</label>
 
-                            <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
-                            <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
+                            <div class="input-append">
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
+                                <button class="btn btn-danger clear-date-button" type="button">x</button>
+                            </div>
+                            <div class="input-append">
+                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
+                                <button class="btn btn-danger clear-date-button" type="button">x</button>
+                            </div>
                         </div>
                     </td>
                     <td>

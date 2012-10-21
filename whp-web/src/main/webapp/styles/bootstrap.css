@@ -1065,7 +1065,7 @@ select:focus:required:invalid:focus {
 .input-append .add-on,
 .input-prepend .btn,
 .input-append .btn {
-    margin-left: -1px;
+    margin-left: -5px;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
