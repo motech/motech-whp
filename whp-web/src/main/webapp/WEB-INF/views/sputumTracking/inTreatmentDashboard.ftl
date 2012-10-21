@@ -13,16 +13,13 @@
         </#list>
     </div>
     </#if>
-
     <#include "inTreatmentReasonForClosure.ftl"/>
-
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
         <h3>In Treatment Containers</h3>
        <div class="row-fluid well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
                 Pane</a></h3>
-
             <div id="search-pane">
             <table>
                 <tr>
@@ -46,7 +43,6 @@
 
                             <div class="controls">
                                   <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
-
                             </div>
                         </div>
                     </td>
@@ -119,6 +115,7 @@
                     <td>
                         <div class="control-group pull-right pull-down padding-left">
                             <div class="controls">
+                                <button id="clearFilter" type="reset" class="btn btn-primary form-button-center">Clear</button>
                                 <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
                             </div>
                         </div>

@@ -5,9 +5,7 @@
     <#if !pageNo??>
         <#assign pageNo=1/>
     </#if>
-
     <#include "preTreatmentReasonForClosure.ftl"/>
-
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
        <h3>Pre Treatment Containers</h3>
@@ -64,7 +62,6 @@
                             </div>
                         </div>
                     </td>
-
                 </tr>
                 <tr>
                     <td>
@@ -81,11 +78,9 @@
                             </div>
                         </div>
                     </td>
-
                     <td>
                         <div class="control-group">
                             <label class="control-label">Reason for Closure</label>
-
                             <div class="controls">
                                 <select id="reasonForClosure" name="reasonForClosure">
                                     <option value=""></option>
@@ -96,7 +91,6 @@
                             </div>
                         </div>
                     </td>
-
                     <td>
                         <div class="control-group">
                             <label class="control-label">Consultation Date</label>
@@ -115,11 +109,11 @@
                     <td>
                         <div class="control-group pull-down padding-left">
                             <div class="controls">
+                                <button id="clearFilter" type="reset" class="btn btn-primary form-button-center">Clear</button>
                                 <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
                             </div>
                         </div>
                     </td>
-
                 </tr>
             </table>
             </div>
