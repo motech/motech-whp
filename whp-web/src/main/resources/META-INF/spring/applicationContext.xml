@@ -63,4 +63,22 @@
     <bean id="activeMQDiagnosticsClientConnector" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean">
         <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi"/>
     </bean>
+    <bean id="configurationDiagnostic" class="org.motechproject.diagnostics.diagnostics.ConfigurationDiagnostic">
+        <constructor-arg>
+            <map>
+                <entry key="activemq">
+                    <util:properties location="classpath:activemq.properties"/>
+                </entry>
+                <entry key="couchdb">
+                    <util:properties location="classpath:couchdb.properties"/>
+                </entry>
+                <entry key="kookoo">
+                    <util:properties location="classpath:ivr.properties"/>
+                </entry>
+                <entry key="diagnostics">
+                    <util:properties location="classpath:diagnostics.properties"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>
