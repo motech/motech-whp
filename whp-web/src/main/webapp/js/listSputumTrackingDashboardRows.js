@@ -19,13 +19,7 @@ $(function () {
             resetFormFields();
         });
 
-        var resetFormFields = function () {
-            $('#reason').val('');
-            $('#alternateDiagnosis').val('');
-            $("#alternateDiagnosis-autocomplete").val("");
-            $('#consultationDatePicker').val('');
-            $("#tbNegativeControls").hide();
-        }
+
 
         var setContainerIdOnClosureForm = function () {
             var containerId = $(this).parents('tr').attr('containerId');
@@ -56,6 +50,14 @@ $(function () {
             return false;
         });
     });
+
+    var resetFormFields = function () {
+        $('#reason').val('');
+        $('#alternateDiagnosis').val('');
+        $("#alternateDiagnosis-autocomplete").val("");
+        $('#consultationDatePicker').val('');
+        $("#tbNegativeControls").hide();
+    }
 
     var today = new Date();
     $('#consultationDate').datepicker({maxDate:today, dateFormat:'dd/mm/yy'});
@@ -121,6 +123,7 @@ $(function () {
                 }
             }
         });
+        resetFormFields();
         return false;
     });
 

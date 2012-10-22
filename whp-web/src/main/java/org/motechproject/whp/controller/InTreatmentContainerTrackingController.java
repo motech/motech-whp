@@ -26,6 +26,7 @@ public class InTreatmentContainerTrackingController {
     private ContainerService containerService;
     private ReasonForClosureValidator reasonForClosureValidator;
     private AllDistricts allDistricts;
+    public static final String REASONS_FOR_FILTER = "reasonsForFilter";
 
     public static final String REASONS = "reasons";
     public static final String ERRORS = "errors";
@@ -63,6 +64,7 @@ public class InTreatmentContainerTrackingController {
         List<ReasonForContainerClosure> allClosureReasons = containerService.getAllInTreatmentClosureReasonsForAdmin();
 
         uiModel.addAttribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES);
+        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllReasonsForClosure());
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());

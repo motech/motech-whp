@@ -59,22 +59,25 @@ public class PreTreatmentContainerTrackingControllerTest {
 
     @Test
     public void shouldPopulateUIModelForPreTreatmentDashboard() throws Exception {
-        ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
+        ArrayList<ReasonForContainerClosure> reasonsForClosureForm = new ArrayList<>();
+        ArrayList<ReasonForContainerClosure> reasonsForFilter = new ArrayList<>();
         ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
-        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasonsForClosureForm);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
+        when(containerService.getAllReasonsForClosure()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/pre-treatment/dashboard"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(6))
+                .andExpect(model().size(7))
                 .andExpect(model().attribute(DIAGNOSIS_LIST, Diagnosis.allNames()))
                 .andExpect(model().attribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames()))
                 .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
-                .andExpect(model().attribute(REASONS, reasons))
+                .andExpect(model().attribute(REASONS, reasonsForClosureForm))
+                .andExpect(model().attribute(REASONS_FOR_FILTER, reasonsForFilter))
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
 

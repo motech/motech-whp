@@ -16,7 +16,7 @@
     <#include "inTreatmentReasonForClosure.ftl"/>
 <div>
     <@paginator.filter id = "sputum_tracking_filter" pagination_id = "sputum_tracking_pagination">
-       <h3>In Treatment Containers</h3>
+       <h3>In Treatment Sputum Tracking Dashboard</h3>
        <div class="row-fluid well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
             <div id="search-pane">
@@ -144,7 +144,7 @@
                 <td>{{item.consultationTwoResult}}</td>
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.mappingInstance}}</td>
-                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}' />">{{item.patientId}}</a></td>
+                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'  target="_new"/>">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>

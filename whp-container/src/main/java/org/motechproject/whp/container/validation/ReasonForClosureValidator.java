@@ -23,18 +23,18 @@ public class ReasonForClosureValidator {
             errors.add("Container Id must be of" + containerClosureRequest.getContainerId() + " digits in length");
 
         if (StringUtils.isEmpty(containerClosureRequest.getReason()))
-            errors.add("Invalid reason for closure : "+ containerClosureRequest.getReason());
+            errors.add("Enter reason for closure");
 
         if (StringUtils.equals(containerClosureRequest.getReason(), TB_NEGATIVE_CODE)) {
             if (StringUtils.isEmpty(containerClosureRequest.getAlternateDiagnosis()))
-                errors.add("Invalid alternate diagnosis : "+ containerClosureRequest.getAlternateDiagnosis());
+                errors.add("Enter alternate diagnosis");
             if (StringUtils.isEmpty(containerClosureRequest.getConsultationDate()) || isInvalidFormat(containerClosureRequest.getConsultationDate()))
-                errors.add("Invalid consultation date : "+ containerClosureRequest.getConsultationDate());
+                errors.add("Enter consultation date");
         } else {
             if (!StringUtils.isEmpty(containerClosureRequest.getAlternateDiagnosis()))
-                errors.add("Invalid alternate diagnosis : "+ containerClosureRequest.getAlternateDiagnosis());
+                errors.add("Enter alternate diagnosis");
             if (!StringUtils.isEmpty(containerClosureRequest.getConsultationDate()))
-                errors.add("Invalid consultation date : "+ containerClosureRequest.getConsultationDate());
+                errors.add("Enter consultation date");
         }
 
         return errors;

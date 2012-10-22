@@ -27,7 +27,7 @@ public class ReasonForClosureValidatorTest {
 
         assertEquals(2, errors.size());
         assertTrue(StringUtils.contains(errors.get(0), "Container Id must be of"));
-        assertTrue(StringUtils.contains(errors.get(1), "Invalid reason for closure :"));
+        assertTrue(StringUtils.contains(errors.get(1), "Enter reason for closure"));
     }
 
     @Test
@@ -39,8 +39,8 @@ public class ReasonForClosureValidatorTest {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertTrue(StringUtils.contains(errors.get(0), "Invalid alternate diagnosis "));
-        assertTrue(StringUtils.contains(errors.get(1), "Invalid consultation date"));
+        assertTrue(StringUtils.contains(errors.get(0), "Enter alternate diagnosis"));
+        assertTrue(StringUtils.contains(errors.get(1), "Enter consultation date"));
     }
 
     @Test
@@ -54,8 +54,8 @@ public class ReasonForClosureValidatorTest {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertTrue(StringUtils.contains(errors.get(0), "Invalid alternate diagnosis "));
-        assertTrue(StringUtils.contains(errors.get(1), "Invalid consultation date"));
+        assertTrue(StringUtils.contains(errors.get(0), "Enter alternate diagnosis"));
+        assertTrue(StringUtils.contains(errors.get(1), "Enter consultation date"));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ReasonForClosureValidatorTest {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(1, errors.size());
-        assertTrue(StringUtils.contains(errors.get(0), "Invalid consultation date"));
+        assertTrue(StringUtils.contains(errors.get(0), "Enter consultation date"));
     }
 
     @Test
@@ -83,6 +83,6 @@ public class ReasonForClosureValidatorTest {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(1, errors.size());
-        assertTrue(StringUtils.contains(errors.get(0), "Invalid consultation date"));
+        assertTrue(StringUtils.contains(errors.get(0), "Enter consultation date"));
     }
 }

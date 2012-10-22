@@ -9,7 +9,6 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -31,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
-import static ch.lambdaj.Lambda.filter;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
@@ -90,14 +88,14 @@ public class ContainerService {
     public void closeContainer(ContainerClosureRequest reasonForClosureRequest) {
         Container container = allContainers.findByContainerId(reasonForClosureRequest.getContainerId());
 
-        if(container == null || container.getStatus() == Closed)
+        if (container == null || container.getStatus() == Closed)
             return;
 
         ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(reasonForClosureRequest.getReason());
         container.setReasonForClosure(reasonForContainerClosure.getCode());
         container.setStatus(Closed);
 
-        if(reasonForContainerClosure.isTbNegative())
+        if (reasonForContainerClosure.isTbNegative())
             populateTbNegativeDetails(reasonForClosureRequest, container);
 
         allContainers.update(container);
@@ -117,6 +115,10 @@ public class ContainerService {
         return reasonsForAdmin;
     }
 
+    public List<ReasonForContainerClosure> getAllReasonsForClosure() {
+        return allReasonForContainerClosures.getAll();
+    }
+
     public ReasonForContainerClosure getClosureReasonForMapping() {
         List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
         List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
@@ -130,7 +132,7 @@ public class ContainerService {
     public void openContainer(String containerId) {
         Container container = allContainers.findByContainerId(containerId);
 
-        if(container == null || container.getStatus() == ContainerStatus.Open)
+        if (container == null || container.getStatus() == ContainerStatus.Open)
             return;
 
         container.setStatus(ContainerStatus.Open);
@@ -140,7 +142,7 @@ public class ContainerService {
     }
 
     private void resetContainerDiagnosisData(Container container) {
-        if(container.getDiagnosis() == Diagnosis.Negative) {
+        if (container.getDiagnosis() == Diagnosis.Negative) {
             container.setDiagnosis(Diagnosis.Pending);
             container.setConsultationDate(null);
         }
@@ -152,6 +154,7 @@ public class ContainerService {
         container.setConsultationDate(parseDate(reasonForClosureRequest.getConsultationDate()));
         container.setDiagnosis(Diagnosis.Negative);
     }
+
 
     private LocalDate parseDate(String date) {
         List<String> dateFormats = Arrays.asList(new SimpleDateFormat(DATE_FORMAT).toPattern());

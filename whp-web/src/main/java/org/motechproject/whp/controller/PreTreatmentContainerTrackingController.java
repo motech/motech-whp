@@ -37,6 +37,7 @@ public class PreTreatmentContainerTrackingController {
     public static final String ERRORS = "errors";
     public static final String LAB_RESULTS = "labResults";
     public static final String DISTRICTS = "districts";
+    public static final String REASONS_FOR_FILTER = "reasonsForFilter";
 
     @Autowired
     public PreTreatmentContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
@@ -73,6 +74,7 @@ public class PreTreatmentContainerTrackingController {
         List<AlternateDiagnosis> allAlternateDiagnosis = containerService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);
+        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllReasonsForClosure());
         uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosis);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());

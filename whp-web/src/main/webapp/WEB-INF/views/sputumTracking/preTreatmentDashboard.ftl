@@ -8,7 +8,7 @@
     <#include "preTreatmentReasonForClosure.ftl"/>
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
-      <h3>Pre Treatment Containers</h3>
+      <h3>Pre Treatment Sputum Tracking Dashboard</h3>
       <div class="row-fluid well" id="search-section">
            <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
            <div id="search-pane">
@@ -61,7 +61,7 @@
                        <div class="controls inline-align">
                            <select id="reasonForClosure" name="reasonForClosure">
                                <option value=""></option>
-                               <#list reasons as reason>
+                               <#list reasonsForFilter as reason>
                                    <option value="${reason.code}" ng-selected="{{isSelected('${reason.code}', searchCriteria.reasonForClosure, 'reasonForClosure')}}">${reason.name}</option>
                                </#list>
                            </select>

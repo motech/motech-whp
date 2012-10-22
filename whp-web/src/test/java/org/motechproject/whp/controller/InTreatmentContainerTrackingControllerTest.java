@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.InTreatmentContainerTrackingController.*;
+import static org.motechproject.whp.controller.PreTreatmentContainerTrackingController.REASONS_FOR_FILTER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
@@ -59,18 +60,21 @@ public class InTreatmentContainerTrackingControllerTest {
     @Test
     public void shouldPopulateUIModelForPreTreatmentDashboard() throws Exception {
         ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
+        List<ReasonForContainerClosure> reasonsForFilter = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
         when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllReasonsForClosure()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(get("/sputum-tracking/in-treatment/dashboard"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(5))
+                .andExpect(model().size(6))
                 .andExpect(model().attribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames()))
                 .andExpect(model().attribute(LAB_RESULTS, SmearTestResult.allNames()))
                 .andExpect(model().attribute(REASONS, reasons))
+                .andExpect(model().attribute(REASONS_FOR_FILTER, reasonsForFilter))
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES));
 

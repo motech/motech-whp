@@ -32,11 +32,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
@@ -72,6 +71,25 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(Open, container.getStatus());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
         assertEquals(Pending, container.getDiagnosis());
+    }
+
+    @Test
+    public void shouldGetAllReasonsForClosure() {
+        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
+        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllReasonsForClosure();
+
+        Assert.assertEquals(3, allClosureReasonsForAdmin.size());
+        Assert.assertEquals("reason number one", allClosureReasonsForAdmin.get(0).getName());
+        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(1).getName());
+        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(2).getName());
+        Assert.assertEquals("0", allClosureReasonsForAdmin.get(0).getCode());
+        Assert.assertEquals("2", allClosureReasonsForAdmin.get(1).getCode());
+        Assert.assertEquals("3", allClosureReasonsForAdmin.get(2).getCode());
     }
 
     @Test
