@@ -1,5 +1,18 @@
 var app = angular.module('whp', []);
 
+app.directive('updateFilter', function($rootScope) {
+    return function(scope,elm,attrs) {
+        $rootScope.$on("hashChanged", function() {
+            $(elm).find("input").each(function(index, element){
+                $(element).val("");
+            })
+            $(elm).find("select").each(function(index, element){
+                $(element).val("");
+            })
+        });
+    };
+});
+
 function FilterCtrl($scope, $http, $rootScope, $location) {
 
     $scope.initializeFilterForm = function () {
@@ -10,10 +23,10 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         }
 
         /*Initialize the search box*/
-        for (id in $rootScope.searchCriteria) {
-            var element = $('#' + id);
+        for (key in $rootScope.searchCriteria) {
+            var element = $('#' + key);
             if (element) {
-                element.val($rootScope.searchCriteria[id]);
+                element.val($rootScope.searchCriteria[key]);
             }
         }
 
@@ -23,6 +36,7 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
 
     $(window).bind('hashchange', function () {
         $scope.initializeFilterForm();
+        $rootScope.$broadcast("hashChanged");
     });
 
 

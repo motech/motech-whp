@@ -72,6 +72,9 @@
                         $(self.element).trigger( "autocomplete-selected", event, {
                             item: ui.item.option
                         });
+                        $(self.element).trigger( "autocomplete-changed", [event, {
+                            item: ui.item.option
+                        }]);
                     },
                     change: function( event, ui ) {
                         if ( !ui.item ) {

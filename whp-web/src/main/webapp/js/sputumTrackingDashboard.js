@@ -4,39 +4,42 @@ $(function () {
     $('#containerIssuedDateFrom').datepicker({dateFormat:'dd/mm/yy'});
     $('#containerIssuedDateTo').datepicker({dateFormat:'dd/mm/yy'});
     $("#district").combobox();
-    var providerId = $("#providerId").val();
-    $("#providerId").combobox();
 
     $("#district").bind("autocomplete-selected", function (event, ui) {
-        initProvidersList();
         $("#district").val($(this).val());
         $("#providerId-autocomplete").val("");
+        initProvidersList();
     });
 
     $("#district").bind("invalid-value", function (event, ui) {
+        resetProvidersList();
+    });
+
+    $(".clear-date-button").click(function () {
+        $(this).parents(".input-append").children("input").val("");
+    });
+
+    $("#providerId").bind("autocomplete-changed", function (event, ui, data) {
+        $("#providerId").val($(data.item).val());
+    });
+
+    function resetProvidersList() {
         $("#providerId-autocomplete").val("");
         $("#providerId").html("");
-        $("#providerId").data('combobox').destroy();
-        $("#providerId").combobox();
         initProvidersList();
-    });
-
-    $("#providerId").bind("autocomplete-selected", function (event, ui) {
-        $("#providerId").val($("#providerId-autocomplete").val());
-    });
-
-    $(".clear-date-button").click(function(){
-        $(this).parents(".input-append").children("input").val("");
-    })
-
-    initProvidersList();
+    }
 
     function initProvidersList() {
+        if ($("#providerId").data('combobox')) {
+            $("#providerId").val("");
+            $("#providerId").data('combobox').destroy();
+        }
         $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
             $("#providerId").html(response);
-            $("#providerId-autocomplete").val(providerId);
         });
+        $("#providerId").combobox();
     }
+
     $('#district').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
@@ -52,4 +55,6 @@ $(function () {
             return true;
         }
     }
+
+    initProvidersList();
 });
