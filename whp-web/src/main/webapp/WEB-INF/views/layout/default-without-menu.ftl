@@ -2,21 +2,26 @@
 <#import "header.ftl" as header/>
 <#macro defaultLayout title="WHP">
 <!DOCTYPE html>
-<html ng-app="whp">
+<html>
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
+    <style>
+        body {
+            background-color: #017AC5;
+            background-image: -moz-linear-gradient(center top , #025A91, #0784D2 50%, #009DFE);
+            background-image: -webkit-linear-gradient(center top , #025A91, #0784D2 50%, #009DFE);
+            background-image: -o-linear-gradient(center top , #025A91, #0784D2 50%, #009DFE);
+            background-image: -ms-linear-gradient(center top , #025A91, #0784D2 50%, #009DFE);
+            background-image: linear-gradient(center top , #025A91, #0784D2 50%, #009DFE);
+            background-repeat: no-repeat;
+        }
+    </style>
 
-    <link rel="stylesheet" type="text/css"
-          href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
 
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
 <body>
-<div>
-    <div class="row-fluid" id="headerContent">
-        <@header.header/>
-    </div>
 
     <div id="bodyContent" class="container">
         <div class="row-fluid" id="mainContent">

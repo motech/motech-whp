@@ -6,17 +6,43 @@ body {
     min-height: 100%;
     position: relative;
     margin: 0;
-    padding: 0;
+    padding: 50px 0 0 0;
+    background: #f5f5f5;
+}
+body:before, body:after {
+    content: "";
+    display: table;
+}
+body:after {
+    clear: both;
+}
+.navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
+    padding: 7px 20px;
 }
 
-#navibar {
-    position: static;
-    left: 0;
-    top: 0;
+.navbar .brand {
+    border-right: 1px solid #F5F5F5;
+    color: #F5F5F5;
+    font-size: 22px;
+    line-height: 1;
+    margin: 0 10px 0 0;
+    padding: 5px 15px 5px 0;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0);
+}
+.navbar .brand:hover {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+.navbar .nav > li > a {
+    color: #F5F5F5;
+    padding: 7px 10px;
+    line-height: normal;
+}
+.navbar .nav-pills > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
 #mainContent {
-    margin-top: 20px;
+    margin-top: 70px;
     margin-bottom: 70px;
     padding-bottom: 25px;
     height: 100%;
@@ -38,9 +64,8 @@ body {
     padding-right: 20px;
     padding-top: 15px;
     padding-left: 60px;
-
     border-top: 1px ridge;
-    background: #FAFADE;
+    background: #FFFFCC;
 }
 
 #whp-logo {
@@ -49,10 +74,6 @@ body {
 
 #motech-logo {
     height: 38px
-}
-
-#navibar {
-    padding-top: 5px;
 }
 
 .well.small-well {
@@ -733,4 +754,51 @@ pre {
 }
 #container-tracking-error{
     padding-left: 35px;
+}
+/* LOG IN */
+.login-form  {
+    width: 570px;
+    margin: 15% auto 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.login-form h1, .login-form label {
+   color: #fff;
+}
+.login-form label {
+    text-transform: uppercase;
+}
+.login-form hr {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-width: 0 0 1px 0;
+}
+.login-form .login-controls {
+    padding: 0 120px;
+}
+.login-form h1 .site-name {
+    padding-right: 10px;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    margin-right: 10px;
+}
+.login-form h1 a, .login-form h1 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+.login-form h1 a:hover {
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.7);
+}
+.login-form h1 .module-name {
+    font-size: 75%;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.login-form .control-group {
+    margin-bottom: 15px;
+}
+
+.login-form .alert {
+    margin-left: 0;
 }

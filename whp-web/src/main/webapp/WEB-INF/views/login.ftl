@@ -1,19 +1,21 @@
 <#import "/spring.ftl" as spring />
-<#import "layout/default.ftl" as layout>
-<@layout.defaultLayout "Login">
+<#import "layout/default-without-menu.ftl" as layout>
+<@layout.defaultLayout title="Sign-in to MoTech-WHP">
 
-<div class="row-fluid" id="loginForm">
+<div class="row-fluid login-form" id="loginForm">
+    <h1><a class="site-name" href="/whp">MoTeCH-WHP</a><span class="module-name">Login</span> </h1>
+    <hr />
     <#if RequestParameters.login_error?exists>
         <div id="loginError" class="alert alert-error row">${Session.loginFailure}</div>
     </#if>
-    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="row well form-horizontal">
-        <div class="offset2">
-            </br>
+    <form action="<@spring.url '/security/j_spring_security_check' />" method="POST" class="">
+        <div class="login-controls">
+
             <div class="control-group">
                 <label class="control-label" for="j_username"> User Name</label>
 
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name='j_username' id="j_username" autofocus="autofocus"/>
+                    <input class="input-xlarge" type="text" name='j_username' id="j_username" autofocus="autofocus" placeholder="Enter your username" />
                 </div>
             </div>
 
@@ -21,13 +23,13 @@
                 <label class="control-label" for="j_password">Password</label>
 
                 <div class="controls">
-                    <input class="input-xlarge" type="password" name='j_password' id="j_password"/>
+                    <input class="input-xlarge" type="password" name='j_password' id="j_password" placeholder="Enter your password"/>
                 </div>
             </div>
 
             <div class="control-group">
                 <div class="controls">
-                    <button id="login" type="submit" class="btn btn-primary login-btn"> Login</button>
+                    <button id="login" type="submit" class="btn login-btn"> SIGN IN</button>
                 </div>
             </div>
         </div>
