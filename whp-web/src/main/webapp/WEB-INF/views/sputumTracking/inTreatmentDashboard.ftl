@@ -144,7 +144,7 @@
                 <td>{{item.consultationTwoResult}}</td>
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.mappingInstance}}</td>
-                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'  target="_new"/>">{{item.patientId}}</a></td>
+                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'/>" target="_new">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
