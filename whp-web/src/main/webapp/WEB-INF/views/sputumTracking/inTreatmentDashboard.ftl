@@ -16,8 +16,8 @@
     <#include "inTreatmentReasonForClosure.ftl"/>
 <div>
     <@paginator.filter id = "sputum_tracking_filter" pagination_id = "sputum_tracking_pagination">
-       <h3>In Treatment Sputum Tracking Dashboard</h3>
-       <div class="row-fluid well" id="search-section">
+       <h1>In Treatment Sputum Tracking Dashboard</h1>
+       <div class="well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
             <div id="search-pane">
                <fieldset class="inline-align span3">

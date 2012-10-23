@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Telex);
+
 html {
     height: 100%;
 }
@@ -6,8 +8,12 @@ body {
     min-height: 100%;
     position: relative;
     margin: 0;
-    padding: 50px 0 0 0;
+    padding: 0;
     background: #f5f5f5;
+    color: #555555;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+    line-height: 18px;
 }
 body:before, body:after {
     content: "";
@@ -16,38 +22,32 @@ body:before, body:after {
 body:after {
     clear: both;
 }
-.navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
-    padding: 7px 20px;
-}
 
-.navbar .brand {
-    border-right: 1px solid #F5F5F5;
-    color: #F5F5F5;
-    font-size: 22px;
-    line-height: 1;
-    margin: 0 10px 0 0;
-    padding: 5px 15px 5px 0;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0);
-}
-.navbar .brand:hover {
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-.navbar .nav > li > a {
-    color: #F5F5F5;
-    padding: 7px 10px;
-    line-height: normal;
-}
-.navbar .nav-pills > li > a:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
 #mainContent {
     margin-top: 70px;
     margin-bottom: 70px;
     padding-bottom: 25px;
     height: 100%;
 }
-
+#mainContent h1 {
+    font-family: Georgia, serif;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    color: #038CE1;
+    font-size: 26px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    text-shadow: 2px 2px 2px #FFFFFF;
+}
+#mainContent .login-form h1 {
+    font-family: 'Telex',sans-serif;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-shadow: 0 0 0 #FFF;
+}
 #bodyContent {
     margin-top: 20px;
     margin-bottom: 70px;
@@ -88,6 +88,10 @@ body:after {
 
 #footer-left-section {
     padding-bottom: 5px;
+}
+
+.well {
+    background-color: #EDEDED;
 }
 
 .login-btn {
@@ -758,7 +762,7 @@ pre {
 /* LOG IN */
 .login-form  {
     width: 570px;
-    margin: 15% auto 0;
+    margin: 10% auto 0;
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -774,14 +778,17 @@ pre {
 .login-form hr {
     border-color: rgba(255, 255, 255, 0.2);
     border-width: 0 0 1px 0;
+    margin: 15px 0;
 }
 .login-form .login-controls {
     padding: 0 120px;
 }
+
 .login-form h1 .site-name {
     padding-right: 10px;
     border-right: 1px solid rgba(255, 255, 255, 0.5);
     margin-right: 10px;
+    text-shadow: 0 0 0 #000000;
 }
 .login-form h1 a, .login-form h1 a:hover {
     color: #fff;
@@ -801,4 +808,72 @@ pre {
 
 .login-form .alert {
     margin-left: 0;
+}
+
+/* NavBar Menu */
+
+.navbar-inner {
+    font-family: 'Telex',sans-serif;
+    color: #F5F5F5;
+    background-color: #3F9FD9;
+    background-image: linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
+    background-repeat: no-repeat;
+}
+.navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
+    padding: 7px 20px;
+}
+
+.navbar .brand {
+    border-right: 1px solid #F5F5F5;
+    color: #F5F5F5;
+    font-size: 22px;
+    line-height: 1;
+    margin: 0 10px 0 0;
+    padding: 5px 15px 5px 0;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0);
+}
+.navbar .brand:hover {
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .nav > li > a {
+    color: #F5F5F5;
+    padding: 7px 10px;
+    line-height: normal;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+    color: #fff;
+}
+.navbar .nav-pills > li > a:focus, .navbar .nav-pills > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .nav li.dropdown.open .caret {
+    border-bottom-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+}
+.dropdown-menu li {
+     border-bottom:  1px dotted rgba(0,0,0,0.1);
+ }
+.dropdown-menu li:last-child {
+    border: 0;
+}
+.dropdown-menu a {
+    padding: 7px 15px;
+}
+
+.caret {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+.icon-white {
+    opacity: 0.75;
+    filter: alpha(opacity=75);
+}
+.dropdown:hover .caret, .open .caret,
+.dropdown:hover .icon-white , .open .icon-white, .nav-pills a:hover .icon-white {
+    opacity: 1;
+    filter: alpha(opacity=100);
 }

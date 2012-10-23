@@ -1,4 +1,4 @@
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.min.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/standard.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/jquery-ui-1.8.21.custom.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/jquery.alerts.css'/>"/>

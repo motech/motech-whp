@@ -16,10 +16,10 @@
                 ${message}
             </div>
     </#if>
-        <h3>Container Registration</h3>
-        <hr/>
+        <h1>Container Registration</h1>
+
         <div id="container-registration">
-            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="row well form-horizontal span9">
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="well form-horizontal">
                 <table class="controls">
                     <tr>
                             <td>
@@ -77,10 +77,11 @@
                         <td>
                             <div class="control-group pull-down">
                                 <div class="controls">
-                                    <button type="submit" id="registerButton" class="btn btn-primary form-button-center">
+                                    <a id="back" class="btn padding-right" href="<@spring.url ''/>">Back</a>
+                                    <button type="submit" id="registerButton" class="btn btn-primary">
                                         Register
                                     </button>
-                                    <a id="back" class="btn btn-primary padding-left" href="<@spring.url ''/>">Back</a>
+
                                 </div>
                             </div>
                         </td>

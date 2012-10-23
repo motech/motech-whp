@@ -16,10 +16,10 @@
                 ${message}
             </div>
     </#if>
-        <h3>Container Registration</h3>
-        <hr/>
+        <h1>Container Registration</h1>
+
         <div id="container-registration">
-            <form id="container-registration-form" autocomplete="off" action="<@spring.url '/containerRegistration/by_provider/register'/>"  class="row well form-horizontal span9" input method="POST" submitOnEnterKey="true">
+            <form id="container-registration-form" autocomplete="off" action="<@spring.url '/containerRegistration/by_provider/register'/>"  class="well form-horizontal" input method="POST" submitOnEnterKey="true">
                 <table class="controls">
                     <tr>
                         <td>
