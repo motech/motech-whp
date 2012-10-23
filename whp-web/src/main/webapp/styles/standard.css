@@ -9,7 +9,7 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    background: #f5f5f5;
+    background: #fcfcfc;
     color: #555555;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -30,13 +30,13 @@ body:after {
     height: 100%;
 }
 #mainContent h1 {
-    font-family: Georgia, serif;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid #81C7FF;
     color: #038CE1;
+    font-family: Georgia,serif;
     font-size: 26px;
     margin-bottom: 25px;
     padding-bottom: 10px;
-    text-shadow: 2px 2px 2px #FFFFFF;
+    text-shadow: 0 1px 1px #999999;
 }
 #mainContent .login-form h1 {
     font-family: 'Telex',sans-serif;
@@ -91,7 +91,7 @@ body:after {
 }
 
 .well {
-    background-color: #EDEDED;
+    background-color: #FFF;
 }
 
 .login-btn {
@@ -145,7 +145,9 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
     text-align: left;
     width:375px;
 }
-
+#weeklyAdherenceForm .controls {
+    margin-left: 375px;
+}
 #legend-container {
     display: inline-block;
     overflow: auto;
@@ -307,20 +309,16 @@ div.buttons a, div.buttons button {
 }
 
 .ui-combobox-toggle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
     margin-left: -1px;
-    padding: 0;
-    /* adjust styles for IE 6/7 */
-    *height: 1.7em;
-    *top: 0.1em;
+    height: 29px;
 }
 
 .ui-combobox-input {
     margin: 0;
     padding: 0.3em;
     float: left;
+    height: 20px;
+    width: 180px;
 }
 
 .ui-menu {
@@ -328,14 +326,13 @@ div.buttons a, div.buttons button {
     max-height: 130px;
 }
 
-.ui-button {
-    height: 25px;
-}
-
 .patient-info, .patient-info div {
     overflow: hidden;
 }
-
+.patient-info h3 {
+    margin-bottom: 20px;
+    border-bottom: 1px dotted rgba(0,0,0,0.5);
+}
 .default-arrow, .default-arrow td, .default-arrow th {
     cursor: default;
 }
@@ -350,15 +347,16 @@ div.buttons a, div.buttons button {
 
 #search-pane {
     overflow: hidden;
+    background: none;
 }
-#container-filter-buttons{
-    display:block;
-    padding-left:0px;
-    margin-left:0px;
+#search-pane .buttons-group {
+    margin-left: -15px;
+    margin-top: 25px;
 }
+
 .search-section-header {
     z-index: 1;
-    font-size: 1.3em;
+    font-size: 1.1em;
 }
 
 .results {
@@ -373,10 +371,11 @@ div.buttons a, div.buttons button {
     width: 470px;
 }
 
+/*
 #patientList th, #providerList th, #cmfAdminList th, #smearTestDetails, #sampleInstance, #labName, #labNumber, #weight, #patientDetails, #providerDetails, #treatmentDetails {
     background-color: #43A1DA;
     color: white;
-}
+}  */
 
 #patientList td[class~=adherenceCaptured] {
     text-align: center;
@@ -650,9 +649,7 @@ pre {
 .pull-down {
     margin-top: 20px;
 }
-.pull-down-5px {
-    margin-top: 5px;
-}
+
 
 .margin-bottom-10px {
     margin-bottom: 10px;
@@ -754,10 +751,20 @@ pre {
     display: inline;
 }
 .dates{
-    width:110px;
+    width:120px;
 }
 #container-tracking-error{
     padding-left: 35px;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-size: 14px;
+}
+.ui-widget select {
+    background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6;
+}
+.show-date-button, .clear-date-button {
+    cursor: pointer;
 }
 /* LOG IN */
 .login-form  {
@@ -816,6 +823,8 @@ pre {
     font-family: 'Telex',sans-serif;
     color: #F5F5F5;
     background-color: #3F9FD9;
+    background-image: -moz-linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
+    background-image: -webkit-linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
     background-image: linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
     background-repeat: no-repeat;
 }
@@ -876,4 +885,31 @@ pre {
 .dropdown:hover .icon-white , .open .icon-white, .nav-pills a:hover .icon-white {
     opacity: 1;
     filter: alpha(opacity=100);
+}
+
+/* table */
+.table {
+    background: #f4f4f4;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 2px #D1D1D1;
+    color: #666666;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    text-shadow: 1px 1px 0 #FFFFFF;
+}
+.table thead th {
+    background: -moz-linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
+    background: -webkit-linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
+    background: linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #FAFAFA;
+    padding: 15px 10px
+}
+
+.table tr:first-child th:first-child {
+    border-top-left-radius: 3px;
+}
+.table tr:first-child th:last-child {
+    border-top-right-radius: 3px;
 }

@@ -19,10 +19,13 @@
     </li>
 
     <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-check icon-white"></i> Container Tracking <b class="caret"></b></a>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-check icon-white"></i> Container Registration <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
             <li>
-                <a id="register-container" href="/whp/containerRegistration/by_cmfAdmin">Container Registration</a>
+                <a id="register-container" href="/whp/containerRegistration/by_cmfAdmin">Register on behalf of provider </a>
+            </li>
+            <li>
+                <a id="register-container1" href="/whp/containerRegistration/by_cmfAdmin">Register a new container</a>
             </li>
         </ul>
     </li>

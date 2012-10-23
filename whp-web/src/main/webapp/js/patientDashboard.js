@@ -28,8 +28,11 @@ $(function () {
         }
     });
 
-    $(".date-dismiss").click(function(event){
-        $(event.target).closest("tr").find("input").val("");
+    $(".date-dismiss").click(function(){
+        $(this).parent().find(".hasDatepicker").val("");
+    });
+    $(".show-date-button").click(function(){
+        $(this).parent().find(".hasDatepicker").focus();
     });
 
     $("#clearFields").click(function () {

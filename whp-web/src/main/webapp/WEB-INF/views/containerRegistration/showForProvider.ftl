@@ -52,10 +52,10 @@
                         <td>
                             <div class="control-group pull-down">
                                 <div class="controls">
-                                    <button type="submit" id="registerButton" class="btn btn-primary form-button-center">
+                                    <button type="submit" id="registerButton" class="btn btn-primary">
                                         Register
                                     </button>
-                                    <a id="back" class="padding-left" href="<@spring.url ''/>">Back</a>
+                                    <a id="back" class="btn" href="<@spring.url ''/>">Back</a>
                                 </div>
                             </div>
                         </td>

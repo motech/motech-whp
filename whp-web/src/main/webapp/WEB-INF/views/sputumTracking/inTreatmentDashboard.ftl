@@ -17,99 +17,114 @@
 <div>
     <@paginator.filter id = "sputum_tracking_filter" pagination_id = "sputum_tracking_pagination">
        <h1>In Treatment Sputum Tracking Dashboard</h1>
-       <div class="well" id="search-section">
+        <div class="well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
             <div id="search-pane">
-               <fieldset class="inline-align span3">
-                   <legend><small>Provider</small></legend>
-                    <div class="control-group">
-                        <label class="control-label">Provider District</label>
-                        <div class="controls">
-                            <select id="district" name="district">
-                                <option value=""></option>
-                                <#list districts as district>
-                                    <option value="${district.name}" ng-selected="{{isSelected('${district.name}', searchCriteria.district, 'district')}}">${district.name}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Provider ID</label>
-                        <div class="controls">
-                              <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset class="inline-align span9">
-                    <legend><small>Container</small></legend>
-                    <div class="control-group inline-align">
-                        <label class="control-label span4">Instance</label>
-                        <div class="controls inline-align">
-                            <select id="mappingInstance" name="mappingInstance">
-                                <option value=""></option>
-                                <#list instances as instance>
-                                    <option value="${instance}" ng-selected="{{isSelected('${instance}', searchCriteria.mappingInstance, 'mappingInstance')}}">${instance.displayText}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group inline-align">
-                        <label class="control-label span4">Cumulative Lab Result</label>
-                        <div class="controls inline-align">
-                            <select id="cumulativeResult" name="cumulativeResult">
-                                <option value=""></option>
-                                <#list labResults as labResult>
-                                    <option value="${labResult}" ng-selected="{{isSelected('${labResult}', searchCriteria.cumulativeResult, 'cumulativeResult')}}">${labResult}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group inline-align">
-                        <label class="control-label span4">Container Status</label>
-                        <div class="controls inline-align">
-                            <select id="containerStatus" name="containerStatus">
-                                <option value=""></option>
-                                <#list containerStatusList as containerStatus>
-                                    <option value="${containerStatus}" ng-selected="{{isSelected('${containerStatus}', searchCriteria.containerStatus, 'containerStatus')}}">${containerStatus}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group inline-align">
-                        <label class="control-label span4">Reason for Closure</label>
-                        <div class="controls inline-align">
-                            <select id="reasonForClosure" name="reasonForClosure">
-                                <option value=""></option>
-                                <#list reasons as reason>
-                                    <option value="${reason.code}" ng-selected="{{isSelected('${reason.code}', searchCriteria.reasonForClosure, 'reasonForClosure')}}">${reason.name}</option>
-                                </#list>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group inline-align span7 date-field">
-                        <label class="control-label span4">Container Issue Date</label>
-                        <div class="controls">
-                            <div class="input-append inline">
-                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
-                                <button class="btn btn-danger clear-date-button" type="button">x</button>
+                <fieldset class="span12">
+                    <div class="row-fluid sel-provider">
+
+                        <div class="control-group span2">
+                            <label class="control-label">Provider District</label>
+                            <div class="controls">
+                                <select id="district" name="district">
+                                    <option value=""></option>
+                                    <#list districts as district>
+                                        <option value="${district.name}" ng-selected="{{isSelected('${district.name}', searchCriteria.district, 'district')}}">${district.name}</option>
+                                    </#list>
+                                </select>
                             </div>
-                            <div class="input-append inline">
-                                <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
-                                <button class="btn btn-danger clear-date-button" type="button">x</button>
+                        </div>
+                        <div class="control-group span2">
+                            <label class="control-label">Provider ID</label>
+                            <div class="controls">
+                                <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
+                            </div>
+                        </div>
+                        <div class="control-group span2 ">
+                            <label class="control-label ">Instance</label>
+                            <div class="controls">
+                                <select id="mappingInstance" name="mappingInstance">
+                                    <option value=""></option>
+                                    <#list instances as instance>
+                                        <option value="${instance}" ng-selected="{{isSelected('${instance}', searchCriteria.mappingInstance, 'mappingInstance')}}">${instance.displayText}</option>
+                                    </#list>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </fieldset>
-                <div id="container-filter-buttons" class="span12 pull-left pull-down padding-left">
-                    <div class="controls">
-                        <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
-                        <button id="clearFilter" type="reset" class="btn btn-primary form-button-center">Clear</button>
+                    <div class="row-fluid sel-result">
+
+                        <div class="control-group  span2 ">
+                            <label class="control-label ">Cumulative Lab Result</label>
+                            <div class="controls ">
+                                <select id="cumulativeResult" name="cumulativeResult">
+                                    <option value=""></option>
+                                    <#list labResults as labResult>
+                                        <option value="${labResult}" ng-selected="{{isSelected('${labResult}', searchCriteria.cumulativeResult, 'cumulativeResult')}}">${labResult}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group  span2 ">
+                            <label class="control-label ">Container Status</label>
+                            <div class="controls ">
+                                <select id="containerStatus" name="containerStatus">
+                                    <option value=""></option>
+                                    <#list containerStatusList as containerStatus>
+                                        <option value="${containerStatus}" ng-selected="{{isSelected('${containerStatus}', searchCriteria.containerStatus, 'containerStatus')}}">${containerStatus}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group  span2">
+                            <label class="control-label ">Reason for Closure</label>
+                            <div class="controls ">
+                                <select id="reasonForClosure" name="reasonForClosure">
+                                    <option value=""></option>
+                                    <#list reasonsForFilter as reason>
+                                        <option value="${reason.code}" ng-selected="{{isSelected('${reason.code}', searchCriteria.reasonForClosure, 'reasonForClosure')}}">${reason.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="control-group span3 ">
+                            <label class="control-label  date-field">Container Issue Date</label>
+                            <div class="controls">
+                                <div class="input-append input-prepend">
+                                    <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                                    <input class = "dates" type="text" placeholder="From: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
+                                    <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+                                </div>
+                                <div class="input-append input-prepend">
+                                    <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                                    <input class = "dates" type="text" placeholder="To: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
+                                    <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="control-group buttons-group span2 pull-down">
+                            <div class="controls">
+                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search <i class="icon-search icon-white"></i></button>
+                                <button id="clearFilter" type="reset" class="btn  form-button-center">Clear <i class="icon-refresh"></i></button>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
+                </fieldset>
+
             </div>
-       </div>
+        </div>
     </@paginator.filter>
 </div>
+
+
 
 <div class="results">
     <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="sputum_tracking_filter" entity="in_treatment_container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">

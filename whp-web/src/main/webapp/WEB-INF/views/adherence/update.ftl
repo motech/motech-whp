@@ -2,7 +2,7 @@
 <#import "../layout/default-with-menu.ftl" as layout>
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout title="Update Adherence" entity="provider">
-<div class="row">
+<div class="">
     <#if adherence.warningMessage != ''>
         <div id="adherenceWarning" class="alert alert-error">
         ${adherence.warningMessage}
@@ -11,7 +11,7 @@
     <h4 class="page-header form-header" id="adherenceCaption">Update adherence for Patient ID: ${adherence.patientId} from ${weekStartDate} to ${weekEndDate}</h4>
 </div>
 
-<form id="weeklyAdherenceForm" class="row well form-horizontal" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
+<form id="weeklyAdherenceForm" class="well form-horizontal" action="<@spring.url '/adherence/update/' + adherence.patientId/>" method="POST">
     <input type="hidden" name="patientId" value="${adherence.patientId}"/>
     <input type="hidden" name="referenceDateString" value="${adherence.referenceDateString}"/>
     <div id="numberSelect" class="control-group">
@@ -31,10 +31,12 @@
         </div>
     </div>
     <div class="control-group">
-        <a href="<@spring.url ''/>" class="btn">Cancel</a>
-        <#if !readOnly>
-            <input type="submit" id="submit" class="btn btn-primary login-btn" value="Submit"/>
-        </#if>
+        <div class="controls">
+            <#if !readOnly>
+                <input type="submit" id="submit" class="btn btn-primary login-btn" value="Submit"/>
+            </#if>
+            <a href="<@spring.url ''/>" class="btn">Cancel</a>
+        </div>
     </div>
 </form>
 </@layout.defaultLayout>

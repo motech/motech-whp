@@ -77,11 +77,11 @@
                         <td>
                             <div class="control-group pull-down">
                                 <div class="controls">
-                                    <a id="back" class="btn padding-right" href="<@spring.url ''/>">Back</a>
+
                                     <button type="submit" id="registerButton" class="btn btn-primary">
                                         Register
                                     </button>
-
+                                    <a id="back" class="btn padding-right" href="<@spring.url ''/>">Back</a>
                                 </div>
                             </div>
                         </td>

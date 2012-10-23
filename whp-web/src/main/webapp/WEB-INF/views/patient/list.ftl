@@ -46,7 +46,7 @@
                             <div class="control-group pull-down">
                                 <div class="controls">
                                     <button type="button" id="searchButton" class="btn btn-primary form-button-center">
-                                        Search
+                                        Search <i class="icon-search icon-white"></i>
                                     </button>
                                 </div>
                             </div>

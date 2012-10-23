@@ -27,8 +27,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-group" data-dismiss="modal" id="activateProviderClose">Close</button>
-        <button type="button" class="btn btn-group btn-primary" id="activateProvider">Save</button>
+
+        <button type="button" class="btn  btn-primary" id="activateProvider">Save</button>
+        <button class="btn " data-dismiss="modal" id="activateProviderClose">Close</button>
     </div>
 </form>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/activateProvider.js'/>"></script>

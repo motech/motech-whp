@@ -9,12 +9,14 @@
         <#assign message=""/>
     </div>
     </#if>
-<div class="row">
-    <span class="pull-left"><h4 class="page-header form-header">Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4></span>
-<@legend key1="paused" value1="Current Treatment Paused" />
-</div>
-<div class="row">
-    <div>
+
+    <div class="pull-left">
+        <h1>Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h1>
+    </div>
+
+    <@legend key1="paused" value1="Current Treatment Paused" />
+
+
         <table id="patientList" class="table table-striped table-bordered table-condensed">
             <thead>
             <tr>
@@ -69,8 +71,7 @@
                 </#if>
             </tbody>
         </table>
-    </div>
-</div>
+
 <script type="text/javascript">
     createAutoClosingAlert(".adherence-message-alert", 5000)
 </script>

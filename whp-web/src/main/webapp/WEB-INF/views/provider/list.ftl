@@ -32,7 +32,7 @@
                             <label class="control-label" for="providerId">Provider ID</label>
 
                             <div class="controls">
-                                <input class="input-large pull-down-5px" type="text" name='selectedProvider' id="providerId"
+                                <input class="input-large" type="text" name='selectedProvider' id="providerId"
                                        ng-model="searchCriteria.selectedProvider" autofocus="autofocus"/>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     <td>
                         <div class="control-group pull-down padding-left">
                             <div class="controls">
-                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search
+                                <button type="submit" id="search" class="btn btn-primary r">Search <i class="icon-search icon-white"></i>
                                 </button>
                             </div>
                         </div>

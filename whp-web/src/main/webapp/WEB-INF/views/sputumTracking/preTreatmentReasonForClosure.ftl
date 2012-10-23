@@ -49,7 +49,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-group" data-dismiss="modal" id="close">Close</button>
-        <button type="submit" class="btn btn-group btn-primary" id="saveReason">Save</button>
+
+        <button type="submit" class="btn  btn-primary" id="saveReason">Save</button>
+        <button class="btn" data-dismiss="modal" id="close">Close</button>
     </div>
 </form>

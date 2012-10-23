@@ -9,8 +9,9 @@
         <div id="resetPasswordServerSideError" class="alert alert-error hide"></div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-group" data-dismiss="modal" id="resetPasswordClose">Cancel</button>
-        <button type="button" class="btn btn-group btn-primary" id="resetPassword">OK</button>
+
+        <button type="button" class="btn  btn-primary" id="resetPassword">OK</button>
+        <button class="btn " data-dismiss="modal" id="resetPasswordClose">Cancel</button>
     </div>
 </form>
 <script type="text/javascript">

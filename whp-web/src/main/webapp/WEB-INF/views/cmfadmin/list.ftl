@@ -17,7 +17,7 @@
     createAutoClosingAlert(".message-alert", 5000);
 </script>
 <div class="well float-right">
-    <a id = "createCmfAdmin-button" href="/whp/cmfAdmin/create">Create CMF Admin</a>
+    <a class="btn btn-primary" id="createCmfAdmin-button" href="/whp/cmfAdmin/create">Create CMF Admin</a>
 </div>
 <table id="cmfAdminList" class="table table-bordered table-condensed" redirectOnRowClick="true">
     <thead>

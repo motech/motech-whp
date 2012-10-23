@@ -15,6 +15,10 @@ $(function () {
         resetProvidersList();
     });
 
+    $(".show-date-button").click(function(){
+        $(this).parent().find(".dates").focus();
+    });
+
     $(".clear-date-button").click(function () {
         $(this).parents(".input-append").children("input").val("");
     });

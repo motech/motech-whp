@@ -1,7 +1,7 @@
 <table id="legend" class="table table-bordered table-condensed">
     <thead>
     <tr>
-        <th>Legend</th>
+        <th colspan="2">Legend</th>
     </tr>
     </thead>
     <tbody>

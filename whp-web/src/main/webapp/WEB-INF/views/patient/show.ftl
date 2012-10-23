@@ -20,7 +20,7 @@
         $('#achtung').fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350).fadeOut(350).fadeIn(350);
     });
 </script>
-<div class="row span9">
+<div class="row-fluid">
         <#if message??>
         <div class="dateUpdated-message-alert row alert alert-info fade in">
             <button class="close" data-dismiss="alert">&times;</button>

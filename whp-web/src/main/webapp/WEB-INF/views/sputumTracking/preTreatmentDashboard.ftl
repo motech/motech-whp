@@ -12,9 +12,10 @@
       <div class="well" id="search-section">
            <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
            <div id="search-pane">
-              <fieldset class="inline-align span3">
-                  <legend><small>Provider</small></legend>
-                   <div class="control-group">
+              <fieldset class="span12">
+              <div class="row-fluid sel-provider">
+
+                   <div class="control-group span2">
                        <label class="control-label">Provider District</label>
                        <div class="controls">
                            <select id="district" name="district">
@@ -25,18 +26,48 @@
                            </select>
                        </div>
                    </div>
-                   <div class="control-group">
+                   <div class="control-group span2">
                        <label class="control-label">Provider ID</label>
                        <div class="controls">
                              <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
                        </div>
                    </div>
-               </fieldset>
-               <fieldset class="inline-align span9">
-                   <legend><small>Container</small></legend>
-                   <div class="control-group inline-align">
-                       <label class="control-label span4">Cumulative Lab Result</label>
-                       <div class="controls inline-align">
+                  <div class="control-group span2 ">
+                      <label class="control-label ">Diagnosis</label>
+                      <div class="controls">
+                          <select id="diagnosis" name="diagnosis">
+                              <option value=""></option>
+                              <#list diagnosisList as diagnosis>
+                                  <option value="${diagnosis}" ng-selected="{{isSelected('${diagnosis}', searchCriteria.diagnosis, 'diagnosis')}}">${diagnosis}</option>
+                              </#list>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="control-group  span3 ">
+                      <label class="control-group   date-field">Consultation Date</label>
+                      <div class="controls">
+                          <div class="input-append input-prepend">
+                              <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                              <input class = "dates" type="text" placeholder="From: dd/mm/yyyy" id="consultationDateFrom" name="consultationDateFrom" ng-model = "searchCriteria.consultationDateFrom">
+                              <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+
+                          </div>
+                          <div class="input-append input-prepend">
+                              <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                              <input class = "dates" type="text" placeholder="To: dd/mm/yyyy" id="consultationDateTo" name="consultationDateTo"  ng-model = "searchCriteria.consultationDateTo">
+                              <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+
+                          </div>
+                      </div>
+                  </div>
+
+               </div>
+               <div class="row-fluid sel-result">
+
+                   <div class="control-group  span2 ">
+                       <label class="control-label ">Cumulative Lab Result</label>
+                       <div class="controls ">
                            <select id="cumulativeResult" name="cumulativeResult">
                                <option value=""></option>
                                <#list labResults as labResult>
@@ -45,9 +76,10 @@
                            </select>
                        </div>
                    </div>
-                   <div class="control-group inline-align">
-                       <label class="control-label span4">Container Status</label>
-                       <div class="controls inline-align">
+
+                   <div class="control-group  span2 ">
+                       <label class="control-label ">Container Status</label>
+                       <div class="controls ">
                            <select id="containerStatus" name="containerStatus">
                                <option value=""></option>
                                <#list containerStatusList as containerStatus>
@@ -56,9 +88,10 @@
                            </select>
                        </div>
                    </div>
-                   <div class="control-group inline-align">
-                       <label class="control-label span4">Reason for Closure</label>
-                       <div class="controls inline-align">
+
+                   <div class="control-group  span2">
+                       <label class="control-label ">Reason for Closure</label>
+                       <div class="controls ">
                            <select id="reasonForClosure" name="reasonForClosure">
                                <option value=""></option>
                                <#list reasonsForFilter as reason>
@@ -67,50 +100,36 @@
                            </select>
                        </div>
                    </div>
-                   <div class="control-group inline-align">
-                       <label class="control-group inline-align span4 date-field">Consultation Date</label>
+
+
+
+                   <div class="control-group span3 ">
+                       <label class="control-label  date-field">Container Issue Date</label>
                        <div class="controls">
-                           <div class="input-append">
-                               <input class = "dates" type="text" id="consultationDateFrom" name="consultationDateFrom" ng-model = "searchCriteria.consultationDateFrom">
-                               <button class="btn btn-danger clear-date-button" type="button">x</button>
+                           <div class="input-append input-prepend">
+                               <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                               <input class = "dates" type="text" placeholder="From: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
+                               <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
                            </div>
-                           <div class="input-append">
-                               <input class = "dates" type="text" id="consultationDateTo" name="consultationDateTo"  ng-model = "searchCriteria.consultationDateTo">
-                               <button class="btn btn-danger clear-date-button" type="button">x</button>
+                           <div class="input-append input-prepend">
+                               <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
+                               <input class = "dates" type="text" placeholder="To: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
+                               <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
                            </div>
                        </div>
                    </div>
-                   <div class="control-group inline-align">
-                       <label class="control-label span4">Diagnosis</label>
+
+
+                   <div class="control-group buttons-group span2 pull-down">
                        <div class="controls">
-                           <select id="diagnosis" name="diagnosis">
-                               <option value=""></option>
-                               <#list diagnosisList as diagnosis>
-                                   <option value="${diagnosis}" ng-selected="{{isSelected('${diagnosis}', searchCriteria.diagnosis, 'diagnosis')}}">${diagnosis}</option>
-                               </#list>
-                           </select>
+                           <button type="submit" id="search" class="btn btn-primary form-button-center">Search <i class="icon-search icon-white"></i></button>
+                           <button id="clearFilter" type="reset" class="btn  form-button-center">Clear <i class="icon-refresh"></i></button>
                        </div>
                    </div>
-                   <div class="control-group inline-align">
-                       <label class="control-label span4 date-field">Container Issue Date</label>
-                       <div class="controls">
-                           <div class="input-append inline">
-                               <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
-                               <button class="btn btn-danger clear-date-button" type="button">x</button>
-                           </div>
-                           <div class="input-append inline">
-                               <input class = "dates" type="text" data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
-                               <button class="btn btn-danger clear-date-button" type="button">x</button>
-                           </div>
-                       </div>
+
                    </div>
                </fieldset>
-               <div class="control-group pull-left pull-down padding-left">
-                   <div class="controls">
-                       <button type="submit" id="search" class="btn btn-primary form-button-center">Search</button>
-                       <button id="clearFilter" type="reset" class="btn btn-primary form-button-center">Clear</button>
-                   </div>
-               </div>
+
            </div>
       </div>
     </@paginator.filter>

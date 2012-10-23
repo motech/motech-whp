@@ -8,47 +8,54 @@
     <div class="modal-body">
         <div class="control-group">
             <div>
-                <table id="patientList" class="table table-bordered table-condensed">
+                <table id="patientList" class="table table-bordered table-condensed table-striped">
                     <thead>
                     <tr>
                         <th>Phase</th>
                         <th>Start Date</th>
-                        <th></th>
+
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Intensive Phase</td>
-                        <td>
-                            <input class="span 2" data-date-format="dd/mm/yyyy" id="ipDatePicker" name="ipStartDate"
+                        <td class="input-prepend input-append">
+                            <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
+                            <input class="" placeholder="dd/mm/yyyy" data-date-format="dd/mm/yyyy" id="ipDatePicker" name="ipStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.ipStartDate}"/>
+                            <span class="add-on date-dismiss"><i class="icon-refresh"></i></span>
+
                         </td>
-                        <td><a class="date-dismiss" href="#">x</a></td>
+
                     </tr>
                     <tr>
                         <td>Extended Intensive Phase</td>
-                        <td>
-                            <input class="span 2" data-date-format="dd/mm/yyyy" id="eipDatePicker" name="eipStartDate"
+                        <td class="input-prepend input-append">
+                            <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
+                            <input class="" placeholder="dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="eipDatePicker" name="eipStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.eipStartDate}"/>
+                            <span class="add-on  date-dismiss"><i class="icon-refresh"></i></span>
                         </td>
-                        <td><a class="date-dismiss" href="#">x</a></td>
+
                     </tr>
                     <tr>
                         <td>Continuation Phase</td>
-                        <td>
-                            <input class="span 2" data-date-format="dd/mm/yyyy" id="cpDatePicker" name="cpStartDate"
+                        <td class="input-prepend input-append">
+                            <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
+                            <input class="" placeholder="dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="cpDatePicker" name="cpStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.cpStartDate}"/>
+                            <span class="add-on  date-dismiss"><i class="icon-refresh"></i></span>
                         </td>
-                        <td><a class="date-dismiss" href="#">x</a></td>
+
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-group" data-dismiss="modal">Close</button>
-        <input type="button" class="btn btn-group" id="clearFields" value="Clear All"/>
-        <button type="submit" class="btn btn-group btn-primary" id="saveTheDate">Save</button>
+    <div class="modal-footer ">
+        <button class="btn " data-dismiss="modal">Close</button>
+        <input type="button" class="btn " id="clearFields" value="Clear All"/>
+        <button type="submit" class="btn  btn-primary" id="saveTheDate">Save</button>
     </div>
 </form>

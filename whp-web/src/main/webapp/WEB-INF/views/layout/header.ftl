@@ -25,8 +25,9 @@
 
     </div>
     <#if Session.loggedInUser?exists>
-        <@changePassword/>
+
     </#if>
 </div>
+<@changePassword/>
 </#macro>
 
