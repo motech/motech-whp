@@ -9,7 +9,7 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    background: #fcfcfc;
+    background: #f7f7f7;
     color: #555555;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -318,7 +318,7 @@ div.buttons a, div.buttons button {
     padding: 0.3em;
     float: left;
     height: 20px;
-    width: 180px;
+    width: 75%;
 }
 
 .ui-menu {
@@ -341,19 +341,30 @@ div.buttons a, div.buttons button {
     word-wrap: break-word;
 }
 
-.controls a {
-    margin-right: 10px;
-}
-
 #search-pane {
     overflow: hidden;
     background: none;
+    padding: 1em;
+}
+#search-pane select {
+   width: 95%;
+}
+#search-pane input#providerId {
+    width: 95%;
+}
+#search-pane .dates {
+    padding: 4px;
+    width: 66%;
+}
+#search-pane .input-append {
+    width: 49.5% !important;
 }
 #search-pane .buttons-group {
-    margin-left: -15px;
     margin-top: 25px;
 }
-
+#search-pane .btn{
+    margin-bottom: 10px;
+}
 .search-section-header {
     z-index: 1;
     font-size: 1.1em;
@@ -756,11 +767,14 @@ pre {
 #container-tracking-error{
     padding-left: 35px;
 }
-
+.ui-widget {
+    font-family: 'Telex',Verdana,Arial,sans-serif;
+}
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-size: 14px;
 }
-.ui-widget select {
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default,
+.ui-widget select, .ui-widget input {
     background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6;
 }
 .show-date-button, .clear-date-button {
@@ -858,7 +872,12 @@ pre {
 .navbar .nav-pills > li > a:focus, .navbar .nav-pills > li > a:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
 
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret,
 .navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .nav li.dropdown.open .caret {
     border-bottom-color: #FFFFFF;
     border-top-color: #FFFFFF;
@@ -899,12 +918,13 @@ pre {
     text-shadow: 1px 1px 0 #FFFFFF;
 }
 .table thead th {
-    background: -moz-linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
-    background: -webkit-linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
-    background: linear-gradient(center top , #EDEDED, #EBEBEB) repeat scroll 0 0 transparent;
+    background: -moz-linear-gradient(center top , #F1F1F1, #E1E1E1) repeat scroll 0 0 transparent;
+    background: -webkit-linear-gradient(center top , #F1F1F1, #E1E1E1) repeat scroll 0 0 transparent;
+    background: linear-gradient(center top , #F1F1F1, #E1E1E1) repeat scroll 0 0 transparent;
     border-bottom: 1px solid #E0E0E0;
-    border-top: 1px solid #FAFAFA;
-    padding: 15px 10px
+    border-top: 1px solid #FFF !important;
+    padding: 15px 10px;
+    vertical-align: middle;
 }
 
 .table tr:first-child th:first-child {

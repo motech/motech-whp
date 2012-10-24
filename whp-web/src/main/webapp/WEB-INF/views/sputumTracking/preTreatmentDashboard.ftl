@@ -44,7 +44,7 @@
                       </div>
                   </div>
 
-                  <div class="control-group  span3 ">
+                  <div class="control-group  span4 ">
                       <label class="control-group   date-field">Consultation Date</label>
                       <div class="controls">
                           <div class="input-append input-prepend">
@@ -103,7 +103,7 @@
 
 
 
-                   <div class="control-group span3 ">
+                   <div class="control-group span4 ">
                        <label class="control-label  date-field">Container Issue Date</label>
                        <div class="controls">
                            <div class="input-append input-prepend">

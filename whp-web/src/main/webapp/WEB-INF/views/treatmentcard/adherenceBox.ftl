@@ -7,6 +7,8 @@
             <th>${x}</th>
         </#list>
     </tr>
+    </thead>
+    <tbody>
         <#list monthlyAdherences as monthlyAdherence>
         <tr>
             <div>
@@ -74,8 +76,7 @@
             </#list>
         </tr>
         </#list>
-    </thead>
-    <tbody>
+
     </tbody>
 </table>
 </#macro>

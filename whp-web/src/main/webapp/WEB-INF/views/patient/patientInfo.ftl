@@ -134,6 +134,7 @@
         </div>
         <div class="row-fluid">
             <div class="span12">
+                <h3>Smear Test Results</h3>
                 <table class="table table-bordered text-center table-striped">
                     <thead>
                     <tr>

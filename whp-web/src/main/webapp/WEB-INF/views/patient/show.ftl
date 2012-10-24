@@ -35,20 +35,21 @@
         <#include "phaseInfo.ftl"/>
 
     <div id="treatmentCard"></div>
-    <div class="controls">
-        <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
-        <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand">Adjust Phase Start
-            Dates</a>
-        <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>">Print</a>
+    <div class="row-fluid">
+        <div class="controls btn-group float-right">
+            <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
+            <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand">Adjust Phase Start
+                Dates</a>
+            <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>">Print</a>
+        </div>
     </div>
-
     <br/>
     <br/>
 
 
     <form id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
 
-        <div class="well row">
+        <div class="well clearfix">
             <textarea class="float-left" id="patientRemark" name="patientRemark"></textarea>
             <button class="btn btn-primary float-right" type="submit" id='addRemark'>Add Remark</button>
         </div>
