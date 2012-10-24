@@ -66,7 +66,7 @@ public class PreTreatmentContainerTrackingControllerTest {
 
         when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasonsForClosureForm);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
-        when(containerService.getAllReasonsForClosure()).thenReturn(reasonsForFilter);
+        when(containerService.getAllReasonsPreTreatmentClosureReasons()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()

@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.InTreatmentContainerTrackingController.*;
-import static org.motechproject.whp.controller.PreTreatmentContainerTrackingController.REASONS_FOR_FILTER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
@@ -58,13 +57,13 @@ public class InTreatmentContainerTrackingControllerTest {
     }
 
     @Test
-    public void shouldPopulateUIModelForPreTreatmentDashboard() throws Exception {
+    public void shouldPopulateUIModelForInTreatmentDashboard() throws Exception {
         ArrayList<ReasonForContainerClosure> reasons = new ArrayList<>();
         List<ReasonForContainerClosure> reasonsForFilter = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
-        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
-        when(containerService.getAllReasonsForClosure()).thenReturn(reasonsForFilter);
+        when(containerService.getAllInTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(containerService.getAllInTreatmentClosureReasons()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()

@@ -22,7 +22,7 @@
                                 <label class="control-label">Reason*</label>
                                 <select id="reason" name="reason" validate="required:true">
                                     <option value=""></option>
-                                <#list reasonsForFilter as reason>
+                                <#list reasons as reason>
                                     <option value="${reason.code}">
                                         ${reason.name}
                                     </option>

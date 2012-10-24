@@ -15,6 +15,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -74,14 +75,14 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetAllReasonsForClosure() {
+    public void shouldGetAllReasonsForClosureForPreTreatment() {
         ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
         when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
 
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllReasonsForClosure();
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllReasonsPreTreatmentClosureReasons();
 
         Assert.assertEquals(3, allClosureReasonsForAdmin.size());
         Assert.assertEquals("reason number one", allClosureReasonsForAdmin.get(0).getName());
@@ -90,6 +91,23 @@ public class ContainerServiceTest extends BaseUnitTest {
         Assert.assertEquals("0", allClosureReasonsForAdmin.get(0).getCode());
         Assert.assertEquals("2", allClosureReasonsForAdmin.get(1).getCode());
         Assert.assertEquals("3", allClosureReasonsForAdmin.get(2).getCode());
+    }
+
+    @Test
+    public void shouldGetAllReasonsExceptTBNegativeForInTreatment() {
+        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", WHPContainerConstants.TB_NEGATIVE_CODE));
+        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
+        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllInTreatmentClosureReasons();
+
+        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
+        Assert.assertEquals("reason number one", allClosureReasonsForAdmin.get(0).getName());
+        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
+        Assert.assertEquals("0", allClosureReasonsForAdmin.get(0).getCode());
+        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
     }
 
     @Test

@@ -64,7 +64,7 @@ public class InTreatmentContainerTrackingController {
         List<ReasonForContainerClosure> allClosureReasons = containerService.getAllInTreatmentClosureReasonsForAdmin();
 
         uiModel.addAttribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES);
-        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllReasonsForClosure());
+        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllInTreatmentClosureReasons());
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());

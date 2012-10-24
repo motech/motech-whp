@@ -74,7 +74,7 @@ public class PreTreatmentContainerTrackingController {
         List<AlternateDiagnosis> allAlternateDiagnosis = containerService.getAllAlternateDiagnosis();
 
         uiModel.addAttribute(REASONS, allClosureReasons);
-        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllReasonsForClosure());
+        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllReasonsPreTreatmentClosureReasons());
         uiModel.addAttribute(ALTERNATE_DIAGNOSIS_LIST, allAlternateDiagnosis);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());

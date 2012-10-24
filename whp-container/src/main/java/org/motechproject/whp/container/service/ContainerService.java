@@ -115,8 +115,15 @@ public class ContainerService {
         return reasonsForAdmin;
     }
 
-    public List<ReasonForContainerClosure> getAllReasonsForClosure() {
+    public List<ReasonForContainerClosure> getAllReasonsPreTreatmentClosureReasons() {
         return allReasonForContainerClosures.getAll();
+    }
+
+    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasons() {
+        List<ReasonForContainerClosure> preTreatmentClosureReasons = allReasonForContainerClosures.getAll();
+        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(TB_NEGATIVE_CODE)), preTreatmentClosureReasons);
+        List reasonsForAdmin = ListUtils.removeAll(preTreatmentClosureReasons, reasonForMapping);
+        return reasonsForAdmin;
     }
 
     public ReasonForContainerClosure getClosureReasonForMapping() {
