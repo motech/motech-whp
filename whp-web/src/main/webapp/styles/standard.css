@@ -155,10 +155,14 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
 
 .sharp, .sharp td, .sharp th {
     border-color: #999;
+
+}
+table.sharp {
     background: none !important;
 }
-#IPTreatmentCard thead th {
-    padding: 4px;
+
+table.sharp thead th {
+    padding: 4px !important;
 }
 .fixed th, .fixed td {
     width: 13px;
