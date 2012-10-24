@@ -18,17 +18,17 @@ public class ReportingEventURLsIT {
 
     @Test
     public void shouldGetAdherenceCaptureURL(){
-        assertThat(reportingEventURLs.getAdherenceCallLogURL(), is("http://localhost:8080/whp-reports/adherence/callLogs"));
+        assertThat(reportingEventURLs.getAdherenceCallLogURL(), is("http://localhost/whp-reports/adherence/callLogs"));
     }
 
     @Test
     public void shouldGetCallLogMeasureURL(){
-        assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost:8080/whp-reports/callLog/measure"));
+        assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost/whp-reports/callLog/measure"));
     }
 
     @Test
     public void shouldGetFlashingLogMeasureURL(){
-        assertThat(reportingEventURLs.getFlashingLogURL(), is("http://localhost:8080/whp-reports/flashingLog/measure"));
+        assertThat(reportingEventURLs.getFlashingLogURL(), is("http://localhost/whp-reports/flashingLog/measure"));
     }
 
 }
