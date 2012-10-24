@@ -20,7 +20,7 @@ $(function () {
     });
 
     $(".clear-date-button").click(function () {
-        $(this).parents(".input-append").children("input").val("");
+        $$(this).parent().find(".dates").val("");
     });
 
     $("#providerId").bind("autocomplete-changed", function (event, ui, data) {

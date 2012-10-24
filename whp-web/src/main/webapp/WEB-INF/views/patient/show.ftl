@@ -36,7 +36,7 @@
 
     <div id="treatmentCard"></div>
     <div class="row-fluid">
-        <div class="controls btn-group float-right">
+        <div class="controls btn-group float-left">
             <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
             <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand">Adjust Phase Start
                 Dates</a>

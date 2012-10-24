@@ -57,9 +57,11 @@ function initSearchPane() {
 }
 
 $(function () {
+    initSearchPane();
+
     initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
 
-    initSearchPane();
+
 
     $('#searchButton').click(function () {
         $("#searchForm").submit();

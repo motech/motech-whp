@@ -11,7 +11,8 @@
     </#if>
 
     <div class="pull-left">
-        <h1>Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h1>
+        <h1>All Patients </h1>
+        <h4>Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4>
     </div>
 
     <@legend key1="paused" value1="Current Treatment Paused" />

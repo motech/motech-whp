@@ -29,19 +29,21 @@ $(function () {
     });
 
     $(".date-dismiss").click(function(){
-        $(this).parent().find(".hasDatepicker").val("");
+        $(this).parent().find("input").val("");
     });
     $(".show-date-button").click(function(){
-        $(this).parent().find(".hasDatepicker").focus();
+        $(this).parent().find("input").focus();
     });
 
     $("#clearFields").click(function () {
-        $('#ipDatePicker').val('');
-        $('#eipDatePicker').val('');
-        $('#cpDatePicker').val('');
+        $('.hasDatepicker').each(function() {
+             $(this).val('');
+        });
     });
-    $('#ipDatePicker').css('cursor', 'pointer');
-    $('#eipDatePicker').css('cursor', 'pointer');
-    $('#cpDatePicker').css('cursor', 'pointer');
+
+    $('.hasDatepicker').each(function() {
+        $(this).css('cursor', 'pointer');
+    });
+
     createAutoClosingAlert(".dateUpdated-message-alert", 5000);
 });

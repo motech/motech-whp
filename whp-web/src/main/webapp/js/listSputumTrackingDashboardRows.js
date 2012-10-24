@@ -65,7 +65,15 @@ $(function () {
     $('#reason').change(function () {
         showAlternateDiagnosisTbNegativeIsSelected($(this).val());
     });
-
+    $('input.hasDatepicker').each(function() {
+        $(this).css('cursor', 'pointer');
+    });
+    $(".date-dismiss").click(function(){
+        $(this).parent().find("input.hasDatepicker").val("");
+    });
+    $(".show-date-button").click(function(){
+        $(this).parent().find("input.hasDatepicker").focus();
+    });
     var showAlternateDiagnosisTbNegativeIsSelected = function (selectedValue) {
         if (selectedValue === "1") {
             $("#tbNegativeControls").show();

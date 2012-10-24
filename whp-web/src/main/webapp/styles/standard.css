@@ -365,6 +365,9 @@ div.buttons a, div.buttons button {
 #search-pane .btn{
     margin-bottom: 10px;
 }
+#search-pane .buttons-group .btn:first-child {
+    margin-left: -10px;
+}
 .search-section-header {
     z-index: 1;
     font-size: 1.1em;
@@ -780,10 +783,14 @@ pre {
 .show-date-button, .clear-date-button {
     cursor: pointer;
 }
+
+#ui-datepicker-div {
+    z-index: 1500 !important;
+}
 /* LOG IN */
 .login-form  {
     width: 570px;
-    margin: 10% auto 0;
+    margin: 7% auto 0;
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;

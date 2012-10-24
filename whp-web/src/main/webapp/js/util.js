@@ -38,11 +38,13 @@ function initializeCollapsiblePane(collapseSectionSelector, headerLinkSelector, 
     $(collapseSectionSelector).accordion({
         collapsible:true,
         icons:icons,
+        heightStyle: "content",
         change:function (event, ui) {
-            if (typeof ui.options.active == "number")
-                $(headerLinkSelector).text(hideText);
-            else
+            if(ui.newHeader.length === 0){
                 $(headerLinkSelector).text(showText);
+            }else{
+                $(headerLinkSelector).text(hideText);
+            }
         }
     });
 }

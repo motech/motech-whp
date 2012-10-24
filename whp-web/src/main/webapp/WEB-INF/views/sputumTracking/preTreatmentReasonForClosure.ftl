@@ -37,8 +37,14 @@
                                     </#list>
                                     </select>
                                     <label class="control-label consultationDate">Consultation Date*</label>
-                                    <input class="span 2" data-date-format="dd/mm/yyyy" id="consultationDate"
-                                           name="consultationDate" type="text" readonly="readonly"/>
+
+                                    <div class="input-prepend input-append">
+                                        <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
+                                        <input class="" placeholder="dd/mm/yyyy" data-date-format="dd/mm/yyyy" id="consultationDate"
+                                               name="consultationDate" type="text" readonly="readonly"/>
+                                        <span class="add-on  date-dismiss"><i class="icon-refresh"></i></span>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
