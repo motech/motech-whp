@@ -6,7 +6,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public enum SputumTrackingInstance {
-    PreTreatment("Pre-treatment"), InTreatment("In-treatment"), EndIP("End of Intensive Phase"), ExtendedIP("Extended IP"), TwoMonthsIntoCP("Two Months Into CP"), EndTreatment("End Treatment");;
+    PreTreatment("Pre-treatment"), InTreatment("In-treatment"), EndIP("End of Intensive Phase"), ExtendedIP("Extended IP"), TwoMonthsIntoCP("Two Months Into CP"), EndTreatment("End Treatment");
 
     public static SputumTrackingInstance[] REGISTRATION_INSTANCES = {PreTreatment, InTreatment};
     public static SputumTrackingInstance[] MAPPING_INSTANCES = {PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment};

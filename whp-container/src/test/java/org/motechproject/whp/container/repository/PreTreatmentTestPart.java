@@ -39,7 +39,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
         Properties queryParams = new Properties();
-        String providerId = "providerId";
+        String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "PreTreatment");
         SputumTrackingInstance preTreatment = PreTreatment;
@@ -63,7 +63,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
         Properties queryParams = new Properties();
-        String providerId = "providerId";
+        String providerId = "providerid";
         String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
         queryParams.put("district", districtName);
@@ -123,8 +123,8 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldCountPreTreatmentContainerTrackingRecordRows(){
-        String providerId1 = "providerId";
-        String providerId2 = "anotherProvider";
+        String providerId1 = "providerid";
+        String providerId2 = "anotherprovider";
         String districtName1 = "East Champaran";
 
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
