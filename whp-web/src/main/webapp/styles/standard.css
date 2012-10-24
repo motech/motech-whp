@@ -154,9 +154,12 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
 }
 
 .sharp, .sharp td, .sharp th {
-    border-color: #000000;
+    border-color: #999;
+    background: none !important;
 }
-
+#IPTreatmentCard thead th {
+    padding: 4px;
+}
 .fixed th, .fixed td {
     width: 13px;
     text-align: center;
@@ -939,4 +942,11 @@ pre {
 }
 .table tr:first-child th:last-child {
     border-top-right-radius: 3px;
+}
+
+/* print specific style */
+@media print {
+    body {
+        background: none;
+    }
 }
