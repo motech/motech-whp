@@ -55,8 +55,9 @@ $(function () {
         $('#reason').val('');
         $('#alternateDiagnosis').val('');
         $("#alternateDiagnosis-autocomplete").val("");
-        $('#consultationDatePicker').val('');
+        $('#consultationDate').val('');
         $("#tbNegativeControls").hide();
+        $("#container-tracking-error").html('');
     }
 
     var today = new Date();
@@ -124,7 +125,7 @@ $(function () {
                     var listOfErrors = JSON.parse(data.responseText).errors;
                     var allErrors = "";
                     $.each(listOfErrors, function(index, element){
-                        allErrors += element + "\n";
+                        allErrors += element + "<br/>";
                     })
                     $("#container-tracking-error").html(allErrors);
                     $("#container-tracking-error").show();
