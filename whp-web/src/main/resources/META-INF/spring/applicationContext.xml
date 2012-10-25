@@ -10,7 +10,7 @@
 
     <context:property-placeholder location="classpath*:message_en.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:httpclient.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:whp.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:ivr.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:dozer.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:seed.properties"  ignore-unresolvable="true"/>
@@ -63,6 +63,7 @@
     <bean id="activeMQDiagnosticsClientConnector" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean">
         <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi"/>
     </bean>
+
     <bean id="configurationDiagnostic" class="org.motechproject.diagnostics.diagnostics.ConfigurationDiagnostic">
         <constructor-arg>
             <map>
