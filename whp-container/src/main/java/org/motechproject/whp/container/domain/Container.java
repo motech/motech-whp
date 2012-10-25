@@ -69,7 +69,7 @@ public class Container extends MotechBaseDataObject {
         this.creationTime = DateUtil.setTimeZone(creationTime);
     }
 
-    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping) {
+    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping, LocalDate consultationDate) {
         setPatientId(patientId);
         setTbId(tbId);
         setDiagnosis(Positive);
@@ -77,6 +77,7 @@ public class Container extends MotechBaseDataObject {
         setStatus(ContainerStatus.Closed);
         updateCurrentTrackingStatus();
         setReasonForClosure(closureReasonForMapping.getCode());
+        setConsultationDate(consultationDate);
     }
 
     public void unMap() {

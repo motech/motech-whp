@@ -31,7 +31,7 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
         Therapy therapy = createTherapy();
         Patient patient = new Patient(patientId, firstName, "Singh", Gender.M, "1234567890");
         Treatment treatment = createTreatment(providerId, providerDistrict);
-        patient.addTreatment(treatment, therapy, dateModified);
+        patient.addTreatment(treatment, therapy, dateModified, dateModified);
         allPatients.add(patient);
         return patient;
     }

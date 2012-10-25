@@ -50,6 +50,17 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
         }
     }
 
+    @Override
+    public void createCase(PatientWebRequest patientWebRequest) {
+        try {
+            validator.validate(patientWebRequest, UpdateScope.createScope);
+            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
+            patientService.createPatient(patientRequest);
+        } catch (WHPRuntimeException e) {
+            throw new WHPCaseException(e);
+        }
+    }
+
     private void formatEmptySmearTestResults(PatientWebRequest patientWebRequest) {
         patientWebRequest.setSmear_test_date_1(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_date_1()));
         patientWebRequest.setSmear_test_date_2(replaceEmptyStringWithNull(patientWebRequest.getSmear_test_date_2()));
@@ -61,16 +72,5 @@ public class PatientWebService extends CaseService<PatientWebRequest> {
 
     private String replaceEmptyStringWithNull(String fieldValue) {
         return StringUtils.isEmpty(fieldValue) ? null : fieldValue;
-    }
-
-    @Override
-    public void createCase(PatientWebRequest patientWebRequest) {
-        try {
-            validator.validate(patientWebRequest, UpdateScope.createScope);
-            PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
-            patientService.createPatient(patientRequest);
-        } catch (WHPRuntimeException e) {
-            throw new WHPCaseException(e);
-        }
     }
 }

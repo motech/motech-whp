@@ -32,5 +32,6 @@
         <disease_class>P</disease_class>
         <weight_instance>PreTreatment</weight_instance>
         <weight>80</weight>
+        <tb_registration_date>01/03/2012</tb_registration_date>
     </update>
 </case>

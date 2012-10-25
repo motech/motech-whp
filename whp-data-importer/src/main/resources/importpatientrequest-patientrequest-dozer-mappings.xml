@@ -15,6 +15,10 @@
             <a>date_modified</a>
             <b>treatmentCreationDate</b>
         </field>
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+            <a>tb_registration_date</a>
+            <b>tb_registration_date</b>
+        </field>
 
         <field custom-converter-id="stringToTreatmentCategory">
             <a>treatment_category</a>

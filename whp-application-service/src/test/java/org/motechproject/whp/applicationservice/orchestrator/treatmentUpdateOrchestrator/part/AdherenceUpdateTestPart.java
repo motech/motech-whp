@@ -12,13 +12,13 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.common.domain.Phase;
 
 import java.util.Collections;
 
@@ -236,7 +236,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
             this.setLastName("lastName");
             this.setGender(Gender.O);
             this.setPhoneNumber("1234567890");
-            this.addTreatment(new PatientBuilder().defaultTreatment(), new PatientBuilder().defaultTherapy(), now());
+            this.addTreatment(new PatientBuilder().defaultTreatment(), new PatientBuilder().defaultTherapy(), now(), now());
         }
 
         @Override

@@ -39,6 +39,11 @@ public class PatientWebRequest {
 
     private String tb_registration_number;
 
+    @NotNullOrEmpty
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
+    private String tb_registration_date;
+
     private String phi;
 
     @NotNullOrEmpty

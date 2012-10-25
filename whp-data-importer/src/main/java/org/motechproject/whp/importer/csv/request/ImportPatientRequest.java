@@ -30,6 +30,11 @@ public class ImportPatientRequest {
     @ColumnName(name = "Registration date")
     private String date_modified;
 
+    @NotNullOrEmpty
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
+    @ColumnName(name = "TB Registration date*")
+    private String tb_registration_date;
+
     @ColumnName(name = "Patient TB Registration Number*")
     private String tb_registration_number;
 

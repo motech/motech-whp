@@ -11,6 +11,10 @@
             <b>date_modified</b>
         </field>
         <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+            <a>tb_registration_date</a>
+            <b>tb_registration_date</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
             <a>date_modified</a>
             <b>treatmentCreationDate</b>
         </field>

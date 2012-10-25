@@ -35,7 +35,7 @@ public class PatientTest {
     public void shouldSetTreatmentAddedAsCurrentTreatment() {
         Patient patient = patient();
         Treatment treatment = treatment();
-        patient.addTreatment(treatment, now());
+        patient.addTreatment(treatment, now(), now());
         assertEquals(treatment, patient.getCurrentTreatment());
     }
 
@@ -43,7 +43,7 @@ public class PatientTest {
     public void shouldUpdateTreatmentHistoryWhenNewTreatmentIdAdded() {
         Patient patient = patient();
         Treatment firstTreatment = patient.getCurrentTreatment();
-        patient.addTreatment(treatment(), now());
+        patient.addTreatment(treatment(), now(), now());
 
         assertArrayEquals(new Object[]{firstTreatment}, patient.getTreatmentHistory().toArray());
     }
@@ -58,7 +58,7 @@ public class PatientTest {
     public void shouldAddCurrentTreatmentToHistoryWhenNewTreatmentIsAdded() {
         Patient patient = patient();
         Treatment treatment = patient.getCurrentTreatment();
-        patient.addTreatment(treatment(), now());
+        patient.addTreatment(treatment(), now(), now());
 
         assertArrayEquals(new Object[]{treatment}, patient.getTreatmentHistory().toArray());
     }
@@ -184,11 +184,11 @@ public class PatientTest {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
-        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
-        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
 
         assertEquals(currentTreatment, patient.getTreatment(date(2012, 4, 1)));
     }
@@ -198,11 +198,11 @@ public class PatientTest {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
-        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
-        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
 
         assertEquals(currentTreatment, patient.getTreatment(date(2012, 4, 2)));
     }
@@ -213,10 +213,10 @@ public class PatientTest {
         Treatment firstTreatment = patient.getCurrentTreatment();
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
-        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1));
+        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
-        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1));
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1), now());
 
         assertEquals(firstTreatment, patient.getTreatment(date(2011, 12, 1)));
     }
@@ -227,10 +227,10 @@ public class PatientTest {
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
         Treatment secondTreatment = new TreatmentBuilder().withDefaults().build();
-        patient.addTreatment(secondTreatment, dateTime(2011, 12, 1));
+        patient.addTreatment(secondTreatment, dateTime(2011, 12, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
-        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1));
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1), now());
 
         assertEquals(secondTreatment, patient.getTreatment(date(2011, 12, 1)));
     }
@@ -247,7 +247,7 @@ public class PatientTest {
         patient.setOnActiveTreatment(false);
 
         Treatment treatment = treatment();
-        patient.addTreatment(treatment, now());
+        patient.addTreatment(treatment, now(), now());
 
         assertTrue(patient.isOnActiveTreatment());
     }
@@ -440,7 +440,7 @@ public class PatientTest {
     @Test
     public void shouldReturnFalseIfHasCurrentTherapyAndAdherenceProvidedForOldTherapy() {
         Patient patient = new PatientBuilder().withDefaults().withAdherenceProvidedForLastWeek().build();
-        patient.addTreatment(new Treatment(), new Therapy(), DateUtil.now());
+        patient.addTreatment(new Treatment(), new Therapy(), DateUtil.now(), now());
         assertFalse(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
     }
 
@@ -448,7 +448,7 @@ public class PatientTest {
     public void addingNewTherapyShouldResetLastAdherenceProvidedWeekStartDate() {
         Patient patient = patient();
         patient.setLastAdherenceWeekStartDate(new LocalDate(2012, 7, 7));
-        patient.addTreatment(new Treatment(), new Therapy(), now());
+        patient.addTreatment(new Treatment(), new Therapy(), now(), now());
         assertNull(patient.getLastAdherenceWeekStartDate());
     }
 
@@ -503,11 +503,11 @@ public class PatientTest {
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
-        patient.addTreatment(treatment2, dateTime(2012, 1, 1));
+        patient.addTreatment(treatment2, dateTime(2012, 1, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
-        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
 
         assertThat(patient.getTreatmentHistory(), hasItems(treatment1, treatment2));
         assertThat(patient.getTreatmentHistory().size(), is(2));
@@ -520,11 +520,11 @@ public class PatientTest {
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
-        patient.addTreatment(treatment2, dateTime(2012, 1, 1));
+        patient.addTreatment(treatment2, dateTime(2012, 1, 1), now());
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
-        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1));
+        patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
 
         assertThat(patient.getAllTreatments(), hasItems(treatment1, treatment2, currentTreatment));
         assertThat(patient.getAllTreatments().size(), is(3));
@@ -591,7 +591,7 @@ public class PatientTest {
         closedTherapy.addTreatment(currentTreatment, now());
 
         Treatment dummy = new TreatmentBuilder().withDefaults().build();
-        patient.addTreatment(dummy, closedTherapy, now());
+        patient.addTreatment(dummy, closedTherapy, now(), now());
         patient.getCurrentTreatment().setTbId(currentTherapyCurrentTreatment);
 
         //Assertions

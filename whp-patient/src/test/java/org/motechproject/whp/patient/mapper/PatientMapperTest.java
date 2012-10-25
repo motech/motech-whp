@@ -179,7 +179,8 @@ public class PatientMapperTest {
         Therapy therapy = patient.getCurrentTherapy();
         Treatment treatment = patient.getCurrentTreatment();
 
-        assertEquals(updateRequest.getDate_modified().toLocalDate(), treatment.getStartDate());
+        assertEquals(updateRequest.getTb_registration_date().toLocalDate(), treatment.getStartDate());
+        assertEquals(updateRequest.getDate_modified(), patient.getLastModifiedDate());
         assertEquals(updateRequest.getAddress(), treatment.getPatientAddress());
         assertEquals(updateRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(updateRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
@@ -190,11 +191,10 @@ public class PatientMapperTest {
 
         assertEquals(updateRequest.getWeightStatistics().size() + 1, treatment.getWeightStatistics().size());
         assertEquals(updateRequest.getWeightStatistics().get(0), treatment.getWeightStatistics().get(1));
-
     }
 
     @Test
-    public void shouldSetProviderDistrictOnCreatingNewTreament(){
+    public void shouldSetProviderDistrictOnCreatingNewTreatment(){
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withPatientAge(50)
@@ -223,7 +223,7 @@ public class PatientMapperTest {
     }
 
     private void assertTreatment(PatientRequest patientRequest, Address address, Treatment treatment) {
-        assertEquals(patientRequest.getDate_modified().toLocalDate(), treatment.getStartDate());
+        assertEquals(patientRequest.getTb_registration_date().toLocalDate(), treatment.getStartDate());
         assertEquals(patientRequest.getTb_id().toLowerCase(), treatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), treatment.getProviderId());
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());

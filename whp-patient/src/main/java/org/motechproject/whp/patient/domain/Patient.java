@@ -55,16 +55,16 @@ public class Patient extends MotechBaseDataObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public void addTreatment(Treatment treatment, DateTime dateModified) {
-        currentTherapy.addTreatment(treatment, dateModified);
+    public void addTreatment(Treatment treatment, DateTime tbRegistrationDate, DateTime lastModifiedDate) {
+        currentTherapy.addTreatment(treatment, tbRegistrationDate);
 
-        setLastModifiedDate(dateModified);
+        setLastModifiedDate(lastModifiedDate);
         onActiveTreatment = true;
     }
 
-    public void addTreatment(Treatment treatment, Therapy therapy, DateTime dateModified) {
+    public void addTreatment(Treatment treatment, Therapy therapy, DateTime tbRegistrationDate, DateTime lastModifiedDate) {
         addTherapy(therapy);
-        addTreatment(treatment, dateModified);
+        addTreatment(treatment, tbRegistrationDate, lastModifiedDate);
     }
 
     private void addTherapy(Therapy therapy) {

@@ -141,14 +141,55 @@ public class ContainerPatientMappingRequestValidatorTest {
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(anyString())).thenReturn(container);
 
-        when(containerService.exists(request.getCase_id())).thenReturn(true);
-
         Patient patient = new PatientBuilder().withDefaults().build();
         patient.getCurrentTreatment().setTbId(request.getTb_id());
         when(patientService.findByPatientId(anyString())).thenReturn(patient);
         List<WHPError> validationErrors = validator.validate(request);
 
         assertTrue(validationErrors.contains(new WHPError(INVALID_SPUTUM_TEST_INSTANCE)));
+    }
+
+    @Test
+    public void shouldReturnValidationError_whenTbRegistrationDateIsPassedForInTreatmentPhases() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        request.setSmear_sample_instance(SampleInstance.ExtendedIP.name());
+        request.setTb_registration_date("20/11/1985");
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentTreatment().setTbId(request.getTb_id());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+
+        List<WHPError> validationErrors = validator.validate(request);
+
+        assertTrue(validationErrors.contains(new WHPError(UNEXPECTED_TB_REGISTRATION_DATE)));
+    }
+
+    @Test
+    public void shouldReturnValidationError_whenTbRegistrationDateIsNotPassedForPreTreatmentPhases() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        request.setSmear_sample_instance(SampleInstance.PreTreatment.name());
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentTreatment().setTbId(request.getTb_id());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+
+        List<WHPError> validationErrors = validator.validate(request);
+
+        assertTrue(validationErrors.contains(new WHPError(NULL_VALUE_IN_TB_REGISTRATION_DATE)));
     }
 
     private ContainerPatientMappingWebRequest buildTestRequest() {

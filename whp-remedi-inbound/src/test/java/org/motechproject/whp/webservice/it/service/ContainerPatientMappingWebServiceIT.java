@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice.it.service;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,7 +119,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldNotUnMapContainerFromPreviousPatient_uponMappingValidationFailure() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure());
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate());
         container2.setLabResults(null);
         allContainers.update(container1);
         allContainers.update(container2);
@@ -189,7 +190,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldUnMapPatientFromContainer_forUnMappingRequest() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure());
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate());
         allContainers.update(container1);
 
         String unMapContainer1 = buildUnMappingRequestFor(CONTAINER_ID_1);
@@ -238,6 +239,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
                 "<patient_id>" + patientId + "</patient_id>\n" +
                 "<tb_id>" + patientId + "</tb_id>\n" +
                 "<smear_sample_instance>PreTreatment</smear_sample_instance>\n" +
+                "<tb_registration_date>20/11/1986</tb_registration_date>\n" +
                 "</update>\n" +
                 "</case>";
     }

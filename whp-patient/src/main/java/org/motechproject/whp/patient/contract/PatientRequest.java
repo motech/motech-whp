@@ -30,6 +30,7 @@ public class PatientRequest {
     private DateTime treatmentCreationDate;
     private DiseaseClass disease_class;
     private String tb_registration_number;
+    private DateTime tb_registration_date;
 
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
@@ -106,6 +107,11 @@ public class PatientRequest {
 
     public PatientRequest setDateModified(DateTime dateModified) {
         this.date_modified = dateModified;
+        return this;
+    }
+
+    public PatientRequest setTbRegistrationDate(DateTime tb_registration_date) {
+        this.tb_registration_date = tb_registration_date;
         return this;
     }
 

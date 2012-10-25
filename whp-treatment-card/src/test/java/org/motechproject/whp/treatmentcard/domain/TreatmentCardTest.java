@@ -1,6 +1,5 @@
 package org.motechproject.whp.treatmentcard.domain;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.adherence.domain.Adherence;
@@ -20,6 +19,7 @@ import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.util.DateUtil.newDate;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 
@@ -48,9 +48,9 @@ public class TreatmentCardTest {
         LocalDate currentTreatmentStartDate = new LocalDate(2012, 2, 1);
         Treatment currentTreatment = new TreatmentBuilder().withStartDate(currentTreatmentStartDate).withProviderId("p1").build();
 
-        patient.addTreatment(firstTreatment, therapy, firstTreatmentStartDate.toDateTimeAtCurrentTime());
-        patient.addTreatment(pastTreatment2, secondTreatmentStartDate.toDateTimeAtCurrentTime());
-        patient.addTreatment(currentTreatment, currentTreatmentStartDate.toDateTimeAtCurrentTime());
+        patient.addTreatment(firstTreatment, therapy, firstTreatmentStartDate.toDateTimeAtCurrentTime(), now());
+        patient.addTreatment(pastTreatment2, secondTreatmentStartDate.toDateTimeAtCurrentTime(), now());
+        patient.addTreatment(currentTreatment, currentTreatmentStartDate.toDateTimeAtCurrentTime(), now());
 
         TreatmentCard treatmentCard = new TreatmentCard(patient);
         List<TreatmentHistory> treatmentHistories = treatmentCard.getTreatmentHistories();
@@ -70,7 +70,7 @@ public class TreatmentCardTest {
 
         Treatment currentTreatment = new TreatmentBuilder().withStartDate(currentTreatmentStartDate).withProviderId("p1").build();
 
-        patient.addTreatment(currentTreatment, therapy, currentTreatmentStartDate.toDateTimeAtCurrentTime());
+        patient.addTreatment(currentTreatment, therapy, currentTreatmentStartDate.toDateTimeAtCurrentTime(), now());
 
         assertTrue(new TreatmentCard(patient).getTreatmentHistories().isEmpty());
     }
@@ -102,8 +102,8 @@ public class TreatmentCardTest {
         currentTreatment.pause("testing", currentTreatmentPauseDate.toDateTimeAtCurrentTime());
         currentTreatment.resume("testing", currentTreatmentResumeDate.toDateTimeAtCurrentTime());
 
-        patient.addTreatment(firstTreatment, therapy, firstTreatmentStartDate.toDateTimeAtCurrentTime());
-        patient.addTreatment(currentTreatment, currentTreatmentStartDate.toDateTimeAtCurrentTime());
+        patient.addTreatment(firstTreatment, therapy, firstTreatmentStartDate.toDateTimeAtCurrentTime(), now());
+        patient.addTreatment(currentTreatment, currentTreatmentStartDate.toDateTimeAtCurrentTime(), now());
 
         TreatmentCard treatmentCard = new TreatmentCard(patient);
         assertThat(treatmentCard.getTreatmentPausePeriods(), is(asList(

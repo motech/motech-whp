@@ -183,12 +183,12 @@ public class Therapy implements Serializable {
         return phases.hasBeenOnCp();
     }
 
-    public void addTreatment(Treatment treatment, DateTime dateModified) {
+    public void addTreatment(Treatment treatment, DateTime tbRegistrationDate) {
         if (currentTreatment != null) {
             treatments.add(currentTreatment);
         }
         currentTreatment = treatment;
-        treatment.setStartDate(dateModified.toLocalDate());
+        treatment.setStartDate(tbRegistrationDate.toLocalDate());
     }
 
     @JsonIgnore

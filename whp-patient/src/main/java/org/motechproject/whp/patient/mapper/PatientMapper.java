@@ -23,14 +23,14 @@ public class PatientMapper {
         therapy.setCreationDate(patientRequest.getTreatmentCreationDate());
 
         Treatment treatment = createTreatment(patientRequest, patientRequest.getAddress());
-        patient.addTreatment(treatment, therapy, patientRequest.getDate_modified());
+        patient.addTreatment(treatment, therapy, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
         return patient;
     }
 
     public void mapNewTreatmentForCategoryChange(PatientRequest patientRequest, Patient patient) {
         Therapy newTherapy = new Therapy(patientRequest.getTreatment_category(), patientRequest.getDisease_class(), patient.getAge());
         Treatment treatment = createTreatment(patientRequest, patient.getCurrentTreatment().getPatientAddress());
-        patient.addTreatment(treatment, newTherapy, patientRequest.getDate_modified());
+        patient.addTreatment(treatment, newTherapy, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
     }
 
     public void mapTreatmentForTransferIn(PatientRequest patientRequest, Patient patient) {
@@ -40,7 +40,7 @@ public class PatientMapper {
             patient.getCurrentTherapy().setDiseaseClass(patientRequest.getDisease_class());
         }
 
-        patient.addTreatment(newTreatment, patientRequest.getDate_modified());
+        patient.addTreatment(newTreatment, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
     }
 
     public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
@@ -53,6 +53,8 @@ public class PatientMapper {
             patient.setPhoneNumber(patientRequest.getMobile_number());
         if (patientRequest.getTb_registration_number() != null)
             patient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
+        if (patientRequest.getTb_registration_date() != null)
+            treatment.setStartDate(patientRequest.getTb_registration_date().toLocalDate());
 
         setPatientAddress(treatment, patientRequest.getAddress());
         updateTestResults(patientRequest, treatment);
@@ -81,7 +83,7 @@ public class PatientMapper {
     Treatment createTreatment(PatientRequest patientRequest, Address address) {
         String providerId = patientRequest.getProvider_id();
         Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
-        treatment.setStartDate(patientRequest.getDate_modified().toLocalDate());
+        treatment.setStartDate(patientRequest.getTb_registration_date().toLocalDate());
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
         treatment.setWeightStatistics(patientRequest.getWeightStatistics());

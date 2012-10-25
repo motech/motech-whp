@@ -17,6 +17,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
@@ -146,7 +147,7 @@ public class PatientInfoTest {
                 .withWeightStatistics(weightStatistics)
                 .build();
 
-        patient.addTreatment(treatment,DateUtil.now());
+        patient.addTreatment(treatment, now(), now());
 
         PatientInfo patientInfo = new PatientInfo(patient, provider);
         assertThat(patientInfo.getTestResults().size(),is(2));

@@ -10,6 +10,7 @@ import org.motechproject.whp.webservice.validation.APIKeyValidator;
 
 import javax.validation.constraints.Pattern;
 
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
@@ -25,6 +26,9 @@ public class ContainerPatientMappingWebRequest {
     @NotNullOrEmpty
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String date_modified;
+
+    @DateTimeFormat(pattern = DATE_FORMAT)
+    private String tb_registration_date;
 
     @NotNullOrEmpty
     @Pattern(regexp = "patient_mapping")

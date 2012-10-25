@@ -16,5 +16,6 @@
         <disease_class>P</disease_class>
         <provider_id>%s</provider_id>
         <patient_type>Relapse</patient_type>
+        <tb_registration_date>01/03/2012</tb_registration_date>
     </update>
 </case>

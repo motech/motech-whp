@@ -72,15 +72,15 @@ public class WHPAdherenceServiceTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         Treatment treatment0 = new TreatmentBuilder().withDefaults().withProviderId("provider0").withTbId("tb0").build();
-        patient.addTreatment(treatment0, datetime(1, 10, 2011));
+        patient.addTreatment(treatment0, datetime(1, 10, 2011), datetime(1, 10, 2011));
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 12, 2011));
 
         Treatment treatment1 = new TreatmentBuilder().withDefaults().withProviderId("provider1").withTbId("tb1").build();
-        patient.addTreatment(treatment1, datetime(1, 1, 2012));
+        patient.addTreatment(treatment1, datetime(1, 1, 2012), datetime(1, 10, 2012));
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 2, 2012));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().withProviderId("provider2").withTbId("tb2").build();
-        patient.addTreatment(treatment2, datetime(15, 2, 2012));
+        patient.addTreatment(treatment2, datetime(15, 2, 2012), datetime(1, 10, 2011));
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();
         request.setPatientId(PATIENT_ID);
@@ -107,15 +107,15 @@ public class WHPAdherenceServiceTest {
         Patient patient = new PatientBuilder().withDefaults().build();
 
         Treatment treatment0 = new TreatmentBuilder().withDefaults().withProviderId("provider0").withTbId("tb0").build();
-        patient.addTreatment(treatment0, datetime(1, 10, 2011));
+        patient.addTreatment(treatment0, datetime(1, 10, 2011), datetime(1, 10, 2011));
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 12, 2011));
 
         Treatment treatment1 = new TreatmentBuilder().withDefaults().withProviderId("provider1").withTbId("tb1").build();
-        patient.addTreatment(treatment1, datetime(1, 1, 2012));
+        patient.addTreatment(treatment1, datetime(1, 1, 2012), datetime(1, 1, 2012));
         patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, datetime(1, 2, 2012));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().withProviderId("provider2").withTbId("tb2").build();
-        patient.addTreatment(treatment2, datetime(15, 2, 2012));
+        patient.addTreatment(treatment2, datetime(15, 2, 2012), datetime(15, 2, 2012));
 
         UpdateAdherenceRequest request = new UpdateAdherenceRequest();
         request.setPatientId(PATIENT_ID);

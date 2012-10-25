@@ -1,14 +1,17 @@
 package org.motechproject.whp.webservice.service;
 
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.motechproject.casexml.service.CaseService;
 import org.motechproject.casexml.service.exception.CaseException;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 import org.motechproject.whp.webservice.validation.ContainerPatientMappingRequestValidator;
@@ -45,7 +48,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             container.unMap();
         } else {
             ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
-            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping);
+            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, inDesiredFormat(request));
         }
         containerService.update(container);
     }
@@ -58,5 +61,9 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
     @Override
     public void createCase(ContainerPatientMappingWebRequest request) throws CaseException {
         throw new CaseException("containerPatientMapping does not support Create Case", NOT_IMPLEMENTED);
+    }
+
+    private LocalDate inDesiredFormat(ContainerPatientMappingWebRequest request) {
+        return LocalDate.parse(request.getTb_registration_date(), DateTimeFormat.forPattern(WHPDate.DATE_FORMAT));
     }
 }

@@ -10,7 +10,6 @@ import org.motechproject.decisiontree.FlowSession;
 import org.motechproject.decisiontree.model.Node;
 import org.motechproject.decisiontree.model.Prompt;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.builder.PromptBuilder;
@@ -25,13 +24,8 @@ import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.patient.domain.Gender;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import java.util.List;
@@ -46,6 +40,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
 import static org.motechproject.whp.ivr.prompts.CallCompletionPrompts.callCompletionPromptsAfterCapturingAdherence;
 import static org.motechproject.whp.ivr.prompts.CaptureAdherencePrompts.captureAdherencePrompts;
@@ -584,7 +579,7 @@ public class AdherenceCaptureTransitionTest extends BaseUnitTest {
         Therapy therapy = new Therapy(treatmentCategory, DiseaseClass.P, 20);
         Patient patient = new Patient(patientId, "", "", Gender.F, "");
         Treatment treatment = new TreatmentBuilder().withProviderId(providerId).build();
-        patient.addTreatment(treatment, therapy, DateUtil.now());
+        patient.addTreatment(treatment, therapy, now(), now());
         return patient;
     }
 

@@ -28,7 +28,9 @@ public enum WHPErrorCode {
     NO_SUCH_TREATMENT_EXISTS("No such treatment exists for patient"),
     INVALID_PHONE_NUMBER("No provider found for the given phone number"),
     CONTAINER_ALREADY_REGISTERED("The container Id is already registered"),
-    INVALID_PHASE("Phase should be one of [PreTreatment, InTreatment]");
+    INVALID_PHASE("Phase should be one of [PreTreatment, InTreatment]"),
+    UNEXPECTED_TB_REGISTRATION_DATE("TB Registration date is not expected for InTreatment phase"),
+    NULL_VALUE_IN_TB_REGISTRATION_DATE("TB Registration date is expected for PreTreatment phase");
 
     private String message;
 

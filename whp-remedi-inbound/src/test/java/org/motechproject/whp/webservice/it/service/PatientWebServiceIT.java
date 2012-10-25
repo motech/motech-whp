@@ -135,6 +135,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
         DateTime dateModified = DateUtil.now();
+        DateTime tbRegistrationDate = DateUtil.now().plusDays(1);
 
         //first closing current treatment
         PatientWebRequest closeRequest = new PatientWebRequestBuilder()
@@ -146,6 +147,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         PatientWebRequest transferInRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
                 .withDate_Modified(dateModified)
+                .withTbRegistartionDate(tbRegistrationDate)
                 .build();
         Provider newProvider = new Provider(transferInRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
         allProviders.add(newProvider);
@@ -156,7 +158,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
         assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-        assertEquals(dateModified.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
+        assertEquals(tbRegistrationDate.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
         assertEquals(patient.getCurrentTherapy().getUid(), updatedPatient.getCurrentTherapy().getUid());
 
         assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
@@ -347,6 +349,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
                 .build();
         patientWebRequest.setTreatmentData(null, simpleUpdateRequest.getTb_id(), null, null, "50", null);
         simpleUpdateRequest.setDate_modified("15/10/2010 10:10:10");
+        simpleUpdateRequest.setTb_registration_date("17/10/2010 10:10:10");
         simpleUpdateRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         simpleUpdateRequest.setPatientInfo(simpleUpdateRequest.getCase_id(), null, null, null, null, "9087654321", null);
 

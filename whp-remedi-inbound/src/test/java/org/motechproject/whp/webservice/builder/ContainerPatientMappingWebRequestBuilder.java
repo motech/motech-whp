@@ -4,8 +4,6 @@ package org.motechproject.whp.webservice.builder;
 import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
-import static org.motechproject.util.DateUtil.now;
-
 public class ContainerPatientMappingWebRequestBuilder {
 
     private ContainerPatientMappingWebRequest mappingWebRequest = new ContainerPatientMappingWebRequest();
@@ -47,6 +45,11 @@ public class ContainerPatientMappingWebRequestBuilder {
 
     public ContainerPatientMappingWebRequestBuilder withInstance(String instance) {
         mappingWebRequest.setSmear_sample_instance(instance);
+        return this;
+    }
+
+    public ContainerPatientMappingWebRequestBuilder withTbRegistrationDate(String tbRegistrationDate) {
+        mappingWebRequest.setTb_registration_date(tbRegistrationDate);
         return this;
     }
 }

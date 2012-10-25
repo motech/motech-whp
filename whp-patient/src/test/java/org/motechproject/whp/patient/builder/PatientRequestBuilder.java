@@ -36,7 +36,8 @@ public class PatientRequestBuilder {
                 .addSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setWeightStatistics(SampleInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
-                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
+                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
+                .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
         return this;
     }
 
@@ -46,7 +47,8 @@ public class PatientRequestBuilder {
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .addSmearTestResults(SampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative, "labName", "labNumber")
                 .setWeightStatistics(SampleInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
-                .setTreatmentData(null, TB_ID, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
+                .setTreatmentData(null, TB_ID, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0))
+                .setTbRegistrationDate(now());
         return this;
     }
 
@@ -54,6 +56,7 @@ public class PatientRequestBuilder {
         patientRequest.setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50));
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
+        patientRequest.setTbRegistrationDate(now());
         patientRequest.setTb_id("tbid");
         patientRequest.setTreatment_category(category10);
         patientRequest.setProvider_id("newproviderid");
@@ -71,6 +74,7 @@ public class PatientRequestBuilder {
         patientRequest.setTb_id(TB_ID);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Close);
         patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
+        patientRequest.setTbRegistrationDate(now().minusDays(3));
         return this;
     }
 
@@ -96,6 +100,7 @@ public class PatientRequestBuilder {
         patientRequest.setProvider_id(NEW_PROVIDER_ID);
         patientRequest.setCase_id(PATIENT_ID);
         patientRequest.setDate_modified(now());
+        patientRequest.setTbRegistrationDate(now());
         patientRequest.setTb_id(NEW_TB_ID);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
         patientRequest.setPatient_type(PatientType.TransferredIn);
@@ -109,7 +114,8 @@ public class PatientRequestBuilder {
                 .setTreatmentData(category, TB_ID, "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
                 .addSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
+                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
+                .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
         return this;
     }
 
@@ -193,4 +199,8 @@ public class PatientRequestBuilder {
         return this;
     }
 
+    public PatientRequestBuilder withTbRegistrationDate(DateTime dateTime) {
+        patientRequest.setTbRegistrationDate(dateTime);
+        return this;
+    }
 }

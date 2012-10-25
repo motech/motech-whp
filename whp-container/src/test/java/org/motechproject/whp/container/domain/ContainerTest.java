@@ -34,8 +34,9 @@ public class ContainerTest {
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         String tbId = "tbId";
+        LocalDate consultationDate = new LocalDate(2011, 11, 23);
 
-        container.mapWith(patientId, tbId, instance, new ReasonForContainerClosure("some reason", "0"));
+        container.mapWith(patientId, tbId, instance, new ReasonForContainerClosure("some reason", "0"), consultationDate);
 
         assertEquals(patientId, container.getPatientId());
         assertEquals(ContainerStatus.Closed, container.getStatus());
@@ -44,13 +45,14 @@ public class ContainerTest {
         assertEquals(Positive, container.getDiagnosis());
         assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
         assertEquals("0", container.getReasonForClosure());
+        assertEquals(consultationDate, container.getConsultationDate());
     }
 
     @Test
     public void shouldUnMapContainer() {
         Container container = new Container();
         container.setConsultationDate(new LocalDate());
-        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP, new ReasonForContainerClosure("some reason", "123"));
+        container.mapWith("patientid", "tbId", SputumTrackingInstance.ExtendedIP, new ReasonForContainerClosure("some reason", "123"), new LocalDate());
 
         container.unMap();
 

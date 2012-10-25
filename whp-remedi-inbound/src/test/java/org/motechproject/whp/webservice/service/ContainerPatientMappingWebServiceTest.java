@@ -1,5 +1,7 @@
 package org.motechproject.whp.webservice.service;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -67,7 +69,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
         container.setLabResults(labResults);
-        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP, mock(ReasonForContainerClosure.class));
+        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP, mock(ReasonForContainerClosure.class), new LocalDate());
 
         Patient patient = new PatientBuilder().withDefaults().build();
         String tbId = request.getTb_id();
@@ -90,6 +92,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     @Test
     public void shouldMapContainerWithPatientInstance_forMappingRequest() {
         ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("some reason", "0");
+        DateTime tbRegistrationDate = new DateTime(1986, 11, 20, 0, 0, 0);
 
         ContainerPatientMappingWebRequest request = buildMappingRequest();
 
@@ -118,6 +121,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         assertEquals(request.getSmear_sample_instance(), fetchedContainer.getMappingInstance().name());
         assertEquals(request.getTb_id(),fetchedContainer.getTbId());
         assertEquals(reasonForContainerClosure.getCode(),fetchedContainer.getReasonForClosure());
+        assertEquals(tbRegistrationDate.toLocalDate(),fetchedContainer.getConsultationDate());
     }
 
     private ContainerPatientMappingWebRequest buildMappingRequest() {
@@ -127,6 +131,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
                 .withInstance(SampleInstance.PreTreatment.name())
                 .withPatientId("patient")
                 .withTbId("test")
+                .withTbRegistrationDate("20/11/1986")
                 .build();
     }
 

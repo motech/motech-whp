@@ -40,7 +40,7 @@ public class PatientBuilder {
         patient.setLastName("lastName");
         patient.setGender(Gender.O);
         patient.setPhoneNumber("1234567890");
-        patient.addTreatment(defaultTreatment(), defaultTherapy(), now());
+        patient.addTreatment(defaultTreatment(), defaultTherapy(), now(), now());
         return this;
     }
 

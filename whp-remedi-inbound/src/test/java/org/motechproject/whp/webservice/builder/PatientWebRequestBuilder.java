@@ -27,6 +27,7 @@ public class PatientWebRequestBuilder {
                 .setWeightStatistics(SampleInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("10/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
     }
@@ -39,6 +40,7 @@ public class PatientWebRequestBuilder {
                 .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, TB_ID, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         return this;
     }
@@ -49,6 +51,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentData("01", "tbtbtbtbtbt", "elevenDigit", null, null, null)
                 .setTreatmentUpdateData(TreatmentUpdateScenario.Close.name(), "Cured");
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setPatient_type("TransferredIn");
         return this;
@@ -62,6 +65,7 @@ public class PatientWebRequestBuilder {
                 .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7");
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setPatient_type("TransferredIn");
         return this;
@@ -73,6 +77,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentData(null, TB_ID, "newProviderId", null, null, null);
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setReason("Chillaxing");
         return this;
@@ -84,6 +89,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentData(null, TB_ID, "newProviderId", null, null, null);
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setReason("Coz he shouldn die");
         return this;
@@ -94,6 +100,7 @@ public class PatientWebRequestBuilder {
                 .setTreatmentUpdateData("Close", "Died");
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010 10:10:10");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setTb_id(TB_ID);
         return this;
@@ -185,6 +192,11 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDate_Modified(DateTime date_modified) {
         patientWebRequest.setDate_modified(date_modified.toString(DATE_TIME_FORMAT));
+        return this;
+    }
+
+    public PatientWebRequestBuilder withTbRegistartionDate(DateTime tbRegistartionDate) {
+        patientWebRequest.setTb_registration_date(tbRegistartionDate.toString(DATE_TIME_FORMAT));
         return this;
     }
 

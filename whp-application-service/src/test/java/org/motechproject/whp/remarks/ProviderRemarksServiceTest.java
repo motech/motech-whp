@@ -48,11 +48,11 @@ public class ProviderRemarksServiceTest {
 
         Patient patient = new Patient();
         DateTime now = DateUtil.now();
-        patient.addTreatment(treatmentUnderOldTherapy1, new Therapy(), now.minusMonths(2));
+        patient.addTreatment(treatmentUnderOldTherapy1, new Therapy(), now.minusMonths(2), now.minusMonths(2));
         patient.closeCurrentTreatment(TreatmentOutcome.Died, now.minusMonths(1));
 
-        patient.addTreatment(treatmentUnderCurrentTherapy1, new Therapy(), now.minusDays(15));
-        patient.addTreatment(treatmentUnderCurrentTherapy2,now);
+        patient.addTreatment(treatmentUnderCurrentTherapy1, new Therapy(), now.minusDays(15), now.minusDays(15));
+        patient.addTreatment(treatmentUnderCurrentTherapy2,now, now);
 
         List<AuditLog> auditLogs = mock(List.class);
         when(allWeeklyAdherenceAuditLogs.findByTbIdsWithRemarks(any(List.class))).thenReturn(auditLogs);
