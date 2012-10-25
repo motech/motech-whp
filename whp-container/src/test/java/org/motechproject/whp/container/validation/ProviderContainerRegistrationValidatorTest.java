@@ -61,7 +61,7 @@ public class ProviderContainerRegistrationValidatorTest {
         List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
 
         assertThat(validationErrors.size(), is(1));
-        assertThat(validationErrors, hasItem(new ErrorWithParameters("container.id.invalid.error", containerId)));
+        assertThat(validationErrors, hasItem(new ErrorWithParameters("provider.container.id.invalid.error", containerId)));
         verify(providerContainerMappingService).isValidContainerForProvider(validProvider.getProviderId(), containerId);
     }
 
@@ -101,7 +101,6 @@ public class ProviderContainerRegistrationValidatorTest {
         verify(containerRegistrationRequestValidator).validate(registrationRequest);
         verifyZeroInteractions(providerContainerMappingService);
     }
-
 
     @After
     public void tearDown() {

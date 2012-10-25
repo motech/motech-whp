@@ -28,7 +28,7 @@ public class ProviderContainerRegistrationValidator implements ContainerRegistra
         }
 
         if(!providerContainerMappingService.isValidContainerForProvider(registrationRequest.getProviderId(), registrationRequest.getContainerId())) {
-            errors.add(new ErrorWithParameters("container.id.invalid.error", registrationRequest.getContainerId()));
+            errors.add(new ErrorWithParameters("provider.container.id.invalid.error", registrationRequest.getContainerId()));
             return errors;
         }
 

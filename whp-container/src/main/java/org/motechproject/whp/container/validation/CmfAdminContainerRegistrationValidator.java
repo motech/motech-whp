@@ -34,14 +34,14 @@ public class CmfAdminContainerRegistrationValidator implements ContainerRegistra
 
         if(request.getContainerRegistrationMode() == NEW_CONTAINER){
             if(!adminContainerMappingService.isValidContainer(Long.parseLong(request.getContainerId()))) {
-                errors.add(new ErrorWithParameters("container.id.invalid.error", request.getContainerId()));
+                errors.add(new ErrorWithParameters("admin.container.id.invalid.error", request.getContainerId()));
             }
             return errors;
         }
 
         if(request.getContainerRegistrationMode() == ON_BEHALF_OF_PROVIDER){
             if(!providerContainerMappingService.isValidContainerForProvider(request.getProviderId(), request.getContainerId())) {
-                errors.add(new ErrorWithParameters("container.id.invalid.error", request.getContainerId()));
+                errors.add(new ErrorWithParameters("provider.container.id.invalid.error", request.getContainerId()));
             }
             return errors;
         }

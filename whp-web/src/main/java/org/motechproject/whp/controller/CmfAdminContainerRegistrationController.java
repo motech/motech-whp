@@ -3,9 +3,10 @@ package org.motechproject.whp.controller;
 import freemarker.template.TemplateException;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
-import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
+import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
+import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,20 +29,31 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
         super(containerService, cmfAdminContainerRegistrationValidator, sputumTrackingProperties);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String show(Model uiModel, HttpServletRequest request) {
+    @RequestMapping(value = "/new-container", method = RequestMethod.GET)
+    public String newContainer(Model uiModel, HttpServletRequest request) {
         populateViewDetails(uiModel, request);
-        return "containerRegistration/showForCMFAdmin";
+        return "containerRegistration/cmfAdminNewContainerRegistration";
+    }
+
+    @RequestMapping(value = "/on-behalf-of-provider", method = RequestMethod.GET)
+    public String onBehalfOfProvider(Model uiModel, HttpServletRequest request) {
+        populateViewDetails(uiModel, request);
+        return "containerRegistration/cmfAdminContainerRegistrationBehalfOfProvider";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(Model uiModel, CmfAdminContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) throws IOException, TemplateException {
-        if (validate(uiModel, registrationRequest))
-            return show(uiModel, servletRequest);
+        ContainerRegistrationMode mode = registrationRequest.getContainerRegistrationMode();
+        if (validate(uiModel, registrationRequest)) {
+            if (mode == ContainerRegistrationMode.NEW_CONTAINER)
+                return newContainer(uiModel, servletRequest);
+            return onBehalfOfProvider(uiModel, servletRequest);
+        }
 
         containerService.registerContainer(registrationRequest);
 
         out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), servletRequest);
-        return "redirect:/containerRegistration/by_cmfAdmin";
+        String redirectedUrl = (mode == ContainerRegistrationMode.NEW_CONTAINER) ? "/new-container" : "/on-behalf-of-provider";
+        return "redirect:/containerRegistration/by_cmfAdmin" +  redirectedUrl;
     }
 }
