@@ -32,6 +32,10 @@
             <input id="tb_id" class="span2" type="text" value="12345678891"/>
         </div>
         <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter TB Registration Date:</span>
+            <input id="tb_registration_date" class="span2" type="text" value="25/11/2012"/>
+        </div>
+        <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Provider Id:</span>
             <input id="provider_id" class="span2" type="text" value="raj"/>
         </div>
@@ -152,6 +156,7 @@
                 <disease_class>$DCLASS$</disease_class>
                 <weight_instance>$WII$</weight_instance>
                 <weight>$W$</weight>
+                <tb_registration_date>$TB_REGISTRATION_DATE$</tb_registration_date>
             </update>
         </case>
     </textarea>
@@ -162,6 +167,7 @@
             patientXML = $.trim(patientXML);
 
             patientXML = patientXML.replace('$TB_ID$', $("#tb_id").val());
+            patientXML = patientXML.replace('$TB_REGISTRATION_DATE$', $("#tb_registration_date").val());
             patientXML = patientXML.replace('$CASE_NAME$', $("#case_name").val());
             patientXML = patientXML.replace('$CASE_ID$', $("#case_id").val());
             patientXML = patientXML.replace('$PROVIDER_ID$', $("#provider_id").val());

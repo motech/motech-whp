@@ -135,7 +135,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
 
         DateTime dateModified = DateUtil.now();
-        DateTime tbRegistrationDate = DateUtil.now().plusDays(1);
+        DateTime tbRegistrationDate = new DateTime(2012, 11, 11, 0, 0, 0);
 
         //first closing current treatment
         PatientWebRequest closeRequest = new PatientWebRequestBuilder()
