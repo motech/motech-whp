@@ -31,10 +31,17 @@
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/" />
     <mvc:default-servlet-handler/>
 
-
-
     <!-- Configures Handler Interceptors -->
     <mvc:interceptors>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/containerRegistration/**"/>
+            <mvc:mapping path="/ivr/callback/**"/>
+            <bean class="org.motechproject.whp.interceptor.APIKeyInterceptor">
+                <constructor-arg value="#{whpProperties['whp.api.key']}"/>
+            </bean>
+        </mvc:interceptor>
+
         <bean class="org.motechproject.flash.FlashScopeFilter"/>
 
         <bean id="staticContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
