@@ -40,7 +40,7 @@ public class PatientWebRequest {
     private String tb_registration_number;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String tb_registration_date;
 
