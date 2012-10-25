@@ -8,7 +8,7 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>whp-wgn-inbound</name>
+    <name>whp-container-registration-api</name>
     <artifactId>whp-container-registration-api</artifactId>
     <properties>
         <build.dir>../build</build.dir>

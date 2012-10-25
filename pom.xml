@@ -153,7 +153,7 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-wgn-inbound</artifactId>
+                <artifactId>whp-container-registration-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

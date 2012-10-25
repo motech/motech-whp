@@ -1,8 +1,8 @@
 package org.motechproject.whp.mapper;
 
 
-import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
-import org.motechproject.whp.wgninbound.request.IvrContainerRegistrationRequest;
+import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
+import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 
 public class ContainerVerificationRequestMapper {
 
