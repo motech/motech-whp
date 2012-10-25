@@ -43,6 +43,7 @@
     <import resource="classpath*:applicationContext-Paginator.xml"/>
     <import resource="classpath*:applicationWebServiceContext.xml"/>
     <import resource="classpath*:applicationContainerMappingContext.xml"/>
+    <import resource="classpath*:applicationContainerRegistrationApiContext.xml"/>
     <import resource="classpath*:applicationContainerContext.xml"/>
     <import resource="classpath*:applicationContext-Diagnostics.xml"/>
     <import resource="classpath*:applicationContext-case.xml"/>

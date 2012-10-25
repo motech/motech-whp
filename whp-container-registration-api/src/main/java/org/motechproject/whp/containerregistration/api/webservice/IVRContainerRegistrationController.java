@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/containerRegistration")
+@RequestMapping("/ivr/containerRegistration")
 public class IVRContainerRegistrationController {
     public static final String CONTENT_TYPE = "application/xml";
     private ProviderVerification providerVerification;

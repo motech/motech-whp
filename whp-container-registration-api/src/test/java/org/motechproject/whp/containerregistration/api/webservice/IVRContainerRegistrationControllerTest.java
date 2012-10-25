@@ -76,7 +76,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/provider/verify")
+                        post("/ivr/containerRegistration/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
@@ -89,7 +89,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/provider/verify")
+                        post("/ivr/containerRegistration/provider/verify")
                                 .body(readXML("/inValidProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
@@ -111,7 +111,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/provider/verify")
+                        post("/ivr/containerRegistration/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 )
@@ -139,7 +139,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/container/verify")
+                        post("/ivr/containerRegistration/container/verify")
                                 .body(readXML("/validContainerAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
@@ -160,7 +160,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/container/verify")
+                        post("/ivr/containerRegistration/container/verify")
                                 .body(readXML("/validContainerAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 )
@@ -181,7 +181,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/container/verify")
+                        post("/ivr/containerRegistration/container/verify")
                                 .body("invalidXMLContent".getBytes())
                                 .contentType(MediaType.APPLICATION_XML)
                 )
@@ -200,7 +200,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/register")
+                        post("/ivr/containerRegistration/register")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
 
@@ -230,7 +230,7 @@ public class IVRContainerRegistrationControllerTest {
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/register")
+                        post("/ivr/containerRegistration/register")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(status().isOk())

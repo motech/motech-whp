@@ -24,7 +24,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:applicationContainerRegistrationApiContext.xml")
 public class ContainerRegistrationVerificationIT {
 
     @Autowired

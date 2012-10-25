@@ -41,7 +41,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationContainerRegistrationApiContext.xml")
 public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest {
 
     @Autowired
@@ -92,7 +92,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/containerRegistration/register")
+                        post("/ivr/containerRegistration/register")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
 

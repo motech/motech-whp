@@ -35,7 +35,7 @@
     <mvc:interceptors>
 
         <mvc:interceptor>
-            <mvc:mapping path="/containerRegistration/**"/>
+            <mvc:mapping path="/ivr/containerRegistration/**"/>
             <mvc:mapping path="/ivr/callback/**"/>
             <bean class="org.motechproject.whp.interceptor.APIKeyInterceptor">
                 <constructor-arg value="#{whpProperties['whp.api.key']}"/>
