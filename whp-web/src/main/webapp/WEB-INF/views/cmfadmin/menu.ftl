@@ -22,10 +22,10 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-check icon-white"></i> Container Registration <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
             <li>
-                <a id="register-container" href="/whp/containerRegistration/by_cmfAdmin/on-behalf-of-provider">Register on behalf of provider </a>
+                <a id="register-container1" href="/whp/containerRegistration/by_cmfAdmin/new-container">Register a new container</a>
             </li>
             <li>
-                <a id="register-container1" href="/whp/containerRegistration/by_cmfAdmin/new-container">Register a new container</a>
+                <a id="register-container" href="/whp/containerRegistration/by_cmfAdmin/on-behalf-of-provider">Register on behalf of provider </a>
             </li>
         </ul>
     </li>

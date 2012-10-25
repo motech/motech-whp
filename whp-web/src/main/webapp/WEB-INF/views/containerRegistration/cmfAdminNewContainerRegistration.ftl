@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Provider ID*</label>
+                    <label class="control-label">Assign to Provider*</label>
 
                     <div class="controls">
                         <input id="providerId" class="span3" name="providerId" type="text" placeholder="Enter provider ID"/>
