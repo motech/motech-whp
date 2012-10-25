@@ -92,7 +92,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/registerContainer")
+                        post("/containerRegistration/register")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
 

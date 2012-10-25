@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/sputumCall")
+@RequestMapping("/containerRegistration")
 public class IVRContainerRegistrationController {
     public static final String CONTENT_TYPE = "application/xml";
     private ProviderVerification providerVerification;
@@ -59,7 +59,7 @@ public class IVRContainerRegistrationController {
         return getVerificationResponse(verificationResult, response);
     }
 
-    @RequestMapping(value = "/registerContainer", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public VerificationResponse registerThroughIVR(@RequestBody IvrContainerRegistrationRequest ivrContainerRegistrationRequest, HttpServletResponse response) throws IOException, TemplateException {
 
