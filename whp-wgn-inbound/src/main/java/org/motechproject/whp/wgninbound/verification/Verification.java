@@ -4,7 +4,6 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
-import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.request.VerificationRequest;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
 

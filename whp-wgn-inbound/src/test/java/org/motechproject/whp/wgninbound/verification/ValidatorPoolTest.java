@@ -1,4 +1,4 @@
-package org.motechproject.whp.wgninbound.request;
+package org.motechproject.whp.wgninbound.verification;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +10,7 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.wgninbound.verification.ValidatorPool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.controller;
+package org.motechproject.whp.wgninbound.webservice;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -18,7 +18,11 @@ import org.motechproject.whp.wgninbound.response.VerificationResult;
 import org.motechproject.whp.wgninbound.verification.ContainerRegistrationVerification;
 import org.motechproject.whp.wgninbound.verification.ContainerVerification;
 import org.motechproject.whp.wgninbound.verification.ProviderVerification;
+import org.motechproject.whp.wgninbound.webservice.IVRContainerRegistrationController;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.server.request.MockMvcRequestBuilders;
+import org.springframework.test.web.server.result.MockMvcResultMatchers;
+import org.springframework.test.web.server.setup.MockMvcBuilders;
 
 import java.io.IOException;
 
@@ -47,7 +51,7 @@ public class IVRContainerRegistrationControllerTest {
     @Mock
     ProviderService providerService;
 
-    IVRContainerRegistrationController IVRContainerRegistrationController;
+    org.motechproject.whp.wgninbound.webservice.IVRContainerRegistrationController IVRContainerRegistrationController;
 
     @Mock
     ContainerRegistrationVerification containerRegistrationVerification;
@@ -69,27 +73,27 @@ public class IVRContainerRegistrationControllerTest {
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/provider/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
-                content().string(containsString("success"))
+                MockMvcResultMatchers.content().string(containsString("success"))
         );
     }
 
     @Test
     public void shouldRespondWithBadRequestIfRequestXMLIsInvalid() throws Exception {
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/provider/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/provider/verify")
                                 .body(readXML("/inValidProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
-                status().isBadRequest()
+                MockMvcResultMatchers.status().isBadRequest()
         );
     }
 
@@ -104,16 +108,16 @@ public class IVRContainerRegistrationControllerTest {
 
         when(providerVerification.verifyRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/provider/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/provider/verify")
                                 .body(readXML("/validProviderAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 )
-                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(
-                        content().string(
+                        MockMvcResultMatchers.content().string(
                                 allOf(
                                         containsString("failure"),
                                         containsString("INVALID_PHONE_NUMBER"),
@@ -132,14 +136,14 @@ public class IVRContainerRegistrationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
 
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/container/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/container/verify")
                                 .body(readXML("/validContainerAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 ).andExpect(
-                content().string(containsString("success"))
+                MockMvcResultMatchers.content().string(containsString("success"))
         );
     }
 
@@ -153,16 +157,16 @@ public class IVRContainerRegistrationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
 
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/container/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/container/verify")
                                 .body(readXML("/validContainerAuthorizationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
                 )
-                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(
-                        content().string(
+                        MockMvcResultMatchers.content().string(
                                 allOf(
                                         containsString("failure"),
                                         containsString(whpError.getErrorCode().name()),
@@ -174,14 +178,14 @@ public class IVRContainerRegistrationControllerTest {
 
     @Test
     public void shouldRespondWithErrorOnInvalidXMLForContainerRequest() throws Exception {
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/container/verify")
+                        MockMvcRequestBuilders.post("/sputumCall/container/verify")
                                 .body("invalidXMLContent".getBytes())
                                 .contentType(MediaType.APPLICATION_XML)
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -201,16 +205,16 @@ public class IVRContainerRegistrationControllerTest {
         provider.setProviderId(providerId);
         when(providerService.findByMobileNumber(anyString())).thenReturn(provider);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/registerContainer")
+                        MockMvcRequestBuilders.post("/sputumCall/registerContainer")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
 
-                ).andExpect(status().isOk())
+                ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(
-                        content().string(containsString("success"))
+                        MockMvcResultMatchers.content().string(containsString("success"))
         );
 
         ArgumentCaptor<ContainerRegistrationRequest> containerRegistrationRequestArgumentCaptor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
@@ -230,15 +234,15 @@ public class IVRContainerRegistrationControllerTest {
         request.setPhase("Pre-treatment");
         request.setCall_id("64756435684375");
         when(containerRegistrationVerification.verifyRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
-        standaloneSetup(IVRContainerRegistrationController)
+        MockMvcBuilders.standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
-                        post("/sputumCall/registerContainer")
+                        MockMvcRequestBuilders.post("/sputumCall/registerContainer")
                                 .body(readXML("/validIVRContainerRegistrationRequest.xml"))
                                 .contentType(MediaType.APPLICATION_XML)
-                ).andExpect(status().isOk())
+                ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(
-                        content().string(containsString("failure"))
+                        MockMvcResultMatchers.content().string(containsString("failure"))
                 );
 
         verify(containerService, never()).registerContainer((ContainerRegistrationRequest) anyObject());

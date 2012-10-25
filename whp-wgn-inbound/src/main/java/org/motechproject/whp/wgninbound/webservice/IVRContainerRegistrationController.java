@@ -1,4 +1,4 @@
-package org.motechproject.whp.controller;
+package org.motechproject.whp.wgninbound.webservice;
 
 
 import freemarker.template.TemplateException;
@@ -28,7 +28,6 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/sputumCall")
 public class IVRContainerRegistrationController {
-
     public static final String CONTENT_TYPE = "application/xml";
     private ProviderVerification providerVerification;
     private ContainerVerification containerVerification;

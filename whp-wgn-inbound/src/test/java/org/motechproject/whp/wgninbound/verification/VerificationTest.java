@@ -8,7 +8,6 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.validation.RequestValidator;
-import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.request.VerificationRequest;
 
 import static junit.framework.Assert.assertEquals;

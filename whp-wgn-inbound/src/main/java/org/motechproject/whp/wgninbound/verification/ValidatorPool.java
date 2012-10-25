@@ -1,4 +1,4 @@
-package org.motechproject.whp.wgninbound.request;
+package org.motechproject.whp.wgninbound.verification;
 
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPError;

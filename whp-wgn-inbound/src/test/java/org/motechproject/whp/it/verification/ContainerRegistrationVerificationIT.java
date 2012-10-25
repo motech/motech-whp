@@ -1,18 +1,17 @@
-package org.motechproject.whp.wgninbound.verification;
+package org.motechproject.whp.it.verification;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.IvrContainerRegistrationRequest;
-import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
+import org.motechproject.whp.wgninbound.verification.ContainerRegistrationVerification;
+import org.motechproject.whp.wgninbound.verification.ValidatorPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,29 +21,18 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:applicationWHPWgnInputContext.xml")
 public class ContainerRegistrationVerificationIT {
 
     @Autowired
     @ReplaceWithMock
     ValidatorPool validatorPool;
 
-    @Captor
-    ArgumentCaptor<WHPErrors> whpErrors;
-
     @Autowired
     ContainerRegistrationVerification containerRegistrationVerification;
-
-    @Before
-    public void setUp() {
-        reset(validatorPool);
-        initMocks(this);
-    }
 
     @Test
     public void shouldReturnFailureWhenMSISDNIsEmpty() {
@@ -104,6 +92,8 @@ public class ContainerRegistrationVerificationIT {
         String containerId = "10000000000";
         String callId = "callId";
         String phase = "phase";
+
+        ArgumentCaptor<WHPErrors> whpErrors = ArgumentCaptor.forClass(WHPErrors.class);
         IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest(msisdn, containerId, callId, phase);
         when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
         when(validatorPool.verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture())).thenReturn(validatorPool);

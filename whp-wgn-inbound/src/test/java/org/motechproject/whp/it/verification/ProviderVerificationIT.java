@@ -1,4 +1,4 @@
-package org.motechproject.whp.wgninbound.verification;
+package org.motechproject.whp.it.verification;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
@@ -11,8 +11,9 @@ import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.ProviderVerificationRequest;
-import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
+import org.motechproject.whp.wgninbound.verification.ProviderVerification;
+import org.motechproject.whp.wgninbound.verification.ValidatorPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:applicationWHPWgnInputContext.xml")
 public class ProviderVerificationIT {
 
     @Autowired
@@ -35,15 +36,6 @@ public class ProviderVerificationIT {
 
     @Autowired
     ProviderVerification providerVerification;
-
-    @Captor
-    ArgumentCaptor<WHPErrors> whpErrors;
-
-    @Before
-    public void setUp() {
-        reset(validatorPool);
-        initMocks(this);
-    }
 
     @Test
     public void shouldReturnErrorOnEmptyMSIDN() {
@@ -108,6 +100,8 @@ public class ProviderVerificationIT {
         String msisdn = "1234567890";
         String callId = "callId";
         ProviderVerificationRequest request = new ProviderVerificationRequest(msisdn, "time", callId);
+
+        ArgumentCaptor<WHPErrors> whpErrors = ArgumentCaptor.forClass(WHPErrors.class);
 
         when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
 

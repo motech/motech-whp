@@ -16,7 +16,7 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
-import org.motechproject.whp.controller.IVRContainerRegistrationController;
+import org.motechproject.whp.wgninbound.webservice.IVRContainerRegistrationController;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
@@ -41,7 +41,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:META-INF/spring/applicationContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
 public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest {
 
     @Autowired

@@ -12,6 +12,7 @@
     <import resource="classpath*:applicationContainerContext.xml"/>
     <import resource="classpath*:applicationContainerMappingContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
+    <import resource="classpath*:applicationWebServiceContext.xml"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.wgninbound"/>

@@ -1,4 +1,4 @@
-package org.motechproject.whp.wgninbound.verification;
+package org.motechproject.whp.it.verification;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
@@ -11,9 +11,11 @@ import org.mockito.Captor;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrors;
 import org.motechproject.whp.wgninbound.request.ContainerVerificationRequest;
-import org.motechproject.whp.wgninbound.request.ValidatorPool;
 import org.motechproject.whp.wgninbound.response.VerificationResult;
+import org.motechproject.whp.wgninbound.verification.ContainerVerification;
+import org.motechproject.whp.wgninbound.verification.ValidatorPool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -23,9 +25,11 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.annotation.DirtiesContext.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationWHPWgnInputContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:applicationWHPWgnInputContext.xml")
 public class ContainerVerificationIT {
 
     @Autowired
@@ -35,13 +39,9 @@ public class ContainerVerificationIT {
     @ReplaceWithMock
     private ValidatorPool validatorPool;
 
-    @Captor
-    ArgumentCaptor<WHPErrors> whpErrors;
-
     @Before
-    public void setup() {
+    public void setUp() {
         reset(validatorPool);
-        initMocks(this);
     }
 
     @Test
@@ -92,6 +92,7 @@ public class ContainerVerificationIT {
         String containerId = "containerId";
         ContainerVerificationRequest request = new ContainerVerificationRequest(msisdn, containerId, callId);
 
+        ArgumentCaptor<WHPErrors> whpErrors = ArgumentCaptor.forClass(WHPErrors.class);
         when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
         when(validatorPool.verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture())).thenReturn(validatorPool);
 
