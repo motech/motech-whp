@@ -27,7 +27,6 @@ public class ContainerPatientMappingWebRequest {
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String date_modified;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
     private String tb_registration_date;
 
     @NotNullOrEmpty

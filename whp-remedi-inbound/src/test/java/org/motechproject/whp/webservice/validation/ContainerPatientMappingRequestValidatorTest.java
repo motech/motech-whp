@@ -192,6 +192,28 @@ public class ContainerPatientMappingRequestValidatorTest {
         assertTrue(validationErrors.contains(new WHPError(NULL_VALUE_IN_TB_REGISTRATION_DATE)));
     }
 
+    @Test
+    public void shouldReturnValidationError_whenInvalidTbRegistrationDateIsPassedForPreTreatmentPhases() {
+        ContainerPatientMappingWebRequest request = buildTestRequest();
+        request.setSmear_sample_instance(SampleInstance.PreTreatment.name());
+        request.setTb_registration_date("invalid date");
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(anyString())).thenReturn(container);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patient.getCurrentTreatment().setTbId(request.getTb_id());
+        when(patientService.findByPatientId(anyString())).thenReturn(patient);
+
+        List<WHPError> validationErrors = validator.validate(request);
+
+        assertTrue(validationErrors.contains(new WHPError(INVALID_TB_REGISTRATION_DATE)));
+    }
+
     private ContainerPatientMappingWebRequest buildTestRequest() {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")

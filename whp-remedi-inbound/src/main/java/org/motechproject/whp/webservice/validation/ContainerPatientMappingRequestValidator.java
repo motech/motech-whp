@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice.validation;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
@@ -45,6 +46,7 @@ public class ContainerPatientMappingRequestValidator {
     }
 
     private void validateTbRegistrationDate(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
+
         SputumTrackingInstance instance = SputumTrackingInstance.getInstanceByName(containerPatientMappingWebRequest.getSmear_sample_instance());
         if (instance != SputumTrackingInstance.PreTreatment && !StringUtils.isEmpty(containerPatientMappingWebRequest.getTb_registration_date())) {
             validationErrors.add(new WHPError(UNEXPECTED_TB_REGISTRATION_DATE));
@@ -52,6 +54,14 @@ public class ContainerPatientMappingRequestValidator {
         if (instance == SputumTrackingInstance.PreTreatment && StringUtils.isEmpty(containerPatientMappingWebRequest.getTb_registration_date())) {
             validationErrors.add(new WHPError(NULL_VALUE_IN_TB_REGISTRATION_DATE));
         }
+        if (instance == SputumTrackingInstance.PreTreatment && !isValidFormat(containerPatientMappingWebRequest.getTb_registration_date())) {
+            validationErrors.add(new WHPError(NULL_VALUE_IN_TB_REGISTRATION_DATE));
+        }
+    }
+
+    private boolean isValidFormat(String date) {
+        DateUtils.parseDate()
+        return false;  //To change body of created methods use File | Settings | File Templates.
     }
 
     private void validateInstance(ContainerPatientMappingWebRequest containerPatientMappingWebRequest, ArrayList<WHPError> validationErrors) {
