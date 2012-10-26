@@ -124,6 +124,44 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         assertEquals(tbRegistrationDate.toLocalDate(),fetchedContainer.getConsultationDate());
     }
 
+    @Test
+    public void shouldMapContainerWithoutConsultationDateOnInTreatmentPhase_forMappingRequest() {
+        ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("some reason", "0");
+        DateTime tbRegistrationDate = new DateTime(1986, 11, 20, 0, 0, 0);
+
+        ContainerPatientMappingWebRequest request = buildMappingRequest();
+        request.setSmear_sample_instance(SampleInstance.EndIP.name());
+        request.setTb_registration_date("");
+
+        Container container = new Container();
+        container.setContainerId(request.getCase_id());
+        container.setConsultationDate(tbRegistrationDate.toLocalDate());
+        LabResults labResults = new LabResults();
+        container.setLabResults(labResults);
+
+        Patient patient = new PatientBuilder().withDefaults().build();
+        String tbId = request.getTb_id();
+        patient.getCurrentTreatment().setTbId(tbId);
+
+        when(containerService.exists(request.getCase_id())).thenReturn(true);
+        when(containerService.getContainer(container.getContainerId())).thenReturn(container);
+        when(containerService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
+        when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
+
+        webService.updateCase(request);
+
+        verify(containerService, times(2)).getContainer(request.getCase_id());
+        verify(containerService).getClosureReasonForMapping();
+
+        Container fetchedContainer = containerService.getContainer(request.getCase_id());
+        assertEquals(request.getPatient_id(),fetchedContainer.getPatientId());
+        assertEquals(ContainerStatus.Closed, fetchedContainer.getStatus());
+        assertEquals(request.getSmear_sample_instance(), fetchedContainer.getMappingInstance().name());
+        assertEquals(request.getTb_id(),fetchedContainer.getTbId());
+        assertEquals(reasonForContainerClosure.getCode(),fetchedContainer.getReasonForClosure());
+        assertNull(fetchedContainer.getConsultationDate());
+    }
+
     private ContainerPatientMappingWebRequest buildMappingRequest() {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")
@@ -142,6 +180,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
                 .withInstance("")
                 .withPatientId("")
                 .withTbId("")
+                .withTbRegistrationDate("")
                 .build();
     }
 }

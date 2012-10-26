@@ -48,7 +48,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             container.unMap();
         } else {
             ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
-            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, inDesiredFormat(request));
+            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, getTbRegistrationDate(request));
         }
         containerService.update(container);
     }
@@ -63,7 +63,9 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         throw new CaseException("containerPatientMapping does not support Create Case", NOT_IMPLEMENTED);
     }
 
-    private LocalDate inDesiredFormat(ContainerPatientMappingWebRequest request) {
-        return LocalDate.parse(request.getTb_registration_date(), DateTimeFormat.forPattern(WHPDate.DATE_FORMAT));
+    private LocalDate getTbRegistrationDate(ContainerPatientMappingWebRequest request) {
+        if (SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()) == SputumTrackingInstance.PreTreatment)
+            return LocalDate.parse(request.getTb_registration_date(), DateTimeFormat.forPattern(WHPDate.DATE_FORMAT));
+        return null;
     }
 }

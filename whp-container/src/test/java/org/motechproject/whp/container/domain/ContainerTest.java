@@ -29,8 +29,9 @@ public class ContainerTest {
     }
 
     @Test
-    public void shouldMapContainerToPatient() {
+    public void shouldMapContainerToPatient_forInTreatmentPhase() {
         Container container = new Container();
+        container.setConsultationDate(LocalDate.now());
         String patientId = "patientid";
         SputumTrackingInstance instance = SputumTrackingInstance.ExtendedIP;
         String tbId = "tbId";
@@ -44,6 +45,28 @@ public class ContainerTest {
         assertEquals(tbId, container.getTbId());
         assertEquals(Positive, container.getDiagnosis());
         assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
+        assertEquals("0", container.getReasonForClosure());
+        assertNull(container.getConsultationDate());
+    }
+
+    @Test
+    public void shouldMapContainerToPatient_forPreTreatmentPhase() {
+        Container container = new Container();
+        LocalDate now = LocalDate.now();
+        container.setConsultationDate(now);
+        String patientId = "patientid";
+        SputumTrackingInstance instance = SputumTrackingInstance.PreTreatment;
+        String tbId = "tbId";
+        LocalDate consultationDate = new LocalDate(2011, 11, 23);
+
+        container.mapWith(patientId, tbId, instance, new ReasonForContainerClosure("some reason", "0"), consultationDate);
+
+        assertEquals(patientId, container.getPatientId());
+        assertEquals(ContainerStatus.Closed, container.getStatus());
+        assertEquals(instance, container.getMappingInstance());
+        assertEquals(tbId, container.getTbId());
+        assertEquals(Positive, container.getDiagnosis());
+        assertEquals(SputumTrackingInstance.PreTreatment, container.getCurrentTrackingInstance());
         assertEquals("0", container.getReasonForClosure());
         assertEquals(consultationDate, container.getConsultationDate());
     }

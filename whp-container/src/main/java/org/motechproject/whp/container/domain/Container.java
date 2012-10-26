@@ -77,7 +77,7 @@ public class Container extends MotechBaseDataObject {
         setStatus(ContainerStatus.Closed);
         updateCurrentTrackingStatus();
         setReasonForClosure(closureReasonForMapping.getCode());
-        setConsultationDate(consultationDate);
+        updateConsultationDate(consultationDate, mappingInstance);
     }
 
     public void unMap() {
@@ -103,6 +103,13 @@ public class Container extends MotechBaseDataObject {
             this.providerId = providerId.toLowerCase();
         else
             this.providerId = null;
+    }
+
+    private void updateConsultationDate(LocalDate consultationDate, SputumTrackingInstance mappingInstance) {
+        if(SputumTrackingInstance.getTrackingInstanceType(mappingInstance) == SputumTrackingInstance.PreTreatment)
+            setConsultationDate(consultationDate);
+        else
+            setConsultationDate(null);
     }
 
     private void updateCurrentTrackingStatus() {
