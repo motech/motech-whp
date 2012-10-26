@@ -42,7 +42,6 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-api</artifactId>
-            <version>${motech.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>

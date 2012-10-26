@@ -32,13 +32,10 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-ivr-kookoo</artifactId>
-            <version>${motech.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-decisiontree</artifactId>
-            <version>${motech.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
@@ -64,11 +61,6 @@
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
