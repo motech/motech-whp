@@ -144,6 +144,7 @@ public class ContainerService {
 
         container.setStatus(ContainerStatus.Open);
         container.setReasonForClosure(null);
+        container.setAlternateDiagnosis(null);
         resetContainerDiagnosisData(container);
         allContainers.update(container);
     }

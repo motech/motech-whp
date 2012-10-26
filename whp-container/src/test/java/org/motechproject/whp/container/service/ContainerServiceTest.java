@@ -313,6 +313,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Container container = new Container();
         container.setStatus(ContainerStatus.Closed);
         container.setDiagnosis(Diagnosis.Positive);
+        container.setAlternateDiagnosis("some alternate");
         container.setReasonForClosure("Some reason for closure");
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
@@ -325,6 +326,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         assertEquals(ContainerStatus.Open, actualContainer.getStatus());
         assertNull(actualContainer.getReasonForClosure());
+        assertNull(actualContainer.getAlternateDiagnosis());
     }
 
     @Test
