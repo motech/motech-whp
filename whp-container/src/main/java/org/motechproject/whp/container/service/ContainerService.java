@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -19,6 +20,8 @@ import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +50,14 @@ public class ContainerService {
     private final AllReasonForContainerClosures allReasonForContainerClosures;
     private final AllAlternateDiagnosis allAlternateDiagnosis;
     private ProviderService providerService;
+    private ReportingPublisherService reportingPublisherService;
 
 
     @Autowired
-    public ContainerService(AllContainers allContainers, RemediService remediService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis, ProviderService providerService) {
+    public ContainerService(AllContainers allContainers, RemediService remediService, ReportingPublisherService reportingPublisherService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis, ProviderService providerService) {
         this.allContainers = allContainers;
         this.remediService = remediService;
+        this.reportingPublisherService = reportingPublisherService;
         this.allReasonForContainerClosures = allReasonForContainerClosures;
         this.allAlternateDiagnosis = allAlternateDiagnosis;
         this.providerService = providerService;
@@ -71,6 +76,12 @@ public class ContainerService {
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
+        publishReportingEvent(container, registrationRequest.getChannelId());
+    }
+
+    private void publishReportingEvent(Container container, String channelId) {
+        SputumTrackingRequest containerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).build();
+        reportingPublisherService.reportContainerRegistration(containerRegistrationRequest);
     }
 
     public boolean exists(String containerId) {

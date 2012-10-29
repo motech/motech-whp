@@ -17,6 +17,7 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.WHPContainerConstants;
+import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -27,6 +28,8 @@ import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -55,21 +58,28 @@ public class ContainerServiceTest extends BaseUnitTest {
     private AllAlternateDiagnosis allAlternateDiagnosis;
     @Mock
     private ProviderService providerService;
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerService = new ContainerService(allContainers, remediService, allReasonForContainerClosures, allAlternateDiagnosis, providerService);
+        containerService = new ContainerService(allContainers, remediService, reportingPublisherService, allReasonForContainerClosures, allAlternateDiagnosis, providerService);
     }
 
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
         when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
-        containerService.registerContainer(new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name()));
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name());
+        containerService.registerContainer(containerRegistrationRequest);
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
         Container container = captor.getValue();
+
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationRequest.getChannelId()).build();
+        verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
+
         assertEquals(Open, container.getStatus());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
         assertEquals(Pending, container.getDiagnosis());
@@ -125,7 +135,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         Provider provider = new Provider(null, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
-        containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name()));
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name());
+        containerService.registerContainer(containerRegistrationRequest);
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
@@ -138,9 +149,12 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertEquals(district, actualContainer.getDistrict());
 
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(actualContainer).registeredThrough(containerRegistrationRequest.getChannelId()).build();
+
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
         verify(providerService).findByProviderId(providerId);
+        verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.motechproject.whp.containerregistration.it.controller;
 
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,15 +9,19 @@ import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.exceptions.WebSecurityException;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.containerregistration.api.webservice.IVRContainerRegistrationController;
+import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
@@ -33,6 +38,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
@@ -56,6 +62,8 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
     private ContainerService containerService;
     @Autowired
     private RemediProperties remediProperties;
+    @Autowired
+    private ReportingEventURLs reportingEventURLs;
 
     @ReplaceWithMock
     @Autowired
@@ -119,7 +127,10 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).build();
+
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 
     @After

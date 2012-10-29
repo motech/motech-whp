@@ -9,9 +9,11 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.service.ContainerService;
@@ -19,6 +21,8 @@ import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
+import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
@@ -65,6 +69,9 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Autowired
     private AllContainers allContainers;
 
+    @Autowired
+    private ReportingEventURLs reportingEventURLs;
+
     private final String providerId = "provider";
 
     private String remediUrl;
@@ -102,6 +109,8 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
         Container container = containerService.getContainer(containerId);
 
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
         assertThat(container.getContainerId(), is(containerId));
@@ -118,6 +127,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
 
         markForDeletion(container);
     }

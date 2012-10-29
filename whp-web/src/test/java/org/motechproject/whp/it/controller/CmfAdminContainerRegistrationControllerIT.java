@@ -10,8 +10,10 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.containermapping.domain.AdminContainerMapping;
@@ -22,6 +24,8 @@ import org.motechproject.whp.containermapping.repository.AllProviderContainerMap
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.CmfAdminContainerRegistrationController;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.CmfAdminService;
@@ -63,6 +67,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     private ContainerService containerService;
     @Autowired
     private RemediProperties remediProperties;
+    @Autowired
+    private ReportingEventURLs reportingEventURLs;
 
     @ReplaceWithMock
     @Autowired
@@ -130,7 +136,10 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
         markForDeletion(container);
     }
 
@@ -152,6 +161,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
         Container container = containerService.getContainer(containerId);
 
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
         assertThat(container.getContainerId(), is(containerId));
@@ -168,6 +179,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
         markForDeletion(container);
     }
 
