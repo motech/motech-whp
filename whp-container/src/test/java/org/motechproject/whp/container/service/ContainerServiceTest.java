@@ -12,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
@@ -64,7 +65,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
         when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
-        containerService.registerContainer(new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText()));
+        containerService.registerContainer(new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
@@ -124,7 +125,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Provider provider = new Provider(null, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
-        containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText()));
+        containerService.registerContainer(new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name()));
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());

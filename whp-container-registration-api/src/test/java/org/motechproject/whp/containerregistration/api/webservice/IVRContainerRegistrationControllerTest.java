@@ -9,7 +9,6 @@ import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.containerregistration.api.webservice.IVRContainerRegistrationController;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
@@ -20,9 +19,6 @@ import org.motechproject.whp.containerregistration.api.verification.ContainerReg
 import org.motechproject.whp.containerregistration.api.verification.ContainerVerification;
 import org.motechproject.whp.containerregistration.api.verification.ProviderVerification;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.server.request.MockMvcRequestBuilders;
-import org.springframework.test.web.server.result.MockMvcResultMatchers;
-import org.springframework.test.web.server.setup.MockMvcBuilders;
 
 import java.io.IOException;
 

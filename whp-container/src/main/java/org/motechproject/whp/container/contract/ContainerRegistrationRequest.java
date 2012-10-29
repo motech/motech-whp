@@ -10,12 +10,15 @@ public class ContainerRegistrationRequest {
 
     private String providerId;
 
+    private String channelId;
+
     public ContainerRegistrationRequest() {
     }
 
-    public ContainerRegistrationRequest(String providerId, String containerId, String instance) {
+    public ContainerRegistrationRequest(String providerId, String containerId, String instance, String channelId) {
         this.providerId = providerId;
         this.containerId = containerId;
         this.instance = instance;
+        this.channelId = channelId;
     }
 }

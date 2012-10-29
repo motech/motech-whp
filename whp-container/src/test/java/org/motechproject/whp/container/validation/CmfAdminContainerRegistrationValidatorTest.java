@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
@@ -49,7 +50,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forValidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(true);
@@ -66,7 +67,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forInvalidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(false);
@@ -87,7 +88,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
         CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 containerId, InTreatment.getDisplayText(),
-                containerRegistrationMode);
+                containerRegistrationMode, ChannelId.WEB);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
@@ -107,7 +108,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
                 validProvider.getProviderId(),
                 CONTAINER_ID,
                 InTreatment.getDisplayText(),
-                containerRegistrationMode);
+                containerRegistrationMode, ChannelId.WEB);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), CONTAINER_ID)).thenReturn(false);
@@ -127,7 +128,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
                 validProvider.getProviderId(),
                 CONTAINER_ID,
                 InTreatment.getDisplayText(),
-                containerRegistrationMode);
+                containerRegistrationMode, ChannelId.WEB);
 
         ArrayList<ErrorWithParameters> errors = new ArrayList<>();
         errors.add(new ErrorWithParameters("container.id.length.error", "11"));

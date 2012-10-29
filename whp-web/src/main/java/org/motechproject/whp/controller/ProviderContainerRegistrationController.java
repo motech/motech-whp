@@ -1,6 +1,7 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
@@ -38,7 +39,7 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
     public String register(Model uiModel, ContainerRegistrationRequest registrationRequest,
                            HttpServletRequest servletRequest) throws IOException, TemplateException {
         populateProviderId(registrationRequest, servletRequest);
-
+        populateChannelId(registrationRequest);
         if (validate(uiModel, registrationRequest)) {
             return show(uiModel, servletRequest);
         }

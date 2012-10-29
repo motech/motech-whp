@@ -1,6 +1,7 @@
 package org.motechproject.whp.container.contract;
 
 import lombok.Data;
+import org.motechproject.whp.common.domain.ChannelId;
 
 @Data
 public class CmfAdminContainerRegistrationRequest extends ContainerRegistrationRequest {
@@ -9,8 +10,8 @@ public class CmfAdminContainerRegistrationRequest extends ContainerRegistrationR
     public CmfAdminContainerRegistrationRequest() {
     }
 
-    public CmfAdminContainerRegistrationRequest(String providerId, String containerId, String instance, ContainerRegistrationMode containerRegistrationMode) {
-        super(providerId, containerId, instance);
+    public CmfAdminContainerRegistrationRequest(String providerId, String containerId, String instance, ContainerRegistrationMode containerRegistrationMode, ChannelId channelId) {
+        super(providerId, containerId, instance, channelId.name());
         this.containerRegistrationMode = containerRegistrationMode;
     }
 }

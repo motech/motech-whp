@@ -31,4 +31,9 @@ public class ReportingEventURLsIT {
         assertThat(reportingEventURLs.getFlashingLogURL(), is("http://localhost:8080/whp-reports/flashingLog/measure"));
     }
 
+    @Test
+    public void shouldGetContainerRegistrationLogMeasureURL() {
+        assertThat(reportingEventURLs.getContainerRegistrationLogURL(), is("http://localhost:8080/whp-reports/sputumTracking/containerRegistrationMeasure"));
+    }
+
 }

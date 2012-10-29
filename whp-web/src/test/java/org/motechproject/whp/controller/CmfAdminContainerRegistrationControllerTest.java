@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
@@ -162,6 +163,7 @@ public class CmfAdminContainerRegistrationControllerTest {
 
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
+        assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
     }
 
     @Test
@@ -188,5 +190,6 @@ public class CmfAdminContainerRegistrationControllerTest {
         assertEquals(providerId, actualRegistrationRequest.getProviderId());
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
+        assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
     }
 }

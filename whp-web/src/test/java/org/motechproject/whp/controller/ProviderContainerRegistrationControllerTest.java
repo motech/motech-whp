@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -138,5 +139,6 @@ public class ProviderContainerRegistrationControllerTest {
         assertEquals(providerId.toLowerCase(), actualRegistrationRequest.getProviderId());
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
+        assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
     }
 }

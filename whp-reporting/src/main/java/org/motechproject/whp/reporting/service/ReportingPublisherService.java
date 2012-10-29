@@ -6,10 +6,9 @@ import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class ReportingPublisherService {
@@ -35,5 +34,9 @@ public class ReportingPublisherService {
 
     public void reportFlashingRequest(FlashingLogRequest flashingLogRequest) {
         httpClientService.post(reportingEventURLs.getFlashingLogURL(), flashingLogRequest);
+    }
+
+    public void reportContainerRegistration(SputumTrackingRequest sputumTrackingRequest) {
+        httpClientService.post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
     }
 }

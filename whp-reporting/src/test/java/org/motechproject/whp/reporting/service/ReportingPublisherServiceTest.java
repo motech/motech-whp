@@ -9,6 +9,9 @@ import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
+import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+
+import java.util.Date;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -65,5 +68,20 @@ public class ReportingPublisherServiceTest {
         reportingPublisher.reportFlashingRequest(flashingLog);
 
         verify(httpClientService).post(reportingEventURLs.getFlashingLogURL(), flashingLog);
+    }
+
+    @Test
+    public void shouldPublishSputumTrackingContainerRegistrationLog() throws Exception {
+
+        SputumTrackingRequest sputumTrackingRequest = new SputumTrackingRequest();
+        sputumTrackingRequest.setContainerId("containerId");
+        sputumTrackingRequest.setInstance("PreTreatment");
+        sputumTrackingRequest.setDateIssuedOn(new Date());
+        sputumTrackingRequest.setProviderId("raj");
+        sputumTrackingRequest.setSubmittedBy("CmfAdmin");
+        sputumTrackingRequest.setSubmitterId("submitterId");
+
+        reportingPublisher.reportContainerRegistration(sputumTrackingRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
     }
 }

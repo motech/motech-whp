@@ -3,16 +3,14 @@ package org.motechproject.whp.containerregistration.mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.containerregistration.mapper.ContainerRegistrationRequestMapper;
+import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ContainerRegistrationRequestMapperTest {
@@ -44,7 +42,7 @@ public class ContainerRegistrationRequestMapperTest {
         assertEquals("container_id", containerRegistrationRequest.getContainerId());
         assertEquals("phase", containerRegistrationRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationRequest.getProviderId());
-
+        assertEquals(ChannelId.IVR.name(), containerRegistrationRequest.getChannelId());
 
     }
 }

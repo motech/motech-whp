@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -50,5 +51,9 @@ public abstract class ContainerRegistrationController extends BaseWebController 
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
         uiModel.addAttribute(CONTAINER_ID_MAX_LENGTH, sputumTrackingProperties.getContainerIdMaxLength());
+    }
+
+    protected void populateChannelId(ContainerRegistrationRequest registrationRequest) {
+        registrationRequest.setChannelId(ChannelId.WEB.name());
     }
 }

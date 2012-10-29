@@ -4,10 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.Provider;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ProviderContainerRegistrationValidatorTest {
     @Test
     public void shouldValidateProviderIdContainerMappingSuccessfully() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.InTreatment.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
 
         List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
@@ -55,7 +56,7 @@ public class ProviderContainerRegistrationValidatorTest {
     @Test
     public void shouldValidateProviderIdContainerMappingWithErrors_whenProviderExists() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.InTreatment.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, SputumTrackingInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(false);
 
         List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
@@ -69,7 +70,7 @@ public class ProviderContainerRegistrationValidatorTest {
     public void shouldNotValidateProviderIdContainerMapping_whenContainerRegistrationValidationFailed() {
         String unregisteredProviderId = "UnregisteredProviderId";
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, containerId, SputumTrackingInstance.InTreatment.getDisplayText());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, containerId, SputumTrackingInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
 
 
         ArrayList<ErrorWithParameters> expectedErrors = new ArrayList<>();
@@ -88,7 +89,7 @@ public class ProviderContainerRegistrationValidatorTest {
         ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 containerId,
-                InTreatment.getDisplayText());
+                InTreatment.getDisplayText(), ChannelId.WEB.name());
 
         ArrayList<ErrorWithParameters> expectedErrors = new ArrayList<>();
         expectedErrors.add(new ErrorWithParameters("container.id.length.error", "11"));

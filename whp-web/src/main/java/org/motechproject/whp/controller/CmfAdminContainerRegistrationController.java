@@ -49,7 +49,7 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
                 return newContainer(uiModel, servletRequest);
             return onBehalfOfProvider(uiModel, servletRequest);
         }
-
+        populateChannelId(registrationRequest);
         containerService.registerContainer(registrationRequest);
 
         out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), servletRequest);

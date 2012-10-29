@@ -11,6 +11,7 @@ public class ReportingEventURLs {
     private String adherenceCallLogPath;
     private String callLogURL;
     private String flashingLogURL;
+    private String containerRegistrationURL;
 
     public String getAdherenceCallLogURL() {
         return whpReportsURL + adherenceCallLogPath;
@@ -22,6 +23,10 @@ public class ReportingEventURLs {
 
     public String getFlashingLogURL() {
         return whpReportsURL + flashingLogURL;
+    }
+
+    public String getContainerRegistrationLogURL() {
+        return whpReportsURL + containerRegistrationURL;
     }
 
     @Value("${whp.reports.adherenceCallLog}")
@@ -42,5 +47,10 @@ public class ReportingEventURLs {
     @Value("${whp.reports.flashingLog}")
     public void setFlashingLogURL(String flashingLogURL) {
         this.flashingLogURL = flashingLogURL;
+    }
+
+    @Value("${whp.reports.containerRegistration}")
+    public void setContainerRegistrationURL(String containerRegistrationURL) {
+        this.containerRegistrationURL = containerRegistrationURL;
     }
 }
