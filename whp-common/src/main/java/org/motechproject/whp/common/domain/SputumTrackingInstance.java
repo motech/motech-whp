@@ -44,7 +44,7 @@ public enum SputumTrackingInstance {
 
     public static SputumTrackingInstance getInstanceByName(String name) {
         for(SputumTrackingInstance instance : SputumTrackingInstance.values()) {
-            if(instance.name().equals(name))
+            if(instance.name().equalsIgnoreCase(name))
                 return instance;
         }
         return null;

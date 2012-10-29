@@ -21,6 +21,12 @@ public class SputumTrackingInstanceTest {
     }
 
     @Test
+    public void shouldGetInstanceForGivenName() {
+        assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceByName("PreTreatment"));
+        assertEquals(SputumTrackingInstance.PreTreatment, SputumTrackingInstance.getInstanceByName("Pretreatment"));
+    }
+
+    @Test
     public void shouldValidateBasedOnInstanceName() {
         assertTrue(SputumTrackingInstance.isValidRegistrationInstanceName("PreTreatment"));
         assertTrue(SputumTrackingInstance.isValidRegistrationInstanceName("Pretreatment"));

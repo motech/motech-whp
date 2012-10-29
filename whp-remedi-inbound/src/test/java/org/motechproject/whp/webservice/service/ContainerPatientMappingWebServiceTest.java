@@ -118,7 +118,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         Container fetchedContainer = containerService.getContainer(request.getCase_id());
         assertEquals(request.getPatient_id(),fetchedContainer.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer.getStatus());
-        assertEquals(request.getSmear_sample_instance(), fetchedContainer.getMappingInstance().name());
+        assertEquals(request.getSmear_sample_instance().toLowerCase(), fetchedContainer.getMappingInstance().name().toLowerCase());
         assertEquals(request.getTb_id(),fetchedContainer.getTbId());
         assertEquals(reasonForContainerClosure.getCode(),fetchedContainer.getReasonForClosure());
         assertEquals(tbRegistrationDate.toLocalDate(),fetchedContainer.getConsultationDate());
@@ -166,7 +166,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")
                 .withDateModified(now().toString())
-                .withInstance(SampleInstance.PreTreatment.name())
+                .withInstance(SampleInstance.PreTreatment.name().toLowerCase())
                 .withPatientId("patient")
                 .withTbId("test")
                 .withTbRegistrationDate("20/11/1986")
