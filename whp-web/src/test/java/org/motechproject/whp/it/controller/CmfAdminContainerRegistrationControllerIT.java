@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
@@ -79,6 +80,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     @Before
     public void setUp() throws WebSecurityException {
+        reset(httpClientService);
+
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
@@ -182,9 +185,9 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
         markForDeletion(container);
     }
-/*
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(httpClientService);
-    }*/
+    }
 }
