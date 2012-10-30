@@ -11,7 +11,7 @@
             </div>
     </#if>
     <#if message??>
-            <div id="container-registration-confirmation" class="container-registration-message-alert row alert alert-info fade in">
+            <div id="container-registration-confirmation" class="container-registration-message-alert alert alert-success fade in">
                 <button class="close" data-dismiss="alert">&times;</button>
                 ${message}
             </div>

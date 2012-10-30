@@ -1,12 +1,12 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-menu.ftl" as layout>
 <@layout.defaultLayout entity="itadmin" title="Create CMF Admin Account" >
-<div class="span12 row" id="createCmfAdmin">
-    </br>
+<div class="row-fluid" id="createCmfAdmin">
+    <h1>Create CMF Admin Account</h1>
     <form action="<@spring.url '/cmfAdmin/create'/>" id="createCmfAdminForm" submitOnEnterKey="true" method="POST"
           class="">
         <div class="offset2-fixed form-horizontal">
-            <div class="control-group well">
+            <div class="well">
                 <div class="control-group">
                     <label class="control-label" for="staffName">Staff Name*</label>
 

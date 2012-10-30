@@ -98,12 +98,12 @@
                                 <div class="input-append input-prepend">
                                     <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
                                     <input class = "dates" type="text" placeholder="From: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateFrom" name="containerIssuedDateFrom"  ng-model = "searchCriteria.containerIssuedDateFrom">
-                                    <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+                                    <span class="add-on clear-date-button"><i class ="icon-remove-sign"></i></span>
                                 </div>
                                 <div class="input-append input-prepend">
                                     <span class="add-on show-date-button"><i class ="icon-calendar"></i></span>
                                     <input class = "dates" type="text" placeholder="To: dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="containerIssuedDateTo" name="containerIssuedDateTo" ng-model = "searchCriteria.containerIssuedDateTo">
-                                    <span class="add-on clear-date-button"><i class ="icon-refresh"></i></span>
+                                    <span class="add-on clear-date-button"><i class ="icon-remove-sign"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -111,8 +111,8 @@
 
                         <div class="control-group buttons-group span2 pull-down">
                             <div class="controls">
-                                <button type="submit" id="search" class="btn btn-primary form-button-center">Search <i class="icon-search icon-white"></i></button>
-                                <button id="clearFilter" type="reset" class="btn  form-button-center">Clear <i class="icon-refresh"></i></button>
+                                <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
+                                <button id="clearFilter" type="reset" class="btn">Clear All</button>
                             </div>
                         </div>
 

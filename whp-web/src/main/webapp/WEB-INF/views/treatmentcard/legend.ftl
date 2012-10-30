@@ -7,32 +7,32 @@
     <tbody>
     <tr>
         <td>
-            <div class="label pausedAdherenceData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="label pausedAdherenceData"></div>
         </td>
         <td>
-            <div class="text-center">Treatment Paused</div>
+            Treatment Paused
         </td>
     </tr>
     <#list treatmentCard.providerIds as providerId>
     <tr>
         <td>
-            <div class="tick-icon pull-left" providerId=${providerId}> &#10004; </div>
-            <div class="pull-left"> , &nbsp; </div>
-            <div class="round-icon legend-round-icon" providerId=${providerId}>O</div>
+            <span class="tick-icon" providerId=${providerId}> &#10004; </span>
+            <span > , &nbsp; </div>
+            <span class="round-icon legend-round-icon" providerId=${providerId}>O</span>
         </td>
         <td>
-            <div class="text-center text-center">Adherence given by provider ${providerId}</div>
+            Adherence given by provider ${providerId}
         </td>
     </tr>
     </#list>
     <tr>
         <td>
-            <div class="tick-icon pull-left" providerId=""> &#10004; </div>
-            <div class="pull-left"> , &nbsp; </div>
-            <div class="round-icon legend-round-icon" providerId="">O</div>
+            <span class="tick-icon" providerId=""> &#10004; </span>
+            <span class=""> , &nbsp; </span>
+            <span class="round-icon legend-round-icon" providerId="">O</span>
         </td>
         <td>
-            <div class="text-center text-center">Provider Unknown</div>
+            Provider Unknown
         </td>
     </tr>
     </tbody>

@@ -23,7 +23,7 @@
                             <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
                             <input class="" placeholder="dd/mm/yyyy" data-date-format="dd/mm/yyyy" id="ipDatePicker" name="ipStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.ipStartDate}"/>
-                            <span class="add-on date-dismiss"><i class="icon-refresh"></i></span>
+                            <span class="add-on date-dismiss"><i class="icon-remove-sign"></i></span>
 
                         </td>
 
@@ -34,7 +34,7 @@
                             <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
                             <input class="" placeholder="dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="eipDatePicker" name="eipStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.eipStartDate}"/>
-                            <span class="add-on  date-dismiss"><i class="icon-refresh"></i></span>
+                            <span class="add-on  date-dismiss"><i class="icon-remove-sign"></i></span>
                         </td>
 
                     </tr>
@@ -44,7 +44,7 @@
                             <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
                             <input class="" placeholder="dd/mm/yyyy"  data-date-format="dd/mm/yyyy" id="cpDatePicker" name="cpStartDate"
                                    readonly="readonly" type="text" value="${phaseStartDates.cpStartDate}"/>
-                            <span class="add-on  date-dismiss"><i class="icon-refresh"></i></span>
+                            <span class="add-on  date-dismiss"><i class="icon-remove-sign"></i></span>
                         </td>
 
                     </tr>

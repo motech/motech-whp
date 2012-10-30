@@ -30,13 +30,15 @@ body:after {
     height: 100%;
 }
 #mainContent h1 {
-    border-bottom: 1px solid #81C7FF;
-    color: #038CE1;
+    border-bottom: 1px solid #0159D3;
+    color: #006BFF;
     font-family: Georgia,serif;
-    font-size: 26px;
+    font-size: 22px;
+    font-weight: normal;
+    line-height: normal;
     margin-bottom: 25px;
-    padding-bottom: 10px;
-    text-shadow: 0 1px 1px #999999;
+    padding-bottom: 5px;
+    text-shadow: 2px 1px 1px #FFFFFF;
 }
 #mainContent .login-form h1 {
     font-family: 'Telex',sans-serif;
@@ -81,7 +83,12 @@ body:after {
     margin-bottom: 5px;
     color: #54555a;
 }
-
+.well form {
+    margin: 0;
+}
+.patients-list-legend .table {
+    margin: 10px 0 0;
+}
 #whp-logo {
     margin-right: 0px;
 }
@@ -127,11 +134,13 @@ table tr td.text-center, .text-center, .text-center th, .text-center td {
     vertical-align: middle;
 }
 
-.table tbody tr:hover td {
+.table tbody tr:hover td, .table tbody tr:hover th {
     background-color: #E3F5FA;
     color: black;
 }
-
+.table-nohighlight tbody tr:hover td, .table-nohighlight tbody tr:hover th {
+    background-color: transparent;
+}
 table tbody .link:hover td:not(.row-click-exclude), .hover {
     color: #369BD7;
     text-decoration: underline;
@@ -148,10 +157,7 @@ table tbody .link:hover td:not(.row-click-exclude), .hover {
 #weeklyAdherenceForm .controls {
     margin-left: 375px;
 }
-#legend-container {
-    display: inline-block;
-    overflow: auto;
-}
+
 
 .sharp, .sharp td, .sharp th {
     border-color: #999;
@@ -252,6 +258,12 @@ table.sharp thead th {
 .pausedAdherenceData {
     background-color: lightPink;
 }
+
+#legend .pausedAdherenceData {
+    height: 18px;
+    padding: 0;
+    width: 50px;
+}
 .printable-version .pausedAdherenceData {
     background-color: transparent;
 }
@@ -283,12 +295,6 @@ table.sharp thead th {
     font-weight: bold;
 }
 
-.alert-info {
-    background-color: #EDEBBF;
-    border-color: #E0D6AA;
-    color: #817B02;
-    font-weight: bold;
-}
 
 .leftnav-menu-margin {
     margin-left: -200px;
@@ -333,9 +339,7 @@ div.buttons a, div.buttons button {
     max-height: 130px;
 }
 
-.patient-info, .patient-info div {
-    overflow: hidden;
-}
+
 .patient-info h3 {
     margin-bottom: 20px;
     border-bottom: 1px dotted rgba(0,0,0,0.5);
@@ -466,6 +470,10 @@ div.buttons a, div.buttons button {
     padding-top: 3px;
     text-align: center;
 }
+#legend td{
+       text-align: left;
+}
+
 #treatmentCard .sunday {
     padding-left: 4px;
     min-width: 12px;
@@ -478,7 +486,9 @@ div.buttons a, div.buttons button {
 #treatmentCard .sunday.dash-icon div {
     line-height: 13px;
 }
-
+#treatmentCard #legend {
+    margin-top: 60px;
+}
 .line-height-normal td {
     line-height: 18px;
 }
@@ -667,14 +677,16 @@ pre {
 .border-bottom {
     border-bottom: 1px #add8e6 solid;
 }
-.result-count {
-    margin-top: -34px;
-}
+
 .pull-down {
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
-
+.align-center {
+    text-align: center;
+    margin: auto;
+    display: inline-block;
+}
 .margin-bottom-10px {
     margin-bottom: 10px;
 }
@@ -940,7 +952,7 @@ pre {
     background: linear-gradient(center top , #F1F1F1, #E1E1E1) repeat scroll 0 0 transparent;
     border-bottom: 1px solid #E0E0E0;
     border-top: 1px solid #FFF !important;
-    padding: 15px 10px;
+    padding: 10px 5px;
     vertical-align: middle;
 }
 

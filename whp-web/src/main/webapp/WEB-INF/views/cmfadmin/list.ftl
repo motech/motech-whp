@@ -6,7 +6,7 @@
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 
     <#if message?exists && (message?length>0)>
-    <div id="statusMessage" class="message-alert row text-center alert alert-info fade in">
+    <div id="statusMessage" class="message-alert row text-center alert alert-success fade in">
         <button class="close" data-dismiss="alert">&times;</button>
     ${message}
         <#assign message=""/>
@@ -16,9 +16,17 @@
 <script type="text/javascript">
     createAutoClosingAlert(".message-alert", 5000);
 </script>
-<div class="well float-right">
-    <a class="btn btn-primary" id="createCmfAdmin-button" href="/whp/cmfAdmin/create">Create CMF Admin</a>
+<div class="row-fluid">
+    <div class="span10">
+        <h1>CMF Admin Listing</h1>
+    </div>
+    <div class="span2 well">
+
+            <a class="btn btn-primary" id="createCmfAdmin-button" href="/whp/cmfAdmin/create">Create CMF Admin</a>
+
+    </div>
 </div>
+
 <table id="cmfAdminList" class="table table-bordered table-condensed" redirectOnRowClick="true">
     <thead>
     <tr>

@@ -2,8 +2,10 @@
 <#import "../layout/default-with-menu.ftl" as layout>
 <#include "../layout/legend.ftl">
 <@layout.defaultLayout title="Patient List" entity="provider">
+
+    <div class="row-fluid">
     <#if message?exists && (message?length>0)>
-    <div class="adherence-message-alert row text-center alert alert-info fade in">
+    <div class="adherence-message-alert text-center alert alert-success fade in">
         <button class="close" data-dismiss="alert">&times;</button>
     ${message}
         <#assign message=""/>
@@ -14,10 +16,10 @@
         <h1>All Patients </h1>
         <h4>Adherence to be given for: ${weekStartDate} to ${weekEndDate}</h4>
     </div>
-
+    <div class="pull-right">
     <@legend key1="paused" value1="Current Treatment Paused" />
-
-
+    </div>
+    </div>
         <table id="patientList" class="table table-striped table-bordered table-condensed">
             <thead>
             <tr>

@@ -1,5 +1,5 @@
 <#macro legend key1 value1>
-    <div id="legend-container" class="pull-right">
+    <div id="legend-container">
         <table id="legend" class="table table-bordered table-condensed">
             <thead>
             <tr>
@@ -18,6 +18,4 @@
             </tbody>
         </table>
     </div>
-    <!-- FIXES FIREFOX DISPLAY ISSUE. DO.NOT.REMOVE. -->
-    <div class="row"></div>
 </#macro>

@@ -1,4 +1,4 @@
-<div class="patient-info default-arrow" ">
+<div class="patient-info default-arrow well" >
 
 
         <div class="row-fluid">

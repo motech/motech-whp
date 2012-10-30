@@ -5,6 +5,7 @@
 <#include "../user/resetPassword.ftl">
 
 <@layout.defaultLayout title="MoTeCH-WHP" entity="itadmin">
+<h1>Provider Listing</h1>
 <div id="search-section" class="well">
     <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
         Pane</a></h3>

@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#include "../layout/legend.ftl">
-<div class="pull-left result-count">Found <span class="bold">${patientList?size}</span> patient(s)</div>
+<div class="">Found <span class="bold">${patientList?size}</span> patient(s)</div>
 <script type="text/javascript"
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 <script type="text/javascript"
@@ -95,4 +95,4 @@
     </#if>
     </tbody>
 </table>
-<i>&#42; Cumulative missed doses shown as of ${lastSunday}</i>
+

@@ -22,41 +22,44 @@
 </script>
 <div class="row-fluid">
         <#if message??>
-        <div class="dateUpdated-message-alert row alert alert-info fade in">
+        <div class="dateUpdated-message-alert alert alert-success fade in">
             <button class="close" data-dismiss="alert">&times;</button>
         ${message}
         </div>
         </#if>
 
         <#include "phaseTransitionAlert.ftl"/>
-    <br/>
+
         <#include "patientInfo.ftl"/>
-    <br/>
+
         <#include "phaseInfo.ftl"/>
 
     <div id="treatmentCard"></div>
+
     <div class="row-fluid">
-        <div class="controls btn-group float-left">
-            <a href="<@spring.url "/"/>" class="btn">Back To Patient List</a>
-            <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand">Adjust Phase Start
+        <div class="controls btn-group">
+            <a href="<@spring.url "/"/>" class="btn"><i class="icon-chevron-left"></i> Back To Patient List</a>
+            <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn brand"><i class="icon-calendar"></i> Adjust Phase Start
                 Dates</a>
-            <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>">Print</a>
+            <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print"></i> Print</a>
         </div>
     </div>
-    <br/>
-    <br/>
+
+    <br />
+    <br />
 
 
-    <form id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
 
-        <div class="well clearfix">
+    <form class="well" id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
+
+        <div class="row-fluid">
             <textarea class="float-left" id="patientRemark" name="patientRemark"></textarea>
             <button class="btn btn-primary float-right" type="submit" id='addRemark'>Add Remark</button>
         </div>
 
     </form>
 
-    <br/>
+
     <div id="remarks">
         <#include "remarks.ftl"/>
     </div>
