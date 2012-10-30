@@ -114,12 +114,13 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
+        MotechUser testuser = new MotechUser(new MotechWebUser("testuser", null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
                         .param("instance", inTreatment.getDisplayText()).param("providerId", providerId)
                         .param("containerRegistrationMode", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER.name())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
         Container container = containerService.getContainer(containerId);
@@ -139,7 +140,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
@@ -154,17 +155,18 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
+        MotechUser testuser = new MotechUser(new MotechWebUser("testuser", null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
                         .param("instance", inTreatment.getDisplayText()).param("providerId", providerId)
                         .param("containerRegistrationMode", ContainerRegistrationMode.NEW_CONTAINER.name())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
         Container container = containerService.getContainer(containerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));

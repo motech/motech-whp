@@ -1,12 +1,14 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
+import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,11 +51,17 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
                 return newContainer(uiModel, servletRequest);
             return onBehalfOfProvider(uiModel, servletRequest);
         }
+        populateSubmitterDetails(registrationRequest, servletRequest);
         populateChannelId(registrationRequest);
         containerService.registerContainer(registrationRequest);
 
         out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), servletRequest);
         String redirectedUrl = (mode == ContainerRegistrationMode.NEW_CONTAINER) ? "/new-container" : "/on-behalf-of-provider";
         return "redirect:/containerRegistration/by_cmfAdmin" +  redirectedUrl;
+    }
+
+    @Override
+    String getSupportedUserRole() {
+        return WHPRole.CMF_ADMIN.name();
     }
 }

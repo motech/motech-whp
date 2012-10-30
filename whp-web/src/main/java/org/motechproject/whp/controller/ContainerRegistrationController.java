@@ -1,13 +1,16 @@
 package org.motechproject.whp.controller;
 
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ContainerRegistrationValidator;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,4 +59,12 @@ public abstract class ContainerRegistrationController extends BaseWebController 
     protected void populateChannelId(ContainerRegistrationRequest registrationRequest) {
         registrationRequest.setChannelId(ChannelId.WEB.name());
     }
+
+    protected void populateSubmitterDetails(ContainerRegistrationRequest registrationRequest, HttpServletRequest servletRequest) {
+        MotechUser motechUser = loggedInUser(servletRequest);
+        registrationRequest.setSubmitterId(motechUser.getUserName());
+        registrationRequest.setSubmitterRole(getSupportedUserRole());
+    }
+
+    abstract String getSupportedUserRole();
 }

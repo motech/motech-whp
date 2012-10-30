@@ -94,9 +94,6 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         String containerId = "76862367681";
         SputumTrackingInstance inTreatment = SputumTrackingInstance.PreTreatment;
 
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add(WHPRole.CMF_ADMIN.name());
-
         standaloneSetup(IVRContainerRegistrationController)
                 .build()
                 .perform(
@@ -127,7 +124,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).build();
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);

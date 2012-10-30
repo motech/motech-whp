@@ -76,11 +76,11 @@ public class ContainerService {
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
-        publishReportingEvent(container, registrationRequest.getChannelId());
+        publishReportingEvent(container, registrationRequest.getChannelId(), registrationRequest.getSubmitterId(), registrationRequest.getSubmitterRole());
     }
 
-    private void publishReportingEvent(Container container, String channelId) {
-        SputumTrackingRequest containerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).build();
+    private void publishReportingEvent(Container container, String channelId, String submitterId, String submitterRole) {
+        SputumTrackingRequest containerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
         reportingPublisherService.reportContainerRegistration(containerRegistrationRequest);
     }
 

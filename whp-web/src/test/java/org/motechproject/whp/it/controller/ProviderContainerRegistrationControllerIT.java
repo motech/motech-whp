@@ -102,14 +102,15 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         List<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
+        MotechUser testuser = new MotechUser(new MotechWebUser(providerId, null, null, roles));
         standaloneSetup(providerContainerRegistrationController).build()
                 .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", inTreatmentInstance.getDisplayText())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
         Container container = containerService.getContainer(containerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).build();
+        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.PROVIDER.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));

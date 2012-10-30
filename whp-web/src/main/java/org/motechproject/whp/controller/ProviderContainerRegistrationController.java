@@ -7,6 +7,7 @@ import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
+import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,7 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
                            HttpServletRequest servletRequest) throws IOException, TemplateException {
         populateProviderId(registrationRequest, servletRequest);
         populateChannelId(registrationRequest);
+        populateSubmitterDetails(registrationRequest, servletRequest);
         if (validate(uiModel, registrationRequest)) {
             return show(uiModel, servletRequest);
         }
@@ -52,5 +54,10 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
 
     private void populateProviderId(ContainerRegistrationRequest registrationRequest, HttpServletRequest request) {
          registrationRequest.setProviderId(loggedInUser(request).getUserName());
+    }
+
+    @Override
+    String getSupportedUserRole() {
+        return WHPRole.PROVIDER.name();
     }
 }

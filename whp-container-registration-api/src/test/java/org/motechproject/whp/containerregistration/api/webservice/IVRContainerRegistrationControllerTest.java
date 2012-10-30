@@ -5,11 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
 import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
@@ -212,6 +214,9 @@ public class IVRContainerRegistrationControllerTest {
         assertEquals(request.getContainer_id(), containerRegistrationRequest.getContainerId());
         assertEquals(request.getPhase(), containerRegistrationRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationRequest.getProviderId());
+        assertEquals(ChannelId.IVR.name(), containerRegistrationRequest.getChannelId());
+        assertEquals(provider.getProviderId(), containerRegistrationRequest.getSubmitterId());
+        assertEquals(WHPRole.PROVIDER.name(), containerRegistrationRequest.getSubmitterRole());
     }
 
     @Test

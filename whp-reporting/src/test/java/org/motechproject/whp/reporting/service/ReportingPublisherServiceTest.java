@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
@@ -78,8 +79,9 @@ public class ReportingPublisherServiceTest {
         sputumTrackingRequest.setInstance("PreTreatment");
         sputumTrackingRequest.setDateIssuedOn(new Date());
         sputumTrackingRequest.setProviderId("raj");
-        sputumTrackingRequest.setSubmittedBy("CmfAdmin");
+        sputumTrackingRequest.setSubmitterRole("CmfAdmin");
         sputumTrackingRequest.setSubmitterId("submitterId");
+        sputumTrackingRequest.setChannelId(ChannelId.WEB.name());
 
         reportingPublisher.reportContainerRegistration(sputumTrackingRequest);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);

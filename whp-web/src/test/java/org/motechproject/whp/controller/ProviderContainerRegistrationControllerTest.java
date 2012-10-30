@@ -124,9 +124,10 @@ public class ProviderContainerRegistrationControllerTest {
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
+        MotechUser testuser = new MotechUser(new MotechWebUser(providerId, null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", instance)
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
                 .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
@@ -140,5 +141,7 @@ public class ProviderContainerRegistrationControllerTest {
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
         assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
+        assertEquals(testuser.getUserName(), actualRegistrationRequest.getSubmitterId());
+        assertEquals(WHPRole.PROVIDER.name(), actualRegistrationRequest.getSubmitterRole());
     }
 }

@@ -11,6 +11,8 @@ public class ContainerRegistrationRequest {
     private String providerId;
 
     private String channelId;
+    private String submitterId;
+    private String submitterRole;
 
     public ContainerRegistrationRequest() {
     }
