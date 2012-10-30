@@ -375,6 +375,9 @@ div.buttons a, div.buttons button {
 #search-pane .buttons-group .btn:first-child {
     margin-left: -10px;
 }
+.btn:hover .icon-white {
+    opacity: 1;
+}
 .search-section-header {
     z-index: 1;
     font-size: 1.1em;
