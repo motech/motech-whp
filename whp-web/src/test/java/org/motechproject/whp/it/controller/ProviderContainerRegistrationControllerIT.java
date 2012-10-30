@@ -22,7 +22,7 @@ import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
 import org.motechproject.whp.webservice.request.ProviderWebRequest;
@@ -110,7 +110,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
         Container container = containerService.getContainer(containerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.PROVIDER.name()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.PROVIDER.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));

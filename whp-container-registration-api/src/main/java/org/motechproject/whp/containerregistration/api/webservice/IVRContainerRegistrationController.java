@@ -67,8 +67,8 @@ public class IVRContainerRegistrationController {
 
         if (verificationResult.isSuccess()) {
             ContainerRegistrationRequestMapper containerRegistrationRequestMapper = new ContainerRegistrationRequestMapper(providerService);
-            ContainerRegistrationRequest containerRegistrationRequest = containerRegistrationRequestMapper.buildContainerRegistrationRequest(ivrContainerRegistrationRequest);
-            containerService.registerContainer(containerRegistrationRequest);
+            ContainerRegistrationRequest containerRegistrationReportingRequest = containerRegistrationRequestMapper.buildContainerRegistrationRequest(ivrContainerRegistrationRequest);
+            containerService.registerContainer(containerRegistrationReportingRequest);
         }
 
         return getVerificationResponse(verificationResult, response);

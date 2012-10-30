@@ -209,14 +209,14 @@ public class IVRContainerRegistrationControllerTest {
 
         ArgumentCaptor<ContainerRegistrationRequest> containerRegistrationRequestArgumentCaptor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
         verify(containerService, times(1)).registerContainer(containerRegistrationRequestArgumentCaptor.capture());
-        ContainerRegistrationRequest containerRegistrationRequest = containerRegistrationRequestArgumentCaptor.getValue();
+        ContainerRegistrationRequest containerRegistrationReportingRequest = containerRegistrationRequestArgumentCaptor.getValue();
 
-        assertEquals(request.getContainer_id(), containerRegistrationRequest.getContainerId());
-        assertEquals(request.getPhase(), containerRegistrationRequest.getInstance());
-        assertEquals(provider.getProviderId(), containerRegistrationRequest.getProviderId());
-        assertEquals(ChannelId.IVR.name(), containerRegistrationRequest.getChannelId());
-        assertEquals(provider.getProviderId(), containerRegistrationRequest.getSubmitterId());
-        assertEquals(WHPRole.PROVIDER.name(), containerRegistrationRequest.getSubmitterRole());
+        assertEquals(request.getContainer_id(), containerRegistrationReportingRequest.getContainerId());
+        assertEquals(request.getPhase(), containerRegistrationReportingRequest.getInstance());
+        assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
+        assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
+        assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getSubmitterId());
+        assertEquals(WHPRole.PROVIDER.name(), containerRegistrationReportingRequest.getSubmitterRole());
     }
 
     @Test

@@ -21,7 +21,7 @@ import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +80,8 @@ public class ContainerService {
     }
 
     private void publishReportingEvent(Container container, String channelId, String submitterId, String submitterRole) {
-        SputumTrackingRequest containerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
-        reportingPublisherService.reportContainerRegistration(containerRegistrationRequest);
+        ContainerRegistrationReportingRequest containerRegistrationReportingRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
+        reportingPublisherService.reportContainerRegistration(containerRegistrationReportingRequest);
     }
 
     public boolean exists(String containerId) {

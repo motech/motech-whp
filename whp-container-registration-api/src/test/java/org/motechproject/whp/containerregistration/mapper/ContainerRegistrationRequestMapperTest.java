@@ -36,13 +36,13 @@ public class ContainerRegistrationRequestMapperTest {
         ivrContainerRegistrationRequest.setPhase("phase");
 
         ContainerRegistrationRequestMapper containerRegistrationRequestMapper = new ContainerRegistrationRequestMapper(providerService);
-        ContainerRegistrationRequest containerRegistrationRequest = containerRegistrationRequestMapper.buildContainerRegistrationRequest(ivrContainerRegistrationRequest);
+        ContainerRegistrationRequest containerRegistrationReportingRequest = containerRegistrationRequestMapper.buildContainerRegistrationRequest(ivrContainerRegistrationRequest);
 
         verify(providerService,times(1)).findByMobileNumber("msisdn");
-        assertEquals("container_id", containerRegistrationRequest.getContainerId());
-        assertEquals("phase", containerRegistrationRequest.getInstance());
-        assertEquals(provider.getProviderId(), containerRegistrationRequest.getProviderId());
-        assertEquals(ChannelId.IVR.name(), containerRegistrationRequest.getChannelId());
+        assertEquals("container_id", containerRegistrationReportingRequest.getContainerId());
+        assertEquals("phase", containerRegistrationReportingRequest.getInstance());
+        assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
+        assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
 
     }
 }

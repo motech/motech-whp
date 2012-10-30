@@ -10,7 +10,7 @@ import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 
 import java.util.Date;
 
@@ -74,7 +74,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishSputumTrackingContainerRegistrationLog() throws Exception {
 
-        SputumTrackingRequest sputumTrackingRequest = new SputumTrackingRequest();
+        ContainerRegistrationReportingRequest sputumTrackingRequest = new ContainerRegistrationReportingRequest();
         sputumTrackingRequest.setContainerId("containerId");
         sputumTrackingRequest.setInstance("PreTreatment");
         sputumTrackingRequest.setDateIssuedOn(new Date());

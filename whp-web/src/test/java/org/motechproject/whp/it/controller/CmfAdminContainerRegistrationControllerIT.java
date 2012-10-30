@@ -25,7 +25,7 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.CmfAdminContainerRegistrationController;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.CmfAdminService;
@@ -140,7 +140,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
@@ -166,7 +166,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
         Container container = containerService.getContainer(containerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));

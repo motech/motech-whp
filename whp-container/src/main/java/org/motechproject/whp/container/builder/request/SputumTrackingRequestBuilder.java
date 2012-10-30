@@ -1,44 +1,44 @@
 package org.motechproject.whp.container.builder.request;
 
 import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 
 public class SputumTrackingRequestBuilder {
     private Container container;
-    private SputumTrackingRequest containerRegistrationRequest;
+    private ContainerRegistrationReportingRequest containerRegistrationReportingRequest;
 
     public SputumTrackingRequestBuilder forContainer(Container container) {
         this.container = container;
-        containerRegistrationRequest = new SputumTrackingRequest();
+        containerRegistrationReportingRequest = new ContainerRegistrationReportingRequest();
         withBasicDetails();
         return this;
     }
 
     public void withBasicDetails() {
-        containerRegistrationRequest.setContainerId(container.getContainerId());
-        containerRegistrationRequest.setDateIssuedOn(container.getContainerIssuedDate().toDate());
-        containerRegistrationRequest.setInstance(container.getInstance().name());
-        containerRegistrationRequest.setContainerStatus(container.getStatus().name());
-        containerRegistrationRequest.setProviderId(container.getProviderId());
-        containerRegistrationRequest.setLocationId(container.getDistrict());
+        containerRegistrationReportingRequest.setContainerId(container.getContainerId());
+        containerRegistrationReportingRequest.setDateIssuedOn(container.getContainerIssuedDate().toDate());
+        containerRegistrationReportingRequest.setInstance(container.getInstance().name());
+        containerRegistrationReportingRequest.setContainerStatus(container.getStatus().name());
+        containerRegistrationReportingRequest.setProviderId(container.getProviderId());
+        containerRegistrationReportingRequest.setLocationId(container.getDistrict());
     }
 
     public SputumTrackingRequestBuilder registeredThrough(String channelId) {
-        containerRegistrationRequest.setChannelId(channelId);
+        containerRegistrationReportingRequest.setChannelId(channelId);
         return this;
     }
 
-    public SputumTrackingRequest build() {
-        return containerRegistrationRequest;
+    public ContainerRegistrationReportingRequest build() {
+        return containerRegistrationReportingRequest;
     }
 
     public SputumTrackingRequestBuilder withSubmitterId(String creatorId) {
-        containerRegistrationRequest.setSubmitterId(creatorId);
+        containerRegistrationReportingRequest.setSubmitterId(creatorId);
         return this;
     }
 
     public SputumTrackingRequestBuilder withSubmitterRole(String role) {
-        containerRegistrationRequest.setSubmitterRole(role);
+        containerRegistrationReportingRequest.setSubmitterRole(role);
         return this;
     }
 }

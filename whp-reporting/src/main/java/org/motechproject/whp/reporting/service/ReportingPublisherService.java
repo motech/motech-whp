@@ -6,7 +6,7 @@ import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.reports.contract.CallLogRequest;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getFlashingLogURL(), flashingLogRequest);
     }
 
-    public void reportContainerRegistration(SputumTrackingRequest sputumTrackingRequest) {
+    public void reportContainerRegistration(ContainerRegistrationReportingRequest sputumTrackingRequest) {
         httpClientService.post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
     }
 }

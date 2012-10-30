@@ -21,7 +21,7 @@ import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.containerregistration.api.webservice.IVRContainerRegistrationController;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.contract.SputumTrackingRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
@@ -124,7 +124,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        SputumTrackingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
