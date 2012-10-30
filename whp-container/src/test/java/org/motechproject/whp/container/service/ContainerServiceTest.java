@@ -12,16 +12,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.ChannelId;
-import org.motechproject.whp.common.domain.ContainerStatus;
-import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.container.WHPContainerConstants;
-import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
+import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
+import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -30,6 +29,7 @@ import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -43,8 +43,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
+import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class ContainerServiceTest extends BaseUnitTest {
     private ContainerService containerService;
@@ -77,7 +80,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         verify(allContainers).add(captor.capture());
         Container container = captor.getValue();
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
         verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
 
         assertEquals(Open, container.getStatus());
@@ -149,7 +152,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertEquals(district, actualContainer.getDistrict());
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new SputumTrackingRequestBuilder().forContainer(actualContainer).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(actualContainer).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
@@ -182,12 +185,33 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldUpdateContainer() {
+    public void shouldUpdateContainer_forMapping() {
         Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
 
-        containerService.update(container);
+        containerService.updatePatientMapping(container);
 
         verify(allContainers).update(container);
+    }
+
+    @Test
+    public void shouldUpdateContainer_forLabResultsCapture() {
+        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
+        LabResults labResults = new LabResults();
+        labResults.setCumulativeResult(Negative);
+        labResults.setLabName("TestlabName");
+        labResults.setLabNumber("TestlabNumber");
+        labResults.setSmearTestDate1(today());
+        labResults.setSmearTestDate2(today().minusDays(1));
+        labResults.setSmearTestResult1(Positive);
+        labResults.setSmearTestResult2(Negative);
+        container.setLabResults(labResults);
+
+        SputumLabResultsCaptureReportingRequest reportingRequest = new SputumLabResultsCaptureReportingRequestBuilder().forContainer(container).build();
+
+        containerService.updateLabResults(container);
+
+        verify(allContainers).update(container);
+        verify(reportingPublisherService).reportLabResultsCapture(reportingRequest);
     }
 
     @Test

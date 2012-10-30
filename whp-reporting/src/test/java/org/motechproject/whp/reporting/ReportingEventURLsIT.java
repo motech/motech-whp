@@ -36,4 +36,9 @@ public class ReportingEventURLsIT {
         assertThat(reportingEventURLs.getContainerRegistrationLogURL(), is("http://localhost:8080/whp-reports/sputumTracking/containerRegistrationMeasure"));
     }
 
+    @Test
+    public void shouldGetSputumLabResultsCaptureMeasureURL() {
+        assertThat(reportingEventURLs.getSputumLabResultsCaptureLogURL(), is("http://localhost:8080/whp-reports/sputumTracking/sputumLabResultsMeasure"));
+    }
+
 }

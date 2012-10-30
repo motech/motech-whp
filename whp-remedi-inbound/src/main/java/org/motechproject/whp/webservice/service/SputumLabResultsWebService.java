@@ -36,6 +36,7 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
         this.validator = validator;
     }
 
+    @Override
     public void updateCase(SputumLabResultsWebRequest sputumLabResultsWebRequest) {
         if(!sputumLabResultsWebRequest.hasCompleteLabResults()) {
             throwWHPCaseException(SPUTUM_LAB_RESULT_IS_INCOMPLETE);
@@ -53,7 +54,7 @@ public class SputumLabResultsWebService extends CaseService<SputumLabResultsWebR
         }
 
         sputumLabResultsMapper.map(sputumLabResultsWebRequest, container);
-        containerService.update(container);
+        containerService.updateLabResults(container);
     }
 
     public void createCase(SputumLabResultsWebRequest ccCase) throws CaseException {

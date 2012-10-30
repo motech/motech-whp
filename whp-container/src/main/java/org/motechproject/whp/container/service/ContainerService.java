@@ -9,7 +9,8 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.container.builder.request.SputumTrackingRequestBuilder;
+import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
+import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -22,6 +23,7 @@ import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +78,7 @@ public class ContainerService {
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
-        publishReportingEvent(container, registrationRequest.getChannelId(), registrationRequest.getSubmitterId(), registrationRequest.getSubmitterRole());
-    }
-
-    private void publishReportingEvent(Container container, String channelId, String submitterId, String submitterRole) {
-        ContainerRegistrationReportingRequest containerRegistrationReportingRequest = new SputumTrackingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
-        reportingPublisherService.reportContainerRegistration(containerRegistrationReportingRequest);
+        publishContainerRegistrationReportingEvent(container, registrationRequest.getChannelId(), registrationRequest.getSubmitterId(), registrationRequest.getSubmitterRole());
     }
 
     public boolean exists(String containerId) {
@@ -92,8 +89,13 @@ public class ContainerService {
         return allContainers.findByContainerId(containerId);
     }
 
-    public void update(Container container) {
+    public void updatePatientMapping(Container container) {
         allContainers.update(container);
+    }
+
+    public void updateLabResults(Container container) {
+        allContainers.update(container);
+        publishLabResultsCaptureReportingEvent(container);
     }
 
     public void closeContainer(ContainerClosureRequest reasonForClosureRequest) {
@@ -182,5 +184,15 @@ public class ContainerService {
         } catch (DateParseException e) {
             throw new RuntimeException("Date cannot be parsed");
         }
+    }
+
+    private void publishContainerRegistrationReportingEvent(Container container, String channelId, String submitterId, String submitterRole) {
+        ContainerRegistrationReportingRequest containerRegistrationReportingRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
+        reportingPublisherService.reportContainerRegistration(containerRegistrationReportingRequest);
+    }
+
+    private void publishLabResultsCaptureReportingEvent(Container container) {
+        SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest = new SputumLabResultsCaptureReportingRequestBuilder().forContainer(container).build();
+        reportingPublisherService.reportLabResultsCapture(labResultsCaptureReportingRequest);
     }
 }

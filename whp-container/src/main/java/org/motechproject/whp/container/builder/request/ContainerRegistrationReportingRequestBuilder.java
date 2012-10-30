@@ -3,11 +3,11 @@ package org.motechproject.whp.container.builder.request;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 
-public class SputumTrackingRequestBuilder {
+public class ContainerRegistrationReportingRequestBuilder {
     private Container container;
     private ContainerRegistrationReportingRequest containerRegistrationReportingRequest;
 
-    public SputumTrackingRequestBuilder forContainer(Container container) {
+    public ContainerRegistrationReportingRequestBuilder forContainer(Container container) {
         this.container = container;
         containerRegistrationReportingRequest = new ContainerRegistrationReportingRequest();
         withBasicDetails();
@@ -23,7 +23,7 @@ public class SputumTrackingRequestBuilder {
         containerRegistrationReportingRequest.setLocationId(container.getDistrict());
     }
 
-    public SputumTrackingRequestBuilder registeredThrough(String channelId) {
+    public ContainerRegistrationReportingRequestBuilder registeredThrough(String channelId) {
         containerRegistrationReportingRequest.setChannelId(channelId);
         return this;
     }
@@ -32,12 +32,12 @@ public class SputumTrackingRequestBuilder {
         return containerRegistrationReportingRequest;
     }
 
-    public SputumTrackingRequestBuilder withSubmitterId(String creatorId) {
+    public ContainerRegistrationReportingRequestBuilder withSubmitterId(String creatorId) {
         containerRegistrationReportingRequest.setSubmitterId(creatorId);
         return this;
     }
 
-    public SputumTrackingRequestBuilder withSubmitterRole(String role) {
+    public ContainerRegistrationReportingRequestBuilder withSubmitterRole(String role) {
         containerRegistrationReportingRequest.setSubmitterRole(role);
         return this;
     }

@@ -152,7 +152,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
         sputumLabResultsWebService.updateCase(request);
 
         ArgumentCaptor<Container> containerArgumentCaptor = ArgumentCaptor.forClass(Container.class);
-        verify(containerService).update(containerArgumentCaptor.capture());
+        verify(containerService).updateLabResults(containerArgumentCaptor.capture());
 
         assertThat(container.getLabResults().getSmearTestDate1(), is(parse(request.getSmear_test_date_1(), forPattern(DATE_FORMAT))));
         assertThat(container.getLabResults().getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));

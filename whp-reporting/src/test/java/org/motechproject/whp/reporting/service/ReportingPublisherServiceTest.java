@@ -7,10 +7,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
-import org.motechproject.whp.reports.contract.CallLogRequest;
-import org.motechproject.whp.reports.contract.FlashingLogRequest;
-import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.*;
 
 import java.util.Date;
 
@@ -72,18 +69,21 @@ public class ReportingPublisherServiceTest {
     }
 
     @Test
-    public void shouldPublishSputumTrackingContainerRegistrationLog() throws Exception {
+    public void shouldPublishContainerRegistrationLog() throws Exception {
 
         ContainerRegistrationReportingRequest sputumTrackingRequest = new ContainerRegistrationReportingRequest();
-        sputumTrackingRequest.setContainerId("containerId");
-        sputumTrackingRequest.setInstance("PreTreatment");
-        sputumTrackingRequest.setDateIssuedOn(new Date());
-        sputumTrackingRequest.setProviderId("raj");
-        sputumTrackingRequest.setSubmitterRole("CmfAdmin");
-        sputumTrackingRequest.setSubmitterId("submitterId");
-        sputumTrackingRequest.setChannelId(ChannelId.WEB.name());
 
         reportingPublisher.reportContainerRegistration(sputumTrackingRequest);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
+    }
+
+    @Test
+    public void shouldPublishSputumLabResultsCaptureLog() throws Exception {
+
+        SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest = new SputumLabResultsCaptureReportingRequest();
+
+        reportingPublisher.reportLabResultsCapture(labResultsCaptureReportingRequest);
+        verify(httpClientService).post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), labResultsCaptureReportingRequest);
+
     }
 }

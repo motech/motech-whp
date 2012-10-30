@@ -1,11 +1,18 @@
 package org.motechproject.whp.webservice.it.service;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kubek2k.springockito.annotations.ReplaceWithMock;
+import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.motechproject.http.client.service.HttpClientService;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.webservice.service.SputumLabResultsWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,24 +22,31 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationWebServiceContext.xml")
 public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
     SputumLabResultsWebService sputumLabResultsWebService;
-
+    @Autowired
+    private ReportingEventURLs reportingEventURLs;
     @Autowired
     AllContainers allContainers;
     private Container container;
 
+    @ReplaceWithMock
+    @Autowired
+    private HttpClientService httpClientService;
+
     @Before
     public void setUp() {
+        reset(httpClientService);
         this.container = new Container();
         container.setContainerId("12345");
         container.setProviderId("providerId");
@@ -40,6 +54,11 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
         allContainers.add(container);
         markForDeletion(container);
+    }
+
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(httpClientService);
     }
 
     @Test
@@ -72,6 +91,10 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         assertThat(container.getLabResults().getCumulativeResult().value(), is("Positive"));
         assertThat(container.getLabResults().getLabName(), is("XYZ"));
         assertThat(container.getLabResults().getLabNumber(), is("1234"));
+
+        SputumLabResultsCaptureReportingRequest expectedReportingRequest = new SputumLabResultsCaptureReportingRequestBuilder().forContainer(container).build();
+
+        verify(httpClientService).post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), expectedReportingRequest);
     }
 
     @Test
@@ -94,6 +117,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
                 .perform(post("/sputumLabResults/process").body(requestBodyWithValidationErrors.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(allOf(containsString("<message nature=\"submit_error\">Lab results are incomplete</message>"), containsString("<message>Lab results are incomplete</message>"))));
+
     }
 
     @Test
@@ -118,5 +142,4 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
                 .andExpect(content().string(containsString("<message nature=\"submit_error\">field:api_key:api_key:is invalid.</message>")));
 
     }
-
 }

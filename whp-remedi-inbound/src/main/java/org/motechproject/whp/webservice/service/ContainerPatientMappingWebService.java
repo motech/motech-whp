@@ -50,7 +50,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
             container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, getTbRegistrationDate(request));
         }
-        containerService.update(container);
+        containerService.updatePatientMapping(container);
     }
 
     @Override
