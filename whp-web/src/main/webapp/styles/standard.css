@@ -767,12 +767,20 @@ pre {
     border: 2px solid red;
 }
 
-.Closed .closeContainer {
+.closeContainer {
     display: none;
 }
 
-.Open .openContainer {
+.openContainer {
     display: none;
+}
+
+.Close .closeContainer {
+    display: block;
+}
+
+.Open .openContainer {
+    display: block;
 }
 
 .consultationDate {

@@ -1,6 +1,7 @@
 package org.motechproject.whp.container.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -12,7 +13,7 @@ import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.Diagnosis.Positive;
-
+import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
 
 @Data
 @TypeDiscriminator("doc.type == 'Container'")
@@ -114,5 +115,10 @@ public class Container extends MotechBaseDataObject {
 
     private void updateCurrentTrackingStatus() {
         currentTrackingInstance = mappingInstance == null ? instance : SputumTrackingInstance.getTrackingInstanceType(mappingInstance);
+    }
+
+    @JsonIgnore
+    public boolean isClosedDueToMapping() {
+        return reasonForClosure.equals(CLOSURE_DUE_TO_MAPPING);
     }
 }

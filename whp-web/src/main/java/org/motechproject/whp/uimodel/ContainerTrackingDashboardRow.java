@@ -20,4 +20,5 @@ public class ContainerTrackingDashboardRow {
     private String containerStatus;
     private String reasonForClosure;
     private String mappingInstance;
+    private String action;
 }

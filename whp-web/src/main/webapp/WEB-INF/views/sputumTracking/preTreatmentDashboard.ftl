@@ -33,7 +33,7 @@
                        </div>
                    </div>
                   <div class="control-group span2 ">
-                      <label class="control-label ">Diagnosis</label>
+                      <label class="control-label ">TB Diagnosis</label>
                       <div class="controls">
                           <select id="diagnosis" name="diagnosis">
                               <option value=""></option>
@@ -147,8 +147,8 @@
                 <th>Date Of Test 1</th>
                 <th>Result 2</th>
                 <th>Date Of Test 2</th>
-                <th>Consulted On</th>
-                <th>Diagnosis</th>
+                <th>Consultation Date</th>
+                <th>TB Diagnosis</th>
                 <th>Patient ID</th>
                 <th>Provider District</th>
                 <th>Provider Id</th>
@@ -174,7 +174,7 @@
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
-                <td class="{{item.containerStatus}}">
+                <td class="{{item.action}}">
                     <div class="closeContainer">
                         <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a>
                     </div>

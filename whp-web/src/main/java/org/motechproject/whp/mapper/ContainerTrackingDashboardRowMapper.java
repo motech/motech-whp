@@ -2,12 +2,14 @@ package org.motechproject.whp.mapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
+import org.motechproject.whp.domain.Action;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,6 +76,17 @@ public class ContainerTrackingDashboardRowMapper {
 
         if (isNotBlank(container.getTbId()))
             row.setDiagnosis(DIAGNOSIS_POSITIVE);
+
+        setContainerAction(container);
+    }
+
+    private void setContainerAction(Container container) {
+        if(container.getStatus() == ContainerStatus.Open)
+            row.setAction(Action.Close.name());
+        else if(container.isClosedDueToMapping())
+            row.setAction(Action.None.name());
+        else
+            row.setAction(Action.Open.name());
     }
 
     private void setReasonForClosure(Container container) {

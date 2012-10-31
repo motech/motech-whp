@@ -7,22 +7,27 @@ import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
+import org.motechproject.whp.domain.Action;
 import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
+import static org.joda.time.DateTime.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Negative;
 import static org.motechproject.whp.common.domain.Diagnosis.Positive;
+import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
 import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
 
 public class ContainerTrackingDashboardRowMapperTest {
@@ -93,22 +98,20 @@ public class ContainerTrackingDashboardRowMapperTest {
         assertEquals(now.toLocalDate().plusDays(1).toString(DATE_FORMAT), row.getConsultationTwoDate());
         assertEquals(SmearTestResult.Positive.name(), row.getConsultationOneResult());
         assertEquals(SmearTestResult.Negative.name(), row.getConsultationTwoResult());
+        assertEquals(Action.Close.name(), row.getAction());
     }
 
     @Test
-    public void shouldNotChangeDiagnosisWhenReasonForClosureIsNotTbNegative() {
-        when(allReasonForContainerClosures.findByCode("some non tb negative code")).thenReturn(new ReasonForContainerClosure("some reason", "some non tb negative code"));
+    public void shouldMakeActionAsNoneAsContainerIsClosedByDefaultSputumMappingRequest() {
+        when(allReasonForContainerClosures.findByCode(WHPContainerConstants.CLOSURE_DUE_TO_MAPPING)).thenReturn(new ReasonForContainerClosure("sputum default mapping text", CLOSURE_DUE_TO_MAPPING));
         Container containerNotMappedToProvider = new Container();
-        containerNotMappedToProvider.setStatus(Open);
-        containerNotMappedToProvider.setCreationTime(now);
-        containerNotMappedToProvider.setReasonForClosure("some non tb negative code");
-        containerNotMappedToProvider.setDiagnosis(Positive);
-        containerNotMappedToProvider.setStatus(Open);
+        containerNotMappedToProvider.setCreationTime(now());
+        containerNotMappedToProvider.setStatus(Closed);
+        containerNotMappedToProvider.setReasonForClosure(WHPContainerConstants.CLOSURE_DUE_TO_MAPPING);
 
         ContainerTrackingDashboardRow row = new ContainerTrackingDashboardRowMapper(allReasonForContainerClosures, allAlternateDiagnosis).mapFrom(containerNotMappedToProvider);
 
-        assertNull(row.getProviderId());
-        assertEquals(Positive.name(), row.getDiagnosis());
+        assertEquals(Action.None.name(), row.getAction());
     }
 
     @Test

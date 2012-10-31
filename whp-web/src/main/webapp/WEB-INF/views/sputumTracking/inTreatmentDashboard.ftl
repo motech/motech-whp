@@ -163,7 +163,7 @@
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
-                <td class="{{item.containerStatus}}">
+                <td class="{{item.action}}">
                     <div class="closeContainer">
                         <a class="closeContainer" data-toggle="modal" href="#setReason">Close</a>
                     </div>
