@@ -13,6 +13,7 @@ public class ReportingEventURLs {
     private String flashingLogURL;
     private String containerRegistrationURL;
     private String sputumLabResultsCaptureLogURL;
+    private String containerStatusUpdateLogURL;
 
     public String getAdherenceCallLogURL() {
         return whpReportsURL + adherenceCallLogPath;
@@ -32,6 +33,10 @@ public class ReportingEventURLs {
 
     public String getSputumLabResultsCaptureLogURL() {
         return whpReportsURL + sputumLabResultsCaptureLogURL;
+    }
+
+    public String getContainerStatusUpdateLogURL() {
+        return whpReportsURL + containerStatusUpdateLogURL;
     }
 
     @Value("${whp.reports.adherenceCallLog}")
@@ -62,5 +67,10 @@ public class ReportingEventURLs {
     @Value("${whp.reports.labResultsCapture}")
     public void setSputumLabResultsCaptureLogURL(String sputumLabResultsCaptureLogURL) {
         this.sputumLabResultsCaptureLogURL = sputumLabResultsCaptureLogURL;
+    }
+
+    @Value("${whp.reports.containerStatusUpdate}")
+    public void setContainerStatusUpdateLogURL(String containerStatusUpdateLogURL) {
+        this.containerStatusUpdateLogURL = containerStatusUpdateLogURL;
     }
 }

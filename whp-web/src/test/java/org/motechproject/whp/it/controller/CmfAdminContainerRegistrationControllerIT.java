@@ -39,12 +39,15 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.motechproject.whp.common.domain.ChannelId.WEB;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
+import static org.motechproject.whp.user.domain.WHPRole.CMF_ADMIN;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -114,7 +117,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
-        MotechUser testuser = new MotechUser(new MotechWebUser("testuser", null, null, roles));
+        MotechUser testuser = new MotechUser(new MotechWebUser("testUser", null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
@@ -140,10 +143,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
-
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
+        verifyReportingEventPublication(testuser, container);
         markForDeletion(container);
     }
 
@@ -155,7 +156,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
-        MotechUser testuser = new MotechUser(new MotechWebUser("testuser", null, null, roles));
+        MotechUser testuser = new MotechUser(new MotechWebUser("testUser", null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
@@ -165,8 +166,6 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 .andExpect(status().isOk());
 
         Container container = containerService.getContainer(containerId);
-
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
@@ -184,8 +183,24 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
+
+        verifyReportingEventPublication(testuser, container);
         markForDeletion(container);
+    }
+
+    private void verifyReportingEventPublication(MotechUser testUser, Container container) {
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testUser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
+        assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
+        assertEquals(WEB.name(), expectedContainerRegistrationRequest.getChannelId());
+        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getContainerStatus());
+        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getDateIssuedOn());
+        assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
+        assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
+        assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());
+        assertEquals(container.getProviderId(), expectedContainerRegistrationRequest.getProviderId());
+        assertEquals(testUser.getUserName(), expectedContainerRegistrationRequest.getSubmitterId());
+        assertEquals(CMF_ADMIN.name(), expectedContainerRegistrationRequest.getSubmitterRole());
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 
     @After

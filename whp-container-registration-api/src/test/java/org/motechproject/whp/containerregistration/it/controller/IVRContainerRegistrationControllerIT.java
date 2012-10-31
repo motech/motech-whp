@@ -8,6 +8,7 @@ import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.exceptions.WebSecurityException;
+import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.service.RemediProperties;
@@ -34,12 +35,17 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.motechproject.whp.common.domain.ChannelId.IVR;
+import static org.motechproject.whp.common.domain.ChannelId.WEB;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
+import static org.motechproject.whp.user.domain.WHPRole.PROVIDER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -85,6 +91,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
 
         markForDeletion(providerContainerMapping);
         markForDeletion(providerService.findByProviderId(providerId));
+        reset(httpClientService);
     }
 
     @Test
@@ -105,7 +112,6 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 );
 
         Container container = containerService.getContainer(containerId);
-        markForDeletion(container);
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
@@ -122,9 +128,23 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 "    </update>\n" +
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatment.name(), providerId);
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
-
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+        markForDeletion(container);
+        verifyReportingEventPublication(container);
+    }
+
+    private void verifyReportingEventPublication(Container container) {
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
+        assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
+        assertEquals(IVR.name(), expectedContainerRegistrationRequest.getChannelId());
+        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getContainerStatus());
+        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getDateIssuedOn());
+        assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
+        assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
+        assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());
+        assertEquals(container.getProviderId(), expectedContainerRegistrationRequest.getProviderId());
+        assertEquals(providerId, expectedContainerRegistrationRequest.getSubmitterId());
+        assertEquals(PROVIDER.name(), expectedContainerRegistrationRequest.getSubmitterRole());
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 

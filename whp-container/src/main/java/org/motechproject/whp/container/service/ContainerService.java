@@ -10,6 +10,7 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
+import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -23,6 +24,7 @@ import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.ContainerStatusReportingRequest;
 import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -98,6 +100,20 @@ public class ContainerService {
         publishLabResultsCaptureReportingEvent(container);
     }
 
+    public void openContainer(String containerId) {
+        Container container = allContainers.findByContainerId(containerId);
+
+        if (container == null || container.getStatus() == ContainerStatus.Open)
+            return;
+
+        container.setStatus(ContainerStatus.Open);
+        container.setReasonForClosure(null);
+        container.setAlternateDiagnosis(null);
+        resetContainerDiagnosisData(container);
+        allContainers.update(container);
+        publishContainerStatusUpdateReportingEvent(container);
+    }
+
     public void closeContainer(ContainerClosureRequest reasonForClosureRequest) {
         Container container = allContainers.findByContainerId(reasonForClosureRequest.getContainerId());
 
@@ -112,6 +128,7 @@ public class ContainerService {
             populateTbNegativeDetails(reasonForClosureRequest, container);
 
         allContainers.update(container);
+        publishContainerStatusUpdateReportingEvent(container);
     }
 
     public List<ReasonForContainerClosure> getAllPreTreatmentClosureReasonsForAdmin() {
@@ -149,19 +166,6 @@ public class ContainerService {
         return allAlternateDiagnosis.getAll();
     }
 
-    public void openContainer(String containerId) {
-        Container container = allContainers.findByContainerId(containerId);
-
-        if (container == null || container.getStatus() == ContainerStatus.Open)
-            return;
-
-        container.setStatus(ContainerStatus.Open);
-        container.setReasonForClosure(null);
-        container.setAlternateDiagnosis(null);
-        resetContainerDiagnosisData(container);
-        allContainers.update(container);
-    }
-
     private void resetContainerDiagnosisData(Container container) {
         if (container.getDiagnosis() == Diagnosis.Negative) {
             container.setDiagnosis(Diagnosis.Pending);
@@ -194,5 +198,10 @@ public class ContainerService {
     private void publishLabResultsCaptureReportingEvent(Container container) {
         SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest = new SputumLabResultsCaptureReportingRequestBuilder().forContainer(container).build();
         reportingPublisherService.reportLabResultsCapture(labResultsCaptureReportingRequest);
+    }
+
+    private void publishContainerStatusUpdateReportingEvent(Container container) {
+        ContainerStatusReportingRequest containerStatusReportingRequest = new ContainerStatusReportingRequestBuilder().forContainer(container).build();
+        reportingPublisherService.reportContainerStatusUpdate(containerStatusReportingRequest);
     }
 }

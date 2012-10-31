@@ -86,4 +86,12 @@ public class ReportingPublisherServiceTest {
         verify(httpClientService).post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), labResultsCaptureReportingRequest);
 
     }
+
+    @Test
+    public void shouldPublishContainerStatusUpdateLog() {
+        ContainerStatusReportingRequest containerStatusReportingRequest = new ContainerStatusReportingRequest();
+
+        reportingPublisher.reportContainerStatusUpdate(containerStatusReportingRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerStatusUpdateLogURL(), containerStatusReportingRequest);
+    }
 }

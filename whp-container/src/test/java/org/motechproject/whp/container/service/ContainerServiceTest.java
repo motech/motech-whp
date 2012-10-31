@@ -15,6 +15,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
+import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -29,6 +30,7 @@ import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.ContainerStatusReportingRequest;
 import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -39,11 +41,13 @@ import java.util.List;
 
 import static junit.framework.Assert.*;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
@@ -80,12 +84,12 @@ public class ContainerServiceTest extends BaseUnitTest {
         verify(allContainers).add(captor.capture());
         Container container = captor.getValue();
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
-        verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
-
         assertEquals(Open, container.getStatus());
         assertEquals(container.getInstance(), container.getCurrentTrackingInstance());
         assertEquals(Pending, container.getDiagnosis());
+
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
+        verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
     }
 
     @Test
@@ -239,6 +243,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertNull(actualContainer.getAlternateDiagnosis());
         assertNull(actualContainer.getConsultationDate());
         assertNull(actualContainer.getDiagnosis());
+
+        verifyReportingEventPublication(actualContainer);
     }
 
     @Test
@@ -253,6 +259,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         verify(allContainers).findByContainerId(containerId);
         verify(allContainers, never()).update(any(Container.class));
+        verifyZeroInteractions(reportingPublisherService);
     }
 
     @Test
@@ -269,6 +276,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         verify(allContainers).findByContainerId(containerId);
         verify(allContainers, never()).update(any(Container.class));
+        verifyZeroInteractions(reportingPublisherService);
     }
 
     @Test
@@ -302,6 +310,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(new LocalDate(2012, 11, 25), actualContainer.getConsultationDate());
         assertEquals(Diagnosis.Negative, actualContainer.getDiagnosis());
         assertEquals(ContainerStatus.Closed, actualContainer.getStatus());
+
+        verifyReportingEventPublication(actualContainer);
     }
 
     @Test
@@ -366,6 +376,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(ContainerStatus.Open, actualContainer.getStatus());
         assertNull(actualContainer.getReasonForClosure());
         assertNull(actualContainer.getAlternateDiagnosis());
+
+        verifyReportingEventPublication(actualContainer);
     }
 
     @Test
@@ -389,6 +401,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertNull(actualContainer.getReasonForClosure());
         assertNull(actualContainer.getConsultationDate());
         assertEquals(Open, actualContainer.getStatus());
+
+        verifyReportingEventPublication(actualContainer);
     }
 
     @Test
@@ -400,6 +414,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         verify(allContainers).findByContainerId(containerId);
         verify(allContainers, never()).update(any(Container.class));
+        verifyZeroInteractions(reportingPublisherService);
     }
 
     @Test
@@ -413,6 +428,30 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         verify(allContainers).findByContainerId(containerId);
         verify(allContainers, never()).update(any(Container.class));
+        verifyZeroInteractions(reportingPublisherService);
+    }
+
+    private void verifyReportingEventPublication(Container actualContainer) {
+        ContainerStatusReportingRequest expectedReportingRequest = new ContainerStatusReportingRequestBuilder().forContainer(actualContainer).build();
+        assertEquals(actualContainer.getAlternateDiagnosis(), expectedReportingRequest.getAlternateDiagnosisCode());
+        assertEquals(actualContainer.getStatus().name(), expectedReportingRequest.getContainerStatus());
+        if (actualContainer.getDiagnosis() != null) {
+            assertEquals(actualContainer.getDiagnosis().name(), expectedReportingRequest.getDiagnosis());
+        } else {
+            assertNull(expectedReportingRequest.getDiagnosis());
+        }
+        if(actualContainer.getConsultationDate() != null) {
+            assertEquals(actualContainer.getConsultationDate().toDate(), expectedReportingRequest.getConsultationDate());
+        } else {
+            assertNull(expectedReportingRequest.getConsultationDate());
+        }
+        assertEquals(actualContainer.getContainerId(), expectedReportingRequest.getContainerId());
+        if(actualContainer.getStatus() == Closed) {
+            assertNotNull(expectedReportingRequest.getClosureDate());
+        } else {
+            assertNull(expectedReportingRequest.getClosureDate());
+        }
+        verify(reportingPublisherService).reportContainerStatusUpdate(expectedReportingRequest);
     }
 
     @After

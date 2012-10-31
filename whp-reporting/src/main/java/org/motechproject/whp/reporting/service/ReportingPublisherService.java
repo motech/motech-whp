@@ -40,4 +40,8 @@ public class ReportingPublisherService {
     public void reportLabResultsCapture(SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest) {
         httpClientService.post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), labResultsCaptureReportingRequest);
     }
+
+    public void reportContainerStatusUpdate(ContainerStatusReportingRequest expectedReportingRequest) {
+        httpClientService.post(reportingEventURLs.getContainerStatusUpdateLogURL(), expectedReportingRequest);
+    }
 }

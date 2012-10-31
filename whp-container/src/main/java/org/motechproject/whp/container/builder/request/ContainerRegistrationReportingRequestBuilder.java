@@ -19,6 +19,7 @@ public class ContainerRegistrationReportingRequestBuilder {
         containerRegistrationReportingRequest.setDateIssuedOn(container.getContainerIssuedDate().toDate());
         containerRegistrationReportingRequest.setInstance(container.getInstance().name());
         containerRegistrationReportingRequest.setContainerStatus(container.getStatus().name());
+        containerRegistrationReportingRequest.setDiagnosis(container.getDiagnosis().name());
         containerRegistrationReportingRequest.setProviderId(container.getProviderId());
         containerRegistrationReportingRequest.setLocationId(container.getDistrict());
     }
