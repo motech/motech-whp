@@ -192,8 +192,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testUser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
         assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
         assertEquals(WEB.name(), expectedContainerRegistrationRequest.getChannelId());
-        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getContainerStatus());
-        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getDateIssuedOn());
+        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getStatus());
+        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getIssuedOn());
         assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
         assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
         assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());

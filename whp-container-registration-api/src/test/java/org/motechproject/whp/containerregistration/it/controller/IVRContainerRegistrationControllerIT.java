@@ -137,8 +137,8 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
         assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
         assertEquals(IVR.name(), expectedContainerRegistrationRequest.getChannelId());
-        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getContainerStatus());
-        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getDateIssuedOn());
+        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getStatus());
+        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getIssuedOn());
         assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
         assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
         assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());

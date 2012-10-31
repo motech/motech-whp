@@ -434,7 +434,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     private void verifyReportingEventPublication(Container actualContainer) {
         ContainerStatusReportingRequest expectedReportingRequest = new ContainerStatusReportingRequestBuilder().forContainer(actualContainer).build();
         assertEquals(actualContainer.getAlternateDiagnosis(), expectedReportingRequest.getAlternateDiagnosisCode());
-        assertEquals(actualContainer.getStatus().name(), expectedReportingRequest.getContainerStatus());
+        assertEquals(actualContainer.getStatus().name(), expectedReportingRequest.getStatus());
         if (actualContainer.getDiagnosis() != null) {
             assertEquals(actualContainer.getDiagnosis().name(), expectedReportingRequest.getDiagnosis());
         } else {

@@ -20,7 +20,7 @@ public class ContainerStatusReportingRequestBuilder {
         reportingRequest.setAlternateDiagnosisCode(container.getAlternateDiagnosis());
         reportingRequest.setClosureDate(container.getStatus() == Closed ? today().toDate() : null);
         reportingRequest.setConsultationDate(container.getConsultationDate() != null ? container.getConsultationDate().toDate() : null);
-        reportingRequest.setContainerStatus(container.getStatus().name());
+        reportingRequest.setStatus(container.getStatus().name());
         reportingRequest.setReasonForClosure(container.getReasonForClosure());
         return this;
     }
