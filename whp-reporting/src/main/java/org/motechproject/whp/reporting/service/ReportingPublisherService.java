@@ -33,15 +33,19 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getFlashingLogURL(), flashingLogRequest);
     }
 
-    public void reportContainerRegistration(ContainerRegistrationReportingRequest sputumTrackingRequest) {
-        httpClientService.post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
+    public void reportContainerRegistration(ContainerRegistrationReportingRequest request) {
+        httpClientService.post(reportingEventURLs.getContainerRegistrationLogURL(), request);
     }
 
-    public void reportLabResultsCapture(SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest) {
-        httpClientService.post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), labResultsCaptureReportingRequest);
+    public void reportLabResultsCapture(SputumLabResultsCaptureReportingRequest request) {
+        httpClientService.post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), request);
     }
 
-    public void reportContainerStatusUpdate(ContainerStatusReportingRequest expectedReportingRequest) {
-        httpClientService.post(reportingEventURLs.getContainerStatusUpdateLogURL(), expectedReportingRequest);
+    public void reportContainerStatusUpdate(ContainerStatusReportingRequest request) {
+        httpClientService.post(reportingEventURLs.getContainerStatusUpdateLogURL(), request);
+    }
+
+    public void reportContainerPatientMapping(ContainerPatientMappingReportingRequest request) {
+        httpClientService.post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
     }
 }

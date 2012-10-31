@@ -94,4 +94,13 @@ public class ReportingPublisherServiceTest {
         reportingPublisher.reportContainerStatusUpdate(containerStatusReportingRequest);
         verify(httpClientService).post(reportingEventURLs.getContainerStatusUpdateLogURL(), containerStatusReportingRequest);
     }
+
+    @Test
+    public void shouldPublishContainerPatientMappingLog() {
+        ContainerPatientMappingReportingRequest containerPatientMappingReportingRequest = new ContainerPatientMappingReportingRequest();
+
+        reportingPublisher.reportContainerPatientMapping(containerPatientMappingReportingRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerPatientMappingLogURL(), containerPatientMappingReportingRequest);
+
+    }
 }

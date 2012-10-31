@@ -46,4 +46,9 @@ public class ReportingEventURLsIT {
         assertThat(reportingEventURLs.getContainerStatusUpdateLogURL(), is("http://localhost:8080/whp-reports/sputumTracking/containerStatusMeasure"));
     }
 
+    @Test
+    public void shouldGetContainerPatientMappingMeasureURL() {
+        assertThat(reportingEventURLs.getContainerPatientMappingLogURL(), is("http://localhost:8080/whp-reports/sputumTracking/containerPatientMappingMeasure"));
+    }
+
 }

@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
@@ -23,6 +24,7 @@ import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.ContainerPatientMappingReportingRequest;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.reports.contract.ContainerStatusReportingRequest;
 import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
@@ -93,6 +95,7 @@ public class ContainerService {
 
     public void updatePatientMapping(Container container) {
         allContainers.update(container);
+        publishContainerPatientMappingReportingEvent(container);
     }
 
     public void updateLabResults(Container container) {
@@ -203,5 +206,10 @@ public class ContainerService {
     private void publishContainerStatusUpdateReportingEvent(Container container) {
         ContainerStatusReportingRequest containerStatusReportingRequest = new ContainerStatusReportingRequestBuilder().forContainer(container).build();
         reportingPublisherService.reportContainerStatusUpdate(containerStatusReportingRequest);
+    }
+
+    private void publishContainerPatientMappingReportingEvent(Container container) {
+        ContainerPatientMappingReportingRequest containerPatientMappingReportingRequest = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
+        reportingPublisherService.reportContainerPatientMapping(containerPatientMappingReportingRequest);
     }
 }
