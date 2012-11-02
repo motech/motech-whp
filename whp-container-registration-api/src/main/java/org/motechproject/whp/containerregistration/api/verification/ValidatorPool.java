@@ -1,6 +1,6 @@
 package org.motechproject.whp.containerregistration.api.verification;
 
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPErrors;
@@ -47,7 +47,7 @@ public class ValidatorPool {
     }
 
     public ValidatorPool verifyPhase(String phase, WHPErrors whpErrors) {
-        if (!SputumTrackingInstance.isValidRegistrationInstanceName(phase))
+        if (!RegistrationInstance.isValidRegistrationInstanceName(phase))
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHASE));
         return this;
     }

@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ public class WeightStatistics implements Serializable {
         return false;
     }
 
-    public WeightStatisticsRecord resultForInstance(SampleInstance SampleInstance) {
+    public WeightStatisticsRecord resultForInstance(SputumTrackingInstance SputumTrackingInstance) {
         for (WeightStatisticsRecord weightStatisticsRecord : weightStatisticsRecords) {
-            if (weightStatisticsRecord.isOfInstance(SampleInstance))
+            if (weightStatisticsRecord.isOfInstance(SputumTrackingInstance))
                 return weightStatisticsRecord;
         }
         return null;
@@ -38,9 +38,9 @@ public class WeightStatistics implements Serializable {
         return weightStatisticsRecords.get(weightStatisticsRecords.size() - 1);
     }
 
-    public WeightStatistics add(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
-        if (SampleInstance != null) {
-            this.add(new WeightStatisticsRecord(SampleInstance, weight, measuringDate));
+    public WeightStatistics add(SputumTrackingInstance SputumTrackingInstance, Double weight, LocalDate measuringDate) {
+        if (SputumTrackingInstance != null) {
+            this.add(new WeightStatisticsRecord(SputumTrackingInstance, weight, measuringDate));
         }
         return this;
     }
@@ -87,6 +87,6 @@ public class WeightStatistics implements Serializable {
 
     @JsonIgnore
     public WeightStatisticsRecord getPreTreatmentWeightRecord() {
-        return resultForInstance(SampleInstance.PreTreatment);
+        return resultForInstance(SputumTrackingInstance.PreTreatment);
     }
 }

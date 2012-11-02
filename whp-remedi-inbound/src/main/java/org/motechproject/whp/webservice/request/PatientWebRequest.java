@@ -2,8 +2,8 @@ package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.*;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.DiseaseClass;
@@ -103,7 +103,7 @@ public class PatientWebRequest {
     @Scope(scope = {UpdateScope.createScope})
     private String address_state;
 
-    @Enumeration(type = SampleInstance.class)
+    @Enumeration(type = SputumTrackingInstance.class)
     private String smear_sample_instance;
 
     @DateTimeFormat(pattern = DATE_FORMAT)
@@ -122,7 +122,7 @@ public class PatientWebRequest {
 
     private String lab_number;
 
-    @Enumeration(type = SampleInstance.class)
+    @Enumeration(type = SputumTrackingInstance.class)
     private String weight_instance;
 
     @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE, message = "Weight must be a real number")
@@ -202,8 +202,8 @@ public class PatientWebRequest {
         return this;
     }
 
-    public PatientWebRequest setWeightStatistics(String SampleInstance, String weight) {
-        this.weight_instance = SampleInstance;
+    public PatientWebRequest setWeightStatistics(String SputumTrackingInstance, String weight) {
+        this.weight_instance = SputumTrackingInstance;
         this.weight = weight;
         return this;
     }

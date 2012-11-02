@@ -5,12 +5,11 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.validation.APIKeyValidator;
 
 import javax.validation.constraints.Pattern;
 
-import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
@@ -37,7 +36,7 @@ public class ContainerPatientMappingWebRequest {
 
     private String tb_id;
 
-    @Enumeration(type = SampleInstance.class, validateEmptyString = false)
+    @Enumeration(type = SputumTrackingInstance.class, validateEmptyString = false)
     private String smear_sample_instance;
 
     public boolean isMappingRequest() {

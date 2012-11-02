@@ -3,6 +3,7 @@ package org.motechproject.whp.remedi.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
@@ -14,7 +15,7 @@ public class ContainerRegistrationModel {
     private String caseType;
     private String providerId;
 
-    public ContainerRegistrationModel(String containerId, String providerId, SputumTrackingInstance caseType, DateTime dateModified) {
+    public ContainerRegistrationModel(String containerId, String providerId, RegistrationInstance caseType, DateTime dateModified) {
         this.containerId = containerId;
         this.providerId = providerId;
         this.caseType = caseType.name();

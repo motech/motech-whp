@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.domain.ContainerStatus;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
@@ -130,7 +129,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         DateTime tbRegistrationDate = new DateTime(1986, 11, 20, 0, 0, 0);
 
         ContainerPatientMappingWebRequest request = buildMappingRequest();
-        request.setSmear_sample_instance(SampleInstance.EndIP.name());
+        request.setSmear_sample_instance(SputumTrackingInstance.EndIP.name());
         request.setTb_registration_date("");
 
         Container container = new Container();
@@ -166,7 +165,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")
                 .withDateModified(now().toString())
-                .withInstance(SampleInstance.PreTreatment.name().toLowerCase())
+                .withInstance(SputumTrackingInstance.PreTreatment.name().toLowerCase())
                 .withPatientId("patient")
                 .withTbId("test")
                 .withTbRegistrationDate("20/11/1986")

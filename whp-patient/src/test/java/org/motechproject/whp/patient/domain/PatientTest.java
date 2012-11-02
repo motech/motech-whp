@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -21,13 +21,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.Phase.EIP;
+import static org.motechproject.whp.common.domain.Phase.IP;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 import static org.motechproject.whp.patient.builder.TreatmentBuilder.treatment;
-import static org.motechproject.whp.common.domain.Phase.EIP;
-import static org.motechproject.whp.common.domain.Phase.IP;
-import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 public class PatientTest {
 
@@ -480,7 +480,7 @@ public class PatientTest {
     @Test
     public void shouldGetPreTreatmentWeightRecord() {
         Therapy therapy = mock(Therapy.class);
-        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SputumTrackingInstance.PreTreatment, 30.0, LocalDate.now());
         when(therapy.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
         Patient patient = new PatientBuilder().withDefaults().withTherapy(therapy).build();
 

@@ -24,9 +24,9 @@ public class SmearTestResultsV0 {
         return false;
     }
 
-    private SmearTestRecordV0 resultForInstance(SmearTestSampleInstanceV0 smearTestSampleInstance) {
+    private SmearTestRecordV0 resultForInstance(SmearTestSputumTrackingInstanceV0 smearTestSputumTrackingInstance) {
         for (SmearTestRecordV0 smearTestRecord : this.all) {
-            if (smearTestRecord.isOfInstance(smearTestSampleInstance))
+            if (smearTestRecord.isOfInstance(smearTestSputumTrackingInstance))
                 return smearTestRecord;
         }
         return null;
@@ -49,9 +49,9 @@ public class SmearTestResultsV0 {
         return this.all.isEmpty();
     }
 
-    public void add(SmearTestSampleInstanceV0 smearSampleInstance, LocalDate test1Date, SmearTestResultV0 test1Result, LocalDate test2Date, SmearTestResultV0 test2Result) {
-        if (smearSampleInstance != null) {
-            this.add(new SmearTestRecordV0(smearSampleInstance, test1Date, test1Result, test2Date, test2Result));
+    public void add(SmearTestSputumTrackingInstanceV0 smearSputumTrackingInstance, LocalDate test1Date, SmearTestResultV0 test1Result, LocalDate test2Date, SmearTestResultV0 test2Result) {
+        if (smearSputumTrackingInstance != null) {
+            this.add(new SmearTestRecordV0(smearSputumTrackingInstance, test1Date, test1Result, test2Date, test2Result));
         }
     }
 

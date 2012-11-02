@@ -5,8 +5,8 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
@@ -36,7 +36,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     public void setUp() {
 
         now = DateUtil.now();
-        container = new Container("P00001", "1234567890", SputumTrackingInstance.PreTreatment, now, "d1");
+        container = new Container("P00001", "1234567890", RegistrationInstance.PreTreatment, now, "d1");
     }
 
     @Test

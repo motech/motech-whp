@@ -3,11 +3,9 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.patient.builder.TreatmentBuilder;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
@@ -140,7 +138,7 @@ public class TreatmentTest {
     @Test
     public void shouldReturnPreTreatmentWeightRecord(){
         WeightStatistics weightStatistics = mock(WeightStatistics.class);
-        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SampleInstance.PreTreatment, 30.0, LocalDate.now());
+        WeightStatisticsRecord weightStatisticsRecord = new WeightStatisticsRecord(SputumTrackingInstance.PreTreatment, 30.0, LocalDate.now());
         when(weightStatistics.getPreTreatmentWeightRecord()).thenReturn(weightStatisticsRecord);
 
         Treatment treatment = new TreatmentBuilder().withWeightStatistics(weightStatistics).build();

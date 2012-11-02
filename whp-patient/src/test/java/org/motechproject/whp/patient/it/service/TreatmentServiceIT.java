@@ -4,17 +4,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
+import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,8 +174,8 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
                 .withProviderId(providerId)
-                .withSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
-                .withWeightStatistics(SampleInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
+                .withSmearTestResults(SputumTrackingInstance.PreTreatment, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2012, 5, 19), SmearTestResult.Positive)
+                .withWeightStatistics(SputumTrackingInstance.PreTreatment, 30.00, DateUtil.newDate(2012, 5, 19))
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
@@ -184,13 +184,13 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
         WeightStatisticsRecord weightStatisticsRecord = updatedPatient.getWeightStatistics().get(0);
-        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SputumTrackingInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_1());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.newDate(2012, 5, 19), smearTestRecord.getSmear_test_date_2());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_2());
 
-        assertEquals(SampleInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
+        assertEquals(SputumTrackingInstance.PreTreatment, weightStatisticsRecord.getWeight_instance());
         assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
         assertEquals(30.00, weightStatisticsRecord.getWeight());
     }

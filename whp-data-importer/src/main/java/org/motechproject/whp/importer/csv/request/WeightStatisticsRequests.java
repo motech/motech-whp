@@ -2,7 +2,7 @@ package org.motechproject.whp.importer.csv.request;
 
 import lombok.Data;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
@@ -26,16 +26,16 @@ public class WeightStatisticsRequests {
     @Valid
     private WeightStatisticsRequest endTreatmentWeightStatistics = new WeightStatisticsRequest();
 
-    public void setWeight(SampleInstance SampleInstance, String weight) {
-        getWeightStatisticsRecord(SampleInstance).setWeight(weight);
+    public void setWeight(SputumTrackingInstance SputumTrackingInstance, String weight) {
+        getWeightStatisticsRecord(SputumTrackingInstance).setWeight(weight);
     }
 
-    public void setWeightDate(SampleInstance SampleInstance, String weightDate) {
-        getWeightStatisticsRecord(SampleInstance).setWeightDate(weightDate);
+    public void setWeightDate(SputumTrackingInstance SputumTrackingInstance, String weightDate) {
+        getWeightStatisticsRecord(SputumTrackingInstance).setWeightDate(weightDate);
     }
 
-    public WeightStatisticsRequest getWeightStatisticsRecord(SampleInstance SampleInstance) {
-        switch (SampleInstance) {
+    public WeightStatisticsRequest getWeightStatisticsRecord(SputumTrackingInstance SputumTrackingInstance) {
+        switch (SputumTrackingInstance) {
             case PreTreatment:
                 return preTreatmentWeightStatistics;
             case EndIP:
@@ -51,15 +51,15 @@ public class WeightStatisticsRequests {
         }
     }
 
-    public boolean hasWeightInstanceRecord(SampleInstance type) {
+    public boolean hasWeightInstanceRecord(SputumTrackingInstance type) {
         return StringUtils.hasText(getWeightStatisticsRecord(type).getWeightDate());
     }
 
-    public String getWeightDate(SampleInstance type) {
+    public String getWeightDate(SputumTrackingInstance type) {
         return getWeightStatisticsRecord(type).getWeightDate();
     }
 
-    public String getWeight(SampleInstance type) {
+    public String getWeight(SputumTrackingInstance type) {
         return getWeightStatisticsRecord(type).getWeight();
     }
 

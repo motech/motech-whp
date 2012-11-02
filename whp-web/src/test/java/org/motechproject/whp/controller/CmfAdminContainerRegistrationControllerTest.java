@@ -8,7 +8,7 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
@@ -51,8 +51,8 @@ public class CmfAdminContainerRegistrationControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        INSTANCES.add(SputumTrackingInstance.PreTreatment.getDisplayText());
-        INSTANCES.add(SputumTrackingInstance.InTreatment.getDisplayText());
+        INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
+        INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
         containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
     }
@@ -66,27 +66,23 @@ public class CmfAdminContainerRegistrationControllerTest {
 
         String containerId = "containerId";
         String providerId = "providerId";
-        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
-        MotechUser testuser = new MotechUser(new MotechWebUser("testuser", null, null, roles));
+        String instance = RegistrationInstance.InTreatment.getDisplayText();
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
                         .param("instance", instance)
                         .param("providerId", providerId)
                         .param("containerRegistrationMode", NEW_CONTAINER.name())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser));
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))));
 
         ArgumentCaptor<CmfAdminContainerRegistrationRequest> argumentCaptor = ArgumentCaptor.forClass(CmfAdminContainerRegistrationRequest.class);
         verify(containerRegistrationController).register(any(Model.class), argumentCaptor.capture(), any(HttpServletRequest.class));
 
         CmfAdminContainerRegistrationRequest request = argumentCaptor.getValue();
-
         assertEquals(NEW_CONTAINER, request.getContainerRegistrationMode());
         assertEquals(providerId, request.getProviderId());
         assertEquals(containerId, request.getContainerId());
         assertEquals(instance, request.getInstance());
-        assertEquals(testuser.getUserName(), request.getSubmitterId());
-        assertEquals(WHPRole.CMF_ADMIN.name(), request.getSubmitterRole());
     }
 
     @Test
@@ -148,15 +144,14 @@ public class CmfAdminContainerRegistrationControllerTest {
     public void shouldRegisterTheContainerGivenTheDetailsForNewContainer() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
+        String instance = RegistrationInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
-        MotechUser testuser = new MotechUser(new MotechWebUser(providerId, null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register").param("containerId", containerId).param("instance", instance).param("containerRegistrationMode", NEW_CONTAINER.name())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
                 .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
@@ -169,23 +164,20 @@ public class CmfAdminContainerRegistrationControllerTest {
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
         assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
-        assertEquals(testuser.getUserName(), actualRegistrationRequest.getSubmitterId());
-        assertEquals(WHPRole.CMF_ADMIN.name(), actualRegistrationRequest.getSubmitterRole());
     }
 
     @Test
     public void shouldRegisterTheContainerGivenTheDetailsOnBehalfOfProvider() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
+        String instance = RegistrationInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
 
-        MotechUser testuser = new MotechUser(new MotechWebUser(null, null, null, roles));
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register").param("containerId", containerId).param("instance", instance).param("providerId", providerId).param("containerRegistrationMode", ON_BEHALF_OF_PROVIDER.name())
-                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
+                        .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().size(1))
                 .andExpect(request().attribute(CONTRIB_FLASH_OUT_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "Container with id 1234567890 registered successfully."))
@@ -199,7 +191,5 @@ public class CmfAdminContainerRegistrationControllerTest {
         assertEquals(containerId, actualRegistrationRequest.getContainerId());
         assertEquals(instance, actualRegistrationRequest.getInstance());
         assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
-        assertEquals(testuser.getUserName(), actualRegistrationRequest.getSubmitterId());
-        assertEquals(WHPRole.CMF_ADMIN.name(), actualRegistrationRequest.getSubmitterRole());
     }
 }

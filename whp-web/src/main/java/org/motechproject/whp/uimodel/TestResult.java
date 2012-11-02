@@ -1,10 +1,10 @@
 package org.motechproject.whp.uimodel;
 
 import lombok.Data;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
-import org.motechproject.whp.common.domain.SampleInstance;
 
 @Data
 public class TestResult {
@@ -17,8 +17,8 @@ public class TestResult {
     private String labNumber;
     private String sampleInstance;
     private static final String EMPTY_STRING = "";
-    public TestResult(SampleInstance sampleInstance, SmearTestRecord smearTestRecord, WeightStatisticsRecord weightStatisticsRecord) {
-        this.sampleInstance = sampleInstance.value();
+    public TestResult(SputumTrackingInstance sampleInstance, SmearTestRecord smearTestRecord, WeightStatisticsRecord weightStatisticsRecord) {
+        this.sampleInstance = sampleInstance.getDisplayText();
         if (smearTestRecord == null) {
             smearTestDate1 = smearTestResult1 = smearTestDate2 = smearTestResult2 = labName = labNumber = EMPTY_STRING;
         }

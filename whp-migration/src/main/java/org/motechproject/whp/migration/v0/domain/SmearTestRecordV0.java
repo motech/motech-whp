@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class SmearTestRecordV0 {
 
-    private SmearTestSampleInstanceV0 smear_sample_instance;
+    private SmearTestSputumTrackingInstanceV0 smear_sample_instance;
     private LocalDate smear_test_date_1;
     private SmearTestResultV0 smear_test_result_1;
     private LocalDate smear_test_date_2;
@@ -19,8 +19,8 @@ public class SmearTestRecordV0 {
     public SmearTestRecordV0() {
     }
 
-    public SmearTestRecordV0(SmearTestSampleInstanceV0 smearTestSampleInstance, LocalDate testDate1, SmearTestResultV0 result1, LocalDate testDate2, SmearTestResultV0 result2) {
-        this.smear_sample_instance = smearTestSampleInstance;
+    public SmearTestRecordV0(SmearTestSputumTrackingInstanceV0 smearTestSputumTrackingInstance, LocalDate testDate1, SmearTestResultV0 result1, LocalDate testDate2, SmearTestResultV0 result2) {
+        this.smear_sample_instance = smearTestSputumTrackingInstance;
         this.smear_test_date_1 = testDate1;
         this.smear_test_result_1 = result1;
         this.smear_test_date_2 = testDate2;
@@ -42,7 +42,7 @@ public class SmearTestRecordV0 {
     }
 
     @JsonIgnore
-    public boolean isOfInstance(SmearTestSampleInstanceV0 smearTestSampleInstance) {
-        return this.smear_sample_instance.equals(smearTestSampleInstance);
+    public boolean isOfInstance(SmearTestSputumTrackingInstanceV0 smearTestSputumTrackingInstance) {
+        return this.smear_sample_instance.equals(smearTestSputumTrackingInstance);
     }
 }

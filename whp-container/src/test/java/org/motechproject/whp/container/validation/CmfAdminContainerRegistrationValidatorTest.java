@@ -22,7 +22,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.container.contract.ContainerRegistrationMode.NEW_CONTAINER;
 import static org.motechproject.whp.container.contract.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
 
 public class CmfAdminContainerRegistrationValidatorTest {
 

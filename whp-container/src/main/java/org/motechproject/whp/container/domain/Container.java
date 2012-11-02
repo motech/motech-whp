@@ -9,6 +9,7 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
@@ -21,11 +22,11 @@ public class Container extends MotechBaseDataObject {
 
     private String containerId;
 
-    private SputumTrackingInstance instance;
+    private RegistrationInstance instance;
 
     private SputumTrackingInstance mappingInstance;
 
-    private SputumTrackingInstance currentTrackingInstance;
+    private RegistrationInstance currentTrackingInstance;
 
     private String providerId;
 
@@ -55,7 +56,7 @@ public class Container extends MotechBaseDataObject {
     public Container() {
     }
 
-    public Container(String providerId, String containerId, SputumTrackingInstance instance, DateTime creationTime, String district) {
+    public Container(String providerId, String containerId, RegistrationInstance instance, DateTime creationTime, String district) {
         setProviderId(providerId);
         this.district = district;
         this.containerId = containerId;
@@ -107,14 +108,14 @@ public class Container extends MotechBaseDataObject {
     }
 
     private void updateConsultationDate(LocalDate consultationDate, SputumTrackingInstance mappingInstance) {
-        if(SputumTrackingInstance.getTrackingInstanceType(mappingInstance) == SputumTrackingInstance.PreTreatment)
+        if(RegistrationInstance.getTrackingInstanceType(mappingInstance) == RegistrationInstance.PreTreatment)
             setConsultationDate(consultationDate);
         else
             setConsultationDate(null);
     }
 
     private void updateCurrentTrackingStatus() {
-        currentTrackingInstance = mappingInstance == null ? instance : SputumTrackingInstance.getTrackingInstanceType(mappingInstance);
+        currentTrackingInstance = mappingInstance == null ? instance : RegistrationInstance.getTrackingInstanceType(mappingInstance);
     }
 
     @JsonIgnore

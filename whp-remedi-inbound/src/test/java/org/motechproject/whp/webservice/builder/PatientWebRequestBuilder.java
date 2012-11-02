@@ -1,8 +1,8 @@
 package org.motechproject.whp.webservice.builder;
 
 import org.joda.time.DateTime;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
@@ -25,7 +25,7 @@ public class PatientWebRequestBuilder {
                 .setPatientInfo(CASE_ID, "Foo", "Bar", Gender.M.name(), PatientType.Chronic.name(), "1234567890", "phi")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name(), "labName", "labNumber")
-                .setWeightStatistics(SampleInstance.PreTreatment.name(), "99.7")
+                .setWeightStatistics(SputumTrackingInstance.PreTreatment.name(), "99.7")
                 .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber");
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("10/10/2010");
@@ -37,8 +37,8 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setPatientInfo(CASE_ID, null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .setSmearTestResults(SampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name(), "labName", "labNumber")
-                .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
+                .setSmearTestResults(SputumTrackingInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name(), "labName", "labNumber")
+                .setWeightStatistics(SputumTrackingInstance.EndTreatment.name(), "99.7")
                 .setTreatmentData(null, TB_ID, null, null, "50", null);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("15/10/2010");
@@ -62,8 +62,8 @@ public class PatientWebRequestBuilder {
         patientWebRequest = new PatientWebRequest()
                 .setTreatmentUpdateData("New", null)
                 .setTreatmentData("01", NEW_TB_ID, "newProviderId", "P", null, null)
-                .setSmearTestResults(SampleInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name(), "labName", "labNumber")
-                .setWeightStatistics(SampleInstance.EndTreatment.name(), "99.7");
+                .setSmearTestResults(SputumTrackingInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name(), "labName", "labNumber")
+                .setWeightStatistics(SputumTrackingInstance.EndTreatment.name(), "99.7");
         patientWebRequest.setCase_id(CASE_ID);
         patientWebRequest.setDate_modified("15/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("15/10/2010");
@@ -176,13 +176,13 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
-    public PatientWebRequestBuilder withWeightStatistics(String SampleInstance, String weight) {
-        patientWebRequest.setWeightStatistics(SampleInstance, weight);
+    public PatientWebRequestBuilder withWeightStatistics(String SputumTrackingInstance, String weight) {
+        patientWebRequest.setWeightStatistics(SputumTrackingInstance, weight);
         return this;
     }
 
-    public PatientWebRequestBuilder withSmearTestResults(String smearSampleInstance, String testResultDate1, String testResult1, String testResultDate2, String testResult2, String labName, String labNumber) {
-        patientWebRequest.setSmearTestResults(smearSampleInstance, testResultDate1, testResult1, testResultDate2, testResult2, labName, labNumber);
+    public PatientWebRequestBuilder withSmearTestResults(String smearSputumTrackingInstance, String testResultDate1, String testResult1, String testResultDate2, String testResult2, String labName, String labNumber) {
+        patientWebRequest.setSmearTestResults(smearSputumTrackingInstance, testResultDate1, testResult1, testResultDate2, testResult2, labName, labNumber);
         return this;
     }
 

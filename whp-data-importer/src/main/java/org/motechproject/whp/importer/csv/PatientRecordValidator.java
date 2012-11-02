@@ -7,8 +7,8 @@ import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.importer.domain.ValidationResponse;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.mapping.StringToDateTime;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
@@ -173,7 +173,7 @@ public class PatientRecordValidator {
             }
         }
 
-        for (SampleInstance instance : SampleInstance.values()) {
+        for (SputumTrackingInstance instance : SputumTrackingInstance.values()) {
             SmearTestResultRequests.SmearTestResultRequest expectedRecord = smearTestResultRequest.getSmearTestInstanceRecord(instance);
             SmearTestRecord actualRecord = getSmearTestRecord(smearTestResults, instance);
             validateSmearTestRecord(expectedRecord, actualRecord, instance, errors);
@@ -193,7 +193,7 @@ public class PatientRecordValidator {
             }
         }
 
-        for (SampleInstance instance : SampleInstance.values()) {
+        for (SputumTrackingInstance instance : SputumTrackingInstance.values()) {
             WeightStatisticsRequests.WeightStatisticsRequest expectedRecord = weightStatisticsRequest.getWeightStatisticsRecord(instance);
             WeightStatisticsRecord actualRecord = getWeightStatisticsRecord(weightStatistics, instance);
             validateWeightStatisticsRecord(request, expectedRecord, actualRecord, instance, errors);
@@ -201,7 +201,7 @@ public class PatientRecordValidator {
 
     }
 
-    private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SampleInstance instanceType, List<String> errors) {
+    private void validateSmearTestRecord(SmearTestResultRequests.SmearTestResultRequest expectedRecord, SmearTestRecord actualRecord, SputumTrackingInstance instanceType, List<String> errors) {
         if (expectedRecord == null && actualRecord == null)
             return;
 
@@ -232,7 +232,7 @@ public class PatientRecordValidator {
         checkIfEnumsAreEqual(expectedRecord.getResult2(), actualRecord.getSmear_test_result_2(), result2FieldName, errors, SmearTestResult.class);
     }
 
-    private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, SampleInstance instanceType, List<String> errors) {
+    private void validateWeightStatisticsRecord(ImportPatientRequest request, WeightStatisticsRequests.WeightStatisticsRequest expectedRecord, WeightStatisticsRecord actualRecord, SputumTrackingInstance instanceType, List<String> errors) {
         String weightDateFieldName = "Measuring Date of WeightStatistics type " + instanceType.name();
         String weightFieldName = "Weight of WeightStatistics type " + instanceType.name();
 
@@ -256,7 +256,7 @@ public class PatientRecordValidator {
         }
     }
 
-    private SmearTestRecord getSmearTestRecord(SmearTestResults smearTestResults, SampleInstance instanceType) {
+    private SmearTestRecord getSmearTestRecord(SmearTestResults smearTestResults, SputumTrackingInstance instanceType) {
         for (int i = 0; i < smearTestResults.size(); i++) {
             if (smearTestResults.get(i).getSmear_sample_instance().equals(instanceType))
                 return smearTestResults.get(i);
@@ -264,7 +264,7 @@ public class PatientRecordValidator {
         return null;
     }
 
-    private WeightStatisticsRecord getWeightStatisticsRecord(WeightStatistics weightStatistics, SampleInstance instanceType) {
+    private WeightStatisticsRecord getWeightStatisticsRecord(WeightStatistics weightStatistics, SputumTrackingInstance instanceType) {
         for (int i = 0; i < weightStatistics.size(); i++) {
             if (weightStatistics.get(i).getWeight_instance().equals(instanceType))
                 return weightStatistics.get(i);

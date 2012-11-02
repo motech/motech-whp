@@ -8,13 +8,13 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.user.domain.WHPRole;
 
 import java.util.ArrayList;
@@ -47,8 +47,8 @@ public class ProviderContainerRegistrationControllerTest {
     @Before
     public void setUp() {
         initMocks(this);
-        INSTANCES.add(SputumTrackingInstance.PreTreatment.getDisplayText());
-        INSTANCES.add(SputumTrackingInstance.InTreatment.getDisplayText());
+        INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
+        INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
         providerId = "providerId";
         when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
         containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
@@ -119,7 +119,7 @@ public class ProviderContainerRegistrationControllerTest {
     public void shouldRegisterTheContainerGivenTheDetails() throws Exception {
         String providerId = "P00011";
         String containerId = "1234567890";
-        String instance = SputumTrackingInstance.InTreatment.getDisplayText();
+        String instance = RegistrationInstance.InTreatment.getDisplayText();
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());

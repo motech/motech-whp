@@ -1,10 +1,7 @@
 package org.motechproject.whp.container.builder;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.ContainerStatus;
-import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 
@@ -36,7 +33,7 @@ public class ContainerBuilder {
         return this;
     }
 
-    public ContainerBuilder withInstance(SputumTrackingInstance instance) {
+    public ContainerBuilder withInstance(RegistrationInstance instance) {
         container.setInstance(instance);
         container.setCurrentTrackingInstance(instance);
         return this;

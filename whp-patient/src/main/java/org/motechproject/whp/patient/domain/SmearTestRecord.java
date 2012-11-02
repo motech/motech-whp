@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class SmearTestRecord implements Serializable {
 
-    private SampleInstance smear_sample_instance;
+    private SputumTrackingInstance smear_sample_instance;
     private LocalDate smear_test_date_1;
     private SmearTestResult smear_test_result_1;
     private LocalDate smear_test_date_2;
@@ -24,7 +24,7 @@ public class SmearTestRecord implements Serializable {
     public SmearTestRecord() {
     }
 
-    public SmearTestRecord(SampleInstance sampleInstance, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2, String labName, String labNumber) {
+    public SmearTestRecord(SputumTrackingInstance sampleInstance, LocalDate testDate1, SmearTestResult result1, LocalDate testDate2, SmearTestResult result2, String labName, String labNumber) {
         this.smear_sample_instance = sampleInstance;
         this.smear_test_date_1 = testDate1;
         this.smear_test_result_1 = result1;
@@ -57,7 +57,7 @@ public class SmearTestRecord implements Serializable {
     }
 
     @JsonIgnore
-    public boolean isOfInstance(SampleInstance sampleInstance) {
+    public boolean isOfInstance(SputumTrackingInstance sampleInstance) {
         return this.smear_sample_instance.equals(sampleInstance);
     }
 
@@ -67,6 +67,6 @@ public class SmearTestRecord implements Serializable {
 
     @JsonIgnore
     public boolean isPreTreatmentRecord() {
-        return smear_sample_instance == SampleInstance.PreTreatment;
+        return smear_sample_instance == SputumTrackingInstance.PreTreatment;
     }
 }

@@ -5,17 +5,17 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.validation.RequestValidator;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -110,9 +110,9 @@ public class PatientRecordImporterUnitTest {
 
         assertEquals(true, patientRecordImporter.validate(asList((Object) importPatientRequest1, importPatientRequest2, importPatientRequest3)).isValid());
 
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest1.getWeightDate(SampleInstance.PreTreatment));
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest2.getWeightDate(SampleInstance.PreTreatment));
-        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(SampleInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest1.getWeightDate(SputumTrackingInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest2.getWeightDate(SputumTrackingInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat), importPatientRequest3.getWeightDate(SputumTrackingInstance.PreTreatment));
 
         assertEquals(PatientType.New.name(), importPatientRequest1.getPatient_type());
         assertEquals(PatientType.Chronic.name(), importPatientRequest2.getPatient_type());
@@ -121,6 +121,6 @@ public class PatientRecordImporterUnitTest {
         assertEquals("WHP", importPatientRequest1.getPhi());
         assertEquals("WHP", importPatientRequest2.getPhi());
         assertEquals("yy", importPatientRequest3.getPhi());
-        assertEquals(patientRegDate.toString(dateFormat),importPatientRequest1.getWeightDate(SampleInstance.PreTreatment));
+        assertEquals(patientRegDate.toString(dateFormat),importPatientRequest1.getWeightDate(SputumTrackingInstance.PreTreatment));
     }
 }

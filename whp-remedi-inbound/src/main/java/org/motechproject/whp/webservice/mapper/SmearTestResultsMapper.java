@@ -2,10 +2,10 @@ package org.motechproject.whp.webservice.mapper;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
@@ -25,22 +25,22 @@ public class SmearTestResultsMapper {
     public SmearTestResults map(PatientWebRequest patientWebRequest) {
         SmearTestResults smearTestResults = new SmearTestResults();
         if (isNotEmpty(patientWebRequest.getSmear_sample_instance())) {
-            SampleInstance smearSampleInstance = mapTestInstance(patientWebRequest.getSmear_sample_instance());
+            SputumTrackingInstance smearSputumTrackingInstance = mapTestInstance(patientWebRequest.getSmear_sample_instance());
             LocalDate test1Date = stringToLocalDate(patientWebRequest.getSmear_test_date_1());
             LocalDate test2Date = stringToLocalDate(patientWebRequest.getSmear_test_date_2());
             SmearTestResult test1Result = mapTestResult(patientWebRequest.getSmear_test_result_1());
             SmearTestResult test2Result = mapTestResult(patientWebRequest.getSmear_test_result_2());
             String labName = patientWebRequest.getLab_name();
             String labNumber = patientWebRequest.getLab_number();
-            smearTestResults.add(smearSampleInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber);
+            smearTestResults.add(smearSputumTrackingInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber);
         }
         return smearTestResults;
     }
 
-    private SampleInstance mapTestInstance(String instance) {
-        return (SampleInstance) stringToEnumeration.convert(
+    private SputumTrackingInstance mapTestInstance(String instance) {
+        return (SputumTrackingInstance) stringToEnumeration.convert(
                 instance,
-                SampleInstance.class
+                SputumTrackingInstance.class
         );
     }
 

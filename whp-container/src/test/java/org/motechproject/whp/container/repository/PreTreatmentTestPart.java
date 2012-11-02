@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,9 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
+import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatment;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerContext.xml")
@@ -42,13 +42,13 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "PreTreatment");
-        SputumTrackingInstance preTreatment = PreTreatment;
+        RegistrationInstance preTreatment = PreTreatment;
         String districtName = "East Champaran";
 
         Container expectedContainerTrackingRecord = createContainerTrackingRecord(providerId, districtName, preTreatment);
 
         allContainerTrackingRecords.add(expectedContainerTrackingRecord);
-        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId, districtName, SputumTrackingInstance.EndTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId, districtName, RegistrationInstance.InTreatment));
         allContainerTrackingRecords.add(createContainerTrackingRecord("anotherProvider", districtName, PreTreatment));
 
         int skip = 0;
@@ -129,7 +129,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, PreTreatment));
-        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, SputumTrackingInstance.EndTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord(providerId1, districtName1, RegistrationInstance.InTreatment));
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId2, districtName1, PreTreatment));
 
         // Assertion 1 for provider1-Instance1

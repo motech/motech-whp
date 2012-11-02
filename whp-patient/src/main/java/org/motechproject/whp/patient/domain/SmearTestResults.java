@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class SmearTestResults implements Serializable {
         return false;
     }
 
-    public SmearTestRecord resultForInstance(SampleInstance sampleInstance) {
+    public SmearTestRecord resultForInstance(SputumTrackingInstance sampleInstance) {
         for (SmearTestRecord smearTestRecord : this.all) {
             if (smearTestRecord.isOfInstance(sampleInstance))
                 return smearTestRecord;
@@ -52,9 +52,9 @@ public class SmearTestResults implements Serializable {
         return this.all.isEmpty();
     }
 
-    public void add(SampleInstance smearSampleInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result, String labName, String labNumber) {
-        if (smearSampleInstance != null) {
-            this.add(new SmearTestRecord(smearSampleInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber));
+    public void add(SputumTrackingInstance smearSputumTrackingInstance, LocalDate test1Date, SmearTestResult test1Result, LocalDate test2Date, SmearTestResult test2Result, String labName, String labNumber) {
+        if (smearSputumTrackingInstance != null) {
+            this.add(new SmearTestRecord(smearSputumTrackingInstance, test1Date, test1Result, test2Date, test2Result, labName, labNumber));
         }
     }
 

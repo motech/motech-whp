@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class WeightStatisticsRecord implements Serializable {
 
-    private SampleInstance weight_instance;
+    private SputumTrackingInstance weight_instance;
     private Double weight;
     private LocalDate measuringDate;
 
@@ -20,8 +20,8 @@ public class WeightStatisticsRecord implements Serializable {
     public WeightStatisticsRecord() {
     }
 
-    public WeightStatisticsRecord(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
-        this.weight_instance = SampleInstance;
+    public WeightStatisticsRecord(SputumTrackingInstance SputumTrackingInstance, Double weight, LocalDate measuringDate) {
+        this.weight_instance = SputumTrackingInstance;
         this.weight = weight;
         this.measuringDate = measuringDate;
     }
@@ -41,7 +41,7 @@ public class WeightStatisticsRecord implements Serializable {
     }
 
     @JsonIgnore
-    public boolean isOfInstance(SampleInstance SampleInstance) {
-        return this.weight_instance.equals(SampleInstance);
+    public boolean isOfInstance(SputumTrackingInstance SputumTrackingInstance) {
+        return this.weight_instance.equals(SputumTrackingInstance);
     }
 }

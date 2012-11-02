@@ -4,8 +4,8 @@ import lombok.Data;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.validation.constraints.Scope;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.*;
 
@@ -88,19 +88,19 @@ public class PatientRequest {
         return this;
     }
 
-    public PatientRequest addSmearTestResults(SampleInstance smearSampleInstance,
+    public PatientRequest addSmearTestResults(SputumTrackingInstance smearSputumTrackingInstance,
                                               LocalDate smearTestDate1,
                                               SmearTestResult smear_result_1,
                                               LocalDate smearTestDate2,
                                               SmearTestResult smearResult2,
                                               String labName, String labNumber) {
-        this.smearTestResults.add(new SmearTestRecord(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2, labName, labNumber));
+        this.smearTestResults.add(new SmearTestRecord(smearSputumTrackingInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2, labName, labNumber));
         return this;
     }
 
-    public PatientRequest setWeightStatistics(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
-        if (SampleInstance != null) {
-            weightStatistics.add(new WeightStatisticsRecord(SampleInstance, weight, measuringDate));
+    public PatientRequest setWeightStatistics(SputumTrackingInstance SputumTrackingInstance, Double weight, LocalDate measuringDate) {
+        if (SputumTrackingInstance != null) {
+            weightStatistics.add(new WeightStatisticsRecord(SputumTrackingInstance, weight, measuringDate));
         }
         return this;
     }

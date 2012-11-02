@@ -9,6 +9,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateUtil;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.common.domain.SampleInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
@@ -333,7 +334,7 @@ public class Therapy implements Serializable {
 
     @JsonIgnore
     public SmearTestResult getPreTreatmentSputumResult() {
-        SmearTestRecord pretreatmentSmearTestRecord = getAggregatedSmearTestResults().resultForInstance(PreTreatment);
+        SmearTestRecord pretreatmentSmearTestRecord = getAggregatedSmearTestResults().resultForInstance(SputumTrackingInstance.PreTreatment);
         if (pretreatmentSmearTestRecord == null) {
             return null;
         }

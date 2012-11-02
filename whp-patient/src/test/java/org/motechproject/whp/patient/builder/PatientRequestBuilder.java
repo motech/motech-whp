@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.domain.*;
@@ -33,9 +33,9 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo(PATIENT_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
                 .setTreatmentData(category01, TB_ID, PROVIDER_ID, DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
-                .addSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
+                .addSmearTestResults(SputumTrackingInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setWeightStatistics(SampleInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
+                .setWeightStatistics(SputumTrackingInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
                 .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
                 .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
         return this;
@@ -45,8 +45,8 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo(PATIENT_ID, null, null, null, null, "9087654321", null)
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .addSmearTestResults(SampleInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative, "labName", "labNumber")
-                .setWeightStatistics(SampleInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
+                .addSmearTestResults(SputumTrackingInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative, "labName", "labNumber")
+                .setWeightStatistics(SputumTrackingInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .setTreatmentData(null, TB_ID, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0))
                 .setTbRegistrationDate(now());
         return this;
@@ -62,8 +62,8 @@ public class PatientRequestBuilder {
         patientRequest.setProvider_id("newproviderid");
         patientRequest.setDisease_class(DiseaseClass.E);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
-        patientRequest.addSmearTestResults(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber");
-        patientRequest.setWeightStatistics(SampleInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
+        patientRequest.addSmearTestResults(SputumTrackingInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber");
+        patientRequest.setWeightStatistics(SputumTrackingInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
 
         return this;
     }
@@ -112,7 +112,7 @@ public class PatientRequestBuilder {
         patientRequest = new PatientRequest()
                 .setPatientInfo(PATIENT_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
                 .setTreatmentData(category, TB_ID, "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
-                .addSmearTestResults(SampleInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
+                .addSmearTestResults(SputumTrackingInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
                 .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
@@ -154,13 +154,13 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withSmearTestResults(SampleInstance smearSampleInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
-        patientRequest.addSmearTestResults(smearSampleInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2, "labName", "labNumber");
+    public PatientRequestBuilder withSmearTestResults(SputumTrackingInstance smearSputumTrackingInstance, LocalDate smearTestDate1, SmearTestResult smear_result_1, LocalDate smearTestDate2, SmearTestResult smearResult2) {
+        patientRequest.addSmearTestResults(smearSputumTrackingInstance, smearTestDate1, smear_result_1, smearTestDate2, smearResult2, "labName", "labNumber");
         return this;
     }
 
-    public PatientRequestBuilder withWeightStatistics(SampleInstance SampleInstance, Double weight, LocalDate measuringDate) {
-        patientRequest.setWeightStatistics(SampleInstance, weight, measuringDate);
+    public PatientRequestBuilder withWeightStatistics(SputumTrackingInstance SputumTrackingInstance, Double weight, LocalDate measuringDate) {
+        patientRequest.setWeightStatistics(SputumTrackingInstance, weight, measuringDate);
         return this;
     }
 

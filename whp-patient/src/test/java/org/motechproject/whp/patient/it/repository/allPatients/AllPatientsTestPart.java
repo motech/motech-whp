@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -50,12 +50,12 @@ public abstract class AllPatientsTestPart extends SpringIntegrationTest {
     }
 
     private WeightStatisticsRecord weightStatistics() {
-        return new WeightStatisticsRecord(SampleInstance.PreTreatment, 88.0, DateUtil.today());
+        return new WeightStatisticsRecord(SputumTrackingInstance.PreTreatment, 88.0, DateUtil.today());
     }
 
     private SmearTestRecord smearTestResult() {
         SmearTestRecord smearTestRecord = new SmearTestRecord();
-        smearTestRecord.setSmear_sample_instance(SampleInstance.PreTreatment);
+        smearTestRecord.setSmear_sample_instance(SputumTrackingInstance.PreTreatment);
         test1(smearTestRecord);
         test2(smearTestRecord);
         return smearTestRecord;

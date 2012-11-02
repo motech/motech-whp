@@ -1,18 +1,18 @@
 package org.motechproject.whp.service;
 
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.container.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
 
 @Service
 public class InTreatmentContainerDashboardService extends ContainerDashboardService {
 
     @Override
-    protected SputumTrackingInstance getSupportedInstance() {
+    protected RegistrationInstance getSupportedInstance() {
         return InTreatment;
     }
 

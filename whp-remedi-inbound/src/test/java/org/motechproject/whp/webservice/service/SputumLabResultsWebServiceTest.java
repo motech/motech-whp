@@ -7,11 +7,11 @@ import org.mockito.Mock;
 import org.motechproject.casexml.builder.ResponseMessageBuilder;
 import org.motechproject.casexml.repository.AllCaseLogs;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
 import org.motechproject.whp.webservice.request.SputumLabResultsWebRequest;
@@ -67,7 +67,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 "</update>\n" +
                 "</case>";
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now(), "d1"));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -126,7 +126,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now(), "d1"));
+        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -145,7 +145,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        Container container = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
+        Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
 
         when(containerService.getContainer(containerId)).thenReturn(container);
 

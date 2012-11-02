@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.service.RemediProperties;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.util.RemediXmlRequestBuilder;
 
@@ -36,7 +36,7 @@ public class RemediServiceTest {
 
     @Test
     public void shouldSendContainerRegistrationDetails() throws IOException, TemplateException {
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", SputumTrackingInstance.PreTreatment, DateUtil.now());
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", RegistrationInstance.PreTreatment, DateUtil.now());
         String xmlRequestToBeSent = "xml Request";
 
         when(remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel)).thenReturn(xmlRequestToBeSent);

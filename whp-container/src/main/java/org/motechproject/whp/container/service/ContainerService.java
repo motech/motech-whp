@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
@@ -70,7 +70,7 @@ public class ContainerService {
     }
 
     public void registerContainer(ContainerRegistrationRequest registrationRequest) throws IOException, TemplateException {
-        SputumTrackingInstance instance = SputumTrackingInstance.getInstanceForValue(registrationRequest.getInstance());
+        RegistrationInstance instance = RegistrationInstance.getInstanceForValue(registrationRequest.getInstance());
         DateTime creationTime = now();
 
         Provider provider = providerService.findByProviderId(registrationRequest.getProviderId());

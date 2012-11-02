@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatment;
 
 public class PreTreatmentTestPart {
 

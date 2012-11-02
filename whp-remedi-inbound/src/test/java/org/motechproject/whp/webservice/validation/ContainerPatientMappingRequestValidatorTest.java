@@ -11,7 +11,6 @@ import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.builder.ContainerPatientMappingWebRequestBuilder;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
@@ -132,7 +131,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     @Test
     public void shouldReturnValidationError_whenSputumTestInstanceIsInvalid() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
-        request.setSmear_sample_instance(SputumTrackingInstance.InTreatment.name());
+        request.setSmear_sample_instance("invalid-name");
         Container container = new Container();
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
@@ -152,7 +151,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     @Test
     public void shouldReturnValidationError_whenTbRegistrationDateIsNotPassedForPreTreatmentPhases() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
-        request.setSmear_sample_instance(SampleInstance.PreTreatment.name());
+        request.setSmear_sample_instance(SputumTrackingInstance.PreTreatment.name());
         Container container = new Container();
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
@@ -173,7 +172,7 @@ public class ContainerPatientMappingRequestValidatorTest {
     @Test
     public void shouldReturnValidationError_whenInvalidTbRegistrationDateIsPassedForPreTreatmentPhases() {
         ContainerPatientMappingWebRequest request = buildTestRequest();
-        request.setSmear_sample_instance(SampleInstance.PreTreatment.name());
+        request.setSmear_sample_instance(SputumTrackingInstance.PreTreatment.name());
         request.setTb_registration_date("invalid date");
         Container container = new Container();
         container.setContainerId(request.getCase_id());
@@ -196,7 +195,7 @@ public class ContainerPatientMappingRequestValidatorTest {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")
                 .withDateModified(now().toString())
-                .withInstance(SampleInstance.PreTreatment.name())
+                .withInstance(SputumTrackingInstance.PreTreatment.name())
                 .withPatientId("patient")
                 .withTbId("tbid")
                 .build();

@@ -1,7 +1,7 @@
 package org.motechproject.whp.webservice.builder;
 
 
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 
 public class ContainerPatientMappingWebRequestBuilder {
@@ -15,7 +15,7 @@ public class ContainerPatientMappingWebRequestBuilder {
     public ContainerPatientMappingWebRequestBuilder withDefaults() {
         withCaseId("caseId")
                 .withDateModified("03/04/2012 11:23:40")
-                .withInstance(SampleInstance.PreTreatment.name())
+                .withInstance(SputumTrackingInstance.PreTreatment.name())
                 .withTbId("tbId")
                 .withPatientId("patientId");
         mappingWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");

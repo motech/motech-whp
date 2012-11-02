@@ -137,7 +137,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         String providerId = "provider_one";
         String containerId = "1234567890";
-        SputumTrackingInstance instance = SputumTrackingInstance.InTreatment;
+        RegistrationInstance instance = RegistrationInstance.InTreatment;
 
         String district = "district1";
         Provider provider = new Provider(null, null, district, null);
@@ -179,7 +179,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldGetContainerByContainerId() {
         String containerId = "containerId";
-        Container expectedContainer = new Container("providerId", containerId, SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
+        Container expectedContainer = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
 
         Container container = containerService.getContainer(containerId);
@@ -191,7 +191,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldUpdateContainer_forMapping() {
         ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("reason", "code");
-        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
+        Container container = new Container("providerId", "containerId", RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         container.mapWith("patient", "tb", SputumTrackingInstance.EndIP, reasonForContainerClosure, today());
         container.setConsultationDate(today());
         containerService.updatePatientMapping(container);
@@ -202,7 +202,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer_forLabResultsCapture() {
-        Container container = new Container("providerId", "containerId", SputumTrackingInstance.InTreatment, DateUtil.now(), "d1");
+        Container container = new Container("providerId", "containerId", RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         LabResults labResults = new LabResults();
         labResults.setCumulativeResult(Negative);
         labResults.setLabName("TestlabName");

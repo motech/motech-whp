@@ -3,7 +3,7 @@ package org.motechproject.whp.service;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainerTrackingRecords;
 import org.motechproject.whp.mapper.ContainerTrackingDashboardRowMapper;
@@ -17,7 +17,7 @@ public abstract class ContainerDashboardService  implements Paging<ContainerTrac
     protected AllContainerTrackingRecords allContainerTrackingRecords;
     protected ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper;
 
-    protected abstract SputumTrackingInstance getSupportedInstance();
+    protected abstract RegistrationInstance getSupportedInstance();
 
     public ContainerDashboardService(AllContainerTrackingRecords allContainerTrackingRecords, ContainerTrackingDashboardRowMapper containerTrackingDashboardRowMapper) {
         this.allContainerTrackingRecords = allContainerTrackingRecords;

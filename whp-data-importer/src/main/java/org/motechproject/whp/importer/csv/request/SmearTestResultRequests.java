@@ -5,8 +5,8 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 import org.motechproject.validation.constraints.ValidateIfNotEmpty;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
@@ -30,23 +30,23 @@ public class SmearTestResultRequests {
     @Valid
     private SmearTestResultRequest endTreatmentSmearTestResult = new SmearTestResultRequest();
 
-    public void setDate1(SampleInstance sampleInstance, String date1) {
+    public void setDate1(SputumTrackingInstance sampleInstance, String date1) {
         getSmearTestInstanceRecord(sampleInstance).setDate1(date1);
     }
 
-    public void setResult1(SampleInstance sampleInstance, String result1) {
+    public void setResult1(SputumTrackingInstance sampleInstance, String result1) {
         getSmearTestInstanceRecord(sampleInstance).setResult1(result1);
     }
 
-    public void setDate2(SampleInstance sampleInstance, String date2) {
+    public void setDate2(SputumTrackingInstance sampleInstance, String date2) {
         getSmearTestInstanceRecord(sampleInstance).setDate2(date2);
     }
 
-    public void setResult2(SampleInstance sampleInstance, String result2) {
+    public void setResult2(SputumTrackingInstance sampleInstance, String result2) {
         getSmearTestInstanceRecord(sampleInstance).setResult2(result2);
     }
 
-    public SmearTestResultRequest getSmearTestInstanceRecord(SampleInstance sampleInstance) {
+    public SmearTestResultRequest getSmearTestInstanceRecord(SputumTrackingInstance sampleInstance) {
         switch (sampleInstance) {
             case PreTreatment:
                 return preTreatmentSmearTestResult;
@@ -63,23 +63,23 @@ public class SmearTestResultRequests {
         }
     }
 
-    public boolean hasSmearTestInstanceRecord(SampleInstance type) {
+    public boolean hasSmearTestInstanceRecord(SputumTrackingInstance type) {
         return StringUtils.hasText(getSmearTestInstanceRecord(type).getDate1());
     }
 
-    public String getTestDate1(SampleInstance type) {
+    public String getTestDate1(SputumTrackingInstance type) {
         return getSmearTestInstanceRecord(type).getDate1();
     }
 
-    public String getTestResult1(SampleInstance type) {
+    public String getTestResult1(SputumTrackingInstance type) {
         return getSmearTestInstanceRecord(type).getResult1();
     }
 
-    public String getTestDate2(SampleInstance type) {
+    public String getTestDate2(SputumTrackingInstance type) {
         return getSmearTestInstanceRecord(type).getDate2();
     }
 
-    public String getTestResult2(SampleInstance type) {
+    public String getTestResult2(SputumTrackingInstance type) {
         return getSmearTestInstanceRecord(type).getResult2();
     }
 

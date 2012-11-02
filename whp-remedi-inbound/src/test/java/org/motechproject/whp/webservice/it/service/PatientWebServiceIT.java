@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.domain.*;
@@ -249,7 +249,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         // Updating current closed treatment
         String resultDate = "04/09/2012";
         SmearTestResult testResult = SmearTestResult.Positive;
-        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;
         String labName = "Maxim";
         String labNumber = "11234556";
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
@@ -305,7 +305,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         // Updating historised treatment
         String resultDate = "04/09/2012";
         SmearTestResult testResult = SmearTestResult.Positive;
-        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;
         String labName = "Maxim";
         String labNumber = "11234556";
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
@@ -339,11 +339,11 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         patientWebService.createCase(patientWebRequest);
 
-        SampleInstance sampleInstance = SampleInstance.PreTreatment;
+        SputumTrackingInstance sampleInstance = SputumTrackingInstance.PreTreatment;
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .withSmearTestResults(sampleInstance.name(), "", "", "", "", "", "")
-                .withWeightStatistics(SampleInstance.EndTreatment.name(), "99.7")
+                .withWeightStatistics(SputumTrackingInstance.EndTreatment.name(), "99.7")
                 .withTbId(tbId)
                 .withCaseId(caseId)
                 .build();

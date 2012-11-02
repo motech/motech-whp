@@ -146,7 +146,7 @@ public class PatientV1Mapper {
 
     private WeightStatisticsRecord map(WeightStatisticsRecordV0 weightStatisticsRecordV0) {
         return new WeightStatisticsRecord(
-                SampleInstance.valueOf(weightStatisticsRecordV0.getWeight_instance().name()),
+                SputumTrackingInstance.valueOf(weightStatisticsRecordV0.getWeight_instance().name()),
                 weightStatisticsRecordV0.getWeight(),
                 weightStatisticsRecordV0.getMeasuringDate());
     }
@@ -160,7 +160,7 @@ public class PatientV1Mapper {
     }
 
     private SmearTestRecord map(SmearTestRecordV0 smearTestRecordV0) {
-        return new SmearTestRecord(SampleInstance.valueOf(smearTestRecordV0.getSmear_sample_instance().name()),
+        return new SmearTestRecord(SputumTrackingInstance.valueOf(smearTestRecordV0.getSmear_sample_instance().name()),
                 smearTestRecordV0.getSmear_test_date_1(),
                 SmearTestResult.valueOf(smearTestRecordV0.getSmear_test_result_1().name()),
                 smearTestRecordV0.getSmear_test_date_2(),

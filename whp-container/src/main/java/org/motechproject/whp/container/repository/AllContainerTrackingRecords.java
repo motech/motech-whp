@@ -7,7 +7,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.util.URLEscape;
 import org.motechproject.whp.container.domain.Container;
@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.InTreatment;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
+import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatment;
 
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<Container> {
@@ -68,7 +68,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         };
     }
 
-    public List<Container> filter(SputumTrackingInstance instance, Properties filterParams, int skip, int limit) {
+    public List<Container> filter(RegistrationInstance instance, Properties filterParams, int skip, int limit) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
@@ -77,7 +77,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return Collections.emptyList();
     }
 
-    public int count(SputumTrackingInstance instance, Properties filterParams) {
+    public int count(RegistrationInstance instance, Properties filterParams) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
@@ -86,7 +86,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return 0;
     }
 
-    private ContainerTrackingQueryDefinition getNewQueryDefinition(SputumTrackingInstance instance) {
+    private ContainerTrackingQueryDefinition getNewQueryDefinition(RegistrationInstance instance) {
         switch (instance) {
 
             case PreTreatment:

@@ -3,17 +3,17 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class TestResultTest {
 
-    SampleInstance sampleInstance = SampleInstance.EndIP;
+    SputumTrackingInstance sampleInstance = SputumTrackingInstance.EndIP;
     String date1;
     String result1;
     String date2;
@@ -66,8 +66,8 @@ public class TestResultTest {
         assertTestResults(testResult, sampleInstance, "", "", "", "", String.valueOf(weight));
     }
 
-    private void assertTestResults(TestResult testResult, SampleInstance sampleInstance, String date1, String date2, String result1, String result2, String weight) {
-        assertThat(testResult.getSampleInstance(), is(sampleInstance.value()));
+    private void assertTestResults(TestResult testResult, SputumTrackingInstance sampleInstance, String date1, String date2, String result1, String result2, String weight) {
+        assertThat(testResult.getSampleInstance(), is(sampleInstance.getDisplayText()));
         assertThat(testResult.getSmearTestDate1(), is(date1));
         assertThat(testResult.getSmearTestDate2(), is(date2));
         assertThat(testResult.getSmearTestResult1(), is(result1));

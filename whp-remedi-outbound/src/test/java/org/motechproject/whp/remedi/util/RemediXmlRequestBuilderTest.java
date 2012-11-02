@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
@@ -34,7 +35,7 @@ public class RemediXmlRequestBuilderTest {
     @Test
     public void shouldBuildXmlFromTemplate_forSuppliedContainerRegistrationModel() throws IOException, TemplateException, SAXException {
         DateTime now = DateUtil.now();
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("123456", "raj", SputumTrackingInstance.PreTreatment, now);
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("123456", "raj", RegistrationInstance.PreTreatment, now);
         assertXMLEqual(getExpectedXml("123456", "raj", SputumTrackingInstance.PreTreatment, now), remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel));
     }
 

@@ -3,18 +3,18 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.patient.domain.WeightStatistics;
 import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.motechproject.whp.common.domain.SampleInstance.EndIP;
-import static org.motechproject.whp.common.domain.SampleInstance.EndTreatment;
-import static org.motechproject.whp.common.domain.SampleInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndIP;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 
 public class TestResultsTest {
 
@@ -24,7 +24,7 @@ public class TestResultsTest {
     String date1;
     String date2;
     WeightStatistics weightStatistics;
-    SampleInstance sampleInstance;
+    SputumTrackingInstance sampleInstance;
     SmearTestResults smearTestResults;
     String labName = "labName";
     String labNumber = "labNumber";
@@ -51,7 +51,7 @@ public class TestResultsTest {
     }
 
     @Test
-    public void shouldMapSampleInstanceTestResultsFromPatient() {
+    public void shouldMapSputumTrackingInstanceTestResultsFromPatient() {
 
         TestResults testResults = new TestResults(smearTestResults, weightStatistics);
         assertThat(1, is(testResults.size()));
@@ -85,18 +85,18 @@ public class TestResultsTest {
     }
 
     @Test
-    public void shouldNotAddTestResultForSampleInstanceIfSmearAndWeightTestDoesNotExist() {
+    public void shouldNotAddTestResultForSputumTrackingInstanceIfSmearAndWeightTestDoesNotExist() {
         SmearTestResults smearTestResultsWithPreTreatmentResultOnly = smearTestResults;
         WeightStatistics weightStatisticsWithPreTreatmentResultOnly = weightStatistics;
 
         TestResults testResults = new TestResults(smearTestResultsWithPreTreatmentResultOnly, weightStatisticsWithPreTreatmentResultOnly);
 
         assertThat(testResults.size(), is(1));
-        assertThat(testResults.get(0).getSampleInstance(), is(PreTreatment.value()));
+        assertThat(testResults.get(0).getSampleInstance(), is(PreTreatment.getDisplayText()));
     }
 
     @Test
-    public void shouldReturnTestResultsInTheOrderOfSampleInstances() {
+    public void shouldReturnTestResultsInTheOrderOfSputumTrackingInstances() {
         SmearTestResults smearTestResults = new SmearTestResults();
         SmearTestRecord preTreatmentSmearTestRecord = new SmearTestRecord();
         preTreatmentSmearTestRecord.setSmear_sample_instance(PreTreatment);
@@ -113,13 +113,13 @@ public class TestResultsTest {
 
         TestResults testResults = new TestResults(smearTestResults, new WeightStatistics());
 
-        assertThat(testResults.get(0).getSampleInstance(), is(PreTreatment.value()));
-        assertThat(testResults.get(1).getSampleInstance(), is(EndIP.value()));
-        assertThat(testResults.get(2).getSampleInstance(), is(EndTreatment.value()));
+        assertThat(testResults.get(0).getSampleInstance(), is(PreTreatment.getDisplayText()));
+        assertThat(testResults.get(1).getSampleInstance(), is(EndIP.getDisplayText()));
+        assertThat(testResults.get(2).getSampleInstance(), is(EndTreatment.getDisplayText()));
     }
 
-    private void assertTestResult(TestResult testResult, SampleInstance expectedSampleInstance, String expectedDate1, String expectedResult1, String expectedDate2, String expectedResult2, String expectedLabName, String expectedLabNumber, String expectedWeight) {
-        assertThat(testResult.getSampleInstance(), is(expectedSampleInstance.value()));
+    private void assertTestResult(TestResult testResult, SputumTrackingInstance expectedSputumTrackingInstance, String expectedDate1, String expectedResult1, String expectedDate2, String expectedResult2, String expectedLabName, String expectedLabNumber, String expectedWeight) {
+        assertThat(testResult.getSampleInstance(), is(expectedSputumTrackingInstance.getDisplayText()));
         assertThat(testResult.getSmearTestDate1(), is(expectedDate1));
         assertThat(testResult.getSmearTestResult1(), is(expectedResult1));
         assertThat(testResult.getSmearTestDate2(), is(expectedDate2));

@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.Phase.*;
-import static org.motechproject.whp.common.domain.SampleInstance.*;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 

@@ -35,7 +35,7 @@ public class TreatmentV0Builder {
         treatmentV0.setPatientType(PatientTypeV0.New);
         treatmentV0.setTbRegistrationNumber("tbRegistrationNumber");
 
-        treatmentV0.addSmearTestResult(new SmearTestRecordV0(SmearTestSampleInstanceV0.PreTreatment, today, SmearTestResultV0.Negative, today, SmearTestResultV0.Negative));
+        treatmentV0.addSmearTestResult(new SmearTestRecordV0(SmearTestSputumTrackingInstanceV0.PreTreatment, today, SmearTestResultV0.Negative, today, SmearTestResultV0.Negative));
         treatmentV0.addWeightStatistics(new WeightStatisticsRecordV0(WeightInstanceV0.PreTreatment, 100.0, today));
         treatmentV0.pause("paws", DateUtil.now().minusDays(9));
         treatmentV0.resume("resume", DateUtil.now().minusDays(8));

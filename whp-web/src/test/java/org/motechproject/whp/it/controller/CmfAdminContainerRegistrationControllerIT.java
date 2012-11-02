@@ -11,19 +11,19 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerRegistrationMode;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.AdminContainerMapping;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllAdminContainerMappings;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
-import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.controller.CmfAdminContainerRegistrationController;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.CmfAdmin;
@@ -39,12 +39,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.domain.ChannelId.WEB;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.motechproject.whp.user.domain.WHPRole.CMF_ADMIN;
@@ -112,7 +108,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_OnBehalfOfProvider() throws Exception {
         String containerId = "10000000000";
-        SputumTrackingInstance inTreatment = SputumTrackingInstance.InTreatment;
+        RegistrationInstance inTreatment = RegistrationInstance.InTreatment;
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());
@@ -151,7 +147,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_ForNewContainer() throws Exception {
         String containerId = "30000000000";
-        SputumTrackingInstance inTreatment = SputumTrackingInstance.InTreatment;
+        RegistrationInstance inTreatment = RegistrationInstance.InTreatment;
 
         ArrayList<String> roles = new ArrayList<>();
         roles.add(WHPRole.CMF_ADMIN.name());

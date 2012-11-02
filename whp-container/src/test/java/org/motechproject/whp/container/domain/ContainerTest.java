@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.container.WHPContainerConstants;
 
@@ -20,7 +21,7 @@ public class ContainerTest {
     @Test
     public void shouldSetDefaultsUponCreation() {
         DateTime creationTime = now();
-        Container container = new Container("providerId", "12345678912", SputumTrackingInstance.PreTreatment, creationTime, "d1");
+        Container container = new Container("providerId", "12345678912", RegistrationInstance.PreTreatment, creationTime, "d1");
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertEquals(Pending, container.getDiagnosis());
         assertNull(container.getPatientId());
@@ -46,7 +47,7 @@ public class ContainerTest {
         assertEquals(instance, container.getMappingInstance());
         assertEquals(tbId, container.getTbId());
         assertEquals(Positive, container.getDiagnosis());
-        assertEquals(SputumTrackingInstance.InTreatment, container.getCurrentTrackingInstance());
+        assertEquals(RegistrationInstance.InTreatment, container.getCurrentTrackingInstance());
         assertEquals("0", container.getReasonForClosure());
         assertNull(container.getConsultationDate());
     }
@@ -68,7 +69,7 @@ public class ContainerTest {
         assertEquals(instance, container.getMappingInstance());
         assertEquals(tbId, container.getTbId());
         assertEquals(Positive, container.getDiagnosis());
-        assertEquals(SputumTrackingInstance.PreTreatment, container.getCurrentTrackingInstance());
+        assertEquals(RegistrationInstance.PreTreatment, container.getCurrentTrackingInstance());
         assertEquals("0", container.getReasonForClosure());
         assertEquals(consultationDate, container.getConsultationDate());
     }

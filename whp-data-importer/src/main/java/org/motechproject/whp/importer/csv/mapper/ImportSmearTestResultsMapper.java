@@ -2,11 +2,11 @@ package org.motechproject.whp.importer.csv.mapper;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.common.mapping.StringToEnumeration;
-import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.mapping.StringToEnumeration;
+import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
+import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.springframework.stereotype.Component;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
@@ -24,7 +24,7 @@ public class ImportSmearTestResultsMapper {
 
     public SmearTestResults map(ImportPatientRequest importPatientRequest) {
         SmearTestResults smearTestResults = new SmearTestResults();
-        for (SampleInstance instance : SampleInstance.values()) {
+        for (SputumTrackingInstance instance : SputumTrackingInstance.values()) {
             SmearTestResultRequest request = importPatientRequest.getSmearTestResultRequestByType(instance);
             if (request != null && request.isNotEmpty()) {
                 SmearTestResult test1Result = (SmearTestResult) stringToEnumeration.convert(request.getResult1(), SmearTestResult.class);

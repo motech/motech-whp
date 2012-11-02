@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -18,10 +21,6 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
@@ -39,10 +38,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
-import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 @ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
 public class PatientServiceIT extends SpringIntegrationTest {
@@ -161,7 +160,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .build();
         patientService.createPatient(patientRequest);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
-                .withSmearTestResults(SampleInstance.PreTreatment, today(), Positive, null, null)
+                .withSmearTestResults(SputumTrackingInstance.PreTreatment, today(), Positive, null, null)
                 .withTbId("elevenDigit")
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
@@ -527,7 +526,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         LocalDate today = today();
         SmearTestResult testResult = SmearTestResult.Positive;
-        SampleInstance sampleInstance = SampleInstance.ExtendedIP;
+        SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;
         PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
                 .withSimpleUpdateFields()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -551,10 +550,10 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withSmearTestResults(SampleInstance.PreTreatment, null, null, null, null)
+                .withSmearTestResults(SputumTrackingInstance.PreTreatment, null, null, null, null)
                 .withTbId(patientRequest.getTb_id())
                 .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
-                .withWeightStatistics(SampleInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
+                .withWeightStatistics(SputumTrackingInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .build();
         simpleUpdateRequest.setPatientInfo(PATIENT_ID, null, null, null, null, "9087654321", null)
                 .setTreatmentData(null, patientRequest.getTb_id(), null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0));
@@ -564,7 +563,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(patientRequest.getTb_id()).getSmearTestResults().latestResult();
-        assertEquals(SampleInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
+        assertEquals(SputumTrackingInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertNull(smearTestRecord.getSmear_test_result_1());
         assertNull(smearTestRecord.getSmear_test_result_2());
         assertNull(smearTestRecord.getSmear_test_date_1());

@@ -1,9 +1,9 @@
 package org.motechproject.whp.importer.csv.mapper;
 
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.springframework.stereotype.Component;
 
 import static java.lang.Double.parseDouble;
@@ -19,7 +19,7 @@ public class ImportWeightStatisticsMapper {
 
     public WeightStatistics map(ImportPatientRequest importPatientRequest) {
         WeightStatistics weightStatistics = new WeightStatistics();
-        for (SampleInstance instance : SampleInstance.values()) {
+        for (SputumTrackingInstance instance : SputumTrackingInstance.values()) {
             WeightStatisticsRequest request = importPatientRequest.getWeightStatisticsRequestByType(instance);
             if (request != null && request.isNotEmpty()) {
                 LocalDate date = resolveMeasuringDate(importPatientRequest, request);

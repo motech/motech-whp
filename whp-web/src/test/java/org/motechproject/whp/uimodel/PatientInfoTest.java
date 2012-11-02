@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -50,10 +50,10 @@ public class PatientInfoTest {
     public void setup() {
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null));
+        smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, null, null));
 
         WeightStatistics weightStatistics = new WeightStatistics();
-        weightStatistics.add(new WeightStatisticsRecord(SampleInstance.PreTreatment, 20.0, new LocalDate(2012, 1, 1)));
+        weightStatistics.add(new WeightStatisticsRecord(SputumTrackingInstance.PreTreatment, 20.0, new LocalDate(2012, 1, 1)));
 
         currentTreatment = new TreatmentBuilder()
                 .withStartDate(new LocalDate(2012, 2, 2))
@@ -130,11 +130,11 @@ public class PatientInfoTest {
         patient.closeCurrentTreatment(TreatmentOutcome.TransferredOut, DateUtil.now());
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        SampleInstance newSampleInstance = SampleInstance.ExtendedIP;
-        smearTestResults.add(new SmearTestRecord(newSampleInstance, null, null, null, null, null, null));
+        SputumTrackingInstance newSputumTrackingInstance = SputumTrackingInstance.ExtendedIP;
+        smearTestResults.add(new SmearTestRecord(newSputumTrackingInstance, null, null, null, null, null, null));
 
         WeightStatistics weightStatistics = new WeightStatistics();
-        weightStatistics.add(new WeightStatisticsRecord(SampleInstance.ExtendedIP, 20.0, new LocalDate(2012, 1, 1)));
+        weightStatistics.add(new WeightStatisticsRecord(SputumTrackingInstance.ExtendedIP, 20.0, new LocalDate(2012, 1, 1)));
 
         Treatment treatment = new TreatmentBuilder()
                 .withStartDate(new LocalDate(2012, 2, 2))
@@ -151,8 +151,8 @@ public class PatientInfoTest {
 
         PatientInfo patientInfo = new PatientInfo(patient, provider);
         assertThat(patientInfo.getTestResults().size(),is(2));
-        assertThat(patientInfo.getTestResults().get(0).getSampleInstance(),is(SampleInstance.PreTreatment.value()));
-        assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSampleInstance.value()));
+        assertThat(patientInfo.getTestResults().get(0).getSampleInstance(),is(SputumTrackingInstance.PreTreatment.getDisplayText()));
+        assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSputumTrackingInstance.getDisplayText()));
     }
 
     @Test

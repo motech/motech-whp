@@ -1,22 +1,21 @@
 package org.motechproject.whp.patient.command;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 import org.motechproject.whp.patient.domain.SmearTestResults;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.service.ProviderService;
 
 import static org.joda.time.DateTime.now;
@@ -112,7 +111,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();
-        str.add(new SmearTestRecord(SampleInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber"));
+        str.add(new SmearTestRecord(SputumTrackingInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber"));
         patientRequest.setSmearTestResults(str);
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
@@ -131,7 +130,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();
-        str.add(new SmearTestRecord(SampleInstance.PreTreatment, null, null, null, null, null, null));
+        str.add(new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, null, null));
         patientRequest.setSmearTestResults(str);
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");

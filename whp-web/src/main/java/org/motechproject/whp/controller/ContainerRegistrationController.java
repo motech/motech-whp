@@ -2,15 +2,13 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
-import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ContainerRegistrationValidator;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +43,8 @@ public abstract class ContainerRegistrationController extends BaseWebController 
 
     protected void populateViewDetails(Model uiModel, HttpServletRequest request) {
         ArrayList<String> instances = new ArrayList<>();
-        for (SputumTrackingInstance sputumTrackingInstance : SputumTrackingInstance.REGISTRATION_INSTANCES)
-            instances.add(sputumTrackingInstance.getDisplayText());
+        for (RegistrationInstance instance : RegistrationInstance.values())
+            instances.add(instance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);

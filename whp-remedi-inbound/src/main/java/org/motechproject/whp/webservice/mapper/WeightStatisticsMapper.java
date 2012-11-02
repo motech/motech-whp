@@ -1,8 +1,8 @@
 package org.motechproject.whp.webservice.mapper;
 
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.WeightStatistics;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class WeightStatisticsMapper {
         if (isNotEmpty(patientWebRequest.getWeight_instance())) {
             LocalDate measuringDate = parse(patientWebRequest.getDate_modified(), forPattern(DATE_TIME_FORMAT));
             statistics.add(
-                    SampleInstance.valueOf(patientWebRequest.getWeight_instance()),
+                    SputumTrackingInstance.valueOf(patientWebRequest.getWeight_instance()),
                     Double.valueOf(patientWebRequest.getWeight()),
                     measuringDate
             );

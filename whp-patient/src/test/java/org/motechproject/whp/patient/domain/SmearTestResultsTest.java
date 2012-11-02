@@ -3,8 +3,8 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,22 +18,22 @@ public class SmearTestResultsTest {
     public void shouldAddANewSmearTestResultPreservingOrder() {
         SmearTestResults smearTestResults = new SmearTestResults();
 
-        SmearTestRecord SmearTestRecord1 = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
-        SmearTestRecord SmearTestRecord2 = new SmearTestRecord(SampleInstance.ExtendedIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord SmearTestRecord1 = new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord SmearTestRecord2 = new SmearTestRecord(SputumTrackingInstance.ExtendedIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
 
         smearTestResults.add(SmearTestRecord1);
         smearTestResults.add(SmearTestRecord2);
 
         assertEquals(2, smearTestResults.size());
-        assertThat(smearTestResults.get(0).getSmear_sample_instance(),is(SampleInstance.EndIP));
-        assertThat(smearTestResults.get(1).getSmear_sample_instance(),is(SampleInstance.ExtendedIP));
+        assertThat(smearTestResults.get(0).getSmear_sample_instance(),is(SputumTrackingInstance.EndIP));
+        assertThat(smearTestResults.get(1).getSmear_sample_instance(),is(SputumTrackingInstance.ExtendedIP));
     }
 
     @Test
     public void shouldUpdateCurrentSmearTestResultAndPushToEndOfList() {
 
-        SampleInstance toBeUpdatedInstance = SampleInstance.PreTreatment;
-        SampleInstance anotherInstance = SampleInstance.EndIP;
+        SputumTrackingInstance toBeUpdatedInstance = SputumTrackingInstance.PreTreatment;
+        SputumTrackingInstance anotherInstance = SputumTrackingInstance.EndIP;
         LocalDate anotherInstanceDate1 = new LocalDate(2011, 1, 2);
         LocalDate anotherInstanceDate2 = new LocalDate(2011, 1, 13);
         SmearTestResult anotherInstanceResult1 = SmearTestResult.Positive;
@@ -61,28 +61,28 @@ public class SmearTestResultsTest {
     public void shouldReturnLastResultInList() {
         SmearTestResults smearTestResults = new SmearTestResults();
 
-        smearTestResults.add(new SmearTestRecord(SampleInstance.PreTreatment, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
-        assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SampleInstance.PreTreatment));
+        smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.PreTreatment, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
+        assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SputumTrackingInstance.PreTreatment));
 
-        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
-        assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SampleInstance.EndIP));
+        smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.EndIP, new LocalDate(2010, 10, 10), SmearTestResult.Positive, new LocalDate(2010, 10, 10), SmearTestResult.Positive, "labName", "labNumber"));
+        assertThat(smearTestResults.latestResult().getSmear_sample_instance(), is(SputumTrackingInstance.EndIP));
     }
 
     @Test
-    public void shouldReturnSmearTestResultForGivenSampleInstance() {
+    public void shouldReturnSmearTestResultForGivenSputumTrackingInstance() {
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
 
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
 
-        assertThat(smearTestResults.resultForInstance(SampleInstance.PreTreatment), is(pretreatmentSmearTestRecord));
-        assertThat(smearTestResults.resultForInstance(SampleInstance.EndIP), is(endIpSmearTestRecord));
-        assertThat(smearTestResults.resultForInstance(SampleInstance.ExtendedIP), nullValue());
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.PreTreatment), is(pretreatmentSmearTestRecord));
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.EndIP), is(endIpSmearTestRecord));
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.ExtendedIP), nullValue());
     }
 
-    private void assertSmearTestResult(SmearTestRecord smearTestRecord, SampleInstance expectedInstance, LocalDate expectedDate1, SmearTestResult expectedResult1, LocalDate expectedDate2, SmearTestResult expectedResult2) {
+    private void assertSmearTestResult(SmearTestRecord smearTestRecord, SputumTrackingInstance expectedInstance, LocalDate expectedDate1, SmearTestResult expectedResult1, LocalDate expectedDate2, SmearTestResult expectedResult2) {
         assertEquals(expectedInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(expectedDate1, smearTestRecord.getSmear_test_date_1());
         assertEquals(expectedDate2, smearTestRecord.getSmear_test_date_2());
@@ -93,8 +93,8 @@ public class SmearTestResultsTest {
     @Test
     public void shouldGetPreTreatmentSmearTestResult(){
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Negative, DateUtil.today(), SmearTestResult.Negative, "labName", "labNumber");
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Negative, DateUtil.today(), SmearTestResult.Negative, "labName", "labNumber");
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
 
@@ -104,8 +104,8 @@ public class SmearTestResultsTest {
     @Test
     public void shouldReturnIfPreTreatmentSmearTestResultExists(){
         SmearTestResults smearTestResults = new SmearTestResults();
-        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SampleInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
-        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord pretreatmentSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+        SmearTestRecord endIpSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
         smearTestResults.add(endIpSmearTestRecord);
         smearTestResults.add(pretreatmentSmearTestRecord);
 

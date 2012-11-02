@@ -6,10 +6,10 @@ import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.user.validation.ProviderIdValidator;
 
 import javax.validation.Valid;
@@ -119,192 +119,192 @@ public class ImportPatientRequest {
 
     @ColumnName(name = "PreTreatment Sputum Date of Test 1:*")
     public void setPreTreatmentSmearTestDate1(String date) {
-        smearTestResultRequest.setDate1(SampleInstance.PreTreatment, date);
+        smearTestResultRequest.setDate1(SputumTrackingInstance.PreTreatment, date);
     }
 
     @ColumnName(name = "PreTreatment Sputum Result 1:*")
     public void setPreTreatmentSmearTestResult1(String result) {
-        smearTestResultRequest.setResult1(SampleInstance.PreTreatment, result);
+        smearTestResultRequest.setResult1(SputumTrackingInstance.PreTreatment, result);
     }
 
     @ColumnName(name = "PreTreatment Sputum Date of Test 2:*")
     public void setPreTreatmentSmearTestDate2(String date) {
-        smearTestResultRequest.setDate2(SampleInstance.PreTreatment, date);
+        smearTestResultRequest.setDate2(SputumTrackingInstance.PreTreatment, date);
     }
 
     @ColumnName(name = "PreTreatment Sputum Result 2:*")
     public void setPreTreatmentSmearTestResult2(String result) {
-        smearTestResultRequest.setResult2(SampleInstance.PreTreatment, result);
+        smearTestResultRequest.setResult2(SputumTrackingInstance.PreTreatment, result);
     }
 
     @ColumnName(name = "EndIP Date of Test 1:")
     public void setEndIpSmearTestDate1(String date) {
-        smearTestResultRequest.setDate1(SampleInstance.EndIP, date);
+        smearTestResultRequest.setDate1(SputumTrackingInstance.EndIP, date);
     }
 
     @ColumnName(name = "EndIP Result 1:")
     public void setEndIpSmearTestResult1(String result) {
-        smearTestResultRequest.setResult1(SampleInstance.EndIP, result);
+        smearTestResultRequest.setResult1(SputumTrackingInstance.EndIP, result);
     }
 
     @ColumnName(name = "EndIP Date of Test 2:")
     public void setEndIpSmearTestDate2(String date) {
-        smearTestResultRequest.setDate2(SampleInstance.EndIP, date);
+        smearTestResultRequest.setDate2(SputumTrackingInstance.EndIP, date);
     }
 
     @ColumnName(name = "EndIP Result 2:")
     public void setEndIpSmearTestResult2(String result) {
-        smearTestResultRequest.setResult2(SampleInstance.EndIP, result);
+        smearTestResultRequest.setResult2(SputumTrackingInstance.EndIP, result);
     }
 
     @ColumnName(name = "ExtendedIP Date of Test 1:")
     public void setExtendedIpSmearTestDate1(String date) {
-        smearTestResultRequest.setDate1(SampleInstance.ExtendedIP, date);
+        smearTestResultRequest.setDate1(SputumTrackingInstance.ExtendedIP, date);
     }
 
     @ColumnName(name = "ExtendedIP Result 1:")
     public void setExtendedIpSmearTestResult1(String result) {
-        smearTestResultRequest.setResult1(SampleInstance.ExtendedIP, result);
+        smearTestResultRequest.setResult1(SputumTrackingInstance.ExtendedIP, result);
     }
 
     @ColumnName(name = "ExtendedIP Date of Test 2:")
     public void setExtendedIpSmearTestDate2(String date) {
-        smearTestResultRequest.setDate2(SampleInstance.ExtendedIP, date);
+        smearTestResultRequest.setDate2(SputumTrackingInstance.ExtendedIP, date);
     }
 
     @ColumnName(name = "ExtendedIP Result 2:")
     public void setExtendedIpSmearTestResult2(String result) {
-        smearTestResultRequest.setResult2(SampleInstance.ExtendedIP, result);
+        smearTestResultRequest.setResult2(SputumTrackingInstance.ExtendedIP, result);
     }
 
     @ColumnName(name = "TwoMonthsIntoCP Date of Test 1:")
     public void setTwoMonthsIntoCpSmearTestDate1(String date) {
-        smearTestResultRequest.setDate1(SampleInstance.TwoMonthsIntoCP, date);
+        smearTestResultRequest.setDate1(SputumTrackingInstance.TwoMonthsIntoCP, date);
     }
 
     @ColumnName(name = "TwoMonthsIntoCP Result 1:")
     public void setTwoMonthsIntoCpSmearTestResult1(String result) {
-        smearTestResultRequest.setResult1(SampleInstance.TwoMonthsIntoCP, result);
+        smearTestResultRequest.setResult1(SputumTrackingInstance.TwoMonthsIntoCP, result);
     }
 
     @ColumnName(name = "TwoMonthsIntoCP Date of Test 2:")
     public void setTwoMonthsIntoCpSmearTestDate2(String date) {
-        smearTestResultRequest.setDate2(SampleInstance.TwoMonthsIntoCP, date);
+        smearTestResultRequest.setDate2(SputumTrackingInstance.TwoMonthsIntoCP, date);
     }
 
     @ColumnName(name = "TwoMonthsIntoCP Result 2:")
     public void setTwoMonthsIntoCpSmearTestResult2(String result) {
-        smearTestResultRequest.setResult2(SampleInstance.TwoMonthsIntoCP, result);
+        smearTestResultRequest.setResult2(SputumTrackingInstance.TwoMonthsIntoCP, result);
     }
 
     @ColumnName(name = "EndTreatment Date of Test 1:")
     public void setEndTreatmentSmearTestDate1(String date) {
-        smearTestResultRequest.setDate1(SampleInstance.EndTreatment, date);
+        smearTestResultRequest.setDate1(SputumTrackingInstance.EndTreatment, date);
     }
 
     @ColumnName(name = "EndTreatment Result 1:")
     public void setEndTreatmentSmearTestResult1(String result) {
-        smearTestResultRequest.setResult1(SampleInstance.EndTreatment, result);
+        smearTestResultRequest.setResult1(SputumTrackingInstance.EndTreatment, result);
     }
 
     @ColumnName(name = "EndTreatment Date of Test 2:")
     public void setEndTreatmentSmearTestDate2(String date) {
-        smearTestResultRequest.setDate2(SampleInstance.EndTreatment, date);
+        smearTestResultRequest.setDate2(SputumTrackingInstance.EndTreatment, date);
     }
 
     @ColumnName(name = "EndTreatment Result 2:")
     public void setEndTreatmentSmearTestResult2(String result) {
-        smearTestResultRequest.setResult2(SampleInstance.EndTreatment, result);
+        smearTestResultRequest.setResult2(SputumTrackingInstance.EndTreatment, result);
     }
 
     @ColumnName(name = "PreTreatmentDate on which Weight was measured:")
     public void setPreTreatmentWeightDate(String date) {
-        weightStatisticsRequest.setWeightDate(SampleInstance.PreTreatment, date);
+        weightStatisticsRequest.setWeightDate(SputumTrackingInstance.PreTreatment, date);
     }
 
     @ColumnName(name = "PreTreatment Weight Result:")
     public void setPreTreatmentWeight(String weight) {
-        weightStatisticsRequest.setWeight(SampleInstance.PreTreatment, weight);
+        weightStatisticsRequest.setWeight(SputumTrackingInstance.PreTreatment, weight);
     }
 
     @ColumnName(name = "EndIP Date on which Weight was measured:")
     public void setEndIpWeightDate(String date) {
-        weightStatisticsRequest.setWeightDate(SampleInstance.EndIP, date);
+        weightStatisticsRequest.setWeightDate(SputumTrackingInstance.EndIP, date);
     }
 
     @ColumnName(name = "EndIP Weight Result:")
     public void setEndIpWeight(String weight) {
-        weightStatisticsRequest.setWeight(SampleInstance.EndIP, weight);
+        weightStatisticsRequest.setWeight(SputumTrackingInstance.EndIP, weight);
     }
 
     @ColumnName(name = "ExtendedIP Date on which Weight was measured:")
     public void setExtendedIpWeightDate(String date) {
-        weightStatisticsRequest.setWeightDate(SampleInstance.ExtendedIP, date);
+        weightStatisticsRequest.setWeightDate(SputumTrackingInstance.ExtendedIP, date);
     }
 
     @ColumnName(name = "ExtendedIP Weight Result:")
     public void setExtendedIpWeight(String weight) {
-        weightStatisticsRequest.setWeight(SampleInstance.ExtendedIP, weight);
+        weightStatisticsRequest.setWeight(SputumTrackingInstance.ExtendedIP, weight);
     }
 
     @ColumnName(name = "TwoMonthsIntoCPDate on which Weight was measured:")
     public void setTwoMonthsIntoCpWeightDate(String date) {
-        weightStatisticsRequest.setWeightDate(SampleInstance.TwoMonthsIntoCP, date);
+        weightStatisticsRequest.setWeightDate(SputumTrackingInstance.TwoMonthsIntoCP, date);
     }
 
     @ColumnName(name = "TwoMonthsIntoCP Result:")
     public void setTwoMonthsIntoCpWeight(String weight) {
-        weightStatisticsRequest.setWeight(SampleInstance.TwoMonthsIntoCP, weight);
+        weightStatisticsRequest.setWeight(SputumTrackingInstance.TwoMonthsIntoCP, weight);
     }
 
     @ColumnName(name = "EndTreatment Date on which Weight was measured:")
     public void setEndTreatmentWeightDate(String date) {
-        weightStatisticsRequest.setWeightDate(SampleInstance.EndTreatment, date);
+        weightStatisticsRequest.setWeightDate(SputumTrackingInstance.EndTreatment, date);
     }
 
     @ColumnName(name = "EndTreatment Result:")
     public void setEndTreatmentWeight(String weight) {
-        weightStatisticsRequest.setWeight(SampleInstance.EndTreatment, weight);
+        weightStatisticsRequest.setWeight(SputumTrackingInstance.EndTreatment, weight);
     }
 
-    public String getTestDate1(SampleInstance type) {
+    public String getTestDate1(SputumTrackingInstance type) {
         return smearTestResultRequest.getTestDate1(type);
     }
 
-    public String getTestResult1(SampleInstance type) {
+    public String getTestResult1(SputumTrackingInstance type) {
         return smearTestResultRequest.getTestResult1(type);
     }
 
-    public String getTestDate2(SampleInstance type) {
+    public String getTestDate2(SputumTrackingInstance type) {
         return smearTestResultRequest.getTestDate2(type);
     }
 
-    public String getTestResult2(SampleInstance type) {
+    public String getTestResult2(SputumTrackingInstance type) {
         return smearTestResultRequest.getTestResult2(type);
     }
 
-    public String getWeightDate(SampleInstance type) {
+    public String getWeightDate(SputumTrackingInstance type) {
         return weightStatisticsRequest.getWeightDate(type);
     }
 
-    public String getWeight(SampleInstance type) {
+    public String getWeight(SputumTrackingInstance type) {
         return weightStatisticsRequest.getWeight(type);
     }
 
 
-    public boolean hasSmearTestInstanceRecord(SampleInstance type) {
+    public boolean hasSmearTestInstanceRecord(SputumTrackingInstance type) {
         return smearTestResultRequest.hasSmearTestInstanceRecord(type);
     }
 
-    public boolean hasWeightInstanceRecord(SampleInstance type) {
+    public boolean hasWeightInstanceRecord(SputumTrackingInstance type) {
         return weightStatisticsRequest.hasWeightInstanceRecord(type);
     }
 
-    public SmearTestResultRequests.SmearTestResultRequest getSmearTestResultRequestByType(SampleInstance instance) {
+    public SmearTestResultRequests.SmearTestResultRequest getSmearTestResultRequestByType(SputumTrackingInstance instance) {
         return smearTestResultRequest.getSmearTestInstanceRecord(instance);
     }
 
-    public WeightStatisticsRequests.WeightStatisticsRequest getWeightStatisticsRequestByType(SampleInstance instance) {
+    public WeightStatisticsRequests.WeightStatisticsRequest getWeightStatisticsRequestByType(SputumTrackingInstance instance) {
         return weightStatisticsRequest.getWeightStatisticsRecord(instance);
     }
 }

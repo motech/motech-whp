@@ -4,8 +4,8 @@ import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.SampleInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.*;
 
 import java.util.Arrays;
@@ -55,8 +55,8 @@ public class PatientBuilder {
         treatment.setProviderId(PROVIDER_ID);
         treatment.setPatientAddress(defaultAddress());
         treatment.setPatientType(PatientType.New);
-        treatment.addSmearTestResult(new SmearTestRecord(SampleInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative, "labName", "labNumber"));
-        treatment.addWeightStatistics(new WeightStatisticsRecord(SampleInstance.PreTreatment, 100.0, today));
+        treatment.addSmearTestResult(new SmearTestRecord(SputumTrackingInstance.PreTreatment, today, SmearTestResult.Negative, today, SmearTestResult.Negative, "labName", "labNumber"));
+        treatment.addWeightStatistics(new WeightStatisticsRecord(SputumTrackingInstance.PreTreatment, 100.0, today));
         treatment.setTbRegistrationNumber("tbRegistrationNumber");
         return treatment;
     }

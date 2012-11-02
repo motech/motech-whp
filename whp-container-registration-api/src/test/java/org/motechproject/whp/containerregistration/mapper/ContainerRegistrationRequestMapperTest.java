@@ -25,7 +25,6 @@ public class ContainerRegistrationRequestMapperTest {
 
     @Test
     public void shouldMapIvrContainerRegistrationRequestToContainerRegistrationRequest() {
-
         Provider provider = new Provider("providerId", "primaryMobile", "district", null);
         when(providerService.findByMobileNumber("msisdn")).
                 thenReturn(provider);
@@ -43,6 +42,5 @@ public class ContainerRegistrationRequestMapperTest {
         assertEquals("phase", containerRegistrationReportingRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
         assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
-
     }
 }

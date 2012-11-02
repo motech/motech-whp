@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
@@ -50,7 +50,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
         this.container = new Container();
         container.setContainerId("12345");
         container.setProviderId("providerId");
-        container.setInstance(SputumTrackingInstance.InTreatment);
+        container.setInstance(RegistrationInstance.InTreatment);
 
         allContainers.add(container);
         markForDeletion(container);

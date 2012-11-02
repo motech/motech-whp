@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.common.domain.SampleInstance;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;
@@ -122,7 +122,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
     }
 
     private void assertWeightStatistics(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
-        assertEquals(SampleInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
+        assertEquals(SputumTrackingInstance.valueOf(patientWebRequest.getWeight_instance()), patientRequest.getWeightStatistics().get(0).getWeight_instance());
         assertEquals(Double.parseDouble(patientWebRequest.getWeight()), patientRequest.getWeightStatistics().get(0).getWeight(), 0.0);
         assertEquals("10/10/2010", patientRequest.getWeightStatistics().get(0).getMeasuringDate().toString(DATE_FORMAT));
     }

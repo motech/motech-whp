@@ -4,15 +4,14 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
@@ -48,10 +47,10 @@ public class PatientSummaryMapperTest {
     public void shouldHandleNullPretreatmentSputumAndWeightResult(){
 
         SmearTestResults smearTestResults = new SmearTestResults();
-        smearTestResults.add(new SmearTestRecord(SampleInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber"));
+        smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber"));
 
         WeightStatistics weightStatistics = new WeightStatistics();
-        weightStatistics.add(new WeightStatisticsRecord(SampleInstance.ExtendedIP, 10.0, DateUtil.today()));
+        weightStatistics.add(new WeightStatisticsRecord(SputumTrackingInstance.ExtendedIP, 10.0, DateUtil.today()));
         Treatment treatment = new TreatmentBuilder().withDefaults().withSmearTestResults(smearTestResults).withWeightStatistics(weightStatistics).build();
         Patient patient = new PatientBuilder().withTherapy(new TherapyBuilder().withTreatment(treatment).build()).build();
 

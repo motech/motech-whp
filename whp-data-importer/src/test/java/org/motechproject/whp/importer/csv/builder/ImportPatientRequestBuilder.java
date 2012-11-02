@@ -1,11 +1,11 @@
 package org.motechproject.whp.importer.csv.builder;
 
 import org.joda.time.DateTime;
+import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
-import org.motechproject.whp.common.domain.SampleInstance;
-import org.motechproject.whp.common.domain.SmearTestResult;
 
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
@@ -55,7 +55,7 @@ public class ImportPatientRequestBuilder {
                 .withLastModifiedDate("15/10/2010 10:10:10");
     }
 
-    public ImportPatientRequestBuilder withSmearTestResults(SampleInstance type,
+    public ImportPatientRequestBuilder withSmearTestResults(SputumTrackingInstance type,
                                                             String testResultDate1,
                                                             String testResult1,
                                                             String testResultDate2,
@@ -154,7 +154,7 @@ public class ImportPatientRequestBuilder {
                 .withPhi(phi);
     }
 
-    public ImportPatientRequestBuilder withWeightStatistics(SampleInstance type,
+    public ImportPatientRequestBuilder withWeightStatistics(SputumTrackingInstance type,
                                                             String measuringDate,
                                                             String weight) {
         switch (type) {
