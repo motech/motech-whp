@@ -8,7 +8,6 @@ import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.exceptions.WebSecurityException;
-import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.service.RemediProperties;
@@ -35,15 +34,9 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.domain.ChannelId.IVR;
-import static org.motechproject.whp.common.domain.ChannelId.WEB;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.motechproject.whp.user.domain.WHPRole.PROVIDER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -118,7 +111,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         assertThat(container.getContainerId(), is(containerId));
 
         String expectedContainerRegistrationXML = String.format("<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"%s\" date_modified=\"%s\" user_id=\"system\"\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"%s\" date_modified=\"%s\" user_id=\"motech\"\n" +
                 "      api_key=\"%s\">\n" +
                 "    <create>\n" +
                 "        <case_type>%s</case_type>\n" +

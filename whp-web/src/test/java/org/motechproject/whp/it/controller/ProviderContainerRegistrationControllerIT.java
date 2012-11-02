@@ -114,7 +114,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         assertThat(container.getContainerId(), is(containerId));
 
         String expectedContainerRegistrationXML = String.format("<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"%s\" date_modified=\"%s\" user_id=\"system\"\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"%s\" date_modified=\"%s\" user_id=\"motech\"\n" +
                 "      api_key=\"%s\">\n" +
                 "    <create>\n" +
                 "        <case_type>%s</case_type>\n" +

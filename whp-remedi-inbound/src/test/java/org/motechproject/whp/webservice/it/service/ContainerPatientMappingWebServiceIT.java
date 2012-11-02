@@ -232,7 +232,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldReturnErrorCode_forMalformedMappingXmlRequest() throws Exception {
         String request = "<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"\" date_modified=\"03/04/2012 11:23:40\" user_id=\"system\" api_key=\"3F2504E04F8911D39A0C0305E82C3301\">\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"\" date_modified=\"03/04/2012 11:23:40\" user_id=\"motech\" api_key=\"3F2504E04F8911D39A0C0305E82C3301\">\n" +
                 "<update>\n" +
                 "<update_type>patient_mapping</update_type>\n" +
                 "<patient_id>" + PATIENT_ID_1 + "</patient_id>\n" +
@@ -242,7 +242,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
                 "</case>";
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isBadRequest())
-                .andExpect(content().string(allOf(containsString("field:case_id:value should not be null"), containsString("field:smear_sample_instance:The value should be one of : [PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment]"))));
+                .andExpect(content().string(allOf(containsString("field:case_id:value should not be null"), containsString("field:smear_sample_instance:The value should be one of : [PreTreatment, EndIP, ExtendedIP, TwoMonthsIntoCP, EndTreatment, TreatmentInterruption1, TreatmentInterruption2, TreatmentInterruption3]"))));
         verifyZeroInteractions(httpClientService);
     }
 

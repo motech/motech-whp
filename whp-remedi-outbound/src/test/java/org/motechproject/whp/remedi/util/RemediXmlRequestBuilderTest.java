@@ -41,7 +41,7 @@ public class RemediXmlRequestBuilderTest {
 
     private String getExpectedXml(String containerId, String providerId, SputumTrackingInstance caseType, DateTime dateModified) {
         return "<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"" + containerId + "\" date_modified=\"" + dateModified.toString(WHPDate.DATE_TIME_FORMAT) +"\" user_id=\"system\"\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"" + containerId + "\" date_modified=\"" + dateModified.toString(WHPDate.DATE_TIME_FORMAT) +"\" user_id=\"motech\"\n" +
                 "      api_key=\"" + REMEDI_API_KEY + "\">\n" +
                 "    <create>\n" +
                 "        <case_type>" + caseType.name() + "</case_type>\n" +
