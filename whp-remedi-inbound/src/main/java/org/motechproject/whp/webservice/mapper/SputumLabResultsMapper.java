@@ -1,5 +1,6 @@
 package org.motechproject.whp.webservice.mapper;
 
+import org.joda.time.DateTime;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import static org.joda.time.LocalDate.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Component
 public class SputumLabResultsMapper {
@@ -30,6 +32,7 @@ public class SputumLabResultsMapper {
 
         labResults.setLabName(request.getLab_name());
         labResults.setLabNumber(request.getLab_number());
+        labResults.setCapturedOn(DateTime.parse(request.getDate_modified(), forPattern(DATE_TIME_FORMAT)));
 
         labResults.updateCumulativeResult();
         container.setLabResults(labResults);

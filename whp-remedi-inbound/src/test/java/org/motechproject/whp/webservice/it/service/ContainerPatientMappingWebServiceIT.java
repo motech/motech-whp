@@ -28,9 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.*;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.*;
@@ -141,7 +139,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldNotUnMapContainerFromPreviousPatient_uponMappingValidationFailure() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate());
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate(), DateTime.now());
         container2.setLabResults(null);
         allContainers.update(container1);
         allContainers.update(container2);
@@ -217,7 +215,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldUnMapPatientFromContainer_forUnMappingRequest() throws Exception {
-        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate());
+        container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate(), DateTime.now());
         allContainers.update(container1);
 
         String unMapContainer1 = buildUnMappingRequestFor(CONTAINER_ID_1);

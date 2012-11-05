@@ -4,8 +4,6 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 
-import static org.motechproject.util.DateUtil.today;
-
 public class SputumLabResultsCaptureReportingRequestBuilder {
 
     private SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest;
@@ -24,7 +22,7 @@ public class SputumLabResultsCaptureReportingRequestBuilder {
         labResultsCaptureReportingRequest.setSmearTestDate2(labResults.getSmearTestDate2().toDate());
         labResultsCaptureReportingRequest.setSmearTestResult1(labResults.getSmearTestResult1().name());
         labResultsCaptureReportingRequest.setSmearTestResult2(labResults.getSmearTestResult2().name());
-        labResultsCaptureReportingRequest.setLabResultsCapturedOn(today().toDate());
+        labResultsCaptureReportingRequest.setLabResultsCapturedOn(labResults.getCapturedOn());
         return this;
     }
 

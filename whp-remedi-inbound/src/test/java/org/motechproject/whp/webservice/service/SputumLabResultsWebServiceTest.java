@@ -1,5 +1,6 @@
 package org.motechproject.whp.webservice.service;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -9,6 +10,7 @@ import org.motechproject.casexml.repository.AllCaseLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.service.ContainerService;
@@ -158,7 +160,6 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
         assertThat(container.getLabResults().getSmearTestDate2(), is(parse(request.getSmear_test_date_2(), forPattern(DATE_FORMAT))));
         assertThat(container.getLabResults().getSmearTestResult1().value(), is(request.getSmear_test_result_1()));
         assertThat(container.getLabResults().getSmearTestResult2().value(), is(request.getSmear_test_result_2()));
+        assertThat(container.getLabResults().getCapturedOn(), is(DateTime.parse(request.getDate_modified(), forPattern(WHPDate.DATE_TIME_FORMAT))));
     }
-
-
 }

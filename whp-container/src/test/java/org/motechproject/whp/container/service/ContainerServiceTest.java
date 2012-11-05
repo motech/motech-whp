@@ -192,7 +192,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     public void shouldUpdateContainer_forMapping() {
         ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("reason", "code");
         Container container = new Container("providerId", "containerId", RegistrationInstance.InTreatment, DateUtil.now(), "d1");
-        container.mapWith("patient", "tb", SputumTrackingInstance.EndIP, reasonForContainerClosure, today());
+        container.mapWith("patient", "tb", SputumTrackingInstance.EndIP, reasonForContainerClosure, today(), DateTime.now());
         container.setConsultationDate(today());
         containerService.updatePatientMapping(container);
 
@@ -211,6 +211,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         labResults.setSmearTestDate2(today().minusDays(1));
         labResults.setSmearTestResult1(Positive);
         labResults.setSmearTestResult2(Negative);
+        labResults.setCapturedOn(DateTime.now());
         container.setLabResults(labResults);
 
         containerService.updateLabResults(container);
@@ -312,6 +313,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(new LocalDate(2012, 11, 25), actualContainer.getConsultationDate());
         assertEquals(Diagnosis.Negative, actualContainer.getDiagnosis());
         assertEquals(ContainerStatus.Closed, actualContainer.getStatus());
+        assertNotNull(actualContainer.getClosureDate());
 
         verifyStatusUpdateReportingEventPublication(actualContainer);
     }
@@ -366,6 +368,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         container.setDiagnosis(Diagnosis.Positive);
         container.setAlternateDiagnosis("some alternate");
         container.setReasonForClosure("Some reason for closure");
+        container.setClosureDate(DateTime.now());
         when(allContainers.findByContainerId(containerId)).thenReturn(container);
 
         containerService.openContainer(containerId);
@@ -378,6 +381,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(ContainerStatus.Open, actualContainer.getStatus());
         assertNull(actualContainer.getReasonForClosure());
         assertNull(actualContainer.getAlternateDiagnosis());
+        assertNull(actualContainer.getClosureDate());
 
         verifyStatusUpdateReportingEventPublication(actualContainer);
     }

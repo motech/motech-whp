@@ -1,5 +1,6 @@
 package org.motechproject.whp.webservice.service;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.motechproject.casexml.service.CaseService;
@@ -48,7 +49,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
             container.unMap();
         } else {
             ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
-            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, getTbRegistrationDate(request));
+            container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, getTbRegistrationDate(request), getDateTimeFor(request.getDate_modified()));
         }
         containerService.updatePatientMapping(container);
     }
@@ -67,5 +68,9 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if (SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()) == SputumTrackingInstance.PreTreatment)
             return LocalDate.parse(request.getTb_registration_date(), DateTimeFormat.forPattern(WHPDate.DATE_FORMAT));
         return null;
+    }
+
+    private DateTime getDateTimeFor(String dateTime) {
+        return DateTime.parse(dateTime, DateTimeFormat.forPattern(WHPDate.DATE_TIME_FORMAT));
     }
 }

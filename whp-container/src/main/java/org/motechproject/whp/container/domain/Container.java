@@ -52,6 +52,8 @@ public class Container extends MotechBaseDataObject {
 
     private LocalDate containerIssuedDate;
 
+    private DateTime closureDate;
+
     // Required for ektorp
     public Container() {
     }
@@ -71,7 +73,11 @@ public class Container extends MotechBaseDataObject {
         this.creationTime = DateUtil.setTimeZone(creationTime);
     }
 
-    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping, LocalDate consultationDate) {
+    public void setClosureDate(DateTime closureDate) {
+        this.closureDate = DateUtil.setTimeZone(closureDate);
+    }
+
+    public void mapWith(String patientId, String tbId, SputumTrackingInstance mappingInstance, ReasonForContainerClosure closureReasonForMapping, LocalDate consultationDate, DateTime closureDate) {
         setPatientId(patientId);
         setTbId(tbId);
         setDiagnosis(Positive);
@@ -79,6 +85,7 @@ public class Container extends MotechBaseDataObject {
         setStatus(ContainerStatus.Closed);
         updateCurrentTrackingStatus();
         setReasonForClosure(closureReasonForMapping.getCode());
+        setClosureDate(closureDate);
         updateConsultationDate(consultationDate, mappingInstance);
     }
 
@@ -90,6 +97,7 @@ public class Container extends MotechBaseDataObject {
         updateCurrentTrackingStatus();
         setStatus(ContainerStatus.Open);
         setReasonForClosure(null);
+        setClosureDate(null);
         setConsultationDate(null);
     }
 

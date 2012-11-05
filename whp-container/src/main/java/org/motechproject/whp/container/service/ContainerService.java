@@ -110,6 +110,7 @@ public class ContainerService {
             return;
 
         container.setStatus(ContainerStatus.Open);
+        container.setClosureDate(null);
         container.setReasonForClosure(null);
         container.setAlternateDiagnosis(null);
         resetContainerDiagnosisData(container);
@@ -126,6 +127,7 @@ public class ContainerService {
         ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(reasonForClosureRequest.getReason());
         container.setReasonForClosure(reasonForContainerClosure.getCode());
         container.setStatus(Closed);
+        container.setClosureDate(DateTime.now());
 
         if (reasonForContainerClosure.isTbNegative())
             populateTbNegativeDetails(reasonForClosureRequest, container);

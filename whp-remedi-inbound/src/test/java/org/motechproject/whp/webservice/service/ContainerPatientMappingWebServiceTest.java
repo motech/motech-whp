@@ -68,7 +68,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
         container.setContainerId(request.getCase_id());
         LabResults labResults = new LabResults();
         container.setLabResults(labResults);
-        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP, mock(ReasonForContainerClosure.class), new LocalDate());
+        container.mapWith("oldPatientId", "oldTbId", SputumTrackingInstance.TwoMonthsIntoCP, mock(ReasonForContainerClosure.class), new LocalDate(), DateTime.now());
 
         Patient patient = new PatientBuilder().withDefaults().build();
         String tbId = request.getTb_id();
@@ -164,7 +164,7 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     private ContainerPatientMappingWebRequest buildMappingRequest() {
         return new ContainerPatientMappingWebRequestBuilder().
                 withCaseId("12345678912")
-                .withDateModified(now().toString())
+                .withDateModified("20/11/1985 20:20:20")
                 .withInstance(SputumTrackingInstance.PreTreatment.name().toLowerCase())
                 .withPatientId("patient")
                 .withTbId("test")
