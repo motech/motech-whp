@@ -10,7 +10,7 @@
     <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
         Pane</a></h3>
 
-    <div id="search-pane" class="row-fluid">
+    <div id="search-pane" class="">
         <@paginator.filter id="provider_pagination_filter" pagination_id = "provider_pagination">
 
                         <div class="control-group span2">
