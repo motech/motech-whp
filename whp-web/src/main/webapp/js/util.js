@@ -49,3 +49,15 @@ function initializeCollapsiblePane(collapseSectionSelector, headerLinkSelector, 
     });
 }
 
+function DownloadAndAlert(url, heading) {
+    $('#dummyIframe').attr('src',url);
+
+    var alertHTML =  "<div id='download-alert' class='alert alert-info fade in'>";
+    alertHTML += "<button class='close' data-dismiss='alert'>&times;</button>";
+    alertHTML += "<h5>File Download - " + heading + "</h5> ";
+    alertHTML += "<p> The downloading has been started successfully... </p>  </div>";
+
+    $("#alertAria").html(alertHTML);
+    createAutoClosingAlert("#download-alert", 5000);
+    return 0;
+}

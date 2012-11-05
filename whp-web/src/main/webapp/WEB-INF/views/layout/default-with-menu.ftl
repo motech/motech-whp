@@ -24,7 +24,8 @@
             <noscript>
                 <div class="row alert alert-error javascript-warning">Please enable Java Script in your browser for the application to work properly. Please contact WHP administrator if you need assistance</div>
             </noscript>
-            <!--Body content-->
+           <div id="alertAria"></div>
+
             <#nested/>
         </div>
 </div>
@@ -33,6 +34,13 @@
     <#include "footer.ftl"/>
 </div>
 
+<!--To trigger file download via JS -->
+<iframe id="dummyIframe" frameborder="0" src="" style="visibility: hidden"></iframe>
+<script type="text/javascript">
+    $('#downloadLinks a').click( function(){
+        DownloadAndAlert($(this).attr('href'), $(this).text());
+    });
+</script>
 </body>
 </html>
 </#macro>

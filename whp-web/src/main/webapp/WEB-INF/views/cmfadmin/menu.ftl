@@ -5,7 +5,7 @@
 
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Downloads <b class="caret"></b></a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="downloadLinks">
             <li>
                 <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data</a>
             </li>
