@@ -11,6 +11,7 @@
             Reason For Closure [<span id="containerIdDisplay" class="containerIdDisplay" name="containerIdDisplay"></span>]
         </h3>
     </div>
+    <div id="container-tracking-error" class="row alert alert-error"></div>
     <div class="modal-body">
         <div class="control-group">
             <table id="reasonUpdateTable" class="table table-bordered table-condensed">

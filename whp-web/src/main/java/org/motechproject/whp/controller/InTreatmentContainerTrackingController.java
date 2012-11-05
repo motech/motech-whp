@@ -8,6 +8,7 @@ import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
+import org.motechproject.whp.reponse.WHPResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -43,13 +45,16 @@ public class InTreatmentContainerTrackingController {
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
     @ResponseBody
-    public String updateReasonForClosure(ContainerClosureRequest containerClosureRequest) {
+    public WHPResponse updateReasonForClosure(ContainerClosureRequest containerClosureRequest, HttpServletResponse httpServletResponse) {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
-        if (!errors.isEmpty())
-            return "error";
+        httpServletResponse.setContentType("application/json");
+        if (!errors.isEmpty()) {
+            httpServletResponse.setStatus(400);
+            return new WHPResponse(errors);
+        }
 
         containerService.closeContainer(containerClosureRequest);
-        return "success";
+        return new WHPResponse();
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
