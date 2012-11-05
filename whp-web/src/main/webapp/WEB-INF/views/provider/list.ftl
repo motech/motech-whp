@@ -10,12 +10,10 @@
     <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search
         Pane</a></h3>
 
-    <div id="search-pane">
+    <div id="search-pane" class="row-fluid">
         <@paginator.filter id="provider_pagination_filter" pagination_id = "provider_pagination">
-            <table>
-                <tr>
-                    <td>
-                        <div class="control-group">
+
+                        <div class="control-group span2">
                             <label class="control-label">District*</label>
 
                             <div class="controls">
@@ -27,9 +25,8 @@
                                 </select>
                             </div>
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group">
+
+                        <div class="control-group span2">
                             <label class="control-label" for="providerId">Provider ID</label>
 
                             <div class="controls">
@@ -37,17 +34,14 @@
                                        ng-model="searchCriteria.selectedProvider" autofocus="autofocus"/>
                             </div>
                         </div>
-                    </td>
-                    <td>
-                        <div class="control-group pull-down padding-left">
+
+                        <div class="control-group span2 pull-down">
                             <div class="controls">
                                 <button type="submit" id="search" class="btn btn-primary r">Search <i class="icon-search icon-white"></i>
                                 </button>
                             </div>
                         </div>
-                    </td>
-                </tr>
-            </table>
+
         </@paginator.filter>
     </div>
 </div>
