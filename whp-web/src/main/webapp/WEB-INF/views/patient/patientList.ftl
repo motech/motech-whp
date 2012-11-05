@@ -3,8 +3,7 @@
 <div class="">Found <span class="bold">${patientList?size}</span> patient(s)</div>
 <script type="text/javascript"
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
-<script type="text/javascript"
-        src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap-tooltip.js'/>"></script>
+
 <script type="text/javascript">
     $(function() {
         $('#achtung').each(function () {
