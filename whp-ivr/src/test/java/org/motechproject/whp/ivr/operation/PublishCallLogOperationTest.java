@@ -11,7 +11,7 @@ import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 
 import java.util.List;
 
@@ -49,18 +49,18 @@ public class PublishCallLogOperationTest {
         int remainingPatientsWithoutAdherence = patientsWithoutAdherence.size() - patientsWithAdherenceRecordedInThisSession.size();
         CallStatus callStatus = CallStatus.OUTSIDE_ADHERENCE_CAPTURE_WINDOW;
 
-        CallLogRequest expectedCallLogRequest = createCallLogRequest(callStatus, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence);
+        AdherenceCallLogRequest expectedAdherenceCallLogRequest = createAdherenceCallLogRequest(callStatus, totalPatients, adherenceCapturedInThisSession, remainingPatientsWithoutAdherence);
 
         PublishCallLogOperation publishCallLogOperation = new PublishCallLogOperation(reportingPublisherService, callStatus, endTime);
 
         publishCallLogOperation.perform("", flowSession);
 
-        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
+        ArgumentCaptor<AdherenceCallLogRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCallLogRequest.class);
         verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
 
-        CallLogRequest callLogRequest = argumentCaptor.getValue();
+        AdherenceCallLogRequest callLogRequest = argumentCaptor.getValue();
 
-        assertThat(callLogRequest, is(expectedCallLogRequest));
+        assertThat(callLogRequest, is(expectedAdherenceCallLogRequest));
     }
 
     private FlowSession setUpFlowSession() {
@@ -78,8 +78,8 @@ public class PublishCallLogOperationTest {
         return flowSession;
     }
 
-    private CallLogRequest createCallLogRequest(CallStatus callStatus, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence) {
-        CallLogRequest callLogRequest = new CallLogRequest();
+    private AdherenceCallLogRequest createAdherenceCallLogRequest(CallStatus callStatus, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence) {
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallLogRequest();
         callLogRequest.setCallId(callId);
         callLogRequest.setEndTime(endTime.toDate());
         callLogRequest.setStartTime(startTime.toDate());

@@ -25,7 +25,7 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getAdherenceCallLogURL(), adherenceCaptureRequest);
     }
 
-    public void reportCallLog(CallLogRequest callLogRequest) {
+    public void reportCallLog(AdherenceCallLogRequest callLogRequest) {
         httpClientService.post(reportingEventURLs.getCallLogURL(), callLogRequest);
     }
 

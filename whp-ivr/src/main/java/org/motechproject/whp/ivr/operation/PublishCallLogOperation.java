@@ -7,7 +7,7 @@ import org.motechproject.decisiontree.model.INodeOperation;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 
 @EqualsAndHashCode
 public class PublishCallLogOperation implements INodeOperation {
@@ -28,13 +28,13 @@ public class PublishCallLogOperation implements INodeOperation {
     @Override
     public void perform(String userInput, FlowSession session) {
         IvrSession ivrSession = new IvrSession(session);
-        CallLogRequest callLogRequest = buildCallLog(ivrSession);
+        AdherenceCallLogRequest callLogRequest = buildCallLog(ivrSession);
 
         reportingPublisherService.reportCallLog(callLogRequest);
     }
 
-    private CallLogRequest buildCallLog(IvrSession ivrSession) {
-        CallLogRequest callLogRequest = new CallLogRequest();
+    private AdherenceCallLogRequest buildCallLog(IvrSession ivrSession) {
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallLogRequest();
         callLogRequest.setCallStatus(callStatus.name());
         callLogRequest.setCallId(ivrSession.callId());
         callLogRequest.setCalledBy(ivrSession.providerId());

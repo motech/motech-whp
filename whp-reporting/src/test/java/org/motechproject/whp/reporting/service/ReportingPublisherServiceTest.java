@@ -47,7 +47,7 @@ public class ReportingPublisherServiceTest {
     public void shouldPublishCallLog() throws Exception {
         String providerId = "123456";
 
-        CallLogRequest callLog = new CallLogRequest();
+        AdherenceCallLogRequest callLog = new AdherenceCallLogRequest();
         callLog.setStartTime(DateUtil.now().toDate());
         callLog.setEndTime(DateUtil.now().toDate());
         callLog.setCalledBy(providerId);

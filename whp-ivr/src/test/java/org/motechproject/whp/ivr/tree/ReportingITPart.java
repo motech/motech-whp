@@ -3,7 +3,7 @@ package org.motechproject.whp.ivr.tree;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
-import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -92,9 +92,9 @@ public class ReportingITPart extends IvrCallFlowITPart {
         recordConfirmedAdherence("3");
         recordConfirmedAdherence("2");
 
-        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
+        ArgumentCaptor<AdherenceCallLogRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCallLogRequest.class);
         verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
-        CallLogRequest callLogRequest = argumentCaptor.getValue();
+        AdherenceCallLogRequest callLogRequest = argumentCaptor.getValue();
 
         assertThat(callLogRequest.getProviderId(), is(provider.getProviderId()));
         assertThat(callLogRequest.getTotalPatients(), is(3));

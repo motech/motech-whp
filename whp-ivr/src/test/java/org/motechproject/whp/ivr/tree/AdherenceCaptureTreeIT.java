@@ -16,7 +16,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
-import org.motechproject.whp.reports.contract.CallLogRequest;
+import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -356,9 +356,9 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         recordAdherence("2");
         disconnectCall();
 
-        ArgumentCaptor<CallLogRequest> argumentCaptor = ArgumentCaptor.forClass(CallLogRequest.class);
+        ArgumentCaptor<AdherenceCallLogRequest> argumentCaptor = ArgumentCaptor.forClass(AdherenceCallLogRequest.class);
         verify(reportingPublisherService).reportCallLog(argumentCaptor.capture());
-        CallLogRequest callLogRequest = argumentCaptor.getValue();
+        AdherenceCallLogRequest callLogRequest = argumentCaptor.getValue();
 
         assertThat(callLogRequest.getProviderId(), is(provider.getProviderId()));
         assertThat(callLogRequest.getTotalPatients(), is(3));

@@ -23,7 +23,7 @@ public class ReportingEventURLsIT {
 
     @Test
     public void shouldGetCallLogMeasureURL() {
-        assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost:8080/whp-reports/callLog/measure"));
+        assertThat(reportingEventURLs.getCallLogURL(), is("http://localhost:8080/whp-reports/adherenceCallLog/measure"));
     }
 
     @Test
