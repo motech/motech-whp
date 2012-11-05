@@ -24,12 +24,12 @@
             responsesGotSoFar = new ArrayList<String>();
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 </head>
 <body>
 <div class="container">
-    <div class="pull-right"><a href="/whp/emulator/">home</a></div>
+    <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
     <form name="testSubmit" method="GET">
         <br/>
         <br/>
@@ -48,7 +48,9 @@
             <input id="request_type_get" type="radio" name="request-method-type" <%=!isPostMethod ? "checked" : ""%>
                    value="GET"/> GET
         </div>
-        <input type="submit" id="post-button" value="Set"/>
+        <div class="row-fluid">
+             <input type="submit" id="post-button" value="Set" class="btn btn-primary offset2"/>
+        </div>
         <br/>
         <br/>
     </form>

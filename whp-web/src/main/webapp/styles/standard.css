@@ -874,9 +874,9 @@ pre {
     font-family: 'Telex',sans-serif;
     color: #F5F5F5;
     background-color: #3F9FD9;
-    background-image: -moz-linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
-    background-image: -webkit-linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
-    background-image: linear-gradient(#369BD7, #369BD7 90%, #61B0DF);
+    background-image: -moz-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);
+    background-image: -webkit-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);
+    background-image: linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);
     background-repeat: no-repeat;
 }
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {

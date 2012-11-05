@@ -10,13 +10,19 @@
     Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
     String appVersion = whpProperties.getProperty("application.version");
     %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/jquery/jquery-ui-1.8.21.custom.js"></script>
-    <script type="text/javascript" src="../js/jquery/jquery-datetimepicker-addon.js"></script>
-    <script type="text/javascript" src="../js/jquery/jquery-ui-slider.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css/"/>
+
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/jquery-ui-1.9.1.custom.min.css"/>
+
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
-    <link rel="stylesheet" media="all" type="text/css" href="../styles/jquery-ui-theme.css"/>
+
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery/jquery.validate.js"></script>
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery/jquery.metadata.js"></script>
+
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery/jquery-ui-1.9.1.custom.min.js"></script>
+    <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery//jquery-datetimepicker-addon.js"></script>
 </head>
 <body>
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
@@ -24,17 +30,22 @@
 <br/>
 
 <div class="container">
-    <div class="pull-right"><a href="/whp/emulator/">home</a></div>
-    <div>
+    <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
+
         <form action="" method="get">
-            Current Time : <%=DateUtil.now().toDate()%><input type="submit" value="Refresh"/>
+          <p>
+              Current Time : <span class="bold"> <%=DateUtil.now().toDate()%> </span>
+              <input type="submit" value="Refresh" class="btn"/>
+         </p>
         </form>
-    </div>
+
 
     <form name="fakeTimeSubmit">
-        <label for="newDateTime">New Date Time</label>
-        <input type="text" name="newDateTime" id="newDateTime" value=""/>
-        <input type="button" id="post-button" value="Submit"/>
+       <p>
+           <label for="newDateTime">New Date Time</label>
+            <input type="text" name="newDateTime" id="newDateTime" value=""/>
+            <input type="button" id="post-button" value="Submit" class="btn btn-primary"/>
+       </p>
     </form>
     <script type="text/javascript">
         $(function () {

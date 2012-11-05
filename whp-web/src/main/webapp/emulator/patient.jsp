@@ -9,117 +9,119 @@
     Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
     String appVersion = whpProperties.getProperty("application.version");
     %>
-    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 </head>
 <body>
 
 <div class="container">
-    <div class="pull-right"><a href="/whp/emulator/">home</a></div>
+    <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
 
     <form name="testSubmit">
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Case Id:</span>
-            <input id="case_id" class="span2" type="text" value="12345"/>
+            <input id="case_id" class="span4" type="text" value="12345"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Case Name:</span>
-            <input id="case_name" class="span2" type="text" value="Raju Singh"/>
+            <input id="case_name" class="span4" type="text" value="Raju Singh"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter TB_Id:</span>
-            <input id="tb_id" class="span2" type="text" value="12345678891"/>
+            <input id="tb_id" class="span4" type="text" value="12345678891"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter TB Registration Date:</span>
-            <input id="tb_registration_date" class="span2" type="text" value="25/11/2012"/>
+            <input id="tb_registration_date" class="span4" type="text" value="25/11/2012"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Provider Id:</span>
-            <input id="provider_id" class="span2" type="text" value="raj"/>
+            <input id="provider_id" class="span4" type="text" value="raj"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter First Name:</span>
-            <input id="first_name" class="span2" type="text" value="raju"/>
+            <input id="first_name" class="span4" type="text" value="raju"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Last Name:</span>
-            <input id="last_name" class="span2" type="text" value="singh"/>
+            <input id="last_name" class="span4" type="text" value="singh"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Age:</span>
-            <input id="age" class="span2" type="text" value="12"/>
+            <input id="age" class="span4" type="text" value="12"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Gender:</span>
-            <input id="gender" class="span2" type="text" value="M"/>
+            <input id="gender" class="span4" type="text" value="M"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Smear test instance:</span>
-            <input id="smear_instance" class="span2" type="text" value="PreTreatment"/>
+            <input id="smear_instance" class="span4" type="text" value="PreTreatment"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Test Date 1:</span>
-            <input id="test_date1" class="span2" type="text" value="01/03/2012"/>
+            <input id="test_date1" class="span4" type="text" value="01/03/2012"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Test Result 1:</span>
-            <input id="test_result1" class="span2" type="text" value="Positive"/>
+            <input id="test_result1" class="span4" type="text" value="Positive"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Test Date 2:</span>
-            <input id="test_date2" class="span2" type="text" value="01/03/2012"/>
+            <input id="test_date2" class="span4" type="text" value="01/03/2012"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Test Result 2:</span>
-            <input id="test_result2" class="span2" type="text" value="Positive"/>
+            <input id="test_result2" class="span4" type="text" value="Positive"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Treatment Category:</span>
-            <input id="tc" class="span2" type="text" value="01"/>
+            <input id="tc" class="span4" type="text" value="01"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address location:</span>
-            <input id="al" class="span2" type="text" value="1001"/>
+            <input id="al" class="span4" type="text" value="1001"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address landmark:</span>
-            <input id="landmark" class="span2" type="text" value="Near banyan tree"/>
+            <input id="landmark" class="span4" type="text" value="Near banyan tree"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address village:</span>
-            <input id="av" class="span2" type="text" value="chambal"/>
+            <input id="av" class="span4" type="text" value="chambal"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address block:</span>
-            <input id="ab" class="span2" type="text" value="Vijaynagar"/>
+            <input id="ab" class="span4" type="text" value="Vijaynagar"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter District:</span>
-            <input id="address_district" class="span2" type="text" value="Muzafarrpur"/>
+            <input id="address_district" class="span4" type="text" value="Muzafarrpur"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address state:</span>
-            <input id="as" class="span2" type="text" value="Bihar"/>
+            <input id="as" class="span4" type="text" value="Bihar"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Mobile number:</span>
-            <input id="mobile" class="span2" type="text" value="9880123456"/>
+            <input id="mobile" class="span4" type="text" value="9880123456"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Disease class:</span>
-            <input id="dclass" class="span2" type="text" value="P"/>
+            <input id="dclass" class="span4" type="text" value="P"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter weight instance:</span>
-            <input id="wii" class="span2" type="text" value="PreTreatment"/>
+            <input id="wii" class="span4" type="text" value="PreTreatment"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter weight:</span>
-            <input id="w" class="span2" type="text" value="80"/>
+            <input id="w" class="span4" type="text" value="80"/>
         </div>
-        <input type="button" id="submit" value="Submit"/>
+        <div class="row-fluid">
+            <input type="button" id="submit" value="Submit" class="btn btn-large btn-primary offset3"/>
+        </div>
     </form>
     <br/>
     <br/>

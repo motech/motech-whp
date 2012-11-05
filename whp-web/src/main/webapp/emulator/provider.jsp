@@ -14,40 +14,43 @@
         String appVersion = whpProperties.getProperty("application.version");
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 </head>
 <body>
 
 <div class="container">
-    <div class="pull-right"><a href="/whp/emulator/">home</a></div>
+    <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
 
     <form name="testSubmit">
         <div class="row-fluid">
-            <span style="vertical-align:top" class="pull-left span3">Enter Provider Id</span>
-            <input id="provider_id" class="span" name="provider_id" type="text" value="raj"/>
+            <span style="vertical-align:top" class="span3">Enter Provider Id</span>
+            <input id="provider_id" class="span2" name="provider_id" type="text" value="raj"/>
         </div>
         <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Enter Password</span>
+            <span class="span3" style="vertical-align:top">Enter Password</span>
             <input id="password" name="password" class="span2" type="text" value="raj"/>
         </div>
         <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Enter Primary Mobile Number:</span>
+            <span class="span3" style="vertical-align:top">Enter Primary Mobile Number:</span>
             <input id="primary_mobile" class="span2" type="text" value="1234567890"/>
         </div>
         <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Enter Secondary Mobile:</span>
+            <span class="span3" style="vertical-align:top">Enter Secondary Mobile:</span>
             <input id="secondary_mobile" class="span2" type="text" value="1234567890"/>
         </div>
         <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Enter Tertiary Mobile:</span>
+            <span class="span3" style="vertical-align:top">Enter Tertiary Mobile:</span>
             <input id="tertiary_mobile" class="span2" type="text" value="1234567890"/>
         </div>
         <div class="row-fluid">
-            <span class="pull-left span3" style="vertical-align:top">Enter District:</span>
+            <span class="span3" style="vertical-align:top">Enter District:</span>
             <input id="district" class="span2" type="text" value="Begusarai"/>
         </div>
-        <input type="button" id="post-button" value="Submit"/>
+        <div class="row-fluid">
+            <input type="button" id="post-button" value="Submit" class="btn btn-large btn-primary offset3"/>
+        </div>
+
         <br/>
         <br/>
         <textarea id="statusMessage" rows="30" cols="100" style="min-width: 100%"  readonly></textarea>

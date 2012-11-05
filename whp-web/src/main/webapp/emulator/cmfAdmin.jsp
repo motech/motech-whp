@@ -10,7 +10,7 @@
         String appVersion = whpProperties.getProperty("application.version");
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
 
     <%
@@ -29,15 +29,18 @@
 <br/>
 
 <div class="container">
-    <div class="pull-right"><a href="/whp/emulator/">home</a></div>
+    <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
     <form name="testSubmit" action="/whp/emulator/cmfAdmin.jsp" method="POST">
         <input type="hidden" id="posted_successfully" value="<%=posted%>"/>
 
         <div class="row-fluid">
-            <span style="vertical-align:top" class="pull-left span3">Enter Provider Id</span>
-            <input id="provider_id" class="span" name="provider_id" type="text" value="<%= providerId %>"/>
+            <span style="vertical-align:top" class="span3">Enter Provider Id</span>
+            <input id="provider_id" class="span2" name="provider_id" type="text" value="<%= providerId %>"/>
         </div>
-        <input type="submit" id="post-button" value="Submit"/>
+        <div class="row-fluid">
+            <input type="submit" id="post-button" value="Submit" class="btn btn-large btn-primary offset3"/>
+        </div>
+
     </form>
 </div>
 </body>
