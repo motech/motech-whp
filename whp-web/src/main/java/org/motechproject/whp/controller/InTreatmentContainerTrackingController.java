@@ -22,46 +22,33 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/sputum-tracking/in-treatment/")
-public class InTreatmentContainerTrackingController {
+public class InTreatmentContainerTrackingController extends ContainerTrackingController {
 
     public static final String CONTAINER_STATUS_LIST = "containerStatusList";
-    private ContainerService containerService;
-    private ReasonForClosureValidator reasonForClosureValidator;
     private AllDistricts allDistricts;
     public static final String REASONS_FOR_FILTER = "reasonsForFilter";
 
     public static final String REASONS = "reasons";
-    public static final String ERRORS = "errors";
     public static final String LAB_RESULTS = "labResults";
     public static final String DISTRICTS = "districts";
     public static final String INSTANCES = "instances";
 
     @Autowired
     public InTreatmentContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
-        this.containerService = containerService;
-        this.reasonForClosureValidator = reasonForClosureValidator;
+        super(reasonForClosureValidator, containerService);
         this.allDistricts = allDistricts;
     }
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
     @ResponseBody
-    public WHPResponse updateReasonForClosure(ContainerClosureRequest containerClosureRequest, HttpServletResponse httpServletResponse) {
-        List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
-        httpServletResponse.setContentType("application/json");
-        if (!errors.isEmpty()) {
-            httpServletResponse.setStatus(400);
-            return new WHPResponse(errors);
-        }
-
-        containerService.closeContainer(containerClosureRequest);
-        return new WHPResponse();
+    public WHPResponse closeInTreatmentContainer(ContainerClosureRequest containerClosureRequest, HttpServletResponse httpServletResponse) {
+        return closeContainer(containerClosureRequest, httpServletResponse);
     }
 
     @RequestMapping(value = "/open-container", method = RequestMethod.GET)
     @ResponseBody
-    public String openContainer(@RequestParam("containerId") String containerId) {
-        containerService.openContainer(containerId);
-        return "success";
+    public String openInTreatmentContainer(@RequestParam("containerId") String containerId) {
+        return openContainer(containerId);
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
