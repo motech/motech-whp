@@ -30,15 +30,15 @@ body:after {
     height: 100%;
 }
 #mainContent h1 {
-    border-bottom: 1px solid #0159D3;
-    color: #006BFF;
+    border-bottom: 1px solid #ccc;
+    color: #000;
     font-family: Georgia,serif;
     font-size: 22px;
     font-weight: normal;
     line-height: normal;
     margin-bottom: 25px;
     padding-bottom: 5px;
-    text-shadow: 2px 1px 1px #FFFFFF;
+    text-shadow: 2px 2px 1px #FFFFFF;
 }
 #mainContent .login-form h1 {
     font-family: 'Telex',sans-serif;
