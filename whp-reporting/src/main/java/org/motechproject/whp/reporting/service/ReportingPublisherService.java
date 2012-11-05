@@ -48,4 +48,8 @@ public class ReportingPublisherService {
     public void reportContainerPatientMapping(ContainerPatientMappingReportingRequest request) {
         httpClientService.post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
     }
+
+    public void reportContainerRegistrationCallLog(ContainerRegistrationCallLogRequest request) {
+        httpClientService.post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
+    }
 }

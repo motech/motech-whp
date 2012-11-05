@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class BaseWebControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldForwardToErrorPageOnException() throws Exception {
-        BaseWebController controller = new BaseWebController(){
+        BaseWebController controller = new BaseWebController() {
             @RequestMapping(value = "test", method = RequestMethod.GET)
             public String throwException() {
                 throw new RuntimeException("Expected exception");

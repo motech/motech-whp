@@ -101,6 +101,13 @@ public class ReportingPublisherServiceTest {
 
         reportingPublisher.reportContainerPatientMapping(containerPatientMappingReportingRequest);
         verify(httpClientService).post(reportingEventURLs.getContainerPatientMappingLogURL(), containerPatientMappingReportingRequest);
+    }
 
+    @Test
+    public void shouldReportContainerRegistrationCallLogRequest() {
+        ContainerRegistrationCallLogRequest request = new ContainerRegistrationCallLogRequest();
+
+        reportingPublisher.reportContainerRegistrationCallLog(request);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
     }
 }

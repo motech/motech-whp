@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class RemediXmlRequestBuilder {
@@ -43,7 +44,7 @@ public class RemediXmlRequestBuilder {
         return cfg.getTemplate(fileName);
     }
 
-    private void populateApiKey(HashMap<String, Object> modelMap) {
+    private void populateApiKey(Map<String, Object> modelMap) {
         modelMap.put("apiKey", remediProperties.getApiKey());
     }
 }
