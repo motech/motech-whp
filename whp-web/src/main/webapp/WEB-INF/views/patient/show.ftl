@@ -38,6 +38,21 @@
 
         <div id="treatmentCard"></div>
 
+    <br />
+
+    <div class="row-fluid">
+        <div class="controls  pull-left">
+            <a href="<@spring.url "/"/>" class="btn"><i class="icon-chevron-left"></i> Back To Patient List</a>
+
+
+        </div>
+        <div class="controls pull-right">
+            <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print"></i> Print</a>
+            <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-primary "><i class="icon-calendar icon-white"></i> Adjust Phase Start
+                Dates</a>
+        </div>
+    </div>
+    <br />
        <div id="remarks" class="well" >
             <h3>Remarks</h3>
             <form class="remarks-form" id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
@@ -55,21 +70,7 @@
             <#include "remarks.ftl"/>
         </div>
 
-        <br />
-        <br />
 
-        <div class="row-fluid">
-            <div class="controls  pull-left">
-                <a href="<@spring.url "/"/>" class="btn"><i class="icon-chevron-left"></i> Back To Patient List</a>
-
-
-            </div>
-            <div class="controls pull-right">
-                <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print"></i> Print</a>
-                <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-primary "><i class="icon-calendar icon-white"></i> Adjust Phase Start
-                    Dates</a>
-            </div>
-        </div>
 
     <script type="text/javascript">
         $('#ipDatePicker').datepicker({maxDate:'${today}', dateFormat:'dd/mm/yy'});
