@@ -1,44 +1,45 @@
-<h3 class="remarks underline">Remarks</h3>
+<h3 class="remarks underline">Previous Remarks</h3>
 <div id="remarks-content">
-<#if cmfAdminRemarks?size == 0 && providerRemarks?size == 0>
-    <label>
-        No remarks added for the patient.
-    </label>
-</#if>
+    <#if cmfAdminRemarks?size == 0 && providerRemarks?size == 0>
+        <p>
+            No remarks added for the patient.
+        </p>
+    </#if>
 
-    <div id="cmf-admin-remarks"
-            <#if cmfAdminRemarks?size != 0 && providerRemarks?size != 0> class="border-bottom" </#if>
-            >
-    <#list cmfAdminRemarks as cmfAdminRemark>
-        <div class="cmf-admin-remark">
-            <h5>
-            ${cmfAdminRemark.user} on ${cmfAdminRemark.creationTime.toString("dd/MM/yyy")}
-                at ${cmfAdminRemark.creationTime.toString("hh:mm a")} says:
-            </h5>
+    <#if cmfAdminRemarks?size!=0>
+        <ul id="cmf-admin-remarks">
+            <#list cmfAdminRemarks as cmfAdminRemark>
+                <li class="cmf-admin-remark">
+                    <h5> <i class="icon-user"></i>
+                    ${cmfAdminRemark.user} <span>on <em>${cmfAdminRemark.creationTime.toString("dd/MM/yyy")} </em>
+                        at <em>${cmfAdminRemark.creationTime.toString("hh:mm a")}</em> says : </span>
+                    </h5>
 
-            <div>
-                <pre class="inherit-style"><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
-            </div>
-            <br/>
-        </div>
-    </#list>
-    </div>
-<#if cmfAdminRemarks?size!=0>
-    <br/>
-</#if>
-    <div id="provider-remarks">
-    <#list providerRemarks as providerRemark>
-        <div class="provider-remark">
-            <h5>
-                Provider ${providerRemark.providerId()} on ${providerRemark.creationTime.toString("dd/MM/yyy")}
-                at ${providerRemark.creationTime.toString("hh:mm a")} says:
-            </h5>
+                    <div class="remark-desc">
+                        <pre class="inherit-style"><#transform html_escape>${cmfAdminRemark.remark}</#transform></pre>
+                    </div>
+                    <br/>
+                </li>
+            </#list>
+        </ul>
+        <hr />
+    </#if>
 
-            <div>
-                <pre class="inherit-style"><#transform html_escape>${providerRemark.remark()}</#transform></pre>
-            </div>
-            <br/>
-        </div>
-    </#list>
-    </div>
+    <#if providerRemarks?size!=0>
+        <ul id="provider-remarks">
+            <#list providerRemarks as providerRemark>
+                <li class="provider-remark">
+                    <h5> <i class="icon-user"></i>
+                        Provider ${providerRemark.providerId()} <span>on <em>${providerRemark.creationTime.toString("dd/MM/yyy")}</em>
+                        at <em>${providerRemark.creationTime.toString("hh:mm a")}</em> says :</span>
+                    </h5>
+
+                    <div class="remark-desc">
+                        <pre class="inherit-style"><#transform html_escape>${providerRemark.remark()}</#transform></pre>
+                    </div>
+                    <br/>
+                </li>
+            </#list>
+        </ul>
+    </#if>
 </div>

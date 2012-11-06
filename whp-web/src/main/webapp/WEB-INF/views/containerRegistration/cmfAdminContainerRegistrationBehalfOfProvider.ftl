@@ -19,7 +19,7 @@
         <h1>Register on behalf of provider</h1>
 
         <div id="container-registration" class="row-fluid">
-            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="well form-horizontal row-fluid">
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="well form-horizontal">
                 <input type="hidden" id="providerContainer" name="containerRegistrationMode"
                        value="ON_BEHALF_OF_PROVIDER"/>
 

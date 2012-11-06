@@ -31,7 +31,7 @@
     </li>
 
     <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-th-large icon-white"></i> Dashboard <b class="caret"></b></a>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-th-large icon-white"></i> Container Tracking Dashboard <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
             <li>
                 <a href="/whp/sputum-tracking/pre-treatment/dashboard#?sputum_tracking_pagination-searchCriteria=%7B%22containerStatus%22:%22Open%22%7D">Pre Treatment Dashboard</a>

@@ -1,10 +1,10 @@
-<div class="patient-info default-arrow well" >
+<div class="patient-info default-arrow word-wrap well" >
 
 
         <div class="row-fluid">
             <div class="span4">
                 <h3>Treatment Details</h3>
-                <table class="table table-bordered word-wrap table-striped">
+                <table class="table table-bordered table-striped">
 
                     <tbody>
                     <tr>
@@ -57,7 +57,7 @@
             </div>
             <div class="span4">
                 <h3>Patient Details</h3>
-                <table class="table table-bordered default-arrow word-wrap table-striped">
+                <table class="table table-bordered table-striped">
 
                     <tbody>
                     <tr>
@@ -110,7 +110,7 @@
             </div>
             <div class="span4">
                 <h3>Provider Details</h3>
-                <table class="table table-bordered default-arrow word-wrap table-striped">
+                <table class="table table-bordered table-striped">
 
                     <tbody>
                         <tr>
@@ -170,5 +170,11 @@
 
             </div>
          </div>
+
+
+
+
+
+
 
 </div>

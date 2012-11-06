@@ -33,12 +33,13 @@ body:after {
     border-bottom: 1px solid #ccc;
     color: #000;
     font-family: Georgia,serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: normal;
     line-height: normal;
     margin-bottom: 25px;
     padding-bottom: 5px;
-    text-shadow: 2px 2px 1px #FFFFFF;
+    text-shadow: 0 1px white, 0 2px #C4C2C2;
+    letter-spacing: 2px;
 }
 #mainContent .login-form h1 {
     font-family: 'Telex',sans-serif;
@@ -316,7 +317,22 @@ div.buttons a, div.buttons button {
     width: 757px;
     max-width: 757px;
 }
-
+/* styles over written for calendar UI */
+.ui-datepicker-calendar .ui-state-default {
+     border-color: #fff;
+ }
+.ui-datepicker-calendar .ui-state-hover, ui-datepicker-calendar .ui-state-focus {
+    border-color: #d3d3d3;
+}
+.ui-datepicker-calendar .ui-state-active {
+    border-color: #aaa;
+}
+.ui-datepicker-calendar .ui-state-highlight {
+    border-color: #FCEFA1
+}
+.ui-datepicker-calendar .ui-state-error {
+    border-color: #CD0A0A
+}
 .ui-combobox {
     position: relative;
 }
@@ -339,14 +355,13 @@ div.buttons a, div.buttons button {
     max-height: 130px;
 }
 .ui-accordion .ui-accordion-header {
-    background-image: -ms-linear-gradient(top, #E8E8E8 0%, #F5F5F5 50%);
-    background-image: -moz-linear-gradient(top, #E8E8E8 0%, #F5F5F5 50%);
-    background-image: -o-linear-gradient(top, #E8E8E8 0%, #F5F5F5 50%);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #E8E8E8), color-stop(.5, #F5F5F5));
-    background-image: -webkit-linear-gradient(top, #E8E8E8 0%, #F5F5F5 50%);
-    background-image: linear-gradient(to bottom, #E8E8E8 0%, #F5F5F5 50%);
+    background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
 }
-
+.ui-accordion .ui-accordion-header a{
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-shadow: 1px 1px white;
+}
 .patient-info h3 {
     margin-bottom: 20px;
     border-bottom: 1px dotted rgba(0,0,0,0.5);
@@ -358,7 +373,38 @@ div.buttons a, div.buttons button {
 .word-wrap, .word-wrap tr, .word-wrap th, .word-wrap td {
     word-wrap: break-word;
 }
+#treatmentCard .well {
+     padding: 0;
+ }
+#treatmentCard .treatment-card-container {
+    padding: 0 19px;
+}
+.treatment-card-buttons, .remarks-form {
+    background: #F5F5F5;
+}
+.treatment-card-buttons {
+    padding: 10px;
+    margin: 0;
 
+}
+.remarks-form {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #B0B0B0;
+}
+.remarks-form textarea {
+    width: 100%;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.remarks-form .remarks-button {
+    padding: 10px;
+}
+.remarks-form .remarks-button .btn {
+   float: right;
+}
 #search-pane {
     overflow: hidden;
     background: none;
@@ -437,9 +483,7 @@ div.buttons a, div.buttons button {
     font-weight: bold;
 }
 
-#patientRemark {
-    width: 80%;
-}
+
 
 .user-name {
     display: inline-block;
@@ -681,9 +725,7 @@ pre {
     background-color: inherit;
     padding: 0px;
 }
-.border-bottom {
-    border-bottom: 1px #add8e6 solid;
-}
+
 
 .pull-down {
     margin-top: 25px;
@@ -814,15 +856,32 @@ pre {
     font-size: 14px;
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default,
-.ui-widget select, .ui-widget input {
+.ui-widget select, .ui-widget input, .input-append .clear-date-button  {
     background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6;
 }
 .show-date-button, .clear-date-button {
     cursor: pointer;
 }
-
+.input-append .clear-date-button {
+   border-left: 0;
+}
+.input-append .dates {
+   border-right: 0;
+}
 #ui-datepicker-div {
     z-index: 1500 !important;
+}
+#remarks ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#remarks h5 span {
+    font-weight: normal;
+    font-size: 80%;
+}
+#remarks .remark-desc {
+    margin-left: 25px;
 }
 /* LOG IN */
 .login-form  {
