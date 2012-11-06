@@ -36,9 +36,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.motechproject.whp.common.domain.ChannelId.IVR;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
-import static org.motechproject.whp.user.domain.WHPRole.PROVIDER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -123,21 +121,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         markForDeletion(container);
-        verifyReportingEventPublication(container);
-    }
-
-    private void verifyReportingEventPublication(Container container) {
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
-        assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
-        assertEquals(IVR.name(), expectedContainerRegistrationRequest.getChannelId());
-        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getStatus());
-        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getIssuedOn());
-        assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
-        assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
-        assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());
-        assertEquals(container.getProviderId(), expectedContainerRegistrationRequest.getProviderId());
-        assertEquals(providerId, expectedContainerRegistrationRequest.getSubmitterId());
-        assertEquals(PROVIDER.name(), expectedContainerRegistrationRequest.getSubmitterRole());
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 

@@ -266,26 +266,6 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     private void verifyMappingReportingEventPublication(Container container) {
         ContainerPatientMappingReportingRequest request = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
-        if (container.getStatus() == Closed) {
-            assertNotNull(request.getClosureDate());
-        } else {
-            assertNull(request.getClosureDate());
-        }
-        if(container.getConsultationDate() != null) {
-            Assert.assertEquals(container.getConsultationDate().toDate(), request.getConsultationDate());
-        } else {
-            assertNull(request.getConsultationDate());
-        }
-        Assert.assertEquals(container.getContainerId(), request.getContainerId());
-        if(container.getMappingInstance() != null) {
-            Assert.assertEquals(container.getMappingInstance().name(), request.getMappingInstance());
-        } else {
-            assertNull(request.getMappingInstance());
-        }
-        Assert.assertEquals(container.getPatientId(), request.getPatientId());
-        Assert.assertEquals(container.getReasonForClosure(), request.getReasonForClosure());
-        Assert.assertEquals(container.getStatus().name(), request.getStatus());
-        Assert.assertEquals(container.getTbId(), request.getTbId());
         verify(httpClientService).post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
     }
 

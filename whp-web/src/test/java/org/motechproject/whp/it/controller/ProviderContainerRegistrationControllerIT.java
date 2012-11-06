@@ -107,7 +107,6 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
         Container container = containerService.getContainer(containerId);
 
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).withSubmitterRole(WHPRole.PROVIDER.name()).withSubmitterId(providerId).registeredThrough(ChannelId.WEB.name()).build();
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
@@ -125,6 +124,8 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                 "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
+
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).withSubmitterRole(WHPRole.PROVIDER.name()).withSubmitterId(providerId).registeredThrough(ChannelId.WEB.name()).build();
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
 
         markForDeletion(container);

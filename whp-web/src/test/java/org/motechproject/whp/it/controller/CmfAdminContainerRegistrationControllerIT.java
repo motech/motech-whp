@@ -41,9 +41,7 @@ import java.util.ArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.motechproject.whp.common.domain.ChannelId.WEB;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
-import static org.motechproject.whp.user.domain.WHPRole.CMF_ADMIN;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -184,18 +182,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         markForDeletion(container);
     }
 
-    private void verifyReportingEventPublication(MotechUser testUser, Container container) {
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testUser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
-        assertEquals(container.getContainerId(), expectedContainerRegistrationRequest.getContainerId());
-        assertEquals(WEB.name(), expectedContainerRegistrationRequest.getChannelId());
-        assertEquals(container.getStatus().name(), expectedContainerRegistrationRequest.getStatus());
-        assertEquals(container.getContainerIssuedDate().toDate(), expectedContainerRegistrationRequest.getIssuedOn());
-        assertEquals(container.getDiagnosis().name(), expectedContainerRegistrationRequest.getDiagnosis());
-        assertEquals(container.getInstance().name(), expectedContainerRegistrationRequest.getInstance());
-        assertEquals(container.getDistrict(), expectedContainerRegistrationRequest.getLocationId());
-        assertEquals(container.getProviderId(), expectedContainerRegistrationRequest.getProviderId());
-        assertEquals(testUser.getUserName(), expectedContainerRegistrationRequest.getSubmitterId());
-        assertEquals(CMF_ADMIN.name(), expectedContainerRegistrationRequest.getSubmitterRole());
+    private void verifyReportingEventPublication(MotechUser testuser, Container container) {
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 
