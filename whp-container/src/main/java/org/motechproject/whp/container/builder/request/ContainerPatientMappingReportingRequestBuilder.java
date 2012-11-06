@@ -20,6 +20,7 @@ public class ContainerPatientMappingReportingRequestBuilder {
         containerPatientMappingReportingRequest.setReasonForClosure(container.getReasonForClosure());
         containerPatientMappingReportingRequest.setStatus(container.getStatus().name());
         containerPatientMappingReportingRequest.setTbId(container.getTbId());
+        containerPatientMappingReportingRequest.setDiagnosis(container.getDiagnosis().name());
         return this;
     }
 
