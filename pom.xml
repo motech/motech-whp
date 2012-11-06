@@ -48,7 +48,7 @@
                 <updatePolicy>daily</updatePolicy>
             </releases>
             <snapshots>
-                <updatePolicy>daily</updatePolicy>
+                <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
         <repository>
