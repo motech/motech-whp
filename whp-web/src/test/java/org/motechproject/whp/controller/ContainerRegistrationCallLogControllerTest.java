@@ -8,10 +8,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
+import org.motechproject.whp.request.IvrContainerRegistrationCallLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -79,6 +81,25 @@ public class ContainerRegistrationCallLogControllerTest {
         assertEquals(dateTimeFormatter.parseDateTime("10/12/2012 12:32:35").toDate(), callLogRequest.getStartDateTime());
         assertEquals(dateTimeFormatter.parseDateTime("10/12/2012 12:33:35").toDate(), callLogRequest.getEndDateTime());
         assertEquals(providerId, callLogRequest.getProviderId());
+    }
+
+    @Test
+    public void shouldHandleCallLogRequestsWithInvalidMobileNumber() {
+        String invalidMobileNumber = "98121210";
+        IvrContainerRegistrationCallLogRequest request = new IvrContainerRegistrationCallLogRequest();
+        request.setMobileNumber(invalidMobileNumber);
+
+        containerRegistrationCallLogController.recordCallLog(request);
+        when(providerService.findByMobileNumber(invalidMobileNumber)).thenReturn(null);
+
+        ArgumentCaptor<ContainerRegistrationCallLogRequest> captor = forClass(ContainerRegistrationCallLogRequest.class);
+        verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
+        verify(providerService).findByMobileNumber(invalidMobileNumber);
+
+        ContainerRegistrationCallLogRequest callLogRequest = captor.getValue();
+
+        assertEquals(invalidMobileNumber, callLogRequest.getMobileNumber());
+        assertNull(callLogRequest.getProviderId());
     }
 
 }

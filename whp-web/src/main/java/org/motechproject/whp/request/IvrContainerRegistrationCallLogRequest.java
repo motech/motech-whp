@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -11,11 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
+import static org.motechproject.whp.common.util.WHPDateUtil.toDate;
 
 @Setter
 @XmlRootElement(name = "call_log")
 public class IvrContainerRegistrationCallLogRequest {
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
     @NotBlank
     private String callId;
@@ -62,9 +63,5 @@ public class IvrContainerRegistrationCallLogRequest {
         callLogRequest.setEndDateTime(toDate(endTime));
         callLogRequest.setProviderId(providerId);
         return callLogRequest;
-    }
-
-    private Date toDate(String date) {
-        return this.dateTimeFormatter.parseDateTime(date).toDate();
     }
 }

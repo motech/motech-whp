@@ -2,13 +2,21 @@ package org.motechproject.whp.common.util;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Weeks;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
+
 public class WHPDateUtil {
+
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
     public static List<LocalDate> getDatesInRange(LocalDate startingOn, LocalDate asOf) {
         List<LocalDate> datesAcrossCurrentWeek = new ArrayList<LocalDate>();
@@ -44,5 +52,9 @@ public class WHPDateUtil {
             if (date.getDayOfWeek() == dayOfWeek.getValue()) count++;
         }
         return count;
+    }
+
+    public static Date toDate(String date) {
+        return StringUtil.isNullOrEmpty(date) ? null : dateTimeFormatter.parseDateTime(date).toDate();
     }
 }
