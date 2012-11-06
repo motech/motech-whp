@@ -53,8 +53,8 @@ public class IvrContainerRegistrationCallLogRequest {
         callLogRequest.setCallId(callId);
         callLogRequest.setDisconnectionType(disconnectionType);
         callLogRequest.setMobileNumber(mobileNumber);
-        callLogRequest.setStartDateTime(toDate(startTime));
-        callLogRequest.setEndDateTime(toDate(endTime));
+        callLogRequest.setStartDateTime(startTime);
+        callLogRequest.setEndDateTime(endTime);
         callLogRequest.setProviderId(providerId);
         return callLogRequest;
     }

@@ -72,14 +72,12 @@ public class ContainerRegistrationCallLogControllerTest {
         verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
         verify(providerService).findByMobileNumber(mobileNumber);
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
-
         ContainerRegistrationCallLogRequest callLogRequest = captor.getValue();
         assertEquals(mobileNumber, callLogRequest.getMobileNumber());
         assertEquals("64756435684375", callLogRequest.getCallId());
         assertEquals("PROVIDER_HUNGUP", callLogRequest.getDisconnectionType());
-        assertEquals(dateTimeFormatter.parseDateTime("10/12/2012 12:32:35").toDate(), callLogRequest.getStartDateTime());
-        assertEquals(dateTimeFormatter.parseDateTime("10/12/2012 12:33:35").toDate(), callLogRequest.getEndDateTime());
+        assertEquals("10/12/2012 12:32:35", callLogRequest.getStartDateTime());
+        assertEquals("10/12/2012 12:33:35", callLogRequest.getEndDateTime());
         assertEquals(providerId, callLogRequest.getProviderId());
     }
 
