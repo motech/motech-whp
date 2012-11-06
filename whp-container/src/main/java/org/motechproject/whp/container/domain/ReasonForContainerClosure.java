@@ -11,8 +11,12 @@ import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_
 @TypeDiscriminator("doc.type == 'ReasonForContainerClosure'")
 public class ReasonForContainerClosure extends MotechBaseDataObject {
 
+    public static enum ApplicableTreatmentPhase {PreTreatment, InTreatment, All}
+
     private String name;
     private String code;
+    private ApplicableTreatmentPhase phase;
+    private boolean canFilterOn;
 
     //Required for Ektorp
     public ReasonForContainerClosure() {
@@ -21,6 +25,12 @@ public class ReasonForContainerClosure extends MotechBaseDataObject {
     public ReasonForContainerClosure(String name, String code) {
         this.name = name;
         this.code = code;
+    }
+
+    public ReasonForContainerClosure(String name, String code, ApplicableTreatmentPhase phase, boolean canFilterOn) {
+        this(name, code);
+        this.phase = phase;
+        this.canFilterOn = canFilterOn;
     }
 
     @JsonIgnore
