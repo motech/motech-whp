@@ -17,16 +17,10 @@ import static org.motechproject.whp.common.util.WHPDateUtil.toDate;
 @Setter
 @XmlRootElement(name = "call_log")
 public class IvrContainerRegistrationCallLogRequest {
-
-    @NotBlank
     private String callId;
-    @org.motechproject.validation.constraints.DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String startTime;
-    @org.motechproject.validation.constraints.DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String endTime;
-    @NotBlank
     private String disconnectionType;
-    @NotBlank
     private String mobileNumber;
 
     @XmlElement(name = "call_id")

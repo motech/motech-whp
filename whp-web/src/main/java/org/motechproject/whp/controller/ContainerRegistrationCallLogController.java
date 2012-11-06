@@ -6,9 +6,11 @@ import org.motechproject.whp.request.IvrContainerRegistrationCallLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -26,6 +28,7 @@ public class ContainerRegistrationCallLogController {
     }
 
     @RequestMapping(value = "/callLog", method = POST)
+    @ResponseStatus(value = HttpStatus.OK)
     public void recordCallLog(@RequestBody IvrContainerRegistrationCallLogRequest request) {
         Provider provider = providerService.findByMobileNumber(request.getMobileNumber());
         String providerId = provider != null ? provider.getProviderId() : null;
