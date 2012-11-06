@@ -5,7 +5,7 @@
 <div class="span12">
     <form action="<@spring.url '/cmfAdmin/edit'/>" id="editCmfAdminForm" submitOnEnterKey="true" method="POST"
           class="form-horizontal">
-        <div class="offset2-fixed">
+        <div class="offset1-fixed">
             <div class="control-group well">
                 <div class="control-group">
                     <label class="control-label" for="staffName">Staff Name*</label>

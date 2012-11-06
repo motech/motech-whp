@@ -21,7 +21,7 @@
     });
 </script>
 
-<div class="row-fluid">
+<div class="patient-info word-wrap row-fluid">
 
         <#if message??>
         <div class="dateUpdated-message-alert alert alert-success fade in">
@@ -29,7 +29,7 @@
         ${message}
         </div>
         </#if>
-        <h1>Treatment Details of <em class="name">${patient.firstName!} ${patient.lastName!}</em></h1>
+        <h1 class="offset-top">Treatment Details of <em class="name">${patient.firstName!} ${patient.lastName!}</em></h1>
         <#include "phaseTransitionAlert.ftl"/>
 
         <#include "patientInfo.ftl"/>
@@ -39,17 +39,18 @@
         <div id="treatmentCard"></div>
 
     <br />
+    <div class="patients-buttons-container">
+        <div class="row-fluid">
+            <div class="controls  pull-left">
+                <a href="<@spring.url "/"/>" class="btn"><i class="icon-chevron-left"></i> Back To Patient List</a>
 
-    <div class="row-fluid">
-        <div class="controls  pull-left">
-            <a href="<@spring.url "/"/>" class="btn"><i class="icon-chevron-left"></i> Back To Patient List</a>
 
-
-        </div>
-        <div class="controls pull-right">
-            <a id="printTreatmentCard" target="_blank" class="btn" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print"></i> Print</a>
-            <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-primary "><i class="icon-calendar icon-white"></i> Adjust Phase Start
-                Dates</a>
+            </div>
+            <div class="controls pull-right">
+                <a id="printTreatmentCard" target="_blank" class="btn btn-large btn-info" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print icon-white"></i> Print</a>
+                <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-success  btn-large"><i class="icon-calendar icon-white"></i> Adjust Phase Start
+                    Dates</a>
+            </div>
         </div>
     </div>
     <br />

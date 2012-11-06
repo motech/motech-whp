@@ -18,44 +18,46 @@
     </#if>
         <h1>Register on behalf of provider</h1>
 
-        <div id="container-registration" class="row-fluid">
-            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="well form-horizontal">
+        <div id="container-registration" class="offset1-fixed">
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
+                <div class="well"
                 <input type="hidden" id="providerContainer" name="containerRegistrationMode"
-                       value="ON_BEHALF_OF_PROVIDER"/>
+                           value="ON_BEHALF_OF_PROVIDER"/>
 
-                <div class="control-group">
-                    <label class="control-label">Provider ID*</label>
+                    <div class="control-group">
+                        <label class="control-label">Provider ID*</label>
 
-                    <div class="controls">
-                        <input id="providerId" class="span3" name="providerId" type="text" placeholder="Enter provider ID"/>
+                        <div class="controls">
+                            <input id="providerId" class="input-xlarge" name="providerId" type="text" placeholder="Enter provider ID"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Container ID*</label>
+
+                        <div class="controls">
+                            <input id="containerId" class="input-xlarge" name="containerId" type="text" maxlength="${containerIdMaxLength}" placeholder="Enter a container ID from provider's pool"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Instance*</label>
+
+                        <div class="controls">
+                            <select id="instance" class="select-xlarge" name="instance" validate="required:true">
+                                <option value=""></option>
+                                <#list instances as instance>
+                                    <option value="${instance}">${instance}</option>
+                                </#list>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">Container ID*</label>
-
-                    <div class="controls">
-                        <input id="containerId" class="span3" name="containerId" type="text" maxlength="${containerIdMaxLength}" placeholder="Enter a container ID from provider's pool"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Instance*</label>
-
-                    <div class="controls">
-                        <select id="instance" class="span3" name="instance" validate="required:true">
-                            <option value=""></option>
-                            <#list instances as instance>
-                                <option value="${instance}">${instance}</option>
-                            </#list>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group pull-down">
+                <div class="control-group pull-right">
                     <div class="controls">
 
                         <button type="submit" id="registerButton" class="btn btn-primary">
-                            Register
+                            <i class="icon-ok icon-white"></i> Register Container
                         </button>
-                        <a id="back" class="btn padding-right" href="<@spring.url ''/>">Back</a>
+                        <a id="back" class="btn padding-right" href="<@spring.url ''/>"><i class="icon-remove"></i> Cancel</a>
                     </div>
                 </div>
             </form>

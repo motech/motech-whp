@@ -12,7 +12,7 @@
 
     <div id="search-pane" class="">
         <@paginator.filter id="provider_pagination_filter" pagination_id = "provider_pagination">
-
+               <div class="row-fluid filters">
                         <div class="control-group span2">
                             <label class="control-label">District*</label>
 
@@ -41,7 +41,7 @@
                                 </button>
                             </div>
                         </div>
-
+               </div>
         </@paginator.filter>
     </div>
 </div>

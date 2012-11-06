@@ -5,7 +5,7 @@
     <h1>Create CMF Admin Account</h1>
     <form action="<@spring.url '/cmfAdmin/create'/>" id="createCmfAdminForm" submitOnEnterKey="true" method="POST"
           class="">
-        <div class="offset2-fixed form-horizontal">
+        <div class="offset1-fixed form-horizontal">
             <div class="well">
                 <div class="control-group">
                     <label class="control-label" for="staffName">Staff Name*</label>

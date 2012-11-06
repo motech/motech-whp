@@ -9,7 +9,7 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.35);
     color: #555555;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -308,15 +308,16 @@ div.buttons a, div.buttons button {
 
 .offset2-fixed {
     margin: auto;
-    width: 679px;
-    max-width: 679px;
+    width: 675px;
+    max-width: 675px;
 }
 
 .offset1-fixed {
     margin: auto;
-    width: 757px;
-    max-width: 757px;
+    width: 750px;
+    max-width: 750px;
 }
+
 /* styles over written for calendar UI */
 .ui-datepicker-calendar .ui-state-default {
      border-color: #fff;
@@ -354,6 +355,9 @@ div.buttons a, div.buttons button {
     overflow: auto;
     max-height: 130px;
 }
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+    background-image: url("images/ui-icons_2e83ff_256x240.png");
+}
 .ui-accordion .ui-accordion-header {
     background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
 }
@@ -361,10 +365,13 @@ div.buttons a, div.buttons button {
     letter-spacing: 1px;
     text-decoration: none;
     text-shadow: 1px 1px white;
+    color: #0464BC;
 }
 .patient-info h3 {
     margin-bottom: 20px;
-    border-bottom: 1px dotted rgba(0,0,0,0.5);
+    border-bottom: 1px dotted rgba(0,0,0,0.3);
+    color: #0287C4;
+    font-size: 20px;
 }
 .default-arrow, .default-arrow td, .default-arrow th {
     cursor: default;
@@ -408,7 +415,11 @@ div.buttons a, div.buttons button {
 #search-pane {
     overflow: hidden;
     background: none;
+    padding: 0;
+}
+#search-pane .filters {
     padding: 1em;
+    background: #FFF;
 }
 #search-pane select {
    width: 95%;
@@ -424,13 +435,15 @@ div.buttons a, div.buttons button {
     width: 49.5% !important;
 }
 #search-pane .buttons-group {
-    margin-top: 25px;
+   background: #F5F5F5;
+   margin: 0;
+   border-top: 1px solid #ddd;
 }
-#search-pane .btn{
-    margin-bottom: 10px;
+#search-pane .buttons-group .controls {
+   padding: 1em;
 }
-#search-pane .buttons-group .btn:first-child {
-    margin-left: -10px;
+.btn .icon-white {
+    opacity: 0.9;
 }
 .btn:hover .icon-white {
     opacity: 1;
@@ -883,6 +896,20 @@ pre {
 #remarks .remark-desc {
     margin-left: 25px;
 }
+
+.patients-buttons-container {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    background: rgba(115, 115, 115, 0.51);
+    width: 100%;
+}
+.patients-buttons-container .controls {
+    margin: 15px 20px;
+}
+.offset-top {
+    margin-top: 60px;
+}
 /* LOG IN */
 .login-form  {
     width: 570px;
@@ -947,6 +974,7 @@ pre {
 }
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
     padding: 7px 20px;
+    border-color: rgba(126, 126, 126, 0.5)
 }
 
 .navbar .brand {

@@ -54,8 +54,8 @@
         </div>
     </div>
     <div class="modal-footer ">
-        <button class="btn " data-dismiss="modal">Close</button>
-        <input type="button" class="btn " id="clearFields" value="Clear All"/>
-        <button type="submit" class="btn  btn-primary" id="saveTheDate">Save</button>
+        <button class="btn " data-dismiss="modal"><i class="icon-remove"></i> Close</button>
+        <button class="btn " id="clearFields"><i class="icon-remove-sign"></i> Clear All</button>
+        <button type="submit" class="btn  btn-primary" id="saveTheDate"><i class="icon-ok icon-white"></i> Save</button>
     </div>
 </form>

@@ -1,5 +1,4 @@
-<div>
-    <div class="row white" id="footer">
+    <div class="row" id="footer">
         <div class="pull-left" id="footer-left-section">
             <div class="row">
                 <a href="<@spring.url '/' />">
@@ -21,4 +20,3 @@
         </div>
     </div>
 
-</div>

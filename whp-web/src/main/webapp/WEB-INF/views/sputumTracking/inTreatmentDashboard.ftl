@@ -20,7 +20,7 @@
         <div class="well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
             <div id="search-pane">
-                <fieldset class="span12">
+                <fieldset class="filters">
                     <div class="row-fluid sel-provider">
 
                         <div class="control-group span2">
@@ -40,7 +40,7 @@
                                 <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
                             </div>
                         </div>
-                        <div class="control-group span2 ">
+                        <div class="control-group span3 ">
                             <label class="control-label ">Instance</label>
                             <div class="controls">
                                 <select id="mappingInstance" name="mappingInstance">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="control-group  span2">
+                        <div class="control-group  span3">
                             <label class="control-label ">Reason for Closure</label>
                             <div class="controls ">
                                 <select id="reasonForClosure" name="reasonForClosure">
@@ -109,15 +109,16 @@
                         </div>
 
 
-                        <div class="control-group buttons-group span2 pull-down">
-                            <div class="controls">
-                                <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
-                                <button id="clearFilter" type="reset" class="btn">Clear All</button>
-                            </div>
-                        </div>
+
 
                     </div>
                 </fieldset>
+                <div class="control-group buttons-group row-fluid">
+                    <div class="controls pull-right">
+                        <button id="clearFilter" type="reset" class="btn"><i class="icon-remove"></i> Clear All</button>
+                        <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
+                    </div>
+                </div>
 
             </div>
         </div>

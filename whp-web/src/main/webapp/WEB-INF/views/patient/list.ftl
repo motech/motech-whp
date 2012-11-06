@@ -13,7 +13,7 @@
 
             <div id="search-pane">
                 <form id="searchForm" action="<@spring.url '/patients/search'/>" input method="POST" submitOnEnterKey="true">
-                    <div class="row-fluid">
+                    <div class="row-fluid filters">
                         <div class="control-group span2">
                             <label class="control-label">Provider District*</label>
 

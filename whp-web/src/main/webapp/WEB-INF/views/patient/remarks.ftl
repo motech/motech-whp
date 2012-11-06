@@ -1,4 +1,4 @@
-<h3 class="remarks underline">Previous Remarks</h3>
+<h4 class="remarks underline">Previous Remarks</h4>
 <div id="remarks-content">
     <#if cmfAdminRemarks?size == 0 && providerRemarks?size == 0>
         <p>
