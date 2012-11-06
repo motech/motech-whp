@@ -1,7 +1,6 @@
 package org.motechproject.whp.container.service;
 
 import freemarker.template.TemplateException;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.joda.time.DateTime;
@@ -38,14 +37,13 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
-import static org.motechproject.whp.container.WHPContainerConstants.TB_NEGATIVE_CODE;
+import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.InTreatment;
+import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.PreTreatment;
 
 @Service
 public class ContainerService {
@@ -136,35 +134,24 @@ public class ContainerService {
         publishContainerStatusUpdateReportingEvent(container);
     }
 
-    public List<ReasonForContainerClosure> getAllPreTreatmentClosureReasonsForAdmin() {
-        List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
-        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
-        List reasonsForAdmin = ListUtils.removeAll(allReasons, reasonForMapping);
-        return reasonsForAdmin;
-    }
-
-    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasonsForAdmin() {
-        List<ReasonForContainerClosure> preTreatmentClosureReasons = getAllPreTreatmentClosureReasonsForAdmin();
-        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(TB_NEGATIVE_CODE)), preTreatmentClosureReasons);
-        List reasonsForAdmin = ListUtils.removeAll(preTreatmentClosureReasons, reasonForMapping);
-        return reasonsForAdmin;
-    }
-
     public List<ReasonForContainerClosure> getAllReasonsPreTreatmentClosureReasons() {
-        return allReasonForContainerClosures.getAll();
+        return allReasonForContainerClosures.withTreatmentPhase(PreTreatment);
     }
 
     public List<ReasonForContainerClosure> getAllInTreatmentClosureReasons() {
-        List<ReasonForContainerClosure> preTreatmentClosureReasons = allReasonForContainerClosures.getAll();
-        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(TB_NEGATIVE_CODE)), preTreatmentClosureReasons);
-        List reasonsForAdmin = ListUtils.removeAll(preTreatmentClosureReasons, reasonForMapping);
-        return reasonsForAdmin;
+        return allReasonForContainerClosures.withTreatmentPhase(InTreatment);
+    }
+
+    public List<ReasonForContainerClosure> getAllPreTreatmentClosureReasonsForAdmin() {
+        return allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, PreTreatment);
+    }
+
+    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasonsForAdmin() {
+        return allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, InTreatment);
     }
 
     public ReasonForContainerClosure getClosureReasonForMapping() {
-        List<ReasonForContainerClosure> allReasons = allReasonForContainerClosures.getAll();
-        List<ReasonForContainerClosure> reasonForMapping = filter(having(on(ReasonForContainerClosure.class).getCode(), comparesEqualTo(CLOSURE_DUE_TO_MAPPING)), allReasons);
-        return reasonForMapping.get(0);
+        return allReasonForContainerClosures.findByCode(CLOSURE_DUE_TO_MAPPING);
     }
 
     public List<AlternateDiagnosis> getAllAlternateDiagnosis() {

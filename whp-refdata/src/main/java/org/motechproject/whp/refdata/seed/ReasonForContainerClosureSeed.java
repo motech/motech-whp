@@ -19,7 +19,7 @@ public class ReasonForContainerClosureSeed {
 
     @Seed(priority = 0, version = "4.0")
     public void load() {
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Sputum container mapped to patient", CLOSURE_DUE_TO_MAPPING, All, true));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Sputum container mapped to patient", CLOSURE_DUE_TO_MAPPING, All, false));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Diagnosis TB Negative", TB_NEGATIVE_CODE, PreTreatment, true));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Container lost", "2", All, true));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Invalid Container", "3", All, true));

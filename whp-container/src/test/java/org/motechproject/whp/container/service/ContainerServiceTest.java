@@ -41,22 +41,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.InTreatment;
+import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.PreTreatment;
 
 public class ContainerServiceTest extends BaseUnitTest {
+
     private ContainerService containerService;
+
     @Mock
     private AllContainers allContainers;
     @Mock
@@ -99,7 +104,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+        when(allReasonForContainerClosures.withTreatmentPhase(PreTreatment)).thenReturn(reasonForContainerClosures);
 
         List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllReasonsPreTreatmentClosureReasons();
 
@@ -113,12 +118,11 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetAllReasonsExceptTBNegativeForInTreatment() {
+    public void shouldGetAllReasonsForInTreatment() {
         ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", WHPContainerConstants.TB_NEGATIVE_CODE));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+        when(allReasonForContainerClosures.withTreatmentPhase(InTreatment)).thenReturn(reasonForContainerClosures);
 
         List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllInTreatmentClosureReasons();
 
@@ -330,12 +334,11 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetAllContainerClosureReasonsForAdmin() {
+    public void shouldGetAllPreTreatmentContainerClosureReasonsForAdmin() {
         ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("not for admin", "0"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+        when(allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, PreTreatment)).thenReturn(reasonForContainerClosures);
 
         List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllPreTreatmentClosureReasonsForAdmin();
 
@@ -347,12 +350,25 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGetContainerClosureReasonForMapping() {
+    public void shouldGetAllInTreatmentContainerClosureReasonsForAdmin() {
         ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("not for admin", "0"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
         reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.getAll()).thenReturn(reasonForContainerClosures);
+        when(allReasonForContainerClosures.withTreatmentPhase(InTreatment)).thenReturn(reasonForContainerClosures);
+
+        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllInTreatmentClosureReasons();
+
+        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
+        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(0).getName());
+        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
+        Assert.assertEquals("2", allClosureReasonsForAdmin.get(0).getCode());
+        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
+    }
+
+    @Test
+    public void shouldGetContainerClosureReasonForMapping() {
+        ReasonForContainerClosure reason = new ReasonForContainerClosure("not for admin", "0");
+        when(allReasonForContainerClosures.findByCode(WHPContainerConstants.CLOSURE_DUE_TO_MAPPING)).thenReturn(reason);
 
         ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
 

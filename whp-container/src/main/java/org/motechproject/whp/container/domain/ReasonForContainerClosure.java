@@ -16,7 +16,7 @@ public class ReasonForContainerClosure extends MotechBaseDataObject {
     private String name;
     private String code;
     private ApplicableTreatmentPhase phase;
-    private boolean canFilterOn;
+    private boolean applicableToAdmin;
 
     //Required for Ektorp
     public ReasonForContainerClosure() {
@@ -27,10 +27,10 @@ public class ReasonForContainerClosure extends MotechBaseDataObject {
         this.code = code;
     }
 
-    public ReasonForContainerClosure(String name, String code, ApplicableTreatmentPhase phase, boolean canFilterOn) {
+    public ReasonForContainerClosure(String name, String code, ApplicableTreatmentPhase phase, boolean applicableToAdmin) {
         this(name, code);
         this.phase = phase;
-        this.canFilterOn = canFilterOn;
+        this.applicableToAdmin = applicableToAdmin;
     }
 
     @JsonIgnore
