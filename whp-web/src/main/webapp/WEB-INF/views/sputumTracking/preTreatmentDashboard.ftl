@@ -137,12 +137,12 @@
 </div>
 
 <div class="results">
-    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="sputum_tracking_filter" entity="pre_treatment_container_tracking_dashboard_row" rowsPerPage="20" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
+    <@paginator.paginate id="sputum_tracking_pagination" filterSectionId="sputum_tracking_filter" entity="pre_treatment_container_tracking_dashboard_row" rowsPerPage="1" contextRoot="/whp" stylePath="/resources-${applicationVersion}/styles">
         <table class="table table-striped table-bordered" id="sputumTrackingDashboardRowsList" endpoint="<@spring.url '/sputum-tracking/pre-treatment'/>"/>
             <thead>
             <tr>
                 <th>Container Id</th>
-                <th>Container Issued On</th>
+                <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
                 <th>Lab Name</th>
                 <th>Result 1</th>
                 <th>Date Of Test 1</th>

@@ -3,7 +3,7 @@ var app = angular.module('whp', []);
 function PaginationCtrl($scope, $http, $rootScope, $location) {
 
     $scope.loadPage = function () {
-        $http.get($scope.buildURL($rootScope.searchCriteria)).success(function (data) {
+        $http.get($scope.buildURL($rootScope.searchCriteria, $rootScope.sortCriteria)).success(function (data) {
             $scope.data = data;
             $scope.numberOfPages = function () {
                 return Math.ceil($scope.data.totalRows / $scope.rowsPerPage);
@@ -23,6 +23,8 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         var urlPart = $location.path() + "#?";
         if ($rootScope.searchCriteria)
             urlPart += $scope.id + "-searchCriteria=" + JSON.stringify($rootScope.searchCriteria);
+        if ($rootScope.sortCriteria)
+            urlPart += $scope.id + "-sortCriteria=" + JSON.stringify($rootScope.sortCriteria);
 
         urlPart += "&" + $scope.id + "-rowsPerPage=" + $scope.rowsPerPage + "&" + $scope.id + "-pageNo=";
         var currentPage = Number($scope.currentPage);
@@ -39,12 +41,15 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         $scope.loadPage();
     }
 
-    $scope.buildURL = function (searchCriteria) {
+    $scope.buildURL = function (searchCriteria, sortCriteria) {
         var url = $scope.contextRoot + '/page/' + $scope.entity +
             '?pageNo=' + $scope.currentPage +
             '&rowsPerPage=' + $scope.rowsPerPage;
         if (searchCriteria) {
             url += '&searchCriteria=' + JSON.stringify(searchCriteria);
+        }
+        if (sortCriteria) {
+            url += '&sortCriteria=' + JSON.stringify(sortCriteria);
         }
         return url;
     }
@@ -66,6 +71,22 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
     $scope.hasResults = function () {
        return $scope.data.totalRows  > 0;
+    }
+
+    $scope.sort = function(sortField) {
+        if(!$rootScope.sortCriteria){
+            $rootScope.sortCriteria = {}
+        }
+
+         if($rootScope.sortCriteria[sortField] == "asc")  {
+            $rootScope.sortCriteria[sortField] = "desc";
+        } else {
+             $rootScope.sortCriteria[sortField] = "asc";
+         }
+
+        $("#sortIcon_" + sortField).toggleClass('icon-arrow-up icon-arrow-down');
+        $scope.currentPage = 1;
+        $scope.loadPage();
     }
 
     $.fn.serializeObject = function () {
@@ -109,11 +130,19 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
     });
 
 
-    $rootScope.$on('filterUpdated', function (evt, searchCriteria) {
-        //setSearchCriteria();
+    $rootScope.$on('filterUpdated', function (evt) {
+        var paramMap = $location.search();
+        if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
+            $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
+        }
+
         var searchString = JSON.stringify($rootScope.searchCriteria);
+        var sortString = JSON.stringify($rootScope.sortCriteria);
+
         var searchParams = {}
         searchParams[$scope.id + "-searchCriteria"] = searchString;
+        searchParams[$scope.id + "-sortCriteria"] = sortString;
+
         $location.search(searchParams);
         $scope.currentPage = 1;
         $scope.loadPage();
