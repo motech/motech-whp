@@ -133,7 +133,7 @@
             <thead>
             <tr>
                 <th>Container Id</th>
-                <th>Container Issued On</th>
+                <th>Container Issued On <a href="#" ng-click = "sort('containerIssuedDate')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
                 <th>Lab Name</th>
                 <th>Result 1</th>
                 <th>Date Of Test 1</th>

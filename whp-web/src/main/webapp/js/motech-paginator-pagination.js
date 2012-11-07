@@ -78,10 +78,10 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
             $rootScope.sortCriteria = {}
         }
 
-         if($rootScope.sortCriteria[sortField] == "asc")  {
-            $rootScope.sortCriteria[sortField] = "desc";
+         if($rootScope.sortCriteria[sortField] == "DESC")  {
+            $rootScope.sortCriteria[sortField] = "ASC";
         } else {
-             $rootScope.sortCriteria[sortField] = "asc";
+             $rootScope.sortCriteria[sortField] = "DESC";
          }
 
         $("#sortIcon_" + sortField).toggleClass('icon-arrow-up icon-arrow-down');
@@ -131,11 +131,6 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
 
     $rootScope.$on('filterUpdated', function (evt) {
-        var paramMap = $location.search();
-        if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
-            $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
-        }
-
         var searchString = JSON.stringify($rootScope.searchCriteria);
         var sortString = JSON.stringify($rootScope.sortCriteria);
 
@@ -150,6 +145,20 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
     function setInitParams() {
         $scope.currentPage = 1;
+
+        var paramMap = $location.search();
+        if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
+            $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
+
+            $.each($rootScope.sortCriteria, function(sortField, sortOrder) {
+                if(sortOrder == 'ASC')
+                    $("#sortIcon_" + sortField).removeClass('icon-arrow-down').addClass('icon-arrow-up');
+                else
+                    $("#sortIcon_" + sortField).removeClass('icon-arrow-up').addClass('icon-arrow-down');
+
+            });
+
+        }
 
         var paramMap = $location.search();
         if(paramMap[$scope.id + "-pageNo"])
