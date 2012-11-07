@@ -3,6 +3,7 @@ package org.motechproject.whp.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
@@ -12,7 +13,6 @@ import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -52,8 +52,8 @@ public class InTreatmentTestPart {
         when(containerTrackingDashboardRowMapper.mapFrom(container1)).thenReturn(expectedPageResult1);
         when(containerTrackingDashboardRowMapper.mapFrom(container2)).thenReturn(expectedPageResult2);
 
-        Properties filterParams = new Properties();
-        Properties sortParams = new Properties();
+        FilterParams filterParams = new FilterParams();
+        FilterParams sortParams = new FilterParams();
         int skip = 0;
         int limit = 10;
 

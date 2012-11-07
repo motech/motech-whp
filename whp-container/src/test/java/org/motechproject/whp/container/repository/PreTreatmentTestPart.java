@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
@@ -15,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,8 +39,8 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
-        Properties sortParams = new Properties();
-        Properties queryParams = new Properties();
+        FilterParams sortParams = new FilterParams();
+        FilterParams queryParams = new FilterParams();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "PreTreatment");
@@ -64,8 +64,8 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
-        Properties queryParams = new Properties();
-        Properties sortParams = new Properties();
+        FilterParams queryParams = new FilterParams();
+        FilterParams sortParams = new FilterParams();
         String providerId = "providerid";
         String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
@@ -74,8 +74,8 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("containerStatus", Open.name());
         queryParams.put("containerIssuedDateFrom", "01/02/2010");
         queryParams.put("containerIssuedDateTo", "30/04/2010");
-        queryParams.put("consultationDateFrom","04/02/2010");
-        queryParams.put("consultationDateTo","01/05/2010");
+        queryParams.put("consultationDateFrom", "04/02/2010");
+        queryParams.put("consultationDateTo", "01/05/2010");
         queryParams.put("diagnosis", Positive.name());
         queryParams.put("reasonForClosure", "reasonForClosure");
 
@@ -126,8 +126,8 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterAndSortPreTreatmentContainerRecordsByAllFilterCriteria() {
-        Properties queryParams = new Properties();
-        Properties sortParams = new Properties();
+        FilterParams queryParams = new FilterParams();
+        FilterParams sortParams = new FilterParams();
         sortParams.put("containerIssuedDate", "asc");
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
@@ -170,7 +170,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     }
 
     @Test
-    public void shouldCountPreTreatmentContainerTrackingRecordRows(){
+    public void shouldCountPreTreatmentContainerTrackingRecordRows() {
         String providerId1 = "providerid";
         String providerId2 = "anotherprovider";
         String districtName1 = "East Champaran";
@@ -181,14 +181,14 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId2, districtName1, PreTreatment));
 
         // Assertion 1 for provider1-Instance1
-        Properties queryParams = new Properties();
+        FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", providerId1);
         int recordCount = allContainerTrackingRecords.count(PreTreatment, queryParams);
         assertEquals(2, recordCount);
 
 
         // Assertion 3 for provider2-Instance1
-        queryParams = new Properties();
+        queryParams = new FilterParams();
         queryParams.put("providerId", providerId2);
         recordCount = allContainerTrackingRecords.count(PreTreatment, queryParams);
         assertEquals(1, recordCount);

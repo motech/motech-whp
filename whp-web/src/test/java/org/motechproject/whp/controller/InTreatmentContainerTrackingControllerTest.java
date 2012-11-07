@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.Container;
@@ -15,6 +14,7 @@ import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.ContainerTrackingService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
+import org.motechproject.whp.uimodel.InTreatmentSputumTrackingInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class InTreatmentContainerTrackingControllerTest {
                 .andExpect(model().attribute(REASONS, reasons))
                 .andExpect(model().attribute(REASONS_FOR_FILTER, reasonsForFilter))
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
-                .andExpect(model().attribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES));
+                .andExpect(model().attribute(INSTANCES, InTreatmentSputumTrackingInstance.values()));
 
         verify(containerService).getAllInTreatmentClosureReasonsForAdmin();
     }

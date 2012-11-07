@@ -33,7 +33,11 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
                 "index.add(doc.consultationDate, {field: 'consultationDate', type : 'date'}); " +
 
                 "if(doc.mappingInstance != undefined) {" +
-                "index.add(doc.mappingInstance, {field: 'mappingInstance'}); " +
+                "   if(doc.mappingInstance.indexOf('TreatmentInterruption')!== -1) { " +
+                "     index.add('TreatmentInterruption', {field: 'mappingInstance'}); " +
+                "   }else {" +
+                "     index.add(doc.mappingInstance, {field: 'mappingInstance'}); " +
+                "   }" +
                 "} " +
 
                 "if(doc.labResults != undefined) { " +

@@ -2,13 +2,13 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.motechproject.whp.reponse.WHPResponse;
+import org.motechproject.whp.uimodel.InTreatmentSputumTrackingInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +55,7 @@ public class InTreatmentContainerTrackingController extends ContainerTrackingCon
     public String showContainerTrackingDashBoard(Model uiModel) {
         List<ReasonForContainerClosure> allClosureReasons = containerService.getAllInTreatmentClosureReasonsForAdmin();
 
-        uiModel.addAttribute(INSTANCES, SputumTrackingInstance.IN_TREATMENT_INSTANCES);
+        uiModel.addAttribute(INSTANCES, InTreatmentSputumTrackingInstance.values());
         uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllInTreatmentClosureReasons());
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());

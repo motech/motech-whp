@@ -7,9 +7,10 @@ import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
-import org.motechproject.whp.common.util.URLEscape;
+import org.motechproject.whp.container.util.URLEscape;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.query.ContainerTrackingQueryDefinition;
 import org.motechproject.whp.container.query.InTreatmentContainerTrackingQueryDefinition;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
 import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
 import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatment;
@@ -68,7 +68,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         };
     }
 
-    public List<Container> filter(RegistrationInstance instance, Properties filterParams, Properties sortParams, int skip, int limit) {
+    public List<Container> filter(RegistrationInstance instance, FilterParams filterParams, FilterParams sortParams, int skip, int limit) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
@@ -77,7 +77,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         return Collections.emptyList();
     }
 
-    public int count(RegistrationInstance instance, Properties filterParams) {
+    public int count(RegistrationInstance instance, FilterParams filterParams) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());

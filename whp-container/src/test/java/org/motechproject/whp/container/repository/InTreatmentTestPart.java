@@ -3,6 +3,7 @@ package org.motechproject.whp.container.repository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.RegistrationInstance;
@@ -13,8 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-import java.util.Properties;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -22,6 +23,7 @@ import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndIP;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.TreatmentInterruption1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContainerContext.xml")
@@ -37,8 +39,8 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterInTreatmentContainerRecordsByInstanceAndProviderId() {
-        Properties queryParams = new Properties();
-        Properties sortParams = new Properties();
+        FilterParams queryParams = new FilterParams();
+        FilterParams sortParams = new FilterParams();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "InTreatment");
@@ -62,7 +64,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterInTreatmentContainerRecordsByAllFilterCriteria() {
-        Properties queryParams = new Properties();
+        FilterParams queryParams = new FilterParams();
         String providerId = "providerid";
         String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
@@ -74,7 +76,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("reasonForClosure", "reasonForClosure");
         queryParams.put("mappingInstance", EndIP.name());
 
-        Properties sortParams = new Properties();
+        FilterParams sortParams = new FilterParams();
 
         Container expectedContainerTrackingRecord = new ContainerBuilder()
                 .withProviderId(providerId)
@@ -119,6 +121,20 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     }
 
     @Test
+    public void shouldMatchPartialCriteria() {
+        String partialCriteria = "TreatmentInterruption";
+        Container containerTrackingRecord = createContainerTrackingRecord("providerid", "Begusarai", InTreatment);
+        containerTrackingRecord.setMappingInstance(TreatmentInterruption1);
+
+        FilterParams params = new FilterParams();
+        params.put("mappingInstance", partialCriteria);
+
+        allContainerTrackingRecords.add(containerTrackingRecord);
+        List<Container> results = allContainerTrackingRecords.filter(InTreatment, params, new FilterParams(), 0, 10);
+        assertEquals(asList(containerTrackingRecord), results);
+    }
+
+    @Test
     public void shouldCountInTreatmentContainerTrackingRecordRows() {
         String providerId1 = "providerid";
         String providerId2 = "anotherprovider";
@@ -130,14 +146,14 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         allContainerTrackingRecords.add(createContainerTrackingRecord(providerId2, districtName1, InTreatment));
 
         // Assertion 1 for provider1-Instance1
-        Properties queryParams = new Properties();
+        FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", providerId1);
         int recordCount = allContainerTrackingRecords.count(InTreatment, queryParams);
         assertEquals(2, recordCount);
 
 
         // Assertion 3 for provider2-Instance1
-        queryParams = new Properties();
+        queryParams = new FilterParams();
         queryParams.put("providerId", providerId2);
         recordCount = allContainerTrackingRecords.count(InTreatment, queryParams);
         assertEquals(1, recordCount);

@@ -1,6 +1,7 @@
 package org.motechproject.whp.user.service;
 
 import org.apache.log4j.Logger;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.security.service.MotechUser;
@@ -29,7 +30,7 @@ public class ProviderPaginationService implements Paging {
     }
 
     @Override
-    public PageResults page(Integer pageNo, Integer rowsPerPage, Properties searchCriteria, Properties sortCriteria) {
+    public PageResults page(Integer pageNo, Integer rowsPerPage, FilterParams searchCriteria, FilterParams sortCriteria) {
         List<Provider> allProviders = providerService.fetchBy((String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
 
         int startIndex = (pageNo - 1) * rowsPerPage;
