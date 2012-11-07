@@ -10,10 +10,6 @@
         body {
             background-color: #019EFF;
             background-repeat: no-repeat;
-            background: -webkit-gradient(radial, 80% 20%, 0, 80% 40%, 100, from(#5ABCF8), to(#096DAB));
-            background: -webkit-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB);
-            background: -moz-radial-gradient(closest-corner at 80% 20% , #5ABCF8, #096DAB);
-            background: -ms-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB);
             background: radial-gradient(closest-corner at 80% 20% , #5ABCF8, #096DAB);
 
         }

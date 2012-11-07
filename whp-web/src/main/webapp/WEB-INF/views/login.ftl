@@ -15,7 +15,7 @@
                 <label class="control-label" for="j_username"> User Name</label>
 
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name='j_username' id="j_username" autofocus="autofocus" placeholder="Enter your username" />
+                    <input class="input-xlarge" type="text" name='j_username' id="j_username" autofocus="autofocus" placeholder="" />
                 </div>
             </div>
 
@@ -23,13 +23,13 @@
                 <label class="control-label" for="j_password">Password</label>
 
                 <div class="controls">
-                    <input class="input-xlarge" type="password" name='j_password' id="j_password" placeholder="Enter your password"/>
+                    <input class="input-xlarge" type="password" name='j_password' id="j_password" placeholder=""/>
                 </div>
             </div>
 
             <div class="control-group">
                 <div class="controls">
-                    <button id="login" type="submit" class="btn login-btn"> SIGN IN</button>
+                    <button id="login" type="submit" class="btn btn-large btn-info login-btn"> SIGN IN</button>
                 </div>
             </div>
         </div>
