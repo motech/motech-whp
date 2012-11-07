@@ -53,15 +53,16 @@ public class InTreatmentTestPart {
         when(containerTrackingDashboardRowMapper.mapFrom(container2)).thenReturn(expectedPageResult2);
 
         Properties filterParams = new Properties();
+        Properties sortParams = new Properties();
         int skip = 0;
         int limit = 10;
 
         when(allContainerTrackingRecords.count(InTreatment, filterParams)).thenReturn(2);
-        when(allContainerTrackingRecords.filter(InTreatment, filterParams, skip, limit)).thenReturn(results);
+        when(allContainerTrackingRecords.filter(InTreatment, filterParams, sortParams, skip, limit)).thenReturn(results);
 
-        PageResults<ContainerTrackingDashboardRow> pageResults = inTreatmentContainerDashboardService.page(1, limit, filterParams);
+        PageResults<ContainerTrackingDashboardRow> pageResults = inTreatmentContainerDashboardService.page(1, limit, filterParams, sortParams);
 
-        verify(allContainerTrackingRecords).filter(InTreatment, filterParams, skip, limit);
+        verify(allContainerTrackingRecords).filter(InTreatment, filterParams, sortParams, skip, limit);
         verify(allContainerTrackingRecords).count(InTreatment, filterParams);
 
         assertEquals(new Integer(2), pageResults.getTotalRows());

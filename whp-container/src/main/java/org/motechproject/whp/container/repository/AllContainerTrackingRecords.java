@@ -68,11 +68,11 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         };
     }
 
-    public List<Container> filter(RegistrationInstance instance, Properties filterParams, int skip, int limit) {
+    public List<Container> filter(RegistrationInstance instance, Properties filterParams, Properties sortParams, int skip, int limit) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
-            return super.filter(queryDefinition, URLEscape.escape(filterParams), null, skip, limit);
+            return super.filter(queryDefinition, URLEscape.escape(filterParams), sortParams, skip, limit);
         }
         return Collections.emptyList();
     }

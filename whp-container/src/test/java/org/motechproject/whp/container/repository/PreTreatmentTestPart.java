@@ -1,5 +1,6 @@
 package org.motechproject.whp.container.repository;
 
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
+        Properties sortParams = new Properties();
         Properties queryParams = new Properties();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
@@ -54,7 +56,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         int skip = 0;
         int limit = 10;
 
-        List<Container> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, skip, limit);
+        List<Container> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, sortParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertEquals(results.get(0).getId(), expectedContainerTrackingRecord.getId());
@@ -63,6 +65,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
         Properties queryParams = new Properties();
+        Properties sortParams = new Properties();
         String providerId = "providerid";
         String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
@@ -115,10 +118,55 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         int skip = 0;
         int limit = 10;
 
-        List<Container> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, skip, limit);
+        List<Container> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, sortParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertThat(results.get(0).getId(), is(expectedContainerTrackingRecord.getId()));
+    }
+
+    @Test
+    public void shouldFilterAndSortPreTreatmentContainerRecordsByAllFilterCriteria() {
+        Properties queryParams = new Properties();
+        Properties sortParams = new Properties();
+        sortParams.put("containerIssuedDate", "asc");
+        String providerId = "providerid";
+        queryParams.put("providerId", providerId);
+
+        Container containerTrackingRecord1 = new ContainerBuilder()
+                .withDefaults()
+                .withProviderId(providerId)
+                .withInstance(PreTreatment)
+                .withContainerIssuedDate(new LocalDate(2012, 10, 9))
+                .build();
+
+        Container containerTrackingRecord2 = new ContainerBuilder()
+                .withDefaults()
+                .withProviderId(providerId)
+                .withInstance(PreTreatment)
+                .withContainerIssuedDate(new LocalDate(2012, 10, 15))
+                .build();
+
+        Container containerTrackingRecord3 = new ContainerBuilder()
+                .withDefaults()
+                .withProviderId(providerId)
+                .withInstance(PreTreatment)
+                .withContainerIssuedDate(new LocalDate(2012, 10, 10))
+                .build();
+
+
+        allContainerTrackingRecords.add(containerTrackingRecord1);
+        allContainerTrackingRecords.add(containerTrackingRecord2);
+        allContainerTrackingRecords.add(containerTrackingRecord3);
+
+        int skip = 0;
+        int limit = 10;
+
+        List<Container> results = allContainerTrackingRecords.filter(PreTreatment, queryParams, sortParams, skip, limit);
+
+        assertThat(results.size(), is(3));
+        assertThat(results.get(0).getId(), is(containerTrackingRecord1.getId()));
+        assertThat(results.get(1).getId(), is(containerTrackingRecord3.getId()));
+        assertThat(results.get(2).getId(), is(containerTrackingRecord2.getId()));
     }
 
     @Test

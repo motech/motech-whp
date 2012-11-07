@@ -38,6 +38,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterInTreatmentContainerRecordsByInstanceAndProviderId() {
         Properties queryParams = new Properties();
+        Properties sortParams = new Properties();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "InTreatment");
@@ -53,7 +54,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         int skip = 0;
         int limit = 10;
 
-        List<Container> results = allContainerTrackingRecords.filter(InTreatment, queryParams, skip, limit);
+        List<Container> results = allContainerTrackingRecords.filter(InTreatment, queryParams, sortParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertEquals(results.get(0).getId(), expectedContainerTrackingRecord.getId());
@@ -72,6 +73,8 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("containerIssuedDateTo", "30/04/2010");
         queryParams.put("reasonForClosure", "reasonForClosure");
         queryParams.put("mappingInstance", EndIP.name());
+
+        Properties sortParams = new Properties();
 
         Container expectedContainerTrackingRecord = new ContainerBuilder()
                 .withProviderId(providerId)
@@ -109,7 +112,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         int skip = 0;
         int limit = 10;
 
-        List<Container> results = allContainerTrackingRecords.filter(InTreatment, queryParams, skip, limit);
+        List<Container> results = allContainerTrackingRecords.filter(InTreatment, queryParams, sortParams, skip, limit);
 
         assertThat(results.size(), is(1));
         assertThat(results.get(0).getId(), is(expectedContainerTrackingRecord.getId()));
