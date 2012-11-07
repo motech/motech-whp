@@ -72,7 +72,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
-            return super.filter(queryDefinition, URLEscape.escape(filterParams), skip, limit);
+            return super.filter(queryDefinition, URLEscape.escape(filterParams), null, skip, limit);
         }
         return Collections.emptyList();
     }
