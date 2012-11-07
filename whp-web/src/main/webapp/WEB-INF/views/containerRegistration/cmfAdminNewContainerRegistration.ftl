@@ -19,7 +19,7 @@
         <h1>Register a new container</h1>
 
         <div id="container-registration" class="offset1-fixed">
-            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class=" form-horizontal">
+            <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
                 <div class="well">
                     <input type="hidden" id="providerContainer" name="containerRegistrationMode" value="NEW_CONTAINER"/>
 

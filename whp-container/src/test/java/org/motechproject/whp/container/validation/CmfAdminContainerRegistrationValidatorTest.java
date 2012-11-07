@@ -142,6 +142,26 @@ public class CmfAdminContainerRegistrationValidatorTest {
         verifyZeroInteractions(adminContainerMappingService);
     }
 
+    @Test
+    public void shouldNotRegisterContainer_whenRegistrationModeIsUndefined() {
+        ContainerRegistrationMode containerRegistrationMode = null;
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
+                validProvider.getProviderId(),
+                CONTAINER_ID,
+                InTreatment.getDisplayText(),
+                containerRegistrationMode, ChannelId.WEB);
+
+        when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
+
+        List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
+
+        assertEquals(1, validationErrors.size());
+
+        verifyZeroInteractions(providerContainerMappingService);
+        verify(containerRegistrationRequestValidator).validate(registrationRequest);
+        verifyZeroInteractions(adminContainerMappingService);
+    }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(adminContainerMappingService);

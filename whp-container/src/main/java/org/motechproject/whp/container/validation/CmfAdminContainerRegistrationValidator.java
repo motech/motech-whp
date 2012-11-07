@@ -32,6 +32,11 @@ public class CmfAdminContainerRegistrationValidator implements ContainerRegistra
             return errors;
         }
 
+        if(request.getContainerRegistrationMode() == null) {
+            errors.add(new ErrorWithParameters("container.registration.mode.invalid.error", request.getContainerId()));
+            return errors;
+        }
+
         if(request.getContainerRegistrationMode() == NEW_CONTAINER){
             if(!adminContainerMappingService.isValidContainer(Long.parseLong(request.getContainerId()))) {
                 errors.add(new ErrorWithParameters("admin.container.id.invalid.error", request.getContainerId()));

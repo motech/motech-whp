@@ -20,9 +20,8 @@
 
         <div id="container-registration" class="offset1-fixed">
             <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
-                <div class="well"
-                <input type="hidden" id="providerContainer" name="containerRegistrationMode"
-                           value="ON_BEHALF_OF_PROVIDER"/>
+                <div class="well">
+                    <input type="hidden" id="providerContainer" name="containerRegistrationMode" value="ON_BEHALF_OF_PROVIDER"/>
 
                     <div class="control-group">
                         <label class="control-label">Provider ID*</label>
@@ -42,7 +41,7 @@
                         <label class="control-label">Instance*</label>
 
                         <div class="controls">
-                            <select id="instance" class="select-xlarge" name="instance" validate="required:true">
+                            <select id="instance" name="instance" class="select-xlarge" validate="required:true">
                                 <option value=""></option>
                                 <#list instances as instance>
                                     <option value="${instance}">${instance}</option>
