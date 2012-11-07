@@ -46,7 +46,7 @@ public class CmfAdminContainerRegistrationValidator implements ContainerRegistra
 
         if(request.getContainerRegistrationMode() == ON_BEHALF_OF_PROVIDER){
             if(!providerContainerMappingService.isValidContainerForProvider(request.getProviderId(), request.getContainerId())) {
-                errors.add(new ErrorWithParameters("provider.container.id.invalid.error", request.getContainerId()));
+                errors.add(new ErrorWithParameters("on.behalf.of.provider.container.id.invalid.error", request.getContainerId()));
             }
             return errors;
         }
