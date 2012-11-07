@@ -70,7 +70,9 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
     }
 
     $scope.hasResults = function () {
-       return $scope.data.totalRows  > 0;
+       if($scope.data)
+            return $scope.data.totalRows  > 0;
+        return false;
     }
 
     $scope.sort = function(sortField) {
