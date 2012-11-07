@@ -6,8 +6,6 @@
 <head>
     <title> ${title} </title>
     <#include "scripts.ftl"/>
-    <link rel="stylesheet" type="text/css"
-          href="<@spring.url '/resources-${applicationVersion}/styles/datepicker.css'/>"/>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 

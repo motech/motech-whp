@@ -11,10 +11,8 @@
             background-color: #019EFF;
             background-repeat: no-repeat;
             background: radial-gradient(closest-corner at 80% 20% , #5ABCF8, #096DAB);
-
         }
     </style>
-
 
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
