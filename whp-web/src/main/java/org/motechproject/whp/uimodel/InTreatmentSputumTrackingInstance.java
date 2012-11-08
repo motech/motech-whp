@@ -1,5 +1,6 @@
 package org.motechproject.whp.uimodel;
 
+
 public enum InTreatmentSputumTrackingInstance {
 
     EndIP("End of Intensive Phase"),
