@@ -321,7 +321,7 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp-contrib</groupId>
-                <artifactId>motech-diagnostics</artifactId>
+                <artifactId>motech-diagnostics-web</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
