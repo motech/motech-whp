@@ -1081,3 +1081,8 @@ pre {
         background: none;
     }
 }
+
+/*for angular if condition */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}

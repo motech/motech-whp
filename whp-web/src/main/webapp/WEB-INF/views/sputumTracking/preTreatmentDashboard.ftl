@@ -183,7 +183,12 @@
                         <a class="openContainerLink" href="#">Open</a>
                     </div>
                 </td>
-                <td>{{item.reasonForClosure}}</td>
+                <td>
+                    {{item.reasonForClosure}}
+                    <span ng-show="item.alternateDiagnosis != null" ng-cloak>
+                        (<a href=""#" title="{{item.alternateDiagnosis}}">...</a>)
+                    </span>
+                </td>
             </tr>
             <tr type="no-results" class="hide">
                 <td class="warning text-center" colspan="15"></td>

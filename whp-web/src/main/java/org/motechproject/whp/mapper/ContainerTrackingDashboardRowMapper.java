@@ -94,7 +94,8 @@ public class ContainerTrackingDashboardRowMapper {
             ReasonForContainerClosure reasonForContainerClosure = allReasonForContainerClosures.findByCode(container.getReasonForClosure());
             String reason = reasonForContainerClosure.getName();
             if (reasonForContainerClosure.getCode().equals(TB_NEGATIVE_CODE)) {
-                reason = String.format("%s (%s)", reason, allAlternateDiagnosis.findByCode(container.getAlternateDiagnosis()).getName());
+                String alternateDiagnosis = allAlternateDiagnosis.findByCode(container.getAlternateDiagnosis()).getName();
+                row.setAlternateDiagnosis(alternateDiagnosis);
                 row.setDiagnosis(Diagnosis.Negative.name());
             }
             row.setReasonForClosure(reason);
