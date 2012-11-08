@@ -8,9 +8,15 @@
     <#include "scripts.ftl"/>
     <style>
         body {
-            background-color: #019EFF;
             background-repeat: no-repeat;
-            background: radial-gradient(closest-corner at 80% 20% , #5ABCF8, #096DAB);
+            background-color: #096DAB;
+            background-image: -webkit-gradient(radial, 80% 20%, 0, 80% 40%, 100, from(#5ABCF8), to(#096DAB)); /* Safari 4-5, Chrome 1-9 */
+            background-image: -webkit-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* Safari 5.1+, Chrome 10+ */
+            background-image: -moz-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* Firefox 3.6+ */
+            background-image: -ms-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB);  /* IE 10 */
+
+            background-image: radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* w3c */
+
         }
     </style>
 

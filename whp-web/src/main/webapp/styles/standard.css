@@ -9,7 +9,14 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #ffffff 0%,#f3f3f3 50%,#ededed 51%,#ffffff 100%);
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#F3F3F3));   /* Safari 4-5, Chrome 1-9 */
+    background-image: -webkit-linear-gradient(-30deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);    /* Safari 5.1, Chrome 10+ */
+    background-image: -moz-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);      /* Firefox 3.6+ */
+    background-image: -ms-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);       /* IE 10 */
+    background-image: -o-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);       /* Opera 11.10+ */
+    background-image: linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);    /* w3c */
     color: #555555;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
@@ -30,10 +37,9 @@ body:after {
     height: 100%;
 }
 #mainContent h1 {
-    border-bottom: 1px solid #ccc;
     color: #000;
     font-family: Georgia,serif;
-    font-size: 24px;
+    font-size: 25px;
     font-weight: normal;
     line-height: normal;
     margin-bottom: 25px;
@@ -911,10 +917,9 @@ pre {
     width: 570px;
     margin: 7% auto 0;
     padding: 15px;
-    border: 1px solid #ccc;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 .login-form h1, .login-form label {
    color: #fff;
@@ -935,7 +940,7 @@ pre {
     padding-right: 10px;
     border-right: 1px solid rgba(255, 255, 255, 0.5);
     margin-right: 10px;
-    text-shadow: 0 0 0 #000000;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 .login-form h1 a, .login-form h1 a:hover {
     color: #fff;
@@ -963,8 +968,14 @@ pre {
     font-family: 'Telex',sans-serif;
     color: #F5F5F5;
     background-color: #3F9FD9;
-    background-image: linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);
     background-repeat: no-repeat;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0087DA), to(#0099F7));     /* Safari 4-5, Chrome 1-9 */
+    background-image: -webkit-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);  /* Safari 5.1, Chrome 10+ */
+    background-image: -moz-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);    /* Firefox 3.6+ */
+    background-image: -ms-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);     /* IE 10 */
+    background-image: -o-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);     /* Opera 11.10+ */
+    background-image: linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);        /* w3c */
+
 }
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
     padding: 7px 20px;
@@ -978,11 +989,11 @@ pre {
     line-height: 1;
     margin: 0 10px 0 0;
     padding: 5px 15px 5px 0;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0);
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 .navbar .brand:hover {
     color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .navbar .nav > li > a {
@@ -1043,9 +1054,16 @@ pre {
     text-shadow: 1px 1px 0 #FFFFFF;
 }
 .table thead th {
-    background: linear-gradient(center top , #F1F1F1, #E1E1E1) repeat scroll 0 0 transparent;
+    background-color: #E1E1E1;
+    background-repeat: repeat;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F1F1F1), to(#E1E1E1));    /* Safari 4-5, Chrome 1-9 */
+    background-image: -webkit-linear-gradient(center top , #F1F1F1, #E1E1E1);    /* Safari 5.1, Chrome 10+ */
+    background-image: -moz-linear-gradient(center top , #F1F1F1, #E1E1E1);      /* Firefox 3.6+ */
+    background-image: -ms-linear-gradient(center top , #F1F1F1, #E1E1E1);       /* IE 10 */
+    background-image: -o-linear-gradient(center top , #F1F1F1, #E1E1E1);        /* Opera 11.10+ */
+    background-image: linear-gradient(center top , #F1F1F1, #E1E1E1);     /* w3c */
     border-bottom: 1px solid #E0E0E0;
-    border-top: 1px solid #FFF !important;
+    border-top: 1px solid #FBFBFB !important;
     padding: 10px 5px;
     vertical-align: middle;
 }

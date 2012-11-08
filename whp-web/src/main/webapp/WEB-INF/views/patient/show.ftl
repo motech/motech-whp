@@ -21,7 +21,7 @@
     });
 </script>
 
-<div class="patient-info word-wrap row-fluid">
+<div class="patient-info word-wrap row-fluid offset-top">
 
         <#if message??>
         <div class="dateUpdated-message-alert alert alert-success fade in">
@@ -29,7 +29,7 @@
         ${message}
         </div>
         </#if>
-        <h1 class="offset-top">Treatment Details of <em class="name">${patient.firstName!} ${patient.lastName!}</em></h1>
+        <h1 class="">Treatment Details of <em class="name">${patient.firstName!} ${patient.lastName!}</em></h1>
         <#include "phaseTransitionAlert.ftl"/>
 
         <#include "patientInfo.ftl"/>

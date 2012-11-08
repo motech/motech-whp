@@ -40,7 +40,7 @@
                                 <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
                             </div>
                         </div>
-                        <div class="control-group span3 ">
+                        <div class="control-group span2 ">
                             <label class="control-label ">Instance</label>
                             <div class="controls">
                                 <select id="mappingInstance" name="mappingInstance">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="control-group  span3">
+                        <div class="control-group  span2">
                             <label class="control-label ">Reason for Closure</label>
                             <div class="controls ">
                                 <select id="reasonForClosure" name="reasonForClosure">
@@ -115,7 +115,8 @@
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
-                        <button id="clearFilter" type="reset" class="btn"><i class="icon-remove"></i> Clear All</button>
+
+                        <button id="clearFilter" type="reset" class="btn">Clear All</button>
                         <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
                     </div>
                 </div>
@@ -133,7 +134,7 @@
             <thead>
             <tr>
                 <th>Container Id</th>
-                <th>Container Issued On <a href="#" ng-click = "sort('containerIssuedDate')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
+                <th>Container Issued On</th>
                 <th>Lab Name</th>
                 <th>Result 1</th>
                 <th>Date Of Test 1</th>
@@ -160,7 +161,7 @@
                 <td>{{item.consultationTwoResult}}</td>
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.mappingInstance}}</td>
-                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'/>" target="_blank">{{item.patientId}}</a></td>
+                <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'/>" target="_new">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
