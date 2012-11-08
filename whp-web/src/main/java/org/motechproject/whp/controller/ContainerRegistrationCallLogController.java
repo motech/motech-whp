@@ -32,6 +32,6 @@ public class ContainerRegistrationCallLogController {
     public void recordCallLog(@RequestBody IvrContainerRegistrationCallLogRequest request) {
         Provider provider = providerService.findByMobileNumber(request.getMobileNumber());
         String providerId = provider != null ? provider.getProviderId() : null;
-        reportingPublisherService.reportContainerRegistrationCallLog(request.mapToContainerRegistrationCallLogRequest(providerId));
+        reportingPublisherService.reportContainerRegistrationCallDetailsLog(request.mapToContainerRegistrationCallLogRequest(providerId));
     }
 }

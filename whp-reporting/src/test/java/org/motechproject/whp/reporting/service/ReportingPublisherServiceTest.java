@@ -104,7 +104,7 @@ public class ReportingPublisherServiceTest {
     public void shouldReportContainerRegistrationCallLogRequest() {
         ContainerRegistrationCallDetailsLogRequest request = new ContainerRegistrationCallDetailsLogRequest();
 
-        reportingPublisher.reportContainerRegistrationCallLog(request);
+        reportingPublisher.reportContainerRegistrationCallDetailsLog(request);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
     }
 }

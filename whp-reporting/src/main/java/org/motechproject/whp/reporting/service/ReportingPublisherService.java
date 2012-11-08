@@ -49,7 +49,11 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
     }
 
-    public void reportContainerRegistrationCallLog(ContainerRegistrationCallDetailsLogRequest request) {
+    public void reportContainerRegistrationCallDetailsLog(ContainerRegistrationCallDetailsLogRequest request) {
         httpClientService.post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
+    }
+
+    public void reportProviderVerificationDetailsLog(ProviderVerificationLogRequest capture) {
+            //To change body of created methods use File | Settings | File Templates.
     }
 }

@@ -66,7 +66,7 @@ public class ContainerRegistrationCallLogControllerTest {
 
         ArgumentCaptor<ContainerRegistrationCallDetailsLogRequest> captor = forClass(ContainerRegistrationCallDetailsLogRequest.class);
 
-        verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
+        verify(reportingPublisherService).reportContainerRegistrationCallDetailsLog(captor.capture());
         verify(providerService).findByMobileNumber(mobileNumber);
 
         ContainerRegistrationCallDetailsLogRequest callLogRequest = captor.getValue();
@@ -88,7 +88,7 @@ public class ContainerRegistrationCallLogControllerTest {
         when(providerService.findByMobileNumber(invalidMobileNumber)).thenReturn(null);
 
         ArgumentCaptor<ContainerRegistrationCallDetailsLogRequest> captor = forClass(ContainerRegistrationCallDetailsLogRequest.class);
-        verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
+        verify(reportingPublisherService).reportContainerRegistrationCallDetailsLog(captor.capture());
         verify(providerService).findByMobileNumber(invalidMobileNumber);
 
         ContainerRegistrationCallDetailsLogRequest callLogRequest = captor.getValue();
