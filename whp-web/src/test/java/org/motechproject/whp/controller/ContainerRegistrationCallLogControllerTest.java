@@ -1,13 +1,11 @@
 package org.motechproject.whp.controller;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationCallDetailsLogRequest;
 import org.motechproject.whp.request.IvrContainerRegistrationCallLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
@@ -18,7 +16,6 @@ import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.http.MediaType.APPLICATION_XML;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -67,12 +64,12 @@ public class ContainerRegistrationCallLogControllerTest {
                 .andExpect(status().isOk());
 
 
-        ArgumentCaptor<ContainerRegistrationCallLogRequest> captor = forClass(ContainerRegistrationCallLogRequest.class);
+        ArgumentCaptor<ContainerRegistrationCallDetailsLogRequest> captor = forClass(ContainerRegistrationCallDetailsLogRequest.class);
 
         verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
         verify(providerService).findByMobileNumber(mobileNumber);
 
-        ContainerRegistrationCallLogRequest callLogRequest = captor.getValue();
+        ContainerRegistrationCallDetailsLogRequest callLogRequest = captor.getValue();
         assertEquals(mobileNumber, callLogRequest.getMobileNumber());
         assertEquals("64756435684375", callLogRequest.getCallId());
         assertEquals("PROVIDER_HUNGUP", callLogRequest.getDisconnectionType());
@@ -90,11 +87,11 @@ public class ContainerRegistrationCallLogControllerTest {
         containerRegistrationCallLogController.recordCallLog(request);
         when(providerService.findByMobileNumber(invalidMobileNumber)).thenReturn(null);
 
-        ArgumentCaptor<ContainerRegistrationCallLogRequest> captor = forClass(ContainerRegistrationCallLogRequest.class);
+        ArgumentCaptor<ContainerRegistrationCallDetailsLogRequest> captor = forClass(ContainerRegistrationCallDetailsLogRequest.class);
         verify(reportingPublisherService).reportContainerRegistrationCallLog(captor.capture());
         verify(providerService).findByMobileNumber(invalidMobileNumber);
 
-        ContainerRegistrationCallLogRequest callLogRequest = captor.getValue();
+        ContainerRegistrationCallDetailsLogRequest callLogRequest = captor.getValue();
 
         assertEquals(invalidMobileNumber, callLogRequest.getMobileNumber());
         assertNull(callLogRequest.getProviderId());

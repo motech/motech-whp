@@ -49,7 +49,7 @@ public class ReportingPublisherService {
         httpClientService.post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
     }
 
-    public void reportContainerRegistrationCallLog(ContainerRegistrationCallLogRequest request) {
+    public void reportContainerRegistrationCallLog(ContainerRegistrationCallDetailsLogRequest request) {
         httpClientService.post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
     }
 }

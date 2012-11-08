@@ -8,7 +8,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.controller.ContainerRegistrationCallLogController;
 import org.motechproject.whp.reporting.ReportingEventURLs;
-import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationCallDetailsLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -66,7 +66,7 @@ public class ContainerRegistrationCallLogControllerIT extends SpringIntegrationT
 
                 ).andExpect(status().isOk());
 
-        ContainerRegistrationCallLogRequest expectedRequest = new ContainerRegistrationCallLogRequest();
+        ContainerRegistrationCallDetailsLogRequest expectedRequest = new ContainerRegistrationCallDetailsLogRequest();
         expectedRequest.setCallId("64756435684375");
         expectedRequest.setDisconnectionType("PROVIDER_HUNGUP");
         expectedRequest.setStartDateTime("10/12/2012 12:32:35");

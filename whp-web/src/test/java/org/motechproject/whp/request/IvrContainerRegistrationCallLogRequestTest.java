@@ -2,7 +2,7 @@ package org.motechproject.whp.request;
 
 
 import org.junit.Test;
-import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationCallDetailsLogRequest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -25,7 +25,7 @@ public class IvrContainerRegistrationCallLogRequestTest {
         request.setEndTime(endTime);
         request.setMobileNumber(mobileNumber);
 
-        ContainerRegistrationCallLogRequest callLog = request.mapToContainerRegistrationCallLogRequest(providerId);
+        ContainerRegistrationCallDetailsLogRequest callLog = request.mapToContainerRegistrationCallLogRequest(providerId);
 
         assertThat(callLog.getCallId(), is(callId));
         assertThat(callLog.getDisconnectionType(), is(disconnectionType));

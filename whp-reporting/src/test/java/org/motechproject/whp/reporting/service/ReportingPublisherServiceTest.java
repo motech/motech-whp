@@ -5,11 +5,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
-
-import java.util.Date;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -105,7 +102,7 @@ public class ReportingPublisherServiceTest {
 
     @Test
     public void shouldReportContainerRegistrationCallLogRequest() {
-        ContainerRegistrationCallLogRequest request = new ContainerRegistrationCallLogRequest();
+        ContainerRegistrationCallDetailsLogRequest request = new ContainerRegistrationCallDetailsLogRequest();
 
         reportingPublisher.reportContainerRegistrationCallLog(request);
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);

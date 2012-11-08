@@ -1,18 +1,10 @@
 package org.motechproject.whp.request;
 
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.motechproject.whp.common.util.WHPDateUtil;
-import org.motechproject.whp.reports.contract.ContainerRegistrationCallLogRequest;
+import org.motechproject.whp.reports.contract.ContainerRegistrationCallDetailsLogRequest;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
-
-import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
-import static org.motechproject.whp.common.util.WHPDateUtil.toDate;
 
 @Setter
 @XmlRootElement(name = "call_log")
@@ -48,8 +40,8 @@ public class IvrContainerRegistrationCallLogRequest {
         return mobileNumber;
     }
 
-    public ContainerRegistrationCallLogRequest mapToContainerRegistrationCallLogRequest(String providerId) {
-        ContainerRegistrationCallLogRequest callLogRequest = new ContainerRegistrationCallLogRequest();
+    public ContainerRegistrationCallDetailsLogRequest mapToContainerRegistrationCallLogRequest(String providerId) {
+        ContainerRegistrationCallDetailsLogRequest callLogRequest = new ContainerRegistrationCallDetailsLogRequest();
         callLogRequest.setCallId(callId);
         callLogRequest.setDisconnectionType(disconnectionType);
         callLogRequest.setMobileNumber(mobileNumber);
