@@ -4,17 +4,15 @@ package org.motechproject.whp.containerregistration.api.webservice;
 import freemarker.template.TemplateException;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.containerregistration.mapper.ContainerRegistrationRequestMapper;
-import org.motechproject.whp.containerregistration.response.ValidationErrorResponse;
-import org.motechproject.whp.containerregistration.response.VerificationResponse;
-import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
 import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.containerregistration.api.request.ProviderVerificationRequest;
 import org.motechproject.whp.containerregistration.api.response.VerificationResult;
-import org.motechproject.whp.containerregistration.api.verification.ContainerRegistrationVerification;
-import org.motechproject.whp.containerregistration.api.verification.ContainerVerification;
-import org.motechproject.whp.containerregistration.api.verification.ProviderVerification;
+import org.motechproject.whp.containerregistration.mapper.ContainerRegistrationRequestMapper;
+import org.motechproject.whp.containerregistration.response.ValidationErrorResponse;
+import org.motechproject.whp.containerregistration.response.VerificationResponse;
+import org.motechproject.whp.containerregistration.service.IVRContainerRegistrationService;
+import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,33 +27,28 @@ import java.io.IOException;
 @RequestMapping("/ivr/containerRegistration")
 public class IVRContainerRegistrationController {
     public static final String CONTENT_TYPE = "application/xml";
-    private ProviderVerification providerVerification;
-    private ContainerVerification containerVerification;
-    private ContainerRegistrationVerification containerRegistrationVerification;
     private ContainerService containerService;
     private ProviderService providerService;
+    private IVRContainerRegistrationService ivrContainerRegistrationService;
 
     @Autowired
-    public IVRContainerRegistrationController(ProviderVerification providerVerification, ContainerVerification containerVerification,
-                                              ContainerRegistrationVerification containerRegistrationVerification, ContainerService containerService, ProviderService providerService) {
-        this.providerVerification = providerVerification;
-        this.containerVerification = containerVerification;
-        this.containerRegistrationVerification = containerRegistrationVerification;
+    public IVRContainerRegistrationController(ContainerService containerService, ProviderService providerService, IVRContainerRegistrationService ivrContainerRegistrationService) {
         this.containerService = containerService;
         this.providerService = providerService;
+        this.ivrContainerRegistrationService = ivrContainerRegistrationService;
     }
 
     @RequestMapping(value = "provider/verify", method = RequestMethod.POST)
     @ResponseBody
     public VerificationResponse verifyProvider(@RequestBody ProviderVerificationRequest request, HttpServletResponse response) {
-        VerificationResult verificationResult = providerVerification.verifyRequest(request);
+        VerificationResult verificationResult = ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
         return getVerificationResponse(verificationResult, response);
     }
 
     @RequestMapping(value = "container/verify", method = RequestMethod.POST)
     @ResponseBody
     public VerificationResponse verifyContainer(@RequestBody ContainerVerificationRequest request, HttpServletResponse response) {
-        VerificationResult verificationResult = containerVerification.verifyRequest(request);
+        VerificationResult verificationResult = ivrContainerRegistrationService.verifyContainerVerificationRequest(request);
         return getVerificationResponse(verificationResult, response);
     }
 
@@ -63,7 +56,7 @@ public class IVRContainerRegistrationController {
     @ResponseBody
     public VerificationResponse registerThroughIVR(@RequestBody IvrContainerRegistrationRequest ivrContainerRegistrationRequest, HttpServletResponse response) throws IOException, TemplateException {
 
-        VerificationResult verificationResult = containerRegistrationVerification.verifyRequest(ivrContainerRegistrationRequest);
+        VerificationResult verificationResult = ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest(ivrContainerRegistrationRequest);
 
         if (verificationResult.isSuccess()) {
             ContainerRegistrationRequestMapper containerRegistrationRequestMapper = new ContainerRegistrationRequestMapper(providerService);
