@@ -25,7 +25,7 @@ public class ReasonForContainerClosureSeed {
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Invalid Container", "3", All, true));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient lost to follow-up", "4", PreTreatment, true));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient did not get sputum tested (no reason stated)", "5", All, true));
-        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient did not get sputum tested (cough improved)", "6", All, true));
+        allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient did not get sputum tested (cough improved)", "6", PreTreatment, true));
         allReasonForContainerClosures.addOrReplace(new ReasonForContainerClosure("Patient started on TB treatment elsewhere", "7", PreTreatment, true));
     }
 }
