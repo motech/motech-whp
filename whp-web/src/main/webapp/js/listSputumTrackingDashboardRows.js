@@ -1,5 +1,11 @@
 $(function () {
     $('#sputum_tracking_pagination').bind('pageLoadSuccess', function () {
+
+        // bootstrap tooltip
+        $('span[rel=tooltip]').tooltip({
+            placement: "top"
+        });
+
         if ($('#sputumTrackingDashboardRowsList tbody tr').length == 1) {
             var noResultsMessage = "No Containers found";
 
@@ -142,6 +148,7 @@ $(function () {
 
 
     $("#container-tracking-error").hide()
+
 
 });
 

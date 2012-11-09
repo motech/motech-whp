@@ -1082,7 +1082,11 @@ pre {
     }
 }
 
-/*for angular if condition */
-[ng\:cloak], [ng-cloak], .ng-cloak {
-    display: none;
+
+.ellipsis {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 175px;
 }
