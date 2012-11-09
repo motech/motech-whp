@@ -183,7 +183,9 @@
                         <a class="openContainerLink" href="#">Open</a>
                     </div>
                 </td>
-                <td>{{item.reasonForClosure}}</td>
+                <td>
+                    <span class="ellipsis" rel="tooltip" title="{{item.reasonForClosure}}">{{item.reasonForClosure}} </span>
+                </td>
             </tr>
             <tr type="no-results" class="hide">
                 <td class="warning text-center" colspan="15"></td>
