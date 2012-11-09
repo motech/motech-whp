@@ -15,7 +15,9 @@ public class ReportingEventURLs {
     private String sputumLabResultsCaptureLogURL;
     private String containerStatusUpdateLogURL;
     private String containerPatientMappingLogURL;
-    private String containerRegistrationCallLogURL;
+    private String containerRegistrationCallDetailsLogURL;
+    private String providerVerificationLogURL;
+    private String containerVerificationLogURL;
 
     public String getAdherenceCallLogURL() {
         return whpReportsURL + adherenceCallLogPath;
@@ -45,8 +47,16 @@ public class ReportingEventURLs {
         return whpReportsURL + containerPatientMappingLogURL;
     }
 
-    public String getContainerRegistrationCallLogURL() {
-        return whpReportsURL + containerRegistrationCallLogURL;
+    public String getContainerRegistrationCallDetailsLogURL() {
+        return whpReportsURL + containerRegistrationCallDetailsLogURL;
+    }
+
+    public String getProviderVerificationLogURL() {
+        return whpReportsURL + providerVerificationLogURL;
+    }
+
+    public String getContainerVerificationLogURL() {
+        return whpReportsURL + containerVerificationLogURL;
     }
 
     @Value("${whp.reports.adherenceCallLog}")
@@ -89,8 +99,18 @@ public class ReportingEventURLs {
         this.containerPatientMappingLogURL = containerPatientMappingLogURL;
     }
 
-    @Value("${whp.reports.containerRegistrationCallLog}")
-    public void setContainerRegistrationCallLogURL(String containerRegistrationCallLogURL) {
-        this.containerRegistrationCallLogURL = containerRegistrationCallLogURL;
+    @Value("${whp.reports.containerRegistrationCallDetailsLog}")
+    public void setContainerRegistrationCallDetailsLogURL(String containerRegistrationCallDetailsLogURL) {
+        this.containerRegistrationCallDetailsLogURL = containerRegistrationCallDetailsLogURL;
+    }
+
+    @Value("${whp.reports.providerVerificationLog}")
+    public void setProviderVerificationLogURL(String providerVerificationCallLogURL) {
+        this.providerVerificationLogURL = providerVerificationCallLogURL;
+    }
+
+    @Value("${whp.reports.containerVerificationLog}")
+    public void setContainerVerificationLogURL(String containerVerificationCallURL) {
+        this.containerVerificationLogURL = containerVerificationCallURL;
     }
 }

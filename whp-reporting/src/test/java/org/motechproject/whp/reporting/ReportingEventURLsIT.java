@@ -53,7 +53,16 @@ public class ReportingEventURLsIT {
 
     @Test
     public void shouldGetContainerRegistrationCallLogURL() {
-        assertThat(reportingEventURLs.getContainerRegistrationCallLogURL(), is("http://localhost:8080/whp-reports/containerRegistrationCallLog/create"));
+        assertThat(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), is("http://localhost:8080/whp-reports/containerRegistrationCallLog/updateCallDetails"));
     }
 
+    @Test
+    public void shouldGetProviderVerificationLogURL() {
+        assertThat(reportingEventURLs.getProviderVerificationLogURL(), is("http://localhost:8080/whp-reports/containerRegistrationCallLog/providerVerification"));
+    }
+
+    @Test
+    public void shouldGetContainerVerificationLogURL() {
+        assertThat(reportingEventURLs.getContainerVerificationLogURL(), is("http://localhost:8080/whp-reports/containerRegistrationCallLog/containerVerification"));
+    }
 }

@@ -74,6 +74,6 @@ public class ContainerRegistrationCallLogControllerIT extends SpringIntegrationT
         expectedRequest.setProviderId(provider.getProviderId());
         expectedRequest.setMobileNumber("0986754322");
 
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallLogURL(), expectedRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), expectedRequest);
     }
 }

@@ -101,10 +101,26 @@ public class ReportingPublisherServiceTest {
     }
 
     @Test
-    public void shouldReportContainerRegistrationCallLogRequest() {
+    public void shouldReportContainerRegistrationCallDetailsLogRequest() {
         ContainerRegistrationCallDetailsLogRequest request = new ContainerRegistrationCallDetailsLogRequest();
 
         reportingPublisher.reportContainerRegistrationCallDetailsLog(request);
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), request);
+    }
+
+    @Test
+    public void shouldReportProviderVerificationLogRequest() {
+        ProviderVerificationLogRequest request = new ProviderVerificationLogRequest();
+
+        reportingPublisher.reportProviderVerificationDetailsLog(request);
+        verify(httpClientService).post(reportingEventURLs.getProviderVerificationLogURL(), request);
+    }
+
+    @Test
+    public void shouldReportContainerVerificationLogRequest() {
+        ContainerVerificationLogRequest request = new ContainerVerificationLogRequest();
+
+        reportingPublisher.reportContainerVerificationDetailsLog(request);
+        verify(httpClientService).post(reportingEventURLs.getContainerVerificationLogURL(), request);
     }
 }

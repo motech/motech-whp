@@ -50,10 +50,14 @@ public class ReportingPublisherService {
     }
 
     public void reportContainerRegistrationCallDetailsLog(ContainerRegistrationCallDetailsLogRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerRegistrationCallLogURL(), request);
+        httpClientService.post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), request);
     }
 
-    public void reportProviderVerificationDetailsLog(ProviderVerificationLogRequest capture) {
-            //To change body of created methods use File | Settings | File Templates.
+    public void reportProviderVerificationDetailsLog(ProviderVerificationLogRequest request) {
+        httpClientService.post(reportingEventURLs.getProviderVerificationLogURL(), request);
+    }
+
+    public void reportContainerVerificationDetailsLog(ContainerVerificationLogRequest request) {
+        httpClientService.post(reportingEventURLs.getContainerVerificationLogURL(), request);
     }
 }
