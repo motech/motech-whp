@@ -87,8 +87,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         assertEquals(containerId, row.getContainerId());
         assertEquals(containerStatus.name(), row.getContainerStatus());
         assertEquals(Negative.name(), row.getDiagnosis());
-        assertEquals("reason text", row.getReasonForClosure());
-        assertEquals("alternate diagnosis text", row.getAlternateDiagnosis());
+        assertEquals("reason text (alternate diagnosis text)", row.getReasonForClosure());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getContainerIssuedOn());
         assertEquals(now.toLocalDate().toString(DATE_FORMAT), row.getConsultation());
         assertEquals(patientId, row.getPatientId());

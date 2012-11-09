@@ -19,7 +19,6 @@ public class ContainerTrackingDashboardRow {
     private String labName;
     private String containerStatus;
     private String reasonForClosure;
-    private String alternateDiagnosis;
     private String mappingInstance;
     private String action;
 }
