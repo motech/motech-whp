@@ -46,4 +46,5 @@ public enum WHPErrorCode {
     public String toString() {
         return name() + " | " + getMessage();
     }
+
 }

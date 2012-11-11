@@ -1,6 +1,10 @@
 package org.motechproject.whp.containerregistration.service;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
 import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.containerregistration.api.request.ProviderVerificationRequest;
@@ -37,18 +41,20 @@ public class IVRContainerRegistrationService {
     public VerificationResult verifyProviderVerificationRequest(ProviderVerificationRequest providerVerificationRequest) {
         VerificationResult verificationResult = providerVerification.verifyRequest(providerVerificationRequest);
 
-        ProviderVerificationLogRequest request = getProviderVerificationLogRequest(providerVerificationRequest, verificationResult);
-        reportingPublishingService.reportProviderVerificationDetailsLog(request);
-
+        if(!verificationResult.hasFieldValidationError()){
+            ProviderVerificationLogRequest request = getProviderVerificationLogRequest(providerVerificationRequest, verificationResult);
+            reportingPublishingService.reportProviderVerificationDetailsLog(request);
+        }
         return verificationResult;
     }
 
     public VerificationResult verifyContainerVerificationRequest(ContainerVerificationRequest containerVerificationRequest) {
         VerificationResult verificationResult = containerVerification.verifyRequest(containerVerificationRequest);
 
-        ContainerVerificationLogRequest request = getContainerVerificationLogRequest(containerVerificationRequest, verificationResult);
-        reportingPublishingService.reportContainerVerificationDetailsLog(request);
-
+        if(!verificationResult.hasFieldValidationError()){
+            ContainerVerificationLogRequest request = getContainerVerificationLogRequest(containerVerificationRequest, verificationResult);
+            reportingPublishingService.reportContainerVerificationDetailsLog(request);
+        }
         return verificationResult;
     }
 
@@ -58,14 +64,17 @@ public class IVRContainerRegistrationService {
     }
 
     private ProviderVerificationLogRequest getProviderVerificationLogRequest(ProviderVerificationRequest providerVerificationRequest, VerificationResult verificationResult) {
+
         ProviderVerificationLogRequest request = new ProviderVerificationLogRequest();
         request.setCallId(providerVerificationRequest.getCall_id());
         request.setMobileNumber(providerVerificationRequest.getPhoneNumber());
-        request.setTime(DateTime.now());
+        request.setTime(getDateTimeFor(providerVerificationRequest.getTime()));
 
         if (verificationResult.isSuccess())
             request.setProviderId(providerService.findByMobileNumber(providerVerificationRequest.getPhoneNumber()).getProviderId());
+
         return request;
+
     }
 
     private ContainerVerificationLogRequest getContainerVerificationLogRequest(ContainerVerificationRequest containerVerificationRequest, VerificationResult verificationResult) {
@@ -75,5 +84,9 @@ public class IVRContainerRegistrationService {
         request.setValidContainer(verificationResult.isSuccess());
 
         return request;
+    }
+
+    private DateTime getDateTimeFor(String dateTime) {
+        return DateTime.parse(dateTime, DateTimeFormat.forPattern(WHPDate.DATE_TIME_FORMAT));
     }
 }

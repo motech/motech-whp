@@ -2,6 +2,7 @@ package org.motechproject.whp.containerregistration.api.response;
 
 import lombok.Data;
 import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +39,9 @@ public class VerificationResult {
 
     public boolean isSuccess() {
         return !isError();
+    }
+
+    public boolean hasFieldValidationError() {
+        return this.getErrors().contains(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED));
     }
 }

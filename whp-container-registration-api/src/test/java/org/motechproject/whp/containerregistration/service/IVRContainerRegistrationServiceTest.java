@@ -20,8 +20,8 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class IVRContainerRegistrationServiceTest {
@@ -73,7 +73,25 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldVerifyProviderVerificationRequestForFailedVerificationResult() {
+    public void shouldNotVerifyProviderVerificationRequestForRequestLevelFailedVerificationResult() {
+        String msisdn = "1234567890";
+        ProviderVerificationRequest request = new ProviderVerificationRequest();
+        request.setMsisdn(msisdn);
+        request.setCall_id("callId");
+        request.setTime("29/11/1986 20:20:20");
+
+        VerificationResult verificationResult = new VerificationResult(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED));
+        when(providerVerification.verifyRequest(request)).thenReturn(verificationResult);
+
+        ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
+
+        verify(providerVerification).verifyRequest(request);
+
+        verify(reportingPublishingService, never()).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
+    }
+
+    @Test
+    public void shouldVerifyProviderVerificationRequestForDomainLevelFailedVerificationResult() {
         String msisdn = "1234567890";
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -116,7 +134,22 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldVerifyContainerVerificationRequestForFailedVerificationResult() {
+    public void shouldNotVerifyContainerVerificationRequestForRequestLevelFailedVerificationResult() {
+        ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest();
+        containerVerificationRequest.setCall_id("callId");
+        containerVerificationRequest.setMsisdn("1234567890");
+        containerVerificationRequest.setContainer_id("something");
+        when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED)));
+
+        ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest);
+
+        verify(containerVerification).verifyRequest(containerVerificationRequest);
+
+        verify(reportingPublishingService, never()).reportContainerVerificationDetailsLog(any(ContainerVerificationLogRequest.class));
+    }
+
+    @Test
+    public void shouldVerifyContainerVerificationRequestForDomainLevelFailedVerificationResult() {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest();
         containerVerificationRequest.setCall_id("callId");
         containerVerificationRequest.setMsisdn("1234567890");

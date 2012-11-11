@@ -59,12 +59,20 @@ public class VerificationResultTest {
         assertTrue(result.equals(anotherResult));
     }
 
-
     @Test
     public void shouldNotBeEqualBasedOnError() {
         VerificationResult result = new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
         VerificationResult anotherResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
 
         assertFalse(result.equals(anotherResult));
+    }
+
+    @Test
+    public void shouldCheckForFieldValidationErrors() {
+        VerificationResult result = new VerificationResult(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED));
+        VerificationResult anotherResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID));
+
+        assertTrue(result.hasFieldValidationError());
+        assertFalse(anotherResult.hasFieldValidationError());
     }
 }
