@@ -2,13 +2,25 @@ package org.motechproject.whp.container.query;
 
 import org.motechproject.couchdb.lucene.query.QueryDefinition;
 import org.motechproject.couchdb.lucene.query.field.QueryField;
+import org.motechproject.couchdb.lucene.query.field.RangeField;
 
+import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
 public abstract class ContainerTrackingQueryDefinition implements QueryDefinition {
 
     protected final QueryField containerInstance = new QueryField("containerInstance", STRING);
     protected final QueryField containerId = new QueryField("containerId", STRING);
+    protected final QueryField providerId = new QueryField("providerId", STRING);
+    protected final QueryField district = new QueryField("district", STRING);
+    protected final QueryField containerStatus = new QueryField("containerStatus", STRING);
+    protected final RangeField containerIssuedDate = new RangeField("containerIssuedDate", DATE, "containerIssuedDateFrom", "containerIssuedDateTo");
+    protected final QueryField cumulativeResult = new QueryField("cumulativeResult", STRING);
+    protected final QueryField reasonForClosure = new QueryField("reasonForClosure", STRING);
+    protected final QueryField instance = new QueryField("instance", STRING);
+    protected final QueryField mappingInstance = new QueryField("mappingInstance", STRING);
+    protected final RangeField consultationDate = new RangeField("consultationDate", DATE, "consultationDateFrom", "consultationDateTo");
+    protected final QueryField diagnosis = new QueryField("diagnosis", STRING);
 
     @Override
     public String viewName() {
