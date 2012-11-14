@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.core.FlowSession;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;

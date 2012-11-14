@@ -4,7 +4,7 @@ import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.common.event.EventContext;
 import org.motechproject.whp.patient.WHPPatientConstants;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;

@@ -1,7 +1,7 @@
 package org.motechproject.whp.ivr.util;
 
-import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.core.model.Node;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,6 +24,11 @@ public class FlowSessionStub implements FlowSession {
 
     @Override
     public void setLanguage(String s) {
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return null;
     }
 
     public <T extends Serializable> void set(String key, T value) {

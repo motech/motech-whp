@@ -6,10 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.event.EventContext;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
@@ -104,7 +104,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldCreateProvider(){
+    public void shouldCreateProvider() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         when(allProviders.findByProviderId(providerId)).thenReturn(null);
@@ -116,7 +116,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldUpdateProvider(){
+    public void shouldUpdateProvider() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();
@@ -131,7 +131,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldUpdateProviderAndSendEvent_whenDistrictHasChanged(){
+    public void shouldUpdateProviderAndSendEvent_whenDistrictHasChanged() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();

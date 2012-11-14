@@ -1,7 +1,7 @@
 package org.motechproject.whp.container.handler;
 
 import org.motechproject.event.MotechEvent;
-import org.motechproject.event.annotations.MotechListener;
+import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.whp.container.service.ContainerTrackingService;
 import org.motechproject.whp.user.WHPUserConstants;
 import org.motechproject.whp.user.domain.Provider;

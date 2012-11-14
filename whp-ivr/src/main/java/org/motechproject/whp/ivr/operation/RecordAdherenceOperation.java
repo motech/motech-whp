@@ -1,7 +1,7 @@
 package org.motechproject.whp.ivr.operation;
 
-import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.INodeOperation;
+import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.core.model.INodeOperation;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;

@@ -3,7 +3,7 @@ package org.motechproject.whp.ivr.prompts;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.decisiontree.model.Prompt;
+import org.motechproject.decisiontree.core.model.Prompt;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.ivr.IvrAudioFiles;
 import org.motechproject.whp.ivr.WhpIvrMessage;

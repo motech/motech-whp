@@ -2,8 +2,8 @@ package org.motechproject.whp.ivr.transition;
 
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.core.model.Node;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.ivr.WhpIvrMessage;

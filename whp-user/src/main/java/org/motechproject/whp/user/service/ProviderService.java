@@ -1,9 +1,9 @@
 package org.motechproject.whp.user.service;
 
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.event.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.user.contract.ProviderRequest;

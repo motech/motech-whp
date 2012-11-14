@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-decisiontree</artifactId>
+            <artifactId>motech-decisiontree-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>

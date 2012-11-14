@@ -2,7 +2,7 @@ package org.motechproject.whp.ivr.session;
 
 
 import org.joda.time.DateTime;
-import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.core.FlowSession;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -44,7 +44,7 @@ public class IvrSession {
     }
 
     public String mobileNumber() {
-        return flowSession.get("cid");
+        return flowSession.getPhoneNumber();
     }
 
     private List<String> getPatientIds(List<Patient> patients) {

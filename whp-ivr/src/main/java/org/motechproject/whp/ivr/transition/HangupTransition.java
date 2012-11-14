@@ -1,9 +1,9 @@
 package org.motechproject.whp.ivr.transition;
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.decisiontree.FlowSession;
-import org.motechproject.decisiontree.model.ITransition;
-import org.motechproject.decisiontree.model.Node;
+import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.core.model.ITransition;
+import org.motechproject.decisiontree.core.model.Node;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.operation.PublishCallLogOperation;
 import org.motechproject.whp.ivr.session.IvrSession;

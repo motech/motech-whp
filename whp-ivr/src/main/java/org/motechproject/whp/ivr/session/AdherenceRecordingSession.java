@@ -1,6 +1,6 @@
 package org.motechproject.whp.ivr.session;
 
-import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.decisiontree.core.FlowSession;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.user.repository.AllProviders;

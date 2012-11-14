@@ -4,7 +4,7 @@ import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.common.event.EventContext;
 import org.motechproject.whp.user.domain.Provider;
 
 import static org.mockito.Mockito.verify;
