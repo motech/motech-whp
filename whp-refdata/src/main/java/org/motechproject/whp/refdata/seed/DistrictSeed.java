@@ -14,7 +14,7 @@ public class DistrictSeed {
     @Qualifier(value = "allDistricts")
     AllDistricts allDistricts;
 
-    @Seed(priority = 0, version = "1.0")
+    @Seed(priority = 1, version = "1.0")
     public void load() {
         allDistricts.add(new District("Begusarai"));
         allDistricts.add(new District("Bhagalpur"));
