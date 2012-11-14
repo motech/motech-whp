@@ -3,15 +3,14 @@ package org.motechproject.whp.patient.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.SmearTestRecord;
-import org.motechproject.whp.patient.domain.SmearTestResults;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.TreatmentService;
@@ -31,15 +30,18 @@ public class SimpleUpdateTest extends BaseUnitTest {
     private ProviderService providerService;
     @Mock
     private TreatmentService treatmentService;
+    @Mock
+    private AllDistricts allDistricts;
     private SimpleUpdate simpleUpdate;
     private Patient patient;
     private PatientMapper patientMapper;
+
     @Before
     public void setUp() {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
         patient = new PatientBuilder().withDefaults().build();
-        simpleUpdate = new SimpleUpdate(allPatients, patientMapper);
+        simpleUpdate = new SimpleUpdate(allPatients, patientMapper, allDistricts);
     }
 
     @Test
@@ -87,6 +89,25 @@ public class SimpleUpdateTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldNotPerformSimpleUpdateIfDistrictIsInvalid() {
+        Patient patient = new PatientBuilder().withDefaults()
+                .withTbId("elevenDigit")
+                .build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("elevenDigit");
+        String invalid_district = "invalid_district";
+        patientRequest.setAddress(new Address("", "", "", "", invalid_district, ""));
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(allDistricts.findByName(invalid_district)).thenReturn(null);
+
+        expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+        simpleUpdate.apply(patientRequest);
+        verify(allPatients, never()).update(patient);
+    }
+
+    @Test
     public void shouldPerformSimpleUpdate() {
         Patient patient = new PatientBuilder().withDefaults()
                 .withTbId("elevenDigit")
@@ -96,6 +117,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(allDistricts.findByName(anyString())).thenReturn(new District());
 
 
         simpleUpdate.apply(patientRequest);
@@ -117,6 +139,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("elevenDigit");
 
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(allDistricts.findByName(anyString())).thenReturn(new District());
 
         simpleUpdate.apply(patientRequest);
         verify(allPatients).update(patient);
@@ -136,6 +159,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("elevenDigit");
 
         when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(allDistricts.findByName(anyString())).thenReturn(new District());
 
         simpleUpdate.apply(patientRequest);
         verify(allPatients).update(patient);

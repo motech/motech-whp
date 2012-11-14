@@ -2,8 +2,11 @@ package org.motechproject.whp.patient.service;
 
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.annotations.MotechListener;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
@@ -32,20 +35,24 @@ public class PatientService {
     private UpdateCommandFactory updateCommandFactory;
     private RequestValidator validator;
     private ProviderService providerService;
+    private AllDistricts allDistricts;
 
     @Autowired
     public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks, UpdateCommandFactory updateCommandFactory,
-                          RequestValidator validator, ProviderService providerService) {
+                          RequestValidator validator, ProviderService providerService, AllDistricts allDistricts) {
         this.allPatients = allPatients;
         this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
         this.updateCommandFactory = updateCommandFactory;
         this.validator = validator;
         this.providerService = providerService;
+        this.allDistricts = allDistricts;
     }
 
     public void createPatient(PatientRequest patientRequest) {
+        validateDistrict(patientRequest);
+
         Patient patient = patientMapper.mapPatient(patientRequest);
         allPatients.add(patient);
     }
@@ -72,14 +79,6 @@ public class PatientService {
         return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
     }
 
-    private List<String> getProviderIds(List<Provider> providers) {
-        List<String> providerIds = new ArrayList<>();
-        for (Provider provider : providers) {
-            providerIds.add(provider.getProviderId());
-        }
-        return providerIds;
-    }
-
     public void addRemark(Patient patient, String remark, String user) {
         Therapy therapy = patient.getCurrentTherapy();
         allTherapyRemarks.add(new TherapyRemark(patient.getPatientId(), therapy.getUid(), remark, user));
@@ -88,7 +87,6 @@ public class PatientService {
     public List<TherapyRemark> getCmfAdminRemarks(Patient patient) {
         return allTherapyRemarks.findByTherapyId(patient.getCurrentTherapy().getUid());
     }
-
 
     public boolean canBeTransferred(String patientId) {
         Patient patient = allPatients.findByPatientId(patientId);
@@ -103,6 +101,7 @@ public class PatientService {
             return TreatmentOutcome.TransferredOut.equals(patient.getCurrentTreatment().getTreatmentOutcome());
         }
     }
+
 
     public List<Patient> getAll() {
         return allPatients.getAll();
@@ -125,4 +124,17 @@ public class PatientService {
         }
     }
 
+    private void validateDistrict(PatientRequest patientRequest) {
+        District district = allDistricts.findByName(patientRequest.getAddress().getAddress_district());
+        if(district == null)
+            throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+    }
+
+    private List<String> getProviderIds(List<Provider> providers) {
+        List<String> providerIds = new ArrayList<>();
+        for (Provider provider : providers) {
+            providerIds.add(provider.getProviderId());
+        }
+        return providerIds;
+    }
 }

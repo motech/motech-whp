@@ -83,4 +83,15 @@ public class AllDistrictsCacheIT extends SpringIntegrationTest {
         List<District> districts = allDistricts.getAll();
         assertTrue(districts.indexOf(new District("districtA")) < districts.indexOf(new District("districtB")));
     }
+
+    @Test
+    public void shouldFindDistrictByName() {
+        allDistricts.add(districtA);
+        allDistricts.add(districtB);
+
+        String district = "myOwnDistrict";
+        allDistricts.add(new District(district));
+
+        assertEquals(district, allDistricts.findByName(district).getName());
+    }
 }

@@ -7,10 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -59,6 +61,9 @@ public class PatientServiceIT extends SpringIntegrationTest {
     AllProviders allProviders;
     @Autowired
     AllTherapyRemarks allTherapyRemarks;
+    @Autowired
+    AllDistricts allDistricts;
+    District district;
 
     @Before
     public void setUp() {
@@ -70,6 +75,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .withProviderId(PatientBuilder.PROVIDER_ID)
                 .withDistrict(PROVIDER_DISTRICT)
                 .build());
+        district = new District("district");
+        allDistricts.add(district);
     }
 
     @After
@@ -77,6 +84,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allTherapyRemarks.getAll().toArray());
         allProviders.removeAll();
+        allDistricts.remove(district);
         super.after();
     }
 
@@ -89,6 +97,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .withTbId("elevenDigit")
                 .build();
         patientService.createPatient(patientRequest);
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
 
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withSimpleUpdateFields()
                 .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
@@ -97,6 +107,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .withCaseId(PATIENT_ID)
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
+
+        allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
         Therapy therapy = updatedPatient.getCurrentTherapy();
 
@@ -120,6 +132,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(PATIENT_ID);
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withPatientInfo(PATIENT_ID, "newFirstName", "newLastName", null, null, "9087654321", null)
                 .withTbRegistrationNumber("newTbRegNum")
+                .withAddressDistrict("district")
                 .withTbId("elevenDigit")
                 .build();
 
@@ -162,6 +175,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest updatePatientRequest = new PatientRequestBuilder().withCaseId(PATIENT_ID)
                 .withSmearTestResults(SputumTrackingInstance.PreTreatment, today(), Positive, null, null)
                 .withTbId("elevenDigit")
+                .withAddressDistrict("district")
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(updatePatientRequest);
     }
@@ -219,6 +233,15 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(caseId);
         assertTrue(patient.isOnActiveTreatment());
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(PROVIDER_DISTRICT));
+    }
+
+    @Test
+    public void shouldThrowExceptionInCreatePatientIfDistrictIsInvalid() {
+        expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withAddressDistrict("some invalid district")
+                .build();
+        patientService.createPatient(patientRequest);
     }
 
     @Test
@@ -382,11 +405,11 @@ public class PatientServiceIT extends SpringIntegrationTest {
         createProvider("provider2", "Vaishali");
         createProvider("provider3", "Begusarai");
 
-        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest2);
-        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest3);
 
         List<Patient> patientList = patientService.searchBy("Vaishali");
@@ -401,11 +424,11 @@ public class PatientServiceIT extends SpringIntegrationTest {
         createProvider("provider3", "Begusarai");
         Provider providerToBeUsedForSearch = providerService.findByProviderId(searchProviderId);
 
-        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId(searchProviderId).withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId(searchProviderId).withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest2);
-        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "", "").build();
+        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest3);
 
         List<Patient> patientList = patientService.getAllWithActiveTreatmentForProvider(providerToBeUsedForSearch.getProviderId());
@@ -531,6 +554,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .withSimpleUpdateFields()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withSmearTestResults(sampleInstance, today, testResult, today, testResult)
+                .withAddressDistrict("district")
                 .withTbId(oldTbId)
                 .build();
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(simpleUpdateRequest);
@@ -548,11 +572,14 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(patientRequest);
 
+        String new_district = "new_district";
+        District newDistrict = new District(new_district);
+        allDistricts.add(newDistrict);
         PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
                 .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
                 .withSmearTestResults(SputumTrackingInstance.PreTreatment, null, null, null, null)
                 .withTbId(patientRequest.getTb_id())
-                .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
+                .withPatientAddress("new_house number", "new_landmark", "new_block", "new_village", new_district, "new_state")
                 .withWeightStatistics(SputumTrackingInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
                 .build();
         simpleUpdateRequest.setPatientInfo(PATIENT_ID, null, null, null, null, "9087654321", null)
@@ -560,6 +587,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         commandFactory.updateFor(UpdateScope.simpleUpdate).apply(simpleUpdateRequest);
 
+        allDistricts.remove(newDistrict);
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(patientRequest.getTb_id()).getSmearTestResults().latestResult();
@@ -569,7 +597,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertNull(smearTestRecord.getSmear_test_date_1());
         assertNull(smearTestRecord.getSmear_test_date_2());
     }
-
 
     private void createProvider(String providerId, String district) {
         String primaryMobile = "1234567890";

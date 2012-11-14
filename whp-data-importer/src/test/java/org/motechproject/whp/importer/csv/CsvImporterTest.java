@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
@@ -44,9 +46,14 @@ public class CsvImporterTest extends SpringIntegrationTest {
     AllTreatmentCategories allTreatmentCategories;
     @Autowired
     AllProviderContainerMappings allProviderContainerMappings;
+    @Autowired
+    AllDistricts allDistricts;
+    private District district;
 
     @Before
     public void setUp() {
+        district = new District("district");
+        allDistricts.add(district);
         allPatients.removeAll();
         allProviders.removeAll();
         allTreatmentCategories.add(new TreatmentCategory("test1", "01", 3, 3, 9, 4, 12, 3, 9, null));
@@ -184,6 +191,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         allTreatmentCategories.removeAll();
         allProviders.removeAll();
         allProviderContainerMappings.removeAll();
+        allDistricts.remove(district);
     }
 
     private String getPatientCsv() {

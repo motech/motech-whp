@@ -2,9 +2,9 @@ package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,13 @@ import java.util.List;
 public class SimpleUpdate extends UpdateCommand {
 
     private PatientMapper patientMapper;
+    private AllDistricts allDistricts;
 
     @Autowired
-    public SimpleUpdate(AllPatients allPatients, PatientMapper patientMapper) {
+    public SimpleUpdate(AllPatients allPatients, PatientMapper patientMapper, AllDistricts allDistricts) {
         super(allPatients, UpdateScope.simpleUpdate);
         this.patientMapper = patientMapper;
+        this.allDistricts = allDistricts;
     }
 
     @Override
@@ -44,6 +46,10 @@ public class SimpleUpdate extends UpdateCommand {
         }
         if(!patient.hasTreatment(tbId)) {
             errorCodes.add(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
+            return false;
+        }
+        if(allDistricts.findByName(patientRequest.getAddress().getAddress_district()) == null) {
+            errorCodes.add(WHPErrorCode.INVALID_DISTRICT);
             return false;
         }
         return true;

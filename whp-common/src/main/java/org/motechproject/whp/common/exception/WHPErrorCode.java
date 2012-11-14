@@ -30,7 +30,8 @@ public enum WHPErrorCode {
     CONTAINER_ALREADY_REGISTERED("The container Id is already registered"),
     INVALID_PHASE("Phase should be one of [PreTreatment, InTreatment]"),
     NULL_VALUE_IN_TB_REGISTRATION_DATE("TB Registration date is expected for PreTreatment phase"),
-    INVALID_TB_REGISTRATION_DATE("TB Registration date should be of format dd/MM/yyyy");
+    INVALID_TB_REGISTRATION_DATE("TB Registration date should be of format dd/MM/yyyy"),
+    INVALID_DISTRICT("Invalid district name");
 
     private String message;
 

@@ -14,6 +14,8 @@ import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
 import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -64,10 +66,13 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
 
     @Autowired
     AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
+    @Autowired
+    private AllDistricts allDistricts;
     final AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
     final String THERAPY_DOC_ID = "THERAPY_DOC_ID";
     private Provider provider;
     private Provider newProvider;
+    private District district;
 
     @Before
     public void setup() {
@@ -77,6 +82,8 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         mockCurrentDate(today);
         allProviders.add(provider);
         allProviders.add(newProvider);
+        district = new District("district");
+        allDistricts.add(district);
     }
 
     @After
@@ -87,6 +94,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         markForDeletion(allWeeklyAdherenceAuditLogs.getAll().toArray());
         allProviders.remove(provider);
         allProviders.remove(newProvider);
+        allDistricts.remove(district);
     }
 
     @Override

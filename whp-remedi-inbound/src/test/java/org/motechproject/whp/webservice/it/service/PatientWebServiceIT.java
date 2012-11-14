@@ -6,8 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.domain.*;
@@ -47,8 +49,11 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     PatientService patientService;
     @Autowired
     PatientRequestMapper patientRequestMapper;
+    @Autowired
+    private AllDistricts allDistricts;
 
     PatientWebService patientWebService;
+    private District district;
 
     @Before
     public void setUpDefaultProvider() {
@@ -60,6 +65,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
+        district = new District("district");
+        allDistricts.add(district);
         patientWebService = new PatientWebService(patientService, validator, patientRequestMapper);
     }
 
@@ -99,12 +106,15 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
 
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
         PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields()
                 .withCaseId("12341234")
                 .withTbId("elevenDigit")
                 .build();
         patientWebService.updateCase(simpleUpdateWebRequest);
 
+        allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
 
         assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
@@ -252,6 +262,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;
         String labName = "Maxim";
         String labNumber = "11234556";
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
         PatientWebRequest simpleUpdateRequest = new PatientWebRequestBuilder()
                 .withSimpleUpdateFields()
                 .withSmearTestResults(sampleInstance.name(), resultDate, testResult.name(), resultDate, testResult.name(), labName, labNumber)
@@ -261,6 +273,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         patientWebService.updateCase(simpleUpdateRequest);
 
+        allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(caseId);
 
         SmearTestRecord smearTestRecord = updatedPatient.getCurrentTreatment().getSmearTestResults().resultForInstance(sampleInstance);
@@ -314,9 +327,12 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
                 .withTbId(tbId)
                 .withCaseId(caseId)
                 .build();
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
 
         patientWebService.updateCase(simpleUpdateRequest);
 
+        allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(caseId);
 
         SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(tbId).getSmearTestResults().resultForInstance(sampleInstance);
@@ -352,9 +368,12 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         simpleUpdateRequest.setTb_registration_date("17/10/2010 10:10:10");
         simpleUpdateRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         simpleUpdateRequest.setPatientInfo(simpleUpdateRequest.getCase_id(), null, null, null, null, "9087654321", null);
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
 
         patientWebService.updateCase(simpleUpdateRequest);
 
+        allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(caseId);
 
         SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(tbId).getSmearTestResults().resultForInstance(sampleInstance);
@@ -367,6 +386,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @After
     public void tearDown() {
+        allDistricts.remove(district);
+
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allProviders.getAll().toArray());
     }

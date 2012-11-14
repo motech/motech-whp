@@ -203,4 +203,9 @@ public class PatientRequestBuilder {
         patientRequest.setTbRegistrationDate(dateTime);
         return this;
     }
+
+    public PatientRequestBuilder withAddressDistrict(String district) {
+        patientRequest.setAddress(new Address("house number", "landmark", "block", "village", district, "state"));
+        return this;
+    }
 }

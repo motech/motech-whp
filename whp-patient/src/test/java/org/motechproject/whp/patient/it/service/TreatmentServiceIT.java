@@ -4,8 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -34,11 +36,16 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     private PatientService patientService;
     @Autowired
     AllProviders allProviders;
+    @Autowired
+    private AllDistricts allDistricts;
 
     private String providerId = "provider-id";
+    private District district;
 
     @Before
     public void setup() {
+        district = new District("district");
+        allDistricts.add(district);
         createProvider(providerId, "district");
         createTestPatient();
     }
@@ -260,6 +267,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void tearDown() {
         markForDeletion(allPatients.getAll().toArray());
         allProviders.removeAll();
+        allDistricts.remove(district);
         super.after();
     }
 }

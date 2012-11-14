@@ -2,8 +2,11 @@ package org.motechproject.whp.patient.it.service;
 
 import org.joda.time.DateTime;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -34,6 +37,17 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
 
     @Autowired
     AllProviders allProviders;
+
+    @Autowired
+    private AllDistricts allDistricts;
+
+    private District district;
+
+    @Before
+    public void setUp() {
+        district = new District("district");
+        allDistricts.add(district);
+    }
 
     @Test
     public void shouldUpdatePatientWhenProviderDistrictChanges() throws InterruptedException {
@@ -87,5 +101,6 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
     public void tearDown()  {
         allPatients.removeAll();
         allProviders.removeAll();
+        allDistricts.remove(district);
     }
 }
