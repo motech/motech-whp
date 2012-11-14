@@ -46,7 +46,7 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldVerifyProviderVerificationRequestForSuccessfulVerificationResult() {
+    public void shouldReportProviderVerificationRequestForSuccessfulVerificationResult() {
         String msisdn = "1234567890";
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -73,7 +73,7 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldNotVerifyProviderVerificationRequestForRequestLevelFailedVerificationResult() {
+    public void shouldNotReportProviderVerificationRequestWithFieldValidationFailure() {
         String msisdn = "1234567890";
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -86,12 +86,11 @@ public class IVRContainerRegistrationServiceTest {
         ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
 
         verify(providerVerification).verifyRequest(request);
-
         verify(reportingPublishingService, never()).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
     }
 
     @Test
-    public void shouldVerifyProviderVerificationRequestForDomainLevelFailedVerificationResult() {
+    public void shouldNotReportProviderVerificationRequestWithAnyValidationFailure() {
         String msisdn = "1234567890";
         ProviderVerificationRequest request = new ProviderVerificationRequest();
         request.setMsisdn(msisdn);
@@ -103,18 +102,11 @@ public class IVRContainerRegistrationServiceTest {
         ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
 
         verify(providerVerification).verifyRequest(request);
-        ArgumentCaptor<ProviderVerificationLogRequest> captor = ArgumentCaptor.forClass(ProviderVerificationLogRequest.class);
-        verify(reportingPublishingService).reportProviderVerificationDetailsLog(captor.capture());
-        ProviderVerificationLogRequest actualLogRequest = captor.getValue();
-
-        assertEquals(request.getCall_id(), actualLogRequest.getCallId());
-        assertEquals(request.getMsisdn(), actualLogRequest.getMobileNumber());
-        assertNotNull(actualLogRequest.getTime());
-        assertNull(actualLogRequest.getProviderId());
+        verify(reportingPublishingService, never()).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
     }
 
     @Test
-    public void shouldVerifyContainerVerificationRequestForSuccessfulVerificationResult() {
+    public void shouldReportContainerVerificationRequestForSuccessfulVerificationResult() {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest();
         containerVerificationRequest.setCall_id("callId");
         containerVerificationRequest.setMsisdn("1234567890");
@@ -134,7 +126,7 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldNotVerifyContainerVerificationRequestForRequestLevelFailedVerificationResult() {
+    public void shouldNotReportContainerVerificationRequestForRequestLevelFailedVerificationResult() {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest();
         containerVerificationRequest.setCall_id("callId");
         containerVerificationRequest.setMsisdn("1234567890");
@@ -149,7 +141,7 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldVerifyContainerVerificationRequestForDomainLevelFailedVerificationResult() {
+    public void shouldReportContainerVerificationRequestForDomainLevelFailedVerificationResult() {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest();
         containerVerificationRequest.setCall_id("callId");
         containerVerificationRequest.setMsisdn("1234567890");

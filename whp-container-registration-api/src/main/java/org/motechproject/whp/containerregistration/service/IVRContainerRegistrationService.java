@@ -41,7 +41,7 @@ public class IVRContainerRegistrationService {
     public VerificationResult verifyProviderVerificationRequest(ProviderVerificationRequest providerVerificationRequest) {
         VerificationResult verificationResult = providerVerification.verifyRequest(providerVerificationRequest);
 
-        if(!verificationResult.hasFieldValidationError()){
+        if(verificationResult.isSuccess()){
             ProviderVerificationLogRequest request = getProviderVerificationLogRequest(providerVerificationRequest, verificationResult);
             reportingPublishingService.reportProviderVerificationDetailsLog(request);
         }
