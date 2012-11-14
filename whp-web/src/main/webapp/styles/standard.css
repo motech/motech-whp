@@ -368,6 +368,10 @@ div.buttons a, div.buttons button {
     text-shadow: 1px 1px white;
     color: #0464BC;
 }
+.ui-accordion .ui-accordion-header,
+.ui-accordion .ui-accordion-content {
+    border-color: rgba(0,0,0,0.15);
+}
 .patient-info h3 {
     margin-bottom: 20px;
     border-bottom: 1px dotted rgba(0,0,0,0.3);
@@ -969,12 +973,12 @@ pre {
     color: #F5F5F5;
     background-color: #3F9FD9;
     background-repeat: no-repeat;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0087DA), to(#0099F7));     /* Safari 4-5, Chrome 1-9 */
-    background-image: -webkit-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);  /* Safari 5.1, Chrome 10+ */
-    background-image: -moz-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);    /* Firefox 3.6+ */
-    background-image: -ms-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);     /* IE 10 */
-    background-image: -o-linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);     /* Opera 11.10+ */
-    background-image: linear-gradient(#0087DA, #017FCC 50%, #0099F7 80%);        /* w3c */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5683AA), to(#375978));     /* Safari 4-5, Chrome 1-9 */
+    background-image: -webkit-linear-gradient(#5683AA, #375978);  /* Safari 5.1, Chrome 10+ */
+    background-image: -moz-linear-gradient(#5683AA, #375978);   /* Firefox 3.6+ */
+    background-image: -ms-linear-gradient(#5683AA, #375978);   /* IE 10 */
+    background-image: -o-linear-gradient(#5683AA, #375978);     /* Opera 11.10+ */
+    background-image: linear-gradient(#5683AA, #375978);        /* w3c */
 
 }
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
@@ -983,7 +987,7 @@ pre {
 }
 
 .navbar .brand {
-    border-right: 1px solid #F5F5F5;
+    border-right:1px solid rgba(255, 255, 255, 0.35);
     color: #F5F5F5;
     font-size: 22px;
     line-height: 1;
