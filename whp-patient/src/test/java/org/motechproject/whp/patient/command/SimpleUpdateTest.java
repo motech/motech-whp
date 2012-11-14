@@ -108,6 +108,39 @@ public class SimpleUpdateTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldPerformSimpleUpdateIfAddressIsNotGiven() {
+        Patient patient = new PatientBuilder().withDefaults()
+                .withTbId("elevenDigit")
+                .build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("elevenDigit");
+        patientRequest.setAddress(new Address(null, null, null, null, null, null));
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
+        simpleUpdate.apply(patientRequest);
+        verify(allDistricts, never()).findByName(anyString());
+    }
+
+    @Test
+    public void shouldNotPerformSimpleUpdateIfDistrictIsNotGiven() {
+        Patient patient = new PatientBuilder().withDefaults()
+                .withTbId("elevenDigit")
+                .build();
+
+        PatientRequest patientRequest = new PatientRequest();
+        patientRequest.setCase_id(patient.getPatientId());
+        patientRequest.setTb_id("elevenDigit");
+        patientRequest.setAddress(new Address("", "", "", "", null, ""));
+        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+
+        expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+        simpleUpdate.apply(patientRequest);
+        verify(allPatients, never()).update(patient);
+    }
+
+    @Test
     public void shouldPerformSimpleUpdate() {
         Patient patient = new PatientBuilder().withDefaults()
                 .withTbId("elevenDigit")

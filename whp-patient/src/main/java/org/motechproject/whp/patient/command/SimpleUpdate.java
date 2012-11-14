@@ -48,7 +48,7 @@ public class SimpleUpdate extends UpdateCommand {
             errorCodes.add(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
             return false;
         }
-        if(allDistricts.findByName(patientRequest.getAddress().getAddress_district()) == null) {
+        if(!patientRequest.getAddress().isEmpty() && allDistricts.findByName(patientRequest.getAddress().getAddress_district()) == null) {
             errorCodes.add(WHPErrorCode.INVALID_DISTRICT);
             return false;
         }
