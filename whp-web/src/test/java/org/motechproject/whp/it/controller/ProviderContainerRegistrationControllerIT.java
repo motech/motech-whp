@@ -10,7 +10,9 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.RegistrationInstance;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
@@ -70,11 +72,15 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Autowired
     private ReportingEventURLs reportingEventURLs;
 
+    @Autowired
+    private AllDistricts allDistricts;
+
     private final String providerId = "provider";
 
     private String remediUrl;
     private String apiKey;
     private ProviderContainerMapping providerContainerMapping;
+    private District district;
 
     @Before
     public void setUp() {
@@ -85,8 +91,9 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         providerContainerMapping.add(new ContainerRange(10000000000L, 20000000000L));
         providerContainerMapping.setProviderId(providerId);
 
+        district = new District("Patna");
+        allDistricts.add(district);
         allProviderContainerMappings.add(providerContainerMapping);
-
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().withProviderId(providerId).build();
         providerWebService.createOrUpdate(whpProviderWeb);
         reset(httpClientService);
@@ -135,6 +142,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     public void tearDown() {
         verifyNoMoreInteractions(httpClientService);
         allProviderContainerMappings.remove(providerContainerMapping);
+        allDistricts.remove(district);
         allContainers.removeAll();
     }
 

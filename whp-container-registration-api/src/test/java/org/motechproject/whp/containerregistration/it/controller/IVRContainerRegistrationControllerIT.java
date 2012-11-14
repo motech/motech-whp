@@ -9,7 +9,9 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
@@ -59,6 +61,8 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
     private RemediProperties remediProperties;
     @Autowired
     private ReportingEventURLs reportingEventURLs;
+    @Autowired
+    private AllDistricts allDistricts;
 
     @ReplaceWithMock
     @Autowired
@@ -66,6 +70,8 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
     private final String providerId = "provider";
     private String remediUrl;
     private String apiKey;
+    private District district;
+
 
     @Before
     public void setUp() throws WebSecurityException {
@@ -76,6 +82,8 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         providerContainerMapping.setProviderId(providerId);
         allProviderContainerMappings.add(providerContainerMapping);
 
+        district = new District("Patna");
+        allDistricts.add(district);
         String primaryMobile = "0986754322";
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().withProviderId(providerId).withPrimaryMobile(primaryMobile).build();
         providerWebService.createOrUpdate(whpProviderWeb);
@@ -127,6 +135,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
 
     @After
     public void tearDown() {
+        allDistricts.remove(district);
         verifyNoMoreInteractions(httpClientService);
     }
 

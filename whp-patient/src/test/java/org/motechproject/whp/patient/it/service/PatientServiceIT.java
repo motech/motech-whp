@@ -401,9 +401,16 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldSearchPatientsByProviderDistrict() {
-        createProvider("provider1", "Vaishali");
-        createProvider("provider2", "Vaishali");
-        createProvider("provider3", "Begusarai");
+        String districtName1 = "Vaishali";
+        String districtName2 = "Begusarai";
+        District district1 = new District(districtName1);
+        District district2 = new District(districtName2);
+        allDistricts.add(district1);
+        allDistricts.add(district2);
+
+        createProvider("provider1", districtName1);
+        createProvider("provider2", districtName1);
+        createProvider("provider3", districtName2);
 
         PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest1);
@@ -412,16 +419,25 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "district", "").build();
         patientService.createPatient(createPatientRequest3);
 
-        List<Patient> patientList = patientService.searchBy("Vaishali");
+        List<Patient> patientList = patientService.searchBy(districtName1);
+        allDistricts.remove(district1);
+        allDistricts.remove(district2);
         assertPatientForRequests(asList(createPatientRequest1, createPatientRequest2), patientList);
     }
 
     @Test
     public void shouldSearchPatientsByProviderIdWhenBothProviderDistrictAndProviderIdArePresent() {
+        String districtName1 = "Vaishali";
+        String districtName2 = "Begusarai";
+        District district1 = new District(districtName1);
+        District district2 = new District(districtName2);
+        allDistricts.add(district1);
+        allDistricts.add(district2);
+
         String searchProviderId = "provider2";
-        createProvider("provider1", "Vaishali");
-        createProvider(searchProviderId, "Vaishali");
-        createProvider("provider3", "Begusarai");
+        createProvider("provider1", districtName1);
+        createProvider(searchProviderId, districtName1);
+        createProvider("provider3", districtName2);
         Provider providerToBeUsedForSearch = providerService.findByProviderId(searchProviderId);
 
         PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "district", "").build();
@@ -432,6 +448,9 @@ public class PatientServiceIT extends SpringIntegrationTest {
         patientService.createPatient(createPatientRequest3);
 
         List<Patient> patientList = patientService.getAllWithActiveTreatmentForProvider(providerToBeUsedForSearch.getProviderId());
+        allDistricts.remove(district1);
+        allDistricts.remove(district2);
+
         assertPatientForRequests(asList(createPatientRequest2), patientList);
     }
 
@@ -450,7 +469,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(patient.getCurrentTherapy().getUid(), therapyRemark.getTherapyUid());
         assertEquals("remark", therapyRemark.getRemark());
         assertEquals("username", therapyRemark.getUser());
-
     }
 
     @Test

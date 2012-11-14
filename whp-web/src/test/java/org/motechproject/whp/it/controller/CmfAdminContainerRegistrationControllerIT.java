@@ -11,7 +11,9 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.RegistrationInstance;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
@@ -67,6 +69,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     private RemediProperties remediProperties;
     @Autowired
     private ReportingEventURLs reportingEventURLs;
+    @Autowired
+    private AllDistricts allDistricts;
 
     @ReplaceWithMock
     @Autowired
@@ -74,6 +78,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     private final String providerId = "provider";
     private String remediUrl;
     private String apiKey;
+    private District district;
 
     @Before
     public void setUp() throws WebSecurityException {
@@ -91,6 +96,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         allAdminContainerMappings.removeAll();
         allAdminContainerMappings.add(adminContainerMapping);
 
+        district = new District("Patna");
+        allDistricts.add(district);
         ProviderWebRequest whpProviderWeb = new ProviderRequestBuilder().withDefaults().withProviderId(providerId).build();
         providerWebService.createOrUpdate(whpProviderWeb);
 
@@ -189,6 +196,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     @After
     public void tearDown() {
+        allDistricts.remove(district);
         verifyNoMoreInteractions(httpClientService);
     }
 }

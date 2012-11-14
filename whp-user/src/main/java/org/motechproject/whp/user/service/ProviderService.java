@@ -4,8 +4,10 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
@@ -28,15 +30,21 @@ public class ProviderService {
 
     private AllProviders allProviders;
     private EventContext eventContext;
+    private AllDistricts allDistricts;
 
     @Autowired
-    public ProviderService(MotechAuthenticationService motechAuthenticationService, AllProviders allProviders, @Qualifier("eventContext") EventContext eventContext) {
+    public ProviderService(MotechAuthenticationService motechAuthenticationService, AllProviders allProviders, @Qualifier("eventContext") EventContext eventContext, AllDistricts allDistricts) {
         this.motechAuthenticationService = motechAuthenticationService;
         this.allProviders = allProviders;
         this.eventContext = eventContext;
+        this.allDistricts = allDistricts;
     }
 
     public void registerProvider(ProviderRequest providerRequest) {
+        District district = allDistricts.findByName(providerRequest.getDistrict());
+        if(district == null)
+            throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+
         String providerDocId = createOrUpdateProvider(providerRequest);
         try {
             // TODO : make this idempotent

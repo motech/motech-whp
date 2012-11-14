@@ -2,7 +2,9 @@ package org.motechproject.whp.user.service;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -11,6 +13,9 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.event.EventKeys;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
@@ -40,13 +45,19 @@ public class ProviderServiceTest {
     @Mock
     private EventContext eventContext;
 
+    @Mock
+    private AllDistricts allDistricts;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     private ProviderService providerService;
 
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext);
+        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext, allDistricts);
     }
 
     @Test
@@ -104,7 +115,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldCreateProvider(){
+    public void shouldCreateProvider() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         when(allProviders.findByProviderId(providerId)).thenReturn(null);
@@ -116,7 +127,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldUpdateProvider(){
+    public void shouldUpdateProvider() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();
@@ -131,7 +142,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    public void shouldUpdateProviderAndSendEvent_whenDistrictHasChanged(){
+    public void shouldUpdateProviderAndSendEvent_whenDistrictHasChanged() {
         String providerId = "providerId";
         ProviderRequest providerRequest = new ProviderRequest(providerId, "district", "primaryMobile", now());
         Provider provider = providerRequest.makeProvider();
@@ -157,6 +168,17 @@ public class ProviderServiceTest {
 
         verify(allProviders).findByMobileNumber(mobileNumber);
         assertThat(returnedProvider, nullValue());
+    }
+
+    @Test
+    public void shouldThrowExceptionForInvalidDistrictInProviderRequest() {
+        expectedException.expect(WHPRuntimeException.class);
+        expectedException.expectMessage(WHPErrorCode.INVALID_DISTRICT.getMessage());
+
+        String invalidDistrict = "invalid_district";
+        when(allDistricts.findByName(invalidDistrict)).thenReturn(null);
+
+        providerService.registerProvider(new ProviderRequest("", invalidDistrict, "", null));
     }
 
     @After

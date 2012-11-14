@@ -41,12 +41,15 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
     @Autowired
     private AllDistricts allDistricts;
 
-    private District district;
+    private District district1;
+    private District muzzafarpurDistrict;
 
     @Before
     public void setUp() {
-        district = new District("district");
-        allDistricts.add(district);
+        district1 = new District("district");
+        allDistricts.add(district1);
+        muzzafarpurDistrict = new District("Muzzafarpur");
+        allDistricts.add(muzzafarpurDistrict);
     }
 
     @Test
@@ -62,8 +65,11 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
         createPatient(providerRequest, patientId2);
 
         //update district
-        String newDistrict = "newDistrict";
-        providerRequest.setDistrict(newDistrict);
+        String newDistrictName = "newDistrict";
+        District newDistrict = new District(newDistrictName);
+        allDistricts.add(newDistrict);
+
+        providerRequest.setDistrict(newDistrictName);
         providerService.registerProvider(providerRequest);
 
         Thread.sleep(1500L); //sleep until patient update job is over
@@ -72,8 +78,9 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
         Patient patient1 = patientService.findByPatientId(patientId1);
         Patient patient2 = patientService.findByPatientId(patientId2);
 
-        assertThat(patient1.getCurrentTreatment().getProviderDistrict(), is(newDistrict));
-        assertThat(patient2.getCurrentTreatment().getProviderDistrict(), is(newDistrict));
+        allDistricts.remove(newDistrict);
+        assertThat(patient1.getCurrentTreatment().getProviderDistrict(), is(newDistrictName));
+        assertThat(patient2.getCurrentTreatment().getProviderDistrict(), is(newDistrictName));
     }
 
     private void createPatient(ProviderRequest providerRequest, String patientId) {
@@ -101,6 +108,7 @@ public class ProviderDistrictChangeIT  extends SpringIntegrationTest {
     public void tearDown()  {
         allPatients.removeAll();
         allProviders.removeAll();
-        allDistricts.remove(district);
+        allDistricts.remove(district1);
+        allDistricts.remove(muzzafarpurDistrict);
     }
 }

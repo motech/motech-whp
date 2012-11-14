@@ -2,13 +2,16 @@ package org.motechproject.whp.user.it.service;
 
 import org.joda.time.DateTime;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.repository.AllMotechWebUsers;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.AllDistricts;
+import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -29,11 +32,21 @@ public class ProviderServiceIT extends SpringIntegrationTest {
     AllProviders allProviders;
     @Autowired
     AllMotechWebUsers allMotechWebUsers;
+    @Autowired
+    private AllDistricts allDistricts;
+    private District district;
+
+    @Before
+    public void setUp() {
+        district = new District("district");
+        allDistricts.add(district);
+    }
 
     @After
     public void tearDown() {
         markForDeletion(allProviders.getAll().toArray());
         markForDeletion(allMotechWebUsers.getAll().toArray());
+        allDistricts.remove(district);
     }
 
     @Test
@@ -42,22 +55,25 @@ public class ProviderServiceIT extends SpringIntegrationTest {
         String primaryMobile = "1234567890";
         String secondaryMobile = "0987654321";
         String tertiaryMobile = "1111111111";
-        String district = "Muzzafarpur";
+        String districtName = "Muzzafarpur";
         DateTime now = now();
 
-        ProviderRequest providerRequest = new ProviderRequest(providerId, district, primaryMobile, now);
+        ProviderRequest providerRequest = new ProviderRequest(providerId, districtName, primaryMobile, now);
         providerRequest.setSecondaryMobile(secondaryMobile);
         providerRequest.setTertiaryMobile(tertiaryMobile);
+        District district = new District(districtName);
+        allDistricts.add(district);
 
         providerService.registerProvider(providerRequest);
 
+        allDistricts.remove(district);
         Provider provider = allProviders.findByProviderId(providerId);
 
         assertEquals(providerId.toLowerCase(), provider.getProviderId());
         assertEquals(primaryMobile, provider.getPrimaryMobile());
         assertEquals(secondaryMobile, provider.getSecondaryMobile());
         assertEquals(tertiaryMobile, provider.getTertiaryMobile());
-        assertEquals(district, provider.getDistrict());
+        assertEquals(districtName, provider.getDistrict());
         assertEquals(now, provider.getLastModifiedDate());
     }
 
