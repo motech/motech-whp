@@ -92,7 +92,8 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
                 .addPrompts(adherenceSummaryPrompts(whpIvrMessage, patientsWithAdherence, patientsWithoutAdherence))
                 .addPrompts(CaptureAdherencePrompts.captureAdherencePrompts(whpIvrMessage, patient2.getPatientId(), 1))
                 .addTransition("?", new AdherenceCaptureTransition())
-                .addTransition("hangup", new HangupTransition());
+                .addTransition("Hangup", new HangupTransition())
+                .setMaxTransitionInputDigit(1);
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
         assertThat(actualNode, is(expectedNode));
@@ -120,7 +121,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
         Node expectedNode = new Node()
                 .addPrompts(welcomeMessagePrompts(whpIvrMessage))
                 .addPrompts(adherenceCaptureWindowClosedPrompts(whpIvrMessage))
-                .addTransition("hangup", new HangupTransition());
+                .addTransition("Hangup", new HangupTransition());
 
 
         assertThat(destinationNode.getPrompts(), is(expectedNode.getPrompts()));
@@ -161,7 +162,7 @@ public class AdherenceSummaryTransitionTest extends BaseUnitTest {
 
         Node actualNode = adherenceSummaryTransition.getDestinationNode("", flowSession);
         assertEquals(flowSession.get(IvrSession.CALL_STATUS), CallStatus.ADHERENCE_ALREADY_PROVIDED);
-        assertEquals(new HangupTransition(), actualNode.getTransitions().get("hangup"));
+        assertEquals(new HangupTransition(), actualNode.getTransitions().get("Hangup"));
         assertThat(actualNode.getOperations(), hasItem(isA(RecordCallStartTimeOperation.class)));
     }
 

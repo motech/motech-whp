@@ -39,7 +39,7 @@ public class HangupTransitionTest extends BaseUnitTest {
 
         HangupTransition hangupTransition = new HangupTransition(reportingPublisherService);
 
-        assertEquals(expectedNode.getOperations(), hangupTransition.getDestinationNode("hangup", flowSession).getOperations());
+        assertEquals(expectedNode.getOperations(), hangupTransition.getDestinationNode("Hangup", flowSession).getOperations());
     }
 
 }

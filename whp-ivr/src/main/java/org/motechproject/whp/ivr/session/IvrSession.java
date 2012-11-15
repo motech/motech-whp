@@ -78,7 +78,7 @@ public class IvrSession {
     }
 
     public String callId() {
-        return ((FlowSessionRecord) flowSession).getCallDetailRecord().getCallId();
+        return flowSession.get(SID);
     }
 
     public void callId(String callId) {
