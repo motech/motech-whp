@@ -29,7 +29,7 @@
         ${message}
         </div>
         </#if>
-        <h1 class="">Treatment details of patient ID# <span class="">${patient.patientId!}</span></h1>
+        <h1 class="">Patient details: ID# ${patient.patientId!}</h1>
         <#include "phaseTransitionAlert.ftl"/>
 
         <#include "patientInfo.ftl"/>

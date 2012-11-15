@@ -37,8 +37,7 @@ body:after {
     font-size: 25px;
     font-weight: normal;
     line-height: normal;
-    margin-bottom: 25px;
-    padding-bottom: 5px;
+    margin-bottom: 15px;
     text-shadow: 0 1px white, 0 2px #C4C2C2;
     letter-spacing: 2px;
 }
