@@ -7,12 +7,12 @@
 
     <util:properties id="sputumTracking" location="classpath:/sputumTracking.properties"/>
 
-    <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:/META-INF/motech/applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationContainerMappingContext.xml"/>
-    <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationRemediContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationWHPReportingContext.xml"/>
+    <import resource="classpath*:applicationCommonContext.xml"/>
 
     <bean id="whpContainerCouchDbConnector" class="com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector">
         <constructor-arg value="motech-whp"/>

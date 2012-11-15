@@ -28,7 +28,7 @@ public class FlowSessionStub implements FlowSession {
 
     @Override
     public String getPhoneNumber() {
-        return null;
+        return this.get("cid");
     }
 
     public <T extends Serializable> void set(String key, T value) {

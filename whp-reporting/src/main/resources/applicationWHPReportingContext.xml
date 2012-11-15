@@ -7,8 +7,8 @@
 
     <context:property-placeholder location="classpath*:whp.properties" ignore-unresolvable="true"/>
 
-    <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationContextHttpClient.xml"/>
+    <import resource="classpath*:applicationCommonContext.xml"/>
 
     <util:properties id="whpProperties" location="classpath:/whp.properties"/>
     <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>

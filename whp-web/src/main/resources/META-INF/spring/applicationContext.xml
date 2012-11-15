@@ -34,7 +34,7 @@
     <import resource="classpath*:applicationPatientContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
     <import resource="classpath*:applicationIVRContext.xml"/>
-    <import resource="classpath*:applicationPlatformServerAPI.xml"/>
+    <import resource="classpath*:/META-INF/motech/applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationRefDataContext.xml"/>
     <import resource="classpath*:placeholderPluginContext.xml"/>
     <import resource="classpath*:applicationDateTimeSimulatorContext.xml"/>

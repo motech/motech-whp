@@ -1,6 +1,7 @@
 package org.motechproject.whp.common.event;
 
 import org.motechproject.event.MotechEvent;
+import org.motechproject.event.OutboundEventGateway;
 import org.motechproject.event.listener.EventRelay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +12,16 @@ import java.util.Map;
 @Service
 public class EventContext {
 
-    EventRelay eventRelay;
+    EventRelay eventGateway;
 
     @Autowired
-    public EventContext(EventRelay eventRelay) {
-        this.eventRelay = eventRelay;
+    public EventContext(EventRelay eventGateway) {
+        this.eventGateway = eventGateway;
     }
 
     public void send(String subject, Object... params) {
         MotechEvent motechEvent = new MotechEvent(subject, eventParams(params));
-        eventRelay.sendEventMessage(motechEvent);
+        eventGateway.sendEventMessage(motechEvent);
     }
 
     private Map<String, Object> eventParams(Object[] params) {

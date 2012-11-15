@@ -8,18 +8,25 @@
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-    <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
+    <import resource="classpath*:/META-INF/motech/applicationPlatformCommonAPI.xml"/>
     <import resource="classpath*:applicationValidationContext.xml"/>
+
+    <import resource="classpath*:/META-INF/motech/eventQueueConsumer.xml"/>
+    <import resource="classpath*:/META-INF/motech/eventQueuePublisher.xml"/>
+
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
-    <context:property-placeholder location="classpath:couchdb.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:osgi.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:activemq.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath:httpclient.properties" ignore-unresolvable="true"/>
+    <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
+
+    <context:property-placeholder location="classpath:couchdb.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:osgi.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:activemq.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true" order="-1"/>
+    <context:property-placeholder location="classpath:httpclient.properties" ignore-unresolvable="true" order="-1"/>
 
     <context:component-scan base-package="org.motechproject.whp.common"/>
+    <context:component-scan base-package="org.motechproject.event.listener"/>
 
     <bean id="whpDbConnector" class="org.ektorp.impl.StdCouchDbConnector">
         <constructor-arg value="motech-whp"/>
