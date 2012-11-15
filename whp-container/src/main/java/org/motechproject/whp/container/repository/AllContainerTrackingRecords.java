@@ -6,6 +6,7 @@ import com.github.ldriscoll.ektorplucene.util.IndexUploader;
 import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
+import org.motechproject.couchdb.lucene.query.field.Field;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,13 +37,15 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     public AllContainerTrackingRecords(@Qualifier("whpContainerCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(Container.class, whpLuceneAwareCouchDbConnector);
         IndexUploader uploader = new IndexUploader();
-        ContainerTrackingQueryDefinition preTreatmentQueryDefinition = getNewQueryDefinition(PreTreatment);
-        uploader.updateSearchFunctionIfNecessary(db, preTreatmentQueryDefinition.viewName(), preTreatmentQueryDefinition.searchFunctionName(), preTreatmentQueryDefinition.indexFunction());
-        new SearchFunctionUpdater().updateAnalyzer(db, preTreatmentQueryDefinition.viewName(), preTreatmentQueryDefinition.searchFunctionName(), "keyword");
 
-        ContainerTrackingQueryDefinition inTreatmentQueryDefinition = getNewQueryDefinition(InTreatment);
-        uploader.updateSearchFunctionIfNecessary(db, inTreatmentQueryDefinition.viewName(), inTreatmentQueryDefinition.searchFunctionName(), inTreatmentQueryDefinition.indexFunction());
-        new SearchFunctionUpdater().updateAnalyzer(db, inTreatmentQueryDefinition.viewName(), inTreatmentQueryDefinition.searchFunctionName(), "keyword");
+        ContainerTrackingQueryDefinition containerQueryDefinition = new ContainerTrackingQueryDefinition() {
+            public List<Field> fields() {
+               return new ArrayList<>();
+            }
+        };
+
+        uploader.updateSearchFunctionIfNecessary(db, containerQueryDefinition.viewName(), containerQueryDefinition.searchFunctionName(), containerQueryDefinition.indexFunction());
+        new SearchFunctionUpdater().updateAnalyzer(db, containerQueryDefinition.viewName(), containerQueryDefinition.searchFunctionName(), "keyword");
     }
 
     @View(name = "find_by_containerId", map = "function(doc) {if (doc.type ==='Container') {emit(doc.containerId, doc._id);}}")
