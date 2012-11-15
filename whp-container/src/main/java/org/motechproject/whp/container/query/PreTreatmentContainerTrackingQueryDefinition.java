@@ -11,6 +11,7 @@ import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
 public class PreTreatmentContainerTrackingQueryDefinition extends ContainerTrackingQueryDefinition {
+    private final QueryField containerId = new QueryField("containerId", STRING);
     private final QueryField providerId = new QueryField("providerId", STRING);
     private final QueryField district = new QueryField("district", STRING);
     private final QueryField containerStatus = new QueryField("containerStatus", STRING);
@@ -21,6 +22,7 @@ public class PreTreatmentContainerTrackingQueryDefinition extends ContainerTrack
     private final RangeField consultationDate = new RangeField("consultationDate", DATE, "consultationDateFrom", "consultationDateTo");
 
     List<Field> queryFields = Arrays.asList(
+            containerId,
             providerId,
             district,
             containerStatus,

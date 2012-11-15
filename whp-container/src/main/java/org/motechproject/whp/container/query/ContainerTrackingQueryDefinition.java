@@ -8,6 +8,7 @@ import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 public abstract class ContainerTrackingQueryDefinition implements QueryDefinition {
 
     protected final QueryField containerInstance = new QueryField("containerInstance", STRING);
+    protected final QueryField containerId = new QueryField("containerId", STRING);
 
     @Override
     public String viewName() {
@@ -23,6 +24,7 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
     public String indexFunction() {
         return "function(doc) { " +
                 "var index=new Document(); " +
+                "index.add(doc.containerId, {field: 'containerId'}); " +
                 "index.add(doc.providerId, {field: 'providerId'}); " +
                 "index.add(doc.district, {field: 'district'});" +
                 "index.add(doc.status, {field: 'containerStatus'});" +
@@ -50,5 +52,9 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
 
     public String getContainerInstanceFieldName() {
         return containerInstance.getName();
+    }
+
+    public String getContainerIdFieldName() {
+        return containerId.getName();
     }
 }

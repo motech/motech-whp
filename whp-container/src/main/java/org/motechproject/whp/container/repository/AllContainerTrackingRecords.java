@@ -29,6 +29,8 @@ import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatm
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<Container> {
 
+    public static final String SORT_BY_ASCENDING = "asc";
+
     @Autowired
     public AllContainerTrackingRecords(@Qualifier("whpContainerCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(Container.class, whpLuceneAwareCouchDbConnector);
@@ -73,6 +75,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
+            sortParams.put(queryDefinition.getContainerIdFieldName(), SORT_BY_ASCENDING);
             return super.filter(queryDefinition, URLEscape.escape(filterParams), sortParams, skip, limit);
         }
         return Collections.emptyList();

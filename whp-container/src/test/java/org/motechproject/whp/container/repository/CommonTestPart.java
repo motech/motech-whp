@@ -1,9 +1,13 @@
 package org.motechproject.whp.container.repository;
 
 import junit.framework.Assert;
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
+import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +84,30 @@ public class CommonTestPart {
 
         Assert.assertEquals("providerid1", allContainerTrackingRecords.get(containerTrackingRecord1.getId()).getProviderId());
         Assert.assertEquals("providerid2", allContainerTrackingRecords.get(containerTrackingRecord2.getId()).getProviderId());
+    }
+
+    @Test
+    public void shouldSortContainerDashboardRowsByContainerIdAsDefaultOne() {
+        allContainerTrackingRecords.add(createContainerTrackingRecord("10000000001", LocalDate.now(), RegistrationInstance.PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord("10000000003", LocalDate.now(), RegistrationInstance.PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord("10000000002", LocalDate.now(), RegistrationInstance.PreTreatment));
+        allContainerTrackingRecords.add(createContainerTrackingRecord("10000000004", LocalDate.now().plusDays(2), RegistrationInstance.PreTreatment));
+
+        SortParams sortParams = new SortParams();
+        sortParams.put("containerIssuedDate", "desc");
+        List<Container> all = allContainerTrackingRecords.filter(RegistrationInstance.PreTreatment, new FilterParams(), sortParams, 0, 10);
+
+        assertEquals("10000000004", all.get(0).getContainerId());
+        assertEquals("10000000001", all.get(1).getContainerId());
+        assertEquals("10000000002", all.get(2).getContainerId());
+        assertEquals("10000000003", all.get(3).getContainerId());
+    }
+
+    private Container createContainerTrackingRecord(String containerId, LocalDate containerIssuedDate, RegistrationInstance instance) {
+        Container containerTrackingRecord = new Container();
+        containerTrackingRecord.setContainerId(containerId);
+        containerTrackingRecord.setContainerIssuedDate(containerIssuedDate);
+        containerTrackingRecord.setCurrentTrackingInstance(instance);
+        return containerTrackingRecord;
     }
 }

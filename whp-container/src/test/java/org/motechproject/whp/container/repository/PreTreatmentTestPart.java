@@ -2,6 +2,7 @@ package org.motechproject.whp.container.repository;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.paginator.contract.FilterParams;
