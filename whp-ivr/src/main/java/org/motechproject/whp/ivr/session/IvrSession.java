@@ -3,6 +3,7 @@ package org.motechproject.whp.ivr.session;
 
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.core.FlowSession;
+import org.motechproject.decisiontree.server.domain.FlowSessionRecord;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
@@ -38,7 +39,7 @@ public class IvrSession {
         this.flowSession = flowSession;
         // Stripping the national telephone number prefix from the actual mobile number for all practical usage
         String cid = flowSession.get("cid");
-        if(StringUtils.hasText(cid) && cid.startsWith(NATIONAL_TELEPHONE_NUMBER_PREFIX)) {
+        if (StringUtils.hasText(cid) && cid.startsWith(NATIONAL_TELEPHONE_NUMBER_PREFIX)) {
             this.flowSession.set("cid", cid.substring(1));
         }
     }
@@ -77,7 +78,7 @@ public class IvrSession {
     }
 
     public String callId() {
-        return flowSession.get(SID).toString();
+        return ((FlowSessionRecord) flowSession).getCallDetailRecord().getCallId();
     }
 
     public void callId(String callId) {
@@ -228,7 +229,7 @@ public class IvrSession {
     }
 
     public CallStatus callStatus() {
-        return flowSession.get(CALL_STATUS) == null ? CallStatus.PROVIDER_DISCONNECT :  CallStatus.valueOf(flowSession.get(CALL_STATUS).toString());
+        return flowSession.get(CALL_STATUS) == null ? CallStatus.PROVIDER_DISCONNECT : CallStatus.valueOf(flowSession.get(CALL_STATUS).toString());
     }
 
 }

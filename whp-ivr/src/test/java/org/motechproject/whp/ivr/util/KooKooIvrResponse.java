@@ -1,9 +1,7 @@
 package org.motechproject.whp.ivr.util;
 
-import lombok.Data;
-import lombok.Getter;
-
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
@@ -17,6 +15,7 @@ public class KooKooIvrResponse {
     String hangup;
 
     @XmlElement(name = "playaudio")
+    @XmlElementWrapper(name = "collectdtmf")
     public List<String> getPlayAudio() {
         return playAudio;
     }

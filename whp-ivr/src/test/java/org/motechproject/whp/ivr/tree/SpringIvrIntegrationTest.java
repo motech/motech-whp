@@ -89,7 +89,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
             JAXBContext jaxbContext = JAXBContext.newInstance(KooKooIvrResponse.class);
             return (KooKooIvrResponse) jaxbContext.createUnmarshaller().unmarshal(new ByteArrayInputStream(response.getBytes()));
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return new KooKooIvrResponse();
     }

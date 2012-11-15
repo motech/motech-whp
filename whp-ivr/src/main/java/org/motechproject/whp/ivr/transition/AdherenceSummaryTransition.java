@@ -63,7 +63,7 @@ public class AdherenceSummaryTransition implements ITransition {
     }
 
     private void addHangupTransition(Node node) {
-        node.addTransition("hangup", new HangupTransition());
+        node.addTransition("Hangup", new HangupTransition());
     }
 
     private Node addAdherenceCaptureTransitions(final IvrSession ivrSession, Node captureAdherenceNode) {
