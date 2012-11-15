@@ -32,8 +32,8 @@
     </div>
     <div class="modal-footer">
 
-        <button type="submit" class="btn  btn-primary" id="changePassword">Save</button>
-        <button class="btn " data-dismiss="modal">Close</button>
+        <button type="submit" class="btn  btn-primary" id="changePassword"><i class="icon-ok icon-white"></i> Save</button>
+        <button class="btn " data-dismiss="modal"><i class="icon-remove"></i> Close</button>
     </div>
 </form>
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/changePassword.js'/>"></script>
