@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
@@ -13,7 +14,6 @@ import org.motechproject.whp.uimodel.ContainerTrackingDashboardRow;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -54,7 +54,7 @@ public class PreTreatmentTestPart {
         when(containerTrackingDashboardRowMapper.mapFrom(container2)).thenReturn(expectedPageResult2);
 
         FilterParams filterParams = new FilterParams();
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
         int skip = 0;
         int limit = 10;
 

@@ -8,6 +8,7 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.container.util.URLEscape;
@@ -68,7 +69,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         };
     }
 
-    public List<Container> filter(RegistrationInstance instance, FilterParams filterParams, FilterParams sortParams, int skip, int limit) {
+    public List<Container> filter(RegistrationInstance instance, FilterParams filterParams, SortParams sortParams, int skip, int limit) {
         ContainerTrackingQueryDefinition queryDefinition = getNewQueryDefinition(instance);
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());

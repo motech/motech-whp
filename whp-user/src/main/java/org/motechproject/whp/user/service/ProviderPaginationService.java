@@ -2,6 +2,7 @@ package org.motechproject.whp.user.service;
 
 import org.apache.log4j.Logger;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.security.service.MotechUser;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 @Service
 public class ProviderPaginationService implements Paging {
@@ -30,7 +30,7 @@ public class ProviderPaginationService implements Paging {
     }
 
     @Override
-    public PageResults page(Integer pageNo, Integer rowsPerPage, FilterParams searchCriteria, FilterParams sortCriteria) {
+    public PageResults page(Integer pageNo, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
         List<Provider> allProviders = providerService.fetchBy((String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
 
         int startIndex = (pageNo - 1) * rowsPerPage;

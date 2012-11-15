@@ -2,6 +2,7 @@ package org.motechproject.whp.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.common.domain.RegistrationInstance;
@@ -25,7 +26,7 @@ public abstract class ContainerDashboardService implements Paging<ContainerTrack
     }
 
     @Override
-    public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, FilterParams sortCriteria) {
+    public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
         FilterParams nonEmptyParams = filterOutEmptyParams(searchCriteria);
 
         int startIndex = (pageNumber - 1) * rowsPerPage;

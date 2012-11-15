@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
@@ -39,7 +40,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByInstanceAndProviderId() {
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
@@ -65,7 +66,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterPreTreatmentContainerRecordsByAllFilterCriteria() {
         FilterParams queryParams = new FilterParams();
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
         String providerId = "providerid";
         String districtName = "Begusarai";
         queryParams.put("providerId", providerId);
@@ -127,7 +128,7 @@ public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterAndSortPreTreatmentContainerRecordsByAllFilterCriteria() {
         FilterParams queryParams = new FilterParams();
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
         sortParams.put("containerIssuedDate", "asc");
         String providerId = "providerid";
         queryParams.put("providerId", providerId);

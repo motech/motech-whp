@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.RegistrationInstance;
@@ -40,7 +41,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
     @Test
     public void shouldFilterInTreatmentContainerRecordsByInstanceAndProviderId() {
         FilterParams queryParams = new FilterParams();
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
         String providerId = "providerid";
         queryParams.put("providerId", providerId);
         queryParams.put("containerInstance", "InTreatment");
@@ -76,7 +77,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         queryParams.put("reasonForClosure", "reasonForClosure");
         queryParams.put("mappingInstance", EndIP.name());
 
-        FilterParams sortParams = new FilterParams();
+        SortParams sortParams = new SortParams();
 
         Container expectedContainerTrackingRecord = new ContainerBuilder()
                 .withProviderId(providerId)
@@ -130,7 +131,7 @@ public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
         params.put("mappingInstance", partialCriteria);
 
         allContainerTrackingRecords.add(containerTrackingRecord);
-        List<Container> results = allContainerTrackingRecords.filter(InTreatment, params, new FilterParams(), 0, 10);
+        List<Container> results = allContainerTrackingRecords.filter(InTreatment, params, new SortParams(), 0, 10);
         assertEquals(asList(containerTrackingRecord), results);
     }
 
