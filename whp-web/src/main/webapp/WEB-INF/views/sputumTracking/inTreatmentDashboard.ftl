@@ -40,7 +40,7 @@
                                 <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
                             </div>
                         </div>
-                        <div class="control-group span2 ">
+                        <div class="control-group span3 ">
                             <label class="control-label ">Instance</label>
                             <div class="controls">
                                 <select id="mappingInstance" name="mappingInstance">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="control-group  span2">
+                        <div class="control-group  span3">
                             <label class="control-label ">Reason for Closure</label>
                             <div class="controls ">
                                 <select id="reasonForClosure" name="reasonForClosure">

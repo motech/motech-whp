@@ -25,11 +25,14 @@ body:after {
 }
 
 #mainContent {
-    margin:70px 20px;
+    margin: 70px 20px;
     border-radius: 20px;
     background: rgba(255,255,255,0.4);
-    padding-bottom: 25px;
+    padding: 20px;
     height: 100%;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 #mainContent h1 {
     color: #000;
@@ -37,7 +40,7 @@ body:after {
     font-size: 25px;
     font-weight: normal;
     line-height: normal;
-    margin-bottom: 15px;
+    margin: 0 0 15px 0;
     text-shadow: 0 1px white, 0 2px #C4C2C2;
     letter-spacing: 2px;
 }
@@ -64,9 +67,7 @@ body:after {
 }
 
 #footer {
-    padding-right: 20px;
-    padding-top: 15px;
-    padding-left: 60px;
+    padding: 10px 15px 0;
     border-top: 2px solid #000;
     background: #333;
 }
@@ -116,7 +117,7 @@ table tr td.text-center, .text-center, .text-center th, .text-center td {
 }
 
 
-#version {
+.app-version {
     color: #DCDCDC;
     font-size: 0.8em;
 }
