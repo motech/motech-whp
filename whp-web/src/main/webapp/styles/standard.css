@@ -9,18 +9,12 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#F3F3F3));   /* Safari 4-5, Chrome 1-9 */
-    background-image: -webkit-linear-gradient(-30deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);    /* Safari 5.1, Chrome 10+ */
-    background-image: -moz-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);      /* Firefox 3.6+ */
-    background-image: -ms-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);       /* IE 10 */
-    background-image: -o-linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);       /* Opera 11.10+ */
-    background-image: linear-gradient(135deg, #FFFFFF 0%, #F3F3F3 50%, #EDEDED 50%, #FFFFFF 100%);    /* w3c */
     color: #555555;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     line-height: 18px;
+    background: #F7F7F7 url("images/bgnoise.png") repeat;
+
 }
 body:before, body:after {
     content: "";
@@ -31,8 +25,9 @@ body:after {
 }
 
 #mainContent {
-    margin-top: 70px;
-    margin-bottom: 70px;
+    margin:70px 20px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.4);
     padding-bottom: 25px;
     height: 100%;
 }
@@ -408,8 +403,11 @@ div.buttons a, div.buttons button {
     width: 100%;
     height: 100px;
     margin: 0;
-    padding: 0;
+    padding: 5px;
     border: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .remarks-form .remarks-button {
     padding: 10px;
@@ -509,9 +507,22 @@ div.buttons a, div.buttons button {
     font-weight: bold;
 }
 .name {
- text-transform: capitalize;
+    text-transform: capitalize;
 }
-
+.patient {
+    font-size: 2em;
+    color: #555;
+}
+.patient .sub-details {
+    font-size: 0.7em;
+    color: #999;
+    font-weight: normal;
+}
+.patient-addr {
+    font-size: 0.5em;
+    line-height: 3em;
+    display: block;
+}
 .one-line {
     white-space: nowrap;
 }
@@ -570,26 +581,32 @@ div.buttons a, div.buttons button {
 .tc-label {
     font-size: 14px;
 }
-.print-version-line-height
-.print-version-line-height label,
-.print-version-line-height div,
+.printable-version  label,
+.printable-version  div,
 .tc-value,
 .tc-label {
     line-height: 28px;
 }
 
-.print-version-line-height table td
-.print-version-line-height table th
-.print-version-line-height table label,
-.print-version-line-height table div
+.printable-version  table td
+.printable-version  table th
+.printable-version  table label,
+.printable-version  table div
 {
     line-height: inherit;
 }
-
+.printable-version {
+    background: #fff;
+}
+.printable-version #mainContent {
+    margin: 0;
+}
+.printable-version h3 {
+    font-family: inherit;
+}
 .printable-version, .printable-version label, .printable-version h3, .printable-version h4 {
     color: #000000;
     border-color: #000000;
-
 }
 
 .tc-div {
@@ -608,35 +625,18 @@ div.buttons a, div.buttons button {
    padding: 60px;
 }
 .x-ray {
-    padding-top: 5px;
-    padding-left: 5px;
-    padding-bottom:70px;
-    height: 80px;
+    height: 150px;
+    margin-bottom: 25px;
     border: 1px solid #000000;
-    width: 40%;
-    display: inline-block;
-    float: left;
+    width: 90%;
+    padding: 5px;
 }
-.x-ray-and-remarks {
-    height: 175px;
-}
+
 .overflow-hidden {
     overflow: hidden;
 }
-.actions-for-missed-doses {
-    width: 60%;
-    display: inline-block;
-}
-.actions-for-missed-doses table {
-    width: 90%;
-}
-.chemoprophylaxis {
-    width: 30%;
-    display: inline-block;
-}
-.chemoprophylaxis table {
-    width: 100%;
-}
+
+
 .additional-treatments {
     width: 70%;
     display: inline-block;
@@ -659,9 +659,7 @@ div.buttons a, div.buttons button {
 #treatmentCard .drugs td{
     padding: 2px 6px;
 }
-.pause-details table {
-    width: 25%;
-}
+
 .inherit-font {
     font-family: inherit;
 }
@@ -678,9 +676,7 @@ div.buttons a, div.buttons button {
 .uppercase {
     text-transform: uppercase;
 }
-.printable-version h3 {
-    font-family: inherit;
-}
+
 .bordered {
     border: 1px solid black;
 }
@@ -991,21 +987,31 @@ pre {
     color: #F5F5F5;
     font-size: 22px;
     line-height: 1;
-    margin: 0 10px 0 0;
-    padding: 5px 15px 5px 0;
+    margin: 0;
+    padding: 6px 15px 6px 0;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 .navbar .brand:hover {
     color: #fff;
     text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.5);
 }
-
+.navbar .nav {
+    border-left:1px solid rgba(0, 0, 0, 0.5);
+    padding-left: 10px;
+    margin:0;
+}
+.navbar .nav.pull-right {
+    border: 0;
+    padding: 0;
+}
 .navbar .nav > li > a {
     color: #F5F5F5;
-    padding: 7px 10px;
+    margin: 0;
+    padding: 8px 15px;
     line-height: normal;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
+.navbar .nav > li > a#logout{ padding-right: 0;}
 .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
     color: #fff;
 }

@@ -6,8 +6,8 @@
     <title>Treatment Card</title>
 <#include "../layout/scripts.ftl"/>
 </head>
-<body>
-<div class="container printable-version print-version-line-height">
+<body class="printable-version">
+<div class="container">
 <div id="navibar" class="navbar-fixed-top">
     <a href="<@spring.url '/' />">
         <img class="pull-right" src="<@spring.url '/resources-${applicationVersion}/images/whplogo.png'/>"/>
@@ -17,8 +17,8 @@
 <hr class="bordered"/>
 <div class="row-fluid" id="mainContent">
 
-<div class="relative-size">
-    <div class="tc-div">
+<div class="row-fluid">
+    <div class="span6">
         <div><label class="tc-label">State</label> <label class="tc-value">${patient.addressState}</label></div>
         <div><label class="tc-label">City/District with code</label>
             <label class="tc-value">${patient.addressDistrict}&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
@@ -56,7 +56,7 @@
             <label class="tc-label">Type of Patient</label><label class="tc-value">${patient.patientType!}</label>
         </div>
     </div>
-    <div class="left-spaced tc-div">
+    <div class="span6">
         <div><label class="tc-label">TB Unit with code</label></div>
         <div>
             <label class="tc-label">Patient Id</label><label class="tc-value">${patient.patientId!}</label>
@@ -87,8 +87,8 @@
 </div>
 <br/>
 
-<div id="test-results-pause-provider-history" class="relative-size">
-    <div class="pull-left">
+<div id="test-results-pause-provider-history" class="row-fluid">
+    <div class="span6">
     <#if treatmentCard.treatmentHistories?has_content>
         <div class="provider-details">
             <h4 class="inherit-font">Provider History</h4>
@@ -127,7 +127,7 @@
         </div>
     </#if>
     </div>
-    <div class="pull-right">
+    <div class="span6">
         <table class="table table-bordered sharp fixed text-center">
             <tr>
                 <th rowspan="2">Sample Instance</th>
@@ -163,55 +163,60 @@
 <div id="treatmentCard">
 <#include "../treatmentcard/print.ftl">
 </div>
-<div class="overflow-hidden center">
-    <label class="tc-div tc-label">Treatment outcome with date</label>
-    <label class="tc-div tc-label">Signature of MO with date</label>
-    <br/>
+<div class="row-fluid">
+    <label class="span6 tc-div tc-label">Treatment outcome with date</label>
+    <label class="span6 tc-div tc-label">Signature of MO with date</label>
+
 </div>
-<div class="x-ray-and-remarks">
-    <div class="x-ray">
+<div class="x-ray-and-remarks row-fluid">
+    <div class="span6">
+
+       <div class="x-ray ">
         Details of X ray / EP tests
+        </div>
     </div>
-    <label class="span2 tc-label">
+    <label class="span6 tc-label">
         Remarks
     </label>
 </div>
-<div class="actions-for-missed-doses">
-    <h4 class="inherit-font">Retrieval Actions for Missed Doses</h4>
-    <table class="table table-bordered sharp fixed text-center line-height-normal">
-        <tr>
-            <th>Date</th>
-            <th>By whom</th>
-            <th>Whom contacted</th>
-            <th>Reason for missed doses</th>
-            <th>Outcome of retrieval action</th>
-        </tr>
-    <#list 1..7 as i>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </#list>
-    </table>
-</div>
-<div class="chemoprophylaxis">
-    <h4 class="inherit-font text-center">Household Contacts </h4>
-    <h4 class="inherit-font text-center">(Children &lt; 6 yrs)</h4>
-    <table class="table table-bordered sharp fixed text-center line-height-normal">
-        <tr>
-            <th>No.</th>
-            <th>Chemoprophylaxis</th>
-        </tr>
-    <#list 1..5 as i>
-        <tr>
-            <td></td>
-            <td></td>
-        </tr>
-    </#list>
-    </table>
+<div class="row-fluid">
+    <div class="actions-for-missed-doses span7">
+        <h4 class="inherit-font">Retrieval Actions for Missed Doses</h4>
+        <table class="table table-bordered sharp fixed text-center line-height-normal">
+            <tr>
+                <th>Date</th>
+                <th>By whom</th>
+                <th>Whom contacted</th>
+                <th>Reason for missed doses</th>
+                <th>Outcome of retrieval action</th>
+            </tr>
+        <#list 1..7 as i>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </#list>
+        </table>
+    </div>
+    <div class="span5">
+        <h4 class="inherit-font text-center">Household Contacts </h4>
+        <h4 class="inherit-font text-center">(Children &lt; 6 yrs)</h4>
+        <table class="table table-bordered sharp fixed text-center line-height-normal">
+            <tr>
+                <th>No.</th>
+                <th>Chemoprophylaxis</th>
+            </tr>
+        <#list 1..5 as i>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </#list>
+        </table>
+    </div>
 </div>
 <div class="additional-treatments">
     <h4 class="inherit-font tc-label text-center">Additional Treatments</h4>

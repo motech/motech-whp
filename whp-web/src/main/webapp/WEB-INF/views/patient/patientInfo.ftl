@@ -1,7 +1,21 @@
 <div class="default-arrow well" >
 
+<div class="row-fluid">
 
-        <div class="row-fluid">
+    <p class="patient">
+         <span class="name"> ${patient.firstName!} ${patient.lastName!} </span>
+         <span class="sub-details"> ( Age:  ${patient.age!}, ${patient.gender!} ) </span>
+         <span class="patient-addr">
+          <b>Address:</b>   ${patient.address!}, ${patient.addressVillage!}, ${patient.addressDistrict!} |  <b>Mob:</b> ${patient.phoneNumber!}
+         </span>
+    </p>
+
+    <p class="provider-details"> <b>Provider:</b> <span class="name">${patient.providerId!}</span>, ${patient.providerDistrict!} - District | <b>Mob:</b> ${patient.providerMobileNumber!}
+</div>
+
+    <hr />
+
+<div class="row-fluid">
             <div class="span4">
                 <h3>Treatment Details</h3>
                 <table class="table table-bordered table-striped">
@@ -55,6 +69,7 @@
                 </table>
 
             </div>
+    <!--
             <div class="span4">
                 <h3>Patient Details</h3>
                 <table class="table table-bordered table-striped">
@@ -130,45 +145,46 @@
 
 
             </div>
+         -->
+    <div class="span8">
+        <h3>Smear Test Results</h3>
+        <table class="table table-bordered text-center table-striped">
+            <thead>
+            <tr>
+                <th id="sampleInstance" rowspan="2">Sample Instance</th>
+                <th id="labName" rowspan="2">DMC</th>
+                <th id="labNumber" rowspan="2">Lab No.</th>
+                <th id="smearTestDetails" colspan="4">Smear Test Results</th>
+                <th id="weight" rowspan="2">Weight</th>
+            </tr>
 
+            <tr>
+                <th>Date 1</th>
+                <th>Result 1</th>
+                <th>Date 2</th>
+                <th>Result 2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list patient.testResults as testResult>
+            <tr>
+                <td>${testResult.sampleInstance}</td>
+                <td>${testResult.labName}</td>
+                <td>${testResult.labNumber}</td>
+                <td>${testResult.smearTestDate1}</td>
+                <td>${testResult.smearTestResult1}</td>
+                <td>${testResult.smearTestDate2}</td>
+                <td>${testResult.smearTestResult2}</td>
+                <td>${testResult.weight}</td>
+            </tr>
+            </#list>
+            </tbody>
+        </table>
+
+    </div>
         </div>
         <div class="row-fluid">
-            <div class="span12">
-                <h3>Smear Test Results</h3>
-                <table class="table table-bordered text-center table-striped">
-                    <thead>
-                    <tr>
-                        <th id="sampleInstance" rowspan="2">Sample Instance</th>
-                        <th id="labName" rowspan="2">DMC</th>
-                        <th id="labNumber" rowspan="2">Lab No.</th>
-                        <th id="smearTestDetails" colspan="4">Smear Test Results</th>
-                        <th id="weight" rowspan="2">Weight</th>
-                    </tr>
 
-                    <tr>
-                        <th>Date 1</th>
-                        <th>Result 1</th>
-                        <th>Date 2</th>
-                        <th>Result 2</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <#list patient.testResults as testResult>
-                    <tr>
-                        <td>${testResult.sampleInstance}</td>
-                        <td>${testResult.labName}</td>
-                        <td>${testResult.labNumber}</td>
-                        <td>${testResult.smearTestDate1}</td>
-                        <td>${testResult.smearTestResult1}</td>
-                        <td>${testResult.smearTestDate2}</td>
-                        <td>${testResult.smearTestResult2}</td>
-                        <td>${testResult.weight}</td>
-                    </tr>
-                    </#list>
-                    </tbody>
-                </table>
-
-            </div>
          </div>
 
 

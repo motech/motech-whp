@@ -2,12 +2,8 @@
 <#include "adherenceBox.ftl"/>
 <#include "treatmentCategory.ftl"/>
 <#if treatmentCard.IPAdherenceSectionValid == true || treatmentCard.CPAdherenceSectionValid == true>
-<div class="printable-version">
-    <div class="row-fluid">
-        <div id="legend-container" class="pull-right">
+ <div class="row-fluid">
 
-        </div>
-    </div>
     <div id="ip-card">
     <#if treatmentCard.IPAdherenceSectionValid == true>
             <h3 class="text-center">I. Intensive Phase</h3>
