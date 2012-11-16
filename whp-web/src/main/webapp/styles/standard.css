@@ -13,8 +13,7 @@ body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     line-height: 18px;
-    background: #F7F7F7 url("images/bgnoise.png") repeat;
-
+    background: #f5f5f5;
 }
 body:before, body:after {
     content: "";
@@ -23,13 +22,26 @@ body:before, body:after {
 body:after {
     clear: both;
 }
-
-#mainContent {
+body.main {
+    background: #F7F7F7 url("images/fabric_plaid.png") repeat 0 0;
+}
+body.login-page {
+    background-repeat: no-repeat;
+    background-color: #096DAB;
+    background-image: -webkit-gradient(radial, 80% 20%, 0, 80% 40%, 100, from(#5ABCF8), to(#096DAB)); /* Safari 4-5, Chrome 1-9 */
+    background-image: -webkit-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* Safari 5.1+, Chrome 10+ */
+    background-image: -moz-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* Firefox 3.6+ */
+    background-image: -ms-radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB);  /* IE 10 */
+    background-image: radial-gradient(80% 20%, closest-corner, #5ABCF8, #096DAB); /* w3c */
+}
+body.main #mainContent {
     margin: 70px 20px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.5);
     padding: 20px;
     height: 100%;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
    -moz-box-sizing: border-box;
    -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -69,7 +81,7 @@ body:after {
 #footer {
     padding: 10px 15px 0;
     border-top: 2px solid #000;
-    background: #333;
+    background: #333 url("images/debut_dark.png") repeat 0 0;
 }
 
 #whp-logo {

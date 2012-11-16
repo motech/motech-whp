@@ -10,7 +10,7 @@
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/autoComplete.js'/>"></script>
 
 </head>
-<body>
+<body class="main">
 
 <div class="row-fluid" id="headerContent">
     <@header.header path="../${entity}/menu.ftl"/>
