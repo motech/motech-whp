@@ -27,24 +27,27 @@
                         <label class="control-label">Container ID*</label>
 
                         <div class="controls">
-                            <input id="containerId" class="input-xlarge" name="containerId" type="text" maxlength="${containerIdMaxLength}" placeholder="Enter a container ID from CMF admin pool"/>
+                            <@spring.bind "containerRegistrationRequest.containerId" />
+                            <input id="containerId" class="span" name="${spring.status.expression}" type="text" maxlength="${containerIdMaxLength}" value="${spring.status.value?default("")}" placeholder="Enter a container ID from CMF admin pool"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Assign to Provider*</label>
 
                         <div class="controls">
-                            <input id="providerId" class="input-xlarge" name="providerId" type="text" placeholder="Enter provider ID"/>
+                            <@spring.bind "containerRegistrationRequest.providerId" />
+                            <input id="providerId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter provider ID"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Instance*</label>
 
                         <div class="controls">
-                            <select id="instance" name="instance" class="select-xlarge" validate="required:true">
+                            <@spring.bind "containerRegistrationRequest.instance" />
+                            <select id="instance" name="${spring.status.expression}" validate="required:true">
                                 <option value=""></option>
                                 <#list instances as instance>
-                                    <option value="${instance}">${instance}</option>
+                                    <option value="${instance}" <#if spring.status.value?default("") == instance>selected="true"</#if>>${instance}</option>
                                 </#list>
                             </select>
                         </div>

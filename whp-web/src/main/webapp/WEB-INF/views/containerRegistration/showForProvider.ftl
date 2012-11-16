@@ -27,7 +27,8 @@
                                 <label class="control-label">Container ID*</label>
 
                                 <div class="controls">
-                                    <input id="containerId" class="span" name="containerId" type="text" maxlength="${containerIdMaxLength}" />
+                                    <@spring.bind "containerRegistrationRequest.containerId" />
+                                    <input id="containerId" class="span" name="${spring.status.expression}" type="text" maxlength="${containerIdMaxLength}" value="${spring.status.value?default("")}" />
                                 </div>
                             </div>
                         </td>
@@ -38,10 +39,11 @@
                                 <label class="control-label">Instance*</label>
 
                                 <div class="controls">
-                                    <select id="instance" name="instance" validate="required:true">
+                                    <@spring.bind "containerRegistrationRequest.instance" />
+                                    <select id="instance" name="${spring.status.expression}" validate="required:true">
                                            <option value=""></option>
                                            <#list instances as instance>
-                                              <option value="${instance}">${instance}</option>
+                                              <option value="${instance}" <#if spring.status.value?default("") == instance>selected="true"</#if>>${instance}</option>
                                            </#list>
                                     </select>
                                 </div>

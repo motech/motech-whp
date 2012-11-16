@@ -64,7 +64,8 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
+                .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
@@ -79,7 +80,8 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
+                .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
     }

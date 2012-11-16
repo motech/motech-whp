@@ -35,13 +35,17 @@ public abstract class ContainerRegistrationController extends BaseWebController 
     protected boolean validate(Model uiModel, ContainerRegistrationRequest registrationRequest) {
         List<ErrorWithParameters> errors = containerRegistrationValidator.validate(registrationRequest);
         if (!errors.isEmpty()) {
-            uiModel.addAttribute("errors", errors);
+            uiModel.addAttribute("errors", errors)
+            .addAttribute("containerRegistrationRequest", registrationRequest);
             return true;
         }
         return false;
     }
 
     protected void populateViewDetails(Model uiModel, HttpServletRequest request) {
+        if(!uiModel.containsAttribute("containerRegistrationRequest"))
+            uiModel.addAttribute("containerRegistrationRequest", new ContainerRegistrationRequest());
+
         ArrayList<String> instances = new ArrayList<>();
         for (RegistrationInstance instance : RegistrationInstance.values())
             instances.add(instance.getDisplayText());
