@@ -88,7 +88,7 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
         $("#sortIcon_" + sortField).toggleClass('icon-arrow-up icon-arrow-down');
         $scope.currentPage = 1;
-        $scope.loadPage();
+        //$scope.loadPage();
     }
 
     $.fn.serializeObject = function () {

@@ -1,23 +1,12 @@
 var app = angular.module('whp', []);
 
-app.directive('updateFilter', function($rootScope) {
-    return function(scope,elm,attrs) {
-        $rootScope.$on("hashChanged", function() {
-            $(elm).find("input").each(function(index, element){
-                $(element).val("");
-            })
-            $(elm).find("select").each(function(index, element){
-                $(element).val("");
-            })
-        });
-    };
-});
-
 function FilterCtrl($scope, $http, $rootScope, $location) {
 
     $scope.initializeFilterForm = function () {
-        var paramMap = $location.search();
 
+        $scope.resetFormFields();
+
+        var paramMap = $location.search();
         if (paramMap[$scope.pagination_id + "-searchCriteria"]) {
             $rootScope.searchCriteria = JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
         }
@@ -27,12 +16,24 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
             var element = $('#' + key);
             if (element) {
                 element.val($rootScope.searchCriteria[key]);
+                if(element.data("id")){
+                    $('#' + element.data("id")).val($rootScope.searchCriteria[key]);
+                }
             }
         }
 
         $rootScope.$broadcast("filterUpdated");
     }
 
+    $scope.resetFormFields = function () {
+        var formElement = $('#' + $scope.filter_id);
+        $(formElement).find("input").each(function(index, element){
+                $(element).val("");
+        });
+        $(formElement).find("select").each(function(index, element){
+            $(element).val("");
+        });
+    }
 
     $(window).bind('hashchange', function () {
         $scope.initializeFilterForm();

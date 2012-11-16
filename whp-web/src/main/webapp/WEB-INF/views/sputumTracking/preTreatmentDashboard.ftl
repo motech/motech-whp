@@ -18,7 +18,7 @@
                    <div class="control-group span2">
                        <label class="control-label">Provider District</label>
                        <div class="controls">
-                           <select id="district" name="district">
+                           <select id="district" name="district" data-id="district-autocomplete">
                                <option value=""></option>
                                <#list districts as district>
                                    <option value="${district.name}" ng-selected="{{isSelected('${district.name}', searchCriteria.district, 'district')}}">${district.name}</option>
@@ -29,7 +29,7 @@
                    <div class="control-group span2">
                        <label class="control-label">Provider ID</label>
                        <div class="controls">
-                             <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
+                             <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId" data-id="providerId-autocomplete">
                        </div>
                    </div>
                   <div class="control-group span3 ">
