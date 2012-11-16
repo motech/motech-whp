@@ -38,8 +38,13 @@ $(function () {
             $("#providerId").val("");
             $("#providerId").data('combobox').destroy();
         }
+        var selectedProviderId =  $("#providerId").val();
         $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
             $("#providerId").html(response);
+            if(selectedProviderId) {
+                $("#providerId").val(selectedProviderId);
+                $("#providerId-autocomplete").val($("#providerId").val());
+            }
         });
         $("#providerId").combobox();
     }

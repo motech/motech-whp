@@ -37,7 +37,9 @@
                         <div class="control-group span2">
                             <label class="control-label">Provider ID</label>
                             <div class="controls">
-                                <input type = "text" id="providerId" name="providerId" ng-model = "searchCriteria.providerId">
+                                 <select id="providerId" name="providerId" data-id="providerId-autocomplete">
+                                     <option value="{{searchCriteria.providerId}}">{{searchCriteria.providerId}}</option>
+                                 </select>
                             </div>
                         </div>
                         <div class="control-group span3 ">
