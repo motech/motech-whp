@@ -80,7 +80,7 @@ public class ContainerService {
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);
         remediService.sendContainerRegistrationResponse(containerRegistrationModel);
-        publishContainerRegistrationReportingEvent(container, registrationRequest.getChannelId(), registrationRequest.getSubmitterId(), registrationRequest.getSubmitterRole());
+        publishContainerRegistrationReportingEvent(container, registrationRequest.getChannelId(), registrationRequest.getCallId(), registrationRequest.getSubmitterId(), registrationRequest.getSubmitterRole());
     }
 
     public boolean exists(String containerId) {
@@ -182,8 +182,13 @@ public class ContainerService {
         }
     }
 
-    private void publishContainerRegistrationReportingEvent(Container container, String channelId, String submitterId, String submitterRole) {
-        ContainerRegistrationReportingRequest containerRegistrationReportingRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(channelId).withSubmitterId(submitterId).withSubmitterRole(submitterRole).build();
+    private void publishContainerRegistrationReportingEvent(Container container, String channelId, String callId, String submitterId, String submitterRole) {
+        ContainerRegistrationReportingRequest containerRegistrationReportingRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container)
+                .registeredThrough(channelId)
+                .withSubmitterId(submitterId)
+                .withSubmitterRole(submitterRole)
+                .withCallId(callId)
+                .build();
         reportingPublisherService.reportContainerRegistration(containerRegistrationReportingRequest);
     }
 

@@ -129,7 +129,12 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
         markForDeletion(container);
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.IVR.name()).withSubmitterId(providerId).withSubmitterRole(WHPRole.PROVIDER.name()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container)
+                .registeredThrough(ChannelId.IVR.name())
+                .withSubmitterId(providerId)
+                .withSubmitterRole(WHPRole.PROVIDER.name())
+                .withCallId("64756435684375")
+                .build();
         verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
     }
 

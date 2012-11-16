@@ -42,5 +42,6 @@ public class ContainerRegistrationRequestMapperTest {
         assertEquals("phase", containerRegistrationReportingRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
         assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
+        assertEquals("call_id", containerRegistrationReportingRequest.getCallId());
     }
 }

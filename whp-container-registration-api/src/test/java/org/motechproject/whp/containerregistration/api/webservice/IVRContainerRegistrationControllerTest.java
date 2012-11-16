@@ -41,7 +41,7 @@ public class IVRContainerRegistrationControllerTest {
     @Mock
     ProviderService providerService;
 
-    org.motechproject.whp.containerregistration.api.webservice.IVRContainerRegistrationController IVRContainerRegistrationController;
+    IVRContainerRegistrationController ivrContainerRegistrationController;
 
     @Mock
     private IVRContainerRegistrationService ivrContainerRegistrationService;
@@ -49,7 +49,7 @@ public class IVRContainerRegistrationControllerTest {
     @Before
     public void setup() {
         initMocks(this);
-        IVRContainerRegistrationController = new IVRContainerRegistrationController(containerService, providerService, ivrContainerRegistrationService);
+        ivrContainerRegistrationController = new IVRContainerRegistrationController(containerService, providerService, ivrContainerRegistrationService);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class IVRContainerRegistrationControllerTest {
 
         when(ivrContainerRegistrationService.verifyProviderVerificationRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/provider/verify")
@@ -76,7 +76,7 @@ public class IVRContainerRegistrationControllerTest {
 
     @Test
     public void shouldRespondWithBadRequestIfRequestXMLIsInvalid() throws Exception {
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/provider/verify")
@@ -98,7 +98,7 @@ public class IVRContainerRegistrationControllerTest {
 
         when(ivrContainerRegistrationService.verifyProviderVerificationRequest(request)).thenReturn(successResult);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/provider/verify")
@@ -126,7 +126,7 @@ public class IVRContainerRegistrationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
 
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/container/verify")
@@ -147,7 +147,7 @@ public class IVRContainerRegistrationControllerTest {
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
         when(ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
 
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/container/verify")
@@ -168,7 +168,7 @@ public class IVRContainerRegistrationControllerTest {
 
     @Test
     public void shouldRespondWithErrorOnInvalidXMLForContainerRequest() throws Exception {
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/container/verify")
@@ -182,12 +182,13 @@ public class IVRContainerRegistrationControllerTest {
     public void shouldRegisterContainerOnSuccessfulValidation() throws Exception {
         Provider provider = new Provider();
         provider.setProviderId("providerId");
+        String call_id = "64756435684375";
 
-        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest("0986754322", "76862367681", "64756435684375", "PreTreatment");
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest("0986754322", "76862367681", call_id, "PreTreatment");
         when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult());
         when(providerService.findByMobileNumber(anyString())).thenReturn(provider);
 
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/register")
@@ -207,6 +208,7 @@ public class IVRContainerRegistrationControllerTest {
         assertEquals(request.getPhase(), containerRegistrationReportingRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
         assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
+        assertEquals(call_id, containerRegistrationReportingRequest.getCallId());
         assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getSubmitterId());
         assertEquals(WHPRole.PROVIDER.name(), containerRegistrationReportingRequest.getSubmitterRole());
     }
@@ -220,7 +222,7 @@ public class IVRContainerRegistrationControllerTest {
         request.setPhase("Pre-treatment");
         request.setCall_id("64756435684375");
         when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
-        standaloneSetup(IVRContainerRegistrationController)
+        standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
                         post("/ivr/containerRegistration/register")
@@ -237,5 +239,4 @@ public class IVRContainerRegistrationControllerTest {
     private byte[] readXML(String xmlPath) throws IOException {
         return IOUtils.toByteArray(this.getClass().getResourceAsStream(xmlPath));
     }
-
 }

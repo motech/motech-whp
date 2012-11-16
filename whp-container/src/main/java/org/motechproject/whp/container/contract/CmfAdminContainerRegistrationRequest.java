@@ -10,8 +10,8 @@ public class CmfAdminContainerRegistrationRequest extends ContainerRegistrationR
     public CmfAdminContainerRegistrationRequest() {
     }
 
-    public CmfAdminContainerRegistrationRequest(String providerId, String containerId, String instance, ContainerRegistrationMode containerRegistrationMode, ChannelId channelId) {
-        super(providerId, containerId, instance, channelId.name());
+    public CmfAdminContainerRegistrationRequest(String providerId, String containerId, String instance, ContainerRegistrationMode containerRegistrationMode, ChannelId channelId, String callId) {
+        super(providerId, containerId, instance, channelId.name(), callId);
         this.containerRegistrationMode = containerRegistrationMode;
     }
 }

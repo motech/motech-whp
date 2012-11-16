@@ -17,10 +17,11 @@ public class ContainerRegistrationRequestMapper {
         this.providerService = providerService;
     }
 
-    public ContainerRegistrationRequest buildContainerRegistrationRequest(IvrContainerRegistrationRequest ivrContainerRegistrationRequest){
+    public ContainerRegistrationRequest buildContainerRegistrationRequest(IvrContainerRegistrationRequest ivrContainerRegistrationRequest) {
 
         Provider provider = providerService.findByMobileNumber(ivrContainerRegistrationRequest.getMsisdn());
-        ContainerRegistrationRequest containerRegistrationReportingRequest = new ContainerRegistrationRequest(provider.getProviderId(),ivrContainerRegistrationRequest.getContainer_id(), ivrContainerRegistrationRequest.getPhase(), ChannelId.IVR.name());
+        ContainerRegistrationRequest containerRegistrationReportingRequest = new ContainerRegistrationRequest(provider.getProviderId(),
+                ivrContainerRegistrationRequest.getContainer_id(), ivrContainerRegistrationRequest.getPhase(), ChannelId.IVR.name(), ivrContainerRegistrationRequest.getCall_id());
         containerRegistrationReportingRequest.setSubmitterId(provider.getProviderId());
         containerRegistrationReportingRequest.setSubmitterRole(WHPRole.PROVIDER.name());
         return containerRegistrationReportingRequest;

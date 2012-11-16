@@ -42,4 +42,9 @@ public class ContainerRegistrationReportingRequestBuilder {
         containerRegistrationReportingRequest.setSubmitterRole(role);
         return this;
     }
+
+    public ContainerRegistrationReportingRequestBuilder withCallId(String callId) {
+        containerRegistrationReportingRequest.setCallId(callId);
+        return this;
+    }
 }

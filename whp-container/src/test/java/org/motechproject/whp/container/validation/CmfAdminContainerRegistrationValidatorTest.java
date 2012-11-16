@@ -50,7 +50,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forValidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB, null);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(true);
@@ -67,7 +67,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
     public void shouldValidateWhenCmfAdminEntersContainerIdAsNewContainer_forInvalidContainerId(){
 
         ContainerRegistrationMode containerRegistrationMode = NEW_CONTAINER;
-        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB);
+        CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), CONTAINER_ID, InTreatment.getDisplayText(),containerRegistrationMode, ChannelId.WEB, null);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(adminContainerMappingService.isValidContainer(Long.parseLong(CONTAINER_ID))).thenReturn(false);
@@ -88,7 +88,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
         CmfAdminContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 containerId, InTreatment.getDisplayText(),
-                containerRegistrationMode, ChannelId.WEB);
+                containerRegistrationMode, ChannelId.WEB, null);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
@@ -108,7 +108,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
                 validProvider.getProviderId(),
                 CONTAINER_ID,
                 InTreatment.getDisplayText(),
-                containerRegistrationMode, ChannelId.WEB);
+                containerRegistrationMode, ChannelId.WEB, null);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), CONTAINER_ID)).thenReturn(false);
@@ -128,7 +128,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
                 validProvider.getProviderId(),
                 CONTAINER_ID,
                 InTreatment.getDisplayText(),
-                containerRegistrationMode, ChannelId.WEB);
+                containerRegistrationMode, ChannelId.WEB, null);
 
         ArrayList<ErrorWithParameters> errors = new ArrayList<>();
         errors.add(new ErrorWithParameters("container.id.length.error", "11"));
@@ -149,7 +149,7 @@ public class CmfAdminContainerRegistrationValidatorTest {
                 validProvider.getProviderId(),
                 CONTAINER_ID,
                 InTreatment.getDisplayText(),
-                containerRegistrationMode, ChannelId.WEB);
+                containerRegistrationMode, ChannelId.WEB, null);
 
         when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
 

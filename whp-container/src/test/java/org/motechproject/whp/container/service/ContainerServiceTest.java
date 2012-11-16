@@ -84,7 +84,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
         when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
-        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         containerService.registerContainer(containerRegistrationRequest);
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -147,7 +147,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         Provider provider = new Provider(null, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
-        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name());
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
         containerService.registerContainer(containerRegistrationRequest);
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -464,7 +464,10 @@ public class ContainerServiceTest extends BaseUnitTest {
     }
 
     private void verifyRegistrationReportingEventPublication(ContainerRegistrationRequest containerRegistrationReportingRequest, Container container) {
-        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(containerRegistrationReportingRequest.getChannelId()).build();
+        ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container)
+                .registeredThrough(containerRegistrationReportingRequest.getChannelId())
+                .withCallId(containerRegistrationReportingRequest.getCallId())
+                .build();
         verify(reportingPublisherService).reportContainerRegistration(expectedContainerRegistrationRequest);
     }
 

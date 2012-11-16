@@ -45,7 +45,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidateDuplicateContainerId() {
         String containerID = "12345678910";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerID, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerID, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         when(containerService.exists(containerID)).thenReturn(true);
 
         List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
@@ -56,28 +56,28 @@ public class ContainerRegistrationRequestValidatorTest {
 
     @Test
     public void shouldValidateContainerId_notHavingStipulatedNumberOfDigits() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         List<ErrorWithParameters> invalidLengthErrors = registrationRequestValidator.validate(request);
         assertTrue(invalidLengthErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
     }
 
     @Test
     public void shouldValidateContainerId_havingNonNumericCharacters() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "123456789a", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "123456789a", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         List<ErrorWithParameters> nonNumericErrors = registrationRequestValidator.validate(request);
         assertTrue(nonNumericErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
     }
 
     @Test
     public void shouldValidateInstance() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345678910", "invalid_instance", ChannelId.WEB.name());
+        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345678910", "invalid_instance", ChannelId.WEB.name(), null);
         List<ErrorWithParameters> invalidInstanceErrors = registrationRequestValidator.validate(request);
         assertTrue(invalidInstanceErrors.contains(new ErrorWithParameters("invalid.instance.error", "invalid_instance")));
     }
 
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderIdIsUndefined() {
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest("", "12345678910", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest("", "12345678910", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
         assertTrue(validationErrors.contains(new ErrorWithParameters("provider.id.invalid.error", "")));
     }
@@ -85,7 +85,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderExists() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
 
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
@@ -98,7 +98,7 @@ public class ContainerRegistrationRequestValidatorTest {
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderDoesNotExist() {
         String unregisteredProviderId = "UnregisteredProviderId";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, "11111111111", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, "11111111111", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
         verify(providerService).findByProviderId(unregisteredProviderId);

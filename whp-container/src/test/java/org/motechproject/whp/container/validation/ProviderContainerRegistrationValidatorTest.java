@@ -44,7 +44,7 @@ public class ProviderContainerRegistrationValidatorTest {
     @Test
     public void shouldValidateProviderIdContainerMappingSuccessfully() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(true);
 
         List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
@@ -56,7 +56,7 @@ public class ProviderContainerRegistrationValidatorTest {
     @Test
     public void shouldValidateProviderIdContainerMappingWithErrors_whenProviderExists() {
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         when(providerContainerMappingService.isValidContainerForProvider(validProvider.getProviderId(), containerId)).thenReturn(false);
 
         List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
@@ -70,7 +70,7 @@ public class ProviderContainerRegistrationValidatorTest {
     public void shouldNotValidateProviderIdContainerMapping_whenContainerRegistrationValidationFailed() {
         String unregisteredProviderId = "UnregisteredProviderId";
         String containerId = "11111111111";
-        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name());
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
 
 
         ArrayList<ErrorWithParameters> expectedErrors = new ArrayList<>();
@@ -89,7 +89,7 @@ public class ProviderContainerRegistrationValidatorTest {
         ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(
                 validProvider.getProviderId(),
                 containerId,
-                InTreatment.getDisplayText(), ChannelId.WEB.name());
+                InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
 
         ArrayList<ErrorWithParameters> expectedErrors = new ArrayList<>();
         expectedErrors.add(new ErrorWithParameters("container.id.length.error", "11"));
