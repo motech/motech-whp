@@ -33,6 +33,10 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>case-logger</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
