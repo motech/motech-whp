@@ -46,6 +46,7 @@
     <import resource="classpath*:applicationContainerRegistrationApiContext.xml"/>
     <import resource="classpath*:applicationContainerContext.xml"/>
     <import resource="classpath*:applicationContext-DiagnosticsWeb.xml"/>
+    <import resource="classpath*:applicationContext-CaseLoggerWeb.xml"/>
     <import resource="classpath*:applicationContext-case.xml"/>
 
 

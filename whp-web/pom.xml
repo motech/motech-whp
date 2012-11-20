@@ -174,6 +174,10 @@
             <artifactId>motech-diagnostics-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>case-logger-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-adherence-capture</artifactId>
         </dependency>

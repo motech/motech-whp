@@ -24,11 +24,15 @@
     <context:component-scan base-package="org.motechproject.diagnostics.controller">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    <context:component-scan base-package="org.motechproject.caselogs.controller">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
     <context:component-scan base-package="org.motechproject.flash"/>
 
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/" />
+    <mvc:resources mapping="/case-logger-web/**" location="classpath:/case-logger-web/" />
     <mvc:default-servlet-handler/>
 
     <!-- Configures Handler Interceptors -->
