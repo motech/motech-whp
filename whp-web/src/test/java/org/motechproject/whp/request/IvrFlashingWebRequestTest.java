@@ -16,10 +16,12 @@ public class IvrFlashingWebRequestTest {
         IvrFlashingWebRequest ivrFlashingWebRequest = new IvrFlashingWebRequest();
         String mobileNumber = "123456789";
         String callTime = "14/08/2012 11:20:59";
+        String callId = "callId";
         ivrFlashingWebRequest.setMobileNumber(mobileNumber);
         ivrFlashingWebRequest.setCallTime(callTime);
+        ivrFlashingWebRequest.setCallId(callId);
 
-        FlashingRequest expectedFlashingRequest = new FlashingRequest(mobileNumber, DateTime.parse(callTime, forPattern("dd/MM/yyyy HH:mm:ss")));
+        FlashingRequest expectedFlashingRequest = new FlashingRequest(mobileNumber, DateTime.parse(callTime, forPattern("dd/MM/yyyy HH:mm:ss")), callId);
 
         FlashingRequest flashingRequest = ivrFlashingWebRequest.createFlashingRequest();
 

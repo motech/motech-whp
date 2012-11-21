@@ -56,6 +56,7 @@ public class IvrCallService {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
         flashingLogRequest.setCreationTime(DateUtil.now().toDate());
         flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
+        flashingLogRequest.setFlashingCallId(flashingRequest.getCallId());
         flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
         return flashingLogRequest;
     }

@@ -33,6 +33,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
     private static final String IVR_CALL_BACK_URL = "callBackURL";
     private static final String PHONE_NUMBER_FIELD_KEY = "PHONE_NUMBER_FIELD_KEY";
     private static final String NATIONAL_TELEPHONE_NUMBER_PREFIX = "0";
+    private String CALL_ID = "callId";
 
     @Before
     public void setUp() {
@@ -44,7 +45,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
     @Test
     public void shouldPrefixMobileNumber_withNationalTelephoneNumberPrefix_zero() {
         Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
-        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now(), CALL_ID);
 
         when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
 
@@ -60,7 +61,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
     @Test
     public void shouldInitiateOutboundCallForRegisteredMobileNumbers(){
         Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
-        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now(), CALL_ID);
 
         when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
 
@@ -77,7 +78,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldNotInitiateOutboundCallForUnregisteredMobileNumbers() {
-        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now(), CALL_ID);
 
         when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(null);
 
@@ -90,7 +91,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
     @Test
     public void shouldLogFlashingEvent_whenCallArrivesFromRegisteredMobileNumber(){
         Provider provider = ProviderBuilder.newProviderBuilder().withPrimaryMobileNumber(PHONE_NUMBER_FIELD_KEY).build();
-        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now(), CALL_ID);
 
         when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(provider);
 
@@ -106,7 +107,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldLogFlashingEvent_whenCallArrivesFromUnregisteredMobileNumber(){
-        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now());
+        FlashingRequest flashingRequest = new FlashingRequest(PHONE_NUMBER_FIELD_KEY, DateTime.now(), CALL_ID);
         when(providerService.findByMobileNumber(PHONE_NUMBER_FIELD_KEY)).thenReturn(null);
         ivrCallService.handleFlashingRequest(flashingRequest);
 
@@ -118,6 +119,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
     private FlashingLogRequest createFlashingLogRequest(FlashingRequest flashingRequest) {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
         flashingLogRequest.setCallTime(flashingRequest.getCallTime().toDate());
+        flashingLogRequest.setFlashingCallId(flashingRequest.getCallId());
         flashingLogRequest.setCreationTime(DateUtil.now().toDate());
         flashingLogRequest.setMobileNumber(flashingRequest.getMobileNumber());
         return flashingLogRequest;

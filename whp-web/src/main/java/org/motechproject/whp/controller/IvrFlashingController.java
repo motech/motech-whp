@@ -22,7 +22,7 @@ public class IvrFlashingController extends BaseWebController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void callBack(@RequestBody IvrFlashingWebRequest ivrFlashingWebRequest) {
         FlashingRequest flashingRequest = ivrFlashingWebRequest.createFlashingRequest();
         ivrCallService.handleFlashingRequest(flashingRequest);

@@ -11,7 +11,7 @@
     <context:property-placeholder location="classpath*:message_en.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:httpclient.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:ivr.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:dozer.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:seed.properties"  ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath*:spring-batch-diagnostics.properties" ignore-unresolvable="true"/>

@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.ivr.request.FlashingRequest;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -19,9 +20,16 @@ public class IvrFlashingWebRequest {
 
     private String callTime;
 
+    private String callId;
+
     @XmlElement(name = "call_no")
     public String getMobileNumber() {
         return mobileNumber;
+    }
+
+    @XmlElement(name = "call_id")
+    public String getCallId() {
+        return callId;
     }
 
     @XmlElement(name = "time")
@@ -32,7 +40,8 @@ public class IvrFlashingWebRequest {
     public FlashingRequest createFlashingRequest() {
         FlashingRequest flashingRequest = new FlashingRequest();
         flashingRequest.setMobileNumber(mobileNumber);
-        flashingRequest.setCallTime(DateTime.parse(callTime, forPattern("dd/MM/yyyy HH:mm:ss")));
+        flashingRequest.setCallTime(new WHPDateTime(callTime).date());
+        flashingRequest.setCallId(callId);
         return flashingRequest;
     }
 }
