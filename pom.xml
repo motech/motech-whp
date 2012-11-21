@@ -21,6 +21,7 @@
     </properties>
 
     <modules>
+        <module>whp-config</module>
         <module>whp-common</module>
         <module>whp-refdata</module>
         <module>whp-data-importer</module>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="production" class="org.apache.log4j.RollingFileAppender">
+        <param value="/var/log/whp/whp.log" name="File"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="4096KB"/>
+        <param name="maxBackupIndex" value="5"/>
+        <param name="immediateFlush" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="integration" class="org.apache.log4j.RollingFileAppender">
+        <param value="/var/log/whp/whp-integration.log" name="File"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="4096KB"/>
+        <param name="maxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="dataImporter" class="org.apache.log4j.RollingFileAppender">
+        <param value="/var/log/whp/dataImporter.log" name="File"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="4096KB"/>
+        <param name="maxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] [%p] - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="ivr" class="org.apache.log4j.RollingFileAppender">
+        <param value="/var/log/whp/ivr/ivr.log" name="File"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="20480KB"/>
+        <param name="maxBackupIndex" value="20"/>
+        <param name="immediateFlush" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="org.motechproject.whp.ivr">
+        <level value="info"/>
+        <appender-ref ref="ivr"/>
+    </logger>
+
+    <logger name="org.motechproject.server.decisiontree">
+        <level value="debug"/>
+        <appender-ref ref="ivr"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="warn"/>
+    </logger>
+    <logger name="org.springframework.jms.listener">
+        <level value="fatal"/>
+    </logger>
+    <logger name="org.ektorp">
+        <level value="warn"/>
+    </logger>
+    <logger name="org.motechproject">
+        <level value="info"/>
+    </logger>
+
+    <logger name="org.motechproject.provider.registration.service">
+        <level value="info"/>
+        <appender-ref ref="integration"/>
+    </logger>
+
+    <logger name="org.motechproject.casexml.service">
+        <level value="info"/>
+        <appender-ref ref="integration"/>
+    </logger>
+
+    <logger name="importer">
+        <level value="all"/>
+        <appender-ref ref="dataImporter"/>
+    </logger>
+
+    <root>
+        <priority value="warn"/>
+        <appender-ref ref="production"/>
+    </root>
+</log4j:configuration>
