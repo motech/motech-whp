@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
+import org.motechproject.provider.registration.contract.OpenRosaXmlRequest;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
@@ -12,7 +13,7 @@ import javax.validation.constraints.Pattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
-public class ProviderWebRequest {
+public class ProviderWebRequest implements OpenRosaXmlRequest {
 
     @NotNullOrEmpty
     private String provider_id;
@@ -41,4 +42,14 @@ public class ProviderWebRequest {
     @NotNull
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private String date;
+
+    @Override
+    public String getId() {
+        return provider_id;
+    }
+
+    @Override
+    public String getType() {
+        return "Provider Registration";
+    }
 }

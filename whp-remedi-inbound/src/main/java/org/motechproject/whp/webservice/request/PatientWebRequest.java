@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
+import org.motechproject.casexml.contract.CaseXmlRequest;
 import org.motechproject.validation.constraints.*;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
@@ -22,7 +23,7 @@ import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
-public class PatientWebRequest {
+public class PatientWebRequest implements CaseXmlRequest{
 
     @NotNullOrEmpty
     private String case_id;
@@ -225,5 +226,15 @@ public class PatientWebRequest {
             return (TreatmentUpdateScenario) StringToEnumeration.get(treatment_update, TreatmentUpdateScenario.class);
         }
         return null;
+    }
+
+    @Override
+    public String getId() {
+        return case_id;
+    }
+
+    @Override
+    public String getType() {
+        return "Patient: " + updateScope().name();
     }
 }

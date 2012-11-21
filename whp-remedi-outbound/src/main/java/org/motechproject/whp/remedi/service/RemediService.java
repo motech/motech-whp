@@ -15,6 +15,7 @@ import java.io.IOException;
 
 @Service
 public class RemediService {
+    public static final String CONTAINER_REGISTRATION_REQUEST_TYPE = "Container Registration";
     private HttpClientService httpClientService;
     private CaseLogService caseLogService;
     private RemediXmlRequestBuilder remediXmlRequestBuilder;
@@ -31,6 +32,6 @@ public class RemediService {
     public void sendContainerRegistrationResponse(ContainerRegistrationModel containerRegistrationModel) throws IOException, TemplateException {
         String requestXml = remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel);
         httpClientService.post(remediUrl, requestXml);
-        caseLogService.add(new CaseLog(requestXml, remediUrl, false, DateTime.now()));
+        caseLogService.add(new CaseLog(containerRegistrationModel.getContainerId(), CONTAINER_REGISTRATION_REQUEST_TYPE, requestXml, remediUrl, false, DateTime.now()));
     }
 }

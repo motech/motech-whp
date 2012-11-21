@@ -55,7 +55,8 @@ public class RemediServiceTest {
 
     @Test
     public void shouldLogWhileSendingContainerRegistrationDetails() throws IOException, TemplateException {
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel("", "", RegistrationInstance.PreTreatment, DateUtil.now());
+        String containerId = "containerId";
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, "", RegistrationInstance.PreTreatment, DateUtil.now());
         String xmlRequestToBeSent = "xml Request";
 
         when(remediXmlRequestBuilder.buildTemplatedXmlFor(containerRegistrationModel)).thenReturn(xmlRequestToBeSent);
@@ -68,7 +69,9 @@ public class RemediServiceTest {
         order.verify(caseLogService).add(captor.capture());
         CaseLog actualLog = captor.getValue();
 
-        assertEquals(remediUrl, actualLog.getContextPath());
+        assertEquals(containerId, actualLog.getEntityId());
+        assertEquals(RemediService.CONTAINER_REGISTRATION_REQUEST_TYPE, actualLog.getRequestType());
+        assertEquals(remediUrl, actualLog.getEndpoint());
         assertEquals(xmlRequestToBeSent, actualLog.getRequest());
         assertNotNull(actualLog.getLogDate());
         assertFalse(actualLog.getHasException());

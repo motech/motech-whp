@@ -2,6 +2,7 @@ package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.casexml.contract.CaseXmlRequest;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
@@ -15,7 +16,7 @@ import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
-public class SputumLabResultsWebRequest {
+public class SputumLabResultsWebRequest implements CaseXmlRequest {
 
     @NotNullOrEmpty
     private String case_id;
@@ -56,5 +57,15 @@ public class SputumLabResultsWebRequest {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return case_id;
+    }
+
+    @Override
+    public String getType() {
+        return "Sputum Lab Results";
     }
 }

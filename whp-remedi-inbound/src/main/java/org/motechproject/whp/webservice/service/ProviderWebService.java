@@ -1,5 +1,7 @@
 package org.motechproject.whp.webservice.service;
 
+import org.motechproject.provider.registration.contract.OpenRosaXmlRequest;
+import org.motechproject.provider.registration.exception.OpenRosaRegistrationValidationException;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.provider.registration.service.ProviderRegistrationService;
 import org.motechproject.whp.patient.command.UpdateScope;

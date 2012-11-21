@@ -1,6 +1,7 @@
 package org.motechproject.whp.webservice.request;
 
 import lombok.Data;
+import org.motechproject.casexml.contract.CaseXmlRequest;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Enumeration;
 import org.motechproject.validation.constraints.NamedConstraint;
@@ -13,7 +14,7 @@ import javax.validation.constraints.Pattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
-public class ContainerPatientMappingWebRequest {
+public class ContainerPatientMappingWebRequest implements CaseXmlRequest {
     private static final String EMPTY_STRING = "";
 
     @NotNullOrEmpty
@@ -43,5 +44,15 @@ public class ContainerPatientMappingWebRequest {
         return !(getPatient_id().equals(EMPTY_STRING)
                 && getTb_id().equals(EMPTY_STRING)
                 && getSmear_sample_instance().equals(EMPTY_STRING));
+    }
+
+    @Override
+    public String getId() {
+        return case_id;
+    }
+
+    @Override
+    public String getType() {
+        return "Container Patient Mapping";
     }
 }
