@@ -1,22 +1,31 @@
 package org.motechproject.whp.ivr.session;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.server.kookoo.KookooCallServiceImpl;
+import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.IVRInput;
 import org.motechproject.whp.ivr.util.SerializableList;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.joda.time.DateTime.parse;
 import static org.motechproject.util.DateUtil.setTimeZone;
 
 public class IvrSession {
 
+    public static final String IVR_FLASHING_CALL_ID = "flashingCallId";
     public static final String PATIENTS_WITHOUT_ADHERENCE = "patientsWithoutAdherence";
     public static final String PATIENTS_WITH_ADHERENCE = "patientsWithAdherence";
     public static final String PATIENTS_WITH_ADHERENCE_RECORDED_IN_THIS_SESSION = "patientsWithAdherenceRecordedInThisSession";
@@ -38,7 +47,7 @@ public class IvrSession {
         this.flowSession = flowSession;
         // Stripping the national telephone number prefix from the actual mobile number for all practical usage
         String cid = flowSession.get("cid");
-        if(StringUtils.hasText(cid) && cid.startsWith(NATIONAL_TELEPHONE_NUMBER_PREFIX)) {
+        if (StringUtils.hasText(cid) && cid.startsWith(NATIONAL_TELEPHONE_NUMBER_PREFIX)) {
             this.flowSession.set("cid", cid.substring(1));
         }
     }
@@ -228,8 +237,13 @@ public class IvrSession {
     }
 
     public CallStatus callStatus() {
-        return flowSession.get(CALL_STATUS) == null ? CallStatus.PROVIDER_DISCONNECT :  CallStatus.valueOf(flowSession.get(CALL_STATUS).toString());
+        return flowSession.get(CALL_STATUS) == null ? CallStatus.PROVIDER_DISCONNECT : CallStatus.valueOf(flowSession.get(CALL_STATUS).toString());
     }
 
+    public String flashingCallId() {
+        String jsonDataMap = flowSession.get(KookooCallServiceImpl.CUSTOM_DATA_KEY);
+        Map map = new Gson().fromJson(jsonDataMap, new TypeToken<Map<String, String>>(){}.getType());
+        return map != null ? (String) map.get(IVR_FLASHING_CALL_ID) : null;
+    }
 }
 

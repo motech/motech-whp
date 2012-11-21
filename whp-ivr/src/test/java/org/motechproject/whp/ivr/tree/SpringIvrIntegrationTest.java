@@ -1,9 +1,13 @@
 package org.motechproject.whp.ivr.tree;
 
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.LocalDate;
+import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,18 +18,18 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.ivr.util.KooKooIvrResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.xml.bind.JAXBContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 import static org.apache.commons.codec.binary.Base64.encodeBase64URLSafe;
 import static org.custommonkey.xmlunit.XMLUnit.setIgnoreWhitespace;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
+import static org.motechproject.whp.ivr.session.IvrSession.IVR_FLASHING_CALL_ID;
 
 @ContextConfiguration(locations = {"/test-applicationIVRContext.xml"})
 public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
@@ -41,13 +45,14 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     DefaultHttpClient httpClient;
 
     private static DispatcherServlet dispatcherServlet;
-    protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s";
+    protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s&dataMap=%s";
     protected final String GOT_DTMF_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=GotDTMF&data=%s&cid=%s&sid=%s&";
     protected final String HANGUP_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&event=Disconnect&cid=%s&sid=%s&";
 
     private String currentPath;
     private String callerId;
     private String sessionId;
+    protected String flashingCallId = "flashingCallId";
 
     @Before
     public void setup() throws IOException, InterruptedException {
@@ -89,16 +94,26 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
             JAXBContext jaxbContext = JAXBContext.newInstance(KooKooIvrResponse.class);
             return (KooKooIvrResponse) jaxbContext.createUnmarshaller().unmarshal(new ByteArrayInputStream(response.getBytes()));
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return new KooKooIvrResponse();
     }
 
-    protected KooKooIvrResponse startCall(String callerId) {
+    protected KooKooIvrResponse startCall(String callerId)  {
         sessionId = UUID.randomUUID().toString();
         this.currentPath = TREE_START_PATH;
         this.callerId = callerId;
-        return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, base64(TREE_START_PATH), callerId, sessionId));
+        Map<String, String> params = new HashMap<>();
+        params.put(IVR_FLASHING_CALL_ID, flashingCallId);
+        return getResponse(String.format(NEW_CALL_URL_FORMAT, SERVER_URL, base64(TREE_START_PATH), callerId, sessionId, encodedDataMap(params)));
+    }
+
+    private String encodedDataMap(Map<String, String> params) {
+        try {
+            return URIUtil.encodeQuery(new JSONObject(params).toString());
+        } catch (URIException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected KooKooIvrResponse sendDtmf(String dtmf) {

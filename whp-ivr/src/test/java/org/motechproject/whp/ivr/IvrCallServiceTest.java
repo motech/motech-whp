@@ -10,6 +10,7 @@ import org.motechproject.ivr.service.IVRService;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.request.FlashingRequest;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -20,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.ivr.session.IvrSession.IVR_FLASHING_CALL_ID;
 
 public class IvrCallServiceTest extends BaseUnitTest {
     @Mock
@@ -71,6 +73,7 @@ public class IvrCallServiceTest extends BaseUnitTest {
         verify(ivrService).initiateCall(argumentCaptor.capture());
 
         CallRequest callRequest = argumentCaptor.getValue();
+        assertThat(callRequest.getPayload().get(IVR_FLASHING_CALL_ID), is(CALL_ID));
         assertThat(callRequest.getPhone(), is(NATIONAL_TELEPHONE_NUMBER_PREFIX + PHONE_NUMBER_FIELD_KEY));
         assertThat(callRequest.getCallBackUrl(), is(IVR_CALL_BACK_URL));
         verify(providerService).findByMobileNumber(PHONE_NUMBER_FIELD_KEY);

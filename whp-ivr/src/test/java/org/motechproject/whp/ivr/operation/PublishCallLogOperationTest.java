@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.decisiontree.FlowSession;
+import org.motechproject.server.kookoo.KookooCallServiceImpl;
 import org.motechproject.whp.ivr.CallStatus;
 import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.ivr.util.FlowSessionStub;
@@ -33,14 +34,15 @@ public class PublishCallLogOperationTest {
     private String providerId = "providerId";
     private DateTime startTime = now();
     private DateTime endTime = now().plusMinutes(1);
+    private String flashingCallId = "flashingCallId";
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         initMocks(this);
     }
 
     @Test
-    public void shouldPublishCallLog(){
+    public void shouldPublishCallLog() {
 
         FlowSession flowSession = setUpFlowSession();
 
@@ -68,6 +70,7 @@ public class PublishCallLogOperationTest {
         flowSession.set(IvrSession.PROVIDER_ID, providerId);
         flowSession.set(IvrSession.CALL_START_TIME, startTime);
         flowSession.set(IvrSession.SID, callId);
+        flowSession.set(KookooCallServiceImpl.CUSTOM_DATA_KEY, "{\"flashingCallId\": \"" + flashingCallId + "\"}");
 
         patientsWithAdherence = asList("patient1");
         flowSession.set(IvrSession.PATIENTS_WITH_ADHERENCE, new SerializableList(patientsWithAdherence));
@@ -81,6 +84,7 @@ public class PublishCallLogOperationTest {
     private AdherenceCallLogRequest createAdherenceCallLogRequest(CallStatus callStatus, int totalPatients, int adherenceCaptured, int remainingPatientsWithoutAdherence) {
         AdherenceCallLogRequest callLogRequest = new AdherenceCallLogRequest();
         callLogRequest.setCallId(callId);
+        callLogRequest.setFlashingCallId(flashingCallId);
         callLogRequest.setEndTime(endTime.toDate());
         callLogRequest.setStartTime(startTime.toDate());
         callLogRequest.setCalledBy(providerId);

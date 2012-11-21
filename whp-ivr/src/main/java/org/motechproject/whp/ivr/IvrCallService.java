@@ -4,6 +4,7 @@ import org.motechproject.ivr.service.CallRequest;
 import org.motechproject.ivr.service.IVRService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.ivr.request.FlashingRequest;
+import org.motechproject.whp.ivr.session.IvrSession;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.domain.Provider;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.motechproject.whp.ivr.session.IvrSession.IVR_FLASHING_CALL_ID;
 
 @Service
 public class IvrCallService {
@@ -39,6 +42,7 @@ public class IvrCallService {
         Provider provider = providerService.findByMobileNumber(mobileNumber);
         if(provider != null){
             Map<String, String> params = new HashMap<>();
+            params.put(IVR_FLASHING_CALL_ID, flashingRequest.getCallId());
             mobileNumber = prefixNationalCode(mobileNumber);
             CallRequest callRequest = new CallRequest(mobileNumber, params, ivrCallBackURL);
             ivrService.initiateCall(callRequest);

@@ -364,6 +364,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
         assertThat(callLogRequest.getTotalPatients(), is(3));
         assertThat(callLogRequest.getAdherenceCaptured(), is(3));
         assertThat(callLogRequest.getAdherenceNotCaptured(), is(0));
+        assertThat(callLogRequest.getFlashingCallId(), is(flashingCallId));
     }
 
     @Test

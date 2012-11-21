@@ -44,6 +44,7 @@ public class PublishCallLogOperation implements INodeOperation {
         callLogRequest.setTotalPatients(ivrSession.countOfAllPatients());
         callLogRequest.setAdherenceCaptured(ivrSession.countOfPatientsWithAdherenceRecordedInThisSession());
         callLogRequest.setAdherenceNotCaptured(ivrSession.countOfCurrentPatientsWithoutAdherence());
+        callLogRequest.setFlashingCallId(ivrSession.flashingCallId());
         return callLogRequest;
     }
 }
