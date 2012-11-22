@@ -8,14 +8,14 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-    <context:property-placeholder location="classpath*:message_en.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:httpclient.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:message_en.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:httpClient.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:dozer.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:seed.properties"  ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:spring-batch-diagnostics.properties" ignore-unresolvable="true"/>
-    <context:property-placeholder location="classpath*:activemq.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:seed.properties"  ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:spring-batch-diagnostics.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:activemq.properties" ignore-unresolvable="true"/>
 
     <util:properties id="diagnosticProperties" location="classpath:diagnostics.properties"/>
 

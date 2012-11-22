@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class IvrResponseAudioMatcher extends TypeSafeMatcher<List<String>> {
 
@@ -45,7 +45,7 @@ public class IvrResponseAudioMatcher extends TypeSafeMatcher<List<String>> {
 
     protected void assertPrompts(List<String> actualPrompts) {
         int index = actualPrompts.indexOf(expectedAudioList.get(0));
-        if (index < 0) assertTrue(false);
+        if (index < 0) fail("Expected " + expectedAudioList.toString() + "But was " + actualPrompts.toString());
         for (int i = index; i < index + expectedAudioList.size(); i++) {
             assertThat(actualPrompts.get(i), is(expectedAudioList.get(i - index)));
         }

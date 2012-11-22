@@ -16,6 +16,10 @@
     <dependencies>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
             <type>jar</type>
         </dependency>

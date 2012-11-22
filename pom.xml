@@ -144,6 +144,11 @@
             <!--Child modules-->
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-ivr</artifactId>
                 <version>${project.version}</version>
             </dependency>
