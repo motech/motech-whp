@@ -521,9 +521,16 @@ div.buttons a, div.buttons button {
 .name {
     text-transform: capitalize;
 }
-.patient {
+.patient-info .patient {
     font-size: 2em;
     color: #555;
+	margin: 0;
+}
+.patient-info .provider-details  {
+    font-size: 1.1em;
+}
+.patient-info .provider-details b:first-child{
+    font-size: 1.2em;
 }
 .patient .sub-details {
     font-size: 0.7em;
@@ -929,9 +936,14 @@ pre {
     width: 570px;
     margin: 7% auto 0;
     padding: 15px;
-    border-radius: 8px;
+	background: rgba(254, 254, 254, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.2);
+	-moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
 }
 .login-form h1, .login-form label {
    color: #fff;
@@ -1097,18 +1109,22 @@ pre {
     border-top-right-radius: 3px;
 }
 
-/* print specific style */
-@media print {
-    body {
-        background: none;
-    }
-}
-
-
 .ellipsis {
     display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: hidden;    
     white-space: nowrap;
     width: 175px;
+	text-overflow: ellipsis;
+}
+/* print specific style */
+@media print {
+    body, #treatmentCard td, .table td, .table th {
+		background: #fff;
+	}
+	.navbar-fixed-top {
+		position: static;
+	}
+	.navbar-fixed-top  img{
+		margin-top: 15px;
+	}
 }
