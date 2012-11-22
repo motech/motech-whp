@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <build.dir>build</build.dir>
-        <motech.version>0.12.3</motech.version>
+        <motech.version>0.12.3-whp</motech.version>
         <motech.contrib.version>0.13-SNAPSHOT</motech.contrib.version>
         <motech.delivery.version>0.12-SNAPSHOT</motech.delivery.version>
     </properties>
