@@ -19,6 +19,7 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-config</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
