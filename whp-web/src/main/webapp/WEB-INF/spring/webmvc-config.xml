@@ -32,7 +32,7 @@
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/" />
-    <mvc:resources mapping="/case-logger-web/**" location="classpath:/case-logger-web/" />
+    <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/" />
     <mvc:default-servlet-handler/>
 
     <!-- Configures Handler Interceptors -->

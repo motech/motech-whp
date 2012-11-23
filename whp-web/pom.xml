@@ -180,7 +180,7 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
-            <artifactId>case-logger-web</artifactId>
+            <artifactId>case-log-browser</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>

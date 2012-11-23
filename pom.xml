@@ -333,7 +333,7 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp-contrib</groupId>
-                <artifactId>case-logger-web</artifactId>
+                <artifactId>case-log-browser</artifactId>
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
