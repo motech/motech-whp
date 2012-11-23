@@ -243,6 +243,27 @@
     </dependencies>
     <build>
         <plugins>
+            <!-- Dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>resource-dependencies</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.motechproject.whp</includeGroupIds>
+                            <includeArtifactIds>whp-config</includeArtifactIds>
+                            <includes>*.properties</includes>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--RELEASE-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -290,17 +311,8 @@
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>7.3.0.v20110203</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.motechproject.whp</groupId>
-                        <artifactId>whp-config</artifactId>
-                        <version>${project.version}</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
+                <version>8.0.1.v20110908</version>
                 <configuration>
-                    <useTestClasspath>true</useTestClasspath>
                     <systemProperties>
                         <systemProperty>
                             <name>jetty.port</name>
@@ -418,14 +430,6 @@
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
                         <version>7.3.0.v20110203</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.motechproject.whp</groupId>
-                                <artifactId>whp-config</artifactId>
-                                <version>${project.version}</version>
-                                <scope>runtime</scope>
-                            </dependency>
-                        </dependencies>
                         <executions>
                             <execution>
                                 <id>start-jetty</id>
