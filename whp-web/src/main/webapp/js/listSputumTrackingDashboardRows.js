@@ -142,7 +142,6 @@ $(function () {
                 }
             }
         });
-        resetFormFields();
         return false;
     });
 
