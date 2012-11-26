@@ -87,6 +87,9 @@ $(function () {
             $("#tbNegativeControls").show();
         }
         else {
+            $('#alternateDiagnosis').val('');
+            $("#alternateDiagnosis-autocomplete").val("");
+            $('#consultationDate').val('');
             $("#tbNegativeControls").hide();
         }
     };
