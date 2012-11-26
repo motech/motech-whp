@@ -19,6 +19,7 @@ $(function () {
         $(".closeContainer").click(function () {
             setContainerIdOnClosureForm.call(this);
             showTbNegativeOptionForPositiveDiagnosis.call(this);
+            resetFormFields();
         });
 
         $("#close").click(function () {
