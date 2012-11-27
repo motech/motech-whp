@@ -376,7 +376,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         allDistricts.remove(new_district);
         Patient updatedPatient = allPatients.findByPatientId(caseId);
 
-        SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(tbId).getSmearTestResults().resultForInstance(sampleInstance);
+        SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(tbId).getSmearTestResults().get(0);
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertNull(smearTestRecord.getSmear_test_result_1());
         assertNull(smearTestRecord.getSmear_test_result_2());

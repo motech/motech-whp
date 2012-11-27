@@ -82,6 +82,20 @@ public class SmearTestResultsTest {
         assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.ExtendedIP), nullValue());
     }
 
+    @Test
+    public void shouldReturnSmearTestResultAsNullIfThereAreNoResults() {
+        SmearTestResults smearTestResults = new SmearTestResults();
+        SmearTestRecord emptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, "labName", "labNumber");
+        SmearTestRecord nonEmptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.EndIP, DateUtil.today(), SmearTestResult.Positive, DateUtil.today(), SmearTestResult.Positive, "labName", "labNumber");
+
+        smearTestResults.add(emptySmearTestRecord);
+        smearTestResults.add(nonEmptySmearTestRecord);
+
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.PreTreatment), is(nullValue()));
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.EndIP), is(nonEmptySmearTestRecord));
+        assertThat(smearTestResults.resultForInstance(SputumTrackingInstance.ExtendedIP), nullValue());
+    }
+
     private void assertSmearTestResult(SmearTestRecord smearTestRecord, SputumTrackingInstance expectedInstance, LocalDate expectedDate1, SmearTestResult expectedResult1, LocalDate expectedDate2, SmearTestResult expectedResult2) {
         assertEquals(expectedInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(expectedDate1, smearTestRecord.getSmear_test_date_1());

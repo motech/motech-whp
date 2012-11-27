@@ -28,7 +28,7 @@ public class WeightStatistics implements Serializable {
 
     public WeightStatisticsRecord resultForInstance(SputumTrackingInstance SputumTrackingInstance) {
         for (WeightStatisticsRecord weightStatisticsRecord : weightStatisticsRecords) {
-            if (weightStatisticsRecord.isOfInstance(SputumTrackingInstance))
+            if (weightStatisticsRecord.isOfInstance(SputumTrackingInstance) && !weightStatisticsRecord.isEmpty())
                 return weightStatisticsRecord;
         }
         return null;

@@ -37,7 +37,7 @@ public class WeightStatisticsRecord implements Serializable {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return weight_instance == null && weight == null;
+        return weight == null;
     }
 
     @JsonIgnore

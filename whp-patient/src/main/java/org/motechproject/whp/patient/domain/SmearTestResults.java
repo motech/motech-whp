@@ -29,7 +29,7 @@ public class SmearTestResults implements Serializable {
 
     public SmearTestRecord resultForInstance(SputumTrackingInstance sampleInstance) {
         for (SmearTestRecord smearTestRecord : this.all) {
-            if (smearTestRecord.isOfInstance(sampleInstance))
+            if (smearTestRecord.isOfInstance(sampleInstance) && !smearTestRecord.isEmpty())
                 return smearTestRecord;
         }
         return null;

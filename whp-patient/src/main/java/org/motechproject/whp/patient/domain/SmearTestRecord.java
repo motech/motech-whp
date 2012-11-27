@@ -53,7 +53,7 @@ public class SmearTestRecord implements Serializable {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return smear_sample_instance == null && smear_test_date_1 == null && smear_test_result_1 == null && smear_test_date_2 == null && smear_test_result_2 == null;
+        return smear_test_date_1 == null && smear_test_result_1 == null && smear_test_date_2 == null && smear_test_result_2 == null;
     }
 
     @JsonIgnore

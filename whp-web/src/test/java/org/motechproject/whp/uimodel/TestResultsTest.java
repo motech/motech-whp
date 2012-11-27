@@ -3,6 +3,7 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
@@ -12,9 +13,7 @@ import org.motechproject.whp.patient.domain.WeightStatisticsRecord;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndIP;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndTreatment;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
 
 public class TestResultsTest {
 
@@ -100,12 +99,15 @@ public class TestResultsTest {
         SmearTestResults smearTestResults = new SmearTestResults();
         SmearTestRecord preTreatmentSmearTestRecord = new SmearTestRecord();
         preTreatmentSmearTestRecord.setSmear_sample_instance(PreTreatment);
+        preTreatmentSmearTestRecord.setSmear_test_date_1(DateUtil.today());
 
         SmearTestRecord endIPSmearTestRecord = new SmearTestRecord();
         endIPSmearTestRecord.setSmear_sample_instance(EndIP);
+        endIPSmearTestRecord.setSmear_test_date_1(DateUtil.today());
 
         SmearTestRecord endTreatmentSmearTestRecord = new SmearTestRecord();
         endTreatmentSmearTestRecord.setSmear_sample_instance(EndTreatment);
+        endTreatmentSmearTestRecord.setSmear_test_date_1(DateUtil.today());
 
         smearTestResults.add(endIPSmearTestRecord);
         smearTestResults.add(endTreatmentSmearTestRecord);

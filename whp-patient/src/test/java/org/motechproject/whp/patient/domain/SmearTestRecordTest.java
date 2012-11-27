@@ -49,4 +49,13 @@ public class SmearTestRecordTest {
         assertTrue(preTreatmentSmearTestRecord.isPreTreatmentRecord());
         assertFalse(eipSmearTestRecord.isPreTreatmentRecord());
     }
+
+    @Test
+    public void shouldCheckIfSmearTestRecordIsEmpty(){
+        SmearTestRecord emptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, "labName", "labNumber");
+        SmearTestRecord nonEmptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.ExtendedIP, null, SmearTestResult.Positive, null, SmearTestResult.Positive, "labName", "labNumber");
+
+        assertTrue(emptySmearTestRecord.isEmpty());
+        assertFalse(nonEmptySmearTestRecord.isEmpty());
+    }
 }

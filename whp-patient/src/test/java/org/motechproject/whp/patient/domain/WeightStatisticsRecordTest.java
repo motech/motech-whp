@@ -15,4 +15,12 @@ public class WeightStatisticsRecordTest {
         assertFalse(endTreatmentResult.isOfInstance(SputumTrackingInstance.ExtendedIP));
         assertTrue(endTreatmentResult.isOfInstance(SputumTrackingInstance.EndTreatment));
     }
+
+    @Test
+    public void shouldReturnWhetherWeightStatisticsInstanceIsEmptyOrNot() {
+        WeightStatisticsRecord emptyTreatmentResult = new WeightStatisticsRecord(SputumTrackingInstance.EndTreatment, null, null);
+        WeightStatisticsRecord nonEmptyTreatmentResult = new WeightStatisticsRecord(SputumTrackingInstance.EndTreatment, new Double(80), null);
+        assertTrue(emptyTreatmentResult.isEmpty());
+        assertFalse(nonEmptyTreatmentResult.isEmpty());
+    }
 }
