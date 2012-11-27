@@ -36,7 +36,6 @@ body.login-page {
 }
 body.main #mainContent {
     margin: 70px 20px;
-    background: rgba(255,255,255,0.5);
     padding: 20px;
     height: 100%;
     -moz-border-radius: 20px;
