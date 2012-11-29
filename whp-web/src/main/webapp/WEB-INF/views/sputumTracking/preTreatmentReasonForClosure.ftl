@@ -56,6 +56,6 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" id="close">Cancel</button>
-        <button type="submit" class="btn  btn-primary" id="saveReason">Close</button>
+        <button type="submit" class="btn  btn-primary" id="saveReason">Save</button>
     </div>
 </form>
