@@ -31,15 +31,15 @@
                             }
                         });
                         }
-                        if ( !valid ) {
-                            // remove invalid value, as it didn't match anything
-                            $( this ).val( "" );
-                            select.val( "" );
-                            input.data( "autocomplete" ).term = "";
-                            $(self.element).trigger("invalid-value", event );
-
-                            return false;
-                        }
+//                        if ( !valid ) {
+//                            // remove invalid value, as it didn't match anything
+//                            $( this ).val( "" );
+//                            select.val( "" );
+//                            input.data( "autocomplete" ).term = "";
+//                            $(self.element).trigger("invalid-value", event );
+//
+//                            return false;
+//                        }
                     }
                     $(self.element).trigger('keypress',[e]);
                 })
@@ -92,15 +92,15 @@
                                 }
                             });
                            }
-                            if ( !valid ) {
-                                // remove invalid value, as it didn't match anything
-                                $( this ).val( "" );
-                                select.val( "" );
-                                input.data( "autocomplete" ).term = "";
-                                $(self.element).trigger("invalid-value", event );
-
-                                return false;
-                            }
+//                            if ( !valid ) {
+//                                // remove invalid value, as it didn't match anything
+//                                $( this ).val( "" );
+//                                select.val( "" );
+//                                input.data( "autocomplete" ).term = "";
+//                                $(self.element).trigger("invalid-value", event );
+//
+//                                return false;
+//                            }
                         }
 
                     }
