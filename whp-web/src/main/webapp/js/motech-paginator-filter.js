@@ -16,7 +16,9 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
             var element = $('#' + key);
             if (element) {
                 element.val($rootScope.searchCriteria[key]);
-                if(element.data("id")){
+                if(element.data("id")){ //if data-id (alternate element) is present, populate value into that.
+                                        //use data-id attribute in cases where the element is rendered by UI widgets
+                                        //like combobox that create another input element
                     $('#' + element.data("id")).val($rootScope.searchCriteria[key]);
                 }
             }
@@ -49,6 +51,14 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
     function updateSearchCriteria() {
         if ($scope.filterSectionId) {
             $rootScope.searchCriteria = $("#" + $scope.filterSectionId).serializeObject();
+
+            for (key in $rootScope.searchCriteria) {
+                var element = $('#' + key);
+                if(element.data("id")){ //if data-id (alternate element) is present, take value from that.
+                    $rootScope.searchCriteria[key] = $('#' + element.data("id")).val();
+                }
+            }
+
         }
         else {
             $rootScope.searchCriteria = null;
