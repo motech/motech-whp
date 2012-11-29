@@ -27,7 +27,6 @@ $(function () {
         });
 
 
-
         var setContainerIdOnClosureForm = function () {
             var containerId = $(this).parents('tr').attr('containerId');
             $('#setReason input[name=containerId]').val(containerId);
