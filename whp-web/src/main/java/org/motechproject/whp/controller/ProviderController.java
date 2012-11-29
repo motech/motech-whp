@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -47,11 +48,16 @@ public class ProviderController extends BaseWebController {
         return "provider/list";
     }
 
-
     @RequestMapping(value = "byDistrict/{districtName}", method = RequestMethod.GET)
     public String allProvidersForDistrict(@PathVariable("districtName") String districtName, Model uiModel) {
         prepareResultsModel(uiModel, providerService.fetchBy(districtName));
         return "provider/listByDistrict";
+    }
+
+    @RequestMapping(value = "/pendingAdherence", method = RequestMethod.GET)
+    @ResponseBody
+    public String allProvidersPendingAdherence() {
+        return "";
     }
 
     private void initQueryModel(Model uiModel, String districtName, String providerId) {

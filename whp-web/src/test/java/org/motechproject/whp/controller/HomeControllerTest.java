@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.domain.HomePage;
+import org.motechproject.whp.service.HomePageService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
@@ -29,11 +31,21 @@ public class HomeControllerTest {
     AllProviders allProviders;
     @Mock
     HttpServletRequest request;
+    @Mock
+    HomePageService homePageService;
 
     @Before
     public void setup() {
         initMocks(this);
-        homeController = new HomeController(allProviders);
+        initializeHomePageService();
+        homeController = new HomeController(allProviders, homePageService);
+    }
+
+    private void initializeHomePageService() {
+        when(homePageService.homePageFor(asList(WHPRole.CMF_ADMIN.name()))).thenReturn(new HomePage(asList("/patients/list")));
+        when(homePageService.homePageFor(asList(WHPRole.IT_ADMIN.name()))).thenReturn(new HomePage(asList("/providers/list")));
+        when(homePageService.homePageFor(asList(WHPRole.FIELD_STAFF.name()))).thenReturn(new HomePage(asList("/providers/pendingAdherence")));
+        when(homePageService.homePageFor(asList(WHPRole.PROVIDER.name()))).thenReturn(new HomePage());
     }
 
     @Test
@@ -47,7 +59,7 @@ public class HomeControllerTest {
     @Test
     public void shouldRedirectToProvidersListingPageUponItAdminLogin() {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
-        login(authenticatedAdmin(WHPRole.IT_ADMIN));
+        login(authenticatedUser(WHPRole.IT_ADMIN));
         setupProvider(provider);
         assertEquals("redirect:/providers/list", homeController.homePage(request));
     }
@@ -55,9 +67,15 @@ public class HomeControllerTest {
     @Test
     public void shouldRedirectToTheAllPatientsPageWhenCmfAdminLogsIn() {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
-        login(authenticatedAdmin(WHPRole.CMF_ADMIN));
+        login(authenticatedUser(WHPRole.CMF_ADMIN));
         setupProvider(provider);
         assertEquals("redirect:/patients/list", homeController.homePage(request));
+    }
+
+    @Test
+    public void shouldRedirectToProvidersPendingAdherencePageForFieldStaff() {
+        login(authenticatedUser(WHPRole.FIELD_STAFF));
+        assertEquals("redirect:/providers/pendingAdherence", homeController.homePage(request));
     }
 
     private void login(MotechUser authenticatedUser) {
@@ -73,7 +91,7 @@ public class HomeControllerTest {
         return authenticatedUser;
     }
 
-    private MotechUser authenticatedAdmin(WHPRole whpRole) {
+    private MotechUser authenticatedUser(WHPRole whpRole) {
         MotechUser authenticatedUser = mock(MotechUser.class);
         when(authenticatedUser.getRoles()).thenReturn(Arrays.asList(whpRole.name()));
         return authenticatedUser;

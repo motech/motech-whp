@@ -61,6 +61,7 @@
     <context:component-scan base-package="org.motechproject.whp"/>
 
     <util:properties id="whpProperties" location="classpath:/whp.properties"/>
+    <util:properties id="homePageMappings" location="classpath:/homePageMappings.properties"/>
 
     <bean id="activeMQDiagnosticsClientConnector" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean">
         <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi"/>
