@@ -94,6 +94,14 @@ public class ProviderControllerTest {
     }
 
     @Test
+    public void shouldShowEmptyPageForProvidersPendingAdherence() throws Exception {
+        standaloneSetup(providerController).build()
+                .perform(get("/providers/pendingAdherence/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+    }
+
+    @Test
     public void shouldFetchAllProvidersForDistrict() throws Exception {
         List<Provider> providers = emptyList();
         when(providerService.fetchBy("Begusarai")).thenReturn(providers);

@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.flash.Flash;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.user.domain.WHPRole;
+import org.motechproject.whp.service.HomePageService;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,29 +18,27 @@ import java.util.List;
 public class HomeController extends BaseWebController {
 
     private AllProviders allProviders;
+    private HomePageService homePageService;
 
     @Autowired
-    public HomeController(AllProviders allProviders) {
+    public HomeController(AllProviders allProviders, HomePageService homePageService) {
         this.allProviders = allProviders;
+        this.homePageService = homePageService;
     }
 
-    @RequestMapping(value = "/" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String homePage(HttpServletRequest request) {
         MotechUser user = loggedInUser(request);
         List<String> userRoles = user.getRoles();
-        if (userRoles.contains(WHPRole.CMF_ADMIN.name())) {
-            return "redirect:/patients/list";
-        } else  if(userRoles.contains(WHPRole.IT_ADMIN.name()))  {
-            return "redirect:/providers/list";
-        } else {
+        if (homePageService.homePageFor(userRoles).isEmpty()) {
             String message = Flash.in("message", request);
             if (StringUtils.isNotEmpty(message)) {
                 Flash.out("message", message, request);
             }
             return "redirect:/patients/listByProvider";
+        } else {
+            return "redirect:" + homePageService.homePageFor(userRoles).getHomePage();
         }
     }
-
-
 }
 
