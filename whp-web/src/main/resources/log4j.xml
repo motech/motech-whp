@@ -26,6 +26,12 @@
         <appender-ref ref="console"/>
     </logger>
 
+    <logger name="org.motechproject.web.filter.RequestResponseLoggingFilter" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+
     <logger name="org.motechproject.whp.controller" additivity="false">
         <level value="error"/>
         <appender-ref ref="console"/>
