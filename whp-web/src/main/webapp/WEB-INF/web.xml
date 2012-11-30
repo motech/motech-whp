@@ -50,6 +50,23 @@
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
 
+    <filter>
+        <filter-name>HttpRequestLoggingFilter</filter-name>
+        <filter-class>org.motechproject.web.filter.RequestResponseLoggingFilter</filter-class>
+        <init-param>
+            <param-name>includeQueryString</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>includeRequestPayload</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>includeResponsePayload</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
     <filter-mapping>
         <filter-name>CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -62,6 +79,11 @@
 
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>HttpRequestLoggingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
