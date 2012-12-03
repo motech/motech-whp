@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Controller
 @RequestMapping(value = "/providers")
@@ -70,8 +71,8 @@ public class ProviderController extends BaseWebController {
 
         uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, providedAdherenceFrom));
         uiModel.addAttribute(PROVIDER_LIST_TYPE, "PendingAdherence");
-        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, providedAdherenceFrom);
-        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, today);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, week(today).startDate());
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, week(today).endDate());
         return "provider/adherence";
     }
 
@@ -83,8 +84,8 @@ public class ProviderController extends BaseWebController {
 
         uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, providedAdherenceFrom));
         uiModel.addAttribute(PROVIDER_LIST_TYPE, "WithAdherence");
-        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, providedAdherenceFrom);
-        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, today);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, week(today).startDate());
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, week(today).endDate());
         return "provider/adherence";
     }
 
