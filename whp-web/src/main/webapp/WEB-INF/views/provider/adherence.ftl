@@ -2,6 +2,12 @@
 <#import "../layout/default-with-menu.ftl" as layout>
 
 <@layout.defaultLayout title="MoTeCH-WHP" entity="fieldStaff">
+    <#if providerListType == "PendingAdherence">
+        <h1>Providers pending adherence from ${providedAdherenceFrom} to ${providedAdherenceTo}</h1>
+    </#if>
+    <#if providerListType == "WithAdherence">
+        <h1>Providers with adherence from ${providedAdherenceFrom} to ${providedAdherenceTo}</h1>
+    </#if>
     <table class="table table-striped table-bordered" id="providerList">
         <thead>
             <tr>
