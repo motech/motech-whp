@@ -4,13 +4,16 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -134,7 +137,7 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFindProviderByPrimaryMobileNumber(){
+    public void shouldFindProviderByPrimaryMobileNumber() {
         String primaryMobile = "984567876";
         Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
                 DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
@@ -146,7 +149,7 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFindProviderBySecondaryMobileNumber(){
+    public void shouldFindProviderBySecondaryMobileNumber() {
         String primaryMobile = "primary";
         String secondaryMobile = "secondary";
         String tertiaryMobile = "tertiary";
@@ -162,7 +165,7 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFindProviderByTertiaryMobileNumber(){
+    public void shouldFindProviderByTertiaryMobileNumber() {
         String primaryMobile = "primary";
         String secondaryMobile = "secondary";
         String tertiaryMobile = "tertiary";
@@ -175,6 +178,22 @@ public class AllProvidersIT extends SpringIntegrationTest {
 
         Provider actualProvider = allProviders.findByMobileNumber(tertiaryMobile);
         assertThat(actualProvider, is(savedProvider));
+    }
+
+    @Test
+    public void shouldReturnProvidersGivenProviderIds() {
+        Provider provider1 = new ProviderBuilder().withDefaults().withProviderId("1234").build();
+        Provider provider2 = new ProviderBuilder().withDefaults().withProviderId("5678").build();
+        Provider provider3 = new ProviderBuilder().withDefaults().withProviderId("9012").build();
+
+        addAndMarkForDeletion(provider1);
+        addAndMarkForDeletion(provider2);
+        addAndMarkForDeletion(provider3);
+
+        List<Provider> providers = allProviders.findByProviderIds(new ProviderIds(asList("9012", "1234")));
+
+        assertEquals(2, providers.size());
+        assertEquals(asList(provider1, provider3), providers);
     }
 }
 

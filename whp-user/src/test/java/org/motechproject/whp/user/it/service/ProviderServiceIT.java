@@ -28,12 +28,16 @@ public class ProviderServiceIT extends SpringIntegrationTest {
 
     @Autowired
     ProviderService providerService;
+
     @Autowired
     AllProviders allProviders;
+
     @Autowired
     AllMotechWebUsers allMotechWebUsers;
+
     @Autowired
     private AllDistricts allDistricts;
+
     private District district;
 
     @Before

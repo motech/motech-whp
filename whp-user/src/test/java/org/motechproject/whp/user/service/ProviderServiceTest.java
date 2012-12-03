@@ -16,14 +16,19 @@ import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.AllDistricts;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -76,6 +81,19 @@ public class ProviderServiceTest {
     public void shouldFetchProvidersByOnlyDistrict() {
         providerService.fetchBy("district");
         verify(allProviders).findByDistrict("district");
+    }
+
+    @Test
+    public void shouldReturnProviderIdsByDistrict() {
+        String district = "district";
+        String providerId = "1234";
+
+        List<Provider> providersBelongingToDistrict = asList(new ProviderBuilder().withDefaults().withDistrict(district).withProviderId(providerId).build());
+        ProviderIds providerIdsBelongingToDistrict = new ProviderIds(asList(providerId));
+
+        when(allProviders.findByDistrict(district)).thenReturn(providersBelongingToDistrict);
+        assertEquals(providerIdsBelongingToDistrict, providerService.findByDistrict(district));
+        verify(allProviders).findByDistrict(district);
     }
 
     @Test
@@ -179,6 +197,19 @@ public class ProviderServiceTest {
         when(allDistricts.findByName(invalidDistrict)).thenReturn(null);
 
         providerService.registerProvider(new ProviderRequest("", invalidDistrict, "", null));
+    }
+
+    @Test
+    public void shouldFetchAllProvidersGivenProviderIds(){
+        ProviderIds providerIds = new ProviderIds(asList("1234", "5678"));
+        
+        ArrayList<Provider> providers = new ArrayList<>();
+        when(allProviders.findByProviderIds(providerIds)).thenReturn(providers);
+
+        List<Provider> actualProviders = providerService.findByProviderIds(providerIds);
+
+        verify(allProviders).findByProviderIds(providerIds);
+        assertEquals(providers, actualProviders);
     }
 
     @After

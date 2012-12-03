@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.repository;
 import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
+import org.ektorp.ViewResult;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
@@ -10,6 +11,7 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -85,6 +87,12 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
+    @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
+    public ProviderIds providersWithActivePatients(ProviderIds providersToSearchFor) {
+        ViewQuery query = createQuery("with_active_patients").keys(providersToSearchFor.asList());
+        return filterProviderIds(db.queryView(query));
+    }
+
     @GenerateView
     public List<Patient> getAll(int pageNumber, int pageSize) {
         ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
@@ -92,12 +100,17 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
-
-
         @Override
         public int compare(Patient patient1, Patient patient2) {
             return patient1.getFirstName().compareTo(patient2.getFirstName());
         }
     }
 
+    private ProviderIds filterProviderIds(ViewResult rows) {
+        ProviderIds providerIds = new ProviderIds();
+        for (ViewResult.Row row : rows) {
+            providerIds.add(row.getValue());
+        }
+        return providerIds;
+    }
 }

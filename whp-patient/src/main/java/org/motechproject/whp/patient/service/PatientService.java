@@ -19,6 +19,7 @@ import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -124,9 +125,13 @@ public class PatientService {
         }
     }
 
+    public ProviderIds providersWithActivePatients(ProviderIds providersBelongingToDistrict) {
+        return allPatients.providersWithActivePatients(providersBelongingToDistrict);
+    }
+
     private void validateDistrict(PatientRequest patientRequest) {
         District district = allDistricts.findByName(patientRequest.getAddress().getAddress_district());
-        if(district == null)
+        if (district == null)
             throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
     }
 

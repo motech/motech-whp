@@ -25,6 +25,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.Arrays;
@@ -32,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -65,7 +68,7 @@ public class PatientServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldFetchAllRemarksUnderCurrentTherapy(){
+    public void shouldFetchAllRemarksUnderCurrentTherapy() {
         String therapyId = "therapyId";
         Patient patient = new Patient();
         Therapy currentTherapy = new Therapy();
@@ -79,7 +82,7 @@ public class PatientServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldUpdateAllPatients_WhenEventIsRaised(){
+    public void shouldUpdateAllPatients_WhenEventIsRaised() {
         String providerId = "providerId";
         String newDistrict = "newDistrict";
 
@@ -113,6 +116,20 @@ public class PatientServiceTest extends BaseUnitTest {
         when(allDistricts.findByName(district)).thenReturn(null);
 
         patientService.createPatient(new PatientRequestBuilder().withDefaults().withAddressDistrict(district).build());
+    }
+
+    @Test
+    public void shouldReturnActivePatientsGivenTheProvidersList() {
+        ProviderIds providersList = new ProviderIds(asList("providerId1", "providerId2"));
+        ProviderIds providersWithActivePatients = new ProviderIds(asList("providerId1"));
+
+        when(allPatients.providersWithActivePatients(providersList)).thenReturn(providersWithActivePatients);
+
+        ProviderIds actualProviderIds = patientService.providersWithActivePatients(providersList);
+
+        assertEquals(providersWithActivePatients, actualProviderIds);
+        verify(allPatients).providersWithActivePatients(providersList);
+
     }
 
     @After
