@@ -1,10 +1,11 @@
 package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,10 @@ public class AdherenceLogService {
 
     public List<AdherenceRecord> adherence(LocalDate asOf, int pageNumber, int pageSize) {
         return allAdherenceLogs.findLogsAsOf(asOf, pageNumber, pageSize);
+    }
+
+    public ProviderIds providersWithAdherenceRecords(LocalDate asOf, ProviderIds forProviders) {
+        return allAdherenceLogs.withProviderIdsFromDate(forProviders, asOf);
     }
 
     public List<AdherenceRecord> adherence(String externalId, String treatmentId, LocalDate startDate, LocalDate endDate) {

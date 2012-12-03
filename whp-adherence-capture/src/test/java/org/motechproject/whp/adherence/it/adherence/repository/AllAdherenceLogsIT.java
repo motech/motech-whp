@@ -8,15 +8,14 @@ import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.it.common.SpringIntegrationTest;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class AllAdherenceLogsIT extends SpringIntegrationTest {
@@ -309,7 +308,30 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         assertEquals(2, adherenceRecords.size());
     }
 
+    @Test
+    public void shouldReturnProvidersWithAdherenceReported() {
+        ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
+        ProviderIds allProviders = new ProviderIds(asList("providerId1", "providerId2", "providerId3", "providerId4"));
+
+        List<AdherenceLog> adherenceLogs = asList(new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1)),
+                new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3)),
+                new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5)));
+
+        adherenceLogs.get(0).providerId("providerId1");
+        adherenceLogs.get(1).providerId("providerId2");
+        adherenceLogs.get(2).providerId("providerId3");
+        addAll(adherenceLogs);
+
+        assertEquals(providersWithAdherence, allAdherenceLogs.withProviderIdsFromDate(allProviders, new LocalDate(2012, 1, 1)));
+    }
+
     private void addAll(AdherenceLog... adherenceLogs) {
+        for (AdherenceLog adherenceLog : adherenceLogs) {
+            allAdherenceLogs.add(adherenceLog);
+        }
+    }
+
+    private void addAll(List<AdherenceLog> adherenceLogs) {
         for (AdherenceLog adherenceLog : adherenceLogs) {
             allAdherenceLogs.add(adherenceLog);
         }

@@ -4,11 +4,13 @@ import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
+import org.ektorp.support.ListFunction;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
+import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
-import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -152,13 +154,24 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return getValues(q);
     }
 
-    private List<String> getValues(ViewQuery q) {
-        Set<String> ids = new HashSet<>();
-        ViewResult result = db.queryView(q);
-        for (ViewResult.Row row : result) {
-            ids.add(row.getValue());
+    @ListFunction(name = "filterLogsNotBelongingToProviders", file = "filterLogs.js")
+    @View(name = "find_by_date", map = "function(doc) {if (doc.type == 'AdherenceLog') {emit(doc.doseDate, doc._id);}}")
+    public ProviderIds withProviderIdsFromDate(ProviderIds providersToSearchFor, LocalDate from) {
+        ViewQuery query = createQuery("find_by_date")
+                .startKey(from)
+                .inclusiveEnd(true)
+                .includeDocs(true)
+                .queryParam("providers", providersToSearchFor.toJSONString())
+                .listName("filterLogsNotBelongingToProviders");
+        return new ProviderIds(getValue(db.queryView(query).getRows()));
+    }
+
+    private List<String> getValue(List<ViewResult.Row> rows) {
+        List<String> result = new ArrayList<>();
+        for (ViewResult.Row row : rows) {
+            result.add(row.getValue());
         }
-        return new ArrayList<>(ids);
+        return result;
     }
 
     public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
@@ -168,5 +181,14 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
 
         ViewQuery q = createQuery("all_taken_logs").startKey(startKey).endKey(endKey).inclusiveEnd(true).reduce(false);
         return db.queryView(q, AdherenceRecord.class);
+    }
+
+    private List<String> getValues(ViewQuery q) {
+        Set<String> ids = new HashSet<>();
+        ViewResult result = db.queryView(q);
+        for (ViewResult.Row row : result) {
+            ids.add(row.getValue());
+        }
+        return new ArrayList<>(ids);
     }
 }

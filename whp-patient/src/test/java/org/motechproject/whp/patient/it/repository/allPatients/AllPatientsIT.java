@@ -8,7 +8,8 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 @Suite.SuiteClasses({
         PersistenceTestPart.class,
         SearchByPatientIdTestPart.class,
-        SearchByProviderIdTestPart.class
+        SearchByProviderIdTestPart.class,
+        SearchByActivePatientsTestPart.class
 })
 public class AllPatientsIT extends SpringIntegrationTest {
 }

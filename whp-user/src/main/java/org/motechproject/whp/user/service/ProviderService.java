@@ -10,6 +10,7 @@ import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,40 +43,19 @@ public class ProviderService {
 
     public void registerProvider(ProviderRequest providerRequest) {
         District district = allDistricts.findByName(providerRequest.getDistrict());
-        if(district == null)
+        if (district == null)
             throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
 
         String providerDocId = createOrUpdateProvider(providerRequest);
         try {
-            // TODO : make this idempotent
             motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
         } catch (Exception e) {
             throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR, e.getMessage());
         }
     }
 
-    String createOrUpdateProvider(ProviderRequest providerRequest) {
-        Provider provider = providerRequest.makeProvider();
-        Provider existingProvider = allProviders.findByProviderId(providerRequest.getProviderId());
-
-        String docId = addOrReplace(provider);
-
-        if (existingProvider != null) {
-            if (existingProvider.hasDifferentDistrict(providerRequest.getDistrict())) {
-                eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
-            }
-        }
-
-        return docId;
-    }
-
-    private String addOrReplace(Provider provider) {
-        allProviders.addOrReplace(provider);
-        return provider.getId();
-    }
-
     public List<Provider> fetchBy(String district, String providerId) {
-        if(StringUtils.isEmpty(providerId) && StringUtils.isEmpty(district)){
+        if (StringUtils.isEmpty(providerId) && StringUtils.isEmpty(district)) {
             return allProviders.getAll();
         }
 
@@ -101,7 +81,36 @@ public class ProviderService {
         return allProviders.findByProviderId(providerId);
     }
 
+    public List<Provider> findByProviderIds(ProviderIds providerIds) {
+        return allProviders.findByProviderIds(providerIds);
+    }
+
+    public ProviderIds findByDistrict(String district) {
+        List<Provider> providers = allProviders.findByDistrict(district);
+        return ProviderIds.ofProviders(providers);
+    }
+
     public Provider findByMobileNumber(String mobileNumber) {
         return allProviders.findByMobileNumber(mobileNumber);
+    }
+
+    String createOrUpdateProvider(ProviderRequest providerRequest) {
+        Provider provider = providerRequest.makeProvider();
+        Provider existingProvider = allProviders.findByProviderId(providerRequest.getProviderId());
+
+        String docId = addOrReplace(provider);
+
+        if (existingProvider != null) {
+            if (existingProvider.hasDifferentDistrict(providerRequest.getDistrict())) {
+                eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
+            }
+        }
+
+        return docId;
+    }
+
+    private String addOrReplace(Provider provider) {
+        allProviders.addOrReplace(provider);
+        return provider.getId();
     }
 }

@@ -1,10 +1,15 @@
 package org.motechproject.whp.controller;
 
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.security.authentication.LoginSuccessHandler;
+import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.domain.Provider;
@@ -19,19 +24,23 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class ProviderControllerTest {
+public class ProviderControllerTest extends BaseUnitTest {
 
     @Mock
     Model uiModel;
     @Mock
     HttpServletRequest request;
+
     @Mock
     private ProviderService providerService;
+    @Mock
+    private AdherenceSubmissionService adherenceSubmissionService;
     @Mock
     private AllDistricts allDistricts;
 
@@ -72,7 +81,7 @@ public class ProviderControllerTest {
         districts.add(new District("districtB"));
         when(allDistricts.getAll()).thenReturn(districts);
 
-        providerController = new ProviderController(providerService, allDistricts);
+        providerController = new ProviderController(providerService, adherenceSubmissionService, allDistricts);
     }
 
     @Test
@@ -94,11 +103,35 @@ public class ProviderControllerTest {
     }
 
     @Test
-    public void shouldShowEmptyPageForProvidersPendingAdherence() throws Exception {
+    public void shouldListAllProvidersPendingAdherence() throws Exception {
+        List<Provider> providersWithoutAdherence = new ArrayList<Provider>();
+        String loggedInDistrict = "Patna";
+        LocalDate today = today();
+        mockCurrentDate(today);
+
+        when(adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithoutAdherence);
+        loginAsDistrict(loggedInDistrict);
         standaloneSetup(providerController).build()
-                .perform(get("/providers/pendingAdherence/"))
+                .perform(get("/providers/pendingAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
                 .andExpect(status().isOk())
-                .andExpect(content().string(""));
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithoutAdherence))
+                .andExpect(view().name("provider/adherence"));
+    }
+
+    @Test
+    public void shouldListAllProvidersWithAdherence() throws Exception {
+        List<Provider> providersWithAdherence = new ArrayList<Provider>();
+        String loggedInDistrict = "Patna";
+        LocalDate today = today();
+        mockCurrentDate(today);
+
+        when(adherenceSubmissionService.providersWithAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithAdherence);
+        loginAsDistrict(loggedInDistrict);
+        standaloneSetup(providerController).build()
+                .perform(get("/providers/withAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithAdherence))
+                .andExpect(view().name("provider/adherence"));
     }
 
     @Test
@@ -112,5 +145,9 @@ public class ProviderControllerTest {
                 .andExpect(model().size(1))
                 .andExpect(model().attribute("providerList", providers))
                 .andExpect(view().name("provider/listByDistrict"));
+    }
+
+    private MotechUser loginAsDistrict(String loggedInDistrict) {
+        return new MotechUser(new MotechWebUser(loggedInDistrict, "password", loggedInDistrict, Collections.<String>emptyList()));
     }
 }

@@ -11,6 +11,7 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -67,5 +68,10 @@ public class AllProviders extends MotechBaseRepository<Provider> {
     public Provider findByMobileNumber(String mobileNumber) {
         ViewQuery q = createQuery("find_by_mobile_number").key(mobileNumber).includeDocs(true);
         return singleResult(db.queryView(q, Provider.class));
+    }
+
+    public List<Provider> findByProviderIds(ProviderIds providerIds) {
+        ViewQuery query = createQuery("by_providerId").keys(providerIds.asList()).includeDocs(true);
+        return db.queryView(query, Provider.class);
     }
 }

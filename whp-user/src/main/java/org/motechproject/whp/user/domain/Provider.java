@@ -1,3 +1,4 @@
+
 package org.motechproject.whp.user.domain;
 
 import lombok.Data;

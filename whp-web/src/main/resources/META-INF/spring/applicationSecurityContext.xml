@@ -50,11 +50,15 @@
         <intercept-url pattern="/diagnostics/show/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/caselogs/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
 
+        <!-- Only field staff-->
+        <intercept-url pattern="/providers/pendingAdherence" access="hasRole('FIELD_STAFF')" requires-channel="any"/>
+        <intercept-url pattern="/providers/withAdherence" access="hasRole('FIELD_STAFF')" requires-channel="any"/>
+
         <!-- nagios -->
         <intercept-url pattern="/diagnostics/service/**" access="hasIpAddress('127.0.0.1')" requires-channel="any"/>
 
         <!-- Both admin and providers -->
-        <intercept-url pattern="/" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')" requires-channel="any"/>
+        <intercept-url pattern="/" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN', 'FIELD_STAFF')" requires-channel="any"/>
         <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')"
                        requires-channel="any"/>
 

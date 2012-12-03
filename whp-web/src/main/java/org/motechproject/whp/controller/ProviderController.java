@@ -1,6 +1,7 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechUser;
+import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.domain.Provider;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -20,21 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.motechproject.util.DateUtil.today;
+
 @Controller
 @RequestMapping(value = "/providers")
 public class ProviderController extends BaseWebController {
 
     private ProviderService providerService;
+    private AdherenceSubmissionService adherenceSubmissionService;
     private AllDistricts allDistrictsCache;
 
-    private static final String PROVIDER_LIST = "providerList";
+    public static final String PROVIDER_LIST = "providerList";
     public static final String DISTRICT_LIST = "districts";
     public static final String PROVIDER_ID = "selectedProvider";
     public static final String SELECTED_DISTRICT = "selectedDistrict";
 
     @Autowired
-    public ProviderController(ProviderService providerService, AllDistricts allDistrictsCache) {
+    public ProviderController(ProviderService providerService, AdherenceSubmissionService adherenceSubmissionService, AllDistricts allDistrictsCache) {
         this.providerService = providerService;
+        this.adherenceSubmissionService = adherenceSubmissionService;
         this.allDistrictsCache = allDistrictsCache;
     }
 
@@ -55,9 +59,17 @@ public class ProviderController extends BaseWebController {
     }
 
     @RequestMapping(value = "/pendingAdherence", method = RequestMethod.GET)
-    @ResponseBody
-    public String allProvidersPendingAdherence() {
-        return "";
+    public String allProvidersPendingAdherence(Model uiModel, HttpServletRequest request) {
+        String loggedInDistrict = this.loggedInUser(request).getExternalId();
+        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, today().minusDays(7)));
+        return "provider/adherence";
+    }
+
+    @RequestMapping(value = "/withAdherence", method = RequestMethod.GET)
+    public String allProvidersWithAdherence(Model uiModel, HttpServletRequest request) {
+        String loggedInDistrict = this.loggedInUser(request).getExternalId();
+        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, today().minusDays(7)));
+        return "provider/adherence";
     }
 
     private void initQueryModel(Model uiModel, String districtName, String providerId) {
