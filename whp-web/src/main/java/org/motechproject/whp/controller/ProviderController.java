@@ -1,5 +1,6 @@
 package org.motechproject.whp.controller;
 
+import org.joda.time.LocalDate;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
@@ -34,6 +35,9 @@ public class ProviderController extends BaseWebController {
     public static final String DISTRICT_LIST = "districts";
     public static final String PROVIDER_ID = "selectedProvider";
     public static final String SELECTED_DISTRICT = "selectedDistrict";
+    public static final String PROVIDER_LIST_TYPE = "providerListType";
+    public static final String PROVIDED_ADHERENCE_FROM = "providedAdherenceFrom";
+    public static final String PROVIDED_ADHERENCE_TO = "providedAdherenceTo";
 
     @Autowired
     public ProviderController(ProviderService providerService, AdherenceSubmissionService adherenceSubmissionService, AllDistricts allDistrictsCache) {
@@ -61,14 +65,26 @@ public class ProviderController extends BaseWebController {
     @RequestMapping(value = "/pendingAdherence", method = RequestMethod.GET)
     public String allProvidersPendingAdherence(Model uiModel, HttpServletRequest request) {
         String loggedInDistrict = this.loggedInUser(request).getExternalId();
-        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, today().minusDays(7)));
+        LocalDate today = today();
+        LocalDate providedAdherenceFrom = today.minusDays(7);
+
+        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, providedAdherenceFrom));
+        uiModel.addAttribute(PROVIDER_LIST_TYPE, "PendingAdherence");
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, providedAdherenceFrom);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, today);
         return "provider/adherence";
     }
 
     @RequestMapping(value = "/withAdherence", method = RequestMethod.GET)
     public String allProvidersWithAdherence(Model uiModel, HttpServletRequest request) {
         String loggedInDistrict = this.loggedInUser(request).getExternalId();
-        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, today().minusDays(7)));
+        LocalDate today = today();
+        LocalDate providedAdherenceFrom = today.minusDays(7);
+
+        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, providedAdherenceFrom));
+        uiModel.addAttribute(PROVIDER_LIST_TYPE, "WithAdherence");
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, providedAdherenceFrom);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, today);
         return "provider/adherence";
     }
 

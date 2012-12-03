@@ -115,6 +115,9 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .perform(get("/providers/pendingAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithoutAdherence))
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "PendingAdherence"))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, today.minusDays(7)))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, today))
                 .andExpect(view().name("provider/adherence"));
     }
 
@@ -131,6 +134,9 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .perform(get("/providers/withAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithAdherence))
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "WithAdherence"))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, today.minusDays(7)))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, today))
                 .andExpect(view().name("provider/adherence"));
     }
 
