@@ -38,6 +38,7 @@
         <module>whp-container</module>
         <module>whp-container-mapping</module>
         <module>whp-container-registration-api</module>
+        <module>whp-it</module>
     </modules>
 
     <repositories>
@@ -719,26 +720,6 @@
                         <exclude>**/functional/**/*Test.java</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.9</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <argLine>-XX:MaxPermSize=1024M -XX:-UseSplitVerifier</argLine>
-                            <includes>
-                                <include>**/*IT.java</include>
-                            </includes>
-                            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
