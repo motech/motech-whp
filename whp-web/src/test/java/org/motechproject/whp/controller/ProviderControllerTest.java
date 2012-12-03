@@ -24,7 +24,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
@@ -106,7 +105,7 @@ public class ProviderControllerTest extends BaseUnitTest {
     public void shouldListAllProvidersPendingAdherence() throws Exception {
         List<Provider> providersWithoutAdherence = new ArrayList<Provider>();
         String loggedInDistrict = "Patna";
-        LocalDate today = today();
+        LocalDate today = new LocalDate(2012, 12, 3);
         mockCurrentDate(today);
 
         when(adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithoutAdherence);
@@ -116,8 +115,8 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithoutAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "PendingAdherence"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, today.minusDays(7)))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, today))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, new LocalDate(2012, 11, 26)))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, new LocalDate(2012, 12, 2)))
                 .andExpect(view().name("provider/adherence"));
     }
 
@@ -125,7 +124,7 @@ public class ProviderControllerTest extends BaseUnitTest {
     public void shouldListAllProvidersWithAdherence() throws Exception {
         List<Provider> providersWithAdherence = new ArrayList<Provider>();
         String loggedInDistrict = "Patna";
-        LocalDate today = today();
+        LocalDate today = new LocalDate(2012, 12, 3);
         mockCurrentDate(today);
 
         when(adherenceSubmissionService.providersWithAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithAdherence);
@@ -135,8 +134,8 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "WithAdherence"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, today.minusDays(7)))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, today))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, new LocalDate(2012, 11, 26)))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, new LocalDate(2012, 12, 2)))
                 .andExpect(view().name("provider/adherence"));
     }
 
