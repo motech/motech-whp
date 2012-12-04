@@ -103,6 +103,7 @@
         <property name="freemarkerVariables">
             <map>
                 <entry key="applicationVersion" value="#{whpProperties['application.version']}"/>
+                <entry key="whpReportsURL" value="#{whpProperties['whp.reports.url']}"/>
             </map>
         </property>
     </bean>

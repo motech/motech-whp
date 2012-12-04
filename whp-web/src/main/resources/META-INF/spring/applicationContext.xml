@@ -65,7 +65,7 @@
     <util:properties id="homePageMappings" location="classpath:/homePageMappings.properties"/>
 
     <bean id="activeMQDiagnosticsClientConnector" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean">
-        <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi"/>
+        <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi"/>
     </bean>
 
     <bean id="configurationDiagnostic" class="org.motechproject.diagnostics.diagnostics.ConfigurationDiagnostic">
