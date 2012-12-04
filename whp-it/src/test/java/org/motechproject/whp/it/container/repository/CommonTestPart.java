@@ -3,6 +3,7 @@ package org.motechproject.whp.it.container.repository;
 import junit.framework.Assert;
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.paginator.contract.FilterParams;
@@ -27,6 +28,7 @@ public class CommonTestPart {
     @Autowired
     AllContainerTrackingRecords allContainerTrackingRecords;
 
+    @Before
     @After
     public void tearDown() {
         allContainerTrackingRecords.removeAll();
