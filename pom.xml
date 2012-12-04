@@ -50,7 +50,7 @@
                 <updatePolicy>daily</updatePolicy>
             </releases>
             <snapshots>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
