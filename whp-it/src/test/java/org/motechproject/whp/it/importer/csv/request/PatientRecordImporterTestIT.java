@@ -23,7 +23,7 @@ import static junit.framework.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 @Ignore("Not required anymore")
-public class PatientRecordImporterIT {
+public class PatientRecordImporterTestIT {
 
     @Autowired
     PatientRecordImporter patientRecordImporter;
