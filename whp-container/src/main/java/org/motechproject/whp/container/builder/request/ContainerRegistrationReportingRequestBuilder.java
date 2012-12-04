@@ -21,7 +21,7 @@ public class ContainerRegistrationReportingRequestBuilder {
         containerRegistrationReportingRequest.setStatus(container.getStatus().name());
         containerRegistrationReportingRequest.setDiagnosis(container.getDiagnosis().name());
         containerRegistrationReportingRequest.setProviderId(container.getProviderId());
-        containerRegistrationReportingRequest.setLocationId(container.getDistrict());
+        containerRegistrationReportingRequest.setProviderDistrict(container.getDistrict());
     }
 
     public ContainerRegistrationReportingRequestBuilder registeredThrough(String channelId) {
