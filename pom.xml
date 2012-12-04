@@ -39,6 +39,7 @@
         <module>whp-container-mapping</module>
         <module>whp-container-registration-api</module>
         <module>whp-it</module>
+        <module>whp-adherence-api</module>
     </modules>
 
     <repositories>

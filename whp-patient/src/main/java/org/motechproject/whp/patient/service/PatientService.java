@@ -134,12 +134,4 @@ public class PatientService {
         if (district == null)
             throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
     }
-
-    private List<String> getProviderIds(List<Provider> providers) {
-        List<String> providerIds = new ArrayList<>();
-        for (Provider provider : providers) {
-            providerIds.add(provider.getProviderId());
-        }
-        return providerIds;
-    }
 }
