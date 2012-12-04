@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationWHPReportingContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class ReportingEventURLsIT {
 
     @Autowired

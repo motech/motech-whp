@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.*;
 
-@ContextConfiguration(locations = "classpath*:/applicationContainerContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllReasonForContainerClosuresIT extends SpringIntegrationTest {
 
     @Autowired

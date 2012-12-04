@@ -1,4 +1,4 @@
-package org.motechproject.whp.importer.csv;
+package org.motechproject.whp.it.importer.csv.request;
 
 import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
@@ -13,6 +13,8 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
+import org.motechproject.whp.importer.csv.CsvImporter;
+import org.motechproject.whp.importer.csv.ImportType;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
@@ -35,8 +37,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
-public class CsvImporterTest extends SpringIntegrationTest {
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
+public class CsvImporterIT extends SpringIntegrationTest {
 
     @Autowired
     AllPatients allPatients;
@@ -100,7 +102,7 @@ public class CsvImporterTest extends SpringIntegrationTest {
         CsvImporter.main(arguments);
 
         arguments[0] = "patient";
-        arguments[1] = CsvImporterTest.class.getClassLoader().getResource("patientRecordsWitnInvalidData.csv").getPath();
+        arguments[1] = CsvImporterIT.class.getClassLoader().getResource("patientRecordsWitnInvalidData.csv").getPath();
         CsvImporter.main(arguments);
         assertEquals(0, allPatients.getAll().size());
     }
@@ -195,15 +197,15 @@ public class CsvImporterTest extends SpringIntegrationTest {
     }
 
     private String getPatientCsv() {
-        return CsvImporterTest.class.getClassLoader().getResource("patientRecords.csv").getPath();
+        return CsvImporterIT.class.getClassLoader().getResource("patientRecords.csv").getPath();
     }
 
     private String getProviderCsv() {
-        return CsvImporterTest.class.getClassLoader().getResource("providerRecords.csv").getPath();
+        return CsvImporterIT.class.getClassLoader().getResource("providerRecords.csv").getPath();
     }
 
     private String getContainerMappingCsv() {
-        return CsvImporterTest.class.getClassLoader().getResource("containerMapping.csv").getPath();
+        return CsvImporterIT.class.getClassLoader().getResource("containerMapping.csv").getPath();
     }
 
 }

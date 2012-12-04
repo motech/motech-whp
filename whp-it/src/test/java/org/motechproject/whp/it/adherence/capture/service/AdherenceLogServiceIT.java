@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AdherenceLogServiceIT extends SpringIntegrationTest {
 
     @Autowired

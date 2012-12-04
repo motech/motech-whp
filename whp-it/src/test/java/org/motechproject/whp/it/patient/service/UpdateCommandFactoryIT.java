@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class UpdateCommandFactoryIT extends SpringIntegrationTest {
 
     @Autowired

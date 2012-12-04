@@ -25,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.joda.time.DateTimeZone.UTC;
 
-@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired

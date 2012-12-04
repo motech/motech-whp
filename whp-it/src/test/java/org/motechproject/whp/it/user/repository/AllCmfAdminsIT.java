@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllCmfAdminsIT extends SpringIntegrationTest {
 
     @Autowired

@@ -1,4 +1,4 @@
-package org.motechproject.whp.importer.csv.mapper;
+package org.motechproject.whp.it.importer.csv.mapper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
+import org.motechproject.whp.importer.csv.mapper.ImportPatientRequestMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
@@ -20,8 +21,8 @@ import static junit.framework.Assert.assertEquals;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
-public class ImportPatientRequestMapperTest {
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
+public class ImportPatientRequestMapperIT {
     @Autowired
     ImportPatientRequestMapper importPatientRequestMapper;
 

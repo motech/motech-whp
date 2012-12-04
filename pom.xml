@@ -270,6 +270,14 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-data-importer</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <classifier>tests</classifier>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-treatment-card</artifactId>
                 <version>${project.version}</version>
             </dependency>

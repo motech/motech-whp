@@ -1,10 +1,11 @@
-package org.motechproject.whp.importer.csv.mapper;
+package org.motechproject.whp.it.importer.csv.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
+import org.motechproject.whp.importer.csv.mapper.ImportSmearTestResultsMapper;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ import static junit.framework.Assert.assertEquals;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
-public class ImportSmearTestResultsMapperTest {
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
+public class ImportSmearTestResultsMapperIT {
 
     @Autowired
     private ImportSmearTestResultsMapper importSmearTestResultMapper;

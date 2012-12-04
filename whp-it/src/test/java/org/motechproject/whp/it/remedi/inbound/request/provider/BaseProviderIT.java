@@ -7,7 +7,7 @@ import org.motechproject.whp.common.validation.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public abstract class BaseProviderIT extends SpringIntegrationTest {
 
     @Autowired

@@ -15,7 +15,6 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -72,7 +71,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         Context context = new Context(server, CONTEXT_PATH);
 
         dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setContextConfigLocation("classpath:test-applicationIVRContext.xml");
+        dispatcherServlet.setContextConfigLocation("classpath*:/applicationITContext.xml");
 
         ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
         context.addServlet(servletHolder, "/*");

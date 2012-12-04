@@ -1,4 +1,4 @@
-package org.motechproject.whp.importer.csv;
+package org.motechproject.whp.it.importer.csv.request;
 
 
 import org.junit.After;
@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.whp.importer.csv.PatientRecordImporter;
 import org.motechproject.whp.importer.csv.builder.ImportPatientRequestBuilder;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -20,9 +21,9 @@ import java.util.Arrays;
 import static junit.framework.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 @Ignore("Not required anymore")
-public class PatientRecordImporterTest {
+public class PatientRecordImporterIT {
 
     @Autowired
     PatientRecordImporter patientRecordImporter;

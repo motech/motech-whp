@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(locations = "classpath*:/applicationContainerContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllContainersIT extends SpringIntegrationTest {
     @Autowired
     AllContainers allContainers;

@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class ProviderWebServiceIT extends SpringIntegrationTest {
 
     @Autowired

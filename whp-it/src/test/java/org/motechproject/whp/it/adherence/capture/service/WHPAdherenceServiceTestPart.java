@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest {
 
     LocalDate today = DateUtil.newDate(2012, 5, 3);

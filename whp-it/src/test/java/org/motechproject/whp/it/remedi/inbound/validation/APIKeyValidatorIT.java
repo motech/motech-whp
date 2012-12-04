@@ -17,7 +17,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class APIKeyValidatorIT extends SpringIntegrationTest {
 
     @Autowired

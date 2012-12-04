@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.motechproject.util.DateUtil.now;
 
-@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class ProviderServiceIT extends SpringIntegrationTest {
 
     @Autowired

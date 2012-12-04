@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@ContextConfiguration(locations = "classpath*:/applicationCommonContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllCmfLocationsIT extends SpringIntegrationTest {
 
     @Autowired

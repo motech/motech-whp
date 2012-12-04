@@ -28,7 +28,7 @@ import static org.motechproject.whp.common.domain.SputumTrackingInstance.EndIP;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.TreatmentInterruption1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/applicationContainerContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class InTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Autowired

@@ -18,7 +18,7 @@ import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
 
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";

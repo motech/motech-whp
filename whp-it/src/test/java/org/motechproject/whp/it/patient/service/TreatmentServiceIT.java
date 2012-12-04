@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
 
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class TreatmentServiceIT extends SpringIntegrationTest {
 
     private static final String CASE_ID = "TestCaseId";

@@ -28,7 +28,7 @@ import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatm
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/applicationContainerContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class PreTreatmentTestPart extends AllContainerTrackingRecordsTestPart {
 
     @Autowired

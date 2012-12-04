@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/applicationContainerContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class CommonTestPart {
 
     @Autowired

@@ -13,7 +13,7 @@ import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public abstract class BasePatientIT extends SpringIntegrationTest {
 
     @Autowired

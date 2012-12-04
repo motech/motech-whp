@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.*;
 
-@ContextConfiguration(locations = "classpath*:/applicationUserContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class CmfAdminServiceIT extends SpringIntegrationTest {
 
     @Autowired

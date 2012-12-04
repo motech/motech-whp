@@ -44,7 +44,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath:applicationContainerRegistrationApiContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationITContext.xml")
 public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest {
 
     @Autowired

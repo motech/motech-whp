@@ -15,7 +15,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 
-@ContextConfiguration(locations = "classpath*:/applicationContainerMappingContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllAdminContainerMappingsIT extends SpringIntegrationTest {
 
     @Autowired

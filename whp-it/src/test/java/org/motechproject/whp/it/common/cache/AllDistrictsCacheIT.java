@@ -22,7 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationCommonContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationITContext.xml")
 public class AllDistrictsCacheIT extends SpringIntegrationTest {
 
     @Autowired

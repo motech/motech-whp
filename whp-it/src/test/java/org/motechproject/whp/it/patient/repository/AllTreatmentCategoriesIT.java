@@ -15,7 +15,7 @@ import java.util.Arrays;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllTreatmentCategoriesIT extends SpringIntegrationTest {
 
     public static final String CODE = "99";

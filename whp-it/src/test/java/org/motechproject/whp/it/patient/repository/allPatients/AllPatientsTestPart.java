@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 import static org.motechproject.util.DateUtil.now;
 
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public abstract class AllPatientsTestPart extends SpringIntegrationTest {
 
     public static final String PROVIDER_DISTRICT ="provider-district";

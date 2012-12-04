@@ -1,10 +1,11 @@
-package org.motechproject.whp.importer.csv;
+package org.motechproject.whp.it.importer.csv.request;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
+import org.motechproject.whp.importer.csv.ContainerMappingImporter;
 import org.motechproject.whp.importer.csv.request.ContainerMappingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,8 +18,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationDataImporterContext.xml")
-public class ContainerMappingImporterTest {
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
+public class ContainerMappingImporterIT {
 
     @Autowired
     ContainerMappingImporter containerMappingImporter;

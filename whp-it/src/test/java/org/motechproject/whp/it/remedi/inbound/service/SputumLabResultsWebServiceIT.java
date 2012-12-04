@@ -29,7 +29,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationITContext.xml")
 public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
     @Autowired

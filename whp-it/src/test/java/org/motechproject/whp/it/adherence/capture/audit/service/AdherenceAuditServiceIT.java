@@ -27,7 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 
-@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
     Patient patient;

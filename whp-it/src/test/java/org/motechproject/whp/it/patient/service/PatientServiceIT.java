@@ -45,7 +45,7 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentA
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientForRequests;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 
-@ContextConfiguration(locations = "classpath*:/applicationPatientContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class PatientServiceIT extends SpringIntegrationTest {
 
     public static final String PROVIDER_DISTRICT = "district";

@@ -57,6 +57,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-data-importer</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-api</artifactId>
         </dependency>

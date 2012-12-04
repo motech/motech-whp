@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllWeeklyAdherenceAuditLogsIT extends SpringIntegrationTest {
 
     @Autowired

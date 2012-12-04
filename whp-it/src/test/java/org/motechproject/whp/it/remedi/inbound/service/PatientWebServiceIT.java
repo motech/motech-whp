@@ -32,7 +32,7 @@ import java.util.List;
 import static junit.framework.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class PatientWebServiceIT extends SpringIntegrationTest {
 
     @Autowired
