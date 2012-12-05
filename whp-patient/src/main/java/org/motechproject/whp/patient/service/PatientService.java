@@ -103,7 +103,6 @@ public class PatientService {
         }
     }
 
-
     public List<Patient> getAll() {
         return allPatients.getAll();
     }

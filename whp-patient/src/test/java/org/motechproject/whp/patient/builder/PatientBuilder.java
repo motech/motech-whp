@@ -8,6 +8,7 @@ import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,6 +72,16 @@ public class PatientBuilder {
 
     private Address defaultAddress() {
         return new Address("10", "banyan tree", "10", "chambal", "muzzrafapur", "bhiar");
+    }
+
+    public PatientBuilder withPrivateCategory() {
+        Therapy therapy = new Therapy();
+        therapy.setTreatmentCategory(new TreatmentCategory("Private Category 1", "02", 7, 8, 24, 4, 12, 18, 54, new ArrayList<DayOfWeek>()));
+        therapy.setDiseaseClass(DiseaseClass.P);
+        therapy.setUid(THERAPY_UID);
+
+        patient.setCurrentTherapy(therapy);
+        return this;
     }
 
     public PatientBuilder withType(PatientType type) {

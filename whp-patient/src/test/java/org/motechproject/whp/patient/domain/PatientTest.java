@@ -600,4 +600,13 @@ public class PatientTest {
         assertTrue(patient.hasTreatment(closedTherapyCurrentTreatment));
         assertTrue(patient.hasTreatment(closedTherapyPreviousTreatment));
     }
+
+    @Test
+    public void shouldGetTheTreatmentCategory() {
+        Patient govtCategoryPatient = new PatientBuilder().withDefaults().build();
+        assertTrue(govtCategoryPatient.getTreatmentCategory().isGovernmentCategory());
+
+        Patient privateCategoryPatient = new PatientBuilder().withDefaults().withPrivateCategory().build();
+        assertFalse(privateCategoryPatient.getTreatmentCategory().isGovernmentCategory());
+    }
 }

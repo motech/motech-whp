@@ -471,4 +471,9 @@ public class Patient extends MotechBaseDataObject {
         }
         return null;
     }
+
+    @JsonIgnore
+    public TreatmentCategory getTreatmentCategory() {
+        return this.getCurrentTherapy().getTreatmentCategory();
+    }
 }
