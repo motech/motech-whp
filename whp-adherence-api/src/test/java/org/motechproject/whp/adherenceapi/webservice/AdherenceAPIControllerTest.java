@@ -4,17 +4,25 @@ package org.motechproject.whp.adherenceapi.webservice;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
+import org.motechproject.whp.common.util.WHPDateTime;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.http.MediaType;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -33,6 +41,9 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
     @Mock
     private AdherenceWindow adherenceWindow;
 
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
+
     private LocalDate today = new LocalDate(2012, 12, 5);
 
     private AdherenceAPIController adherenceAPIController;
@@ -41,7 +52,7 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
     public void setup() {
         initMocks(this);
         mockCurrentDate(today);
-        adherenceAPIController = new AdherenceAPIController(adherenceService, providerService, adherenceWindow);
+        adherenceAPIController = new AdherenceAPIController(adherenceService, providerService, adherenceWindow, reportingPublisherService);
     }
 
     @Test
@@ -88,6 +99,15 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
+
+        ArgumentCaptor<FlashingLogRequest> flashingRequestCaptor = ArgumentCaptor.forClass(FlashingLogRequest.class);
+        verify(reportingPublisherService).reportFlashingRequest(flashingRequestCaptor.capture());
+        FlashingLogRequest flashingLogRequest = flashingRequestCaptor.getValue();
+
+        assertThat(flashingLogRequest.getMobileNumber(), is(msisdn));
+        assertThat(flashingLogRequest.getProviderId(), is(providerId));
+        assertThat(flashingLogRequest.getCallTime(), is(new WHPDateTime("14/08/2012 11:20:59").date().toDate()));
+        assertNotNull(flashingLogRequest.getCreationTime());
     }
 
     @Test
@@ -144,5 +164,4 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
-
 }
