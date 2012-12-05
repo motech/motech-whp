@@ -1,6 +1,8 @@
 package org.motechproject.whp.adherenceapi.request;
 
 import org.junit.Test;
+import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentCategoryType;
 

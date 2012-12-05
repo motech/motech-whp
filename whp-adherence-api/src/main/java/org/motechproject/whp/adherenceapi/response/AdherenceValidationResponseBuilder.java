@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.request;
+package org.motechproject.whp.adherenceapi.response;
 
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentCategoryType;

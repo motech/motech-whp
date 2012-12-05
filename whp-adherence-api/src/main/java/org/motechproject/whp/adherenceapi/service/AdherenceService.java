@@ -2,9 +2,10 @@ package org.motechproject.whp.adherenceapi.service;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingResponse;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationResponse;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationResponseBuilder;import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
+import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
+import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class AdherenceService {
         this.patientService = patientService;
     }
 
-    public AdherenceCaptureFlashingResponse adherenceSubmissionInformation(String providerId, LocalDate today) {
+    public AdherenceCaptureFlashingResponse adherenceSummary(String providerId, LocalDate today) {
         List<String> patientsWithAdherence = whpAdherenceService.patientsWithAdherence(providerId, week(today));
         List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(providerId);
 
@@ -42,8 +43,8 @@ public class AdherenceService {
 
         AdherenceValidationResponseBuilder responseBuilder = new AdherenceValidationResponseBuilder();
 
-        if(patient.isValidDose(parseInt(doseTakenCount)))
-             return responseBuilder.successfulResponse();
+        if (patient.isValidDose(parseInt(doseTakenCount)))
+            return responseBuilder.successfulResponse();
         return responseBuilder.failureResponse(patient.getTreatmentCategory());
     }
 }

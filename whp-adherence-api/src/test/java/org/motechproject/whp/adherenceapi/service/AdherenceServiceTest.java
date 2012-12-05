@@ -5,12 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingResponse;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategoryType;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class AdherenceServiceTest {
     @Mock
     private PatientService patientService;
 
+    @Mock
+    private ProviderService providerService;
+
     @Before
     public void setUp() {
         initMocks(this);
@@ -52,7 +56,7 @@ public class AdherenceServiceTest {
 
         assertEquals(
                 new AdherenceCaptureFlashingResponse(patientsWithAdherence, asList("1234", "5678")),
-                adherenceService.adherenceSubmissionInformation(providerId, today)
+                adherenceService.adherenceSummary(providerId, today)
         );
     }
 

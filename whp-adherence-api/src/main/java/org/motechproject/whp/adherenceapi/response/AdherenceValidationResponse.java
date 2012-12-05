@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.request;
+package org.motechproject.whp.adherenceapi.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

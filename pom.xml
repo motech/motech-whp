@@ -245,6 +245,11 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-adherence-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-remedi-inbound</artifactId>
                 <version>${project.version}</version>
                 <classifier>tests</classifier>

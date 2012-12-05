@@ -16,6 +16,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test-mvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
         </dependency>
@@ -26,6 +36,20 @@
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-user</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-common</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
             <type>jar</type>

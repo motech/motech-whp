@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.request;
+package org.motechproject.whp.adherenceapi.response;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class AdherenceCaptureFlashingResponseTest {
                 new AdherenceCaptureFlashingResponse(
                         asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
-                ).getPatientRemainingCount()
+                ).getPatientRemainingCount().intValue()
         );
     }
 
@@ -26,7 +26,7 @@ public class AdherenceCaptureFlashingResponseTest {
                         asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
 
-                ).getPatientGivenCount()
+                ).getPatientGivenCount().intValue()
         );
     }
 
@@ -38,7 +38,7 @@ public class AdherenceCaptureFlashingResponseTest {
                         null,
                         null
 
-                ).getPatientGivenCount()
+                ).getPatientGivenCount().intValue()
         );
         assertEquals(
                 0,
@@ -46,7 +46,7 @@ public class AdherenceCaptureFlashingResponseTest {
                         null,
                         null
 
-                ).getPatientRemainingCount()
+                ).getPatientRemainingCount().intValue()
         );
     }
 }
