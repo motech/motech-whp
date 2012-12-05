@@ -65,11 +65,7 @@ public class AdherenceCaptureFlashingResponse implements Serializable {
         return new ArrayList<String>(subtract(patientsForProvider, patientsWithAdherence));
     }
 
-    public static AdherenceCaptureFlashingResponse invalidMSISDN() {
-        return failureResponse("INVALID_MOBILE_NUMBER");
-    }
-
-    private static AdherenceCaptureFlashingResponse failureResponse(String errorCode) {
+    public static AdherenceCaptureFlashingResponse failureResponse(String errorCode) {
         AdherenceCaptureFlashingResponse response = new AdherenceCaptureFlashingResponse();
         response.errorCode = errorCode;
         response.result = WebServiceResponse.failure;

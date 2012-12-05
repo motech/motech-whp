@@ -10,7 +10,10 @@
 
     <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
     <import resource="classpath*:applicationValidationContext.xml"/>
+
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
+    <util:properties id="adherenceProperties" location="classpath:adherence.properties"/>
+
     <context:property-placeholder location="classpath:couchdb.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:osgi.properties" ignore-unresolvable="true"/>

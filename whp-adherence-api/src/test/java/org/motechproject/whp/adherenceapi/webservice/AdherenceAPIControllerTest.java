@@ -5,6 +5,8 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherence.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -20,7 +22,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class AdherenceAPIControllerTest {
+public class AdherenceAPIControllerTest extends BaseUnitTest {
 
     @Mock
     private AdherenceService adherenceService;
@@ -28,18 +30,22 @@ public class AdherenceAPIControllerTest {
     @Mock
     private ProviderService providerService;
 
+    @Mock
+    private AdherenceWindow adherenceWindow;
+
+    private LocalDate today = new LocalDate(2012, 12, 5);
+
     private AdherenceAPIController adherenceAPIController;
 
     @Before
     public void setup() {
         initMocks(this);
-        adherenceAPIController = new AdherenceAPIController(adherenceService, providerService);
+        mockCurrentDate(today);
+        adherenceAPIController = new AdherenceAPIController(adherenceService, providerService, adherenceWindow);
     }
 
     @Test
     public void shouldRespondWithAdherenceSubmissionInformation() throws Exception {
-        LocalDate today = new LocalDate(2012, 12, 5);
-
         String requestBody = "<?xml version=\"1.0\"?>\n" +
                 "<adherence_capture_flashing_request>\n" +
                 " <msisdn>0986754322</msisdn>\n" +
@@ -56,6 +62,7 @@ public class AdherenceAPIControllerTest {
         Provider provider = new ProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
 
         when(providerService.findByMobileNumber(msisdn)).thenReturn(provider);
+        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(true);
         when(adherenceService.adherenceSummary(providerId, today)).thenReturn(adherenceFlashingResponse);
 
         String expectedXml =
@@ -94,11 +101,40 @@ public class AdherenceAPIControllerTest {
 
 
         when(providerService.findByMobileNumber("0986754322")).thenReturn(null);
+        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(true);
 
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
                         "      <error_code>INVALID_MOBILE_NUMBER</error_code>" +
+                        "    </adherence_capture_flashing_response>";
+
+        standaloneSetup(adherenceAPIController)
+                .build()
+                .perform(post("/adherenceSubmission/").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
+    }
+
+    @Test
+    public void shouldRespondWithInvalidAdherenceDate() throws Exception {
+        String requestBody = "<?xml version=\"1.0\"?>\n" +
+                "<adherence_capture_flashing_request>\n" +
+                " <msisdn>0986754322</msisdn>\n" +
+                " <call_id>abcd1234</call_id>\n" +
+                " <call_time>14/08/2012 11:20:59</call_time>\n" +
+                "</adherence_capture_flashing_request>";
+
+
+        Provider provider = new ProviderBuilder().withDefaults().withId("providerId").build();
+        when(providerService.findByMobileNumber("0986754322")).thenReturn(provider);
+        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(false);
+
+        String expectedXml =
+                "            <adherence_capture_flashing_response>" +
+                        "      <result>failure</result>" +
+                        "      <error_code>NON_ADHERENCE_DAY</error_code>" +
                         "    </adherence_capture_flashing_response>";
 
         standaloneSetup(adherenceAPIController)
