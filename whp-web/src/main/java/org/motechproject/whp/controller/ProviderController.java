@@ -65,14 +65,14 @@ public class ProviderController extends BaseWebController {
     }
 
     @RequestMapping(value = "/adherenceStatus", method = RequestMethod.GET)
-    public String allProvidersPendingAdherence(Model uiModel, HttpServletRequest request) {
+    public String showAdherenceStatus(Model uiModel, HttpServletRequest request) {
         String loggedInDistrict = this.loggedInUser(request).getExternalId();
         LocalDate today = today();
         LocalDate treatmentWeekStartDate = week(today).startDate();
         LocalDate treatmentWeekEndDate = week(today).endDate();
 
         uiModel.addAttribute(PROVIDER_LIST_PENDING_ADHERENCE, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, treatmentWeekStartDate, treatmentWeekEndDate));
-        uiModel.addAttribute(PROVIDER_LIST_WITH_ADHERENCE, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, treatmentWeekEndDate, treatmentWeekEndDate));
+        uiModel.addAttribute(PROVIDER_LIST_WITH_ADHERENCE, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, treatmentWeekStartDate, treatmentWeekEndDate));
 
         uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, treatmentWeekStartDate);
         uiModel.addAttribute(PROVIDED_ADHERENCE_TO, treatmentWeekEndDate);

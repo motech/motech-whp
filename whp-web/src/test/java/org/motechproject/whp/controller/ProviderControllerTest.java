@@ -104,7 +104,7 @@ public class ProviderControllerTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldListAllProvidersPendingAdherence() throws Exception {
+    public void shouldShowAdherenceStatus() throws Exception {
         List<Provider> providersWithoutAdherence = asList(new ProviderBuilder().withProviderId("providerId1").build());
         List<Provider> providersWithAdherence = asList(new ProviderBuilder().withProviderId("providerId2").build());
 
