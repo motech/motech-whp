@@ -9,13 +9,13 @@
 
     <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
 </head>
-<body>
+<body class="main">
 <div>
     <div class="row-fluid" id="headerContent">
         <@header.header/>
     </div>
 
-    <div id="bodyContent" class="container">
+    <div id="bodyContent" class="container-fluid">
         <div class="row-fluid" id="mainContent">
             <noscript>
                 <div class="row alert alert-error  javascript-warning">Please enable Java Script in your browser for the application to work properly. Please contact WHP administrator if you need assistance</div>

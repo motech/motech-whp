@@ -205,7 +205,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldUpdateBulkObjectsIfAlreadyExists() {
-        AdherenceLog log1 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+        AdherenceLog log1 = createAdherenceLog();
         log1.status(1);
         AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId2", new LocalDate(2012, 1, 1));
         log2.status(2);
@@ -221,15 +221,15 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldHandleDuplicateNewLogs() {
-        AdherenceLog log1 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
-        AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+        AdherenceLog log1 = createAdherenceLog();
+        AdherenceLog log2 = createAdherenceLog();
         allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(asList(log1, log2), "externalId");
         Assert.assertEquals(1, allAdherenceLogs.getAll().size());
     }
 
     @Test
     public void shouldCountTakenLogsForTherapyBetweenGivenDates() {
-        AdherenceLog log1 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+        AdherenceLog log1 = createAdherenceLog();
         log1.status(1);
         AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3));
         log2.status(1);
@@ -249,7 +249,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     public void shouldReturnAllTakenLogsSortedInAscendingOrderOfDoseDate() {
         AdherenceLog log1 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3));
         log1.status(1);
-        AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+        AdherenceLog log2 = createAdherenceLog();
         log2.status(1);
         AdherenceLog log3 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5));
         log3.status(2);
@@ -294,7 +294,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldReturnTakenLogs() {
-        AdherenceLog log1 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+        AdherenceLog log1 = createAdherenceLog();
         log1.status(1);
         AdherenceLog log2 = new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3));
         log2.status(1);
@@ -315,16 +315,26 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
         ProviderIds allProviders = new ProviderIds(asList("providerId1", "providerId2", "providerId3", "providerId4"));
 
-        List<AdherenceLog> adherenceLogs = asList(new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1)),
-                new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3)),
-                new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5)));
+        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1));
 
         adherenceLogs.get(0).providerId("providerId1");
         adherenceLogs.get(1).providerId("providerId2");
         adherenceLogs.get(2).providerId("providerId3");
         addAll(adherenceLogs);
 
-        assertEquals(providersWithAdherence, allAdherenceLogs.withProviderIdsFromDate(allProviders, new LocalDate(2012, 1, 1)));
+        assertEquals(providersWithAdherence, allAdherenceLogs.withKnownAdherenceReportedByProviders(allProviders, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+    }
+
+    private AdherenceLog createAdherenceLog() {
+        return new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
+    }
+
+    private AdherenceLog createAdherenceLog(String externalId, String treatmentId, LocalDate doseDate, int status) {
+        AdherenceLog log = new AdherenceLog(externalId, treatmentId, doseDate);
+        log.status(status);
+        return log;
     }
 
     private void addAll(AdherenceLog... adherenceLogs) {

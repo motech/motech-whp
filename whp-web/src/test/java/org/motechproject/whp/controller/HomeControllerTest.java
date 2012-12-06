@@ -44,7 +44,7 @@ public class HomeControllerTest {
     private void initializeHomePageService() {
         when(homePageService.homePageFor(asList(WHPRole.CMF_ADMIN.name()))).thenReturn(new HomePage(asList("/patients/list")));
         when(homePageService.homePageFor(asList(WHPRole.IT_ADMIN.name()))).thenReturn(new HomePage(asList("/providers/list")));
-        when(homePageService.homePageFor(asList(WHPRole.FIELD_STAFF.name()))).thenReturn(new HomePage(asList("/providers/pendingAdherence")));
+        when(homePageService.homePageFor(asList(WHPRole.FIELD_STAFF.name()))).thenReturn(new HomePage(asList("/providers/adherenceStatus")));
         when(homePageService.homePageFor(asList(WHPRole.PROVIDER.name()))).thenReturn(new HomePage());
     }
 
@@ -75,7 +75,7 @@ public class HomeControllerTest {
     @Test
     public void shouldRedirectToProvidersPendingAdherencePageForFieldStaff() {
         login(authenticatedUser(WHPRole.FIELD_STAFF));
-        assertEquals("redirect:/providers/pendingAdherence", homeController.homePage(request));
+        assertEquals("redirect:/providers/adherenceStatus", homeController.homePage(request));
     }
 
     private void login(MotechUser authenticatedUser) {
