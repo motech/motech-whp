@@ -4,25 +4,14 @@ package org.motechproject.whp.adherenceapi.webservice;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherence.service.AdherenceWindow;
+import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
 import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
-import org.motechproject.whp.adherenceapi.service.AdherenceService;
-import org.motechproject.whp.common.util.WHPDateTime;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.FlashingLogRequest;
-import org.motechproject.whp.user.builder.ProviderBuilder;
-import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.service.ProviderService;
+import org.motechproject.whp.adherenceapi.service.AdherenceWebService;
 import org.springframework.http.MediaType;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -33,16 +22,7 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 public class AdherenceAPIControllerTest extends BaseUnitTest {
 
     @Mock
-    private AdherenceService adherenceService;
-
-    @Mock
-    private ProviderService providerService;
-
-    @Mock
-    private AdherenceWindow adherenceWindow;
-
-    @Mock
-    private ReportingPublisherService reportingPublisherService;
+    private AdherenceWebService adherenceWebService;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
 
@@ -52,7 +32,7 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
     public void setup() {
         initMocks(this);
         mockCurrentDate(today);
-        adherenceAPIController = new AdherenceAPIController(adherenceService, providerService, adherenceWindow, reportingPublisherService);
+        adherenceAPIController = new AdherenceAPIController(adherenceWebService);
     }
 
     @Test
@@ -68,13 +48,11 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
                 asList("pat0"), asList("pat1", "pat2")
         );
 
-        String msisdn = "0986754322";
-        String providerId = "providerid";
-        Provider provider = new ProviderBuilder().withProviderId(providerId).withPrimaryMobileNumber(msisdn).build();
-
-        when(providerService.findByMobileNumber(msisdn)).thenReturn(provider);
-        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(true);
-        when(adherenceService.adherenceSummary(providerId, today)).thenReturn(adherenceFlashingResponse);
+        AdherenceCaptureFlashingRequest flashingRequest = new AdherenceCaptureFlashingRequest();
+        flashingRequest.setMsisdn("0986754322");
+        flashingRequest.setCallId("abcd1234");
+        flashingRequest.setCallTime("14/08/2012 11:20:59");
+        when(adherenceWebService.processFlashingRequest(flashingRequest, today)).thenReturn(adherenceFlashingResponse);
 
         String expectedXml =
                 "             <adherence_capture_flashing_response>" +
@@ -92,70 +70,6 @@ public class AdherenceAPIControllerTest extends BaseUnitTest {
                         "                   </patients_remaining>" +
                         "                </adherence_status>" +
                         "     </adherence_capture_flashing_response>";
-
-        standaloneSetup(adherenceAPIController)
-                .build()
-                .perform(post("/adherenceSubmission/").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
-                .andExpect(status().isOk())
-                .andExpect(content().type(MediaType.APPLICATION_XML))
-                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
-
-        ArgumentCaptor<FlashingLogRequest> flashingRequestCaptor = ArgumentCaptor.forClass(FlashingLogRequest.class);
-        verify(reportingPublisherService).reportFlashingRequest(flashingRequestCaptor.capture());
-        FlashingLogRequest flashingLogRequest = flashingRequestCaptor.getValue();
-
-        assertThat(flashingLogRequest.getMobileNumber(), is(msisdn));
-        assertThat(flashingLogRequest.getProviderId(), is(providerId));
-        assertThat(flashingLogRequest.getCallTime(), is(new WHPDateTime("14/08/2012 11:20:59").date().toDate()));
-        assertNotNull(flashingLogRequest.getCreationTime());
-    }
-
-    @Test
-    public void shouldValidateMSISDN() throws Exception {
-        String requestBody = "<?xml version=\"1.0\"?>\n" +
-                "<adherence_capture_flashing_request>\n" +
-                " <msisdn>0986754322</msisdn>\n" +
-                " <call_id>abcd1234</call_id>\n" +
-                " <call_time>14/08/2012 11:20:59</call_time>\n" +
-                "</adherence_capture_flashing_request>";
-
-
-        when(providerService.findByMobileNumber("0986754322")).thenReturn(null);
-        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(true);
-
-        String expectedXml =
-                "            <adherence_capture_flashing_response>" +
-                        "      <result>failure</result>" +
-                        "      <error_code>INVALID_MOBILE_NUMBER</error_code>" +
-                        "    </adherence_capture_flashing_response>";
-
-        standaloneSetup(adherenceAPIController)
-                .build()
-                .perform(post("/adherenceSubmission/").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
-                .andExpect(status().isOk())
-                .andExpect(content().type(MediaType.APPLICATION_XML))
-                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
-    }
-
-    @Test
-    public void shouldRespondWithInvalidAdherenceDate() throws Exception {
-        String requestBody = "<?xml version=\"1.0\"?>\n" +
-                "<adherence_capture_flashing_request>\n" +
-                " <msisdn>0986754322</msisdn>\n" +
-                " <call_id>abcd1234</call_id>\n" +
-                " <call_time>14/08/2012 11:20:59</call_time>\n" +
-                "</adherence_capture_flashing_request>";
-
-
-        Provider provider = new ProviderBuilder().withDefaults().withId("providerId").build();
-        when(providerService.findByMobileNumber("0986754322")).thenReturn(provider);
-        when(adherenceWindow.isValidAdherenceDay(today)).thenReturn(false);
-
-        String expectedXml =
-                "            <adherence_capture_flashing_response>" +
-                        "      <result>failure</result>" +
-                        "      <error_code>NON_ADHERENCE_DAY</error_code>" +
-                        "    </adherence_capture_flashing_response>";
 
         standaloneSetup(adherenceAPIController)
                 .build()

@@ -1,13 +1,16 @@
 package org.motechproject.whp.adherenceapi.request;
 
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlRootElement(name = "adherence_capture_flashing_request")
 @Setter
-public class AdherenceCaptureFlashingRequest {
+@EqualsAndHashCode
+public class AdherenceCaptureFlashingRequest implements Serializable {
 
     private String msisdn;
 

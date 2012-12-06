@@ -1,4 +1,4 @@
-package org.motechproject.whp.patient.domain;
+package org.motechproject.whp.adherenceapi.domain;
 
 public enum TreatmentCategoryType {
     GOVERNMENT, PRIVATE;

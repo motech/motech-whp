@@ -5,18 +5,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
-import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
+import org.motechproject.whp.adherenceapi.builder.AdherenceValidationRequestBuilder;
+import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
+import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.TreatmentCategoryType;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -25,15 +26,16 @@ import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 public class AdherenceServiceTest {
 
-    public static final String GOVT_CATEGORY_VALID_RANGE_TO = "3";
-    public static final String GOVT_CATEGORY_VALID_RANGE_FROM = "0";
     private AdherenceService adherenceService;
 
     @Mock
     private WHPAdherenceService whpAdherenceService;
-
     @Mock
     private PatientService patientService;
+    @Mock
+    private ReportingPublisherService reportingPublisherService;
+    @Mock
+    private AdherenceCaptureRequestBuilder adherenceCaptureRequestBuilder;
 
     @Mock
     private ProviderService providerService;
@@ -55,42 +57,34 @@ public class AdherenceServiceTest {
         when(whpAdherenceService.patientsWithAdherence(providerId, week(today))).thenReturn(patientsWithAdherence);
 
         assertEquals(
-                new AdherenceCaptureFlashingResponse(patientsWithAdherence, asList("1234", "5678")),
+                new AdherenceSummary(patientsWithAdherence, patientsForProvider),
                 adherenceService.adherenceSummary(providerId, today)
         );
     }
 
     @Test
-    public void shouldReturnSuccessfulResponseForValidDoseCount() {
-        String patientId = "1234";
-        String validDoseCount = GOVT_CATEGORY_VALID_RANGE_TO;
+    public void shouldReturnTrueForValidDoseCount() {
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequestBuilder().withDefaults().build();
 
         Patient govtCategoryPatient = new PatientBuilder().withDefaults().build();
-        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
+        when(patientService.findByPatientId(adherenceValidationRequest.getPatientId())).thenReturn(govtCategoryPatient);
 
-        AdherenceValidationResponse actualValidationResponse = adherenceService.validateDosage(patientId, validDoseCount);
+        assertTrue(adherenceService.validateDosage(adherenceValidationRequest));
 
-        assertEquals(new AdherenceValidationResponse("success"), actualValidationResponse);
-        verify(patientService).findByPatientId(patientId);
+        verify(patientService).findByPatientId(adherenceValidationRequest.getPatientId());
     }
 
     @Test
     public void shouldReturnFailureResponseForInValidDoseCount() {
-        String patientId = "1234";
         String inValidDoseCount = "7";
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequestBuilder().withDefaults().withDoseTakenCount(inValidDoseCount).build();
 
         Patient govtCategoryPatient = new PatientBuilder().withDefaults().build();
-        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
+        when(patientService.findByPatientId(adherenceValidationRequest.getPatientId())).thenReturn(govtCategoryPatient);
 
-        AdherenceValidationResponse actualValidationResponse = adherenceService.validateDosage(patientId, inValidDoseCount);
+        assertFalse(adherenceService.validateDosage(adherenceValidationRequest));
 
-        AdherenceValidationResponse failureResponse = new AdherenceValidationResponse("failure");
-        failureResponse.setTreatmentCategory(TreatmentCategoryType.GOVERNMENT.name());
-        failureResponse.setValidRangeFrom(GOVT_CATEGORY_VALID_RANGE_FROM);
-        failureResponse.setValidRangeTo(GOVT_CATEGORY_VALID_RANGE_TO);
-
-        assertEquals(failureResponse, actualValidationResponse);
-        verify(patientService).findByPatientId(patientId);
+        verify(patientService).findByPatientId(adherenceValidationRequest.getPatientId());
     }
 
     private Patient patients(String patientId) {
