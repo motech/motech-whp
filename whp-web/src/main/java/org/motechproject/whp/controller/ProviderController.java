@@ -36,9 +36,10 @@ public class ProviderController extends BaseWebController {
     public static final String DISTRICT_LIST = "districts";
     public static final String PROVIDER_ID = "selectedProvider";
     public static final String SELECTED_DISTRICT = "selectedDistrict";
-    public static final String PROVIDER_LIST_TYPE = "providerListType";
     public static final String PROVIDED_ADHERENCE_FROM = "providedAdherenceFrom";
     public static final String PROVIDED_ADHERENCE_TO = "providedAdherenceTo";
+    public static final String PROVIDER_LIST_PENDING_ADHERENCE = "providersPendingAdherence";
+    public static final String PROVIDER_LIST_WITH_ADHERENCE = "providersWithAdherence";
 
     @Autowired
     public ProviderController(ProviderService providerService, AdherenceSubmissionService adherenceSubmissionService, AllDistricts allDistrictsCache) {
@@ -48,7 +49,7 @@ public class ProviderController extends BaseWebController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String loadProviderSearchPage(Model uiModel, HttpServletRequest request) throws IOException {
+    public String loadProviderSearchPage(Model uiModel) throws IOException {
         List<District> districtList = allDistrictsCache.getAll();
         String district = districtList.get(0).getName();
         String providerId = "";
@@ -63,29 +64,18 @@ public class ProviderController extends BaseWebController {
         return "provider/listByDistrict";
     }
 
-    @RequestMapping(value = "/pendingAdherence", method = RequestMethod.GET)
+    @RequestMapping(value = "/adherenceStatus", method = RequestMethod.GET)
     public String allProvidersPendingAdherence(Model uiModel, HttpServletRequest request) {
         String loggedInDistrict = this.loggedInUser(request).getExternalId();
         LocalDate today = today();
-        LocalDate providedAdherenceFrom = today.minusDays(7);
+        LocalDate treatmentWeekStartDate = week(today).startDate();
+        LocalDate treatmentWeekEndDate = week(today).endDate();
 
-        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, providedAdherenceFrom));
-        uiModel.addAttribute(PROVIDER_LIST_TYPE, "PendingAdherence");
-        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, week(today).startDate());
-        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, week(today).endDate());
-        return "provider/adherence";
-    }
+        uiModel.addAttribute(PROVIDER_LIST_PENDING_ADHERENCE, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, treatmentWeekStartDate, treatmentWeekEndDate));
+        uiModel.addAttribute(PROVIDER_LIST_WITH_ADHERENCE, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, treatmentWeekEndDate, treatmentWeekEndDate));
 
-    @RequestMapping(value = "/withAdherence", method = RequestMethod.GET)
-    public String allProvidersWithAdherence(Model uiModel, HttpServletRequest request) {
-        String loggedInDistrict = this.loggedInUser(request).getExternalId();
-        LocalDate today = today();
-        LocalDate providedAdherenceFrom = today.minusDays(7);
-
-        uiModel.addAttribute(PROVIDER_LIST, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, providedAdherenceFrom));
-        uiModel.addAttribute(PROVIDER_LIST_TYPE, "WithAdherence");
-        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, week(today).startDate());
-        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, week(today).endDate());
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, treatmentWeekStartDate);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, treatmentWeekEndDate);
         return "provider/adherence";
     }
 
@@ -98,7 +88,7 @@ public class ProviderController extends BaseWebController {
     private void prepareResultsModel(Model uiModel, List<Provider> matchingProviders) {
         Map<String, MotechUser> users = providerService.fetchAllWebUsers();
 
-        List<ProviderRow> providerRows = new ArrayList<ProviderRow>();
+        List<ProviderRow> providerRows = new ArrayList<>();
         for (Provider provider : matchingProviders) {
             MotechUser motechUser = users.get(provider.getProviderId());
             if (motechUser != null) {

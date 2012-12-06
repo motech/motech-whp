@@ -12,6 +12,7 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
@@ -85,7 +87,7 @@ public class ProviderControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldLoadProviderSearchPage_verifyViewMappingForGET() throws Exception {
-        String viewName = providerController.loadProviderSearchPage(uiModel, request);
+        String viewName = providerController.loadProviderSearchPage(uiModel);
         assertEquals("provider/list", viewName);
     }
 
@@ -95,7 +97,7 @@ public class ProviderControllerTest extends BaseUnitTest {
         List<District> expectedList = Arrays.asList(new District("d1"), new District("d2"));
         when(allDistricts.getAll()).thenReturn(expectedList);
 
-        providerController.loadProviderSearchPage(uiModel, request);
+        providerController.loadProviderSearchPage(uiModel);
         verify(uiModel).addAttribute(eq(providerController.DISTRICT_LIST), eq(expectedList));
         verify(uiModel).addAttribute(eq(providerController.SELECTED_DISTRICT), eq("d1"));
         verify(uiModel).addAttribute(eq(providerController.PROVIDER_ID), eq(""));
@@ -103,37 +105,22 @@ public class ProviderControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldListAllProvidersPendingAdherence() throws Exception {
-        List<Provider> providersWithoutAdherence = new ArrayList<Provider>();
+        List<Provider> providersWithoutAdherence = asList(new ProviderBuilder().withProviderId("providerId1").build());
+        List<Provider> providersWithAdherence = asList(new ProviderBuilder().withProviderId("providerId2").build());
+
         String loggedInDistrict = "Patna";
         LocalDate today = new LocalDate(2012, 12, 3);
         mockCurrentDate(today);
 
-        when(adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithoutAdherence);
+        when(adherenceSubmissionService.providersPendingAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithoutAdherence);
+        when(adherenceSubmissionService.providersWithAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithAdherence);
+
         loginAsDistrict(loggedInDistrict);
         standaloneSetup(providerController).build()
-                .perform(get("/providers/pendingAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
+                .perform(get("/providers/adherenceStatus/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithoutAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "PendingAdherence"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, new LocalDate(2012, 11, 26)))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, new LocalDate(2012, 12, 2)))
-                .andExpect(view().name("provider/adherence"));
-    }
-
-    @Test
-    public void shouldListAllProvidersWithAdherence() throws Exception {
-        List<Provider> providersWithAdherence = new ArrayList<Provider>();
-        String loggedInDistrict = "Patna";
-        LocalDate today = new LocalDate(2012, 12, 3);
-        mockCurrentDate(today);
-
-        when(adherenceSubmissionService.providersWithAdherence(loggedInDistrict, today.minusDays(7))).thenReturn(providersWithAdherence);
-        loginAsDistrict(loggedInDistrict);
-        standaloneSetup(providerController).build()
-                .perform(get("/providers/withAdherence/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST, providersWithAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_TYPE, "WithAdherence"))
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, new LocalDate(2012, 11, 26)))
                 .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, new LocalDate(2012, 12, 2)))
                 .andExpect(view().name("provider/adherence"));

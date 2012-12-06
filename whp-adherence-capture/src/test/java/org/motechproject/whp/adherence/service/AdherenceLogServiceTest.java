@@ -43,9 +43,10 @@ public class AdherenceLogServiceTest {
     public void shouldReturnProvidersWithAdherenceRecords() {
         ProviderIds providersToSearchFor = new ProviderIds(asList("providerId1", "providerId2"));
         ProviderIds providersWithAdherenceRecords = new ProviderIds(asList("providerId1"));
+        LocalDate yesterday = today().minusDays(1);
         LocalDate today = today();
 
-        when(allAdherenceLogs.withProviderIdsFromDate(providersToSearchFor, today)).thenReturn(providersWithAdherenceRecords);
-        assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherenceRecords(today, providersToSearchFor));
+        when(allAdherenceLogs.withKnownAdherenceReportedByProviders(providersToSearchFor, yesterday, today)).thenReturn(providersWithAdherenceRecords);
+        assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherenceRecords(providersToSearchFor, yesterday, today));
     }
 }
