@@ -1139,3 +1139,7 @@ pre {
     color:black;
     text-shadow:none;
 }
+
+.beside-header{
+    line-height:41px;
+}

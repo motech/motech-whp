@@ -2,7 +2,12 @@
 <#import "../layout/default.ftl" as layout>
 
 <@layout.defaultLayout title="MoTeCH-WHP">
-        <h4>Pending adherence</h4>
+        <div class="row-fluid">
+              <h4 class="pull-left">Pending adherence</h4>
+              <div class="pull-right beside-header">
+                  Adherence status from <strong>${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</strong>
+              </div>
+        </div>
         <table class="table table-striped table-condensed" id="providerList">
                 <thead>
                     <tr>
@@ -76,9 +81,5 @@
                 </#if>
             </tbody>
         </table>
-        <div class="row-fluid">
-            <div class="span3">
-                Adherence status from <strong>${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</strong>
-            </div>
-         </div>
+
 </@layout.defaultLayout>
