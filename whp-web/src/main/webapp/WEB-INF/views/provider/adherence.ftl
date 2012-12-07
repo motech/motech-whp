@@ -2,12 +2,7 @@
 <#import "../layout/default.ftl" as layout>
 
 <@layout.defaultLayout title="MoTeCH-WHP">
-        <div class="row-fluid">
-              <h4 class="pull-left">Pending adherence</h4>
-              <div class="pull-right beside-header">
-                  Adherence status from <strong>${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</strong>
-              </div>
-        </div>
+        <h4 class="pull-left">Pending adherence : <strong>${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</strong></h4>
         <table class="table table-striped table-condensed" id="providerList">
                 <thead>
                     <tr>
@@ -28,7 +23,7 @@
                     <#else>
                         <#list providersPendingAdherence as provider>
                             <tr class="provider-row adherence-status-row not-reported">
-                                <td>&#88;</td>
+                                <td class="adherenceNotCaptured">&#10008;</td>
                                 <td class="providerId">${provider.providerId}</td>
                                 <td>
                                     ${provider.primaryMobile}
@@ -44,7 +39,7 @@
                     </#if>
                 </tbody>
         </table>
-        <h4>Reported adherence</h4>
+        <h4 class="pull-left">Reported adherence : <strong>${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</strong></h4>
         <table class="table table-striped table-condensed" id="providerList">
             <thead>
                 <tr>
@@ -65,7 +60,7 @@
                 <#else>
                     <#list providersWithAdherence as provider>
                         <tr class="provider-row  adherence-status-row reported">
-                            <td>&#10004;</td>
+                            <td class="adherenceCaptured">&#10004;</td>
                             <td class="providerId">${provider.providerId}</td>
                             <td>
                                 ${provider.primaryMobile}

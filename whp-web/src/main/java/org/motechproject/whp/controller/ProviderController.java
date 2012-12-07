@@ -5,6 +5,7 @@ import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.user.uimodel.ProviderRow;
@@ -74,8 +75,8 @@ public class ProviderController extends BaseWebController {
         uiModel.addAttribute(PROVIDER_LIST_PENDING_ADHERENCE, adherenceSubmissionService.providersPendingAdherence(loggedInDistrict, treatmentWeekStartDate, treatmentWeekEndDate));
         uiModel.addAttribute(PROVIDER_LIST_WITH_ADHERENCE, adherenceSubmissionService.providersWithAdherence(loggedInDistrict, treatmentWeekStartDate, treatmentWeekEndDate));
 
-        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, treatmentWeekStartDate);
-        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, treatmentWeekEndDate);
+        uiModel.addAttribute(PROVIDED_ADHERENCE_FROM, WHPDate.date(treatmentWeekStartDate).value());
+        uiModel.addAttribute(PROVIDED_ADHERENCE_TO, WHPDate.date(treatmentWeekEndDate).value());
         return "provider/adherence";
     }
 
