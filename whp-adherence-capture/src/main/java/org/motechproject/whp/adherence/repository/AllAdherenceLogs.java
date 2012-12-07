@@ -163,6 +163,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
                 .inclusiveEnd(true)
                 .includeDocs(true)
                 .queryParam("providers", providersToSearchFor.toJSONString())
+                .cacheOk(false)
                 .listName("filterLogsNotBelongingToProviders");
         return new ProviderIds(getValue(db.queryView(query).getRows()));
     }
