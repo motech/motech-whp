@@ -485,7 +485,7 @@ div.buttons a, div.buttons button {
     color: white;
 }  */
 
-#patientList td[class~=adherenceCaptured] {
+td[class~=adherenceCaptured] {
     text-align: center;
     color: #3C7526;
     font-size: 18px;
@@ -495,7 +495,7 @@ div.buttons a, div.buttons button {
     background-color: lightPink;
 }
 
-#patientList td[class~=adherenceNotCaptured] {
+td[class~=adherenceNotCaptured] {
     text-align: center;
     color: #C7250C;
     font-size: 18px;
@@ -509,7 +509,6 @@ div.buttons a, div.buttons button {
     color: #369BD7;
     font-weight: bold;
 }
-
 
 
 .user-name {

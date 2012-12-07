@@ -121,8 +121,8 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, new LocalDate(2012, 11, 26)))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, new LocalDate(2012, 12, 2)))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, "26/11/2012"))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "02/12/2012"))
                 .andExpect(view().name("provider/adherence"));
     }
 
