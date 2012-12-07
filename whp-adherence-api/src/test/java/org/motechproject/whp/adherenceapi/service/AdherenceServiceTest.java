@@ -5,9 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.builder.AdherenceValidationRequestBuilder;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
+import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryType;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -64,27 +64,67 @@ public class AdherenceServiceTest {
 
     @Test
     public void shouldReturnTrueForValidDoseCount() {
-        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequestBuilder().withDefaults().build();
+        String patientId = "1234";
+        String doseTakenCount = "3";
 
         Patient govtCategoryPatient = new PatientBuilder().withDefaults().build();
-        when(patientService.findByPatientId(adherenceValidationRequest.getPatientId())).thenReturn(govtCategoryPatient);
+        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
 
-        assertTrue(adherenceService.validateDosage(adherenceValidationRequest));
+        assertTrue(adherenceService.validateDosage(patientId, doseTakenCount));
 
-        verify(patientService).findByPatientId(adherenceValidationRequest.getPatientId());
+        verify(patientService).findByPatientId(patientId);
     }
 
     @Test
     public void shouldReturnFailureResponseForInValidDoseCount() {
+        String patientId = "1234";
         String inValidDoseCount = "7";
-        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequestBuilder().withDefaults().withDoseTakenCount(inValidDoseCount).build();
 
         Patient govtCategoryPatient = new PatientBuilder().withDefaults().build();
-        when(patientService.findByPatientId(adherenceValidationRequest.getPatientId())).thenReturn(govtCategoryPatient);
+        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
 
-        assertFalse(adherenceService.validateDosage(adherenceValidationRequest));
+        assertFalse(adherenceService.validateDosage(patientId, inValidDoseCount));
 
-        verify(patientService).findByPatientId(adherenceValidationRequest.getPatientId());
+        verify(patientService).findByPatientId(patientId);
+    }
+
+    @Test
+    public void shouldReturnFailureResponseForDoseCountOfInvalidPatient() {
+        String patientId = "1234";
+        String validDoseCount = "3";
+
+        when(patientService.findByPatientId(patientId)).thenReturn(null);
+
+        assertFalse(adherenceService.validateDosage(patientId, validDoseCount));
+
+        verify(patientService).findByPatientId(patientId);
+    }
+
+    @Test
+    public void shouldReturnTreatmentCategoryInfoGivenPatientId() {
+        String patientId = "1234";
+        Patient govtCategoryPatient = patients(patientId);
+
+        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
+
+        TreatmentCategoryInfo treatmentCategoryInfo = adherenceService.getTreatmentCategoryInformation(patientId);
+
+        assertEquals(TreatmentCategoryType.GOVERNMENT, treatmentCategoryInfo.getTreatmentCategoryType());
+        assertEquals("0", treatmentCategoryInfo.getValidRangeFrom());
+        assertEquals("3", treatmentCategoryInfo.getValidRangeTo());
+        verify(patientService).findByPatientId(patientId);
+    }
+
+    @Test
+    public void shouldReturnTreatmentCategoryInfoAsNullForInvalidPatientId() {
+        String patientId = "invalidPatient";
+
+        when(patientService.findByPatientId(patientId)).thenReturn(null);
+
+        TreatmentCategoryInfo treatmentCategoryInfo = adherenceService.getTreatmentCategoryInformation(patientId);
+
+        assertNull(treatmentCategoryInfo);
+        verify(patientService).findByPatientId(patientId);
     }
 
     private Patient patients(String patientId) {

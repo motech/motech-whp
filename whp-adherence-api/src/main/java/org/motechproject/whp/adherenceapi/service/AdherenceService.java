@@ -3,7 +3,7 @@ package org.motechproject.whp.adherenceapi.service;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,17 @@ public class AdherenceService {
         return new AdherenceSummary(patientsWithAdherence,patientsForProvider);
     }
 
-    public Boolean validateDosage(AdherenceValidationRequest adherenceValidationRequest) {
-        Patient patient = patientService.findByPatientId(adherenceValidationRequest.getPatientId());
+    public Boolean validateDosage(String patientId, String doseTakenCount) {
+        Patient patient = patientService.findByPatientId(patientId);
 
-        return patient.isValidDose(parseInt(adherenceValidationRequest.getDoseTakenCount()));
+        return patient != null && patient.isValidDose(parseInt(doseTakenCount));
+    }
+
+    public TreatmentCategoryInfo getTreatmentCategoryInformation(String patientId) {
+        Patient patient = patientService.findByPatientId(patientId);
+
+        if(patient == null)
+            return null;
+        return new TreatmentCategoryInfo(patient.getTreatmentCategory());
     }
 }

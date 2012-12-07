@@ -7,7 +7,9 @@ import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -21,11 +23,13 @@ public class AdherenceRequestsValidatorTest {
     private ProviderService providerService;
     @Mock
     private AdherenceWindow adherenceWindow;
+    @Mock
+    private PatientService patientService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceRequestsValidator = new AdherenceRequestsValidator(providerService, adherenceWindow);
+        adherenceRequestsValidator = new AdherenceRequestsValidator(providerService, adherenceWindow, patientService);
     }
 
     @Test
@@ -56,5 +60,32 @@ public class AdherenceRequestsValidatorTest {
         ErrorWithParameters error = adherenceRequestsValidator.validateFlashingRequest(flashingRequest, today);
 
         assertEquals(AdherenceCaptureError.NON_ADHERENCE_DAY.name(), error.getCode());
+    }
+
+    @Test
+    public void shouldValidateProvider_ForValidationRequest() {
+        String msisdn = "1234567890";
+        AdherenceValidationRequest validationRequest = new AdherenceValidationRequest();
+        validationRequest.setMsisdn(msisdn);
+        when(providerService.findByMobileNumber(msisdn)).thenReturn(null);
+
+        ErrorWithParameters error = adherenceRequestsValidator.validateValidationRequest(validationRequest);
+
+        assertEquals(AdherenceCaptureError.INVALID_MOBILE_NUMBER.name(), error.getCode());
+    }
+
+    @Test
+    public void shouldValidatePatient_ForValidationRequest() {
+        String msisdn = "1234567890";
+        String patientId = "12345";
+        AdherenceValidationRequest validationRequest = new AdherenceValidationRequest();
+        validationRequest.setMsisdn(msisdn);
+        validationRequest.setPatientId(patientId);
+        when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider());
+        when(patientService.findByPatientId(patientId)).thenReturn(null);
+
+        ErrorWithParameters error = adherenceRequestsValidator.validateValidationRequest(validationRequest);
+
+        assertEquals(AdherenceCaptureError.INVALID_PATIENT.name(), error.getCode());
     }
 }

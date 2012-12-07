@@ -1,28 +1,30 @@
 package org.motechproject.whp.adherenceapi.response;
 
+import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
 import org.motechproject.whp.common.webservice.WebServiceResponse;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.common.webservice.WebServiceResponse.failure;
-import static org.motechproject.whp.adherenceapi.domain.TreatmentCategoryType.GOVERNMENT;
-import static org.motechproject.whp.adherenceapi.domain.TreatmentCategoryType.PRIVATE;
-
+@Component
 public class AdherenceValidationResponseBuilder {
 
-    public static final String VALID_RANGE_FROM = "0";
-
     public AdherenceValidationResponse successfulResponse() {
-        return new AdherenceValidationResponse(WebServiceResponse.success.name());
+        return new AdherenceValidationResponse();
     }
 
-    public AdherenceValidationResponse failureResponse(TreatmentCategory treatmentCategory) {
-        AdherenceValidationResponse response = new AdherenceValidationResponse(failure.name());
+    public AdherenceValidationResponse invalidDosageFailureResponse(TreatmentCategoryInfo treatmentCategoryInfo) {
+        AdherenceValidationResponse response = new AdherenceValidationResponse();
 
-        String treatmentCategoryType = treatmentCategory.isGovernmentCategory() ? GOVERNMENT.name() : PRIVATE.name();
-        response.setTreatmentCategory(treatmentCategoryType);
-        response.setValidRangeFrom(VALID_RANGE_FROM);
-        response.setValidRangeTo(treatmentCategory.getDosesPerWeek().toString());
+        response.setResult(WebServiceResponse.failure);
+        response.setTreatmentCategory(treatmentCategoryInfo.getTreatmentCategoryType().name());
+        response.setValidRangeFrom(treatmentCategoryInfo.getValidRangeFrom());
+        response.setValidRangeTo(treatmentCategoryInfo.getValidRangeTo());
 
+        return response;
+    }
+
+    public AdherenceValidationResponse validationFailureResponse() {
+        AdherenceValidationResponse response = new AdherenceValidationResponse();
+        response.setResult(WebServiceResponse.failure);
         return response;
     }
 }
