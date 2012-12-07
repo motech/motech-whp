@@ -2,7 +2,7 @@ package org.motechproject.whp.adherenceapi.validator;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.patient.service.PatientService;
@@ -24,7 +24,7 @@ public class AdherenceRequestsValidator {
         this.patientService = patientService;
     }
 
-    public ErrorWithParameters validateFlashingRequest(AdherenceCaptureFlashingRequest flashingRequest, LocalDate requestDate) {
+    public ErrorWithParameters validateFlashingRequest(AdherenceFlashingRequest flashingRequest, LocalDate requestDate) {
         if(!validateMobileNumber(flashingRequest.getMsisdn()))
             return new ErrorWithParameters(AdherenceCaptureError.INVALID_MOBILE_NUMBER.name());
 

@@ -1,18 +1,17 @@
 package org.motechproject.whp.adherenceapi.reporting;
 
 
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
 
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.util.WHPDateTime.date;
 
-public class AdherenceFlashingRequest {
+public class AdherenceFlashingReportRequest {
 
-    private AdherenceCaptureFlashingRequest flashingRequest;
+    private org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest flashingRequest;
     private String providerId;
 
-    public AdherenceFlashingRequest(AdherenceCaptureFlashingRequest flashingRequest, String providerId) {
+    public AdherenceFlashingReportRequest(org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest flashingRequest, String providerId) {
         this.flashingRequest = flashingRequest;
         this.providerId = providerId;
     }

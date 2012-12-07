@@ -3,10 +3,10 @@ package org.motechproject.whp.adherenceapi.service;
 import ch.lambdaj.Lambda;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
-import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingRequest;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
+import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.adherenceapi.validator.AdherenceRequestsValidator;
@@ -40,17 +40,17 @@ public class AdherenceWebService {
         this.adherenceValidationResponseBuilder = adherenceValidationResponseBuilder;
     }
 
-    public AdherenceCaptureFlashingResponse processFlashingRequest(AdherenceCaptureFlashingRequest adherenceCaptureFlashingRequest, LocalDate requestedDate) {
-        ErrorWithParameters error = adherenceRequestsValidator.validateFlashingRequest(adherenceCaptureFlashingRequest, requestedDate);
+    public AdherenceFlashingResponse processFlashingRequest(AdherenceFlashingRequest adherenceFlashingRequest, LocalDate requestedDate) {
+        ErrorWithParameters error = adherenceRequestsValidator.validateFlashingRequest(adherenceFlashingRequest, requestedDate);
         if(error == null) {
-            String providerId = providerService.findByMobileNumber(adherenceCaptureFlashingRequest.getMsisdn()).getProviderId();
+            String providerId = providerService.findByMobileNumber(adherenceFlashingRequest.getMsisdn()).getProviderId();
             AdherenceSummary adherenceSummary = adherenceService.adherenceSummary(providerId, requestedDate);
 
             List<String> patientsForProvider = Lambda.extract(adherenceSummary.getPatientsForProvider(), on(Patient.class).getPatientId());
-            reportingPublishingService.reportFlashingRequest(new AdherenceFlashingRequest(adherenceCaptureFlashingRequest, providerId).flashingLogRequest());
-            return new AdherenceCaptureFlashingResponse(adherenceSummary.getPatientsWithAdherence(), patientsForProvider);
+            reportingPublishingService.reportFlashingRequest(new AdherenceFlashingReportRequest(adherenceFlashingRequest, providerId).flashingLogRequest());
+            return new AdherenceFlashingResponse(adherenceSummary.getPatientsWithAdherence(), patientsForProvider);
         }
-        return AdherenceCaptureFlashingResponse.failureResponse(error.getCode());
+        return AdherenceFlashingResponse.failureResponse(error.getCode());
     }
 
     public AdherenceValidationResponse processValidationRequest(AdherenceValidationRequest adherenceValidationRequest) {

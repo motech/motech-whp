@@ -11,16 +11,16 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 class AdherenceStatus {
 
     @XmlElement(name = "patient_remaining_count")
-    private String patientRemainingCount;
+    private Integer patientRemainingCount;
     @XmlElement(name = "patient_given_count")
-    private String patientGivenCount;
+    private Integer patientGivenCount;
     @XmlElement(name = "patients_remaining")
     private PatientsRemaining patientsRemaining;
 
     AdherenceStatus() {
     }
 
-    AdherenceStatus(String patientRemainingCount, String patientGivenCount, List<String> patientsRemaining) {
+    AdherenceStatus(Integer patientRemainingCount, Integer patientGivenCount, List<String> patientsRemaining) {
         this.patientRemainingCount = patientRemainingCount;
         this.patientGivenCount = patientGivenCount;
         if (isNotEmpty(patientsRemaining)) {

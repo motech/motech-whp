@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.patient.service.PatientService;
@@ -35,7 +35,7 @@ public class AdherenceRequestsValidatorTest {
     @Test
     public void shouldValidateTheProviderId_ForFlashingRequest() {
         String msisdn = "1234567890";
-        AdherenceCaptureFlashingRequest flashingRequest = new AdherenceCaptureFlashingRequest();
+        AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn(msisdn);
 
         LocalDate today = DateUtil.today();
@@ -50,7 +50,7 @@ public class AdherenceRequestsValidatorTest {
     @Test
     public void shouldValidateTheAdherenceDay_ForFlashingRequest() {
         String msisdn = "1234567890";
-        AdherenceCaptureFlashingRequest flashingRequest = new AdherenceCaptureFlashingRequest();
+        AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn(msisdn);
         when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider());
 

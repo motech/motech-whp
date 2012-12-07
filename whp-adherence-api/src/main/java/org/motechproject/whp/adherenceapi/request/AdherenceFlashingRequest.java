@@ -11,7 +11,7 @@ import java.io.Serializable;
 @XmlRootElement(name = "adherence_capture_flashing_request")
 @Setter
 @EqualsAndHashCode
-public class AdherenceCaptureFlashingRequest implements Serializable {
+public class AdherenceFlashingRequest implements Serializable {
 
     private String msisdn;
 

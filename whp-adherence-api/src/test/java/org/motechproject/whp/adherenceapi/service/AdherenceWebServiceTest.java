@@ -8,9 +8,9 @@ import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
-import org.motechproject.whp.adherenceapi.request.AdherenceCaptureFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceCaptureFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.adherenceapi.validator.AdherenceRequestsValidator;
@@ -58,10 +58,10 @@ public class AdherenceWebServiceTest {
         String providerId = "raj";
         String msisdn = "1234567890";
 
-        AdherenceCaptureFlashingRequest adherenceCaptureFlashingRequest = new AdherenceCaptureFlashingRequest();
-        adherenceCaptureFlashingRequest.setMsisdn(msisdn);
-        adherenceCaptureFlashingRequest.setCallTime("14/08/2012 11:20:59");
-        when(adherenceRequestsValidator.validateFlashingRequest(adherenceCaptureFlashingRequest, today)).thenReturn(null);
+        AdherenceFlashingRequest adherenceFlashingRequest = new AdherenceFlashingRequest();
+        adherenceFlashingRequest.setMsisdn(msisdn);
+        adherenceFlashingRequest.setCallTime("14/08/2012 11:20:59");
+        when(adherenceRequestsValidator.validateFlashingRequest(adherenceFlashingRequest, today)).thenReturn(null);
         when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider(providerId, msisdn, null, null));
 
         List<String> patientsWithAdherence = asList("1234", "5678");
@@ -69,9 +69,9 @@ public class AdherenceWebServiceTest {
         AdherenceSummary adherenceSummary = new AdherenceSummary(patientsWithAdherence, patientsForProvider);
         when(adherenceService.adherenceSummary(providerId, today)).thenReturn(adherenceSummary);
 
-        AdherenceCaptureFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceCaptureFlashingRequest, today);
+        AdherenceFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceFlashingRequest, today);
 
-        assertEquals(new AdherenceCaptureFlashingResponse(patientsWithAdherence, asList("1234", "5678", "9012")), flashingResponse);
+        assertEquals(new AdherenceFlashingResponse(patientsWithAdherence, asList("1234", "5678", "9012")), flashingResponse);
 
         verify(adherenceService).adherenceSummary(providerId, today);
         verify(providerService).findByMobileNumber(msisdn);
@@ -90,13 +90,13 @@ public class AdherenceWebServiceTest {
         LocalDate today = DateUtil.today();
         String msisdn = "1234567890";
 
-        AdherenceCaptureFlashingRequest adherenceCaptureFlashingRequest = new AdherenceCaptureFlashingRequest();
-        adherenceCaptureFlashingRequest.setMsisdn(msisdn);
-        when(adherenceRequestsValidator.validateFlashingRequest(adherenceCaptureFlashingRequest, today)).thenReturn(new ErrorWithParameters("first_code"));
+        AdherenceFlashingRequest adherenceFlashingRequest = new AdherenceFlashingRequest();
+        adherenceFlashingRequest.setMsisdn(msisdn);
+        when(adherenceRequestsValidator.validateFlashingRequest(adherenceFlashingRequest, today)).thenReturn(new ErrorWithParameters("first_code"));
 
-        AdherenceCaptureFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceCaptureFlashingRequest, today);
+        AdherenceFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceFlashingRequest, today);
 
-        assertEquals(AdherenceCaptureFlashingResponse.failureResponse("first_code"), flashingResponse);
+        assertEquals(AdherenceFlashingResponse.failureResponse("first_code"), flashingResponse);
         verify(adherenceService, never()).adherenceSummary(anyString(), any(LocalDate.class));
         verify(providerService, never()).findByMobileNumber(anyString());
     }

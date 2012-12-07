@@ -5,13 +5,13 @@ import org.junit.Test;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
-public class AdherenceCaptureFlashingResponseTest {
+public class AdherenceFlashingResponseTest {
 
     @Test
     public void shouldCountTheNumberOfPatientsWithoutAdherence() {
         assertEquals(
                 2,
-                new AdherenceCaptureFlashingResponse(
+                new AdherenceFlashingResponse(
                         asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
                 ).getPatientRemainingCount().intValue()
@@ -22,7 +22,7 @@ public class AdherenceCaptureFlashingResponseTest {
     public void shouldCountTheNumberOfPatientsWithAdherence() {
         assertEquals(
                 1,
-                new AdherenceCaptureFlashingResponse(
+                new AdherenceFlashingResponse(
                         asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
 
@@ -34,7 +34,7 @@ public class AdherenceCaptureFlashingResponseTest {
     public void shouldAcceptNullListsAsArguments() {
         assertEquals(
                 0,
-                new AdherenceCaptureFlashingResponse(
+                new AdherenceFlashingResponse(
                         null,
                         null
 
@@ -42,7 +42,7 @@ public class AdherenceCaptureFlashingResponseTest {
         );
         assertEquals(
                 0,
-                new AdherenceCaptureFlashingResponse(
+                new AdherenceFlashingResponse(
                         null,
                         null
 

@@ -27,23 +27,19 @@ public class AdherenceService {
     }
 
     public AdherenceSummary adherenceSummary(String providerId, LocalDate today) {
-        List<String> patientsWithAdherence = whpAdherenceService.patientsWithAdherence(providerId, week(today));
-        List<Patient> patientsForProvider = patientService.getAllWithActiveTreatmentForProvider(providerId);
-
-        return new AdherenceSummary(patientsWithAdherence,patientsForProvider);
+        return new AdherenceSummary(
+                whpAdherenceService.patientsWithAdherence(providerId, week(today)),
+                patientService.getAllWithActiveTreatmentForProvider(providerId)
+        );
     }
 
     public Boolean validateDosage(String patientId, String doseTakenCount) {
         Patient patient = patientService.findByPatientId(patientId);
-
         return patient != null && patient.isValidDose(parseInt(doseTakenCount));
     }
 
     public TreatmentCategoryInfo getTreatmentCategoryInformation(String patientId) {
         Patient patient = patientService.findByPatientId(patientId);
-
-        if(patient == null)
-            return null;
-        return new TreatmentCategoryInfo(patient.getTreatmentCategory());
+        return (patient == null) ? null : new TreatmentCategoryInfo(patient.getTreatmentCategory());
     }
 }
