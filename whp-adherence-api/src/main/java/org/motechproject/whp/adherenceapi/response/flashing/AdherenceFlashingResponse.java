@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.response;
+package org.motechproject.whp.adherenceapi.response.flashing;
 
 import lombok.EqualsAndHashCode;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
@@ -77,7 +77,7 @@ public class AdherenceFlashingResponse implements Serializable {
     }
 
     public static AdherenceFlashingResponse successResponse(AdherenceSummary summary) {
-        List<String> patientsForProvider = extract(summary.getPatientsForProvider(), on(Patient.class).getPatientId());
+        List<String> patientsForProvider = extract(summary.getPatientsUnderProvider(), on(Patient.class).getPatientId());
         return new AdherenceFlashingResponse(summary.getPatientsWithAdherence(), patientsForProvider);
     }
 }

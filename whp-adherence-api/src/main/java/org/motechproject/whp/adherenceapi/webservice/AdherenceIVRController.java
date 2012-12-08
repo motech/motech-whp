@@ -2,8 +2,8 @@ package org.motechproject.whp.adherenceapi.webservice;
 
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
-import org.motechproject.whp.adherenceapi.service.AdherenceFlashingWebService;
+import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,21 +17,21 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @Controller
 @RequestMapping("/ivr/adherence")
-public class AdherenceAPIController {
+public class AdherenceIVRController {
 
     private ProviderService providerService;
-    private AdherenceFlashingWebService adherenceFlashingWebService;
+    private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
 
     @Autowired
-    public AdherenceAPIController(ProviderService providerService, AdherenceFlashingWebService adherenceFlashingWebService) {
+    public AdherenceIVRController(ProviderService providerService, AdherenceSummaryOverIVR adherenceSummaryOverIVR) {
         this.providerService = providerService;
-        this.adherenceFlashingWebService = adherenceFlashingWebService;
+        this.adherenceSummaryOverIVR = adherenceSummaryOverIVR;
     }
 
-    @RequestMapping(value = "/flashing", method = RequestMethod.POST, produces = APPLICATION_XML_VALUE, consumes = APPLICATION_XML_VALUE)
+    @RequestMapping(value = "/summary", method = RequestMethod.POST, produces = APPLICATION_XML_VALUE, consumes = APPLICATION_XML_VALUE)
     @ResponseBody
-    public AdherenceFlashingResponse flashingRequest(@RequestBody AdherenceFlashingRequest request) {
-        return adherenceFlashingWebService.processFlashingRequest(request, providerId(request.getMsisdn()));
+    public AdherenceFlashingResponse adherenceSummary(@RequestBody AdherenceFlashingRequest request) {
+        return adherenceSummaryOverIVR.value(request, providerId(request.getMsisdn()));
     }
 
     private ProviderId providerId(String msisdn) {

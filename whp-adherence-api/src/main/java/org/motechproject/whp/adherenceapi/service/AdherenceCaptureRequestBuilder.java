@@ -6,7 +6,7 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.motechproject.whp.user.service.ProviderService;
 
 import static java.lang.Long.parseLong;
-import static org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus.INVALID;
+import static org.motechproject.whp.adherenceapi.domain.IVRInput.INVALID;
 
 public class AdherenceCaptureRequestBuilder {
 

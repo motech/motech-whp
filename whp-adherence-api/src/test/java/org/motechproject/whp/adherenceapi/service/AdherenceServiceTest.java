@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
-import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryType;
+import org.motechproject.whp.adherenceapi.domain.TreatmentProvider;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -109,7 +109,7 @@ public class AdherenceServiceTest {
 
         TreatmentCategoryInfo treatmentCategoryInfo = adherenceService.getTreatmentCategoryInformation(patientId);
 
-        assertEquals(TreatmentCategoryType.GOVERNMENT, treatmentCategoryInfo.getTreatmentCategoryType());
+        assertEquals(TreatmentProvider.GOVERNMENT, treatmentCategoryInfo.getTreatmentProvider());
         assertEquals("0", treatmentCategoryInfo.getValidRangeFrom());
         assertEquals("3", treatmentCategoryInfo.getValidRangeTo());
         verify(patientService).findByPatientId(patientId);

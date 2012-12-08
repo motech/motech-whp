@@ -6,9 +6,9 @@ import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
-import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
-import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
+import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.adherenceapi.validator.AdherenceRequestsValidator;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.patient.domain.Patient;
@@ -46,7 +46,7 @@ public class AdherenceWebService {
             String providerId = providerService.findByMobileNumber(adherenceFlashingRequest.getMsisdn()).getProviderId();
             AdherenceSummary adherenceSummary = adherenceService.adherenceSummary(providerId, requestedDate);
 
-            List<String> patientsForProvider = Lambda.extract(adherenceSummary.getPatientsForProvider(), on(Patient.class).getPatientId());
+            List<String> patientsForProvider = Lambda.extract(adherenceSummary.getPatientsUnderProvider(), on(Patient.class).getPatientId());
             reportingPublishingService.reportFlashingRequest(new AdherenceFlashingReportRequest(adherenceFlashingRequest, providerId).flashingLogRequest());
             return new AdherenceFlashingResponse(adherenceSummary.getPatientsWithAdherence(), patientsForProvider);
         }

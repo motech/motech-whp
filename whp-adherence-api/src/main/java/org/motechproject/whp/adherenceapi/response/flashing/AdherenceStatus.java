@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.response;
+package org.motechproject.whp.adherenceapi.response.flashing;
 
 import lombok.EqualsAndHashCode;
 

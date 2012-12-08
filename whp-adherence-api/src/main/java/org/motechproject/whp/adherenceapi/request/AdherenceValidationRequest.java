@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 public class AdherenceValidationRequest implements Serializable {
+
     private String patientId;
     private String doseTakenCount;
     private String msisdn;

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus.INVALID;
+import static org.motechproject.whp.adherenceapi.domain.IVRInput.INVALID;
 
 public class AdherenceCaptureRequestBuilderTest {
     @Mock

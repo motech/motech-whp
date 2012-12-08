@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.service;
+package org.motechproject.whp.adherenceapi.adherence;
 
 
 import org.joda.time.LocalDate;
@@ -7,7 +7,8 @@ import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +19,25 @@ import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError
 import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.NON_ADHERENCE_DAY;
 
 @Service
-public class AdherenceFlashingWebService {
+public class AdherenceSummaryOverIVR {
 
     private AdherenceService adherenceService;
     private AdherenceWindow adherenceWindow;
     private ReportingPublisherService reportingPublishingService;
 
     @Autowired
-    public AdherenceFlashingWebService(AdherenceService adherenceService, AdherenceWindow adherenceWindow, ReportingPublisherService reportingPublishingService) {
+    public AdherenceSummaryOverIVR(AdherenceService adherenceService,
+                                   AdherenceWindow adherenceWindow,
+                                   ReportingPublisherService reportingPublishingService
+    ) {
         this.adherenceService = adherenceService;
         this.adherenceWindow = adherenceWindow;
         this.reportingPublishingService = reportingPublishingService;
     }
 
-    public AdherenceFlashingResponse processFlashingRequest(AdherenceFlashingRequest adherenceFlashingRequest, ProviderId providerId) {
+    public AdherenceFlashingResponse value(AdherenceFlashingRequest adherenceFlashingRequest,
+                                           ProviderId providerId
+    ) {
         LocalDate requestedDate = today();
         reportingPublishingService.reportFlashingRequest(flashingLogRequest(adherenceFlashingRequest, providerId));
         return flashingResponse(providerId, requestedDate);
@@ -51,7 +57,9 @@ public class AdherenceFlashingWebService {
         return adherenceService.adherenceSummary(providerId.value(), requestedDate);
     }
 
-    private FlashingLogRequest flashingLogRequest(AdherenceFlashingRequest adherenceFlashingRequest, ProviderId providerId) {
+    private FlashingLogRequest flashingLogRequest(AdherenceFlashingRequest adherenceFlashingRequest,
+                                                  ProviderId providerId
+    ) {
         return new AdherenceFlashingReportRequest(adherenceFlashingRequest, providerId.value()).flashingLogRequest();
     }
 

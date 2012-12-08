@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.response;
+package org.motechproject.whp.adherenceapi.response.validation;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,6 +12,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Data
 public class AdherenceValidationResponse implements Serializable {
+
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
 
@@ -23,4 +24,5 @@ public class AdherenceValidationResponse implements Serializable {
 
     @XmlElement(name = "valid_range_to")
     private String validRangeTo;
+
 }

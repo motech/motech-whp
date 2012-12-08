@@ -1,6 +1,7 @@
-package org.motechproject.whp.adherenceapi.response;
+package org.motechproject.whp.adherenceapi.response.flashing;
 
 import org.junit.Test;
+import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;

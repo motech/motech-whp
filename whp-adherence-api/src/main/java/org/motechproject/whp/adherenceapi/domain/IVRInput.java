@@ -1,11 +1,12 @@
 package org.motechproject.whp.adherenceapi.domain;
 
-public enum AdherenceCaptureStatus {
+public enum IVRInput {
+
     INVALID("Invalid"), VALID("Valid"), NO_INPUT("NoInput"), SKIPPED("Skipped"), CONFIRMED("Confirmed");
 
     private String text;
 
-    AdherenceCaptureStatus(String text) {
+    IVRInput(String text) {
         this.text = text;
     }
 

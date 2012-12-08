@@ -2,14 +2,14 @@ package org.motechproject.whp.adherenceapi.request;
 
 import org.junit.Test;
 import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
-import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponse;
-import org.motechproject.whp.adherenceapi.response.AdherenceValidationResponseBuilder;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.common.webservice.WebServiceResponse;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.motechproject.whp.adherenceapi.domain.TreatmentCategoryType.GOVERNMENT;
+import static org.motechproject.whp.adherenceapi.domain.TreatmentProvider.GOVERNMENT;
 import static org.motechproject.whp.common.webservice.WebServiceResponse.failure;
 
 public class AdherenceValidationResponseBuilderTest {

@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherenceapi.service;
+package org.motechproject.whp.adherenceapi.adherence;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +8,8 @@ import org.motechproject.whp.adherence.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -25,13 +26,13 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherenceapi.response.AdherenceFlashingResponse.failureResponse;
+import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.INVALID_MOBILE_NUMBER;
 import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.NON_ADHERENCE_DAY;
 
-public class AdherenceFlashingWebServiceTest extends BaseUnitTest {
+public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
 
-    AdherenceFlashingWebService adherenceFlashingWebService;
+    AdherenceSummaryOverIVR adherenceSummaryOverIVR;
 
     @Mock
     private AdherenceService adherenceService;
@@ -50,7 +51,7 @@ public class AdherenceFlashingWebServiceTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         mockCurrentDate(today());
-        adherenceFlashingWebService = new AdherenceFlashingWebService(adherenceService, adherenceWindow, reportingPublishingService);
+        adherenceSummaryOverIVR = new AdherenceSummaryOverIVR(adherenceService, adherenceWindow, reportingPublishingService);
     }
 
     @Test
@@ -67,7 +68,7 @@ public class AdherenceFlashingWebServiceTest extends BaseUnitTest {
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
         AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(patientIdsWithAdherence, patientIdsWithoutAdherence);
 
-        AdherenceFlashingResponse response = adherenceFlashingWebService.processFlashingRequest(adherenceFlashingRequest, new ProviderId(provider));
+        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);
@@ -81,7 +82,7 @@ public class AdherenceFlashingWebServiceTest extends BaseUnitTest {
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, null, callTime);
         AdherenceFlashingResponse expectedResponse = failureResponse(INVALID_MOBILE_NUMBER.name());
 
-        AdherenceFlashingResponse response = adherenceFlashingWebService.processFlashingRequest(adherenceFlashingRequest, new ProviderId(null));
+        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(null));
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);
@@ -95,7 +96,7 @@ public class AdherenceFlashingWebServiceTest extends BaseUnitTest {
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
         AdherenceFlashingResponse expectedResponse = failureResponse(NON_ADHERENCE_DAY.name());
 
-        AdherenceFlashingResponse response = adherenceFlashingWebService.processFlashingRequest(adherenceFlashingRequest, new ProviderId(provider));
+        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);

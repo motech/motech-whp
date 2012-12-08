@@ -15,7 +15,7 @@ public class TreatmentCategoryInfoTest {
 
         TreatmentCategoryInfo treatmentCategoryInfo = new TreatmentCategoryInfo(govtCategory);
 
-        assertEquals(TreatmentCategoryType.GOVERNMENT, treatmentCategoryInfo.getTreatmentCategoryType());
+        assertEquals(TreatmentProvider.GOVERNMENT, treatmentCategoryInfo.getTreatmentProvider());
         assertEquals("0", treatmentCategoryInfo.getValidRangeFrom());
         assertEquals(dosesPerWeek.toString(), treatmentCategoryInfo.getValidRangeTo());
     }
@@ -28,7 +28,7 @@ public class TreatmentCategoryInfoTest {
 
         TreatmentCategoryInfo treatmentCategoryInfo = new TreatmentCategoryInfo(privateCategory);
 
-        assertEquals(TreatmentCategoryType.PRIVATE, treatmentCategoryInfo.getTreatmentCategoryType());
+        assertEquals(TreatmentProvider.PRIVATE, treatmentCategoryInfo.getTreatmentProvider());
         assertEquals("0", treatmentCategoryInfo.getValidRangeFrom());
         assertEquals(dosesPerWeek.toString(), treatmentCategoryInfo.getValidRangeTo());
     }
