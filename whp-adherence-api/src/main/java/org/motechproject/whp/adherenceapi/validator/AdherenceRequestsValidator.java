@@ -1,8 +1,5 @@
 package org.motechproject.whp.adherenceapi.validator;
 
-import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.service.AdherenceWindow;
-import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.patient.service.PatientService;
@@ -14,31 +11,19 @@ import org.springframework.stereotype.Component;
 public class AdherenceRequestsValidator {
 
     private ProviderService providerService;
-    private AdherenceWindow adherenceWindow;
     private PatientService patientService;
 
     @Autowired
-    public AdherenceRequestsValidator(ProviderService providerService, AdherenceWindow adherenceWindow, PatientService patientService) {
+    public AdherenceRequestsValidator(ProviderService providerService, PatientService patientService) {
         this.providerService = providerService;
-        this.adherenceWindow = adherenceWindow;
         this.patientService = patientService;
     }
 
-    public ErrorWithParameters validateFlashingRequest(AdherenceFlashingRequest flashingRequest, LocalDate requestDate) {
-        if(!validateMobileNumber(flashingRequest.getMsisdn()))
-            return new ErrorWithParameters(AdherenceCaptureError.INVALID_MOBILE_NUMBER.name());
-
-        if(!validateAdherenceDay(requestDate))
-            return new ErrorWithParameters(AdherenceCaptureError.NON_ADHERENCE_DAY.name());
-
-        return null;
-    }
-
     public ErrorWithParameters validateValidationRequest(AdherenceValidationRequest validationRequest) {
-        if(!validateMobileNumber(validationRequest.getMsisdn()))
+        if (!validateMobileNumber(validationRequest.getMsisdn()))
             return new ErrorWithParameters(AdherenceCaptureError.INVALID_MOBILE_NUMBER.name());
 
-        if(!validatePatient(validationRequest.getPatientId()))
+        if (!validatePatient(validationRequest.getPatientId()))
             return new ErrorWithParameters(AdherenceCaptureError.INVALID_PATIENT.name());
 
         return null;
@@ -46,10 +31,6 @@ public class AdherenceRequestsValidator {
 
     private boolean validatePatient(String patientId) {
         return patientService.findByPatientId(patientId) != null;
-    }
-
-    private Boolean validateAdherenceDay(LocalDate requestDate) {
-        return adherenceWindow.isValidAdherenceDay(requestDate);
     }
 
     private Boolean validateMobileNumber(String msisdn) {

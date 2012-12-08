@@ -1,104 +1,38 @@
 package org.motechproject.whp.adherenceapi.service;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
-import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponseBuilder;
 import org.motechproject.whp.adherenceapi.validator.AdherenceRequestsValidator;
 import org.motechproject.whp.common.error.ErrorWithParameters;
-import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.FlashingLogRequest;
-import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.service.ProviderService;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class AdherenceWebServiceTest {
 
     private AdherenceWebService adherenceWebService;
+
     @Mock
     private AdherenceService adherenceService;
     @Mock
-    private ReportingPublisherService reportingPublishingService;
-    @Mock
     private AdherenceRequestsValidator adherenceRequestsValidator;
-    @Mock
-    private ProviderService providerService;
     @Mock
     private AdherenceValidationResponseBuilder adherenceValidationResponseBuilder;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceWebService = new AdherenceWebService(adherenceService, reportingPublishingService, adherenceRequestsValidator, providerService, adherenceValidationResponseBuilder);
-    }
-
-    @Test
-    public void shouldReturnAValidFlashingResponseAndReportIt() {
-        LocalDate today = DateUtil.today();
-        String providerId = "raj";
-        String msisdn = "1234567890";
-
-        AdherenceFlashingRequest adherenceFlashingRequest = new AdherenceFlashingRequest();
-        adherenceFlashingRequest.setMsisdn(msisdn);
-        adherenceFlashingRequest.setCallTime("14/08/2012 11:20:59");
-        when(adherenceRequestsValidator.validateFlashingRequest(adherenceFlashingRequest, today)).thenReturn(null);
-        when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider(providerId, msisdn, null, null));
-
-        List<String> patientsWithAdherence = asList("1234", "5678");
-        List<Patient> patientsForProvider = asList(patients("1234"), patients("5678"), patients("9012"));
-        AdherenceSummary adherenceSummary = new AdherenceSummary(patientsWithAdherence, patientsForProvider);
-        when(adherenceService.adherenceSummary(providerId, today)).thenReturn(adherenceSummary);
-
-        AdherenceFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceFlashingRequest, today);
-
-        assertEquals(new AdherenceFlashingResponse(patientsWithAdherence, asList("1234", "5678", "9012")), flashingResponse);
-
-        verify(adherenceService).adherenceSummary(providerId, today);
-        verify(providerService).findByMobileNumber(msisdn);
-        ArgumentCaptor<FlashingLogRequest> captor = ArgumentCaptor.forClass(FlashingLogRequest.class);
-        verify(reportingPublishingService).reportFlashingRequest(captor.capture());
-
-        FlashingLogRequest flashingLogRequest = captor.getValue();
-        assertThat(flashingLogRequest.getMobileNumber(), is(msisdn));
-        assertThat(flashingLogRequest.getProviderId(), is(providerId));
-        assertThat(flashingLogRequest.getCallTime(), is(new WHPDateTime("14/08/2012 11:20:59").date().toDate()));
-        assertNotNull(flashingLogRequest.getCreationTime());
-    }
-
-    @Test
-    public void shouldReturnAFailureFlashingResponseIfValidationFails() {
-        LocalDate today = DateUtil.today();
-        String msisdn = "1234567890";
-
-        AdherenceFlashingRequest adherenceFlashingRequest = new AdherenceFlashingRequest();
-        adherenceFlashingRequest.setMsisdn(msisdn);
-        when(adherenceRequestsValidator.validateFlashingRequest(adherenceFlashingRequest, today)).thenReturn(new ErrorWithParameters("first_code"));
-
-        AdherenceFlashingResponse flashingResponse = adherenceWebService.processFlashingRequest(adherenceFlashingRequest, today);
-
-        assertEquals(AdherenceFlashingResponse.failureResponse("first_code"), flashingResponse);
-        verify(adherenceService, never()).adherenceSummary(anyString(), any(LocalDate.class));
-        verify(providerService, never()).findByMobileNumber(anyString());
+        adherenceWebService = new AdherenceWebService(adherenceService, adherenceRequestsValidator, adherenceValidationResponseBuilder);
     }
 
     @Test
