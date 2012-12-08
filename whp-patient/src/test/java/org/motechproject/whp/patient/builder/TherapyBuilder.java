@@ -3,10 +3,10 @@ package org.motechproject.whp.patient.builder;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import static java.util.Arrays.asList;
@@ -32,10 +32,15 @@ public class TherapyBuilder {
         return therapy;
     }
 
-    public TherapyBuilder withTreatmentCategory(String categoryName,String categoryCode) {
+    public TherapyBuilder withTreatmentCategory(String categoryName, String categoryCode) {
         TreatmentCategory treatmentCategory = new TreatmentCategory(categoryName, categoryCode, 3, 12, 36, 4, 12, 22, 66, asList(Monday, Wednesday, Thursday));
         treatmentCategory.setName(categoryName);
         therapy.setTreatmentCategory(treatmentCategory);
+        return this;
+    }
+
+    public TherapyBuilder withTreatmentCategory(TreatmentCategory category) {
+        therapy.setTreatmentCategory(category);
         return this;
     }
 

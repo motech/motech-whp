@@ -410,7 +410,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public boolean isValidDose(int doseTaken) {
-        return doseTaken <= dosesPerWeek();
+        return doseTaken >= 0 && doseTaken <= dosesPerWeek();
     }
 
     public void revertAutoCompleteOfLastPhase() {
@@ -465,8 +465,8 @@ public class Patient extends MotechBaseDataObject {
 
     public Therapy getTherapyHaving(String tbId) {
         for (Therapy therapy : getAllTherapies()) {
-            if(therapy.hasTreatment(tbId.toLowerCase())){
-                return  therapy;
+            if (therapy.hasTreatment(tbId.toLowerCase())) {
+                return therapy;
             }
         }
         return null;

@@ -1,24 +1,24 @@
 package org.motechproject.whp.adherenceapi.domain;
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.Patient;
 
 import static org.motechproject.whp.adherenceapi.domain.TreatmentProvider.GOVERNMENT;
 import static org.motechproject.whp.adherenceapi.domain.TreatmentProvider.PRIVATE;
 
 @EqualsAndHashCode
-public class TreatmentCategoryInfo {
+public class Dosage {
 
     public static final String VALID_RANGE_FROM_FOR_ALL_CATEGORIES = "0";
 
-    private TreatmentCategory treatmentCategory;
+    private Patient patient;
 
-    public TreatmentCategoryInfo(TreatmentCategory treatmentCategory) {
-        this.treatmentCategory = treatmentCategory;
+    public Dosage(Patient patient) {
+        this.patient = patient;
     }
 
     public TreatmentProvider getTreatmentProvider() {
-        return treatmentCategory.isGovernmentCategory() ? GOVERNMENT : PRIVATE;
+        return this.patient.getTreatmentCategory().isGovernmentCategory() ? GOVERNMENT : PRIVATE;
     }
 
     public String getValidRangeFrom() {
@@ -26,6 +26,10 @@ public class TreatmentCategoryInfo {
     }
 
     public String getValidRangeTo() {
-        return treatmentCategory.getDosesPerWeek().toString();
+        return this.patient.getTreatmentCategory().getDosesPerWeek().toString();
+    }
+
+    public boolean isValidInput(int doseCount) {
+        return patient.isValidDose(doseCount);
     }
 }

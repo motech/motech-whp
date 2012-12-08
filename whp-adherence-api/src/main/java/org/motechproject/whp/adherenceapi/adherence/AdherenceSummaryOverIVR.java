@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 
 @Service
 public class AdherenceSummaryOverIVR {

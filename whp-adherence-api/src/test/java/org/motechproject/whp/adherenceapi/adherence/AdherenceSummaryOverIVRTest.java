@@ -27,8 +27,8 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
-import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.validator.AdherenceCaptureError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 
 public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
 

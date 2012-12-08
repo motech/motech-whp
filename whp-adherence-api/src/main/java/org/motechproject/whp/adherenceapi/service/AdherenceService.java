@@ -3,15 +3,12 @@ package org.motechproject.whp.adherenceapi.service;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
-import org.motechproject.whp.adherenceapi.domain.TreatmentCategoryInfo;
+import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import static java.lang.Integer.parseInt;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Service
@@ -33,13 +30,8 @@ public class AdherenceService {
         );
     }
 
-    public Boolean validateDosage(String patientId, String doseTakenCount) {
+    public Dosage dosageForPatient(String patientId) {
         Patient patient = patientService.findByPatientId(patientId);
-        return patient != null && patient.isValidDose(parseInt(doseTakenCount));
-    }
-
-    public TreatmentCategoryInfo getTreatmentCategoryInformation(String patientId) {
-        Patient patient = patientService.findByPatientId(patientId);
-        return (patient == null) ? null : new TreatmentCategoryInfo(patient.getTreatmentCategory());
+        return (patient == null) ? null : new Dosage(patient);
     }
 }

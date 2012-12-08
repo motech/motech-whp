@@ -42,4 +42,8 @@ public class AdherenceValidationRequest implements Serializable {
     public String getTimeTaken() {
         return timeTaken;
     }
+
+    public int doseTakenCount() {
+        return Integer.parseInt(doseTakenCount);
+    }
 }
