@@ -6,10 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
+import org.motechproject.whp.adherenceapi.validation.AdherenceIVRRequestValidator;
+import org.motechproject.whp.adherenceapi.validation.RequestValidation;
+import org.motechproject.whp.common.exception.WHPError;
+import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.http.MediaType;
 
@@ -18,9 +22,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -40,6 +44,8 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     @Mock
     private ProviderService providerService;
+    @Mock
+    private AdherenceIVRRequestValidator adherenceIVRRequestValidator;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
 
@@ -48,8 +54,9 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Before
     public void setup() {
         initMocks(this);
+        when(adherenceIVRRequestValidator.isValid(any())).thenReturn(new RequestValidation());
         mockCurrentDate(today);
-        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR);
+        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceIVRRequestValidator);
     }
 
     @Test
@@ -96,7 +103,9 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
-                        "      <error_code>INVALID_MOBILE_NUMBER</error_code>" +
+                        "      <error_codes>" +
+                        "           <error_code>INVALID_MOBILE_NUMBER</error_code>" +
+                        "      </error_codes>" +
                         "    </adherence_capture_flashing_response>";
 
         when(adherenceSummaryOverIVR.value(any(AdherenceFlashingRequest.class), any(ProviderId.class)))
@@ -118,7 +127,31 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
-                        "      <error_code>NON_ADHERENCE_DAY</error_code>" +
+                        "      <error_codes>" +
+                        "           <error_code>NON_ADHERENCE_DAY</error_code>" +
+                        "      </error_codes>" +
+                        "    </adherence_capture_flashing_response>";
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
+    }
+
+    @Test
+    public void shouldRespondWithErrorWhenRequestValidationFails() throws Exception {
+        when(adherenceIVRRequestValidator
+                .isValid(any())
+        ).thenReturn(new RequestValidation().withErrors(asList(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED, "message"))));
+
+        String expectedXml =
+                "            <adherence_capture_flashing_response>" +
+                        "      <result>failure</result>" +
+                        "      <error_codes>" +
+                        "         <error_code>FIELD_VALIDATION_FAILED:message</error_code>" +
+                        "      </error_codes>" +
                         "    </adherence_capture_flashing_response>";
 
         standaloneSetup(adherenceIVRController)

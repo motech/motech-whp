@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
+import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.successResponse;
 
 @Service
 public class AdherenceSummaryOverIVR {
@@ -26,18 +28,13 @@ public class AdherenceSummaryOverIVR {
     private ReportingPublisherService reportingPublishingService;
 
     @Autowired
-    public AdherenceSummaryOverIVR(AdherenceService adherenceService,
-                                   AdherenceWindow adherenceWindow,
-                                   ReportingPublisherService reportingPublishingService
-    ) {
+    public AdherenceSummaryOverIVR(AdherenceService adherenceService, AdherenceWindow adherenceWindow, ReportingPublisherService reportingPublishingService) {
         this.adherenceService = adherenceService;
         this.adherenceWindow = adherenceWindow;
         this.reportingPublishingService = reportingPublishingService;
     }
 
-    public AdherenceFlashingResponse value(AdherenceFlashingRequest adherenceFlashingRequest,
-                                           ProviderId providerId
-    ) {
+    public AdherenceFlashingResponse value(AdherenceFlashingRequest adherenceFlashingRequest, ProviderId providerId) {
         LocalDate requestedDate = today();
         reportingPublishingService.reportFlashingRequest(flashingLogRequest(adherenceFlashingRequest, providerId));
         return flashingResponse(providerId, requestedDate);
@@ -45,11 +42,11 @@ public class AdherenceSummaryOverIVR {
 
     private AdherenceFlashingResponse flashingResponse(ProviderId providerId, LocalDate requestedDate) {
         if (providerId.isEmpty()) {
-            return AdherenceFlashingResponse.failureResponse(INVALID_MOBILE_NUMBER.name());
+            return failureResponse(INVALID_MOBILE_NUMBER.name());
         } else if (isNotAdherenceDay(requestedDate)) {
-            return AdherenceFlashingResponse.failureResponse(NON_ADHERENCE_DAY.name());
+            return failureResponse(NON_ADHERENCE_DAY.name());
         } else {
-            return AdherenceFlashingResponse.successResponse(adherenceSummary(providerId, requestedDate));
+            return successResponse(adherenceSummary(providerId, requestedDate));
         }
     }
 
@@ -57,9 +54,7 @@ public class AdherenceSummaryOverIVR {
         return adherenceService.adherenceSummary(providerId.value(), requestedDate);
     }
 
-    private FlashingLogRequest flashingLogRequest(AdherenceFlashingRequest adherenceFlashingRequest,
-                                                  ProviderId providerId
-    ) {
+    private FlashingLogRequest flashingLogRequest(AdherenceFlashingRequest adherenceFlashingRequest, ProviderId providerId) {
         return new AdherenceFlashingReportRequest(adherenceFlashingRequest, providerId.value()).flashingLogRequest();
     }
 
