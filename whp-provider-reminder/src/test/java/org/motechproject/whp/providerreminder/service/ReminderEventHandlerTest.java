@@ -8,6 +8,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
+import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 
 import java.util.List;
 
@@ -27,24 +28,28 @@ public class ReminderEventHandlerTest {
     private ProviderReminderService providerReminderService;
     @Mock
     private IvrConfiguration ivrConfiguration;
+    @Mock
+    private UUIDGenerator UUIDGenerator;
 
 
     @Before
     public void setUp() {
         initMocks(this);
-        reminderEventHandler = new ReminderEventHandler(providerReminderService, httpClientService, ivrConfiguration);
+        reminderEventHandler = new ReminderEventHandler(providerReminderService, httpClientService, ivrConfiguration, UUIDGenerator);
     }
 
     @Test
     public void shouldHandleEventForAdherenceWindowApproachingAlert() {
+        String url = "some wgn url";
+        String requestId = "requestId";
         List<String> msisdnList = asList("msisdn1", "msisdn2");
         when(providerReminderService.getActiveProviderPhoneNumbers()).thenReturn(msisdnList);
-        String url = "some wgn url";
         when(ivrConfiguration.getProviderReminderUrl()).thenReturn(url);
+        when(UUIDGenerator.uuid()).thenReturn(requestId);
 
         reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT));
 
         verify(providerReminderService).getActiveProviderPhoneNumbers();
-        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), msisdnList));
+        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), msisdnList, requestId).toXML());
     }
 }

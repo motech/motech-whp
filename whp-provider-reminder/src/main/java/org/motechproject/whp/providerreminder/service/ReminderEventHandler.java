@@ -6,6 +6,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
+import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,17 +20,19 @@ public class ReminderEventHandler {
     private final ProviderReminderService providerReminderService;
     private final HttpClientService httpClientService;
     private IvrConfiguration ivrConfiguration;
+    private UUIDGenerator UUIDGenerator;
 
     @Autowired
-    public ReminderEventHandler(ProviderReminderService providerReminderService, HttpClientService httpClientService, IvrConfiguration ivrConfiguration) {
+    public ReminderEventHandler(ProviderReminderService providerReminderService, HttpClientService httpClientService, IvrConfiguration ivrConfiguration, UUIDGenerator UUIDGenerator) {
         this.providerReminderService = providerReminderService;
         this.httpClientService = httpClientService;
         this.ivrConfiguration = ivrConfiguration;
+        this.UUIDGenerator = UUIDGenerator;
     }
 
     @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT)
     public void adherenceWindowApproachingEvent(MotechEvent motechEvent) {
         List<String> providerPhoneNumbers = providerReminderService.getActiveProviderPhoneNumbers();
-        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), providerPhoneNumbers));
+        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), providerPhoneNumbers, UUIDGenerator.uuid()).toXML());
     }
 }
