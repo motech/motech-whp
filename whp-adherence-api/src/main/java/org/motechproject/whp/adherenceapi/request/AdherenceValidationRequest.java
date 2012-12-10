@@ -3,6 +3,7 @@ package org.motechproject.whp.adherenceapi.request;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.whp.common.domain.PhoneNumber;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +37,7 @@ public class AdherenceValidationRequest implements Serializable {
 
     @XmlElement(name = "msisdn")
     public String getMsisdn() {
-        return msisdn;
+        return new PhoneNumber(msisdn).value();
     }
 
     @XmlElement(name = "call_id")
