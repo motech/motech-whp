@@ -76,7 +76,7 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldGenerateErrorResponseAndReportFlashingForInvaldMSISDN() {
+    public void shouldGenerateErrorResponseAndReportFlashingForInvalidMSISDN() {
         AdherenceFlashingRequest adherenceFlashingRequest = createFlashingRequest(msisdn, flashingCallId, callTime);
 
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, null, callTime);
@@ -86,7 +86,6 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);
-        verifyZeroInteractions(adherenceWindow);
     }
 
     @Test

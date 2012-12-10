@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
+import org.motechproject.whp.adherenceapi.errors.FlashingRequestErrors;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
@@ -15,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.successResponse;
 
@@ -41,10 +40,9 @@ public class AdherenceSummaryOverIVR {
     }
 
     private AdherenceFlashingResponse flashingResponse(ProviderId providerId, LocalDate requestedDate) {
-        if (providerId.isEmpty()) {
-            return failureResponse(INVALID_MOBILE_NUMBER.name());
-        } else if (isNotAdherenceDay(requestedDate)) {
-            return failureResponse(NON_ADHERENCE_DAY.name());
+        FlashingRequestErrors errors = new FlashingRequestErrors(!providerId.isEmpty(), isAdherenceDay(requestedDate));
+        if (errors.isNotEmpty()) {
+            return failureResponse(errors.errorMessage());
         } else {
             return successResponse(adherenceSummary(providerId, requestedDate));
         }
@@ -58,7 +56,7 @@ public class AdherenceSummaryOverIVR {
         return new AdherenceFlashingReportRequest(adherenceFlashingRequest, providerId.value()).flashingLogRequest();
     }
 
-    private boolean isNotAdherenceDay(LocalDate requestDate) {
-        return !adherenceWindow.isValidAdherenceDay(requestDate);
+    private boolean isAdherenceDay(LocalDate requestDate) {
+        return adherenceWindow.isValidAdherenceDay(requestDate);
     }
 }

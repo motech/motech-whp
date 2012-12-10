@@ -52,7 +52,7 @@ public class AdherenceRecordingOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(invalidPatientId)).thenReturn(null);
-        assertEquals(failure(), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
+        assertEquals(failure("INVALID_PATIENT"), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
     }
 
     @Test

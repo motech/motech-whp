@@ -2,9 +2,10 @@ package org.motechproject.whp.adherenceapi.adherence;
 
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
+import org.motechproject.whp.adherenceapi.errors.AdherenceErrors;
+import org.motechproject.whp.adherenceapi.errors.ValidationRequestErrors;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.response.AdherenceIVRError;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
@@ -28,12 +29,7 @@ public class AdherenceRecordingOverIVR {
     }
 
     public AdherenceValidationResponse validateInput(AdherenceValidationRequest request, ProviderId providerId) {
-        AdherenceValidationResponse response = null;
-        if (providerId.isEmpty()) {
-            response = failure(AdherenceIVRError.INVALID_MOBILE_NUMBER.name());
-        } else {
-            response = validateAdherenceInput(request);
-        }
+        AdherenceValidationResponse response = validateAdherenceInput(request, providerId);
         reportAdherenceValidation(request, providerId);
         return response;
     }
@@ -43,14 +39,19 @@ public class AdherenceRecordingOverIVR {
         reportingService.reportAdherenceCapture(reportingRequest);
     }
 
-    private AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest) {
+    private AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId) {
         Dosage dosage = adherenceService.dosageForPatient(adherenceValidationRequest.getPatientId());
-        if (null == dosage) {
-            return failure();
-        } else if (dosage.isValidInput(adherenceValidationRequest.doseTakenCount())) {
+        AdherenceErrors errors = new ValidationRequestErrors(!providerId.isEmpty(), (dosage != null), true);
+        if (errors.isNotEmpty()) {
+            return failure(errors.errorMessage());
+        } else if (isValidDose(adherenceValidationRequest, dosage)) {
             return success();
         } else {
             return failure(dosage);
         }
+    }
+
+    private boolean isValidDose(AdherenceValidationRequest adherenceValidationRequest, Dosage dosage) {
+        return dosage.isValidInput(adherenceValidationRequest.doseTakenCount());
     }
 }
