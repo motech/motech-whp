@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_ADHERENCE;
+
 @XmlRootElement(name = "adherence_validation_response")
 @EqualsAndHashCode
 public class AdherenceValidationResponse implements Serializable {
@@ -15,17 +17,8 @@ public class AdherenceValidationResponse implements Serializable {
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
 
-    @XmlElement(name = "error_code")
-    private String errorCode;
-
-    @XmlElement(name = "treatment_category")
-    private String treatmentCategory;
-
-    @XmlElement(name = "valid_range_from")
-    private String validRangeFrom;
-
-    @XmlElement(name = "valid_range_to")
-    private String validRangeTo;
+    @XmlElement(name = "error")
+    private AdherenceValidationError error;
 
     public static AdherenceValidationResponse success() {
         return new AdherenceValidationResponse();
@@ -39,16 +32,13 @@ public class AdherenceValidationResponse implements Serializable {
 
     public static AdherenceValidationResponse failure(Dosage dosage) {
         AdherenceValidationResponse response = failure();
-        response.treatmentCategory = dosage.getTreatmentProvider().name();
-        response.validRangeFrom = dosage.getValidRangeFrom();
-        response.validRangeTo = dosage.getValidRangeTo();
+        response.error = new ValidRangeError(INVALID_ADHERENCE.name(), dosage);
         return response;
     }
 
     public static AdherenceValidationResponse failure(String errorCode) {
-        AdherenceValidationResponse response = new AdherenceValidationResponse();
-        response.result = WebServiceResponse.failure;
-        response.errorCode = errorCode;
+        AdherenceValidationResponse response = failure();
+        response.error = new SimpleValidationError(errorCode);
         return response;
     }
 }
