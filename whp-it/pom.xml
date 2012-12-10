@@ -87,6 +87,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-provider-reminder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-treatment-card</artifactId>
         </dependency>
         <dependency>

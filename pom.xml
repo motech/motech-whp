@@ -40,6 +40,7 @@
         <module>whp-container-registration-api</module>
         <module>whp-it</module>
         <module>whp-adherence-api</module>
+        <module>whp-provider-reminder</module>
     </modules>
 
     <repositories>
@@ -276,6 +277,11 @@
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-provider-reminder</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-data-importer</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
@@ -328,6 +334,16 @@
             <dependency>
                 <groupId>org.motechproject</groupId>
                 <artifactId>motech-platform-common-api</artifactId>
+                <version>${motech.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-platform-scheduler</artifactId>
+                <version>${motech.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject</groupId>
+                <artifactId>motech-scheduler</artifactId>
                 <version>${motech.version}</version>
             </dependency>
             <dependency>

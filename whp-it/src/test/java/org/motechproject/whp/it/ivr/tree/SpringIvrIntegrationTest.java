@@ -7,6 +7,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.LocalDate;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,7 +41,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     String KOOKOO_CALLBACK_URL = "/kookoo/ivr";
     String SERVER_URL = "http://localhost:7080" + CONTEXT_PATH + KOOKOO_CALLBACK_URL;
 
-    DefaultHttpClient httpClient;
+    DefaultHttpClient httpClient = new DefaultHttpClient();
 
     private static DispatcherServlet dispatcherServlet;
     protected final String NEW_CALL_URL_FORMAT = "%s?tree=adherenceCapture&trP=%s&ln=en&cid=%s&sid=%s&dataMap=%s";
@@ -56,9 +57,8 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
     public void setup() throws IOException, InterruptedException {
         setIgnoreWhitespace(true);
 
-        httpClient = new DefaultHttpClient();
         LocalDate lastMonday = currentAdherenceCaptureWeek().startDate();
-        httpClient.execute(new HttpGet(format(FAKETIME_URL, lastMonday.toString())), new BasicResponseHandler());
+        adjustDateTime(lastMonday);
     }
 
     public void adjustDateTime(LocalDate date) throws IOException {
@@ -77,6 +77,12 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         context.addServlet(servletHolder, "/*");
         server.setHandler(context);
         server.start();
+    }
+
+
+    @After
+    public void tearDown() throws IOException {
+        adjustDateTime(new LocalDate(new Date()));
     }
 
     @AfterClass
