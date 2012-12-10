@@ -2,7 +2,7 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
-import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.whp.common.domain.PhoneNumber;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -14,13 +14,13 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class AdherenceFlashingRequest implements Serializable {
 
-    @NotNullOrEmpty
+    @NotBlank
     private String msisdn;
 
-    @NotNullOrEmpty
+    @NotBlank
     private String callId;
 
-    @NotNullOrEmpty
+    @NotBlank
     private String callTime;
 
     @XmlElement(name = "msisdn")

@@ -1,6 +1,5 @@
 package org.motechproject.whp.adherenceapi.response.validation;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.common.webservice.WebServiceResponse;
@@ -11,7 +10,6 @@ import java.io.Serializable;
 
 @XmlRootElement(name = "adherence_validation_response")
 @EqualsAndHashCode
-@Data
 public class AdherenceValidationResponse implements Serializable {
 
     @XmlElement(name = "result")
@@ -32,16 +30,15 @@ public class AdherenceValidationResponse implements Serializable {
 
     public static AdherenceValidationResponse failure() {
         AdherenceValidationResponse response = new AdherenceValidationResponse();
-        response.setResult(WebServiceResponse.failure);
+        response.result = WebServiceResponse.failure;
         return response;
     }
 
     public static AdherenceValidationResponse failure(Dosage dosage) {
         AdherenceValidationResponse response = failure();
-        response.setTreatmentCategory(dosage.getTreatmentProvider().name());
-        response.setValidRangeFrom(dosage.getValidRangeFrom());
-        response.setValidRangeTo(dosage.getValidRangeTo());
+        response.treatmentCategory = dosage.getTreatmentProvider().name();
+        response.validRangeFrom = dosage.getValidRangeFrom();
+        response.validRangeTo = dosage.getValidRangeTo();
         return response;
     }
-
 }

@@ -2,8 +2,6 @@ package org.motechproject.whp.adherenceapi.response.flashing;
 
 import lombok.EqualsAndHashCode;
 import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
-import org.motechproject.whp.adherenceapi.response.ErrorCodes;
-import org.motechproject.whp.adherenceapi.validation.RequestValidation;
 import org.motechproject.whp.common.webservice.WebServiceResponse;
 import org.motechproject.whp.patient.domain.Patient;
 
@@ -23,8 +21,8 @@ public class AdherenceFlashingResponse implements Serializable {
 
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
-    @XmlElement(name = "error_codes")
-    private ErrorCodes errorCodes;
+    @XmlElement(name = "error_code")
+    private String errorCode;
     private List<String> patientsWithAdherence = new ArrayList<>();
     private List<String> patientsForProvider = new ArrayList<>();
     private AdherenceStatus adherenceStatus;
@@ -32,15 +30,7 @@ public class AdherenceFlashingResponse implements Serializable {
     public AdherenceFlashingResponse() {
     }
 
-    public AdherenceFlashingResponse(boolean failure) {
-        this();
-        if (failure) {
-            errorCodes = new ErrorCodes();
-        }
-    }
-
     public AdherenceFlashingResponse(List<String> patientsWithAdherence, List<String> patientsForProvider) {
-        this(false);
         if (null != patientsWithAdherence) {
             this.patientsWithAdherence = patientsWithAdherence;
         }
@@ -56,15 +46,11 @@ public class AdherenceFlashingResponse implements Serializable {
     }
 
     public Integer getPatientRemainingCount() {
-        return patientsWithoutAdherence();
+        return patientsRemaining().size();
     }
 
     public Integer getPatientGivenCount() {
         return patientsWithAdherence.size();
-    }
-
-    private Integer patientsWithoutAdherence() {
-        return patientsRemaining().size();
     }
 
     private List<String> patientsRemaining() {
@@ -72,17 +58,8 @@ public class AdherenceFlashingResponse implements Serializable {
     }
 
     public static AdherenceFlashingResponse failureResponse(String errorCode) {
-        AdherenceFlashingResponse response = new AdherenceFlashingResponse(true);
-        response.errorCodes.add(errorCode);
-        response.result = WebServiceResponse.failure;
-        return response;
-    }
-
-    public static AdherenceFlashingResponse failureResponse(RequestValidation validation) {
-        AdherenceFlashingResponse response = new AdherenceFlashingResponse(true);
-        for (String error : validation) {
-            response.errorCodes.add(error);
-        }
+        AdherenceFlashingResponse response = new AdherenceFlashingResponse();
+        response.errorCode = errorCode;
         response.result = WebServiceResponse.failure;
         return response;
     }

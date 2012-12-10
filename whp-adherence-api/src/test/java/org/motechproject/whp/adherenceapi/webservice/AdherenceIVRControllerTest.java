@@ -6,14 +6,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceRecordingOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
-import org.motechproject.whp.adherenceapi.validation.AdherenceIVRRequestValidator;
-import org.motechproject.whp.adherenceapi.validation.RequestValidation;
-import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.http.MediaType;
 
@@ -33,19 +32,30 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     public static final String IVR_ADHERENCE_FLASHING_PATH = "/ivr/adherence/summary";
-    public static final String REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
+    public static final String IVR_ADHERENCE_VALIDATION_PATH = "/ivr/adherence/validate";
+
+    public static final String FLASHING_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_capture_flashing_request>\n" +
             " <msisdn>0986754322</msisdn>\n" +
             " <call_id>abcd1234</call_id>\n" +
             " <call_time>14/08/2012 11:20:59</call_time>\n" +
             "</adherence_capture_flashing_request>";
 
+    public static final String VALIDATION_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
+            "<adherence_validation_request>\n" +
+            "    <call_id>abcd1234</call_id>\n" +
+            "    <msisdn>1234567942</msisdn>\n" +
+            "    <patient_id>pat1</patient_id>\n" +
+            "    <adherence_value>3</adherence_value>\n" +
+            "    <time_taken>7</time_taken>\n" +
+            "</adherence_validation_request>";
+
     @Mock
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     @Mock
     private ProviderService providerService;
     @Mock
-    private AdherenceIVRRequestValidator adherenceIVRRequestValidator;
+    private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
 
@@ -54,9 +64,8 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Before
     public void setup() {
         initMocks(this);
-        when(adherenceIVRRequestValidator.isValid(any())).thenReturn(new RequestValidation());
         mockCurrentDate(today);
-        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceIVRRequestValidator);
+        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceRecordingOverIVR);
     }
 
     @Test
@@ -64,7 +73,6 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         AdherenceFlashingResponse adherenceFlashingResponse = new AdherenceFlashingResponse(
                 asList("pat0"), asList("pat1", "pat2")
         );
-
         AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn("0986754322");
         flashingRequest.setCallId("abcd1234");
@@ -91,7 +99,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
         standaloneSetup(adherenceIVRController)
                 .build()
-                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(FLASHING_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
@@ -103,9 +111,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
-                        "      <error_codes>" +
-                        "           <error_code>INVALID_MOBILE_NUMBER</error_code>" +
-                        "      </error_codes>" +
+                        "      <error_code>INVALID_MOBILE_NUMBER</error_code>" +
                         "    </adherence_capture_flashing_response>";
 
         when(adherenceSummaryOverIVR.value(any(AdherenceFlashingRequest.class), any(ProviderId.class)))
@@ -113,7 +119,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
         standaloneSetup(adherenceIVRController)
                 .build()
-                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(FLASHING_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
@@ -127,39 +133,50 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
-                        "      <error_codes>" +
-                        "           <error_code>NON_ADHERENCE_DAY</error_code>" +
-                        "      </error_codes>" +
+                        "      <error_code>NON_ADHERENCE_DAY</error_code>" +
                         "    </adherence_capture_flashing_response>";
 
         standaloneSetup(adherenceIVRController)
                 .build()
-                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(FLASHING_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
 
     @Test
-    public void shouldRespondWithErrorWhenRequestValidationFails() throws Exception {
-        when(adherenceIVRRequestValidator
-                .isValid(any())
-        ).thenReturn(new RequestValidation().withErrors(asList(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED, "message"))));
+    public void shouldRespondWithSuccessOnSuccessfulValidation() throws Exception {
+        when(adherenceRecordingOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+                .thenReturn(AdherenceValidationResponse.success());
 
-        String expectedXml =
-                "            <adherence_capture_flashing_response>" +
-                        "      <result>failure</result>" +
-                        "      <error_codes>" +
-                        "         <error_code>FIELD_VALIDATION_FAILED:message</error_code>" +
-                        "      </error_codes>" +
-                        "    </adherence_capture_flashing_response>";
+        String expectedXML =
+                "        <adherence_validation_response>" +
+                        "    <result>success</result>" +
+                        "</adherence_validation_response>";
 
         standaloneSetup(adherenceIVRController)
                 .build()
-                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .perform(post(IVR_ADHERENCE_VALIDATION_PATH).body(VALIDATION_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
-                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
+                .andExpect(content().xml(expectedXML.replaceAll(" ", "")));
     }
 
+    @Test
+    public void shouldRespondWithValidationFailure() throws Exception {
+        when(adherenceRecordingOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+                .thenReturn(AdherenceValidationResponse.failure());
+
+        String expectedXML =
+                "        <adherence_validation_response>" +
+                        "    <result>failure</result>" +
+                        "</adherence_validation_response>";
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_VALIDATION_PATH).body(VALIDATION_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXML.replaceAll(" ", "")));
+    }
 }
