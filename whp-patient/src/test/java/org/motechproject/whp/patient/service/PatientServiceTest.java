@@ -132,6 +132,18 @@ public class PatientServiceTest extends BaseUnitTest {
 
     }
 
+    @Test
+    public void shouldReturnProvidersWithActivePatients() {
+        ProviderIds providersWithActivePatients = new ProviderIds(asList("providerId1"));
+
+        when(allPatients.providersWithActivePatients()).thenReturn(providersWithActivePatients);
+
+        ProviderIds actualProviderIds = patientService.providersWithActivePatients();
+
+        assertEquals(providersWithActivePatients, actualProviderIds);
+        verify(allPatients).providersWithActivePatients();
+    }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(allPatients);

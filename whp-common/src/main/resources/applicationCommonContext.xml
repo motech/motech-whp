@@ -13,6 +13,11 @@
 
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
     <util:properties id="adherenceProperties" location="classpath:adherence.properties"/>
+    <util:properties id="ivrProperty" location="classpath:ivr.properties"/>
+
+    <util:properties id="whpProperties" location="classpath:/whp.properties"/>
+    <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
+
 
     <context:property-placeholder location="classpath:couchdb.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>

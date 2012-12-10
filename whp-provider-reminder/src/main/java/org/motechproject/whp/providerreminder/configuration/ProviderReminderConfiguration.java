@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 @Component
-public class ProviderReminderProperties {
+public class ProviderReminderConfiguration {
 
     private Properties properties;
 
     @Autowired
-    public ProviderReminderProperties(@Qualifier("providerReminderProperty") Properties properties) {
+    public ProviderReminderConfiguration(@Qualifier("providerReminderProperties") Properties properties) {
         this.properties = properties;
     }
 

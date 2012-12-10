@@ -87,9 +87,13 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         return patients;
     }
 
-    @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
     public ProviderIds providersWithActivePatients(ProviderIds providersToSearchFor) {
         ViewQuery query = createQuery("with_active_patients").keys(providersToSearchFor.asList());
+        return filterProviderIds(db.queryView(query));
+    }
+
+    public ProviderIds providersWithActivePatients() {
+        ViewQuery query = createQuery("with_active_patients");
         return filterProviderIds(db.queryView(query));
     }
 
@@ -97,6 +101,10 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     public List<Patient> getAll(int pageNumber, int pageSize) {
         ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
         return db.queryView(query, Patient.class);
+    }
+
+    @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
+    public void createViewForProvidersWithActivePatients() {
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {

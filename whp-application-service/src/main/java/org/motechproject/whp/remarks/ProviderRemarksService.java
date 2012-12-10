@@ -1,3 +1,4 @@
+
 package org.motechproject.whp.remarks;
 
 import org.motechproject.whp.adherence.audit.domain.AuditLog;

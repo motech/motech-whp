@@ -6,11 +6,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
-    <util:properties id="providerReminderProperty" location="classpath:providerReminder.properties"/>
+    <util:properties id="providerReminderProperties" location="classpath:providerReminder.properties"/>
+
+    <import resource="classpath*:applicationUserContext.xml"/>
+    <import resource="classpath*:applicationContextHttpClient.xml"/>
+    <import resource="classpath*:applicationScheduler.xml"/>
+    <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
+    <import resource="classpath*:applicationPatientContext.xml"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.providerreminder"/>
-    <import resource="classpath*:applicationScheduler.xml"/>
-    <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
 
 </beans>

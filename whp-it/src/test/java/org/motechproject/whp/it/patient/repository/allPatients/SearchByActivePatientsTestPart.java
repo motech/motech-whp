@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
 public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
 
     @Test
-    public void shouldFetchProvidersOfActivePatients() {
+    public void shouldFilterProvidersByActivePatients() {
         Patient patientWithCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
 
         Patient patientWithoutCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
@@ -25,5 +25,18 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         ProviderIds providerIds = new ProviderIds(asList(patientWithCurrentTreatment.getCurrentTreatment().getProviderId(), "providerId"));
 
         assertEquals(new ProviderIds(asList(patientWithCurrentTreatment.getCurrentTreatment().getProviderId())), allPatients.providersWithActivePatients(providerIds));
+    }
+
+    @Test
+    public void shouldFetchAllProvidersWithActivePatients() {
+        Patient patientWithCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
+
+        Patient patientWithoutCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
+        patientWithoutCurrentTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, DateUtil.now());
+
+        allPatients.add(patientWithCurrentTreatment);
+        allPatients.add(patientWithoutCurrentTreatment);
+
+        assertEquals(new ProviderIds(asList(patientWithCurrentTreatment.getCurrentTreatment().getProviderId())), allPatients.providersWithActivePatients());
     }
 }

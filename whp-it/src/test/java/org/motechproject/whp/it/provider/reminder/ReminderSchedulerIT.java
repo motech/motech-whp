@@ -10,9 +10,10 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.providerreminder.configuration.ProviderReminderProperties;
+import org.motechproject.whp.common.event.EventKeys;
+import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
-import org.motechproject.whp.providerreminder.domain.ReminderScheduler;
+import org.motechproject.whp.providerreminder.service.ReminderScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,21 +39,21 @@ public class ReminderSchedulerIT {
 
     @Autowired
     @ReplaceWithMock
-    ProviderReminderProperties providerReminderProperties;
+    ProviderReminderConfiguration providerReminderConfiguration;
 
     @Before
     public void setUp() {
         initMocks(this);
-        when(providerReminderProperties.getWeekDay()).thenReturn("SUN");
-        when(providerReminderProperties.getHour()).thenReturn("10");
-        when(providerReminderProperties.getMinutes()).thenReturn("30");
+        when(providerReminderConfiguration.getWeekDay()).thenReturn("SUN");
+        when(providerReminderConfiguration.getHour()).thenReturn("10");
+        when(providerReminderConfiguration.getMinutes()).thenReturn("30");
     }
 
     @Test
     public void shouldScheduleAJob() {
         reminderScheduler.scheduleJob();
 
-        String subject = ProviderReminderType.ADHERENCE_WINDOW_APPROACHING.name();
+        String subject = EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT;
         String jobId = ProviderReminderType.ADHERENCE_WINDOW_APPROACHING.name();
         Date fromDate = new LocalDate(new Date()).minusDays(2).toDate();
         Date toDate = new LocalDate(new Date()).plusMonths(2).toDate();

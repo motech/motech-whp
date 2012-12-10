@@ -25,6 +25,22 @@
             <artifactId>whp-config</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-patient</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-http-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-web-security</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

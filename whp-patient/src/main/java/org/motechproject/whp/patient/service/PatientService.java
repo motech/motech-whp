@@ -128,6 +128,10 @@ public class PatientService {
         return allPatients.providersWithActivePatients(providersBelongingToDistrict);
     }
 
+    public ProviderIds providersWithActivePatients() {
+        return allPatients.providersWithActivePatients();
+    }
+
     private void validateDistrict(PatientRequest patientRequest) {
         District district = allDistricts.findByName(patientRequest.getAddress().getAddress_district());
         if (district == null)
