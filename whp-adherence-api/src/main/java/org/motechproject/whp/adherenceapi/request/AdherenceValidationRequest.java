@@ -2,7 +2,7 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
-import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,15 +13,15 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class AdherenceValidationRequest implements Serializable {
 
-    @NotNullOrEmpty
+    @NotBlank
     private String patientId;
-    @NotNullOrEmpty
+    @NotBlank
     private String doseTakenCount;
-    @NotNullOrEmpty
+    @NotBlank
     private String msisdn;
-    @NotNullOrEmpty
+    @NotBlank
     private String callId;
-    @NotNullOrEmpty
+    @NotBlank
     private String timeTaken;
 
     @XmlElement(name = "patient_id")
