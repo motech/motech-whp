@@ -8,6 +8,8 @@ import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportReques
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,13 @@ public class AdherenceRecordingOverIVR {
 
     private AdherenceService adherenceService;
     private ReportingPublisherService reportingService;
+    private PatientService patientService;
 
     @Autowired
-    public AdherenceRecordingOverIVR(AdherenceService adherenceService, ReportingPublisherService reportingService) {
+    public AdherenceRecordingOverIVR(AdherenceService adherenceService, ReportingPublisherService reportingService, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.reportingService = reportingService;
+        this.patientService = patientService;
     }
 
     public AdherenceValidationResponse validateInput(AdherenceValidationRequest request, ProviderId providerId) {
@@ -41,7 +45,7 @@ public class AdherenceRecordingOverIVR {
 
     private AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId) {
         Dosage dosage = adherenceService.dosageForPatient(adherenceValidationRequest.getPatientId());
-        AdherenceErrors errors = new ValidationRequestErrors(!providerId.isEmpty(), (dosage != null), true);
+        AdherenceErrors errors = adherenceErrors(adherenceValidationRequest, providerId, dosage);
         if (errors.isNotEmpty()) {
             return failure(errors.errorMessage());
         } else if (isValidDose(adherenceValidationRequest, dosage)) {
@@ -49,6 +53,21 @@ public class AdherenceRecordingOverIVR {
         } else {
             return failure(dosage);
         }
+    }
+
+    private AdherenceErrors adherenceErrors(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId, Dosage dosage) {
+        return new ValidationRequestErrors(
+                !providerId.isEmpty(),
+                (dosage != null),
+                isValidProviderForPatient(
+                        providerId, adherenceValidationRequest.getPatientId()
+                )
+        );
+    }
+
+    private boolean isValidProviderForPatient(ProviderId providerId, String patientId) {
+        Patient patient = patientService.findByPatientId(patientId);
+        return patient != null && patient.getCurrentTreatment().getProviderId().equals(providerId.value());
     }
 
     private boolean isValidDose(AdherenceValidationRequest adherenceValidationRequest, Dosage dosage) {

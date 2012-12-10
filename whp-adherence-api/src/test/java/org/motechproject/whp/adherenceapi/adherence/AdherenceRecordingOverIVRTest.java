@@ -9,6 +9,9 @@ import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 
@@ -25,16 +28,24 @@ public class AdherenceRecordingOverIVRTest {
     private AdherenceService adherenceService;
     @Mock
     private ReportingPublisherService reportingService;
-
-    private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
+    @Mock
+    private PatientService patientService;
 
     private ProviderId providerId;
+
+    private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
 
     @Before
     public void setUp() {
         initMocks(this);
+        initializePatientAndProvider();
+        adherenceRecordingOverIVR = new AdherenceRecordingOverIVR(adherenceService, reportingService, patientService);
+    }
+
+    private void initializePatientAndProvider() {
         providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
-        adherenceRecordingOverIVR = new AdherenceRecordingOverIVR(adherenceService, reportingService);
+        Patient patient = new PatientBuilder().withDefaults().withPatientId("patientid").withProviderId(providerId.value()).build();
+        when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }
 
     @Test
@@ -46,7 +57,7 @@ public class AdherenceRecordingOverIVRTest {
 
     @Test
     public void shouldReturnFailureWhenUnableToFindDosageForPatient() {
-        String invalidPatientId = "patientId";
+        String invalidPatientId = "patientid";
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
         adherenceValidationRequest.setPatientId(invalidPatientId);
         adherenceValidationRequest.setTimeTaken("1000");
@@ -56,8 +67,21 @@ public class AdherenceRecordingOverIVRTest {
     }
 
     @Test
+    public void shouldReturnFailureWhenPatientDoesNotBelongToProvider() {
+        String patientId = "patientid";
+        Patient patient = new PatientBuilder().withDefaults().withProviderId("someOtherProviderId").build();
+
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
+        adherenceValidationRequest.setPatientId(patientId);
+
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(new DosageBuilder(1).dosage());
+        when(patientService.findByPatientId(patientId)).thenReturn(patient);
+        assertEquals(failure("INVALID_PATIENT_PROVIDER_COMBINATION"), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
+    }
+
+    @Test
     public void shouldReturnFailureWhenAdherenceInputIsInvalid() {
-        String patientId = "patientId";
+        String patientId = "patientid";
         Dosage dosage = new DosageBuilder(1).dosage();
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
         adherenceValidationRequest.setPatientId(patientId);
@@ -70,7 +94,7 @@ public class AdherenceRecordingOverIVRTest {
 
     @Test
     public void shouldReturnSuccessWhenAdherenceInputIsValid() {
-        String patientId = "patientId";
+        String patientId = "patientid";
         Dosage dosage = new DosageBuilder(2).dosage();
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
         adherenceValidationRequest.setPatientId(patientId);
