@@ -6,6 +6,10 @@ public class ProviderId {
 
     private Provider provider;
 
+    public ProviderId() {
+        provider = null;
+    }
+
     public ProviderId(Provider provider) {
         this.provider = provider;
     }
