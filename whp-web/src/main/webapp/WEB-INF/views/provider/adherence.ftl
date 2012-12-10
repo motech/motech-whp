@@ -17,7 +17,7 @@
         <div class="row-fluid adherence-report">
             <div class="span6 offset3">
                 <h4 class="pull-left">Pending adherence</h4>
-                <table class="table table-striped table-condensed">
+                <table class="adherence-status-table table table-striped table-condensed">
                     <thead>
                         <tr>
                             <th class="smallest-column">Status</th>
@@ -60,7 +60,7 @@
         <div class="row-fluid  adherence-report">
             <div class="span6 offset3">
                 <h4 class="pull-left">Reported adherence</h4>
-                <table class="table table-striped table-condensed">
+                <table class="adherence-status-table table table-striped table-condensed">
                     <thead>
                         <tr>
                             <th class="smallest-column">Status</th>

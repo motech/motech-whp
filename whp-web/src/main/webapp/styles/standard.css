@@ -1146,30 +1146,45 @@ pre {
 .printable-table {
     clear:both;
     border: 1px solid;
+    text-align: center;
     width:100%;
+    table-layout: fixed;
 }
 
 .printable-table table, td, th {
     border:1px solid black;
 }
 
-.printable-table {
-    text-align: center;
+.adherence-report .printable-table  .providerId{
+    font-weight:bold;
+    width:12em;
+}
+
+.adherence-report .printable-table .smaller-column {
+    width: 10em;
+}
+
+.adherence-report .printable-table .smallest-column {
+    width: 3em;
+}
+
+.adherence-report .providerId{
+    font-weight:bold;
+    width:50px;
+}
+
+.adherence-report .adherence-status-table{
+    table-layout: fixed;
 }
 
 .adherence-status-row{
     font-size:130%
 }
 
-.adherence-report .providerId{
-    font-weight:bold;
-    width:33%;
-}
-
 .smaller-column {
-    width: 12%;
+    width: 15px;
 }
 
 .smallest-column {
-    width: 5%;
+    width: 5px;
 }
