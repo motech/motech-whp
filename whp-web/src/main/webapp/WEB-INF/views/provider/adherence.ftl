@@ -2,20 +2,29 @@
 <#import "../layout/default.ftl" as layout>
 
 <@layout.defaultLayout title="MoTeCH-WHP">
-        <div class="row-fluid">
-            <h3><center>From ${providedAdherenceFrom}</strong> to <strong>${providedAdherenceTo}</center></h3>
+        <div class="patients-buttons-container">
+            <div class="row-fluid">
+                <div class="controls pull-right">
+                    <a target="_blank" class="btn btn-large btn-info" href="<@spring.url '/providers/adherenceStatus/print/'/>"><i class="icon-print icon-white"></i> Print</a>
+                </div>
+            </div>
         </div>
         <div class="row-fluid">
-            <div class="span10 offset1">
+            <h3 class="offset4">
+                <div class="offset1">From ${providedAdherenceFrom} to ${providedAdherenceTo}</div>
+            </h3>
+        </div>
+        <div class="row-fluid adherence-report">
+            <div class="span6 offset3">
                 <h4 class="pull-left">Pending adherence</h4>
-                <table class="table table-striped table-condensed" id="providerList">
+                <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Status</th>
-                            <th>Provider Id</th>
-                            <th>Primary Mobile Number</th>
-                            <th>Secondary Mobile Number</th>
-                            <th>Tertiary Mobile Number</th>
+                            <th class="smallest-column">Status</th>
+                            <th class="providerId">Provider Id</th>
+                            <th class="smaller-column">Mobile Number 1</th>
+                            <th class="smaller-column">Mobile Number 2</th>
+                            <th class="smaller-column">Mobile Number 3</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,17 +37,17 @@
                         <#else>
                             <#list providersPendingAdherence as provider>
                                 <tr class="provider-row adherence-status-row not-reported">
-                                    <td class="adherenceNotCaptured">&#10008;</td>
+                                    <td class="adherenceNotCaptured smallest-column">&#10008;</td>
                                     <td class="providerId">
-                                        <strong>${provider.providerId}</strong>
+                                        ${provider.providerId}
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         ${provider.primaryMobile}
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
                                     </td>
                                 </tr>
@@ -48,17 +57,17 @@
                 </table>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span10 offset1">
+        <div class="row-fluid  adherence-report">
+            <div class="span6 offset3">
                 <h4 class="pull-left">Reported adherence</h4>
-                <table class="table table-striped table-condensed" id="providerList">
+                <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Status</th>
-                            <th>Provider Id</th>
-                            <th>Primary Mobile Number</th>
-                            <th>Secondary Mobile Number</th>
-                            <th>Tertiary Mobile Number</th>
+                            <th class="smallest-column">Status</th>
+                            <th class="providerId">Provider Id</th>
+                            <th class="smaller-column">Mobile Number 1</th>
+                            <th class="smaller-column">Mobile Number 2</th>
+                            <th class="smaller-column">Mobile Number 3</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,18 +79,18 @@
                             </tr>
                         <#else>
                             <#list providersWithAdherence as provider>
-                                <tr class="provider-row  adherence-status-row reported">
-                                    <td class="adherenceCaptured">&#10004;</td>
+                                <tr class="provider-row adherence-status-row reported">
+                                    <td class="adherenceCaptured  smallest-column">&#10004;</td>
                                     <td class="providerId">
-                                        <strong>${provider.providerId}</strong>
+                                        ${provider.providerId}
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         ${provider.primaryMobile}
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
                                     </td>
-                                    <td>
+                                    <td class="smaller-column">
                                         <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
                                     </td>
                                 </tr>

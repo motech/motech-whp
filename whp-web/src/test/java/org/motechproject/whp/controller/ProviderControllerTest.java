@@ -122,8 +122,31 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
                 .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, "26/11/2012"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "0   2/12/2012"))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "02/12/2012"))
                 .andExpect(view().name("provider/adherence"));
+    }
+
+    @Test
+    public void shouldPrintAdherenceStatus() throws Exception {
+        List<Provider> providersWithoutAdherence = asList(new ProviderBuilder().withProviderId("providerId1").build());
+        List<Provider> providersWithAdherence = asList(new ProviderBuilder().withProviderId("providerId2").build());
+
+        String loggedInDistrict = "Patna";
+        LocalDate today = new LocalDate(2012, 12, 3);
+        mockCurrentDate(today);
+
+        when(adherenceSubmissionService.providersPendingAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithoutAdherence);
+        when(adherenceSubmissionService.providersWithAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithAdherence);
+
+        loginAsDistrict(loggedInDistrict);
+        standaloneSetup(providerController).build()
+                .perform(get("/providers/adherenceStatus/print").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
+                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, "26/11/2012"))
+                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "02/12/2012"))
+                .andExpect(view().name("provider/printAdherence"));
     }
 
     @Test

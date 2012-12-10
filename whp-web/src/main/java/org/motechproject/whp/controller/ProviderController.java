@@ -80,6 +80,12 @@ public class ProviderController extends BaseWebController {
         return "provider/adherence";
     }
 
+    @RequestMapping(value = "/adherenceStatus/print", method = RequestMethod.GET)
+    public String printAdherenceStatus(Model uiModel, HttpServletRequest request) {
+        showAdherenceStatus(uiModel, request);
+        return "provider/printAdherence";
+    }
+
     private void initQueryModel(Model uiModel, String districtName, String providerId) {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
