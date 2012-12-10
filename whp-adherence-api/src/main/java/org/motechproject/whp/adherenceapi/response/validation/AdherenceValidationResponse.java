@@ -15,6 +15,9 @@ public class AdherenceValidationResponse implements Serializable {
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
 
+    @XmlElement(name = "error_code")
+    private String errorCode;
+
     @XmlElement(name = "treatment_category")
     private String treatmentCategory;
 
@@ -39,6 +42,13 @@ public class AdherenceValidationResponse implements Serializable {
         response.treatmentCategory = dosage.getTreatmentProvider().name();
         response.validRangeFrom = dosage.getValidRangeFrom();
         response.validRangeTo = dosage.getValidRangeTo();
+        return response;
+    }
+
+    public static AdherenceValidationResponse failure(String errorCode) {
+        AdherenceValidationResponse response = new AdherenceValidationResponse();
+        response.result = WebServiceResponse.failure;
+        response.errorCode = errorCode;
         return response;
     }
 }

@@ -4,6 +4,7 @@ import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.response.AdherenceIVRError;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
@@ -27,11 +28,19 @@ public class AdherenceRecordingOverIVR {
     }
 
     public AdherenceValidationResponse validateInput(AdherenceValidationRequest request, ProviderId providerId) {
-        AdherenceValidationResponse response = validateAdherenceInput(request);
-        AdherenceCaptureRequest reportingRequest = new AdherenceCaptureReportRequest(request, providerId).captureRequest();
-
-        reportingService.reportAdherenceCapture(reportingRequest);
+        AdherenceValidationResponse response = null;
+        if (providerId.isEmpty()) {
+            response = failure(AdherenceIVRError.INVALID_MOBILE_NUMBER.name());
+        } else {
+            response = validateAdherenceInput(request);
+        }
+        reportAdherenceValidation(request, providerId);
         return response;
+    }
+
+    private void reportAdherenceValidation(AdherenceValidationRequest request, ProviderId providerId) {
+        AdherenceCaptureRequest reportingRequest = new AdherenceCaptureReportRequest(request, providerId).captureRequest();
+        reportingService.reportAdherenceCapture(reportingRequest);
     }
 
     private AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest) {

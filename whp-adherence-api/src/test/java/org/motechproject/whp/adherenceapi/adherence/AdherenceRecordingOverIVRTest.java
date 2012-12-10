@@ -10,6 +10,7 @@ import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportReques
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -27,10 +28,20 @@ public class AdherenceRecordingOverIVRTest {
 
     private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
 
+    private ProviderId providerId;
+
     @Before
     public void setUp() {
         initMocks(this);
+        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
         adherenceRecordingOverIVR = new AdherenceRecordingOverIVR(adherenceService, reportingService);
+    }
+
+    @Test
+    public void shouldReturnFailureWhenPhoneNumberDoesNotBelongToAnyProvider() {
+        AdherenceValidationRequest request = new AdherenceValidationRequest();
+        ProviderId emptyProviderId = new ProviderId();
+        assertEquals(failure("INVALID_MOBILE_NUMBER"), adherenceRecordingOverIVR.validateInput(request, emptyProviderId));
     }
 
     @Test
@@ -41,7 +52,7 @@ public class AdherenceRecordingOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(invalidPatientId)).thenReturn(null);
-        assertEquals(failure(), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, new ProviderId()));
+        assertEquals(failure(), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -54,7 +65,7 @@ public class AdherenceRecordingOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
-        assertEquals(failure(dosage), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, new ProviderId()));
+        assertEquals(failure(dosage), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -67,12 +78,11 @@ public class AdherenceRecordingOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
-        assertEquals(success(), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, new ProviderId()));
+        assertEquals(success(), adherenceRecordingOverIVR.validateInput(adherenceValidationRequest, providerId));
     }
 
     @Test
     public void shouldReportAdherenceValidationRequest() {
-        ProviderId providerId = new ProviderId();
         AdherenceValidationRequest request = new AdherenceValidationRequest();
 
         adherenceRecordingOverIVR.validateInput(request, providerId);
