@@ -6,20 +6,20 @@
 </head>
 <body class="printable-version">
         <h3>
-            <center>From ${providedAdherenceFrom} to ${providedAdherenceTo}</center>
+            From ${providedAdherenceFrom} to ${providedAdherenceTo}
         </h3>
 
     <div class="row-fluid adherence-report">
-        <div class="span6 offset3">
+        <div class="span6">
             <h4 class="pull-left">Pending adherence</h4>
             <table class="printable-table">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Provider Id</th>
-                        <th>Mobile Number 1</th>
-                        <th>Mobile Number 2</th>
-                        <th>Mobile Number 3</th>
+                        <th class="smallest-column">Status</th>
+                        <th class="providerId">Provider Id</th>
+                        <th class="smaller-column">Mobile Number 1</th>
+                        <th class="smaller-column">Mobile Number 2</th>
+                        <th class="smaller-column">Mobile Number 3</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,17 +32,17 @@
                     <#else>
                         <#list providersPendingAdherence as provider>
                             <tr>
-                                <td>&#10008;</td>
-                                <td>
+                                <td  class="smallest-column">&#10008;</td>
+                                <td  class="providerId">
                                     ${provider.providerId}
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     ${provider.primaryMobile}
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
                                 </td>
                             </tr>
@@ -53,16 +53,16 @@
         </div>
     </div>
     <div class="row-fluid  adherence-report">
-        <div class="span6 offset3">
+        <div class="span6">
             <h4 class="pull-left">Reported adherence</h4>
             <table class="printable-table">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Provider Id</th>
-                        <th>Mobile Number 1</th>
-                        <th>Mobile Number 2</th>
-                        <th>Mobile Number 3</th>
+                        <th class="smallest-column">Status</th>
+                        <th class="providerId">Provider Id</th>
+                        <th class="smaller-column">Mobile Number 1</th>
+                        <th class="smaller-column">Mobile Number 2</th>
+                        <th class="smaller-column">Mobile Number 3</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,17 +75,17 @@
                     <#else>
                         <#list providersWithAdherence as provider>
                             <tr>
-                                <td>&#10004;</td>
-                                <td>
+                                <td class="smallest-column">&#10004;</td>
+                                <td class="providerId">
                                     ${provider.providerId}
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     ${provider.primaryMobile}
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
                                 </td>
-                                <td>
+                                <td class="smaller-column">
                                     <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
                                 </td>
                             </tr>
