@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceRecordingOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
@@ -55,7 +55,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Mock
     private ProviderService providerService;
     @Mock
-    private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
+    private AdherenceValidationOverIVR adherenceValidationOverIVR;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
 
@@ -65,7 +65,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public void setup() {
         initMocks(this);
         mockCurrentDate(today);
-        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceRecordingOverIVR);
+        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceValidationOverIVR);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithSuccessOnSuccessfulValidation() throws Exception {
-        when(adherenceRecordingOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+        when(adherenceValidationOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
                 .thenReturn(AdherenceValidationResponse.success());
 
         String expectedXML =
@@ -164,7 +164,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithValidationFailure() throws Exception {
-        when(adherenceRecordingOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+        when(adherenceValidationOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
                 .thenReturn(AdherenceValidationResponse.failure());
 
         String expectedXML =

@@ -19,14 +19,14 @@ import static org.motechproject.whp.adherenceapi.response.validation.AdherenceVa
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 @Service
-public class AdherenceRecordingOverIVR {
+public class AdherenceValidationOverIVR {
 
     private AdherenceService adherenceService;
     private ReportingPublisherService reportingService;
     private PatientService patientService;
 
     @Autowired
-    public AdherenceRecordingOverIVR(AdherenceService adherenceService, ReportingPublisherService reportingService, PatientService patientService) {
+    public AdherenceValidationOverIVR(AdherenceService adherenceService, ReportingPublisherService reportingService, PatientService patientService) {
         this.adherenceService = adherenceService;
         this.reportingService = reportingService;
         this.patientService = patientService;

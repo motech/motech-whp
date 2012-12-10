@@ -1,6 +1,6 @@
 package org.motechproject.whp.adherenceapi.webservice;
 
-import org.motechproject.whp.adherenceapi.adherence.AdherenceRecordingOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
@@ -26,16 +26,16 @@ public class AdherenceIVRController {
 
     private ProviderService providerService;
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
-    private AdherenceRecordingOverIVR adherenceRecordingOverIVR;
+    private AdherenceValidationOverIVR adherenceValidationOverIVR;
 
     @Autowired
     public AdherenceIVRController(ProviderService providerService,
                                   AdherenceSummaryOverIVR adherenceSummaryOverIVR,
-                                  AdherenceRecordingOverIVR adherenceRecordingOverIVR) {
+                                  AdherenceValidationOverIVR adherenceValidationOverIVR) {
 
         this.providerService = providerService;
         this.adherenceSummaryOverIVR = adherenceSummaryOverIVR;
-        this.adherenceRecordingOverIVR = adherenceRecordingOverIVR;
+        this.adherenceValidationOverIVR = adherenceValidationOverIVR;
     }
 
     @RequestMapping(
@@ -57,7 +57,7 @@ public class AdherenceIVRController {
     )
     @ResponseBody
     public AdherenceValidationResponse adherenceValidation(@RequestBody @Valid AdherenceValidationRequest request) {
-        return adherenceRecordingOverIVR.validateInput(request, providerId(request.getMsisdn()));
+        return adherenceValidationOverIVR.validateInput(request, providerId(request.getMsisdn()));
     }
 
     private ProviderId providerId(String msisdn) {
