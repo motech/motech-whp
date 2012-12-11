@@ -8,8 +8,8 @@ public class UUIDGeneratorTest {
 
     @Test
     public void shouldReturnUUID() {
-        UUIDGenerator UUIDGenerator = new UUIDGenerator();
-        assertNotSame(UUIDGenerator.uuid(), UUIDGenerator.uuid());
+        UUIDGenerator uuidGenerator = new UUIDGenerator();
+        assertNotSame(uuidGenerator.uuid(), uuidGenerator.uuid());
     }
 
 }

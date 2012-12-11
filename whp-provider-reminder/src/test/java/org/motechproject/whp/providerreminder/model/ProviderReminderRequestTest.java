@@ -13,10 +13,19 @@ public class ProviderReminderRequestTest {
 
     @Test
     public void shouldConvertToXML() throws IOException, JAXBException {
-       ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(),
+        ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(),
                asList("msisdn1", "msisdn2"), "requestId");
 
-        String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><provider_reminder_request><msisdns><msisdn>msisdn1</msisdn><msisdn>msisdn2</msisdn></msisdns><reminder_type>ADHERENCE_WINDOW_APPROACHING</reminder_type><request_id>requestId</request_id></provider_reminder_request>";
+        String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                "<provider_reminder_request>\n" +
+                "    <msisdns>\n" +
+                "        <msisdn>msisdn1</msisdn>\n" +
+                "        <msisdn>msisdn2</msisdn>\n" +
+                "    </msisdns>\n" +
+                "    <reminder_type>ADHERENCE_WINDOW_APPROACHING</reminder_type>\n" +
+                "    <request_id>requestId</request_id>\n" +
+                "</provider_reminder_request>\n";
+
         assertEquals(expectedXML, request.toXML());
     }
 }

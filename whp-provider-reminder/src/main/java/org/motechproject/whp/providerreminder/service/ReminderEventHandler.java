@@ -23,16 +23,17 @@ public class ReminderEventHandler {
     private UUIDGenerator UUIDGenerator;
 
     @Autowired
-    public ReminderEventHandler(ProviderReminderService providerReminderService, HttpClientService httpClientService, IvrConfiguration ivrConfiguration, UUIDGenerator UUIDGenerator) {
+    public ReminderEventHandler(ProviderReminderService providerReminderService, HttpClientService httpClientService, IvrConfiguration ivrConfiguration, UUIDGenerator uuidGenerator) {
         this.providerReminderService = providerReminderService;
         this.httpClientService = httpClientService;
         this.ivrConfiguration = ivrConfiguration;
-        this.UUIDGenerator = UUIDGenerator;
+        this.UUIDGenerator = uuidGenerator;
     }
 
     @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT)
     public void adherenceWindowApproachingEvent(MotechEvent motechEvent) {
         List<String> providerPhoneNumbers = providerReminderService.getActiveProviderPhoneNumbers();
-        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), providerPhoneNumbers, UUIDGenerator.uuid()).toXML());
+        String requestXML = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), providerPhoneNumbers, UUIDGenerator.uuid()).toXML();
+        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), requestXML);
     }
 }

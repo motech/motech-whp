@@ -2,6 +2,7 @@ package org.motechproject.whp.providerreminder.model;
 
 import lombok.EqualsAndHashCode;
 
+import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.List;
 
 @EqualsAndHashCode
@@ -47,12 +49,8 @@ public class ProviderReminderRequest implements Serializable {
 
 
     public String toXML() {
-        OutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            JAXBContext.newInstance(ProviderReminderRequest.class).createMarshaller().marshal(this, outputStream);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-        return outputStream.toString();
+        StringWriter writer =  new StringWriter();
+        JAXB.marshal(this, writer);
+        return writer.toString();
     }
 }
