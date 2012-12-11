@@ -3,18 +3,15 @@ package org.motechproject.whp.adherenceapi.request;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.adherenceapi.webservice.AdherenceIVRController;
-import org.motechproject.whp.common.domain.PhoneNumber;
 import org.springframework.http.MediaType;
 
-import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-public class AdherenceFlashingRequestTest {
+public class AdherenceValidationRequestTest {
 
     private AdherenceIVRController adherenceIVRController;
 
@@ -24,27 +21,19 @@ public class AdherenceFlashingRequestTest {
     }
 
     @Test
-    public void shouldReturnValidPhoneNumberAsValidMSISDN() {
-        String msisdn = "1234567890";
-
-        AdherenceFlashingRequest request = new AdherenceFlashingRequest();
-        request.setMsisdn(msisdn);
-
-        assertEquals(new PhoneNumber(msisdn).value(), request.getMsisdn());
-    }
-
-    @Test
     public void shouldBeInvalidIfMSISDNIsLessThanTenDigits() throws Exception {
         String request = "<?xml version=\"1.0\"?>\n" +
-                "<adherence_capture_flashing_request>\n" +
-                " <msisdn>0986754</msisdn>\n" +
-                " <call_id>abcd1234</call_id>\n" +
-                " <call_time>14/08/2012 11:20:59</call_time>\n" +
-                "</adherence_capture_flashing_request>";
+                "<adherence_validation_request>\n" +
+                "    <call_id>abcd1234</call_id>\n" +
+                "    <msisdn>1234567</msisdn>\n" +
+                "    <patient_id>pat1</patient_id>\n" +
+                "    <adherence_value>3</adherence_value>\n" +
+                "    <time_taken>7</time_taken>\n" +
+                "</adherence_validation_request>";
 
         standaloneSetup(adherenceIVRController)
                 .build()
-                .perform(post("/ivr/adherence/summary").body(request.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .perform(post("/ivr/adherence/validate").body(request.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().string(containsString("length must be between 10")));

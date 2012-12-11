@@ -2,6 +2,7 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.whp.common.domain.PhoneNumber;
 import org.motechproject.whp.common.validation.DateTimeFormat;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 public class AdherenceFlashingRequest implements Serializable {
 
     @NotBlank
+    @Length(min = 10)
     private String msisdn;
 
     @NotBlank

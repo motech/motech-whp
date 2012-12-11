@@ -2,6 +2,7 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.whp.common.domain.PhoneNumber;
 
@@ -19,6 +20,7 @@ public class AdherenceValidationRequest implements Serializable {
     @NotBlank
     private String doseTakenCount;
     @NotBlank
+    @Length(min = 10)
     private String msisdn;
     @NotBlank
     private String callId;
