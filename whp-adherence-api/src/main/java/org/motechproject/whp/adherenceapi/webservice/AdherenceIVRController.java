@@ -23,7 +23,10 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 
 @Controller
-@RequestMapping("/ivr/adherence")
+@RequestMapping(value = "/ivr/adherence",
+        method = RequestMethod.POST,
+        produces = APPLICATION_XML_VALUE,
+        consumes = APPLICATION_XML_VALUE)
 public class AdherenceIVRController {
 
     private ProviderService providerService;
@@ -40,23 +43,13 @@ public class AdherenceIVRController {
         this.adherenceValidationOverIVR = adherenceValidationOverIVR;
     }
 
-    @RequestMapping(
-            value = "/summary",
-            method = RequestMethod.POST,
-            produces = APPLICATION_XML_VALUE,
-            consumes = APPLICATION_XML_VALUE
-    )
+    @RequestMapping(value = "/summary")
     @ResponseBody
     public AdherenceFlashingResponse adherenceSummary(@RequestBody @Valid AdherenceFlashingRequest request) {
         return adherenceSummaryOverIVR.value(request, providerId(request.getMsisdn()));
     }
 
-    @RequestMapping(
-            value = "/validate",
-            method = RequestMethod.POST,
-            produces = APPLICATION_XML_VALUE,
-            consumes = APPLICATION_XML_VALUE
-    )
+    @RequestMapping(value = "/validate")
     @ResponseBody
     public AdherenceValidationResponse adherenceValidation(@RequestBody @Valid AdherenceValidationRequest request) {
         return adherenceValidationOverIVR.validateInput(request, providerId(request.getMsisdn()));
