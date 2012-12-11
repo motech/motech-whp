@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.whp.common.domain.PhoneNumber;
+import org.motechproject.whp.common.validation.DateTimeFormat;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +22,7 @@ public class AdherenceFlashingRequest implements Serializable {
     private String callId;
 
     @NotBlank
+    @DateTimeFormat
     private String callTime;
 
     @XmlElement(name = "msisdn")

@@ -189,4 +189,20 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 .andExpect(content().type(MediaType.APPLICATION_XML));
 
     }
+
+    @Test
+    public void shouldRespondWithBadRequestForRequestWithInvalidDateFormat() throws Exception {
+        String request = "<?xml version=\"1.0\"?>\n" +
+                "<adherence_capture_flashing_request>\n" +
+                " <msisdn>0986754322</msisdn>\n" +
+                " <call_id>abcd1234</call_id>\n" +
+                " <call_time>14-08-2012 11:20:59</call_time>\n" +
+                "</adherence_capture_flashing_request>";
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_FLASHING_PATH).body(request.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().type(MediaType.APPLICATION_XML));
+
+    }
 }
