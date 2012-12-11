@@ -33,25 +33,26 @@ public class ProviderReminderSchedulerIT {
     MotechSchedulerService motechSchedulerService;
 
     @Test
-    public void shouldScheduleAJob() {
-        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration("30", "10", DayOfWeek.Sunday);
-        providerReminderScheduler.scheduleJob(providerReminderConfiguration);
+    public void shouldScheduleAndRetrieveProviderReminderScheduleJob() {
+        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(30, 10, DayOfWeek.Sunday);
+        providerReminderScheduler.scheduleReminder(providerReminderConfiguration);
 
         String subject = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
         Date fromDate = new LocalDate(new Date()).minusDays(2).toDate();
         Date toDate = new LocalDate(new Date()).plusMonths(2).toDate();
 
-        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_APPROACHING.name(), fromDate, toDate);
 
+        assertEquals(providerReminderConfiguration, providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
+
+        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_APPROACHING.name(), fromDate, toDate);
         assertTrue(!timings.isEmpty());
 
         DateTime nextSunday = DateUtil.nextApplicableWeekDay(new DateTime(new Date().getTime()), asList(DayOfWeek.Sunday));
         Date expectedScheduleDate = nextSunday.withHourOfDay(10).withMinuteOfHour(30).withSecondOfMinute(0).withMillisOfSecond(0).toDate();
-
         assertEquals(expectedScheduleDate, timings.get(0));
     }
 
-    private ProviderReminderConfiguration createProviderReminderConfiguration(String minutes, String hour, DayOfWeek dayOfWeek) {
+    private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
         providerReminderConfiguration.setMinutes(minutes);
         providerReminderConfiguration.setHour(hour);

@@ -9,7 +9,6 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
@@ -41,9 +40,11 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
     @Test
     public void shouldScheduleAJob() {
         DayOfWeek dayOfWeek = DayOfWeek.Sunday;
-        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration("minutes", "hour", dayOfWeek);
+        int minutes = 30;
+        int hour = 10;
+        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(minutes, hour, dayOfWeek);
 
-        providerReminderScheduler.scheduleJob(providerReminderConfiguration);
+        providerReminderScheduler.scheduleReminder(providerReminderConfiguration);
 
         ArgumentCaptor<CronSchedulableJob> captor = ArgumentCaptor.forClass(CronSchedulableJob.class);
         verify(motechSchedulerService).scheduleJob(captor.capture());
@@ -51,10 +52,10 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
         assertEquals(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME, job.getMotechEvent().getSubject());
         assertEquals(ADHERENCE_WINDOW_APPROACHING.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
-        assertEquals("0 minutes hour ? * " + dayOfWeek.getShortName(), job.getCronExpression());
+        assertEquals("0 30 10 ? * " + dayOfWeek.getShortName(), job.getCronExpression());
     }
 
-    private ProviderReminderConfiguration createProviderReminderConfiguration(String minutes, String hour, DayOfWeek dayOfWeek) {
+    private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
         providerReminderConfiguration.setMinutes(minutes);
         providerReminderConfiguration.setHour(hour);
@@ -76,9 +77,9 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
         Date expectedNextFireTime = today().plusDays(2).toDate();
 
         when(motechSchedulerService.getScheduledJobTimings(subject, jobId, fromDate, toDate)).thenReturn(asList(expectedNextFireTime));
-        assertEquals(expectedNextFireTime, providerReminderScheduler.getNextFireTime(ADHERENCE_WINDOW_APPROACHING));
+        assertEquals(new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, expectedNextFireTime), providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
 
         when(motechSchedulerService.getScheduledJobTimings(subject, jobId, fromDate, toDate)).thenReturn(new ArrayList<Date>());
-        assertNull(providerReminderScheduler.getNextFireTime(ADHERENCE_WINDOW_APPROACHING));
+        assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
     }
 }

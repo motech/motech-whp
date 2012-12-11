@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.util.WHPDateTime;
+import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
 import java.util.Date;
@@ -14,8 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class ProviderReminderControllerTest {
@@ -32,14 +32,15 @@ public class ProviderReminderControllerTest {
 
     @Test
     public void shouldReturnNextScheduleTiming() throws Exception {
-        Date today = new Date();
+        ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, new Date());
 
-        when(providerReminderScheduler.getNextFireTime(ADHERENCE_WINDOW_APPROACHING)).thenReturn(today);
+        when(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING)).thenReturn(providerReminderConfiguration);
 
         standaloneSetup(providerReminderController)
                 .build()
                 .perform(get("/providerreminder/schedule/" + ADHERENCE_WINDOW_APPROACHING.name()))
-                .andExpect(content().string(WHPDateTime.date(new DateTime(today)).value()))
+                .andExpect(model().attribute("providerReminderConfiguration", providerReminderConfiguration))
+                .andExpect(view().name("reminders/providerReminder"))
                 .andExpect(status().isOk());
     }
 
