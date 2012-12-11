@@ -511,6 +511,7 @@ td[class~=adherenceNotCaptured] {
 }
 
 
+
 .user-name {
     display: inline-block;
     color: #369BD7;
@@ -1109,7 +1110,7 @@ pre {
 
 .ellipsis {
     display: block;
-    overflow: hidden;    
+    overflow: hidden;
     white-space: nowrap;
     width: 175px;
 	text-overflow: ellipsis;
@@ -1126,6 +1127,7 @@ pre {
 		margin-top: 15px;
 	}
 }
+
 
 .provider-row.adherence-status-row.not-reported td{
     background-color: rgba(255, 0, 0, 0.2);
@@ -1151,7 +1153,11 @@ pre {
     table-layout: fixed;
 }
 
-.printable-table table, td, th {
+.printable-table  th  {
+    border:1px solid black;
+}
+
+.printable-table  td  {
     border:1px solid black;
 }
 
