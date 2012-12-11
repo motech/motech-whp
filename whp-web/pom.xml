@@ -87,6 +87,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-provider-reminder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>

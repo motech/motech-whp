@@ -13,7 +13,7 @@ public class ProviderReminderRequestTest {
 
     @Test
     public void shouldConvertToXML() throws IOException, JAXBException {
-        ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(),
+        ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING,
                asList("msisdn1", "msisdn2"), "requestId");
 
         String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +

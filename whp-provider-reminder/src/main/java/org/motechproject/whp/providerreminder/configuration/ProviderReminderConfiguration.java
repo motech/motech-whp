@@ -1,30 +1,13 @@
 package org.motechproject.whp.providerreminder.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import lombok.Data;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 
-import java.util.Properties;
-
-@Component
+@Data
 public class ProviderReminderConfiguration {
-
-    private Properties properties;
-
-    @Autowired
-    public ProviderReminderConfiguration(@Qualifier("providerReminderProperties") Properties properties) {
-        this.properties = properties;
-    }
-
-    public String getWeekDay() {
-        return properties.getProperty("weekday");
-    }
-
-    public String getHour() {
-        return properties.getProperty("hour");
-    }
-
-    public String getMinutes() {
-        return properties.getProperty("minutes");
-    }
+    private DayOfWeek dayOfWeek;
+    private String hour;
+    private String minutes;
+    private ProviderReminderType reminderType;
 }

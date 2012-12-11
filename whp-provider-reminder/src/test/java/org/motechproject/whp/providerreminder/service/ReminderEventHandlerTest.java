@@ -47,9 +47,9 @@ public class ReminderEventHandlerTest {
         when(ivrConfiguration.getProviderReminderUrl()).thenReturn(url);
         when(UUIDGenerator.uuid()).thenReturn(requestId);
 
-        reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT));
+        reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME));
 
         verify(providerReminderService).getActiveProviderPhoneNumbers();
-        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), msisdnList, requestId).toXML());
+        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, msisdnList, requestId).toXML());
     }
 }

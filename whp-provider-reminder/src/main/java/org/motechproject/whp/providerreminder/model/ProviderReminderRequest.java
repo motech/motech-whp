@@ -1,6 +1,7 @@
 package org.motechproject.whp.providerreminder.model;
 
 import lombok.EqualsAndHashCode;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
@@ -19,13 +20,13 @@ import java.util.List;
 public class ProviderReminderRequest implements Serializable {
 
     private String requestId;
-    private String reminderType;
+    private ProviderReminderType reminderType;
     private List<String> msisdns;
 
     public ProviderReminderRequest() {
     }
 
-    public ProviderReminderRequest(String reminderType, List<String> msisdns, String requestId) {
+    public ProviderReminderRequest(ProviderReminderType reminderType, List<String> msisdns, String requestId) {
         this.reminderType = reminderType;
         this.msisdns = msisdns;
         this.requestId = requestId;
@@ -33,7 +34,7 @@ public class ProviderReminderRequest implements Serializable {
 
     @XmlElement(name = "reminder_type")
     public String getReminderType() {
-        return reminderType;
+        return reminderType.name();
     }
 
     @XmlElement(name = "request_id")

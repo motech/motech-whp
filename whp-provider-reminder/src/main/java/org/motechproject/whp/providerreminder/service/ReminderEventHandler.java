@@ -30,10 +30,10 @@ public class ReminderEventHandler {
         this.UUIDGenerator = uuidGenerator;
     }
 
-    @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_SUBJECT)
+    @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME)
     public void adherenceWindowApproachingEvent(MotechEvent motechEvent) {
         List<String> providerPhoneNumbers = providerReminderService.getActiveProviderPhoneNumbers();
-        String requestXML = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING.name(), providerPhoneNumbers, UUIDGenerator.uuid()).toXML();
-        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), requestXML);
+        ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, providerPhoneNumbers, UUIDGenerator.uuid());
+        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), providerReminderRequest.toXML());
     }
 }

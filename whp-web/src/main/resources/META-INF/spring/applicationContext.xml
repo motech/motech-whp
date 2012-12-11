@@ -49,6 +49,7 @@
     <import resource="classpath*:applicationContext-DiagnosticsWeb.xml"/>
     <import resource="classpath*:applicationContext-CaseLoggerWeb.xml"/>
     <import resource="classpath*:applicationContext-case.xml"/>
+    <import resource="classpath*:applicationProviderReminderContext.xml"/>
 
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
