@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherenceapi.builder.DosageBuilder;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
-import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -19,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
@@ -106,10 +106,25 @@ public class AdherenceValidationOverIVRTest {
     }
 
     @Test
-    public void shouldReportAdherenceValidationRequest() {
+    public void shouldReportAdherenceValidationRequestWhenValidationSuccessful() {
+        String patientId = "patientid";
+        Dosage dosage = new DosageBuilder(2).dosage();
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
+        adherenceValidationRequest.setPatientId(patientId);
+        adherenceValidationRequest.setDoseTakenCount("2");
+        adherenceValidationRequest.setTimeTaken("1000");
+
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
+
+        adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId);
+        verify(reportingService).reportAdherenceCapture(adherenceCaptureRequest().validAdherence(adherenceValidationRequest, providerId));
+    }
+
+    @Test
+    public void shouldReportAdherenceValidationRequestWhenValidationFailed() {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
 
         adherenceValidationOverIVR.validateInput(request, providerId);
-        verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(request, providerId).captureRequest());
+        verify(reportingService).reportAdherenceCapture(adherenceCaptureRequest().invalidAdherence(request, providerId));
     }
 }

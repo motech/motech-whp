@@ -4,7 +4,6 @@ import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.AdherenceErrors;
 import org.motechproject.whp.adherenceapi.errors.ValidationRequestErrors;
-import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
@@ -15,6 +14,7 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureRequestBuilder.adherenceCaptureRequest;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
@@ -34,12 +34,17 @@ public class AdherenceValidationOverIVR {
 
     public AdherenceValidationResponse validateInput(AdherenceValidationRequest request, ProviderId providerId) {
         AdherenceValidationResponse response = validateAdherenceInput(request, providerId);
-        reportAdherenceValidation(request, providerId);
+        reportAdherenceValidation(request, response, providerId);
         return response;
     }
 
-    private void reportAdherenceValidation(AdherenceValidationRequest request, ProviderId providerId) {
-        AdherenceCaptureRequest reportingRequest = new AdherenceCaptureReportRequest(request, providerId).captureRequest();
+    private void reportAdherenceValidation(AdherenceValidationRequest request, AdherenceValidationResponse response, ProviderId providerId) {
+        AdherenceCaptureRequest reportingRequest;
+        if (response.failed()) {
+            reportingRequest = adherenceCaptureRequest().invalidAdherence(request, providerId);
+        } else {
+            reportingRequest = adherenceCaptureRequest().validAdherence(request, providerId);
+        }
         reportingService.reportAdherenceCapture(reportingRequest);
     }
 

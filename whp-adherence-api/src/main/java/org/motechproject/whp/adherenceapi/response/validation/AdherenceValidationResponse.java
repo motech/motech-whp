@@ -41,4 +41,8 @@ public class AdherenceValidationResponse implements Serializable {
         response.error = new AdherenceValidationError(errorCode);
         return response;
     }
+
+    public boolean failed() {
+        return null != error;
+    }
 }
