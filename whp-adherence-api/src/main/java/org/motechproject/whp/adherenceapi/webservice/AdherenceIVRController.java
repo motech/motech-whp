@@ -1,20 +1,22 @@
 package org.motechproject.whp.adherenceapi.webservice;
 
-import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.common.error.BindingResultXML;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
@@ -58,6 +60,14 @@ public class AdherenceIVRController {
     @ResponseBody
     public AdherenceValidationResponse adherenceValidation(@RequestBody @Valid AdherenceValidationRequest request) {
         return adherenceValidationOverIVR.validateInput(request, providerId(request.getMsisdn()));
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public BindingResultXML handleError(MethodArgumentNotValidException e, HttpServletResponse response) {
+        response.setContentType(MediaType.APPLICATION_XML.toString());
+        return new BindingResultXML(e.getBindingResult());
     }
 
     private ProviderId providerId(String msisdn) {

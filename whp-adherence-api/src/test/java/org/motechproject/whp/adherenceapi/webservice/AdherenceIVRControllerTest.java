@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
@@ -178,5 +178,15 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXML.replaceAll(" ", "")));
+    }
+
+    @Test
+    public void shouldRespondWithBadRequestForInvalidRequest() throws Exception {
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_VALIDATION_PATH).body("<adherence_validation_request></adherence_validation_request>".getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().type(MediaType.APPLICATION_XML));
+
     }
 }
