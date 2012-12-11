@@ -3,6 +3,7 @@ package org.motechproject.whp.adherenceapi.response.validation;
 import lombok.EqualsAndHashCode;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @EqualsAndHashCode
 class ValidAdherenceRange {

@@ -38,7 +38,7 @@ public class AdherenceValidationResponse implements Serializable {
 
     public static AdherenceValidationResponse failure(String errorCode) {
         AdherenceValidationResponse response = failure();
-        response.error = new SimpleValidationError(errorCode);
+        response.error = new AdherenceValidationError(errorCode);
         return response;
     }
 }
