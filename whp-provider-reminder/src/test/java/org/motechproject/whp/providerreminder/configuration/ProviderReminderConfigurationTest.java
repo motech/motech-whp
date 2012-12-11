@@ -3,7 +3,6 @@ package org.motechproject.whp.providerreminder.configuration;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 
 import java.util.Date;
 
@@ -21,7 +20,6 @@ public class ProviderReminderConfigurationTest {
         assertEquals(ADHERENCE_WINDOW_APPROACHING, tuesdayReminderConfiguration.getReminderType());
         assertEquals(DayOfWeek.Tuesday, tuesdayReminderConfiguration.getDayOfWeek());
         assertEquals(10, tuesdayReminderConfiguration.getHour());
-        assertEquals(30, tuesdayReminderConfiguration.getMinutes());
-
+        assertEquals(30, tuesdayReminderConfiguration.getMinute());
     }
 }

@@ -18,6 +18,8 @@ import java.util.Date;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -57,7 +59,7 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
     private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
-        providerReminderConfiguration.setMinutes(minutes);
+        providerReminderConfiguration.setMinute(minutes);
         providerReminderConfiguration.setHour(hour);
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
         providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
@@ -71,15 +73,12 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
         mockCurrentDate(today());
 
-        Date fromDate = today().toDate();
-        Date toDate = new LocalDate(today()).plusDays(7).toDate();
-
         Date expectedNextFireTime = today().plusDays(2).toDate();
 
-        when(motechSchedulerService.getScheduledJobTimings(subject, jobId, fromDate, toDate)).thenReturn(asList(expectedNextFireTime));
+        when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(asList(expectedNextFireTime));
         assertEquals(new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, expectedNextFireTime), providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
 
-        when(motechSchedulerService.getScheduledJobTimings(subject, jobId, fromDate, toDate)).thenReturn(new ArrayList<Date>());
+        when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
         assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
     }
 }

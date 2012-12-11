@@ -54,7 +54,7 @@ public class ProviderReminderSchedulerIT {
 
     private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
-        providerReminderConfiguration.setMinutes(minutes);
+        providerReminderConfiguration.setMinute(minutes);
         providerReminderConfiguration.setHour(hour);
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
         providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);

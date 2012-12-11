@@ -10,6 +10,7 @@ import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,15 @@ public class ProviderReminderScheduler {
     public ProviderReminderConfiguration getReminder(ProviderReminderType jobType) {
         Date today = new Date();
         Date nextWeek = new LocalDate(today).plusWeeks(1).toDate();
-        List<Date> scheduledJobTimings = motechSchedulerService.getScheduledJobTimings(jobType.getEventSubject(), jobType.name(), today, nextWeek);
+        List<Date> scheduledJobTimings = new ArrayList<>();
+
+        try{
+            scheduledJobTimings = motechSchedulerService.getScheduledJobTimings(jobType.getEventSubject(), jobType.name(), today, nextWeek);
+        } catch (Exception e){
+            //no schedule found
+        }
+
+
 
         if(scheduledJobTimings.isEmpty()){
             return null;
@@ -45,7 +54,7 @@ public class ProviderReminderScheduler {
     }
 
     private String generateCronExpression(ProviderReminderConfiguration providerReminderConfiguration) {
-        int minutes = providerReminderConfiguration.getMinutes();
+        int minutes = providerReminderConfiguration.getMinute();
         int hour = providerReminderConfiguration.getHour();
         String weekDay = providerReminderConfiguration.getDayOfWeek().getShortName();
 

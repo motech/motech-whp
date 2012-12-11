@@ -5,16 +5,21 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
 import java.util.Date;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.model.DayOfWeek.Sunday;
 import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
@@ -38,21 +43,26 @@ public class ProviderReminderControllerTest {
 
         standaloneSetup(providerReminderController)
                 .build()
-                .perform(get("/providerreminder/schedule/" + ADHERENCE_WINDOW_APPROACHING.name()))
+                .perform(get("/providerreminder/" + ADHERENCE_WINDOW_APPROACHING.name()))
                 .andExpect(model().attribute("providerReminderConfiguration", providerReminderConfiguration))
                 .andExpect(view().name("reminders/providerReminder"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @Ignore("Work in progress")
     public void shouldUpdateSchedule() throws Exception {
-        Date today = new Date();
-
         standaloneSetup(providerReminderController)
                 .build()
-                .perform(get("/providerreminder/schedule/" + ADHERENCE_WINDOW_APPROACHING.name() + "/update").param("weekDay", "SUN").param("hour", "10").param("minute", "30"))
-                .andExpect(content().string(WHPDateTime.date(new DateTime(today)).value()))
+                .perform(post("/providerreminder/update").param("dayOfWeek", "Sunday").param("hour", "10").param("minute", "30").param("reminderType", ADHERENCE_WINDOW_APPROACHING.name()))
+                .andExpect(view().name("redirect:/providerreminder/" + ADHERENCE_WINDOW_APPROACHING.name()))
                 .andExpect(status().isOk());
+
+        ProviderReminderConfiguration expectedReminderConfiguration = new ProviderReminderConfiguration();
+        expectedReminderConfiguration.setDayOfWeek(Sunday);
+        expectedReminderConfiguration.setHour(10);
+        expectedReminderConfiguration.setMinute(30);
+        expectedReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
+
+        verify(providerReminderScheduler).scheduleReminder(expectedReminderConfiguration);
     }
 }
