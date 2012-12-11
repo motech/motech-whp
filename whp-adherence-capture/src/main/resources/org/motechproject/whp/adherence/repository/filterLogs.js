@@ -5,10 +5,11 @@ function(doc, req) {
     var providers = JSON.parse(req.query['providers']);
     while (row = getRow()) {
         if(row.doc.type === 'AdherenceLog' && providers.indexOf(row.doc.meta.PROVIDER_ID) !== -1){
-            var text = ((i===0)? "" : ",") + ('{"value" : "' + row.doc.meta.PROVIDER_ID + '"}')
+            var text = ((i===0)? "" : ",") + ('{"value" : "' + row.doc.meta.PROVIDER_ID + '"}');
             send(text);
+            i++;
         }
-        i++;
+
     }
     send(']}');
 }
