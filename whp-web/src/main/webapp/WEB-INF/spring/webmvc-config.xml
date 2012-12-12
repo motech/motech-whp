@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+    <import resource="classpath*:applicationContext-Paginator-mvc.xml"/>
+
+    <context:component-scan base-package="org.motechproject.whp" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.motechproject.export" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.motechproject.deliverytools" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.motechproject.diagnostics.controller">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.motechproject.caselogs.controller">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.motechproject.flash"/>
+
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
+    <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/"/>
+    <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
+    <mvc:default-servlet-handler/>
+
+    <!-- Configures Handler Interceptors -->
+    <mvc:interceptors>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/ivr/containerRegistration/**"/>
+            <mvc:mapping path="/ivr/callback/**"/>
+            <mvc:mapping path="/ivr/adherence/summary"/>
+            <mvc:mapping path="/ivr/adherence/validate"/>
+            <bean class="org.motechproject.whp.interceptor.APIKeyInterceptor">
+                <constructor-arg value="#{whpProperties['whp.api.key']}"/>
+            </bean>
+        </mvc:interceptor>
+
+        <bean class="org.motechproject.flash.FlashScopeFilter"/>
+
+        <bean id="staticContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+            <property name="cacheMappings">
+                <props>
+                    <prop key="/resources-#{whpProperties['application.version']}/**">31556926</prop>
+                </props>
+            </property>
+        </bean>
+    </mvc:interceptors>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <qualifier value="messageBundleSource"/>
+        <property name="basenames">
+            <list>
+                <value>
+                    classpath:message
+                </value>
+                <value>
+                    classpath:container_error_message
+                </value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang"/>
+    </bean>
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en"/>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <ref bean="localeChangeInterceptor"/>
+        </property>
+    </bean>
+
+    <!-- selects a static view for rendering without the need for an explicit controller -->
+    <mvc:view-controller path="/login"/>
+    <mvc:view-controller path="/errors/*"/>
+
+    <!-- Freemarker config -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="applicationVersion" value="#{whpProperties['application.version']}"/>
+                <entry key="whpReportsURL" value="#{whpProperties['whp.reports.url']}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="whpViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".ftl"/>
+
+        <!--Enable spring freemarker macros-->
+        <property name="exposeSpringMacroHelpers" value="true"/>
+
+    </bean>
+</beans>
