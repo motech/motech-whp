@@ -21,7 +21,8 @@ public class ContainerTest {
     @Test
     public void shouldSetDefaultsUponCreation() {
         DateTime creationTime = now();
-        Container container = new Container("providerId", "12345678912", RegistrationInstance.PreTreatment, creationTime, "d1");
+        String providerId = "providerId";
+        Container container = new Container(providerId, new ContainerId(providerId, "12345"), RegistrationInstance.PreTreatment, creationTime, "d1");
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertEquals(Pending, container.getDiagnosis());
         assertNull(container.getPatientId());

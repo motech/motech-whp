@@ -58,10 +58,10 @@ public class Container extends MotechBaseDataObject {
     public Container() {
     }
 
-    public Container(String providerId, String containerId, RegistrationInstance instance, DateTime creationTime, String district) {
+    public Container(String providerId, ContainerId containerId, RegistrationInstance instance, DateTime creationTime, String district) {
         setProviderId(providerId);
         this.district = district;
-        this.containerId = containerId;
+        this.containerId = containerId.value();
         this.instance = instance;
         this.creationTime = creationTime;
         this.status = ContainerStatus.Open;

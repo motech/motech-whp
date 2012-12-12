@@ -20,10 +20,7 @@ import org.motechproject.whp.container.builder.request.ContainerStatusReportingR
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.AlternateDiagnosis;
-import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.domain.LabResults;
-import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.domain.*;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
@@ -84,7 +81,7 @@ public class ContainerServiceTest extends BaseUnitTest {
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
         when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
-        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "containerId", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "12345", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         containerService.registerContainer(containerRegistrationRequest);
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -140,28 +137,31 @@ public class ContainerServiceTest extends BaseUnitTest {
         LocalDate containerIssuedDate = DateUtil.today();
 
         String providerId = "provider_one";
-        String containerId = "1234567890";
+        String containerId = "12345";
         RegistrationInstance instance = RegistrationInstance.InTreatment;
 
         String district = "district1";
-        Provider provider = new Provider(null, null, district, null);
+        Provider provider = new Provider(providerId, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
         containerService.registerContainer(containerRegistrationRequest);
 
+        String expectedContainerId = new ContainerId(providerId, containerId).value();
+
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
         Container actualContainer = captor.getValue();
+
         assertEquals(providerId.toLowerCase(), actualContainer.getProviderId());
-        assertEquals(containerId, actualContainer.getContainerId());
+        assertEquals(expectedContainerId, actualContainer.getContainerId());
         assertEquals(creationTime, actualContainer.getCreationTime());
         assertEquals(containerIssuedDate, actualContainer.getContainerIssuedDate());
         assertEquals(instance, actualContainer.getInstance());
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertEquals(district, actualContainer.getDistrict());
 
-        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(containerId, providerId, instance, creationTime);
+        ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(expectedContainerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
         verify(providerService).findByProviderId(providerId);
 
@@ -182,20 +182,21 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldGetContainerByContainerId() {
-        String containerId = "containerId";
+        ContainerId containerId = new ContainerId("providerId", "12345");
         Container expectedContainer = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
-        when(allContainers.findByContainerId(containerId)).thenReturn(expectedContainer);
+        when(allContainers.findByContainerId(containerId.value())).thenReturn(expectedContainer);
 
-        Container container = containerService.getContainer(containerId);
+        Container container = containerService.getContainer(containerId.value());
 
         assertThat(container, is(expectedContainer));
-        verify(allContainers).findByContainerId(containerId);
+        verify(allContainers).findByContainerId(containerId.value());
     }
 
     @Test
     public void shouldUpdateContainer_forMapping() {
+        ContainerId containerId = new ContainerId("providerId", "12345");
         ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("reason", "code");
-        Container container = new Container("providerId", "containerId", RegistrationInstance.InTreatment, DateUtil.now(), "d1");
+        Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         container.mapWith("patient", "tb", SputumTrackingInstance.EndIP, reasonForContainerClosure, today(), DateTime.now());
         container.setConsultationDate(today());
         containerService.updatePatientMapping(container);
@@ -206,7 +207,8 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer_forLabResultsCapture() {
-        Container container = new Container("providerId", "containerId", RegistrationInstance.InTreatment, DateUtil.now(), "d1");
+        ContainerId containerId = new ContainerId("providerId", "12345");
+        Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         LabResults labResults = new LabResults();
         labResults.setCumulativeResult(Negative);
         labResults.setLabName("TestlabName");
