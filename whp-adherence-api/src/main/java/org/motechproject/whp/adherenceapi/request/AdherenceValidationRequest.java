@@ -27,6 +27,13 @@ public class AdherenceValidationRequest implements Serializable {
     @NotBlank
     private String timeTaken;
 
+    public AdherenceValidationRequest() {
+    }
+
+    public AdherenceValidationRequest(String patientId) {
+        this.patientId = patientId;
+    }
+
     @XmlElement(name = "patient_id")
     public String getPatientId() {
         return patientId;

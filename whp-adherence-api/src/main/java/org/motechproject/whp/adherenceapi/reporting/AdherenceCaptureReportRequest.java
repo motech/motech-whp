@@ -1,13 +1,10 @@
 package org.motechproject.whp.adherenceapi.reporting;
 
-
-import org.apache.commons.lang.StringUtils;
-import org.motechproject.whp.adherenceapi.domain.IVRInput;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 
-import static java.lang.Long.parseLong;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class AdherenceCaptureReportRequest {
 
@@ -21,54 +18,70 @@ public class AdherenceCaptureReportRequest {
         this.valid = valid;
     }
 
-    public AdherenceCaptureReportRequest(AdherenceValidationRequest request, ProviderId providerId) {
-        this(request, providerId, true);
+    public AdherenceCaptureRequest request() {
+        return withChannelId(
+                withCallId(
+                        withTimeTaken(
+                                withSubmittedValue(
+                                        withProviderId(
+                                                withValidity(
+                                                        withPatient(
+                                                                new AdherenceCaptureRequest()
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
-    public AdherenceCaptureReportRequest() {
-        this(null, null, false);
+    private AdherenceCaptureRequest withChannelId(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setChannelId("IVR");
+        return adherenceCaptureRequest;
     }
 
-    public AdherenceCaptureRequest captureRequest() {
-        AdherenceCaptureRequest result = new AdherenceCaptureRequest();
-        result.setChannelId(withChannel().getChannelId());
-        result.setTimeTaken(withTimeTaken(request.getTimeTaken()).getTimeTaken());
-        result.setStatus(withStatus().getStatus());
-        result.setValid(withValidity().isValid());
-
-        result.setCallId(request.getCallId());
-        result.setProviderId(providerId.value());
-        result.setSubmittedBy(providerId.value());
-        result.setPatientId(request.getPatientId());
-        result.setSubmittedValue(request.getDoseTakenCount());
-        return result;
+    private AdherenceCaptureRequest withCallId(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setCallId(request.getCallId());
+        return adherenceCaptureRequest;
     }
 
-    protected AdherenceCaptureRequest withChannel() {
-        AdherenceCaptureRequest result = new AdherenceCaptureRequest();
-        result.setChannelId("IVR");
-        return result;
-    }
-
-    protected AdherenceCaptureRequest withTimeTaken(String timeTaken) {
-        AdherenceCaptureRequest result = new AdherenceCaptureRequest();
-        if (StringUtils.isNotBlank(timeTaken)) {
-            result.setTimeTaken(parseLong(timeTaken));
+    private AdherenceCaptureRequest withTimeTaken(AdherenceCaptureRequest adherenceCaptureRequest) {
+        if (isBlank(request.getTimeTaken())) {
+            adherenceCaptureRequest.setTimeTaken(0l);
         } else {
-            result.setTimeTaken(0l);
+            adherenceCaptureRequest.setTimeTaken(Long.parseLong(request.getTimeTaken()));
         }
-        return result;
+        return adherenceCaptureRequest;
     }
 
-    protected AdherenceCaptureRequest withValidity() {
-        AdherenceCaptureRequest result = new AdherenceCaptureRequest();
-        result.setValid(valid);
-        return result;
+    private AdherenceCaptureRequest withSubmittedValue(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setSubmittedValue(request.getDoseTakenCount());
+        return adherenceCaptureRequest;
     }
 
-    protected AdherenceCaptureRequest withStatus() {
-        AdherenceCaptureRequest result = new AdherenceCaptureRequest();
-        result.setStatus((valid) ? IVRInput.VALID.name() : IVRInput.INVALID.name());
-        return result;
+    private AdherenceCaptureRequest withProviderId(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setProviderId(providerId.value());
+        adherenceCaptureRequest.setSubmittedBy(providerId.value());
+        return adherenceCaptureRequest;
+    }
+
+    private AdherenceCaptureRequest withPatient(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setPatientId(request.getPatientId());
+        return adherenceCaptureRequest;
+    }
+
+    private AdherenceCaptureRequest withValidity(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setValid(valid);
+        return withStatus(adherenceCaptureRequest);
+    }
+
+    private AdherenceCaptureRequest withStatus(AdherenceCaptureRequest adherenceCaptureRequest) {
+        if (valid) {
+            adherenceCaptureRequest.setStatus("Valid");
+        } else {
+            adherenceCaptureRequest.setStatus("Invalid");
+        }
+        return adherenceCaptureRequest;
     }
 }
