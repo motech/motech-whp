@@ -31,8 +31,8 @@
 
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
-    <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/" />
-    <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/" />
+    <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/"/>
+    <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
     <mvc:default-servlet-handler/>
 
     <!-- Configures Handler Interceptors -->
@@ -41,6 +41,8 @@
         <mvc:interceptor>
             <mvc:mapping path="/ivr/containerRegistration/**"/>
             <mvc:mapping path="/ivr/callback/**"/>
+            <mvc:mapping path="/ivr/adherence/summary"/>
+            <mvc:mapping path="/ivr/adherence/validate"/>
             <bean class="org.motechproject.whp.interceptor.APIKeyInterceptor">
                 <constructor-arg value="#{whpProperties['whp.api.key']}"/>
             </bean>
@@ -109,7 +111,7 @@
     </bean>
 
     <bean id="whpViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="contentType" value="text/html;charset=UTF-8"/>
         <property name="cache" value="true"/>
         <property name="prefix" value=""/>
         <property name="suffix" value=".ftl"/>
