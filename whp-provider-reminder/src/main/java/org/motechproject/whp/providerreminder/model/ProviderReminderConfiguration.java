@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.configuration;
+package org.motechproject.whp.providerreminder.model;
 
 import lombok.Data;
 import org.joda.time.LocalDateTime;

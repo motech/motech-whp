@@ -8,7 +8,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

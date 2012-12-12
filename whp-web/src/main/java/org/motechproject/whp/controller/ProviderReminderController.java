@@ -1,6 +1,6 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 import org.springframework.beans.factory.annotation.Autowired;

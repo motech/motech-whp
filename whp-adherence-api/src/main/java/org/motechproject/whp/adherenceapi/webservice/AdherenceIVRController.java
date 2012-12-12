@@ -59,7 +59,7 @@ public class AdherenceIVRController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public BindingResultXML handleError(MethodArgumentNotValidException e, HttpServletResponse response) {
-        response.setContentType(MediaType.APPLICATION_XML.toString());
+        response.setContentType(APPLICATION_XML_VALUE);
         return new BindingResultXML(e.getBindingResult());
     }
 

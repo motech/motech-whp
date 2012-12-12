@@ -1,9 +1,12 @@
 package org.motechproject.whp.providerreminder.model;
 
+import org.joda.time.LocalDateTime;
 import org.junit.Test;
+import org.motechproject.model.DayOfWeek;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.Date;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -27,5 +30,20 @@ public class ProviderReminderRequestTest {
                 "</provider_reminder_request>\n";
 
         assertEquals(expectedXML, request.toXML());
+    }
+
+    public static class ProviderReminderConfigurationTest {
+
+        @Test
+        public void shouldCreateProviderReminderConfigurationFromDate() {
+            Date tuesday = new LocalDateTime(2012, 12, 11, 10, 30).toDate();
+
+            ProviderReminderConfiguration tuesdayReminderConfiguration = new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, tuesday);
+
+            assertEquals(ADHERENCE_WINDOW_APPROACHING, tuesdayReminderConfiguration.getReminderType());
+            assertEquals(DayOfWeek.Tuesday, tuesdayReminderConfiguration.getDayOfWeek());
+            assertEquals(10, tuesdayReminderConfiguration.getHour());
+            assertEquals(30, tuesdayReminderConfiguration.getMinute());
+        }
     }
 }

@@ -4,8 +4,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
-import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.motechproject.scheduler.MotechSchedulerService.JOB_ID_KEY;
-import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 
 @Component
 public class ProviderReminderScheduler {
@@ -43,8 +40,6 @@ public class ProviderReminderScheduler {
         } catch (Exception e){
             //no schedule found
         }
-
-
 
         if(scheduledJobTimings.isEmpty()){
             return null;

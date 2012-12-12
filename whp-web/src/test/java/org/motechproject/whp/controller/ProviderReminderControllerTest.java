@@ -1,14 +1,9 @@
 package org.motechproject.whp.controller;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.common.util.WHPDateTime;
-import org.motechproject.whp.providerreminder.configuration.ProviderReminderConfiguration;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
 import java.util.Date;
