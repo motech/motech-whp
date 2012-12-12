@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 public class CommonContainerRegistrationValidatorTest {
     @Mock
@@ -48,11 +49,11 @@ public class CommonContainerRegistrationValidatorTest {
     public void shouldValidateDuplicateContainerId() {
         String containerID = "12345";
         ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(validProvider.getProviderId(), containerID, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
-        when(containerService.exists(new ContainerId(validProvider.getProviderId(), containerID).value())).thenReturn(true);
+        when(containerService.exists(new ContainerId(validProvider.getProviderId(), containerID, ON_BEHALF_OF_PROVIDER).value())).thenReturn(true);
 
         List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
 
-        verify(containerService).exists(new ContainerId(validProvider.getProviderId(), containerID).value());
+        verify(containerService).exists(new ContainerId(validProvider.getProviderId(), containerID, ON_BEHALF_OF_PROVIDER).value());
         assertTrue(errors.contains(new ErrorWithParameters("container.already.registered.error")));
     }
 

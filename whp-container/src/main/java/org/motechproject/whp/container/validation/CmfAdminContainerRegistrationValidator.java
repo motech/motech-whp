@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.motechproject.whp.container.contract.ContainerRegistrationMode.NEW_CONTAINER;
-import static org.motechproject.whp.container.contract.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.NEW_CONTAINER;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 @Component
 public class CmfAdminContainerRegistrationValidator implements ContainerRegistrationValidator <CmfAdminContainerRegistrationRequest> {

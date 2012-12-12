@@ -27,6 +27,7 @@ import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -72,7 +73,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 "</case>";
 
 
-        when(containerService.getContainer(new ContainerId(providerId, containerId).value())).thenReturn(new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
+        when(containerService.getContainer(new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value())).thenReturn(new Container(providerId, new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -83,7 +84,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
         verify(sputumLabResultsWebService).updateCase(argumentCaptor.capture());
 
         SputumLabResultsWebRequest sputumLabResultsWebRequest = argumentCaptor.getValue();
-        assertThat(sputumLabResultsWebRequest.getCase_id(), is(new ContainerId(providerId, containerId).value()));
+        assertThat(sputumLabResultsWebRequest.getCase_id(), is(new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value()));
         assertThat(sputumLabResultsWebRequest.getDate_modified(), is("03/04/2012 11:23:40"));
         assertThat(sputumLabResultsWebRequest.getApi_key(), is("3F2504E04F8911D39A0C0305E82C3301"));
         assertThat(sputumLabResultsWebRequest.getUpdate_type(), is("lab_results"));
@@ -132,7 +133,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .build();
 
         String providerId = "providerId";
-        when(containerService.getContainer(containerId)).thenReturn(new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
+        when(containerService.getContainer(containerId)).thenReturn(new Container(providerId, new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -152,7 +153,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .build();
 
         String providerId = "providerId";
-        Container container = new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1");
+        Container container = new Container(providerId, new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER), RegistrationInstance.InTreatment, DateUtil.now(), "d1");
 
         when(containerService.getContainer(containerId)).thenReturn(container);
 

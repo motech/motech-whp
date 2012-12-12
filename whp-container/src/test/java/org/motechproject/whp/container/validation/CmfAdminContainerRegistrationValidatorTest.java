@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
-import org.motechproject.whp.container.contract.ContainerRegistrationMode;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 import org.motechproject.whp.containermapping.service.AdminContainerMappingService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
@@ -20,8 +20,8 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.container.contract.ContainerRegistrationMode.NEW_CONTAINER;
-import static org.motechproject.whp.container.contract.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.NEW_CONTAINER;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
 
 public class CmfAdminContainerRegistrationValidatorTest {

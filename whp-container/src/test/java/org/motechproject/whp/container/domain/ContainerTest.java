@@ -22,7 +22,7 @@ public class ContainerTest {
     public void shouldSetDefaultsUponCreation() {
         DateTime creationTime = now();
         String providerId = "providerId";
-        Container container = new Container(providerId, new ContainerId(providerId, "12345"), RegistrationInstance.PreTreatment, creationTime, "d1");
+        Container container = new Container(providerId, new ContainerId(providerId, "12345", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER), RegistrationInstance.PreTreatment, creationTime, "d1");
         assertEquals(ContainerStatus.Open, container.getStatus());
         assertEquals(Pending, container.getDiagnosis());
         assertNull(container.getPatientId());

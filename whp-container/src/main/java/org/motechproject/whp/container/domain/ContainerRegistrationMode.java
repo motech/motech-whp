@@ -1,4 +1,4 @@
-package org.motechproject.whp.container.contract;
+package org.motechproject.whp.container.domain;
 
 public enum ContainerRegistrationMode{
     ON_BEHALF_OF_PROVIDER,

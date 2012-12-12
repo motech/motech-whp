@@ -147,7 +147,7 @@ public class ContainerServiceTest extends BaseUnitTest {
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
         containerService.registerContainer(containerRegistrationRequest);
 
-        String expectedContainerId = new ContainerId(providerId, containerId).value();
+        String expectedContainerId = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
@@ -182,7 +182,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldGetContainerByContainerId() {
-        ContainerId containerId = new ContainerId("providerId", "12345");
+        ContainerId containerId = new ContainerId("providerId", "12345", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER);
         Container expectedContainer = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         when(allContainers.findByContainerId(containerId.value())).thenReturn(expectedContainer);
 
@@ -194,7 +194,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer_forMapping() {
-        ContainerId containerId = new ContainerId("providerId", "12345");
+        ContainerId containerId = new ContainerId("providerId", "12345", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER);
         ReasonForContainerClosure reasonForContainerClosure = new ReasonForContainerClosure("reason", "code");
         Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         container.mapWith("patient", "tb", SputumTrackingInstance.EndIP, reasonForContainerClosure, today(), DateTime.now());
@@ -207,7 +207,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateContainer_forLabResultsCapture() {
-        ContainerId containerId = new ContainerId("providerId", "12345");
+        ContainerId containerId = new ContainerId("providerId", "12345", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER);
         Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
         LabResults labResults = new LabResults();
         labResults.setCumulativeResult(Negative);
