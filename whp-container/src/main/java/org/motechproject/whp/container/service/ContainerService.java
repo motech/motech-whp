@@ -14,7 +14,10 @@ import org.motechproject.whp.container.builder.request.ContainerStatusReportingR
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.*;
+import org.motechproject.whp.container.domain.AlternateDiagnosis;
+import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
+import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
@@ -40,7 +43,6 @@ import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
-import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.InTreatment;
 import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.PreTreatment;
 
@@ -73,7 +75,7 @@ public class ContainerService {
         Provider provider = providerService.findByProviderId(registrationRequest.getProviderId());
         String providerId = provider.getProviderId();
 
-        ContainerId containerId = new ContainerId(providerId, registrationRequest.getContainerId(), ON_BEHALF_OF_PROVIDER);
+        ContainerId containerId = new ContainerId(providerId, registrationRequest.getContainerId(), registrationRequest.getContainerRegistrationMode());
         Container container = new Container(providerId, containerId, instance, creationTime, provider.getDistrict());
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);

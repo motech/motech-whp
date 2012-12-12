@@ -13,7 +13,6 @@ import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
 import org.motechproject.whp.user.domain.WHPRole;
 
@@ -39,8 +38,6 @@ public class ProviderContainerRegistrationControllerTest {
     private ContainerService containerService;
     @Mock
     private ProviderContainerRegistrationValidator containerRegistrationValidator;
-    @Mock
-    private SputumTrackingProperties sputumTrackingProperties;
     private String providerId;
     List<String> INSTANCES = new ArrayList<>();
 
@@ -50,8 +47,7 @@ public class ProviderContainerRegistrationControllerTest {
         INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
         INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
         providerId = "providerId";
-        when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
+        containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator);
     }
 
     @Test
@@ -64,10 +60,9 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(2))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute("instances", INSTANCES))
-                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
     }
 
@@ -80,7 +75,7 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(3))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
@@ -105,7 +100,6 @@ public class ProviderContainerRegistrationControllerTest {
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("errors", errors))
-                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));
 

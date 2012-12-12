@@ -6,13 +6,12 @@ import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 
 @Data
 public class CmfAdminContainerRegistrationRequest extends ContainerRegistrationRequest {
-    private ContainerRegistrationMode containerRegistrationMode;
 
     public CmfAdminContainerRegistrationRequest() {
     }
 
     public CmfAdminContainerRegistrationRequest(String providerId, String containerId, String instance, ContainerRegistrationMode containerRegistrationMode, ChannelId channelId, String callId) {
         super(providerId, containerId, instance, channelId.name(), callId);
-        this.containerRegistrationMode = containerRegistrationMode;
+        setContainerRegistrationMode(containerRegistrationMode);
     }
 }

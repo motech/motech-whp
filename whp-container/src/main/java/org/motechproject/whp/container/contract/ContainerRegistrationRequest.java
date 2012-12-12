@@ -1,6 +1,9 @@
 package org.motechproject.whp.container.contract;
 
 import lombok.Data;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
+
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 @Data
 public class ContainerRegistrationRequest {
@@ -14,6 +17,7 @@ public class ContainerRegistrationRequest {
     private String callId;
     private String submitterId;
     private String submitterRole;
+    private ContainerRegistrationMode containerRegistrationMode = ON_BEHALF_OF_PROVIDER;
 
     public ContainerRegistrationRequest() {
     }
@@ -25,4 +29,5 @@ public class ContainerRegistrationRequest {
         this.channelId = channelId;
         this.callId = callId;
     }
+
 }

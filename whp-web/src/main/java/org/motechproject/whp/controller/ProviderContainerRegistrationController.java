@@ -1,11 +1,9 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
-import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +23,8 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
 
     @Autowired
     public ProviderContainerRegistrationController(ContainerService containerService,
-                                                   ProviderContainerRegistrationValidator providerContainerRegistrationValidator,
-                                                   SputumTrackingProperties sputumTrackingProperties) {
-        super(containerService, providerContainerRegistrationValidator, sputumTrackingProperties);
+                                                   ProviderContainerRegistrationValidator providerContainerRegistrationValidator) {
+        super(containerService, providerContainerRegistrationValidator);
     }
 
     @RequestMapping(method = RequestMethod.GET)

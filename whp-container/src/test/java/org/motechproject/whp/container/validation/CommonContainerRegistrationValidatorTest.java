@@ -1,16 +1,16 @@
 package org.motechproject.whp.container.validation;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerId;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -22,13 +22,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.NEW_CONTAINER;
 import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 public class CommonContainerRegistrationValidatorTest {
     @Mock
     private ContainerService containerService;
-    @Mock
-    private SputumTrackingProperties sputumTrackingProperties;
     @Mock
     private ProviderService providerService;
     @Mock
@@ -40,9 +39,8 @@ public class CommonContainerRegistrationValidatorTest {
     public void setUp() {
         validProvider = new Provider("validProvider", "123", "dist", now());
         initMocks(this);
-        when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(11);
         when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
-        registrationRequestValidator = new CommonContainerRegistrationValidator(containerService, providerService, sputumTrackingProperties);
+        registrationRequestValidator = new CommonContainerRegistrationValidator(containerService, providerService);
     }
 
     @Test
@@ -58,19 +56,15 @@ public class CommonContainerRegistrationValidatorTest {
     }
 
     @Test
-    @Ignore("Not doing 11 digit validation anymore")
-    public void shouldValidateContainerId_notHavingStipulatedNumberOfDigits() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "12345", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
-        List<ErrorWithParameters> invalidLengthErrors = registrationRequestValidator.validate(request);
-        assertTrue(invalidLengthErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
-    }
+    public void shouldValidateDuplicateContainerIdForNewContainers() {
+        String containerID = "12345678901";
+        ContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(validProvider.getProviderId(), containerID, RegistrationInstance.InTreatment.getDisplayText(), ContainerRegistrationMode.NEW_CONTAINER, ChannelId.WEB, null);
+        when(containerService.exists(new ContainerId(validProvider.getProviderId(), containerID, NEW_CONTAINER).value())).thenReturn(true);
 
-    @Test
-    @Ignore
-    public void shouldValidateContainerId_havingNonNumericCharacters() {
-        ContainerRegistrationRequest request = new ContainerRegistrationRequest(validProvider.getProviderId(), "1234a", RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
-        List<ErrorWithParameters> nonNumericErrors = registrationRequestValidator.validate(request);
-        assertTrue(nonNumericErrors.contains(new ErrorWithParameters("container.id.length.error", "11")));
+        List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(containerService).exists(new ContainerId(validProvider.getProviderId(), containerID, NEW_CONTAINER).value());
+        assertTrue(errors.contains(new ErrorWithParameters("container.already.registered.error")));
     }
 
     @Test
