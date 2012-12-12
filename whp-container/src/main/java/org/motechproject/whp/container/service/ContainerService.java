@@ -16,6 +16,7 @@ import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -72,7 +73,10 @@ public class ContainerService {
         DateTime creationTime = now();
 
         Provider provider = providerService.findByProviderId(registrationRequest.getProviderId());
-        Container container = new Container(registrationRequest.getProviderId().toLowerCase(), registrationRequest.getContainerId(), instance, creationTime, provider.getDistrict());
+        String providerId = provider.getProviderId();
+
+        ContainerId containerId = new ContainerId(providerId, registrationRequest.getContainerId());
+        Container container = new Container(providerId, containerId, instance, creationTime, provider.getDistrict());
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);
         container.setDiagnosis(Pending);
