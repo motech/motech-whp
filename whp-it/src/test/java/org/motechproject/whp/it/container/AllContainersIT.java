@@ -13,6 +13,7 @@ import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class AllContainersIT extends SpringIntegrationTest {
     AllContainers allContainers;
     private Container container;
     private DateTime now;
+    String containerIdNumber = "12345";
+    String providerId = "P00001";
+    private ContainerId containerId;
 
     private void addAndMarkForDeletion(Container container) {
         allContainers.add(container);
@@ -34,18 +38,18 @@ public class AllContainersIT extends SpringIntegrationTest {
 
     @Before
     public void setUp() {
-
         now = DateUtil.now();
-        container = new Container("P00001", "1234567890", RegistrationInstance.PreTreatment, now, "d1");
+        containerId = new ContainerId(providerId, containerIdNumber);
+        container = new Container(providerId, containerId, RegistrationInstance.PreTreatment, now, "d1");
     }
 
     @Test
     public void shouldSaveContainerInfo() {
         addAndMarkForDeletion(container);
-        Container containerReturned = allContainers.findByContainerId("1234567890");
+        Container containerReturned = allContainers.findByContainerId(containerId.value());
 
         assertNotNull(containerReturned);
-        Assert.assertEquals("1234567890", containerReturned.getContainerId());
+        Assert.assertEquals(containerId.value(), containerReturned.getContainerId());
         Assert.assertEquals("p00001", containerReturned.getProviderId());
         Assert.assertEquals(now.toString(WHPDate.DATE_TIME_FORMAT), containerReturned.getCreationTime().toString(WHPDate.DATE_TIME_FORMAT));
         Assert.assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
@@ -56,8 +60,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     public void shouldUpdateLabResults() {
         addAndMarkForDeletion(container);
 
-        String containerId = "1234567890";
-        Container containerFromDB = allContainers.findByContainerId(containerId);
+        Container containerFromDB = allContainers.findByContainerId(containerId.value());
 
         LabResults labResults = new LabResults();
         labResults.setSmearTestDate1(new LocalDate());
@@ -72,7 +75,7 @@ public class AllContainersIT extends SpringIntegrationTest {
         allContainers.update(containerFromDB);
         markForDeletion(containerFromDB);
 
-        Container containerWithLabResults = allContainers.findByContainerId(containerId);
+        Container containerWithLabResults = allContainers.findByContainerId(containerId.value());
 
         MatcherAssert.assertThat(containerWithLabResults.getLabResults(), Is.is(labResults));
     }

@@ -20,8 +20,8 @@ public class IvrContainerRegistrationRequest extends VerificationRequest {
     private String msisdn;
 
     @NotNullOrEmpty
-    @DecimalMax("99999999999")
-    @DecimalMin("10000000000")
+    @DecimalMax("99999")
+    @DecimalMin("10000")
     private String container_id;
 
     @NotNullOrEmpty

@@ -13,6 +13,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.webservice.builder.SputumLabResultsWebRequestBuilder;
 import org.motechproject.whp.webservice.mapper.SputumLabResultsMapper;
@@ -53,10 +54,11 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
 
     @Test
     public void shouldConvertCaseXMLToSputumLabResultsWebRequest() throws Exception {
-        String containerId = "12651654165465";
-        
+        String containerId = "12651";
+        String providerId = "providerid";
+
         String requestBody = "<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"12651654165465\" date_modified=\"03/04/2012\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"sproviderid12651\" date_modified=\"03/04/2012\n" +
                 "11:23:40\" user_id=\"system\" api_key=\"3F2504E04F8911D39A0C0305E82C3301\">\n" +
                 "<update>\n" +
                 "<update_type>lab_results</update_type>\n" +
@@ -69,7 +71,8 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 "</update>\n" +
                 "</case>";
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
+
+        when(containerService.getContainer(new ContainerId(providerId, containerId).value())).thenReturn(new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         standaloneSetup(sputumLabResultsWebService).build()
                 .perform(post("/sputumLabResults/process").body(requestBody.getBytes()).contentType(MediaType.APPLICATION_XML))
@@ -80,7 +83,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
         verify(sputumLabResultsWebService).updateCase(argumentCaptor.capture());
 
         SputumLabResultsWebRequest sputumLabResultsWebRequest = argumentCaptor.getValue();
-        assertThat(sputumLabResultsWebRequest.getCase_id(), is(containerId));
+        assertThat(sputumLabResultsWebRequest.getCase_id(), is(new ContainerId(providerId, containerId).value()));
         assertThat(sputumLabResultsWebRequest.getDate_modified(), is("03/04/2012 11:23:40"));
         assertThat(sputumLabResultsWebRequest.getApi_key(), is("3F2504E04F8911D39A0C0305E82C3301"));
         assertThat(sputumLabResultsWebRequest.getUpdate_type(), is("lab_results"));
@@ -117,7 +120,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
 
         expectWHPCaseException(WHPErrorCode.SPUTUM_LAB_RESULT_IS_INCOMPLETE);
 
-        String containerId = "12651654165465";
+        String containerId = "12651";
         SputumLabResultsWebRequest request = new SputumLabResultsWebRequestBuilder().withCase_id(containerId)
                 .withDate_modified("03/04/2012 11:23:40")
                 .withSmear_test_date_1("")
@@ -128,7 +131,8 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        when(containerService.getContainer(containerId)).thenReturn(new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
+        String providerId = "providerId";
+        when(containerService.getContainer(containerId)).thenReturn(new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1"));
 
         sputumLabResultsWebService.updateCase(request);
     }
@@ -136,7 +140,7 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
 
     @Test
     public void shouldUpdateContainerWithLabResults(){
-        String containerId = "12651654165465";
+        String containerId = "12651";
         SputumLabResultsWebRequest request = new SputumLabResultsWebRequestBuilder().withCase_id(containerId)
                 .withDate_modified("03/04/2012 11:23:40")
                 .withSmear_test_date_1("01/03/2012")
@@ -147,7 +151,8 @@ public class SputumLabResultsWebServiceTest extends BaseWebServiceTest {
                 .withLab_number("1234")
                 .build();
 
-        Container container = new Container("providerId", containerId, RegistrationInstance.InTreatment, DateUtil.now(), "d1");
+        String providerId = "providerId";
+        Container container = new Container(providerId, new ContainerId(providerId, containerId), RegistrationInstance.InTreatment, DateUtil.now(), "d1");
 
         when(containerService.getContainer(containerId)).thenReturn(container);
 
