@@ -94,7 +94,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         allProviderContainerMappings.add(providerContainerMapping);
 
         AdminContainerMapping adminContainerMapping = new AdminContainerMapping();
-        adminContainerMapping.add(new ContainerRange(30000L, 40000L));
+        adminContainerMapping.add(new ContainerRange(12345678900L, 12345678909L));
         allAdminContainerMappings.removeAll();
         allAdminContainerMappings.add(adminContainerMapping);
 
@@ -154,7 +154,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_ForNewContainer() throws Exception {
-        String containerId = "30000";
+        String containerId = "12345678901";
         RegistrationInstance inTreatment = RegistrationInstance.InTreatment;
 
         ArrayList<String> roles = new ArrayList<>();
@@ -169,7 +169,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
-        String containerIdValue = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
+        String containerIdValue = new ContainerId(providerId, containerId, ContainerRegistrationMode.NEW_CONTAINER).value();
         Container container = containerService.getContainer(containerIdValue);
 
         assertNotNull(container);

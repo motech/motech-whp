@@ -14,7 +14,6 @@ import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.ui.Model;
@@ -43,8 +42,6 @@ public class CmfAdminContainerRegistrationControllerTest {
     private ContainerService containerService;
     @Mock
     private CmfAdminContainerRegistrationValidator containerRegistrationValidator;
-    @Mock
-    private SputumTrackingProperties sputumTrackingProperties;
 
     List<String> INSTANCES = new ArrayList<>();
 
@@ -53,8 +50,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         initMocks(this);
         INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
         INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
-        when(sputumTrackingProperties.getContainerIdMaxLength()).thenReturn(CONTAINER_ID_MAX_LENGTH);
-        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator, sputumTrackingProperties);
+        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator);
     }
 
     @Test
@@ -94,10 +90,9 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(2))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
-                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
     }
 
@@ -110,7 +105,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(3))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
@@ -134,7 +129,6 @@ public class CmfAdminContainerRegistrationControllerTest {
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("errors", errors))
-                .andExpect(model().attribute("containerIdMaxLength", CONTAINER_ID_MAX_LENGTH))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
 

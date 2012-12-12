@@ -5,7 +5,6 @@ import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 import org.motechproject.whp.container.service.ContainerService;
-import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,8 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
 
     @Autowired
     public CmfAdminContainerRegistrationController(ContainerService containerService,
-                                                   CmfAdminContainerRegistrationValidator cmfAdminContainerRegistrationValidator,
-                                                   SputumTrackingProperties sputumTrackingProperties) {
-        super(containerService, cmfAdminContainerRegistrationValidator, sputumTrackingProperties);
+                                                   CmfAdminContainerRegistrationValidator cmfAdminContainerRegistrationValidator) {
+        super(containerService, cmfAdminContainerRegistrationValidator);
     }
 
     @RequestMapping(value = "/new-container", method = RequestMethod.GET)
