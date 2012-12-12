@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.user.service.ProviderService;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.String.valueOf;
 
 
 @Component
@@ -32,15 +31,16 @@ public class CommonContainerRegistrationValidator {
     }
 
     public List<ErrorWithParameters> validate(ContainerRegistrationRequest registrationRequest) {
-        String containerId = registrationRequest.getContainerId();
+        String containerIdSequence = registrationRequest.getContainerId();
         String instance = registrationRequest.getInstance();
         String providerId = registrationRequest.getProviderId();
 
         ArrayList<ErrorWithParameters> errors = new ArrayList<>();
-        int containerIdMaxLength = sputumTrackingProperties.getContainerIdMaxLength();
-        if (!StringUtils.isNumeric(containerId) || containerId.length() != containerIdMaxLength) {
-            errors.add(new ErrorWithParameters("container.id.length.error", valueOf(containerIdMaxLength)));
-        }
+//        int containerIdMaxLength = sputumTrackingProperties.getContainerIdMaxLength();
+
+//        if (!StringUtils.isNumeric(containerIdSequence) || containerIdSequence.length() != containerIdMaxLength) {
+//            errors.add(new ErrorWithParameters("container.id.length.error", valueOf(containerIdMaxLength)));
+//        }
 
         if (StringUtils.isBlank(providerId))
             errors.add(new ErrorWithParameters("provider.id.invalid.error", providerId));
@@ -51,7 +51,8 @@ public class CommonContainerRegistrationValidator {
         if (!isProviderExists(providerId))
             errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
 
-        if (containerService.exists(containerId))
+        ContainerId containerId = new ContainerId(providerId, containerIdSequence);
+        if (containerService.exists(containerId.value()))
             errors.add(new ErrorWithParameters("container.already.registered.error"));
 
         return errors;

@@ -14,6 +14,7 @@ import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.repository.AllContainers;
@@ -45,8 +46,10 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationWebServiceContext.xml")
 public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
-    private static final String CONTAINER_ID_1 = "11111111111";
-    private static final String CONTAINER_ID_2 = "22222222222";
+    private static final String CONTAINER_ID_1 = "11111";
+    private static final String CONTAINER_ID_1_VALUE = new ContainerId("providerId", CONTAINER_ID_1).value();
+    private static final String CONTAINER_ID_2 = "22222";
+    private static final String CONTAINER_ID_2_VALUE = new ContainerId("providerId", CONTAINER_ID_2).value();
     private static final String PATIENT_ID_1 = "1";
     private static final String PATIENT_ID_2 = "2";
     private static final String CONTAINER_PATIENT_MAPPING_API_URL = "/containerPatientMapping/process";
@@ -89,13 +92,13 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         allPatients.add(patient2);
 
         LabResults labResults = new LabResults();
-        container1 = new Container("providerId", CONTAINER_ID_1, null, DateTime.now(), "d1");
+        container1 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_1), null, DateTime.now(), "d1");
         container1.setStatus(Open);
         container1.setDiagnosis(Pending);
         container1.setLabResults(labResults);
         allContainers.add(container1);
 
-        container2 = new Container("providerId", CONTAINER_ID_2, null, DateTime.now(), "d1");
+        container2 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_2), null, DateTime.now(), "d1");
         container2.setStatus(Open);
         container2.setDiagnosis(Pending);
         container2.setLabResults(labResults);
@@ -119,7 +122,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
     @Test
     public void shouldNotMapContainerWithPatient_uponValidationFailure() throws Exception {
         String request = "<?xml version=\"1.0\"?>\n" +
-                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"" + CONTAINER_ID_1 + "\" date_modified=\"03/04/2012 11:23:40\" user_id=\"system\" api_key=\"3F2504E04F8911D39A0C0305E82C3301\">\n" +
+                "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"" + CONTAINER_ID_1_VALUE + "\" date_modified=\"03/04/2012 11:23:40\" user_id=\"system\" api_key=\"3F2504E04F8911D39A0C0305E82C3301\">\n" +
                 "<update>\n" +
                 "<update_type>patient_mapping</update_type>\n" +
                 "<patient_id>" + PATIENT_ID_1 + "</patient_id>\n" +
@@ -131,7 +134,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isBadRequest())
                 .andExpect(content().string(allOf(containsString("No such treatment exists for patient"))));
 
-        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertNull(fetchedContainer.getPatientId());
         assertEquals(ContainerStatus.Open, fetchedContainer.getStatus());
         verifyZeroInteractions(httpClientService);
@@ -144,15 +147,15 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         allContainers.update(container1);
         allContainers.update(container2);
 
-        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_2);
+        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_2_VALUE);
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isBadRequest())
                 .andExpect(content().string(allOf(containsString(NO_LAB_RESULTS_IN_CONTAINER.getMessage()))));
 
-        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertEquals(PATIENT_ID_1, fetchedContainer1.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer1.getStatus());
 
-        Container fetchedContainer2 = allContainers.findByContainerId(CONTAINER_ID_2);
+        Container fetchedContainer2 = allContainers.findByContainerId(CONTAINER_ID_2_VALUE);
         assertNull(fetchedContainer2.getPatientId());
         assertEquals(ContainerStatus.Open, fetchedContainer2.getStatus());
         verifyZeroInteractions(httpClientService);
@@ -160,11 +163,11 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldMapNewContainerWithNewPatient() throws Exception {
-        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1);
+        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1_VALUE);
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertEquals("1", fetchedContainer.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer.getStatus());
         assertEquals(SputumTrackingInstance.PreTreatment, fetchedContainer.getMappingInstance());
@@ -173,19 +176,19 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldUnMapContainerFromPreviousPatient_uponMappingWithNewPatient() throws Exception {
-        String mapContainer1withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1);
+        String mapContainer1withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1_VALUE);
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(mapContainer1withPatient1.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
-        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertEquals(PATIENT_ID_1, fetchedContainer1.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer1.getStatus());
         verifyMappingReportingEventPublication(fetchedContainer1);
 
 
-        String mapContainer1withPatient2 = buildMappingRequestFor(PATIENT_ID_2, CONTAINER_ID_1);
+        String mapContainer1withPatient2 = buildMappingRequestFor(PATIENT_ID_2, CONTAINER_ID_1_VALUE);
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(mapContainer1withPatient2.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1);
+        fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertEquals(PATIENT_ID_2, fetchedContainer1.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer1.getStatus());
         verifyMappingReportingEventPublication(fetchedContainer1);
@@ -193,21 +196,21 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldCreateAdditionalMapping_forSamePatientTreatment_withContainerHavingDifferentInstance() throws Exception {
-        String mapContainer1withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1);
+        String mapContainer1withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1_VALUE);
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(mapContainer1withPatient1.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        String mapContainer2withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_2);
+        String mapContainer2withPatient1 = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_2_VALUE);
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(mapContainer2withPatient1.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
         //Should not UnMap Patient from previous container as it was for a different instance
-        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertEquals(PATIENT_ID_1, fetchedContainer1.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer1.getStatus());
         verifyMappingReportingEventPublication(fetchedContainer1);
 
         //Should Map Patient with new container as it is for a different instance
-        Container fetchedContainer2 = allContainers.findByContainerId(CONTAINER_ID_2);
+        Container fetchedContainer2 = allContainers.findByContainerId(CONTAINER_ID_2_VALUE);
         assertEquals(PATIENT_ID_1, fetchedContainer2.getPatientId());
         assertEquals(ContainerStatus.Closed, fetchedContainer2.getStatus());
         verifyMappingReportingEventPublication(fetchedContainer2);
@@ -218,10 +221,10 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         container1.mapWith(PATIENT_ID_1, patient1.getCurrentTreatment().getTbId(), SputumTrackingInstance.TwoMonthsIntoCP, new ReasonForContainerClosure(), new LocalDate(), DateTime.now());
         allContainers.update(container1);
 
-        String unMapContainer1 = buildUnMappingRequestFor(CONTAINER_ID_1);
+        String unMapContainer1 = buildUnMappingRequestFor(CONTAINER_ID_1_VALUE);
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(unMapContainer1.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer1 = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         assertNull(fetchedContainer1.getPatientId());
         assertEquals(ContainerStatus.Open, fetchedContainer1.getStatus());
         verifyMappingReportingEventPublication(fetchedContainer1);
@@ -246,21 +249,21 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldReturnSuccessResponse_uponSuccessfulMappingRequestExecution() throws Exception {
-        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1);
+        String request = buildMappingRequestFor(PATIENT_ID_1, CONTAINER_ID_1_VALUE);
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         verifyMappingReportingEventPublication(fetchedContainer);
     }
 
     @Test
     public void shouldReturnSuccessResponse_forSuccessfulUnMappingRequestExecution() throws Exception {
-        String request = buildUnMappingRequestFor(CONTAINER_ID_1);
+        String request = buildUnMappingRequestFor(CONTAINER_ID_1_VALUE);
 
         standaloneSetup(containerPatientMappingWebService).build().perform(post(CONTAINER_PATIENT_MAPPING_API_URL).body(request.getBytes()).contentType(MediaType.APPLICATION_XML)).andExpect(status().isOk());
 
-        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1);
+        Container fetchedContainer = allContainers.findByContainerId(CONTAINER_ID_1_VALUE);
         verifyMappingReportingEventPublication(fetchedContainer);
     }
 

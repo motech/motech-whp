@@ -23,8 +23,8 @@ public class ContainerVerificationRequest extends VerificationRequest {
     private String call_id;
 
     @NotNullOrEmpty
-    @DecimalMax("99999999999")
-    @DecimalMin("10000000000")
+    @DecimalMax("99999")
+    @DecimalMin("10000")
     private String container_id;
 
     /*Required for spring mvc*/

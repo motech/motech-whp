@@ -184,7 +184,7 @@ public class IVRContainerRegistrationControllerTest {
         provider.setProviderId("providerId");
         String call_id = "64756435684375";
 
-        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest("0986754322", "76862367681", call_id, "PreTreatment");
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest("0986754322", "12345", call_id, "PreTreatment");
         when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult());
         when(providerService.findByMobileNumber(anyString())).thenReturn(provider);
 
@@ -218,7 +218,7 @@ public class IVRContainerRegistrationControllerTest {
 
         IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
         request.setMsisdn("0986754322");
-        request.setContainer_id("76862367681");
+        request.setContainer_id("12345");
         request.setPhase("Pre-treatment");
         request.setCall_id("64756435684375");
         when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));

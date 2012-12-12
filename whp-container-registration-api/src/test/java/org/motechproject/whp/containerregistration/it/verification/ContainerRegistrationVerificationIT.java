@@ -33,12 +33,13 @@ public class ContainerRegistrationVerificationIT {
 
     @Autowired
     ContainerRegistrationVerification containerRegistrationVerification;
+    private final String validContainerId = "10000";
 
     @Test
     public void shouldReturnFailureWhenMSISDNIsEmpty() {
         String emptyMSISDN = "";
 
-        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest(emptyMSISDN, "10000000000", "callId", "phase"));
+        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest(emptyMSISDN, validContainerId, "callId", "phase"));
 
         assertTrue(result.isError());
         assertEquals("field:msisdn:should be atleast 10 digits in length", result.getErrors().get(0).getMessage());
@@ -48,7 +49,7 @@ public class ContainerRegistrationVerificationIT {
     public void shouldReturnFailureWhenCallIdIsEmpty() {
         String emptyCallId = "";
 
-        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", "10000000000", emptyCallId, "phase"));
+        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", validContainerId, emptyCallId, "phase"));
 
         assertTrue(result.isError());
         assertEquals("field:call_id:value should not be null", result.getErrors().get(0).getMessage());
@@ -80,7 +81,7 @@ public class ContainerRegistrationVerificationIT {
     public void shouldReturnFailureWhenPhaseIsEmpty() {
         String emptyPhase = "";
 
-        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", "10000000000", "callId", emptyPhase));
+        VerificationResult result = containerRegistrationVerification.verifyRequest(new IvrContainerRegistrationRequest("1234567890", validContainerId, "callId", emptyPhase));
 
         assertTrue(result.isError());
         assertEquals("field:phase:value should not be null", result.getErrors().get(0).getMessage());
@@ -89,14 +90,13 @@ public class ContainerRegistrationVerificationIT {
     @Test
     public void shouldVerifyRequest() {
         String msisdn = "1234567890";
-        String containerId = "10000000000";
         String callId = "callId";
         String phase = "phase";
 
         ArgumentCaptor<WHPErrors> whpErrors = ArgumentCaptor.forClass(WHPErrors.class);
-        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest(msisdn, containerId, callId, phase);
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest(msisdn, validContainerId, callId, phase);
         when(validatorPool.verifyMobileNumber(eq(msisdn), whpErrors.capture())).thenReturn(validatorPool);
-        when(validatorPool.verifyContainerMapping(eq(msisdn), eq(containerId), whpErrors.capture())).thenReturn(validatorPool);
+        when(validatorPool.verifyContainerMapping(eq(msisdn), eq(validContainerId), whpErrors.capture())).thenReturn(validatorPool);
         when(validatorPool.verifyPhase(eq(phase), whpErrors.capture())).thenReturn(validatorPool);
 
         WHPErrors errors = containerRegistrationVerification.verify(request);

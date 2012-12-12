@@ -17,6 +17,7 @@ import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
@@ -88,7 +89,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
         providerContainerMapping = new ProviderContainerMapping();
-        providerContainerMapping.add(new ContainerRange(10000000000L, 20000000000L));
+        providerContainerMapping.add(new ContainerRange(10000L, 20000L));
         providerContainerMapping.setProviderId(providerId);
 
         district = new District("Patna");
@@ -101,7 +102,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
 
     @Test
     public void shouldRegisterContainer() throws Exception {
-        String containerId = "10000000000";
+        String containerId = "10000";
         RegistrationInstance inTreatmentInstance = RegistrationInstance.InTreatment;
 
         List<String> roles = new ArrayList<>();
@@ -112,12 +113,14 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk());
 
-        Container container = containerService.getContainer(containerId);
+        String containerIdValue = new ContainerId(providerId, containerId).value();
+
+        Container container = containerService.getContainer(containerIdValue);
 
 
         assertNotNull(container);
         assertThat(container.getProviderId(), is(providerId));
-        assertThat(container.getContainerId(), is(containerId));
+        assertThat(container.getContainerId(), is(containerIdValue));
 
         String expectedContainerRegistrationXML = String.format("<?xml version=\"1.0\"?>\n" +
                 "<case xmlns=\"http://openrosa.org/javarosa\" case_id=\"%s\" date_modified=\"%s\" user_id=\"motech\"\n" +
@@ -128,7 +131,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                 "    <update>\n" +
                 "        <provider_id>%s</provider_id>\n" +
                 "    </update>\n" +
-                "</case>\n", containerId, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
+                "</case>\n", containerIdValue, container.getCreationTime().toString(DATE_TIME_FORMAT), apiKey, inTreatmentInstance.name(), providerId);
 
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
 

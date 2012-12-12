@@ -16,6 +16,7 @@ import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
@@ -64,10 +65,12 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
     @Autowired
     private AllDistricts allDistricts;
 
+
     @ReplaceWithMock
     @Autowired
     private HttpClientService httpClientService;
     private final String providerId = "provider";
+    private String containerIdNumber = "12345";
     private String remediUrl;
     private String apiKey;
     private District district;
@@ -78,7 +81,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
-        providerContainerMapping.add(new ContainerRange(76862367681L, 76862367691L));
+        providerContainerMapping.add(new ContainerRange(12344L, 12346L));
         providerContainerMapping.setProviderId(providerId);
         allProviderContainerMappings.add(providerContainerMapping);
 
@@ -90,12 +93,14 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
 
         markForDeletion(providerContainerMapping);
         markForDeletion(providerService.findByProviderId(providerId));
+
         reset(httpClientService);
     }
 
     @Test
     public void shouldRegisterTheContainer() throws Exception {
-        String containerId = "76862367681";
+
+        String containerId = new ContainerId(providerId, containerIdNumber).value();
         SputumTrackingInstance inTreatment = SputumTrackingInstance.PreTreatment;
 
         standaloneSetup(IVRContainerRegistrationController)
