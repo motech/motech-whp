@@ -17,7 +17,7 @@ import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
-import org.motechproject.whp.container.contract.ContainerRegistrationMode;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
@@ -129,7 +129,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
-        String containerIdValue = new ContainerId(providerId, containerId).value();
+        String containerIdValue = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
         Container container = containerService.getContainer(containerIdValue);
 
         assertNotNull(container);
@@ -169,7 +169,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
                 .andExpect(status().isOk());
 
-        String containerIdValue = new ContainerId(providerId, containerId).value();
+        String containerIdValue = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
         Container container = containerService.getContainer(containerIdValue);
 
         assertNotNull(container);

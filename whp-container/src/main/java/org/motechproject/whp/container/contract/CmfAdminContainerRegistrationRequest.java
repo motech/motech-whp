@@ -2,6 +2,7 @@ package org.motechproject.whp.container.contract;
 
 import lombok.Data;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 
 @Data
 public class CmfAdminContainerRegistrationRequest extends ContainerRegistrationRequest {

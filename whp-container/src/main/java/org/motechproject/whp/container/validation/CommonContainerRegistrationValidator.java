@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
+
 
 @Component
 public class CommonContainerRegistrationValidator {
@@ -51,7 +53,7 @@ public class CommonContainerRegistrationValidator {
         if (!isProviderExists(providerId))
             errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
 
-        ContainerId containerId = new ContainerId(providerId, containerIdSequence);
+        ContainerId containerId = new ContainerId(providerId, containerIdSequence, ON_BEHALF_OF_PROVIDER);
         if (containerService.exists(containerId.value()))
             errors.add(new ErrorWithParameters("container.already.registered.error"));
 

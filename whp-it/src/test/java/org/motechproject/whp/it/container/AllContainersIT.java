@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertNotNull;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllContainersIT extends SpringIntegrationTest {
@@ -39,7 +40,7 @@ public class AllContainersIT extends SpringIntegrationTest {
     @Before
     public void setUp() {
         now = DateUtil.now();
-        containerId = new ContainerId(providerId, containerIdNumber);
+        containerId = new ContainerId(providerId, containerIdNumber, ON_BEHALF_OF_PROVIDER);
         container = new Container(providerId, containerId, RegistrationInstance.PreTreatment, now, "d1");
     }
 

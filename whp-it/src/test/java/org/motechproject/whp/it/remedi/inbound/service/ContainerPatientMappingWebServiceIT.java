@@ -12,10 +12,7 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
-import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.domain.ContainerId;
-import org.motechproject.whp.container.domain.LabResults;
-import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.domain.*;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -28,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.*;
@@ -36,6 +34,7 @@ import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.exception.WHPErrorCode.NO_LAB_RESULTS_IN_CONTAINER;
 import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.*;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
@@ -45,9 +44,9 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     private static final String CONTAINER_ID_1 = "11111";
-    private static final String CONTAINER_ID_1_VALUE = new ContainerId("providerId", CONTAINER_ID_1).value();
+    private static final String CONTAINER_ID_1_VALUE = new ContainerId("providerId", CONTAINER_ID_1, ON_BEHALF_OF_PROVIDER).value();
     private static final String CONTAINER_ID_2 = "22222";
-    private static final String CONTAINER_ID_2_VALUE = new ContainerId("providerId", CONTAINER_ID_2).value();
+    private static final String CONTAINER_ID_2_VALUE = new ContainerId("providerId", CONTAINER_ID_2, ON_BEHALF_OF_PROVIDER).value();
     private static final String PATIENT_ID_1 = "1";
     private static final String PATIENT_ID_2 = "2";
     private static final String CONTAINER_PATIENT_MAPPING_API_URL = "/containerPatientMapping/process";
@@ -90,13 +89,13 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
         allPatients.add(patient2);
 
         LabResults labResults = new LabResults();
-        container1 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_1), null, DateTime.now(), "d1");
+        container1 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_1, ON_BEHALF_OF_PROVIDER), null, DateTime.now(), "d1");
         container1.setStatus(Open);
         container1.setDiagnosis(Pending);
         container1.setLabResults(labResults);
         allContainers.add(container1);
 
-        container2 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_2), null, DateTime.now(), "d1");
+        container2 = new Container("providerId", new ContainerId("providerId", CONTAINER_ID_2, ON_BEHALF_OF_PROVIDER), null, DateTime.now(), "d1");
         container2.setStatus(Open);
         container2.setDiagnosis(Pending);
         container2.setLabResults(labResults);

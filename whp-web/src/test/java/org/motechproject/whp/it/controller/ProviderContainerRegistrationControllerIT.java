@@ -41,6 +41,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
@@ -113,7 +114,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk());
 
-        String containerIdValue = new ContainerId(providerId, containerId).value();
+        String containerIdValue = new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value();
 
         Container container = containerService.getContainer(containerIdValue);
 

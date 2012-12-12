@@ -1,10 +1,9 @@
 package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
-import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
-import org.motechproject.whp.container.contract.ContainerRegistrationMode;
+import org.motechproject.whp.container.domain.ContainerRegistrationMode;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.SputumTrackingProperties;
 import org.motechproject.whp.container.validation.CmfAdminContainerRegistrationValidator;
