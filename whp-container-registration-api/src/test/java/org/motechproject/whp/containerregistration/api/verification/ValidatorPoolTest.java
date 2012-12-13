@@ -6,16 +6,18 @@ import org.mockito.Mock;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPErrors;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
+import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
-import org.motechproject.whp.containerregistration.api.verification.ValidatorPool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 public class ValidatorPoolTest {
     @Mock
@@ -65,15 +67,17 @@ public class ValidatorPoolTest {
     @Test
     public void shouldVerifyContainerMappingForAlreadyRegisteredContainer() {
         String mobileNumber = "1234567890";
-        String containerId = "containerId";
+        String containerId = "12345";
+        String providerId = "providerid";
+        String containerIdValue = new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value();
         WHPErrors whpErrors = new WHPErrors();
-        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
-        when(containerService.exists(containerId)).thenReturn(true);
+        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new ProviderBuilder().withDefaults().withProviderId(providerId).build());
+        when(containerService.exists(containerIdValue)).thenReturn(true);
 
         validatorPool.verifyContainerMapping(mobileNumber, containerId, whpErrors);
 
         verify(providerService, times(1)).findByMobileNumber(mobileNumber);
-        verify(containerService, times(1)).exists(containerId);
+        verify(containerService, times(1)).exists(containerIdValue);
         assertFalse(whpErrors.isEmpty());
         assertEquals(WHPErrorCode.CONTAINER_ALREADY_REGISTERED, whpErrors.get(0).getErrorCode());
         assertEquals(WHPErrorCode.CONTAINER_ALREADY_REGISTERED.getMessage(), whpErrors.get(0).getMessage());
@@ -82,19 +86,21 @@ public class ValidatorPoolTest {
     @Test
     public void shouldVerifyContainerMappingForInvalidContainer() {
         String mobileNumber = "1234567890";
-        String containerId = "containerId";
-        String providerId = "providerId";
+        String containerId = "12345";
+        String providerId = "providerid";
+        String containerIdValue = new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value();
+
         WHPErrors whpErrors = new WHPErrors();
         Provider provider = new Provider();
         provider.setProviderId(providerId);
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(provider);
-        when(containerService.exists(containerId)).thenReturn(false);
+        when(containerService.exists(containerIdValue)).thenReturn(false);
         when(mappingService.isValidContainerForProvider(providerId.toLowerCase(), containerId)).thenReturn(false);
 
         validatorPool.verifyContainerMapping(mobileNumber, containerId, whpErrors);
 
         verify(providerService, times(1)).findByMobileNumber(mobileNumber);
-        verify(containerService, times(1)).exists(containerId);
+        verify(containerService, times(1)).exists(containerIdValue);
         verify(mappingService, times(1)).isValidContainerForProvider(providerId.toLowerCase(), containerId);
         assertFalse(whpErrors.isEmpty());
         assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
