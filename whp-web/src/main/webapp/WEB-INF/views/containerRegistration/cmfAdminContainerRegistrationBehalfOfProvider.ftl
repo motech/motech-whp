@@ -36,7 +36,7 @@
 
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.containerId" />
-                            <input id="containerId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}" placeholder="Enter a container ID from provider's pool"/>
+                            <input id="containerId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}" maxlength="5" placeholder="Enter last 5 characters from provider's pool"/>
                         </div>
                     </div>
                     <div class="control-group">

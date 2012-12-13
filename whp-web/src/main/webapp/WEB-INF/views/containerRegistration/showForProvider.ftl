@@ -28,7 +28,7 @@
 
                                 <div class="controls">
                                     <@spring.bind "containerRegistrationRequest.containerId" />
-                                    <input id="containerId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}" />
+                                    <input id="containerId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  maxlength="5" placeholder="Enter last 5 characters"/>
                                 </div>
                             </div>
                         </td>
