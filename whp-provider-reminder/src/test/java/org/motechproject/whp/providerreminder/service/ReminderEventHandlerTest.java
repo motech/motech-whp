@@ -1,5 +1,6 @@
 package org.motechproject.whp.providerreminder.service;
 
+import org.apache.commons.collections.ListUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,8 +14,7 @@ import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 
@@ -51,5 +51,15 @@ public class ReminderEventHandlerTest {
 
         verify(providerReminderService).getActiveProviderPhoneNumbers();
         verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, msisdnList, requestId).toXML());
+    }
+
+    @Test
+    public void shouldNotSendRequestToIvrSystemIfThereAreNoActiveProviders() {
+        when(providerReminderService.getActiveProviderPhoneNumbers()).thenReturn(ListUtils.EMPTY_LIST);
+
+        reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME));
+
+        verify(providerReminderService).getActiveProviderPhoneNumbers();
+        verifyNoMoreInteractions(httpClientService);
     }
 }
