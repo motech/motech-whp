@@ -1,15 +1,48 @@
-<%@page import="org.springframework.context.ApplicationContext" %>
-<%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
+<%@page import="org.apache.commons.lang.exception.ExceptionUtils" %>
+<%@page import="org.motechproject.util.DateUtil" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="java.util.Properties" %>
-<%@ page import="org.motechproject.util.DateUtil" %>
-<!DOCTYPE html>
+<%
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    boolean success = false;
+    try {
+        if (request.getMethod().equals("POST")) {
+            String offsetValue = System.getProperty("faketime.offset.seconds");
+            long currentOffset = Long.parseLong(offsetValue == null ? "0" : offsetValue);
+
+            String dateTime = request.getParameter("newDateTime");
+
+            Date newDateTime = dateFormat.parse(dateTime);
+            System.out.println("Current Time: " + dateFormat.format(new Date()));
+            System.out.println("Request for Updated Time: " + dateFormat.format(newDateTime));
+
+            long newOffset = ((newDateTime.getTime() - System.currentTimeMillis()) / 1000) + currentOffset;
+            System.setProperty("faketime.offset.seconds", String.valueOf(newOffset));
+
+            System.out.println("Updated Time: " + dateFormat.format(new Date()));
+
+            success = Math.abs(System.currentTimeMillis() - new Date().getTime()) < 2000;
+            System.out.println(success ? "SUCCESS" : "FAILED");
+        }
+    } catch (java.lang.Exception e) {
+        out.println("Error: " + ExceptionUtils.getFullStackTrace(e));
+        return;
+    }
+
+%>
 <html>
+
 <head>
     <%
-    ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-    Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
-    String appVersion = whpProperties.getProperty("application.version");
+        ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
+        String appVersion = whpProperties.getProperty("application.version");
     %>
+
+    <title>FakeTime</title>
 
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/jquery-ui-1.9.1.custom.min.css"/>
@@ -23,7 +56,18 @@
     <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery/jquery-ui-1.9.1.custom.min.js"></script>
     <script type="text/javascript" src="/whp/resources-<%=appVersion%>/js/jquery//jquery-datetimepicker-addon.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#newDateTime').datetimepicker({
+                dateFormat:'dd/mm/yy',
+                timeFormat:'hh:mm'
+            });
+        });
+    </script>
+
 </head>
+
 <body>
 <span id="statusMessage" style="font-size: medium; font-weight: bold; color: blue;"></span>
 <br/>
@@ -31,49 +75,29 @@
 
 <div class="container">
     <p class=""><a href="/whp/emulator/"><i class="icon-home"></i> Home</a></p>
-
-        <form action="" method="get">
-          <p>
-              Current Time : <span class="bold"> <%=DateUtil.now().toDate()%> </span>
-              <input type="submit" value="Refresh" class="btn"/>
-         </p>
-        </form>
-
-
-    <form name="fakeTimeSubmit">
-       <p>
-           <label for="newDateTime">New Date Time</label>
-            <input type="text" name="newDateTime" id="newDateTime" value=""/>
-            <input type="button" id="post-button" value="Submit" class="btn btn-primary"/>
-       </p>
+    <%
+        if (request.getMethod().equals("POST")) {
+    %>
+    <div style="display:inline;background:<%=success ? "green" : "red"%>;"><%=success ? "SUCCESS" : "FAILED" %>
+    </div>
+    <br/>
+    <%
+        }
+    %>
+    <form action="" method="get">
+        <p>
+            Current Time : <span class="bold"> <%=DateUtil.now().toDate()%> </span>
+            <input type="submit" value="Refresh" class="btn"/>
+        </p>
     </form>
-    <script type="text/javascript">
-        $(function () {
-            $('#newDateTime').datetimepicker({
-                dateFormat:'yy-mm-dd',
-                timeFormat:'hh:mm'
-            });
-        });
 
-        $('#post-button').click(function () {
-            var host = window.location.host;
-            var newDate = $("#newDateTime").val().split(" ")[0];
-            var timeComponent = $("#newDateTime").val().split(" ")[1];
-            var urlString = "/whp/motech-delivery-tools/datetime/update?type=flow&date=" + newDate + "&hour=" + timeComponent.split(":")[0] + "&minute=" + timeComponent.split(":")[1];
-            $.ajax({
-                type:'GET',
-                url:"http://" + host + urlString,
-                contentType:"application/xml; charset=utf-8",
-                success:function (data, textStatus, jqXHR) {
-                    location.reload();
-                },
-                error:function (xhr, status, error) {
-                    $('#statusMessage').html("Status of request: FAILURE. Reason: " + error);
-                }
-            });
-
-        });
-    </script>
+    <form name="fakeTimeSubmit" method="post">
+        <p>
+            <label for="newDateTime">New Date Time</label>
+            <input type="text" name="newDateTime" id="newDateTime" value="<%=dateFormat.format(new Date())%>"/>
+            <input type="submit" id="post-button" value="Submit" class="btn btn-primary"/>
+        </p>
+    </form>
 </div>
 </body>
 </html>
