@@ -33,7 +33,7 @@
                 <div class="controls">
                     <@spring.bind "providerReminderConfiguration.hour" />
                     <select id="hour" name="${spring.status.expression}" validate="required:true">
-                        <#list 1..12 as hour>
+                        <#list 1..24 as hour>
                             <#assign hourValue = spring.status.value?number>
                             <option value="${hour}" <#if hourValue == hour>selected="true"</#if>>${hour}</option>
                         </#list>
