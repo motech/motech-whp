@@ -4,12 +4,15 @@ import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPErrors;
+import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containermapping.service.ProviderContainerMappingService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
 @Component
 public class ValidatorPool {
@@ -38,7 +41,7 @@ public class ValidatorPool {
             return this;
         }
 
-        if (containerService.exists(containerId)) {
+        if (containerService.exists(new ContainerId(provider.getProviderId(), containerId, ON_BEHALF_OF_PROVIDER).value())) {
             whpErrors.add(new WHPError(WHPErrorCode.CONTAINER_ALREADY_REGISTERED));
         }else if (!mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)) {
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID, "The container Id entered  is invalid"));
