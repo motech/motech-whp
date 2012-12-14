@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.RegistrationInstance;
+import org.motechproject.whp.container.InvalidContainerIdException;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
@@ -76,6 +77,11 @@ public class ContainerService {
         String providerId = provider.getProviderId();
 
         ContainerId containerId = new ContainerId(providerId, registrationRequest.getContainerId(), registrationRequest.getContainerRegistrationMode());
+
+        if(exists(containerId.value())){
+            throw new InvalidContainerIdException(String.format("Container Id %s already exists. Cannot register.", containerId.value()));
+        }
+
         Container container = new Container(providerId, containerId, instance, creationTime, provider.getDistrict());
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);

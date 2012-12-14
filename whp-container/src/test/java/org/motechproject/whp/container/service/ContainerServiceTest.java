@@ -4,16 +4,19 @@ import freemarker.template.TemplateException;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.*;
+import org.motechproject.whp.container.InvalidContainerIdException;
 import org.motechproject.whp.container.WHPContainerConstants;
+import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
@@ -84,6 +87,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "12345", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         containerService.registerContainer(containerRegistrationRequest);
 
+        verify(allContainers).findByContainerId(anyString());
+
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
         verify(allContainers).add(captor.capture());
         Container container = captor.getValue();
@@ -130,6 +135,27 @@ public class ContainerServiceTest extends BaseUnitTest {
         Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
     }
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void shouldThrowExceptionIfContainerIdIsAlreadyRegistered() throws IOException, TemplateException {
+        String providerId = "provider_one";
+        String containerId = "12345";
+        RegistrationInstance instance = RegistrationInstance.InTreatment;
+
+        String district = "district1";
+        Provider provider = new Provider(providerId, null, district, null);
+        when(providerService.findByProviderId(providerId)).thenReturn(provider);
+
+        when(allContainers.findByContainerId(anyString())).thenReturn(new ContainerBuilder().withDefaults().build());
+        ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
+
+        expectedException.expect(InvalidContainerIdException.class);
+
+        containerService.registerContainer(containerRegistrationRequest);
+    }
+
     @Test
     public void shouldRegisterAContainer() throws IOException, TemplateException {
         mockCurrentDate(DateUtil.now());
@@ -147,6 +173,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
         containerService.registerContainer(containerRegistrationRequest);
 
+
+        verify(allContainers).findByContainerId(anyString());
         String expectedContainerId = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
 
         ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
@@ -455,6 +483,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         verifyZeroInteractions(reportingPublisherService);
     }
 
+
+
     private void verifyMappingReportingEventPublication(Container container) {
         ContainerPatientMappingReportingRequest request = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
         verify(reportingPublisherService).reportContainerPatientMapping(request);
@@ -476,10 +506,5 @@ public class ContainerServiceTest extends BaseUnitTest {
     private void verifyStatusUpdateReportingEventPublication(Container actualContainer) {
         ContainerStatusReportingRequest expectedReportingRequest = new ContainerStatusReportingRequestBuilder().forContainer(actualContainer).build();
         verify(reportingPublisherService).reportContainerStatusUpdate(expectedReportingRequest);
-    }
-
-    @After
-    public void verifyNoMoreInteractionsOnMocks() {
-        verifyNoMoreInteractions(allContainers);
     }
 }
