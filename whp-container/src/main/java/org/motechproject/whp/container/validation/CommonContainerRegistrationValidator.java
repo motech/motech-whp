@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.valueOf;
+import static org.apache.commons.lang.StringUtils.length;
+
 
 @Component
 public class CommonContainerRegistrationValidator {
@@ -42,11 +45,26 @@ public class CommonContainerRegistrationValidator {
         if (!isProviderExists(providerId))
             errors.add(new ErrorWithParameters("provider.not.registered.error", providerId));
 
+        validateContainerId(registrationRequest, containerIdSequence, providerId, errors);
+
+        return errors;
+    }
+
+    private boolean validateContainerId(ContainerRegistrationRequest registrationRequest, String containerIdSequence, String providerId, ArrayList<ErrorWithParameters> errors) {
+        if(isContainerLengthIsInvalid(registrationRequest)){
+            errors.add(new ErrorWithParameters("container.id.length.error", valueOf(registrationRequest.getContainerRegistrationMode().getValidContainerIdLength())));
+            return true;
+        }
+
         ContainerId containerId = new ContainerId(providerId, containerIdSequence, registrationRequest.getContainerRegistrationMode());
         if (containerService.exists(containerId.value()))
             errors.add(new ErrorWithParameters("container.already.registered.error"));
+        return false;
+    }
 
-        return errors;
+    private boolean isContainerLengthIsInvalid(ContainerRegistrationRequest registrationRequest) {
+        return length(registrationRequest.getContainerId()) !=
+                registrationRequest.getContainerRegistrationMode().getValidContainerIdLength();
     }
 
     private boolean isProviderExists(String providerId) {
