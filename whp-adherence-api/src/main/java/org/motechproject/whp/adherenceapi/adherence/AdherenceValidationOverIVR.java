@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherenceapi.adherence;
 
+import org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.AdherenceErrors;
@@ -15,6 +16,8 @@ import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus.INVALID;
+import static org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus.VALID;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
 import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
@@ -32,22 +35,13 @@ public class AdherenceValidationOverIVR {
         this.patientService = patientService;
     }
 
-    public AdherenceValidationResponse validateInput(AdherenceValidationRequest request, ProviderId providerId) {
+    public AdherenceValidationResponse handleValidationRequest(AdherenceValidationRequest request, ProviderId providerId) {
         AdherenceValidationResponse response = validateAdherenceInput(request, providerId);
         reportAdherenceValidation(request, response, providerId);
         return response;
     }
 
-    private void reportAdherenceValidation(AdherenceValidationRequest request, AdherenceValidationResponse response, ProviderId providerId) {
-        AdherenceCaptureRequest reportingRequest = new AdherenceCaptureReportRequest(
-                request,
-                providerId,
-                !response.failed()
-        ).request();
-        reportingService.reportAdherenceCapture(reportingRequest);
-    }
-
-    private AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId) {
+    protected AdherenceValidationResponse validateAdherenceInput(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId) {
         Dosage dosage = adherenceService.dosageForPatient(adherenceValidationRequest.getPatientId());
         AdherenceErrors errors = adherenceErrors(adherenceValidationRequest, providerId, dosage);
         if (errors.isNotEmpty()) {
@@ -57,6 +51,16 @@ public class AdherenceValidationOverIVR {
         } else {
             return failure(dosage);
         }
+    }
+
+    private void reportAdherenceValidation(AdherenceValidationRequest request, AdherenceValidationResponse response, ProviderId providerId) {
+        AdherenceCaptureStatus status = response.failed() ? INVALID : VALID;
+        AdherenceCaptureRequest reportingRequest = new AdherenceCaptureReportRequest(
+                request,
+                providerId,
+                !response.failed(),
+                status).request();
+        reportingService.reportAdherenceCapture(reportingRequest);
     }
 
     private AdherenceErrors adherenceErrors(AdherenceValidationRequest adherenceValidationRequest, ProviderId providerId, Dosage dosage) {

@@ -2,6 +2,7 @@ package org.motechproject.whp.adherenceapi.reporting;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -22,7 +23,7 @@ public class AdherenceCaptureReportRequestTest {
         String patientId = "patientId";
         AdherenceValidationRequest request = new AdherenceValidationRequest(patientId);
 
-        String requestPatientId = new AdherenceCaptureReportRequest(request, providerId, false).request().getPatientId();
+        String requestPatientId = new AdherenceCaptureReportRequest(request, providerId, false, AdherenceCaptureStatus.VALID).request().getPatientId();
         assertEquals(patientId, requestPatientId);
     }
 
@@ -31,7 +32,7 @@ public class AdherenceCaptureReportRequestTest {
         String patientId = "patientId";
         AdherenceValidationRequest request = new AdherenceValidationRequest(patientId);
 
-        String requestPatientId = new AdherenceCaptureReportRequest(request, providerId, true).request().getPatientId();
+        String requestPatientId = new AdherenceCaptureReportRequest(request, providerId, true, AdherenceCaptureStatus.VALID).request().getPatientId();
         assertEquals(patientId, requestPatientId);
     }
 
@@ -40,7 +41,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = false;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        boolean requestValid = new AdherenceCaptureReportRequest(request, providerId, valid).request().isValid();
+        boolean requestValid = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.INVALID).request().isValid();
         assertFalse(requestValid);
     }
 
@@ -49,7 +50,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = true;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        boolean requestValid = new AdherenceCaptureReportRequest(request, providerId, valid).request().isValid();
+        boolean requestValid = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.VALID).request().isValid();
         assertTrue(requestValid);
     }
 
@@ -58,7 +59,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = true;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        String requestStatus = new AdherenceCaptureReportRequest(request, providerId, valid).request().getStatus();
+        String requestStatus = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.VALID).request().getStatus();
         assertEquals("Valid", requestStatus);
     }
 
@@ -67,7 +68,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = false;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        String requestStatus = new AdherenceCaptureReportRequest(request, providerId, valid).request().getStatus();
+        String requestStatus = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.INVALID).request().getStatus();
         assertEquals("Invalid", requestStatus);
     }
 
@@ -76,7 +77,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = true;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        String requestProviderId = new AdherenceCaptureReportRequest(request, providerId, valid).request().getProviderId();
+        String requestProviderId = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.VALID).request().getProviderId();
         assertEquals(providerId.value(), requestProviderId);
     }
 
@@ -85,7 +86,7 @@ public class AdherenceCaptureReportRequestTest {
         boolean valid = true;
         AdherenceValidationRequest request = new AdherenceValidationRequest("patientId");
 
-        String submittedBy = new AdherenceCaptureReportRequest(request, providerId, valid).request().getSubmittedBy();
+        String submittedBy = new AdherenceCaptureReportRequest(request, providerId, valid, AdherenceCaptureStatus.VALID).request().getSubmittedBy();
         assertEquals(providerId.value(), submittedBy);
     }
 
@@ -95,7 +96,7 @@ public class AdherenceCaptureReportRequestTest {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
         request.setDoseTakenCount(submittedValue);
 
-        String requestValue = new AdherenceCaptureReportRequest(request, providerId, true).request().getSubmittedValue();
+        String requestValue = new AdherenceCaptureReportRequest(request, providerId, true, AdherenceCaptureStatus.VALID).request().getSubmittedValue();
         assertEquals(submittedValue, requestValue);
     }
 
@@ -105,14 +106,14 @@ public class AdherenceCaptureReportRequestTest {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
         request.setTimeTaken(timeTaken);
 
-        Long requestValue = new AdherenceCaptureReportRequest(request, providerId, true).request().getTimeTaken();
+        Long requestValue = new AdherenceCaptureReportRequest(request, providerId, true, AdherenceCaptureStatus.VALID).request().getTimeTaken();
         assertEquals(timeTaken, requestValue.toString());
     }
 
     @Test
     public void shouldHaveChannelId() {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
-        String requestChannel = new AdherenceCaptureReportRequest(request, providerId, true).request().getChannelId();
+        String requestChannel = new AdherenceCaptureReportRequest(request, providerId, true, AdherenceCaptureStatus.VALID).request().getChannelId();
         assertEquals("IVR", requestChannel);
     }
 
@@ -122,7 +123,7 @@ public class AdherenceCaptureReportRequestTest {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
         request.setCallId(callId);
 
-        String requestCallId = new AdherenceCaptureReportRequest(request, providerId, true).request().getCallId();
+        String requestCallId = new AdherenceCaptureReportRequest(request, providerId, true, AdherenceCaptureStatus.VALID).request().getCallId();
         assertEquals(callId, requestCallId);
     }
 }

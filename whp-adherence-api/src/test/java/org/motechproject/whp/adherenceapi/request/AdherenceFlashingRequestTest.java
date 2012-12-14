@@ -7,7 +7,6 @@ import org.motechproject.whp.common.domain.PhoneNumber;
 import org.springframework.http.MediaType;
 
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -20,7 +19,7 @@ public class AdherenceFlashingRequestTest {
 
     @Before
     public void setup() {
-        adherenceIVRController = new AdherenceIVRController(null, null, null);
+        adherenceIVRController = new AdherenceIVRController(null, null, null, null);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherenceapi.reporting;
 
+import org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
@@ -11,29 +12,25 @@ public class AdherenceCaptureReportRequest {
     private AdherenceValidationRequest request;
     private ProviderId providerId;
     private boolean valid;
+    private AdherenceCaptureStatus status;
 
-    public AdherenceCaptureReportRequest(AdherenceValidationRequest request, ProviderId providerId, boolean valid) {
+    public AdherenceCaptureReportRequest(AdherenceValidationRequest request, ProviderId providerId, boolean valid, AdherenceCaptureStatus status) {
         this.request = request;
         this.providerId = providerId;
         this.valid = valid;
+        this.status = status;
     }
 
     public AdherenceCaptureRequest request() {
-        return withChannelId(
-                withCallId(
-                        withTimeTaken(
-                                withSubmittedValue(
-                                        withProviderId(
-                                                withValidity(
-                                                        withPatient(
-                                                                new AdherenceCaptureRequest()
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
-                )
-        );
+        AdherenceCaptureRequest captureRequest = new AdherenceCaptureRequest();
+        withChannelId(captureRequest);
+        withCallId(captureRequest);
+        withTimeTaken(captureRequest);
+        withSubmittedValue(captureRequest);
+        withProviderId(captureRequest);
+        withValidity(captureRequest);
+        withPatient(captureRequest);
+        return captureRequest;
     }
 
     private AdherenceCaptureRequest withChannelId(AdherenceCaptureRequest adherenceCaptureRequest) {
@@ -77,11 +74,7 @@ public class AdherenceCaptureReportRequest {
     }
 
     private AdherenceCaptureRequest withStatus(AdherenceCaptureRequest adherenceCaptureRequest) {
-        if (valid) {
-            adherenceCaptureRequest.setStatus("Valid");
-        } else {
-            adherenceCaptureRequest.setStatus("Invalid");
-        }
+        adherenceCaptureRequest.setStatus(status.getValue());
         return adherenceCaptureRequest;
     }
 }

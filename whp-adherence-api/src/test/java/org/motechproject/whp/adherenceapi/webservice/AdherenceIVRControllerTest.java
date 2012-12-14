@@ -6,9 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceConfirmationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
+import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
@@ -33,6 +35,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     public static final String IVR_ADHERENCE_FLASHING_PATH = "/ivr/adherence/summary";
     public static final String IVR_ADHERENCE_VALIDATION_PATH = "/ivr/adherence/validate";
+    public static final String IVR_ADHERENCE_CONFIRMATION_PATH = "/ivr/adherence/confirm";
 
     public static final String FLASHING_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_capture_flashing_request>\n" +
@@ -50,22 +53,32 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <time_taken>7</time_taken>\n" +
             "</adherence_validation_request>";
 
+    public static final String CONFIRMATION_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
+            "<adherence_confirmation_request>\n" +
+            "    <call_id>abcd1234</call_id>\n" +
+            "    <msisdn>1234567942</msisdn>\n" +
+            "    <patient_id>pat1</patient_id>\n" +
+            "    <adherence_value>3</adherence_value>\n" +
+            "    <time_taken>7</time_taken>\n" +
+            "</adherence_confirmation_request>";
+
     @Mock
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     @Mock
     private ProviderService providerService;
     @Mock
     private AdherenceValidationOverIVR adherenceValidationOverIVR;
+    @Mock
+    private AdherenceConfirmationOverIVR adherenceConfirmationOverIVR;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
-
     private AdherenceIVRController adherenceIVRController;
 
     @Before
     public void setup() {
         initMocks(this);
         mockCurrentDate(today);
-        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceValidationOverIVR);
+        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceValidationOverIVR, adherenceConfirmationOverIVR);
     }
 
     @Test
@@ -146,7 +159,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithSuccessOnSuccessfulValidation() throws Exception {
-        when(adherenceValidationOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+        when(adherenceValidationOverIVR.handleValidationRequest(any(AdherenceValidationRequest.class), any(ProviderId.class)))
                 .thenReturn(AdherenceValidationResponse.success());
 
         String expectedXML =
@@ -164,7 +177,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithValidationFailure() throws Exception {
-        when(adherenceValidationOverIVR.validateInput(any(AdherenceValidationRequest.class), any(ProviderId.class)))
+        when(adherenceValidationOverIVR.handleValidationRequest(any(AdherenceValidationRequest.class), any(ProviderId.class)))
                 .thenReturn(AdherenceValidationResponse.failure());
 
         String expectedXML =
@@ -204,5 +217,38 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().type(MediaType.APPLICATION_XML));
 
+    }
+
+    @Test
+    public void shouldRespondWithSuccessOnSuccessfulConfirmation() throws Exception {
+        when(adherenceConfirmationOverIVR.confirmAdherence(any(AdherenceConfirmationRequest.class), any(ProviderId.class)))
+                .thenReturn(AdherenceValidationResponse.success());
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_CONFIRMATION_PATH).body(CONFIRMATION_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void shouldRespondWithErrorInCaseOfValidationFailureForConfirmationRequest() throws Exception {
+        String expectedXml =
+                "            <adherence_validation_response>" +
+                        "      <result>failure</result>" +
+                        "      <error>" +
+                        "       <error_code>INVALID_MOBILE_NUMBER</error_code>" +
+                        "      </error>" +
+                        "    </adherence_validation_response>";
+
+        when(adherenceConfirmationOverIVR.confirmAdherence(any(AdherenceConfirmationRequest.class), any(ProviderId.class)))
+                .thenReturn(AdherenceValidationResponse.failure(INVALID_MOBILE_NUMBER.name()));
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_CONFIRMATION_PATH).body(CONFIRMATION_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
 }

@@ -1,8 +1,10 @@
 package org.motechproject.whp.adherenceapi.webservice;
 
+import org.motechproject.whp.adherenceapi.adherence.AdherenceConfirmationOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
+import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
@@ -11,7 +13,6 @@ import org.motechproject.whp.common.error.BindingResultXML;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -32,15 +33,17 @@ public class AdherenceIVRController {
     private ProviderService providerService;
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     private AdherenceValidationOverIVR adherenceValidationOverIVR;
+    private AdherenceConfirmationOverIVR adherenceConfirmationOverIVR;
 
     @Autowired
     public AdherenceIVRController(ProviderService providerService,
                                   AdherenceSummaryOverIVR adherenceSummaryOverIVR,
-                                  AdherenceValidationOverIVR adherenceValidationOverIVR) {
+                                  AdherenceValidationOverIVR adherenceValidationOverIVR, AdherenceConfirmationOverIVR adherenceConfirmationOverIVR) {
 
         this.providerService = providerService;
         this.adherenceSummaryOverIVR = adherenceSummaryOverIVR;
         this.adherenceValidationOverIVR = adherenceValidationOverIVR;
+        this.adherenceConfirmationOverIVR = adherenceConfirmationOverIVR;
     }
 
     @RequestMapping(value = "/summary")
@@ -52,7 +55,16 @@ public class AdherenceIVRController {
     @RequestMapping(value = "/validate")
     @ResponseBody
     public AdherenceValidationResponse adherenceValidation(@RequestBody @Valid AdherenceValidationRequest request) {
-        return adherenceValidationOverIVR.validateInput(request, providerId(request.getMsisdn()));
+        return adherenceValidationOverIVR.handleValidationRequest(request, providerId(request.getMsisdn()));
+    }
+
+    @RequestMapping(value = "/confirm")
+    @ResponseBody
+    public AdherenceValidationResponse adherenceConfirmation(@RequestBody @Valid AdherenceConfirmationRequest request) {
+        AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(request, providerId(request.getMsisdn()));
+        if(response.failed())
+            return response;
+        return null;
     }
 
     @ExceptionHandler

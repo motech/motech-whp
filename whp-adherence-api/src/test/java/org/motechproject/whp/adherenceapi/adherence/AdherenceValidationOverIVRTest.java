@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherenceapi.builder.DosageBuilder;
+import org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportRequest;
@@ -52,7 +53,7 @@ public class AdherenceValidationOverIVRTest {
     public void shouldReturnFailureWhenPhoneNumberDoesNotBelongToAnyProvider() {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
         ProviderId emptyProviderId = new ProviderId();
-        assertEquals(failure("INVALID_MOBILE_NUMBER"), adherenceValidationOverIVR.validateInput(request, emptyProviderId));
+        assertEquals(failure("INVALID_MOBILE_NUMBER"), adherenceValidationOverIVR.handleValidationRequest(request, emptyProviderId));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class AdherenceValidationOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(invalidPatientId)).thenReturn(null);
-        assertEquals(failure("INVALID_PATIENT"), adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId));
+        assertEquals(failure("INVALID_PATIENT"), adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -76,7 +77,7 @@ public class AdherenceValidationOverIVRTest {
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(new DosageBuilder(1).dosage());
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
-        assertEquals(failure("INVALID_PATIENT_PROVIDER_COMBINATION"), adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId));
+        assertEquals(failure("INVALID_PATIENT_PROVIDER_COMBINATION"), adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -89,7 +90,7 @@ public class AdherenceValidationOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
-        assertEquals(failure(dosage), adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId));
+        assertEquals(failure(dosage), adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -102,7 +103,7 @@ public class AdherenceValidationOverIVRTest {
         adherenceValidationRequest.setTimeTaken("1000");
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
-        assertEquals(success(), adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId));
+        assertEquals(success(), adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -116,15 +117,15 @@ public class AdherenceValidationOverIVRTest {
 
         when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
 
-        adherenceValidationOverIVR.validateInput(adherenceValidationRequest, providerId);
-        verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(adherenceValidationRequest, providerId, true).request());
+        adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId);
+        verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(adherenceValidationRequest, providerId, true, AdherenceCaptureStatus.VALID).request());
     }
 
     @Test
     public void shouldReportAdherenceValidationRequestWhenValidationFailed() {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
 
-        adherenceValidationOverIVR.validateInput(request, providerId);
-        verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(request, providerId, false).request());
+        adherenceValidationOverIVR.handleValidationRequest(request, providerId);
+        verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(request, providerId, false, AdherenceCaptureStatus.INVALID).request());
     }
 }

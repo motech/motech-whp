@@ -43,6 +43,6 @@ public class AdherenceValidationResponse implements Serializable {
     }
 
     public boolean failed() {
-        return null != error;
+        return (null != error) || (result == WebServiceResponse.failure);
     }
 }
