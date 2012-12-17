@@ -5,6 +5,8 @@ import org.motechproject.whp.containermapping.repository.AllProviderContainerMap
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static java.lang.Long.parseLong;
+
 @Service
 public class ProviderContainerMappingService {
 
@@ -21,8 +23,6 @@ public class ProviderContainerMappingService {
 
     public Boolean isValidContainerForProvider(String providerId, String containerId) {
         ProviderContainerMapping providerContainerMapping = allProviderContainerMappings.findByProviderId(providerId);
-        if(providerContainerMapping == null)
-            return false;
-        return providerContainerMapping.hasContainerId(Long.parseLong(containerId));
+        return providerContainerMapping != null && providerContainerMapping.hasContainerId(parseLong(containerId));
     }
 }
