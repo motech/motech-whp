@@ -20,8 +20,6 @@ public class ContainerVerificationRequest extends VerificationRequest {
     @NotNullOrEmpty
     private String call_id;
 
-    @NotNullOrEmpty
-    @Size(min = 5, max = 5, message = "should be 5 digits in length")
     private String container_id;
 
     /*Required for spring mvc*/
@@ -55,5 +53,4 @@ public class ContainerVerificationRequest extends VerificationRequest {
         super.setMsisdn(msisdn);
         this.msisdn = msisdn;
     }
-
 }

@@ -12,16 +12,22 @@ public class ContainerRegistrationVerification extends Verification<IvrContainer
     @Autowired
     public ContainerRegistrationVerification(RequestValidator validator, ValidatorPool validatorPool) {
         super(validator, validatorPool);
-
     }
 
     @Override
     public WHPErrors verify(IvrContainerRegistrationRequest request) {
         WHPErrors whpErrors = new WHPErrors();
-
-        validatorPool.verifyMobileNumber(request.getPhoneNumber(), whpErrors)
-                .verifyContainerMapping(request.getPhoneNumber(), request.getContainerId(), whpErrors)
-                .verifyPhase(request.getPhase(), whpErrors);
+        validatorPool.verifyMobileNumber(
+                request.getPhoneNumber(),
+                whpErrors
+        ).verifyContainerMapping(
+                request.getPhoneNumber(),
+                request.getContainer_id(),
+                whpErrors
+        ).verifyPhase(
+                request.getPhase(),
+                whpErrors
+        );
         return whpErrors;
     }
 }
