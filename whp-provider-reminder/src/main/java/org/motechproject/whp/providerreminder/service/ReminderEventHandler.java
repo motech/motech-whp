@@ -33,9 +33,9 @@ public class ReminderEventHandler {
     @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME)
     public void adherenceWindowApproachingEvent(MotechEvent motechEvent) {
         List<String> providerPhoneNumbers = providerReminderService.getActiveProviderPhoneNumbers();
-        if(providerPhoneNumbers.isEmpty())
+        if (providerPhoneNumbers.isEmpty()) {
             return;
-
+        }
         ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, providerPhoneNumbers, UUIDGenerator.uuid());
         httpClientService.post(ivrConfiguration.getProviderReminderUrl(), providerReminderRequest.toXML());
     }

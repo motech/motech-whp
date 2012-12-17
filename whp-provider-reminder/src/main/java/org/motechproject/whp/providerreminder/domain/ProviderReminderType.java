@@ -9,7 +9,6 @@ public enum ProviderReminderType {
     private String eventSubject;
 
     ProviderReminderType(String eventSubject) {
-
         this.eventSubject = eventSubject;
     }
 

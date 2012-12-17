@@ -1,7 +1,7 @@
 package org.motechproject.whp.controller;
 
-import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
 
+import static org.motechproject.util.DateUtil.now;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -30,10 +30,9 @@ public class ProviderReminderController extends BaseWebController {
     @RequestMapping(value = "/{reminderType}", method = GET)
     public String scheduleFor(@PathVariable("reminderType") ProviderReminderType reminderType, Model model) throws IOException {
         ProviderReminderConfiguration reminderConfiguration = providerReminderScheduler.getReminder(reminderType);
-        if(reminderConfiguration == null){
-            reminderConfiguration = new ProviderReminderConfiguration(reminderType, new Date());
+        if (reminderConfiguration == null) {
+            reminderConfiguration = new ProviderReminderConfiguration(reminderType, now().toDate());
         }
-
         model.addAttribute(reminderConfiguration);
         return "reminders/providerReminder";
     }

@@ -27,7 +27,6 @@ public class ProviderReminderService {
     public List<String> getActiveProviderPhoneNumbers() {
         ProviderIds providerIds = patientService.providersWithActivePatients();
         List<Provider> providers = providerService.findByProviderIds(providerIds);
-
         return extract(providers, on(Provider.class).getPrimaryMobile());
     }
 }

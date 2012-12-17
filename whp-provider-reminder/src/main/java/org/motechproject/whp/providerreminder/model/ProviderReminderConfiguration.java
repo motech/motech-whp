@@ -8,8 +8,11 @@ import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+import static org.motechproject.model.DayOfWeek.getDayOfWeek;
+
 @Data
 public class ProviderReminderConfiguration {
+
     @NotNull
     private DayOfWeek dayOfWeek;
     @NotNull

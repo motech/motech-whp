@@ -56,15 +56,6 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
         assertEquals("0 30 10 ? * " + dayOfWeek.getShortName(), job.getCronExpression());
     }
 
-    private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
-        ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
-        providerReminderConfiguration.setMinute(minutes);
-        providerReminderConfiguration.setHour(hour);
-        providerReminderConfiguration.setDayOfWeek(dayOfWeek);
-        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
-        return providerReminderConfiguration;
-    }
-
     @Test
     public void shouldReturnNextScheduleForAJob() {
         String subject = ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
@@ -79,5 +70,14 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
         assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
+    }
+
+    private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
+        ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
+        providerReminderConfiguration.setMinute(minutes);
+        providerReminderConfiguration.setHour(hour);
+        providerReminderConfiguration.setDayOfWeek(dayOfWeek);
+        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
+        return providerReminderConfiguration;
     }
 }
