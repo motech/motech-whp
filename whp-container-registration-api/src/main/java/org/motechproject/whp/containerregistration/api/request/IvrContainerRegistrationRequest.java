@@ -45,12 +45,12 @@ public class IvrContainerRegistrationRequest extends VerificationRequest {
     }
 
     @XmlElement(name = "call_id")
-    public String getCall_id() {
+    public String getCallId() {
         return call_id;
     }
 
     @XmlElement(name = "container_id")
-    public String getContainer_id() {
+    public String getContainerId() {
         return container_id;
     }
 

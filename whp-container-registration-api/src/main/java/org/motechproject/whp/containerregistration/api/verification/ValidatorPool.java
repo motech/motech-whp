@@ -40,7 +40,6 @@ public class ValidatorPool {
             whpErrors.add(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
             return this;
         }
-
         if (containerService.exists(new ContainerId(provider.getProviderId(), containerId, ON_BEHALF_OF_PROVIDER).value())) {
             whpErrors.add(new WHPError(WHPErrorCode.CONTAINER_ALREADY_REGISTERED));
         }else if (!mappingService.isValidContainerForProvider(provider.getProviderId(), containerId)) {

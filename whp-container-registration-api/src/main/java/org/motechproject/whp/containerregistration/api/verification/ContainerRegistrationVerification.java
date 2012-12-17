@@ -20,7 +20,7 @@ public class ContainerRegistrationVerification extends Verification<IvrContainer
         WHPErrors whpErrors = new WHPErrors();
 
         validatorPool.verifyMobileNumber(request.getPhoneNumber(), whpErrors)
-                .verifyContainerMapping(request.getPhoneNumber(), request.getContainer_id(), whpErrors)
+                .verifyContainerMapping(request.getPhoneNumber(), request.getContainerId(), whpErrors)
                 .verifyPhase(request.getPhase(), whpErrors);
         return whpErrors;
     }
