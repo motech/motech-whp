@@ -44,4 +44,8 @@ public class VerificationResult {
     public boolean hasFieldValidationError() {
         return this.getErrors().contains(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED));
     }
+
+    public boolean isReportable() {
+        return isSuccess() || !hasFieldValidationError();
+    }
 }
