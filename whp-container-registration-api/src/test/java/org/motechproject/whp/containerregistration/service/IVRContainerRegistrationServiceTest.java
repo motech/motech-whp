@@ -1,11 +1,14 @@
 package org.motechproject.whp.containerregistration.service;
 
+import freemarker.template.TemplateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.common.exception.WHPError;
 import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
+import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
 import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;
 import org.motechproject.whp.containerregistration.api.request.ProviderVerificationRequest;
@@ -18,6 +21,8 @@ import org.motechproject.whp.reports.contract.ContainerVerificationLogRequest;
 import org.motechproject.whp.reports.contract.ProviderVerificationLogRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -38,11 +43,13 @@ public class IVRContainerRegistrationServiceTest {
     private ReportingPublisherService reportingPublishingService;
     @Mock
     private ProviderService providerService;
+    @Mock
+    private ContainerService containerService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        ivrContainerRegistrationService = new IVRContainerRegistrationService(providerVerification, containerVerification, containerRegistrationVerification, reportingPublishingService, providerService);
+        ivrContainerRegistrationService = new IVRContainerRegistrationService(providerVerification, containerVerification, containerRegistrationVerification, reportingPublishingService, providerService, containerService);
     }
 
     @Test
@@ -58,7 +65,7 @@ public class IVRContainerRegistrationServiceTest {
         existingProvider.setProviderId("raj");
         when(providerService.findByMobileNumber(msisdn)).thenReturn(existingProvider);
 
-        ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
+        ivrContainerRegistrationService.verify(request);
 
         verify(providerVerification).verifyRequest(request);
         verify(providerService).findByMobileNumber(msisdn);
@@ -83,26 +90,34 @@ public class IVRContainerRegistrationServiceTest {
         VerificationResult verificationResult = new VerificationResult(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED));
         when(providerVerification.verifyRequest(request)).thenReturn(verificationResult);
 
-        ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
+        ivrContainerRegistrationService.verify(request);
 
         verify(providerVerification).verifyRequest(request);
         verify(reportingPublishingService, never()).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
     }
 
     @Test
-    public void shouldNotReportProviderVerificationRequestWithAnyValidationFailure() {
-        String msisdn = "1234567890";
+    public void shouldNotReportProviderVerificationRequestIfNotReportable() {
         ProviderVerificationRequest request = new ProviderVerificationRequest();
-        request.setMsisdn(msisdn);
-        request.setCall_id("callId");
-        request.setTime("29/11/1986 20:20:20");
+        request.setMsisdn("1234567890");
+        VerificationResult verificationResult = mock(VerificationResult.class);
+        when(verificationResult.isReportable()).thenReturn(false);
+        when(providerVerification.verifyRequest(request)).thenReturn(verificationResult);
 
-        when(providerVerification.verifyRequest(request)).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER)));
-
-        ivrContainerRegistrationService.verifyProviderVerificationRequest(request);
-
-        verify(providerVerification).verifyRequest(request);
+        ivrContainerRegistrationService.verify(request);
         verify(reportingPublishingService, never()).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
+    }
+
+    @Test
+    public void shouldReportProviderVerificationRequestIfReportable() {
+        ProviderVerificationRequest request = new ProviderVerificationRequest();
+        request.setMsisdn("1234567890");
+        VerificationResult verificationResult = mock(VerificationResult.class);
+        when(verificationResult.isReportable()).thenReturn(true);
+        when(providerVerification.verifyRequest(any(ProviderVerificationRequest.class))).thenReturn(verificationResult);
+
+        ivrContainerRegistrationService.verify(request);
+        verify(reportingPublishingService).reportProviderVerificationDetailsLog(any(ProviderVerificationLogRequest.class));
     }
 
     @Test
@@ -113,7 +128,7 @@ public class IVRContainerRegistrationServiceTest {
         containerVerificationRequest.setContainer_id("something");
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
 
-        ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest);
+        ivrContainerRegistrationService.verify(containerVerificationRequest);
 
         verify(containerVerification).verifyRequest(containerVerificationRequest);
         ArgumentCaptor<ContainerVerificationLogRequest> captor = ArgumentCaptor.forClass(ContainerVerificationLogRequest.class);
@@ -133,7 +148,7 @@ public class IVRContainerRegistrationServiceTest {
         containerVerificationRequest.setContainer_id("something");
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.FIELD_VALIDATION_FAILED)));
 
-        ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest);
+        ivrContainerRegistrationService.verify(containerVerificationRequest);
 
         verify(containerVerification).verifyRequest(containerVerificationRequest);
 
@@ -148,7 +163,7 @@ public class IVRContainerRegistrationServiceTest {
         containerVerificationRequest.setContainer_id("something");
         when(containerVerification.verifyRequest(containerVerificationRequest)).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
 
-        ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest);
+        ivrContainerRegistrationService.verify(containerVerificationRequest);
 
         verify(containerVerification).verifyRequest(containerVerificationRequest);
         ArgumentCaptor<ContainerVerificationLogRequest> captor = ArgumentCaptor.forClass(ContainerVerificationLogRequest.class);
@@ -161,11 +176,35 @@ public class IVRContainerRegistrationServiceTest {
     }
 
     @Test
-    public void shouldVerifyContainerRegistrationVerificationRequest() {
+    public void shouldVerifyContainerRegistrationVerificationRequest() throws IOException, TemplateException {
         IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
+        VerificationResult verificationResult = new VerificationResult();
+        when(providerService.findByMobileNumber(anyString())).thenReturn(new Provider());
+        when(containerRegistrationVerification.verifyRequest(any(IvrContainerRegistrationRequest.class))).thenReturn(verificationResult);
 
-        ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest(request);
+        assertEquals(verificationResult, ivrContainerRegistrationService.verify(request));
+    }
 
-        verify(containerRegistrationVerification).verifyRequest(request);
+    @Test
+    public void shouldReportContainerRegistrationIfReportable() throws IOException, TemplateException {
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
+        VerificationResult verificationResult = new VerificationResult();
+        when(providerService.findByMobileNumber(anyString())).thenReturn(new Provider());
+        when(containerRegistrationVerification.verifyRequest(any(IvrContainerRegistrationRequest.class))).thenReturn(verificationResult);
+
+        ivrContainerRegistrationService.verify(request);
+        verify(containerService).registerContainer(any(ContainerRegistrationRequest.class));
+    }
+
+    @Test
+    public void shouldNotReportContainerRegistrationIfNotReportable() throws IOException, TemplateException {
+        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
+        VerificationResult verificationResult = mock(VerificationResult.class);
+        when(verificationResult.isReportable()).thenReturn(false);
+        when(providerService.findByMobileNumber(anyString())).thenReturn(new Provider());
+        when(containerRegistrationVerification.verifyRequest(any(IvrContainerRegistrationRequest.class))).thenReturn(verificationResult);
+
+        ivrContainerRegistrationService.verify(request);
+        verify(containerService, never()).registerContainer(any(ContainerRegistrationRequest.class));
     }
 }

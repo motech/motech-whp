@@ -61,7 +61,7 @@ public class IVRContainerRegistrationControllerTest {
         VerificationResult successResult = new VerificationResult();
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
-        when(ivrContainerRegistrationService.verifyProviderVerificationRequest(request)).thenReturn(successResult);
+        when(ivrContainerRegistrationService.verify(request)).thenReturn(successResult);
 
         standaloneSetup(ivrContainerRegistrationController)
                 .build()
@@ -96,7 +96,7 @@ public class IVRContainerRegistrationControllerTest {
         VerificationResult successResult = new VerificationResult(new WHPError(WHPErrorCode.INVALID_PHONE_NUMBER));
         ProviderVerificationRequest request = new ProviderVerificationRequest(phoneNumberFromRequestFile, timeFromRequestFile, callIdFromRequestFile);
 
-        when(ivrContainerRegistrationService.verifyProviderVerificationRequest(request)).thenReturn(successResult);
+        when(ivrContainerRegistrationService.verify(request)).thenReturn(successResult);
 
         standaloneSetup(ivrContainerRegistrationController)
                 .build()
@@ -124,7 +124,7 @@ public class IVRContainerRegistrationControllerTest {
         String callIdFromFile = "64756435684375";
 
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
-        when(ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest)).thenReturn(new VerificationResult());
+        when(ivrContainerRegistrationService.verify(containerVerificationRequest)).thenReturn(new VerificationResult());
 
         standaloneSetup(ivrContainerRegistrationController)
                 .build()
@@ -145,7 +145,7 @@ public class IVRContainerRegistrationControllerTest {
 
         WHPError whpError = new WHPError(WHPErrorCode.INVALID_CONTAINER_ID);
         ContainerVerificationRequest containerVerificationRequest = new ContainerVerificationRequest(msisdnFromFile, containerIdFromFile, callIdFromFile);
-        when(ivrContainerRegistrationService.verifyContainerVerificationRequest(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
+        when(ivrContainerRegistrationService.verify(containerVerificationRequest)).thenReturn(new VerificationResult(whpError));
 
         standaloneSetup(ivrContainerRegistrationController)
                 .build()
@@ -179,41 +179,6 @@ public class IVRContainerRegistrationControllerTest {
     }
 
     @Test
-    public void shouldRegisterContainerOnSuccessfulValidation() throws Exception {
-        Provider provider = new Provider();
-        provider.setProviderId("providerId");
-        String call_id = "64756435684375";
-
-        IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest("0986754322", "12345", call_id, "PreTreatment");
-        when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult());
-        when(providerService.findByMobileNumber(anyString())).thenReturn(provider);
-
-        standaloneSetup(ivrContainerRegistrationController)
-                .build()
-                .perform(
-                        post("/ivr/containerRegistration/register")
-                                .body(readXML("/validIVRContainerRegistrationRequest.xml"))
-                                .contentType(MediaType.APPLICATION_XML)
-
-                ).andExpect(status().isOk())
-                .andExpect(
-                        content().string(containsString("success"))
-        );
-
-        ArgumentCaptor<ContainerRegistrationRequest> containerRegistrationRequestArgumentCaptor = ArgumentCaptor.forClass(ContainerRegistrationRequest.class);
-        verify(containerService, times(1)).registerContainer(containerRegistrationRequestArgumentCaptor.capture());
-        ContainerRegistrationRequest containerRegistrationReportingRequest = containerRegistrationRequestArgumentCaptor.getValue();
-
-        assertEquals(request.getContainer_id(), containerRegistrationReportingRequest.getContainerId());
-        assertEquals(request.getPhase(), containerRegistrationReportingRequest.getInstance());
-        assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
-        assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
-        assertEquals(call_id, containerRegistrationReportingRequest.getCallId());
-        assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getSubmitterId());
-        assertEquals(WHPRole.PROVIDER.name(), containerRegistrationReportingRequest.getSubmitterRole());
-    }
-
-    @Test
     public void shouldNotRegisterContainerForInvalidContainerDetails() throws Exception {
 
         IvrContainerRegistrationRequest request = new IvrContainerRegistrationRequest();
@@ -221,7 +186,7 @@ public class IVRContainerRegistrationControllerTest {
         request.setContainer_id("12345");
         request.setPhase("Pre-treatment");
         request.setCall_id("64756435684375");
-        when(ivrContainerRegistrationService.verifyContainerRegistrationVerificationRequest((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
+        when(ivrContainerRegistrationService.verify((IvrContainerRegistrationRequest) anyObject())).thenReturn(new VerificationResult(new WHPError(WHPErrorCode.INVALID_CONTAINER_ID)));
         standaloneSetup(ivrContainerRegistrationController)
                 .build()
                 .perform(
