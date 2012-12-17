@@ -2,8 +2,6 @@ package org.motechproject.whp.containerregistration.service;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.motechproject.whp.common.exception.WHPError;
-import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.containerregistration.api.request.ContainerVerificationRequest;
 import org.motechproject.whp.containerregistration.api.request.IvrContainerRegistrationRequest;

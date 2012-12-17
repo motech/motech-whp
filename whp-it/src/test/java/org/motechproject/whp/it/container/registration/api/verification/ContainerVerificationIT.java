@@ -71,16 +71,6 @@ public class ContainerVerificationIT {
     }
 
     @Test
-    public void shouldReturnFailureWhenContainerIdIsEmpty() {
-        String mobileNumber = "1234567890";
-        String emptyContainerId = "";
-
-        VerificationResult result = containerVerification.verifyRequest(new ContainerVerificationRequest(mobileNumber, emptyContainerId, "callId"));
-
-        assertTrue(result.isError());
-    }
-
-    @Test
     public void shouldVerifyRequest() {
         String msisdn = "1234567890";
         String callId = "callId";

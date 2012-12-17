@@ -72,6 +72,7 @@ public class ValidatorPoolTest {
         String containerIdValue = new ContainerId(providerId, containerId, ON_BEHALF_OF_PROVIDER).value();
         WHPErrors whpErrors = new WHPErrors();
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new ProviderBuilder().withDefaults().withProviderId(providerId).build());
+        when(mappingService.isValidContainerForProvider(providerId, containerId)).thenReturn(true);
         when(containerService.exists(containerIdValue)).thenReturn(true);
 
         validatorPool.verifyContainerMapping(mobileNumber, containerId, whpErrors);
@@ -94,13 +95,11 @@ public class ValidatorPoolTest {
         Provider provider = new Provider();
         provider.setProviderId(providerId);
         when(providerService.findByMobileNumber(mobileNumber)).thenReturn(provider);
-        when(containerService.exists(containerIdValue)).thenReturn(false);
         when(mappingService.isValidContainerForProvider(providerId.toLowerCase(), containerId)).thenReturn(false);
 
         validatorPool.verifyContainerMapping(mobileNumber, containerId, whpErrors);
 
         verify(providerService, times(1)).findByMobileNumber(mobileNumber);
-        verify(containerService, times(1)).exists(containerIdValue);
         verify(mappingService, times(1)).isValidContainerForProvider(providerId.toLowerCase(), containerId);
         assertFalse(whpErrors.isEmpty());
         assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
@@ -116,5 +115,45 @@ public class ValidatorPoolTest {
         assertFalse(whpErrors.isEmpty());
         assertEquals(WHPErrorCode.INVALID_PHASE, whpErrors.get(0).getErrorCode());
         assertEquals(WHPErrorCode.INVALID_PHASE.getMessage(), whpErrors.get(0).getMessage());
+    }
+
+    @Test
+    public void shouldBeAnInvalidContainerIdWhenItIsLessThan5DigitsLong() {
+        WHPErrors whpErrors = new WHPErrors();
+        String mobileNumber = "1234567890";
+
+        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
+        validatorPool.verifyContainerMapping("1234567890", "1234", whpErrors);
+        assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
+    }
+
+    @Test
+    public void shouldBeAnInvalidContainerIdWhenItIsGreaterThan5DigitsLong() {
+        WHPErrors whpErrors = new WHPErrors();
+        String mobileNumber = "1234567890";
+
+        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
+        validatorPool.verifyContainerMapping("1234567890", "123456", whpErrors);
+        assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
+    }
+
+    @Test
+    public void shouldBeAnInvalidContainerIdNull() {
+        WHPErrors whpErrors = new WHPErrors();
+        String mobileNumber = "1234567890";
+
+        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
+        validatorPool.verifyContainerMapping(mobileNumber, null, whpErrors);
+        assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
+    }
+
+    @Test
+    public void shouldBeAnInvalidContainerIdWhenEmpty() {
+        WHPErrors whpErrors = new WHPErrors();
+        String mobileNumber = "1234567890";
+
+        when(providerService.findByMobileNumber(mobileNumber)).thenReturn(new Provider());
+        validatorPool.verifyContainerMapping("1234567890", "", whpErrors);
+        assertEquals(WHPErrorCode.INVALID_CONTAINER_ID, whpErrors.get(0).getErrorCode());
     }
 }

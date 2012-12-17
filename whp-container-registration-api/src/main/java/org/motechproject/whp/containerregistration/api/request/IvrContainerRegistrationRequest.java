@@ -1,7 +1,7 @@
 package org.motechproject.whp.containerregistration.api.request;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
 
 import javax.validation.constraints.Size;
@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "register_container")
-@Data
+@Setter
 @EqualsAndHashCode
 public class IvrContainerRegistrationRequest extends VerificationRequest {
 
@@ -45,13 +45,17 @@ public class IvrContainerRegistrationRequest extends VerificationRequest {
     }
 
     @XmlElement(name = "call_id")
-    public String getCallId() {
+    public String getCall_id() {
         return call_id;
     }
 
     @XmlElement(name = "container_id")
-    public String getContainerId() {
+    public String getContainer_id() {
         return container_id;
+    }
+
+    public String getPhase() {
+        return phase;
     }
 
     public void setMsisdn(String msisdn) {

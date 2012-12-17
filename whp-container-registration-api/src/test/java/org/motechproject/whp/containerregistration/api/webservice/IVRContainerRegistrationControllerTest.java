@@ -204,7 +204,7 @@ public class IVRContainerRegistrationControllerTest {
         verify(containerService, times(1)).registerContainer(containerRegistrationRequestArgumentCaptor.capture());
         ContainerRegistrationRequest containerRegistrationReportingRequest = containerRegistrationRequestArgumentCaptor.getValue();
 
-        assertEquals(request.getContainerId(), containerRegistrationReportingRequest.getContainerId());
+        assertEquals(request.getContainer_id(), containerRegistrationReportingRequest.getContainerId());
         assertEquals(request.getPhase(), containerRegistrationReportingRequest.getInstance());
         assertEquals(provider.getProviderId(), containerRegistrationReportingRequest.getProviderId());
         assertEquals(ChannelId.IVR.name(), containerRegistrationReportingRequest.getChannelId());
