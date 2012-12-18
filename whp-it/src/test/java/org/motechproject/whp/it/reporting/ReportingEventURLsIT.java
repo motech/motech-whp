@@ -66,4 +66,9 @@ public class ReportingEventURLsIT {
     public void shouldGetContainerVerificationLogURL() {
         assertThat(reportingEventURLs.getContainerVerificationLogURL(), is("http://127.0.0.1:9999/whp-reports/containerRegistrationCallLog/containerVerification"));
     }
+
+    @Test
+    public void shouldGetProviderReminderCallLogURL() {
+        assertThat(reportingEventURLs.getProviderReminderCallLogURL(), is("http://127.0.0.1:9999/whp-reports/providerReminderCallLog/measure"));
+    }
 }

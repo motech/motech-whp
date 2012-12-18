@@ -60,4 +60,8 @@ public class ReportingPublisherService {
     public void reportContainerVerificationDetailsLog(ContainerVerificationLogRequest request) {
         httpClientService.post(reportingEventURLs.getContainerVerificationLogURL(), request);
     }
+
+    public void reportProviderReminderCallLog(ProviderReminderCallLogRequest request) {
+        httpClientService.post(reportingEventURLs.getProviderReminderCallLogURL(), request);
+    }
 }
