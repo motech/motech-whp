@@ -53,9 +53,7 @@ public class ValidatorPool {
     }
 
     private boolean isInvalidContainerId(String containerId, Provider provider) {
-        boolean invalidRequest = verifyContainerId(containerId);
-        boolean inValidMapping = !mappingService.isValidContainerForProvider(provider.getProviderId(), containerId);
-        return invalidRequest || inValidMapping;
+        return verifyContainerId(containerId) || !mappingService.isValidContainerForProvider(provider.getProviderId(), containerId);
     }
 
     public ValidatorPool verifyPhase(String phase, WHPErrors whpErrors) {
