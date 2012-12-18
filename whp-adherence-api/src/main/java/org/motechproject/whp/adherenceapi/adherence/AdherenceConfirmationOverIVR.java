@@ -8,6 +8,7 @@ import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportReques
 import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.validator.AdherenceValidationRequestValidator;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
@@ -22,18 +23,18 @@ public class AdherenceConfirmationOverIVR {
 
     private ReportingPublisherService reportingService;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
-    private AdherenceValidationOverIVR adherenceValidationOverIVR;
+    private AdherenceValidationRequestValidator adherenceValidationOverIVR;
 
     @Autowired
-    public AdherenceConfirmationOverIVR(ReportingPublisherService reportingService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, AdherenceValidationOverIVR adherenceValidationOverIVR) {
+    public AdherenceConfirmationOverIVR(ReportingPublisherService reportingService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, AdherenceValidationRequestValidator adherenceValidationRequestValidator) {
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
-        this.adherenceValidationOverIVR = adherenceValidationOverIVR;
+        this.adherenceValidationOverIVR = adherenceValidationRequestValidator;
         this.reportingService = reportingService;
     }
 
     public AdherenceValidationResponse confirmAdherence(AdherenceConfirmationRequest request, ProviderId providerId) {
         AdherenceValidationRequest validationRequest = request.validationRequest();
-        AdherenceValidationResponse response = adherenceValidationOverIVR.validateAdherenceInput(validationRequest, providerId);
+        AdherenceValidationResponse response = adherenceValidationOverIVR.validate(validationRequest, providerId);
 
         if (!response.failed()) {
             recordAdherence(request, providerId);

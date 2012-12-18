@@ -1,11 +1,13 @@
 package org.motechproject.whp.adherenceapi.webservice;
 
 import org.motechproject.whp.adherenceapi.adherence.AdherenceConfirmationOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.AdherenceNotCapturedOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
 import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
+import org.motechproject.whp.adherenceapi.request.AdherenceNotCapturedRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
@@ -34,16 +36,18 @@ public class AdherenceIVRController {
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     private AdherenceValidationOverIVR adherenceValidationOverIVR;
     private AdherenceConfirmationOverIVR adherenceConfirmationOverIVR;
+    private AdherenceNotCapturedOverIVR adherenceNotCapturedOverIVR;
 
     @Autowired
     public AdherenceIVRController(ProviderService providerService,
                                   AdherenceSummaryOverIVR adherenceSummaryOverIVR,
-                                  AdherenceValidationOverIVR adherenceValidationOverIVR, AdherenceConfirmationOverIVR adherenceConfirmationOverIVR) {
+                                  AdherenceValidationOverIVR adherenceValidationOverIVR, AdherenceConfirmationOverIVR adherenceConfirmationOverIVR, AdherenceNotCapturedOverIVR adherenceNotCapturedOverIVR) {
 
         this.providerService = providerService;
         this.adherenceSummaryOverIVR = adherenceSummaryOverIVR;
         this.adherenceValidationOverIVR = adherenceValidationOverIVR;
         this.adherenceConfirmationOverIVR = adherenceConfirmationOverIVR;
+        this.adherenceNotCapturedOverIVR = adherenceNotCapturedOverIVR;
     }
 
     @RequestMapping(value = "/summary")
@@ -62,6 +66,15 @@ public class AdherenceIVRController {
     @ResponseBody
     public AdherenceValidationResponse adherenceConfirmation(@RequestBody @Valid AdherenceConfirmationRequest request) {
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(request, providerId(request.getMsisdn()));
+        if(response.failed())
+            return response;
+        return null;
+    }
+
+    @RequestMapping(value = "/notcaptured")
+    @ResponseBody
+    public AdherenceValidationResponse adherenceNotCaptured(@RequestBody @Valid AdherenceNotCapturedRequest request) {
+        AdherenceValidationResponse response = adherenceNotCapturedOverIVR.recordNotCaptured(request, providerId(request.getMsisdn()));
         if(response.failed())
             return response;
         return null;

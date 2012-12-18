@@ -12,6 +12,7 @@ import org.motechproject.whp.adherenceapi.reporting.AdherenceCaptureReportReques
 import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.validator.AdherenceValidationRequestValidator;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
@@ -30,12 +31,12 @@ public class AdherenceConfirmationOverIVRTest {
     @Mock
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
-    private AdherenceValidationOverIVR adherenceValidationOverIVR;
+    private AdherenceValidationRequestValidator adherenceValidationRequestValidator;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceConfirmationOverIVR = new AdherenceConfirmationOverIVR(reportingService, treatmentUpdateOrchestrator, adherenceValidationOverIVR);
+        adherenceConfirmationOverIVR = new AdherenceConfirmationOverIVR(reportingService, treatmentUpdateOrchestrator, adherenceValidationRequestValidator);
     }
 
     @Test
@@ -49,7 +50,7 @@ public class AdherenceConfirmationOverIVRTest {
         validationRequest.setCallId(callId);
 
         AdherenceValidationResponse validationResponse = AdherenceValidationResponse.failure();
-        when(adherenceValidationOverIVR.validateAdherenceInput(validationRequest, providerId)).thenReturn(validationResponse);
+        when(adherenceValidationRequestValidator.validate(validationRequest, providerId)).thenReturn(validationResponse);
 
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(confirmationRequest, providerId);
 
@@ -73,7 +74,7 @@ public class AdherenceConfirmationOverIVRTest {
         validationRequest.setDoseTakenCount(doseTakenCount);
 
         AdherenceValidationResponse validationResponse = AdherenceValidationResponse.success();
-        when(adherenceValidationOverIVR.validateAdherenceInput(validationRequest, providerId)).thenReturn(validationResponse);
+        when(adherenceValidationRequestValidator.validate(validationRequest, providerId)).thenReturn(validationResponse);
 
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(confirmationRequest, providerId);
 

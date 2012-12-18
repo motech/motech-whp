@@ -17,7 +17,7 @@ public class AdherenceValidationRequestTest {
 
     @Before
     public void setup() {
-        adherenceIVRController = new AdherenceIVRController(null, null, null, null);
+        adherenceIVRController = new AdherenceIVRController(null, null, null, null, null);
     }
 
     @Test

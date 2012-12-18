@@ -19,7 +19,7 @@ public class AdherenceFlashingRequestTest {
 
     @Before
     public void setup() {
-        adherenceIVRController = new AdherenceIVRController(null, null, null, null);
+        adherenceIVRController = new AdherenceIVRController(null, null, null, null, null);
     }
 
     @Test
