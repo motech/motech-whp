@@ -990,7 +990,7 @@ pre {
 .navbar-inner {
     font-family: 'Telex',sans-serif;
     color: #F5F5F5;
-    background-color: #3F9FD9;
+    background-color: #5683AA;
     background-repeat: no-repeat;
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5683AA), to(#375978));     /* Safari 4-5, Chrome 1-9 */
     background-image: -webkit-linear-gradient(#5683AA, #375978);  /* Safari 5.1, Chrome 10+ */
@@ -998,6 +998,7 @@ pre {
     background-image: -ms-linear-gradient(#5683AA, #375978);   /* IE 10 */
     background-image: -o-linear-gradient(#5683AA, #375978);     /* Opera 11.10+ */
     background-image: linear-gradient(#5683AA, #375978);        /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5683AA', endColorstr='#375978', GradientType=0);
 
 }
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
