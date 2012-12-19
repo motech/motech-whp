@@ -164,7 +164,6 @@
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>
             <artifactId>motech-paginator</artifactId>
-            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp-contrib</groupId>

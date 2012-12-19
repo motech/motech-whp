@@ -298,7 +298,6 @@
                 <groupId>org.motechproject.whp-contrib</groupId>
                 <artifactId>motech-paginator</artifactId>
                 <version>${motech.contrib.version}</version>
-                <classifier>classes</classifier>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp-contrib</groupId>
