@@ -5,27 +5,28 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="java.lang.reflect.Method" %>
 <%
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     boolean success = false;
     try {
+        Method m = ClassLoader.class.getDeclaredMethod("loadLibrary", Class.class, String.class, Boolean.TYPE);
+        m.setAccessible(true);
+        m.invoke(null, java.lang.System.class, "jvmfaketime", false);
+    } catch (Exception e) {
+        System.out.println("couldn't load native library.");
+    }
+    System.startFakingTime();
+    try {
         if (request.getMethod().equals("POST")) {
-            String offsetValue = System.getProperty("faketime.offset.seconds");
-            long currentOffset = Long.parseLong(offsetValue == null ? "0" : offsetValue);
-
             String dateTime = request.getParameter("newDateTime");
-
             Date newDateTime = dateFormat.parse(dateTime);
+
             System.out.println("Current Time: " + dateFormat.format(new Date()));
             System.out.println("Request for Updated Time: " + dateFormat.format(newDateTime));
 
-            long newOffset = ((newDateTime.getTime() - System.currentTimeMillis()) / 1000) + currentOffset;
-            System.setProperty("faketime.offset.seconds", String.valueOf(newOffset));
+            System.moveTimeBy(newDateTime.getTime() - System.currentTimeMillis());
 
-            System.out.println("Updated Time: " + dateFormat.format(new Date()));
-
-            success = Math.abs(System.currentTimeMillis() - new Date().getTime()) < 2000;
-            System.out.println(success ? "SUCCESS" : "FAILED");
         }
     } catch (java.lang.Exception e) {
         out.println("Error: " + ExceptionUtils.getFullStackTrace(e));
@@ -78,9 +79,6 @@
     <%
         if (request.getMethod().equals("POST")) {
     %>
-    <div style="display:inline;background:<%=success ? "green" : "red"%>;"><%=success ? "SUCCESS" : "FAILED" %>
-    </div>
-    <br/>
     <%
         }
     %>
