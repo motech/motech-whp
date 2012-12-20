@@ -7,7 +7,7 @@
 <%@ page import="java.util.Properties" %>
 <%@ page import="java.lang.reflect.Method" %>
 <%
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     boolean success = false;
     try {
         Method m = ClassLoader.class.getDeclaredMethod("loadLibrary", Class.class, String.class, Boolean.TYPE);
@@ -62,7 +62,7 @@
         $(function () {
             $('#newDateTime').datetimepicker({
                 dateFormat:'dd/mm/yy',
-                timeFormat:'hh:mm'
+                timeFormat:'hh:mm:ss'
             });
         });
     </script>

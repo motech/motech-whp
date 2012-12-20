@@ -6,6 +6,10 @@
 <html>
 <head>
     <%
+        if("true".equals(request.getParameter("clear"))){
+            ArrayList<String> clearedResponses = new ArrayList<String>();
+            application.setAttribute("responses", clearedResponses);
+        }
         ApplicationContext appCtx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
         Properties whpProperties = appCtx.getBean("whpProperties", Properties.class);
         String appVersion = whpProperties.getProperty("application.version");
@@ -20,12 +24,16 @@
         boolean isPostMethod = methodTypeParam == null ? true : methodTypeParam.equals("POST");
 
         ArrayList<String> responsesGotSoFar = (ArrayList<String>) application.getAttribute("responses");
-        if (responsesGotSoFar == null)
+        if (responsesGotSoFar == null){
             responsesGotSoFar = new ArrayList<String>();
+        }
     %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/whp/resources-<%=appVersion%>/styles/standard.css"/>
+
+
+
 </head>
 <body>
 <div class="container">
@@ -63,18 +71,28 @@
     <br/><br/>
 
     <p class="bold">Last 10 responses : </p><br/>
-    <%
-        for (int i=responsesGotSoFar.size()-1; i>=0; i--) {
-    %>
-    <div class="well" style="position: relative;">
-    <pre><textarea rows="20" cols="200" style="width: 880px; height: 370px;" disabled="true"><%=responsesGotSoFar.get(i)%></textarea></pre>
+    <input class="pull-left span2" type="button" id="clearResponses" value="Clear">
+    <div id="responses">
+        <%
+            for (int i=responsesGotSoFar.size()-1; i>=0; i--) {
+        %>
+        <div class="well" style="position: relative;">
+        <pre><textarea rows="20" cols="200" style="width: 880px; height: 370px;" disabled="true"><%=responsesGotSoFar.get(i)%></textarea></pre>
+        </div>
+        <br/>
+        <%
+            }
+        %>
     </div>
-    <br/>
-    <%
-        }
-    %>
 
     <br/><br/>
 </div>
+    <script type="text/javascript">
+        $("#clearResponses").click(function(){
+            $("#responses").html("");
+            $.get('<%= request.getRequestURL().toString() %>?clear=true');
+        });
+
+    </script>
 </body>
 </html>
