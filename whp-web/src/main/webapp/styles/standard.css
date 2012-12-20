@@ -1194,3 +1194,7 @@ pre {
 .smallest-column {
     width: 5px;
 }
+
+.itadmin-menu .nav {
+    border:none;
+}
