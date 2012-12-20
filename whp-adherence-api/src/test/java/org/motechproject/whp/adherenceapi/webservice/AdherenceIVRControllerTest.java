@@ -6,15 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceConfirmationOverIVR;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceNotCapturedOverIVR;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceSummaryOverIVR;
-import org.motechproject.whp.adherenceapi.adherence.AdherenceValidationOverIVR;
+import org.motechproject.whp.adherenceapi.adherence.*;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
-import org.motechproject.whp.adherenceapi.request.AdherenceConfirmationRequest;
-import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
-import org.motechproject.whp.adherenceapi.request.AdherenceNotCapturedRequest;
-import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.request.*;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.user.service.ProviderService;
@@ -26,6 +20,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -39,6 +34,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public static final String IVR_ADHERENCE_VALIDATION_PATH = "/ivr/adherence/validate";
     public static final String IVR_ADHERENCE_CONFIRMATION_PATH = "/ivr/adherence/confirm";
     public static final String IVR_ADHERENCE_NOT_CAPTURED_PATH = "/ivr/adherence/notcaptured";
+    public static final String IVR_ADHERENCE_CALL_STATUS_PATH = "/ivr/adherence/callstatus";
 
     public static final String FLASHING_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_capture_flashing_request>\n" +
@@ -74,6 +70,21 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <time_taken>7</time_taken>\n" +
             "</adherence_not_captured_request>";
 
+    public static final String CALL_STATUS_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
+            "<adherence_call_status_request>\n" +
+            "    <call_id>abcd1234</call_id>\n" +
+            "    <flashing_call_id>abcd1234</flashing_call_id>\n" +
+            "    <msisdn>1234567942</msisdn>\n" +
+            "    <provider_id>cha010</provider_id>\n" +
+            "    <attempt_time>10/12/2012 12:32:31</attempt_time>\n" +
+            "    <start_time>10/12/2012 12:32:35</start_time>\n" +
+            "    <end_time>10/12/2012 12:33:35</end_time>\n" +
+            "    <call_status>SUCCESS</call_status>\n" +
+            "    <disconnection_type>PROVIDER_HUNGUP</disconnection_type>\n" +
+            "    <patient_count>0</patient_count>\n" +
+            "    <adherence_captured_count>0</adherence_captured_count>\n" +
+            "</adherence_call_status_request>";
+
     @Mock
     private AdherenceSummaryOverIVR adherenceSummaryOverIVR;
     @Mock
@@ -84,6 +95,8 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     private AdherenceConfirmationOverIVR adherenceConfirmationOverIVR;
     @Mock
     private AdherenceNotCapturedOverIVR adherenceNotCapturedOverIVR;
+    @Mock
+    private AdherenceCallStatusOverIVR adherenceCallStatusOverIVR;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
     private AdherenceIVRController adherenceIVRController;
@@ -92,7 +105,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public void setup() {
         initMocks(this);
         mockCurrentDate(today);
-        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceValidationOverIVR, adherenceConfirmationOverIVR, adherenceNotCapturedOverIVR);
+        adherenceIVRController = new AdherenceIVRController(providerService, adherenceSummaryOverIVR, adherenceValidationOverIVR, adherenceConfirmationOverIVR, adherenceNotCapturedOverIVR, adherenceCallStatusOverIVR);
     }
 
     @Test
@@ -294,6 +307,39 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
         standaloneSetup(adherenceIVRController)
                 .build()
                 .perform(post(IVR_ADHERENCE_NOT_CAPTURED_PATH).body(NOT_CAPTURED_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
+    }
+
+    @Test
+    public void shouldRespondWithSuccessOnSuccessfulCallStatusRequest() throws Exception {
+        when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
+                .thenReturn(AdherenceValidationResponse.success());
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void shouldRespondWithErrorInCaseOfValidationFailureForCallStatusRequest() throws Exception {
+        String expectedXml =
+                "            <adherence_validation_response>" +
+                        "      <result>failure</result>" +
+                        "      <error>" +
+                        "       <error_code>INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION</error_code>" +
+                        "      </error>" +
+                        "    </adherence_validation_response>";
+
+        when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
+                .thenReturn(AdherenceValidationResponse.failure(INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION.name()));
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
