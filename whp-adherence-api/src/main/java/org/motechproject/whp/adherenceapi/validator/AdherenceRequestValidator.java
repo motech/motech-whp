@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdherenceRequestValidator {
+
     private AdherenceService adherenceService;
     private PatientService patientService;
     private ProviderService providerService;
@@ -28,12 +29,11 @@ public class AdherenceRequestValidator {
 
     public AdherenceErrors validatePatientProviderMapping(String patientId, ProviderId providerId) {
         Dosage dosage = adherenceService.dosageForPatient(patientId);
-        AdherenceErrors errors = adherenceErrors(patientId, providerId, dosage);
-        return errors;
+        return adherenceErrors(patientId, providerId, dosage);
     }
 
-    public AdherenceErrors validateProviderMobileNumberMapping(String msisdn, String providerId) {
-        Provider provider = providerService.findByMobileNumber(msisdn);
+    public AdherenceErrors validateProvider(String providerId) {
+        Provider provider = providerService.findByMobileNumber(providerId);
         return new CallStatusRequestErrors(provider != null && provider.getProviderId().equals(providerId));
     }
 

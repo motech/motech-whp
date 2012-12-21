@@ -8,10 +8,86 @@ import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 import static org.junit.Assert.assertEquals;
 
 public class AdherenceCallStatusReportRequestTest {
+
     @Test
-    public void shouldCreateAdherenceCallLogRequest() {
+    public void shouldCopyCallId() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getCallId(), callLogRequest.getCallId());
+    }
+
+    @Test
+    public void shouldCopyCallStatus() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getCallStatus(), callLogRequest.getCallStatus());
+    }
+
+    @Test
+    public void shouldCopyFlashingCallId() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getFlashingCallId(), callLogRequest.getFlashingCallId());
+    }
+
+    @Test
+    public void shouldCopyProviderId() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getProviderId(), callLogRequest.getProviderId());
+    }
+
+    @Test
+    public void shouldCopyEndTime() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(new WHPDateTime(callStatusRequest.getEndTime()).dateTime().toDate(), callLogRequest.getEndTime());
+    }
+
+    @Test
+    public void shouldCopyStartTime() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(new WHPDateTime(callStatusRequest.getStartTime()).dateTime().toDate(), callLogRequest.getStartTime());
+    }
+
+    @Test
+    public void shouldCopyAttemptTime() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(new WHPDateTime(callStatusRequest.getAttemptTime()).dateTime().toDate(), callLogRequest.getAttemptTime());
+    }
+
+    @Test
+    public void shouldCopyPatientCount() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getPatientCount(), callLogRequest.getTotalPatients().toString());
+    }
+
+    @Test
+    public void shouldCopyAdherenceCapturedCount() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getAdherenceCapturedCount(), callLogRequest.getAdherenceCaptured().toString());
+    }
+
+    @Test
+    public void shouldCopyAdherenceNotCapturedCount() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getAdherenceNotCapturedCount(), callLogRequest.getAdherenceNotCaptured().toString());
+    }
+
+    @Test
+    public void shouldCopyCallAnsweredStatus() {
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getCallAnswered(), callLogRequest.getCallAnswered());
+    }
+
+    private AdherenceCallStatusRequest callStatusRequest() {
         AdherenceCallStatusRequest callStatusRequest = new AdherenceCallStatusRequest();
-        callStatusRequest.setMsisdn("1234567890");
         callStatusRequest.setCallId("callid");
         callStatusRequest.setCallStatus("call_status");
         callStatusRequest.setFlashingCallId("flashing_call_id");
@@ -23,20 +99,6 @@ public class AdherenceCallStatusReportRequestTest {
         callStatusRequest.setAdherenceCapturedCount("2");
         callStatusRequest.setAdherenceNotCapturedCount("2");
         callStatusRequest.setCallAnswered("YES");
-
-        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
-
-        assertEquals(callStatusRequest.getMsisdn(), callLogRequest.getCalledBy());
-        assertEquals(callStatusRequest.getCallId(), callLogRequest.getCallId());
-        assertEquals(callStatusRequest.getCallStatus(), callLogRequest.getCallStatus());
-        assertEquals(callStatusRequest.getFlashingCallId(), callLogRequest.getFlashingCallId());
-        assertEquals(callStatusRequest.getProviderId(), callLogRequest.getProviderId());
-        assertEquals(new WHPDateTime(callStatusRequest.getEndTime()).date().toDate(), callLogRequest.getEndTime());
-        assertEquals(new WHPDateTime(callStatusRequest.getStartTime()).date().toDate(), callLogRequest.getStartTime());
-        assertEquals(new WHPDateTime(callStatusRequest.getAttemptTime()).date().toDate(), callLogRequest.getAttemptTime());
-        assertEquals(callStatusRequest.getPatientCount(), callLogRequest.getTotalPatients().toString());
-        assertEquals(callStatusRequest.getAdherenceCapturedCount(), callLogRequest.getAdherenceCaptured().toString());
-        assertEquals(callStatusRequest.getAdherenceNotCapturedCount(), callLogRequest.getAdherenceNotCaptured().toString());
-        assertEquals(callStatusRequest.getCallAnswered(), callLogRequest.getCallAnswered());
+        return callStatusRequest;
     }
 }

@@ -113,7 +113,7 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
     private FlashingLogRequest expectedFlashingRequest(String msisdn, String flashingCallId, String providerId, String callTime) {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
         flashingLogRequest.setProviderId(providerId);
-        flashingLogRequest.setCallTime(WHPDateTime.date(callTime).date().toDate());
+        flashingLogRequest.setCallTime(WHPDateTime.date(callTime).dateTime().toDate());
         flashingLogRequest.setCreationTime(today().toDate());
         flashingLogRequest.setMobileNumber(msisdn);
         flashingLogRequest.setFlashingCallId(flashingCallId);

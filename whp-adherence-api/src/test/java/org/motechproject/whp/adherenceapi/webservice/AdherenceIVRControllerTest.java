@@ -20,7 +20,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -74,7 +74,6 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "<adherence_call_status_request>\n" +
             "    <call_id>abcd1234</call_id>\n" +
             "    <flashing_call_id>abcd1234</flashing_call_id>\n" +
-            "    <msisdn>1234567942</msisdn>\n" +
             "    <provider_id>cha010</provider_id>\n" +
             "    <attempt_time>10/12/2012 12:32:31</attempt_time>\n" +
             "    <start_time>10/12/2012 12:32:35</start_time>\n" +
@@ -333,12 +332,12 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 "            <adherence_validation_response>" +
                         "      <result>failure</result>" +
                         "      <error>" +
-                        "       <error_code>INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION</error_code>" +
+                        "       <error_code>INVALID_PROVIDER</error_code>" +
                         "      </error>" +
                         "    </adherence_validation_response>";
 
         when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
-                .thenReturn(AdherenceValidationResponse.failure(INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION.name()));
+                .thenReturn(AdherenceValidationResponse.failure(INVALID_PROVIDER.name()));
 
         standaloneSetup(adherenceIVRController)
                 .build()

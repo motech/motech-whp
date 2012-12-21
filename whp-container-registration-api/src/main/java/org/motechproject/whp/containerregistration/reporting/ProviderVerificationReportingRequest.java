@@ -13,7 +13,7 @@ public class ProviderVerificationReportingRequest {
         request = new ProviderVerificationLogRequest();
         request.setCallId(verificationRequest.getCall_id());
         request.setMobileNumber(verificationRequest.getPhoneNumber());
-        request.setTime(date(verificationRequest.getTime()).date());
+        request.setTime(date(verificationRequest.getTime()).dateTime());
         request.setProviderId(providerId);
     }
 

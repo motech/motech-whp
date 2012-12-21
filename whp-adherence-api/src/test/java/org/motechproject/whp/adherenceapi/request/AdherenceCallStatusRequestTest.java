@@ -96,26 +96,6 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfMsidnIsEmpty() {
-        AdherenceCallStatusRequest request = validRequest();
-        request.setMsisdn("");
-
-        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("may not be empty"));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("msisdn"));
-    }
-
-    @Test
-    public void shouldBeInvalidIfMsisdnIsLessThanTenDigitsLong() {
-        AdherenceCallStatusRequest request = validRequest();
-        request.setMsisdn("123456789");
-
-        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("length must be between 10 and 2147483647"));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("msisdn"));
-    }
-
-    @Test
     public void shouldBeInvalidIfDisconnectionTypeIsEmpty() {
         AdherenceCallStatusRequest request = validRequest();
         request.setDisconnectionType("");
@@ -176,7 +156,6 @@ public class AdherenceCallStatusRequestTest {
     private AdherenceCallStatusRequest validRequest() {
         AdherenceCallStatusRequest request = new AdherenceCallStatusRequest();
         request.setCallId("callId");
-        request.setMsisdn("1234567890");
         request.setStartTime("12/12/2011 11:11:11");
         request.setEndTime("12/12/2011 11:11:11");
         request.setAdherenceCapturedCount("1");

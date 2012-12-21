@@ -5,6 +5,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Date;
+
 public class WHPDateTime {
 
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
@@ -40,7 +42,11 @@ public class WHPDateTime {
         return date.toString(DATE_TIME_FORMAT);
     }
 
-    public DateTime date() {
+    public Date asDate(){
+        return dateTime().toDate();
+    }
+
+    public DateTime dateTime() {
         return date;
     }
 }

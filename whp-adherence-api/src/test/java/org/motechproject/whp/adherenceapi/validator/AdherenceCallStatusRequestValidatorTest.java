@@ -27,13 +27,11 @@ public class AdherenceCallStatusRequestValidatorTest {
 
     @Test
     public void shouldValidateAndReturnSuccess() {
-        String msisdn = "1234567890";
         String providerId = "providerId";
         AdherenceCallStatusRequest request = new AdherenceCallStatusRequest();
-        request.setMsisdn(msisdn);
         request.setProviderId(providerId);
 
-        when(adherenceRequestValidator.validateProviderMobileNumberMapping(msisdn, providerId)).thenReturn(new CallStatusRequestErrors(true));
+        when(adherenceRequestValidator.validateProvider(providerId)).thenReturn(new CallStatusRequestErrors(true));
 
         AdherenceValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
 
@@ -42,13 +40,11 @@ public class AdherenceCallStatusRequestValidatorTest {
 
     @Test
     public void shouldValidateAndReturnFailure() {
-        String msisdn = "1234567890";
         String providerId = "providerId";
         AdherenceCallStatusRequest request = new AdherenceCallStatusRequest();
-        request.setMsisdn(msisdn);
         request.setProviderId(providerId);
 
-        when(adherenceRequestValidator.validateProviderMobileNumberMapping(msisdn, providerId)).thenReturn(new CallStatusRequestErrors(false));
+        when(adherenceRequestValidator.validateProvider(providerId)).thenReturn(new CallStatusRequestErrors(false));
 
         AdherenceValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
 

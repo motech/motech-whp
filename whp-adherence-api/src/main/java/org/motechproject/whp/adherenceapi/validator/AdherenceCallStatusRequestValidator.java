@@ -11,6 +11,7 @@ import static org.motechproject.whp.adherenceapi.response.validation.AdherenceVa
 
 @Component
 public class AdherenceCallStatusRequestValidator {
+
     private AdherenceRequestValidator adherenceRequestValidator;
 
     @Autowired
@@ -19,7 +20,7 @@ public class AdherenceCallStatusRequestValidator {
     }
 
     public AdherenceValidationResponse validate(AdherenceCallStatusRequest request) {
-        AdherenceErrors errors = adherenceRequestValidator.validateProviderMobileNumberMapping(request.getMsisdn(), request.getProviderId());
+        AdherenceErrors errors = adherenceRequestValidator.validateProvider(request.getProviderId());
         if (errors.isNotEmpty())
             return failure(errors.errorMessage());
         return success();

@@ -21,7 +21,7 @@ public class AdherenceFlashingReportRequest {
         FlashingLogRequest flashingLogRequest = new FlashingLogRequest();
         flashingLogRequest.setCreationTime(now().toDate());
         flashingLogRequest.setProviderId(providerId);
-        flashingLogRequest.setCallTime(date(flashingRequest.getCallTime()).date().toDate());
+        flashingLogRequest.setCallTime(date(flashingRequest.getCallTime()).dateTime().toDate());
         flashingLogRequest.setFlashingCallId(flashingRequest.getCallId());
         flashingLogRequest.setMobileNumber(flashingRequest.getMsisdn());
         return flashingLogRequest;

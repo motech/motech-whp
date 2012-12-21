@@ -73,25 +73,16 @@ public class AdherenceRequestValidatorTest {
     }
 
     @Test
-    public void shouldReturnFailureWhenThereIsNoProviderWithThatMobileNumber() {
-        String msisdn = "1234567890";
-        when(providerService.findByMobileNumber(msisdn)).thenReturn(null);
-        assertEquals(INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION.name(), adherenceRequestValidator.validateProviderMobileNumberMapping(msisdn, "providerid").errorMessage());
-    }
-
-    @Test
-    public void shouldReturnFailureWhenThatMobileNumberBelongsToDifferentProvider() {
-        String msisdn = "1234567890";
-        String differentProvider = "differentprovider";
-        when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider(differentProvider, null, null, null));
-        assertEquals(INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION.name(), adherenceRequestValidator.validateProviderMobileNumberMapping(msisdn, "providerid").errorMessage());
-    }
-
-    @Test
-    public void shouldReturnSuccessWhenMobileNumberBelongsToProvider() {
-        String msisdn = "1234567890";
+    public void shouldReturnFailureIfProviderIdIsUnknown() {
         String providerId = "providerid";
-        when(providerService.findByMobileNumber(msisdn)).thenReturn(new Provider(providerId, null, null, null));
-        assertEquals("", adherenceRequestValidator.validateProviderMobileNumberMapping(msisdn, providerId).errorMessage());
+        when(providerService.findByProviderId(providerId)).thenReturn(null);
+        assertEquals(INVALID_PROVIDER.name(), adherenceRequestValidator.validateProvider(providerId).errorMessage());
+    }
+
+    @Test
+    public void shouldReturnSuccessIfProviderIdIsRegistered(){
+        String providerId = "providerid";
+        when(providerService.findByMobileNumber(providerId)).thenReturn(new Provider(providerId, null, null, null));
+        assertEquals("", adherenceRequestValidator.validateProvider(providerId).errorMessage());
     }
 }

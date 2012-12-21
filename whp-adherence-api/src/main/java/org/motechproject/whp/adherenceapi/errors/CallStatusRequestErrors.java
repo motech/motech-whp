@@ -12,7 +12,7 @@ public class CallStatusRequestErrors extends AdherenceErrors {
 
     public AdherenceIVRError error() {
         if (!isMobileNumberBelongsToProvider) {
-            return AdherenceIVRError.INVALID_PROVIDER_MOBILE_NUMBER_COMBINATION;
+            return AdherenceIVRError.INVALID_PROVIDER;
         } else {
             return null;
         }

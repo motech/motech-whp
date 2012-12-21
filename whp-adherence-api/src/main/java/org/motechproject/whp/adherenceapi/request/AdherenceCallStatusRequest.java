@@ -16,9 +16,6 @@ import java.io.Serializable;
 public class AdherenceCallStatusRequest implements Serializable {
 
     @NotBlank
-    @Length(min = 10)
-    private String msisdn;
-    @NotBlank
     private String providerId;
     @NotBlank
     private String callAnswered;
@@ -47,11 +44,6 @@ public class AdherenceCallStatusRequest implements Serializable {
     private String adherenceNotCapturedCount;
 
     public AdherenceCallStatusRequest() {
-    }
-
-    @XmlElement(name = "msisdn")
-    public String getMsisdn() {
-        return msisdn;
     }
 
     @XmlElement(name = "provider_id")
