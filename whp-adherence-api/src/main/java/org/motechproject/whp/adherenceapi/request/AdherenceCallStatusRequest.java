@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.whp.common.validation.DateTimeFormat;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,10 +25,13 @@ public class AdherenceCallStatusRequest implements Serializable {
     @NotBlank
     private String flashingCallId;
     @NotBlank
+    @DateTimeFormat
     private String attemptTime;
     @NotBlank
+    @DateTimeFormat
     private String startTime;
     @NotBlank
+    @DateTimeFormat
     private String endTime;
     @NotBlank
     private String callStatus;
@@ -94,9 +98,5 @@ public class AdherenceCallStatusRequest implements Serializable {
     @XmlElement(name = "adherence_captured_count")
     public String getAdherenceCapturedCount() {
         return adherenceCapturedCount;
-    }
-
-    public AdherenceValidationRequest validationRequest() {
-            return null;  //To change body of created methods use File | Settings | File Templates.
     }
 }
