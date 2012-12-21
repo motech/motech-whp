@@ -21,6 +21,8 @@ public class AdherenceCallStatusRequest implements Serializable {
     @NotBlank
     private String providerId;
     @NotBlank
+    private String callAnswered;
+    @NotBlank
     private String callId;
     @NotBlank
     private String flashingCallId;
@@ -41,6 +43,8 @@ public class AdherenceCallStatusRequest implements Serializable {
     private String patientCount;
     @NotBlank
     private String adherenceCapturedCount;
+    @NotBlank
+    private String adherenceNotCapturedCount;
 
     public AdherenceCallStatusRequest() {
     }
@@ -85,6 +89,11 @@ public class AdherenceCallStatusRequest implements Serializable {
         return callStatus;
     }
 
+    @XmlElement(name = "call_answered")
+    public String getCallAnswered() {
+        return callAnswered;
+    }
+
     @XmlElement(name = "disconnection_type")
     public String getDisconnectionType() {
         return disconnectionType;
@@ -98,5 +107,10 @@ public class AdherenceCallStatusRequest implements Serializable {
     @XmlElement(name = "adherence_captured_count")
     public String getAdherenceCapturedCount() {
         return adherenceCapturedCount;
+    }
+
+    @XmlElement(name = "adherence_not_captured_count")
+    public String getAdherenceNotCapturedCount() {
+        return adherenceNotCapturedCount;
     }
 }

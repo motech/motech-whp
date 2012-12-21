@@ -40,8 +40,10 @@ public class AdherenceCallStatusOverIVRTest {
         AdherenceCallStatusRequest adherenceCallStatusRequest = new AdherenceCallStatusRequest();
         adherenceCallStatusRequest.setStartTime("10/12/2012 12:32:35");
         adherenceCallStatusRequest.setEndTime("21/12/2012 12:32:35");
+        adherenceCallStatusRequest.setAttemptTime("21/12/2012 12:32:35");
         adherenceCallStatusRequest.setPatientCount("2");
         adherenceCallStatusRequest.setAdherenceCapturedCount("3");
+        adherenceCallStatusRequest.setAdherenceNotCapturedCount("1");
 
         when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(success());
 

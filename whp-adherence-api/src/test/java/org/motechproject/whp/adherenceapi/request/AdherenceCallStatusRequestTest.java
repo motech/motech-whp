@@ -136,6 +136,26 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
+    public void shouldBeInvalidWhenCallAnsweredIsEmpty() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setCallAnswered("");
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("may not be empty"));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("callAnswered"));
+    }
+
+    @Test
+    public void shouldBeInvalidWhenAdherenceNotCapturedCountIsEmpty() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setAdherenceNotCapturedCount("");
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("may not be empty"));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("adherenceNotCapturedCount"));
+    }
+
+    @Test
     public void shouldBeInvalidIfPatientCountIsEmpty() {
         AdherenceCallStatusRequest request = validRequest();
         request.setPatientCount("");
@@ -161,9 +181,11 @@ public class AdherenceCallStatusRequestTest {
         request.setEndTime("12/12/2011 11:11:11");
         request.setAdherenceCapturedCount("1");
         request.setAttemptTime("12/12/2011 11:11:11");
+        request.setCallAnswered("YES");
         request.setCallStatus("SUCCESS");
         request.setDisconnectionType("PROVIDER_HANGUP");
         request.setFlashingCallId("flashingCallId");
+        request.setAdherenceNotCapturedCount("0");
         request.setPatientCount("1");
         request.setProviderId("providerId");
         return request;

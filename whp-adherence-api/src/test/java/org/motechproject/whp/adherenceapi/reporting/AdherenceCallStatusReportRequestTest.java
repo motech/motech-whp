@@ -19,7 +19,10 @@ public class AdherenceCallStatusReportRequestTest {
         callStatusRequest.setStartTime("10/12/2012 12:32:35");
         callStatusRequest.setEndTime("21/12/2012 12:32:35");
         callStatusRequest.setPatientCount("3");
+        callStatusRequest.setAttemptTime("21/12/2012 12:32:35");
         callStatusRequest.setAdherenceCapturedCount("2");
+        callStatusRequest.setAdherenceNotCapturedCount("2");
+        callStatusRequest.setCallAnswered("YES");
 
         AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
 
@@ -30,7 +33,10 @@ public class AdherenceCallStatusReportRequestTest {
         assertEquals(callStatusRequest.getProviderId(), callLogRequest.getProviderId());
         assertEquals(new WHPDateTime(callStatusRequest.getEndTime()).date().toDate(), callLogRequest.getEndTime());
         assertEquals(new WHPDateTime(callStatusRequest.getStartTime()).date().toDate(), callLogRequest.getStartTime());
+        assertEquals(new WHPDateTime(callStatusRequest.getAttemptTime()).date().toDate(), callLogRequest.getAttemptTime());
         assertEquals(callStatusRequest.getPatientCount(), callLogRequest.getTotalPatients().toString());
         assertEquals(callStatusRequest.getAdherenceCapturedCount(), callLogRequest.getAdherenceCaptured().toString());
+        assertEquals(callStatusRequest.getAdherenceNotCapturedCount(), callLogRequest.getAdherenceNotCaptured().toString());
+        assertEquals(callStatusRequest.getCallAnswered(), callLogRequest.getCallAnswered());
     }
 }

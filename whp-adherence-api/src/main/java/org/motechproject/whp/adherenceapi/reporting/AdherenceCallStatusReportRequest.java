@@ -18,12 +18,15 @@ public class AdherenceCallStatusReportRequest {
         callLogRequest.setCalledBy(callStatusRequest.getMsisdn());
         callLogRequest.setCallId(callStatusRequest.getCallId());
         callLogRequest.setCallStatus(callStatusRequest.getCallStatus());
+        callLogRequest.setCallAnswered(callStatusRequest.getCallAnswered());
         callLogRequest.setFlashingCallId(callStatusRequest.getFlashingCallId());
         callLogRequest.setProviderId(callStatusRequest.getProviderId());
         callLogRequest.setStartTime(new WHPDateTime(callStatusRequest.getStartTime()).date().toDate());
         callLogRequest.setEndTime(new WHPDateTime(callStatusRequest.getEndTime()).date().toDate());
         callLogRequest.setTotalPatients(Integer.parseInt(callStatusRequest.getPatientCount()));
+        callLogRequest.setAttemptTime(new WHPDateTime(callStatusRequest.getAttemptTime()).date().toDate());
         callLogRequest.setAdherenceCaptured(Integer.parseInt(callStatusRequest.getAdherenceCapturedCount()));
+        callLogRequest.setAdherenceNotCaptured(Integer.parseInt(callStatusRequest.getAdherenceNotCapturedCount()));
         return callLogRequest;
     }
 }

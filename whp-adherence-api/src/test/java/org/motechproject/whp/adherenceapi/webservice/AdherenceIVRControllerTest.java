@@ -81,7 +81,9 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <end_time>10/12/2012 12:33:35</end_time>\n" +
             "    <call_status>SUCCESS</call_status>\n" +
             "    <disconnection_type>PROVIDER_HUNGUP</disconnection_type>\n" +
-            "    <patient_count>0</patient_count>\n" +
+            "    <patient_count>0</patient_count>" +
+            "    <call_answered>YES</call_answered>\n" +
+            "    <adherence_not_captured_count>1</adherence_not_captured_count>\n" +
             "    <adherence_captured_count>0</adherence_captured_count>\n" +
             "</adherence_call_status_request>";
 
@@ -99,6 +101,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     private AdherenceCallStatusOverIVR adherenceCallStatusOverIVR;
 
     private LocalDate today = new LocalDate(2012, 12, 5);
+
     private AdherenceIVRController adherenceIVRController;
 
     @Before
