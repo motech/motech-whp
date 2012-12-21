@@ -7,6 +7,7 @@
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
     <import resource="classpath*:applicationUserContext.xml"/>
+    <import resource="classpath*:applicationServiceContext.xml"/>
     <import resource="classpath*:applicationContextHttpClient.xml"/>
     <import resource="classpath*:applicationScheduler.xml"/>
     <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
