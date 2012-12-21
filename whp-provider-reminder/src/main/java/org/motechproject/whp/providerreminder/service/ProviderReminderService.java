@@ -1,5 +1,8 @@
 package org.motechproject.whp.providerreminder.service;
 
+import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
+import org.motechproject.whp.common.domain.TreatmentWeek;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
@@ -17,16 +20,28 @@ public class ProviderReminderService {
 
     private final ProviderService providerService;
     private final PatientService patientService;
+    private AdherenceSubmissionService adherenceSubmissionService;
 
     @Autowired
-    public ProviderReminderService(ProviderService providerService, PatientService patientService) {
+    public ProviderReminderService(ProviderService providerService, PatientService patientService, AdherenceSubmissionService adherenceSubmissionService) {
         this.providerService = providerService;
         this.patientService = patientService;
+        this.adherenceSubmissionService = adherenceSubmissionService;
     }
 
     public List<String> getActiveProviderPhoneNumbers() {
         ProviderIds providerIds = patientService.providersWithActivePatients();
         List<Provider> providers = providerService.findByProviderIds(providerIds);
+        return listPrimaryMobileNumbers(providers);
+    }
+
+    public List<String> getProviderPhoneNumbersWithPendingAdherence() {
+        TreatmentWeek treatmentWeek = TreatmentWeekInstance.currentAdherenceCaptureWeek();
+        List<Provider> providers = adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate());
+        return listPrimaryMobileNumbers(providers);
+    }
+
+    private List<String> listPrimaryMobileNumbers(List<Provider> providers) {
         return extract(providers, on(Provider.class).getPrimaryMobile());
     }
 }

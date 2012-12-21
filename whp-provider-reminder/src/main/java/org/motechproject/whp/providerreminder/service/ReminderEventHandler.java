@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_NOT_REPORTED;
 import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 
 @Component
@@ -20,14 +21,14 @@ public class ReminderEventHandler {
     private final ProviderReminderService providerReminderService;
     private final HttpClientService httpClientService;
     private IvrConfiguration ivrConfiguration;
-    private UUIDGenerator UUIDGenerator;
+    private UUIDGenerator uuidGenerator;
 
     @Autowired
     public ReminderEventHandler(ProviderReminderService providerReminderService, HttpClientService httpClientService, IvrConfiguration ivrConfiguration, UUIDGenerator uuidGenerator) {
         this.providerReminderService = providerReminderService;
         this.httpClientService = httpClientService;
         this.ivrConfiguration = ivrConfiguration;
-        this.UUIDGenerator = uuidGenerator;
+        this.uuidGenerator = uuidGenerator;
     }
 
     @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME)
@@ -36,7 +37,17 @@ public class ReminderEventHandler {
         if (providerPhoneNumbers.isEmpty()) {
             return;
         }
-        ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, providerPhoneNumbers, UUIDGenerator.uuid());
+        ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, providerPhoneNumbers, uuidGenerator.uuid());
+        httpClientService.post(ivrConfiguration.getProviderReminderUrl(), providerReminderRequest.toXML());
+    }
+
+    @MotechListener(subjects = EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME)
+    public void adherenceNotReportedEvent(MotechEvent motechEvent) {
+        List<String> providerPhoneNumbers = providerReminderService.getProviderPhoneNumbersWithPendingAdherence();
+        if (providerPhoneNumbers.isEmpty()) {
+            return;
+        }
+        ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(ADHERENCE_NOT_REPORTED, providerPhoneNumbers, uuidGenerator.uuid());
         httpClientService.post(ivrConfiguration.getProviderReminderUrl(), providerReminderRequest.toXML());
     }
 }
