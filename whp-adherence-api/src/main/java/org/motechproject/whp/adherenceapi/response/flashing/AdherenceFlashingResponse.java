@@ -13,6 +13,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
+import static org.apache.commons.collections.CollectionUtils.intersection;
 import static org.apache.commons.collections.CollectionUtils.subtract;
 
 @XmlRootElement(name = "adherence_capture_flashing_response")
@@ -50,7 +51,7 @@ public class AdherenceFlashingResponse implements Serializable {
     }
 
     public Integer getPatientGivenCount() {
-        return patientsWithAdherence.size();
+        return intersection(patientsForProvider, patientsWithAdherence).size();
     }
 
     private List<String> patientsRemaining() {

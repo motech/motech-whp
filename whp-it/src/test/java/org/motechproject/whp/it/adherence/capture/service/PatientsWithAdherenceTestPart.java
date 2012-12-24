@@ -17,6 +17,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 
 import static org.junit.Assert.assertTrue;
+import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -48,7 +49,7 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
 
             Assert.assertArrayEquals(
                     new String[]{"patient1", "patient2"},
-                    adherenceService.patientsWithAdherence(providerId, summaryForPatient1.getWeek()).toArray()
+                    adherenceService.patientsWithAdherence(summaryForPatient1.getWeek()).toArray()
             );
         }
 
@@ -59,7 +60,7 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
             Patient patient1 = new PatientBuilder().withDefaults().withProviderId(providerId).withPatientId("patient1").build();
             allPatients.add(patient1);
 
-            assertTrue(adherenceService.patientsWithAdherence(providerId, new TreatmentWeek(today)).isEmpty());
+            assertTrue(adherenceService.patientsWithAdherence(new TreatmentWeek(today)).isEmpty());
         }
     }
 
@@ -68,19 +69,24 @@ public class PatientsWithAdherenceTestPart extends WHPAdherenceServiceTestPart {
         @Test
         public void shouldFindPatientsForProvider() {
             String providerId = "providerId1";
+            LocalDate adherenceWeekReference = new LocalDate(2012, 7, 16);
 
-            Patient patient1 = new PatientBuilder().withDefaults().withProviderId(providerId).withPatientId("patient1").build();
+            Patient patient = new PatientBuilder().withDefaults().withProviderId(providerId).withPatientId("patient1").build();
 
-            WeeklyAdherenceSummary summaryForPatient1 = new WeeklyAdherenceSummaryBuilder().forPatient(patient1).forWeek(new LocalDate(2012, 7, 16)).withDosesTaken(3).build();
+            WeeklyAdherenceSummary summaryForPatient = new WeeklyAdherenceSummaryBuilder().forPatient(patient).forWeek(adherenceWeekReference).withDosesTaken(3).build();
+            allPatients.add(patient);
 
-            allPatients.add(patient1);
-            AdherenceList adherenceList = AdherenceListMapper.map(patient1, summaryForPatient1);
-            if (TherapyStartCriteria.shouldStartOrRestartTreatment(patient1, summaryForPatient1)) {
-                patient1.startTherapy(adherenceList.firstDoseTakenOn());
+            AdherenceList adherenceList = startTherapy(patient, summaryForPatient);
+            adherenceService.recordWeeklyAdherence(adherenceList, summaryForPatient, patient, auditParams);
+            assertTrue(adherenceService.patientsWithAdherence(new TreatmentWeek(adherenceWeekReference.plusYears(1))).isEmpty());
+        }
+
+        private AdherenceList startTherapy(Patient patient, WeeklyAdherenceSummary summaryForPatient1) {
+            AdherenceList adherenceList = AdherenceListMapper.map(patient, summaryForPatient1);
+            if (shouldStartOrRestartTreatment(patient, summaryForPatient1)) {
+                patient.startTherapy(adherenceList.firstDoseTakenOn());
             }
-            adherenceService.recordWeeklyAdherence(adherenceList, summaryForPatient1, patient1, auditParams);
-
-            assertTrue(adherenceService.patientsWithAdherence("providerId2", summaryForPatient1.getWeek()).isEmpty());
+            return adherenceList;
         }
     }
 }

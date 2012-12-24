@@ -125,8 +125,8 @@ public class WHPAdherenceService {
         return datePillStatusHashMap;
     }
 
-    public List<String> patientsWithAdherence(String providerId, TreatmentWeek week) {
-        return allAdherenceLogs.findPatientsWithAdherence(providerId, week.startDate(), week.endDate());
+    public List<String> patientsWithAdherence(TreatmentWeek week) {
+        return allAdherenceLogs.findPatientsWithAdherence(week.startDate(), week.endDate());
     }
 
     public AdherenceList getAdherenceSortedByDate(String patientId, String therapyUid) {

@@ -146,11 +146,9 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return doseDates;
     }
 
-    @View(name = "find_patients_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2)) {emit([doc.meta.PROVIDER_ID, doc.doseDate], doc.externalId);}}")
-    public List<String> findPatientsWithAdherence(String providerId, LocalDate startDate, LocalDate endDate) {
-        ComplexKey startKey = ComplexKey.of(providerId.toLowerCase(), startDate);
-        ComplexKey endKey = ComplexKey.of(providerId.toLowerCase(), endDate);
-        ViewQuery q = createQuery("find_patients_with_adherence").startKey(startKey).endKey(endKey).inclusiveEnd(true).includeDocs(true);
+    @View(name = "find_patients_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2)) {emit(doc.doseDate, doc.externalId);}}")
+    public List<String> findPatientsWithAdherence(LocalDate startDate, LocalDate endDate) {
+        ViewQuery q = createQuery("find_patients_with_adherence").startKey(startDate).endKey(endDate).inclusiveEnd(true).includeDocs(true);
         return getValues(q);
     }
 

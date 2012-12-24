@@ -53,7 +53,7 @@ public class AdherenceServiceTest {
         List<Patient> patientsForProvider = asList(patients("1234"), patients("5678"));
 
         when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(patientsForProvider);
-        when(whpAdherenceService.patientsWithAdherence(providerId, week(today))).thenReturn(patientsWithAdherence);
+        when(whpAdherenceService.patientsWithAdherence(week(today))).thenReturn(patientsWithAdherence);
 
         assertEquals(
                 new AdherenceSummary(patientsWithAdherence, patientsForProvider),

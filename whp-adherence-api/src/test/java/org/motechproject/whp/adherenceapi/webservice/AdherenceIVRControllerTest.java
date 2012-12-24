@@ -127,7 +127,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                         "               <result>success</result>" +
                         "               <adherence_status>" +
                         "                   <patient_remaining_count>2</patient_remaining_count>" +
-                        "                   <patient_given_count>1</patient_given_count>" +
+                        "                   <patient_given_count>0</patient_given_count>" +
                         "                   <patients_remaining>" +
                         "                       <patient>" +
                         "                           <id>pat1</id>" +
@@ -146,7 +146,6 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 .andExpect(content().type(MediaType.APPLICATION_XML))
                 .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
-
 
     @Test
     public void shouldRespondWithErrorInCaseOfInvalidMobileNumber() throws Exception {
