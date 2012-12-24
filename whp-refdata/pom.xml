@@ -38,6 +38,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-provider-reminder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-common</artifactId>
             <scope>test</scope>
             <classifier>tests</classifier>
