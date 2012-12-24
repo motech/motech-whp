@@ -33,7 +33,7 @@ public class AdherenceRequestValidator {
     }
 
     public AdherenceErrors validateProvider(String providerId) {
-        Provider provider = providerService.findByMobileNumber(providerId);
+        Provider provider = providerService.findByProviderId(providerId);
         return new CallStatusRequestErrors(provider != null && provider.getProviderId().equals(providerId));
     }
 

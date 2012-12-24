@@ -82,7 +82,7 @@ public class AdherenceRequestValidatorTest {
     @Test
     public void shouldReturnSuccessIfProviderIdIsRegistered(){
         String providerId = "providerid";
-        when(providerService.findByMobileNumber(providerId)).thenReturn(new Provider(providerId, null, null, null));
+        when(providerService.findByProviderId(providerId)).thenReturn(new Provider(providerId, null, null, null));
         assertEquals("", adherenceRequestValidator.validateProvider(providerId).errorMessage());
     }
 }
