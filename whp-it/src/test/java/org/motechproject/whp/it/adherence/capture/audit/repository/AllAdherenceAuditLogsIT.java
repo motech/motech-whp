@@ -1,6 +1,5 @@
 package org.motechproject.whp.it.adherence.capture.audit.repository;
 
-import org.motechproject.whp.it.SpringIntegrationTest;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.joda.time.LocalDate;
@@ -16,6 +15,7 @@ import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLo
 import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.it.SpringIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -59,12 +59,12 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
     }
 
     private AdherenceAuditLog getLog(DailyAdherenceAuditLog dailyAuditLog) {
-        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(dailyAuditLog.getPatientId(), dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(),dailyAuditLog.getSourceOfChange() );
+        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(dailyAuditLog.getPatientId(), null, dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(),dailyAuditLog.getSourceOfChange() );
         return expectedAdherenceAuditLog;
     }
 
     private AdherenceAuditLog getLog(AuditLog weeklyAuditLog) {
-        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(weeklyAuditLog.getPatientId(), weeklyAuditLog.getTbId(), weeklyAuditLog.getCreationTime().toDateTime(UTC), null, weeklyAuditLog.getUser(), weeklyAuditLog.getNumberOfDosesTaken(), null, weeklyAuditLog.getSourceOfChange());
+        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(weeklyAuditLog.getPatientId(), weeklyAuditLog.getProviderId(), weeklyAuditLog.getTbId(), weeklyAuditLog.getCreationTime().toDateTime(UTC), null, weeklyAuditLog.getUser(), weeklyAuditLog.getNumberOfDosesTaken(), null, weeklyAuditLog.getSourceOfChange());
         return expectedAdherenceAuditLog;
     }
 

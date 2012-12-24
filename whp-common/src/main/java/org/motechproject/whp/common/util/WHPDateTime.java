@@ -10,6 +10,7 @@ import java.util.Date;
 public class WHPDateTime {
 
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
+    public static final String TIME_PATTERN = "HH:mm:ss";
 
     private DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
@@ -33,6 +34,10 @@ public class WHPDateTime {
 
     public static WHPDateTime date(DateTime date) {
         return new WHPDateTime(date);
+    }
+
+    public String time() {
+        return date.toLocalTime().toString(TIME_PATTERN);
     }
 
     public String value() {

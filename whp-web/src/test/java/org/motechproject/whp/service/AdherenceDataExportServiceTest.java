@@ -50,10 +50,10 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
     @Test
     public void shouldMapFromAdherenceAuditLogToAdherenceSummary() {
         List<AdherenceAuditLog> adherenceAuditLogList = new ArrayList<>();
-        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "tbId", now, now, "cmfAdmin", 1, Taken, "WEB");
+        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now, now, "cmfAdmin", 1, Taken, "WEB");
         adherenceAuditLogList.add(adherenceAuditLog);
 
-        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDateTime(this.now).value(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB");
+        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB", "raj");
 
         List<AdherenceLogSummary> adherenceLogSummaryList = adherenceDataExportService.map(adherenceAuditLogList);
         assertThat(adherenceLogSummaryList.get(0), Is.is(expectedAdherenceLogSummary));
@@ -62,10 +62,10 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
     @Test
     public void shouldMapFromAdherenceAuditLogToAdherenceSummaryForNullDoseDate() {
         List<AdherenceAuditLog> adherenceAuditLogList = new ArrayList<>();
-        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "tbId", now, null, "cmfAdmin", 1, Taken, "WEB");
+        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now, null, "cmfAdmin", 1, Taken, "WEB");
         adherenceAuditLogList.add(adherenceAuditLog);
 
-        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDateTime(this.now).value(), null, "cmfAdmin", 1, Taken, "WEB");
+        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), null, "cmfAdmin", 1, Taken, "WEB", "raj");
 
         List<AdherenceLogSummary> adherenceLogSummaryList = adherenceDataExportService.map(adherenceAuditLogList);
         assertThat(adherenceLogSummaryList.get(0), Is.is(expectedAdherenceLogSummary));
@@ -74,12 +74,12 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
     @Test
     public void shouldPageAuditLogSummaries() {
         int pageNo = 1;
-        List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));
+        List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "raj", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));
         when(adherenceAuditService.allAuditLogs(1)).thenReturn(auditLogs);
 
         List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceAuditReport(pageNo);
 
-        List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", new WHPDateTime(this.now).value(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB"));
+        List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB", "raj"));
 
         assertEquals(expectedAuditLogSummaries, adherenceAuditLogSummaries);
         verify(adherenceAuditService).allAuditLogs(pageNo);

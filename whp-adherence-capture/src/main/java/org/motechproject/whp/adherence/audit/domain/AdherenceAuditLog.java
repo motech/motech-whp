@@ -8,6 +8,7 @@ import org.motechproject.whp.adherence.domain.PillStatus;
 public class AdherenceAuditLog {
 
     private String patientId;
+    private String providerId;
     private String tbId;
     private DateTime creationTime;
     private DateTime doseDate;
@@ -19,8 +20,9 @@ public class AdherenceAuditLog {
     public AdherenceAuditLog() {
     }
 
-    public AdherenceAuditLog(String patientId, String tbId, DateTime creationTime, DateTime doseDate, String userId, Integer numberOfDosesTaken, PillStatus pillStatus, String sourceOfChange) {
+    public AdherenceAuditLog(String patientId, String providerId, String tbId, DateTime creationTime, DateTime doseDate, String userId, Integer numberOfDosesTaken, PillStatus pillStatus, String sourceOfChange) {
         this.patientId = patientId;
+        this.providerId = providerId;
         this.tbId = tbId;
         this.creationTime = creationTime;
         this.doseDate = doseDate;
