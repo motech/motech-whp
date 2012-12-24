@@ -42,6 +42,7 @@ public class AdherenceCallStatusReportRequest {
     }
 
     private void setCallDetails(AdherenceCallStatusRequest callStatusRequest) {
+        callLogRequest.setDisconnectionType(callStatusRequest.getDisconnectionType());
         callLogRequest.setCallId(callStatusRequest.getCallId());
         callLogRequest.setCallStatus(callStatusRequest.getCallStatus());
         callLogRequest.setCallAnswered(callStatusRequest.getCallAnswered());

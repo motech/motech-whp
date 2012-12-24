@@ -38,6 +38,13 @@ public class AdherenceCallStatusReportRequestTest {
     }
 
     @Test
+    public void shouldCopyDisconnectionType(){
+        AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
+        AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
+        assertEquals(callStatusRequest.getDisconnectionType(), callLogRequest.getDisconnectionType());
+    }
+
+    @Test
     public void shouldCopyEndTime() {
         AdherenceCallStatusRequest callStatusRequest = callStatusRequest();
         AdherenceCallLogRequest callLogRequest = new AdherenceCallStatusReportRequest(callStatusRequest).callLogRequest();
@@ -97,6 +104,7 @@ public class AdherenceCallStatusReportRequestTest {
         callStatusRequest.setPatientCount("3");
         callStatusRequest.setAttemptTime("21/12/2012 12:32:35");
         callStatusRequest.setAdherenceCapturedCount("2");
+        callStatusRequest.setDisconnectionType("disconnectionType");
         callStatusRequest.setAdherenceNotCapturedCount("2");
         callStatusRequest.setCallAnswered("YES");
         return callStatusRequest;
