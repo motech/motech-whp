@@ -1,30 +1,23 @@
 package org.motechproject.whp.providerreminder.service;
 
-import org.apache.commons.collections.ListUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.http.client.service.HttpClientService;
-import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.service.IvrConfiguration;
-import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_NOT_REPORTED;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
+import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME;
+import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
 
 public class ReminderEventHandlerTest {
 
-    ReminderEventHandler reminderEventHandler;
+    public static final String UUID = "uuid";
+    public static final String IVRUrl = "some wgn url";
 
-    @Mock
-    HttpClientService httpClientService;
     @Mock
     private ProviderReminderService providerReminderService;
     @Mock
@@ -32,50 +25,43 @@ public class ReminderEventHandlerTest {
     @Mock
     private UUIDGenerator uuidGenerator;
 
+    ReminderEventHandler reminderEventHandler;
 
     @Before
     public void setUp() {
         initMocks(this);
-        reminderEventHandler = new ReminderEventHandler(providerReminderService, httpClientService, ivrConfiguration, uuidGenerator);
+        setupIVRConfiguration();
+        setupUUID();
+        reminderEventHandler = new ReminderEventHandler(providerReminderService, ivrConfiguration, uuidGenerator);
+    }
+
+    private void setupUUID() {
+        when(uuidGenerator.uuid()).thenReturn(UUID);
+    }
+
+    private void setupIVRConfiguration() {
+        when(ivrConfiguration.getProviderReminderUrl()).thenReturn(IVRUrl);
     }
 
     @Test
-    public void shouldHandleEventForAdherenceWindowApproachingAlert() {
-        String url = "some wgn url";
-        String requestId = "requestId";
-        List<String> msisdnList = asList("msisdn1", "msisdn2");
-        when(providerReminderService.getActiveProviderPhoneNumbers()).thenReturn(msisdnList);
-        when(ivrConfiguration.getProviderReminderUrl()).thenReturn(url);
-        when(uuidGenerator.uuid()).thenReturn(requestId);
-
-        reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME));
-
-        verify(providerReminderService).getActiveProviderPhoneNumbers();
-        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, msisdnList, requestId).toXML());
+    public void shouldRemindProvidersWhenAdherenceWindowApproaches() {
+        MotechEvent motechEvent = new MotechEvent(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME);
+        reminderEventHandler.adherenceWindowApproachingEvent(motechEvent);
+        verify(providerReminderService).alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING, IVRUrl, UUID);
     }
 
     @Test
-    public void shouldNotSendRequestToIvrSystemIfThereAreNoActiveProviders() {
-        when(providerReminderService.getActiveProviderPhoneNumbers()).thenReturn(ListUtils.EMPTY_LIST);
-
-        reminderEventHandler.adherenceWindowApproachingEvent(new MotechEvent(EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME));
-
-        verify(providerReminderService).getActiveProviderPhoneNumbers();
-        verifyNoMoreInteractions(httpClientService);
+    public void shouldRemindProvidersPendingAdherence() {
+        MotechEvent motechEvent = new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME);
+        reminderEventHandler.adherenceNotReportedEvent(motechEvent);
+        verify(providerReminderService).alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED, IVRUrl, UUID);
     }
 
     @Test
-    public void shouldHandleEventForAdherenceNotReportedAlert() {
-        String url = "some wgn url";
-        String requestId = "requestId";
-        List<String> msisdnList = asList("msisdn1", "msisdn2");
-        when(providerReminderService.getProviderPhoneNumbersWithPendingAdherence()).thenReturn(msisdnList);
-        when(ivrConfiguration.getProviderReminderUrl()).thenReturn(url);
-        when(uuidGenerator.uuid()).thenReturn(requestId);
-
-        reminderEventHandler.adherenceNotReportedEvent(new MotechEvent(EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME));
-
-        verify(providerReminderService).getProviderPhoneNumbersWithPendingAdherence();
-        verify(httpClientService).post(url, new ProviderReminderRequest(ADHERENCE_NOT_REPORTED, msisdnList, requestId).toXML());
+    public void shouldRemindProvidersWithNewUUIDOnEveryRequest() {
+        MotechEvent motechEvent = new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME);
+        reminderEventHandler.adherenceNotReportedEvent(motechEvent);
+        reminderEventHandler.adherenceNotReportedEvent(motechEvent);
+        verify(uuidGenerator, times(2)).uuid();
     }
 }

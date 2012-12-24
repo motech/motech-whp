@@ -13,6 +13,8 @@
     <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
 
+    <util:properties id="providerReminderProperty" location="classpath:/providerReminder.properties"/>
+
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.providerreminder"/>
 

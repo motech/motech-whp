@@ -3,66 +3,74 @@ package org.motechproject.whp.providerreminder.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.TreatmentWeek;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
-import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
 import org.motechproject.whp.user.domain.Provider;
-import org.motechproject.whp.user.domain.ProviderIds;
-import org.motechproject.whp.user.service.ProviderService;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
+import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_NOT_REPORTED;
+import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 
 public class ProviderReminderServiceTest {
 
-    ProviderReminderService providerReminderService;
+    public static final String URL = "url";
+    public static final String UUID = "uuid";
 
     @Mock
-    PatientService patientService;
-    @Mock
-    ProviderService providerService;
-
+    HttpClientService httpClientService;
     @Mock
     AdherenceSubmissionService adherenceSubmissionService;
+
+    ProviderReminderService providerReminderService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerReminderService = new ProviderReminderService(providerService, patientService, adherenceSubmissionService);
+        providerReminderService = new ProviderReminderService(adherenceSubmissionService, httpClientService);
     }
 
     @Test
-    public void shouldReturnActiveProviderMSISDNs() {
-        ProviderIds providerIds = new ProviderIds(asList("providerId1", "providerId2"));
-        when(patientService.providersWithActivePatients()).thenReturn(providerIds);
-        when(providerService.findByProviderIds(providerIds)).thenReturn(asList(new Provider("providerId1", "msisdn1", null, null), new Provider("providerId2", "msisdn2", null, null)));
+    public void shouldRemindProvidersThroughIVR() {
+        String phoneNumber = "phoneNumber";
+        List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
 
-        List<String> phoneNumberList =  providerReminderService.getActiveProviderPhoneNumbers();
-
-        List<String> expectedPhoneNumberList = asList("msisdn1", "msisdn2");
-        assertEquals(expectedPhoneNumberList, phoneNumberList);
+        when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(providers);
+        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING, URL, UUID);
+        verify(httpClientService).post(URL, new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, asList(phoneNumber), UUID).toXML());
     }
 
     @Test
-    public void shouldReturnProvidersWithPendingAdherence() {
-        Provider provider1 = newProviderBuilder().withDefaults().withPrimaryMobileNumber("msisdn1").build();
-        Provider provider2 = newProviderBuilder().withDefaults().withPrimaryMobileNumber("msisdn2").build();
-
-        TreatmentWeek treatmentWeek = TreatmentWeekInstance.currentAdherenceCaptureWeek();
-
-        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate()))
-                .thenReturn(asList(provider1, provider2));
-
-        List<String> phoneNumberList =  providerReminderService.getProviderPhoneNumbersWithPendingAdherence();
-
-        List<String> expectedPhoneNumberList = asList(provider1.getPrimaryMobile(), provider2.getPrimaryMobile());
-        assertEquals(expectedPhoneNumberList, phoneNumberList);
+    public void shouldNotRaiseRequestWhenNoProviderNeedsToSubmitAdherence() {
+        when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(null);
+        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING, URL, UUID);
+        verifyZeroInteractions(httpClientService);
     }
 
+    @Test
+    public void shouldHandleEventForAdherenceNotReportedAlert() {
+        String phoneNumber = "phoneNumber";
+        List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
+        TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
+
+        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate())).thenReturn(providers);
+        providerReminderService.alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED, URL, UUID);
+        verify(httpClientService).post(URL, new ProviderReminderRequest(ADHERENCE_NOT_REPORTED, asList(phoneNumber), UUID).toXML());
+    }
+
+    @Test
+    public void shouldNotRaiseRequestWhenNoProviderIsPendingAdherence() {
+        TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
+
+        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate())).thenReturn(null);
+        providerReminderService.alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED, URL, UUID);
+        verifyZeroInteractions(httpClientService);
+    }
 }
