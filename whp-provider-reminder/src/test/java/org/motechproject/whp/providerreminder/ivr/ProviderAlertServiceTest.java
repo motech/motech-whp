@@ -27,6 +27,8 @@ public class ProviderAlertServiceTest {
     @Mock
     private UUIDGenerator uuidGenerator;
     @Mock
+    private ProviderReminderRequestProperties requestProperties;
+    @Mock
     private HttpClientService httpClientService;
 
     ProviderAlertService alertService;
@@ -35,8 +37,9 @@ public class ProviderAlertServiceTest {
     public void setup() {
         initMocks(this);
         when(ivrConfiguration.getProviderReminderUrl()).thenReturn(IVRUrl);
+        when(requestProperties.getBatchSize()).thenReturn(1);
         when(uuidGenerator.uuid()).thenReturn(UUID);
-        alertService = new ProviderAlertService(httpClientService, uuidGenerator, ivrConfiguration);
+        alertService = new ProviderAlertService(httpClientService, uuidGenerator, requestProperties, ivrConfiguration);
     }
 
     @Test
@@ -62,6 +65,17 @@ public class ProviderAlertServiceTest {
         alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_NOT_REPORTED);
 
         verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID).toXML());
+    }
+
+    @Test
+    public void shouldRaiseMoreThanOneRequestWhenTheNumberOfProvidersIsGreaterThenBatchSize() {
+        List<Provider> providers = asList(new Provider("", "phoneNumber1", "", null), new Provider("", "phoneNumber2", "", null));
+        ProviderReminderType sameType = ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
+        String sameUUID = UUID;
+
+        alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber1"), sameUUID).toXML());
+        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber2"), sameUUID).toXML());
     }
 
     @Test
