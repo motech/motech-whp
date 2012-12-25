@@ -36,11 +36,6 @@ public class AdherenceSubmissionService {
         return providerService.findByProviderIds(providersWithActivePatients.subtract(providersWithAdherence));
     }
 
-    public List<Provider> providersPendingAdherence(LocalDate from, LocalDate to) {
-        ProviderIds providersWithActivePatients = patientService.providersWithActivePatients();
-        ProviderIds providerIdsWithAdherence = adherenceLogService.providersWithAdherenceRecords(providersWithActivePatients, from, to);
-        return providerService.findByProviderIds(providersWithActivePatients.subtract(providerIdsWithAdherence));
-    }
 
     public List<Provider> providersWithAdherence(String district, LocalDate from, LocalDate to) {
         return providerService.findByProviderIds(providersIdsWithAdherence(district, from, to));
@@ -48,11 +43,17 @@ public class AdherenceSubmissionService {
 
     private ProviderIds providersIdsWithAdherence(String district, LocalDate from, LocalDate to) {
         ProviderIds providersInDistrict = providerIdsWithActivePatients(district);
-        return adherenceLogService.providersWithAdherenceRecords(providersInDistrict, from, to);
+        return adherenceLogService.providersWithAdherence(providersInDistrict, from, to);
     }
 
     private ProviderIds providerIdsWithActivePatients(String district) {
         ProviderIds providersInDistrict = providerService.findByDistrict(district);
         return patientService.providersWithActivePatients(providersInDistrict);
+    }
+
+    public List<Provider> providersPendingAdherence(LocalDate from, LocalDate to) {
+        ProviderIds providersWithActivePatients = patientService.providersWithActivePatients();
+        ProviderIds providerIdsWithAdherence = adherenceLogService.providersWithAdherence(from, to);
+        return providerService.findByProviderIds(providersWithActivePatients.subtract(providerIdsWithAdherence));
     }
 }

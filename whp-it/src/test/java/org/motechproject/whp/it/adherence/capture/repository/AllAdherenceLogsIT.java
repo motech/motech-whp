@@ -311,7 +311,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnProvidersWithAdherenceReported() {
+    public void shouldReturnProvidersWithAdherenceReportedFromGivenProviderList() {
         ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
         ProviderIds allProviders = new ProviderIds(asList("providerId1", "providerId2", "providerId3", "providerId4"));
 
@@ -326,6 +326,23 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
         assertEquals(providersWithAdherence, allAdherenceLogs.withKnownAdherenceReportedByProviders(allProviders, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
     }
+
+    @Test
+    public void shouldReturnProvidersWithAdherenceReported() {
+        ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
+
+        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1));
+
+        adherenceLogs.get(0).providerId("providerId1");
+        adherenceLogs.get(1).providerId("providerId2");
+        adherenceLogs.get(2).providerId("providerId3");
+        addAll(adherenceLogs);
+
+        assertEquals(providersWithAdherence, allAdherenceLogs.findProvidersWithAdherence(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+    }
+
 
     private AdherenceLog createAdherenceLog() {
         return new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));

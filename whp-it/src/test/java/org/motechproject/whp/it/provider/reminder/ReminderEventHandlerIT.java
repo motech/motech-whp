@@ -2,7 +2,6 @@ package org.motechproject.whp.it.provider.reminder;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
@@ -67,13 +66,7 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
     @Autowired
     UUIDGenerator uuidGenerator;
 
-
     private AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
-
-    @Before
-    public void setup() {
-
-    }
 
     @Test
     public void shouldReturnMobileNumbersProvidersWithAdherencePending() throws IOException, SAXException {

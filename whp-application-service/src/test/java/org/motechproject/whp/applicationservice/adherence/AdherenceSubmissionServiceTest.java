@@ -55,7 +55,7 @@ public class AdherenceSubmissionServiceTest {
 
         when(providerService.findByDistrict(district)).thenReturn(providersInDistrict);
         when(patientService.providersWithActivePatients(providersInDistrict)).thenReturn(providersWithActivePatients);
-        when(adherenceLogService.providersWithAdherenceRecords(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
+        when(adherenceLogService.providersWithAdherence(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
         when(providerService.findByProviderIds(providersPendingAdherenceThisWeek)).thenReturn(providersPendingAdherence);
 
         assertEquals(providersPendingAdherence, adherenceSubmissionService.providersPendingAdherence(district, yesterday, today));
@@ -76,7 +76,7 @@ public class AdherenceSubmissionServiceTest {
 
         when(providerService.findByDistrict(district)).thenReturn(providersInDistrict);
         when(patientService.providersWithActivePatients(providersInDistrict)).thenReturn(providersWithActivePatients);
-        when(adherenceLogService.providersWithAdherenceRecords(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
+        when(adherenceLogService.providersWithAdherence(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
         when(providerService.findByProviderIds(providersPendingAdherenceThisWeek)).thenReturn(providersWithAdherence);
 
         assertEquals(providersWithAdherence, adherenceSubmissionService.providersWithAdherence(district, yesterday, today));
@@ -95,7 +95,7 @@ public class AdherenceSubmissionServiceTest {
 
         ProviderIds providersWithActivePatients = new ProviderIds(asList("providerWithActivePatientWithoutAdherence", "providerWithActivePatientWithAdherence"));
         when(patientService.providersWithActivePatients()).thenReturn(providersWithActivePatients);
-        when(adherenceLogService.providersWithAdherenceRecords(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
+        when(adherenceLogService.providersWithAdherence(yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
         when(providerService.findByProviderIds(providersPendingAdherenceThisWeek)).thenReturn(expectedProvidersPendingAdherence);
 
         List<Provider> providersPendingAdherence = adherenceSubmissionService.providersPendingAdherence(yesterday, today);

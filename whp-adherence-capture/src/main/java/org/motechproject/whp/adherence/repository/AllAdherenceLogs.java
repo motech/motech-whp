@@ -166,6 +166,12 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return new ProviderIds(getValue(db.queryView(query).getRows()));
     }
 
+    @View(name = "find_providers_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit(doc.doseDate, doc.meta.PROVIDER_ID);}}")
+    public ProviderIds findProvidersWithAdherence(LocalDate from, LocalDate to) {
+        ViewQuery q = createQuery("find_providers_with_adherence").startKey(from).endKey(to).inclusiveEnd(true).includeDocs(true);
+        return new ProviderIds(getValues(q));
+    }
+
     private List<String> getValue(List<ViewResult.Row> rows) {
         List<String> result = new ArrayList<>();
         for (ViewResult.Row row : rows) {
