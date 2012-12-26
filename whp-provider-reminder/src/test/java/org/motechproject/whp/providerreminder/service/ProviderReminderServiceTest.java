@@ -63,7 +63,7 @@ public class ProviderReminderServiceTest {
     public void shouldNotRaiseRequestWhenNoProviderIsPendingAdherence() {
         TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
 
-        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate())).thenReturn(null);
+        when(adherenceSubmissionService.providersWithoutAnyAdherence(treatmentWeek.startDate(), treatmentWeek.endDate())).thenReturn(null);
         providerReminderService.alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED);
         verifyZeroInteractions(alertService);
     }

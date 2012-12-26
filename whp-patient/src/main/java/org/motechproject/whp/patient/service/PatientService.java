@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.service;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.annotations.MotechListener;
 import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
@@ -136,5 +137,9 @@ public class PatientService {
         District district = allDistricts.findByName(patientRequest.getAddress().getAddress_district());
         if (district == null)
             throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
+    }
+
+    public List<ProviderPatientCount> getProviderIdActivePatientCount() {
+        return allPatients.getProviderIdActivePatientCount();
     }
 }

@@ -5,7 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.user.domain.ProviderIds;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
@@ -58,5 +61,18 @@ public class AdherenceLogServiceTest {
 
         when(allAdherenceLogs.findProvidersWithAdherence(yesterday, today)).thenReturn(providersWithAdherenceRecords);
         assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherence(yesterday, today));
+    }
+
+    @Test
+    public void shouldReturnProviderPatientCountWithAdherence() {
+        LocalDate from = today().minusDays(1);
+        LocalDate to = today();
+
+        List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
+        when(allAdherenceLogs.getProviderIdPatientWithAdherenceCount(from, from)).thenReturn(expectedResult);
+
+        assertEquals(expectedResult, adherenceLogService.getProviderIdPatientWithAdherenceCount(from, to));
+        verify(allAdherenceLogs).getProviderIdPatientWithAdherenceCount(from, to);
+
     }
 }

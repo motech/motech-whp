@@ -199,11 +199,11 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return new ArrayList<>(ids);
     }
 
-    @View(name = "find_provider_patient_count_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.PROVIDER_ID, doc.externalId, doc.doseDate], null);}}", reduce = "_count")
-    public List<ProviderPatientCount> findProviderPatientCountWithAdherence(LocalDate from, LocalDate to) {
+    @View(name = "find_provider_patient_with_adherence_count", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.PROVIDER_ID, doc.externalId, doc.doseDate], null);}}", reduce = "_count")
+    public List<ProviderPatientCount> getProviderIdPatientWithAdherenceCount(LocalDate from, LocalDate to) {
         ComplexKey startKey = ComplexKey.of(null, null, from);
         ComplexKey endKey = ComplexKey.of(ComplexKey.emptyObject(), ComplexKey.emptyObject(), to);
-        ViewQuery query = createQuery("find_provider_patient_count_with_adherence").startKey(startKey).endKey(endKey).group(true).groupLevel(2).reduce(true);
+        ViewQuery query = createQuery("find_provider_patient_with_adherence_count").startKey(startKey).endKey(endKey).group(true).groupLevel(2).reduce(true);
         return getProviderPatientCountWithAdherence(db.queryView(query));
     }
 

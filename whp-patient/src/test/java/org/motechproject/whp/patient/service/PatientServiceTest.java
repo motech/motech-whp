@@ -9,6 +9,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
@@ -142,6 +143,15 @@ public class PatientServiceTest extends BaseUnitTest {
 
         assertEquals(providersWithActivePatients, actualProviderIds);
         verify(allPatients).providersWithActivePatients();
+    }
+
+    @Test
+    public void shouldReturnProviderPatientCount() {
+        List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
+        when(allPatients.getProviderIdActivePatientCount()).thenReturn(expectedResult);
+
+        assertEquals(expectedResult, patientService.getProviderIdActivePatientCount());
+        verify(allPatients).getProviderIdActivePatientCount();
     }
 
     @After

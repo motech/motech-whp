@@ -109,7 +109,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     @View(name = "provider_with_active_patients_count", map = "classpath:filterProvidersWithActivePatients.js", reduce = "_count")
-    public List<ProviderPatientCount> getProviderIdPatientCount() {
+    public List<ProviderPatientCount> getProviderIdActivePatientCount() {
         ViewQuery query = createQuery("provider_with_active_patients_count").group(true).groupLevel(1).reduce(true);
         return listOfProviderPatientCount(db.queryView(query));
 
