@@ -16,9 +16,7 @@ public class ProviderReminderRequestTest {
 
     @Test
     public void shouldConvertToXML() throws IOException, JAXBException {
-        ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING,
-               asList("msisdn1", "msisdn2"), "requestId");
-
+        ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_APPROACHING, asList("msisdn1", "msisdn2"), "requestId");
         String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                 "<provider_reminder_request>\n" +
                 "    <msisdns>\n" +
@@ -30,20 +28,5 @@ public class ProviderReminderRequestTest {
                 "</provider_reminder_request>\n";
 
         assertEquals(expectedXML, request.toXML());
-    }
-
-    public static class ProviderReminderConfigurationTest {
-
-        @Test
-        public void shouldCreateProviderReminderConfigurationFromDate() {
-            Date tuesday = new LocalDateTime(2012, 12, 11, 10, 30).toDate();
-
-            ProviderReminderConfiguration tuesdayReminderConfiguration = new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, tuesday);
-
-            assertEquals(ADHERENCE_WINDOW_APPROACHING, tuesdayReminderConfiguration.getReminderType());
-            assertEquals(DayOfWeek.Tuesday, tuesdayReminderConfiguration.getDayOfWeek());
-            assertEquals(10, tuesdayReminderConfiguration.getHour());
-            assertEquals(30, tuesdayReminderConfiguration.getMinute());
-        }
     }
 }

@@ -8,8 +8,6 @@ import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import static org.motechproject.model.DayOfWeek.getDayOfWeek;
-
 @Data
 public class ProviderReminderConfiguration {
 
@@ -31,5 +29,10 @@ public class ProviderReminderConfiguration {
         this.dayOfWeek = DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek());
         this.hour = localDateTime.getHourOfDay();
         this.minute = localDateTime.getMinuteOfHour();
+    }
+
+    public String generateCronExpression() {
+        String weekDay = getDayOfWeek().getShortName();
+        return String.format("0 %s %s ? * %s", minute, hour, weekDay);
     }
 }

@@ -48,7 +48,6 @@ public class ProviderReminderRequest implements Serializable {
         return msisdns;
     }
 
-
     public String toXML() {
         StringWriter writer =  new StringWriter();
         JAXB.marshal(this, writer);

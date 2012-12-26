@@ -53,7 +53,6 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
         assertEquals(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME, job.getMotechEvent().getSubject());
         assertEquals(ADHERENCE_WINDOW_APPROACHING.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
-        assertEquals("0 30 10 ? * " + dayOfWeek.getShortName(), job.getCronExpression());
     }
 
     @Test

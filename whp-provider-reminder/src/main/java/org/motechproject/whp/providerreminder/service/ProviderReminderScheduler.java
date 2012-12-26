@@ -1,18 +1,18 @@
 package org.motechproject.whp.providerreminder.service;
 
-import org.joda.time.DateTime;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
+import org.motechproject.whp.providerreminder.domain.ProviderReminderTimings;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.motechproject.scheduler.MotechSchedulerService.JOB_ID_KEY;
 import static org.motechproject.util.DateUtil.now;
 
@@ -26,32 +26,32 @@ public class ProviderReminderScheduler {
         this.motechSchedulerService = motechSchedulerService;
     }
 
-    public void scheduleReminder(ProviderReminderConfiguration providerReminderConfiguration) {
-        MotechEvent motechEvent = new MotechEvent(providerReminderConfiguration.getReminderType().getEventSubject());
-        motechEvent.getParameters().put(JOB_ID_KEY, providerReminderConfiguration.getReminderType().name());
-        motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, generateCronExpression(providerReminderConfiguration)));
+    public void scheduleReminder(ProviderReminderConfiguration reminderConfiguration) {
+        ProviderReminderType reminderType = reminderConfiguration.getReminderType();
+        MotechEvent motechEvent = providerReminderEvent(reminderType);
+        motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
     }
 
     public ProviderReminderConfiguration getReminder(ProviderReminderType jobType) {
-        DateTime now = now();
-        Date today = now.toDate();
-        Date nextWeek = now.toLocalDate().plusWeeks(1).toDate();
-        List<Date> scheduledJobTimings = new ArrayList<>();
-        try {
-            scheduledJobTimings = motechSchedulerService.getScheduledJobTimings(jobType.getEventSubject(), jobType.name(), today, nextWeek);
-        } catch (Exception e) {
-            // no schedule found
-        }
+        List<Date> scheduledJobTimings = getScheduleJobTimings(jobType, new ProviderReminderTimings(now()));
         if (scheduledJobTimings.isEmpty()) {
             return null;
+        } else {
+            return new ProviderReminderConfiguration(jobType, scheduledJobTimings.get(0));
         }
-        return new ProviderReminderConfiguration(jobType, scheduledJobTimings.get(0));
     }
 
-    private String generateCronExpression(ProviderReminderConfiguration providerReminderConfiguration) {
-        int minutes = providerReminderConfiguration.getMinute();
-        int hour = providerReminderConfiguration.getHour();
-        String weekDay = providerReminderConfiguration.getDayOfWeek().getShortName();
-        return String.format("0 %s %s ? * %s", minutes, hour, weekDay);
+    private MotechEvent providerReminderEvent(ProviderReminderType reminderType) {
+        MotechEvent motechEvent = new MotechEvent(reminderType.getEventSubject());
+        motechEvent.getParameters().put(JOB_ID_KEY, reminderType.name());
+        return motechEvent;
+    }
+
+    private List<Date> getScheduleJobTimings(ProviderReminderType jobType, ProviderReminderTimings timings) {
+        try {
+            return motechSchedulerService.getScheduledJobTimings(jobType.getEventSubject(), jobType.name(), timings.getStartDate(), timings.getEndDate());
+        } catch (Exception ignored) {
+            return emptyList();
+        }
     }
 }
