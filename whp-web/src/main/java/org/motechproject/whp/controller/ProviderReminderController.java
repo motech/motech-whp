@@ -29,7 +29,7 @@ public class ProviderReminderController extends BaseWebController {
 
     @RequestMapping(value = "/{reminderType}", method = GET)
     public String scheduleFor(@PathVariable("reminderType") ProviderReminderType reminderType, Model model) throws IOException {
-        ProviderReminderConfiguration reminderConfiguration = providerReminderScheduler.getReminder(reminderType);
+        ProviderReminderConfiguration reminderConfiguration = providerReminderScheduler.configuration(reminderType);
         if (reminderConfiguration == null) {
             reminderConfiguration = new ProviderReminderConfiguration(reminderType, now().toDate());
         }

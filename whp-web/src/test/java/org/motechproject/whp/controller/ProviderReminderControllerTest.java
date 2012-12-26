@@ -34,7 +34,7 @@ public class ProviderReminderControllerTest {
     public void shouldReturnNextScheduleTiming() throws Exception {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, new Date());
 
-        when(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING)).thenReturn(providerReminderConfiguration);
+        when(providerReminderScheduler.configuration(ADHERENCE_WINDOW_APPROACHING)).thenReturn(providerReminderConfiguration);
 
         standaloneSetup(providerReminderController)
                 .build()

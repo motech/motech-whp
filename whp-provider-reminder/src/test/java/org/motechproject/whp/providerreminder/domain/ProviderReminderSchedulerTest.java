@@ -9,6 +9,7 @@ import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.repository.AllProviderReminderConfigurations;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
 import java.util.ArrayList;
@@ -26,16 +27,18 @@ import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
 import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
 
-public class ProviderReminderSchedulerTest extends BaseUnitTest{
+public class ProviderReminderSchedulerTest extends BaseUnitTest {
     @Mock
     private MotechSchedulerService motechSchedulerService;
+    @Mock
+    private AllProviderReminderConfigurations allProviderReminderConfigurations;
 
     private ProviderReminderScheduler providerReminderScheduler;
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerReminderScheduler = new ProviderReminderScheduler(motechSchedulerService);
+        providerReminderScheduler = new ProviderReminderScheduler(motechSchedulerService, allProviderReminderConfigurations);
     }
 
     @Test
@@ -53,6 +56,16 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest{
 
         assertEquals(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME, job.getMotechEvent().getSubject());
         assertEquals(ADHERENCE_WINDOW_APPROACHING.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
+    }
+
+    @Test
+    public void shouldPersistReminderConfigurationUponScheduling() {
+        ProviderReminderConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+
+        when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_APPROACHING)).thenReturn(currentConfiguration);
+        providerReminderScheduler.scheduleReminder(currentConfiguration);
+        assertEquals(currentConfiguration, providerReminderScheduler.configuration(ADHERENCE_WINDOW_APPROACHING));
+        verify(allProviderReminderConfigurations).saveOrUpdate(currentConfiguration);
     }
 
     @Test

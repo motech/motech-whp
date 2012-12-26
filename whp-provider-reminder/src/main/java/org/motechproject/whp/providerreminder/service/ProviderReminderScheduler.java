@@ -6,6 +6,7 @@ import org.motechproject.scheduler.domain.CronSchedulableJob;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderTimings;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.repository.AllProviderReminderConfigurations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,16 +21,19 @@ import static org.motechproject.util.DateUtil.now;
 public class ProviderReminderScheduler {
 
     private MotechSchedulerService motechSchedulerService;
+    private AllProviderReminderConfigurations allProviderReminderConfigurations;
 
     @Autowired
-    public ProviderReminderScheduler(MotechSchedulerService motechSchedulerService) {
+    public ProviderReminderScheduler(MotechSchedulerService motechSchedulerService, AllProviderReminderConfigurations allProviderReminderConfigurations) {
         this.motechSchedulerService = motechSchedulerService;
+        this.allProviderReminderConfigurations = allProviderReminderConfigurations;
     }
 
     public void scheduleReminder(ProviderReminderConfiguration reminderConfiguration) {
         ProviderReminderType reminderType = reminderConfiguration.getReminderType();
         MotechEvent motechEvent = providerReminderEvent(reminderType);
         motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
+        allProviderReminderConfigurations.saveOrUpdate(reminderConfiguration);
     }
 
     public ProviderReminderConfiguration getReminder(ProviderReminderType jobType) {
@@ -39,6 +43,10 @@ public class ProviderReminderScheduler {
         } else {
             return new ProviderReminderConfiguration(jobType, scheduledJobTimings.get(0));
         }
+    }
+
+    public ProviderReminderConfiguration configuration(ProviderReminderType reminderType) {
+        return allProviderReminderConfigurations.withType(reminderType);
     }
 
     private MotechEvent providerReminderEvent(ProviderReminderType reminderType) {
