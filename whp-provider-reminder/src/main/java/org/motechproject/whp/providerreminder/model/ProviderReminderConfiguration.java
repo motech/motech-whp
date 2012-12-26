@@ -1,6 +1,7 @@
 package org.motechproject.whp.providerreminder.model;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDateTime;
 import org.motechproject.model.DayOfWeek;
@@ -28,10 +29,17 @@ public class ProviderReminderConfiguration extends MotechBaseDataObject {
 
     public ProviderReminderConfiguration(ProviderReminderType reminderType, Date date) {
         LocalDateTime localDateTime = new LocalDateTime(date);
+        setReminderType(reminderType);
+        setDayOfWeek(DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek()));
+        setHour(localDateTime.getHourOfDay());
+        setMinute(localDateTime.getMinuteOfHour());
+    }
+
+    public void setReminderType(ProviderReminderType reminderType) {
+        if (StringUtils.isBlank(getId())) {
+            setId(reminderType.name());
+        }
         this.reminderType = reminderType;
-        this.dayOfWeek = DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek());
-        this.hour = localDateTime.getHourOfDay();
-        this.minute = localDateTime.getMinuteOfHour();
     }
 
     public String generateCronExpression() {

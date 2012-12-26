@@ -13,6 +13,12 @@ import static org.motechproject.whp.providerreminder.domain.ProviderReminderType
 public class ProviderReminderConfigurationTest {
 
     @Test
+    public void testIdIsSameAsType() {
+        ProviderReminderConfiguration reminder = new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, null);
+        assertEquals(ADHERENCE_WINDOW_APPROACHING.name(), reminder.getId());
+    }
+
+    @Test
     public void testReminderType() {
         Date tuesday = new LocalDateTime(2012, 12, 11, 10, 30).toDate();
         ProviderReminderConfiguration reminder;
