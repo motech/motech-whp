@@ -1,6 +1,7 @@
 package org.motechproject.whp.it.adherence.capture.repository;
 
 import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -26,7 +27,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     @Autowired
     private AllAdherenceLogs allAdherenceLogs;
 
-//    @After
+    @After
     public void tearDown() {
         markForDeletion(allAdherenceLogs.getAll().toArray());
     }
