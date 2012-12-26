@@ -1,31 +1,32 @@
 package org.motechproject.whp.it.adherence.capture.repository;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
+import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.it.SpringIntegrationTest;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Autowired
     private AllAdherenceLogs allAdherenceLogs;
 
-    @After
+//    @After
     public void tearDown() {
         markForDeletion(allAdherenceLogs.getAll().toArray());
     }
@@ -331,16 +332,31 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     public void shouldReturnProvidersWithAdherenceReported() {
         ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
 
-        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1));
+        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1).providerId("providerId1"),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1).providerId("providerId2"),
+                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1).providerId("providerId3"));
 
-        adherenceLogs.get(0).providerId("providerId1");
-        adherenceLogs.get(1).providerId("providerId2");
-        adherenceLogs.get(2).providerId("providerId3");
         addAll(adherenceLogs);
 
         assertEquals(providersWithAdherence, allAdherenceLogs.findProvidersWithAdherence(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+    }
+
+    @Test
+    public void shouldReturnProviderWithPatientCountsWithAdherence() {
+        List<AdherenceLog> adherenceLogs = asList(
+                createAdherenceLog("patient1", "treatmentId1", new LocalDate(2012, 1, 1), 1).providerId("provider1"),
+                createAdherenceLog("patient1", "treatmentId1", new LocalDate(2011, 1, 1), 1).providerId("provider1"),
+                createAdherenceLog("patient2", "treatmentId1", new LocalDate(2012, 1, 3), 1).providerId("provider1"),
+                createAdherenceLog("patient1", "treatmentId1", new LocalDate(2012, 1, 5), 1).providerId("provider1"),
+                createAdherenceLog("patient3", "treatmentId1", new LocalDate(2012, 1, 3), 1).providerId("provider2"));
+
+        addAll(adherenceLogs);
+
+        List<ProviderPatientCount> expectedProviderAdherenceStatuses = new ArrayList<>();
+        expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider1", 2));
+        expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider2", 1));
+
+        assertEquals(expectedProviderAdherenceStatuses, allAdherenceLogs.findProviderPatientCountWithAdherence(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
     }
 
 

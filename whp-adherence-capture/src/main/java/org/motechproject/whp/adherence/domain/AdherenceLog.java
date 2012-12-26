@@ -68,8 +68,9 @@ public class AdherenceLog extends MotechBaseDataObject {
         return (String) meta.get(TB_ID);
     }
 
-    public void providerId(String providerId) {
+    public AdherenceLog providerId(String providerId) {
         meta.put(PROVIDER_ID, providerId);
+        return this;
     }
 
     public String providerId() {
