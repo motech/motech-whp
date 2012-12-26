@@ -1,7 +1,13 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-menu.ftl" as layout>
 <@layout.defaultLayout title="Provider Reminder Configuration" entity="itadmin">
-    <div class="row well form-container offset1-fixed">
+    <div class="row well form-container offset1-fixed" style="position:relative">
+    <#if message?exists>
+        <div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Successfully updated</div>
+        <script type="text/javascript">
+            createAutoClosingAlert("#update-alert", 5000);
+        </script>
+    </#if>
     <h1>Schedule Reminder</h1>
         <form id="provider-reminder-form"  autocomplete="off" action="<@spring.url '/providerreminder/update'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
             <div class="form-element">

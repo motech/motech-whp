@@ -1213,3 +1213,10 @@ pre {
     margin-top: 20px;
     background-color: white;
 }
+
+.alert.alert-non-intrusive {
+    left: 42%;
+    position: absolute;
+    top: -17px;
+    z-index: 5;
+}
