@@ -1198,3 +1198,18 @@ pre {
 .itadmin-menu .nav {
     border:none;
 }
+
+.form-container {
+    background-color:white;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.form-container .form-element {
+    padding: 19px;
+    border-top: 1px solid #E3E3E3;
+}
+
+.form-container .form-buttons{
+    margin-top: 20px;
+    background-color: white;
+}
