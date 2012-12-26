@@ -8,6 +8,7 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.domain.Patient;
@@ -105,6 +106,22 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
     public void createViewForProvidersWithActivePatients() {
+    }
+
+    @View(name = "provider_with_active_patients_count", map = "classpath:filterProvidersWithActivePatients.js", reduce = "_count")
+    public List<ProviderPatientCount> getProviderIdPatientCount() {
+        ViewQuery query = createQuery("provider_with_active_patients_count").group(true).groupLevel(1).reduce(true);
+        return listOfProviderPatientCount(db.queryView(query));
+
+    }
+
+    private List<ProviderPatientCount> listOfProviderPatientCount(ViewResult rows) {
+        List<ProviderPatientCount> providerPatientCounts = new ArrayList<>();
+        for (ViewResult.Row row : rows) {
+            providerPatientCounts.add(new ProviderPatientCount(row.getKey(), row.getValueAsInt()));
+        }
+
+        return providerPatientCounts;
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
