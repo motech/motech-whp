@@ -69,7 +69,7 @@ public class AdherenceLogServiceTest {
         LocalDate to = today();
 
         List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
-        when(allAdherenceLogs.getProviderIdPatientWithAdherenceCount(from, from)).thenReturn(expectedResult);
+        when(allAdherenceLogs.getProviderIdPatientWithAdherenceCount(from, to)).thenReturn(expectedResult);
 
         assertEquals(expectedResult, adherenceLogService.getProviderIdPatientWithAdherenceCount(from, to));
         verify(allAdherenceLogs).getProviderIdPatientWithAdherenceCount(from, to);
