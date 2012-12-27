@@ -26,6 +26,11 @@ public class DateTimeValidatorTest {
     }
 
     @Test
+    public void shouldBeInvalidWhenYearIsLessThanFourDigits() {
+        assertFalse(dateTimeValidator.isValid("28/02/202 10:10:10", null));
+    }
+
+    @Test
     public void shouldBeInvalidOnValueWithInvalidFormat() {
         assertFalse(dateTimeValidator.isValid("12/02/2012 10:10:", null));
     }

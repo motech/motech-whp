@@ -146,6 +146,36 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
+    public void shouldBeInvalidIfPatientCountIsNotANumber(){
+        AdherenceCallStatusRequest request = validRequest();
+        request.setPatientCount("a");
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("should be a number"));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("patientCount"));
+    }
+
+    @Test
+    public void shouldBeInvalidIfAdherenceCapturedCountIsNotANumber(){
+        AdherenceCallStatusRequest request = validRequest();
+        request.setAdherenceCapturedCount("a");
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("should be a number"));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("adherenceCapturedCount"));
+    }
+
+    @Test
+    public void shouldBeInvalidIfAdherenceNotCapturedCountIsNotANumber(){
+        AdherenceCallStatusRequest request = validRequest();
+        request.setAdherenceNotCapturedCount("a");
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("should be a number"));
+        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("adherenceNotCapturedCount"));
+    }
+
+    @Test
     public void shouldBeValidWhenAllTheFieldsAreValid() {
         AdherenceCallStatusRequest request = validRequest();
 

@@ -2,10 +2,10 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.whp.common.validation.DateTimeFormat;
 
+import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -37,10 +37,13 @@ public class AdherenceCallStatusRequest implements Serializable {
     @NotBlank
     private String disconnectionType;
     @NotBlank
+    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String patientCount;
     @NotBlank
+    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String adherenceCapturedCount;
     @NotBlank
+    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String adherenceNotCapturedCount;
 
     public AdherenceCallStatusRequest() {

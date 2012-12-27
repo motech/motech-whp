@@ -1217,6 +1217,7 @@ pre {
 .alert.alert-non-intrusive {
     left: 42%;
     position: absolute;
+    min-width: 10.7em;
     top: -17px;
     z-index: 5;
 }
