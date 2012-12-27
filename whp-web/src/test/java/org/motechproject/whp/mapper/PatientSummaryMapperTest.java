@@ -7,13 +7,11 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.uimodel.PatientSummary;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class PatientSummaryMapperTest {
 
     private void verifyInactivePatientSummary(PatientSummary patientSummary, Patient inactivePatient) {
         verifyActivePatientSummary(patientSummary, inactivePatient);
-        verifyDates(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate());
+        assertEquals(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate().toDate());
         assertEquals(patientSummary.getTreatmentOutcome(), inactivePatient.getCurrentTreatment().getTreatmentOutcome().getOutcome());
     }
 
@@ -83,17 +81,10 @@ public class PatientSummaryMapperTest {
         assertEquals(patientSummary.getProviderDistrict(), patient.getCurrentTreatment().getProviderDistrict());
         assertEquals(patientSummary.getPreTreatmentSputumResult(), patient.getPreTreatmentSputumResult().name());
         assertEquals(patientSummary.getPreTreatmentWeight(), patient.getPreTreatmentWeightRecord().getWeight().toString());
-        verifyDates(patientSummary.getTbRegistrationDate(), patient.getCurrentTreatment().getStartDate());
-        verifyDates(patientSummary.getTreatmentStartDate(), patient.getCurrentTherapy().getStartDate());
+        assertEquals(patientSummary.getTbRegistrationDate(), patient.getCurrentTreatment().getStartDate().toDate());
+        assertEquals(patientSummary.getTreatmentStartDate(), patient.getCurrentTherapy().getStartDate().toDate());
     }
 
-    private void verifyDates(String formattedDate, LocalDate date) {
-        if (StringUtils.hasText(formattedDate)) {
-            if (date != null) {
-                assertEquals(formattedDate, new WHPDate(date).value());
-            }
-        }
-    }
 
     private Patient createActivePatient() {
         Patient activePatient = new PatientBuilder().withDefaults().withAge(30).build();

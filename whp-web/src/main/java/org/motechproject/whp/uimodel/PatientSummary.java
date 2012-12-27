@@ -2,8 +2,11 @@ package org.motechproject.whp.uimodel;
 
 import lombok.Setter;
 import org.motechproject.export.annotation.ExportValue;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
+
+import java.util.Date;
 
 
 @Setter
@@ -18,15 +21,15 @@ public class PatientSummary {
     private String village;
     private String providerDistrict;
     private String treatmentCategory;
-    private String tbRegistrationDate;
-    private String treatmentStartDate;
+    private Date tbRegistrationDate;
+    private Date treatmentStartDate;
     private String diseaseClass;
     private PatientType patientType;
     private String ipTreatmentProgress;
     private String cpTreatmentProgress;
     private Integer cumulativeMissedDoses;
     private String treatmentOutcome;
-    private String treatmentClosingDate;
+    private Date treatmentClosingDate;
     private String preTreatmentSputumResult;
     private String preTreatmentWeight;
 
@@ -85,13 +88,13 @@ public class PatientSummary {
         return preTreatmentWeight;
     }
 
-    @ExportValue(index = 11, column = "TB Registration Date")
-    public String getTbRegistrationDate() {
+    @ExportValue(index = 11, column = "TB Registration Date", format = WHPDate.DATE_FORMAT)
+    public Date getTbRegistrationDate() {
         return tbRegistrationDate;
     }
 
-    @ExportValue(index = 12)
-    public String getTreatmentStartDate() {
+    @ExportValue(index = 12, format = WHPDate.DATE_FORMAT)
+    public Date getTreatmentStartDate() {
         return treatmentStartDate;
     }
 
@@ -125,8 +128,8 @@ public class PatientSummary {
         return treatmentOutcome;
     }
 
-    @ExportValue(index = 19)
-    public String getTreatmentClosingDate() {
+    @ExportValue(index = 19, format = WHPDate.DATE_FORMAT)
+    public Date getTreatmentClosingDate() {
         return treatmentClosingDate;
     }
 }

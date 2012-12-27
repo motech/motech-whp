@@ -1,12 +1,12 @@
 package org.motechproject.whp.mapper;
 
-import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.uimodel.PatientSummary;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PatientSummaryMapper {
@@ -91,16 +91,16 @@ public class PatientSummaryMapper {
         return null;
     }
 
-    private String extractFormattedTreatmentClosingDate(Patient patient) {
+    private Date extractFormattedTreatmentClosingDate(Patient patient) {
         if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getEndDate() != null) {
-            return new WHPDate(patient.getCurrentTreatment().getEndDate()).value();
+            return patient.getCurrentTreatment().getEndDate().toDate();
         }
         return null;
     }
 
-    private String extractFormattedTreatmentStartDate(Patient patient) {
+    private Date extractFormattedTreatmentStartDate(Patient patient) {
         if (patient != null && patient.getCurrentTherapy() != null && patient.getCurrentTherapy().getStartDate() != null) {
-            return new WHPDate(patient.getCurrentTherapy().getStartDate()).value();
+            return patient.getCurrentTherapy().getStartDate().toDate();
         }
         return null;
     }
@@ -112,9 +112,9 @@ public class PatientSummaryMapper {
         return null;
     }
 
-    private String extractFormattedTbRegistrationDate(Patient patient) {
+    private Date extractFormattedTbRegistrationDate(Patient patient) {
         if (patient != null && patient.getCurrentTreatment() != null && patient.getCurrentTreatment().getStartDate() != null) {
-            return new WHPDate(patient.getCurrentTreatment().getStartDate()).value();
+            return patient.getCurrentTreatment().getStartDate().toDate();
         }
         return null;
     }
