@@ -6,7 +6,6 @@ import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.uimodel.AdherenceLogSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +45,10 @@ public class AdherenceDataExportService {
             adherenceLogSummary.setPatientId(adherenceAuditLog.getPatientId());
             adherenceLogSummary.setProviderId(adherenceAuditLog.getProviderId());
             adherenceLogSummary.setTbId(adherenceAuditLog.getTbId());
-            adherenceLogSummary.setCreationDate(new WHPDate(adherenceAuditLog.getCreationTime().toLocalDate()).value());
+            adherenceLogSummary.setCreationDate(adherenceAuditLog.getCreationTime().toDate());
             adherenceLogSummary.setCreationTime(new WHPDateTime(adherenceAuditLog.getCreationTime()).time().toString());
             if(adherenceAuditLog.getDoseDate() != null)
-                adherenceLogSummary.setDoseDate(new WHPDate(adherenceAuditLog.getDoseDate().toLocalDate()).value());
+                adherenceLogSummary.setDoseDate(adherenceAuditLog.getDoseDate().toDate());
             adherenceLogSummary.setUserId(adherenceAuditLog.getUserId());
             adherenceLogSummary.setNumberOfDosesTaken(adherenceAuditLog.getNumberOfDosesTaken());
             adherenceLogSummary.setPillStatus(adherenceAuditLog.getPillStatus());

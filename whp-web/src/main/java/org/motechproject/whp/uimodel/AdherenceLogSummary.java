@@ -4,9 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.motechproject.export.annotation.ExportValue;
 import org.motechproject.whp.adherence.domain.PillStatus;
-import org.motechproject.whp.common.util.WHPDate;
 
 import java.util.Date;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 
 @Setter
 @EqualsAndHashCode
@@ -14,16 +15,16 @@ public class AdherenceLogSummary {
 
     private String patientId;
     private String tbId;
-    private String creationDate;
+    private Date creationDate;
     private String creationTime;
-    private String doseDate;
+    private Date doseDate;
     private String userId;
     private Integer numberOfDosesTaken;
     private PillStatus pillStatus;
     private String sourceOfChange;
     private String providerId;
 
-    public AdherenceLogSummary(String patientId, String tbId, String creationDate, String creationTime, String doseDate, String userId, Integer numberOfDosesTaken, PillStatus pillStatus, String sourceOfChange, String providerId) {
+    public AdherenceLogSummary(String patientId, String tbId, Date creationDate, String creationTime, Date doseDate, String userId, Integer numberOfDosesTaken, PillStatus pillStatus, String sourceOfChange, String providerId) {
         this.patientId = patientId;
         this.tbId = tbId;
         this.creationDate = creationDate;
@@ -55,12 +56,9 @@ public class AdherenceLogSummary {
         return providerId;
     }
 
-    @ExportValue(index = 3, column = "Log Creation Date")
+    @ExportValue(index = 3, column = "Log Creation Date", format = DATE_FORMAT)
     public Date getCreationDate() {
-        if(creationDate  == null){
-            return null;
-        }
-        return new WHPDate(creationDate).date().toDate();
+        return creationDate;
     }
 
     @ExportValue(index = 4, column = "Log Creation Time")
@@ -68,12 +66,9 @@ public class AdherenceLogSummary {
         return creationTime;
     }
 
-    @ExportValue(index = 5, column = "Adherence Date")
+    @ExportValue(index = 5, column = "Adherence Date", format = DATE_FORMAT)
     public Date getDoseDate() {
-        if(doseDate  == null){
-            return null;
-        }
-        return new WHPDate(doseDate).date().toDate();
+        return doseDate;
     }
 
     @ExportValue(index = 6, column = "User Id")

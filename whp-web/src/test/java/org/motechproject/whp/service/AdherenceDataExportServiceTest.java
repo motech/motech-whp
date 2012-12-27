@@ -12,7 +12,6 @@ import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.uimodel.AdherenceLogSummary;
 
@@ -21,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.joda.time.LocalDate.now;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,7 +51,7 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
         AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now, now, "cmfAdmin", 1, Taken, "WEB");
         adherenceAuditLogList.add(adherenceAuditLog);
 
-        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB", "raj");
+        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", this.now.toDate(), new WHPDateTime(this.now).time(), this.now.toDate(), "cmfAdmin", 1, Taken, "WEB", "raj");
 
         List<AdherenceLogSummary> adherenceLogSummaryList = adherenceDataExportService.map(adherenceAuditLogList);
         assertThat(adherenceLogSummaryList.get(0), Is.is(expectedAdherenceLogSummary));
@@ -65,7 +63,7 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
         AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now, null, "cmfAdmin", 1, Taken, "WEB");
         adherenceAuditLogList.add(adherenceAuditLog);
 
-        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), null, "cmfAdmin", 1, Taken, "WEB", "raj");
+        AdherenceLogSummary expectedAdherenceLogSummary = new AdherenceLogSummary("patient1", "tbId", this.now.toDate(), new WHPDateTime(this.now).time(), null, "cmfAdmin", 1, Taken, "WEB", "raj");
 
         List<AdherenceLogSummary> adherenceLogSummaryList = adherenceDataExportService.map(adherenceAuditLogList);
         assertThat(adherenceLogSummaryList.get(0), Is.is(expectedAdherenceLogSummary));
@@ -79,7 +77,7 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
 
         List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceAuditReport(pageNo);
 
-        List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", new WHPDate(this.now.toLocalDate()).value(), new WHPDateTime(this.now).time(), new WHPDate(now()).value(), "cmfAdmin", 1, Taken, "WEB", "raj"));
+        List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", this.now.toDate(), new WHPDateTime(this.now).time(), this.now.toDate(), "cmfAdmin", 1, Taken, "WEB", "raj"));
 
         assertEquals(expectedAuditLogSummaries, adherenceAuditLogSummaries);
         verify(adherenceAuditService).allAuditLogs(pageNo);
