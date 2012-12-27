@@ -200,7 +200,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
     }
 
     @View(name = "find_provider_patient_with_adherence_count", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.PROVIDER_ID, doc.externalId, doc.doseDate], null);}}", reduce = "_count")
-    public List<ProviderPatientCount> getProviderIdPatientWithAdherenceCount(LocalDate from, LocalDate to) {
+    public List<ProviderPatientCount> findAllProviderPatientWithAdherenceCount(LocalDate from, LocalDate to) {
         ComplexKey startKey = ComplexKey.of(null, null, from);
         ComplexKey endKey = ComplexKey.of(ComplexKey.emptyObject(), ComplexKey.emptyObject(), to);
         ViewQuery query = createQuery("find_provider_patient_with_adherence_count").startKey(startKey).endKey(endKey).group(true).groupLevel(2).reduce(true);

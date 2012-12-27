@@ -112,8 +112,8 @@ public class AdherenceSubmissionServiceTest {
         LocalDate yesterday = today().minusDays(1);
         LocalDate today = today();
 
-        when(patientService.getProviderIdActivePatientCount()).thenReturn(allProviderPatientCounts);
-        when(adherenceLogService.getProviderIdPatientWithAdherenceCount(yesterday, today)).thenReturn(providerIdPatientWithAdherenceCounts);
+        when(patientService.getAllActiveProviderPatientCount()).thenReturn(allProviderPatientCounts);
+        when(adherenceLogService.getProviderPatientWithAdherenceCount(yesterday, today)).thenReturn(providerIdPatientWithAdherenceCounts);
         when(providerService.findByProviderIds(new ProviderIds(asList("provider1")))).thenReturn(asList(provider1));
 
         List<Provider> providersPendingAdherence = adherenceSubmissionService.providersPendingAdherence(yesterday, today);

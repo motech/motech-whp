@@ -65,7 +65,7 @@ public class AdherenceLogService {
         return allAdherenceLogs.findProvidersWithAdherence(from, to);
     }
 
-    public List<ProviderPatientCount> getProviderIdPatientWithAdherenceCount(LocalDate from, LocalDate to) {
-        return allAdherenceLogs.getProviderIdPatientWithAdherenceCount(from, to);
+    public List<ProviderPatientCount> getProviderPatientWithAdherenceCount(LocalDate from, LocalDate to) {
+        return allAdherenceLogs.findAllProviderPatientWithAdherenceCount(from, to);
     }
 }

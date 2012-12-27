@@ -357,7 +357,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider1", 2));
         expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider2", 1));
 
-        assertEquals(expectedProviderAdherenceStatuses, allAdherenceLogs.getProviderIdPatientWithAdherenceCount(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+        assertEquals(expectedProviderAdherenceStatuses, allAdherenceLogs.findAllProviderPatientWithAdherenceCount(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
     }
 
 

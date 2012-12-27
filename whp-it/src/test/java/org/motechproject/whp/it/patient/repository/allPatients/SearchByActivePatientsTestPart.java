@@ -63,7 +63,7 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider1", 2));
         expectedProviderAdherenceStatuses.add(new ProviderPatientCount("provider2", 1));
 
-        assertEquals(expectedProviderAdherenceStatuses, allPatients.getProviderIdActivePatientCount());
+        assertEquals(expectedProviderAdherenceStatuses, allPatients.findAllProviderPatientCount());
     }
 
 }

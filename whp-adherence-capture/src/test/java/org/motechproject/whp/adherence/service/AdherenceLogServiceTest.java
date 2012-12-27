@@ -69,10 +69,10 @@ public class AdherenceLogServiceTest {
         LocalDate to = today();
 
         List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
-        when(allAdherenceLogs.getProviderIdPatientWithAdherenceCount(from, to)).thenReturn(expectedResult);
+        when(allAdherenceLogs.findAllProviderPatientWithAdherenceCount(from, to)).thenReturn(expectedResult);
 
-        assertEquals(expectedResult, adherenceLogService.getProviderIdPatientWithAdherenceCount(from, to));
-        verify(allAdherenceLogs).getProviderIdPatientWithAdherenceCount(from, to);
+        assertEquals(expectedResult, adherenceLogService.getProviderPatientWithAdherenceCount(from, to));
+        verify(allAdherenceLogs).findAllProviderPatientWithAdherenceCount(from, to);
 
     }
 }

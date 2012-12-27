@@ -139,7 +139,7 @@ public class PatientService {
             throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
     }
 
-    public List<ProviderPatientCount> getProviderIdActivePatientCount() {
-        return allPatients.getProviderIdActivePatientCount();
+    public List<ProviderPatientCount> getAllActiveProviderPatientCount() {
+        return allPatients.findAllProviderPatientCount();
     }
 }

@@ -148,10 +148,10 @@ public class PatientServiceTest extends BaseUnitTest {
     @Test
     public void shouldReturnProviderPatientCount() {
         List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
-        when(allPatients.getProviderIdActivePatientCount()).thenReturn(expectedResult);
+        when(allPatients.findAllProviderPatientCount()).thenReturn(expectedResult);
 
-        assertEquals(expectedResult, patientService.getProviderIdActivePatientCount());
-        verify(allPatients).getProviderIdActivePatientCount();
+        assertEquals(expectedResult, patientService.getAllActiveProviderPatientCount());
+        verify(allPatients).findAllProviderPatientCount();
     }
 
     @After

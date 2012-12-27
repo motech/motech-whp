@@ -59,10 +59,9 @@ public class AdherenceSubmissionService {
     }
 
     public List<Provider> providersPendingAdherence(LocalDate from, LocalDate to) {
-        List<ProviderPatientCount> allProviderPatientCounts = patientService.getProviderIdActivePatientCount();
-        List<ProviderPatientCount> providerIdPatientWithAdherenceCounts = adherenceLogService.getProviderIdPatientWithAdherenceCount(from, to);
+        List<ProviderPatientCount> allProviderPatientCounts = patientService.getAllActiveProviderPatientCount();
+        List<ProviderPatientCount> providerIdPatientWithAdherenceCounts = adherenceLogService.getProviderPatientWithAdherenceCount(from, to);
         AllProviderAdherenceStatus allProviderAdherenceStatus = new AllProviderAdherenceStatus(allProviderPatientCounts, providerIdPatientWithAdherenceCounts);
-
         return providerService.findByProviderIds(allProviderAdherenceStatus.providersWithPendingAdherence());
     }
 
