@@ -3,7 +3,6 @@ package org.motechproject.whp.service;
 import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.DataProvider;
 import org.motechproject.export.annotation.ExcelDataSource;
-import org.motechproject.export.annotation.Footer;
 import org.motechproject.export.annotation.Header;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.util.WHPDate;
@@ -33,13 +32,9 @@ public class PatientDataSummary {
 
     @Header(span = 3)
     public List<String> patientSummaryHeader() {
-        return asList("Generated as on " + new WHPDate(today()).value());
-    }
-
-    @Footer(span = 3)
-    public List<String> patientSummaryFooter() {
         LocalDate lastSunday = currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday);
-        return asList("* Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
+        return asList("Generated as on " + new WHPDate(today()).value(),
+                "* Cumulative missed doses shown as of " + new WHPDate(lastSunday).value());
     }
 
     @DataProvider

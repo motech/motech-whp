@@ -17,7 +17,7 @@ public class DailyAdherenceAuditLog extends MotechBaseDataObject {
 
     }
 
-    public DailyAdherenceAuditLog(String patientId, String tbId, LocalDate pillDate, PillStatus pillStatus, String user, String sourceOfChange, DateTime creationTime) {
+    public DailyAdherenceAuditLog(String patientId, String tbId, LocalDate pillDate, PillStatus pillStatus, String user, String sourceOfChange, DateTime creationTime, String providerId) {
         this.patientId = patientId;
         this.tbId = tbId;
         this.pillDate = pillDate;
@@ -25,6 +25,7 @@ public class DailyAdherenceAuditLog extends MotechBaseDataObject {
         this.user = user;
         this.sourceOfChange = sourceOfChange;
         this.creationTime = creationTime;
+        this.providerId = providerId;
     }
 
     private String patientId;
@@ -41,5 +42,5 @@ public class DailyAdherenceAuditLog extends MotechBaseDataObject {
 
     private DateTime creationTime = DateUtil.now();
 
-
+    private String providerId;
 }

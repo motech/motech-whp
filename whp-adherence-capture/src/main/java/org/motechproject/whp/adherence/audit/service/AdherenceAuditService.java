@@ -1,6 +1,5 @@
 package org.motechproject.whp.adherence.audit.service;
 
-import org.joda.time.DateTime;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
@@ -58,6 +57,7 @@ public class AdherenceAuditService {
             auditLog.setPillStatus(adherence.getPillStatus());
             auditLog.setSourceOfChange(auditParams.getSourceOfChange().name());
             auditLog.setUser(auditParams.getUser());
+            auditLog.setProviderId(adherence.getProviderId());
             allDailyAdherenceAuditLogs.add(auditLog);
         }
     }

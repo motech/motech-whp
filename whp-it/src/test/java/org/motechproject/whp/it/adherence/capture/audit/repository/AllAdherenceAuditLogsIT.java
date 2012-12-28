@@ -40,10 +40,11 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
     AuditLog weeklyAuditLog2 = new AuditLog(DateUtil.now(), 3, "remark1", AdherenceSource.WEB.name(), "patient2", "tbId2", "providerId2", "providerId2");
     AuditLog weeklyAuditLog3 = new AuditLog(DateUtil.now(), 2, "remark1", AdherenceSource.IVR.name(), "patient1", "tbId1", "providerId1", "providerId1");
 
+    private final String providerId = "providerId";
     //set up daily audit logs
-    DailyAdherenceAuditLog dailyAuditLog1 = new DailyAdherenceAuditLog("patient1", "tbId1", DateUtil.today(), PillStatus.Taken, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now());
-    DailyAdherenceAuditLog dailyAuditLog2 = new DailyAdherenceAuditLog("patient2", "tbId2", DateUtil.today(), PillStatus.NotTaken, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now());
-    DailyAdherenceAuditLog dailyAuditLog3 = new DailyAdherenceAuditLog("patient1", "tbId1", DateUtil.today(), PillStatus.Unknown, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now());
+    DailyAdherenceAuditLog dailyAuditLog1 = new DailyAdherenceAuditLog("patient1", "tbId1", DateUtil.today(), PillStatus.Taken, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now(), providerId);
+    DailyAdherenceAuditLog dailyAuditLog2 = new DailyAdherenceAuditLog("patient2", "tbId2", DateUtil.today(), PillStatus.NotTaken, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now(), providerId);
+    DailyAdherenceAuditLog dailyAuditLog3 = new DailyAdherenceAuditLog("patient1", "tbId1", DateUtil.today(), PillStatus.Unknown, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now(), providerId);
 
     @Test
     public void shouldGetDailyAndWeeklyAdherenceAuditLogs() {
@@ -59,7 +60,7 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
     }
 
     private AdherenceAuditLog getLog(DailyAdherenceAuditLog dailyAuditLog) {
-        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(dailyAuditLog.getPatientId(), null, dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(),dailyAuditLog.getSourceOfChange() );
+        AdherenceAuditLog expectedAdherenceAuditLog = new AdherenceAuditLog(dailyAuditLog.getPatientId(), dailyAuditLog.getProviderId(), dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(),dailyAuditLog.getSourceOfChange() );
         return expectedAdherenceAuditLog;
     }
 

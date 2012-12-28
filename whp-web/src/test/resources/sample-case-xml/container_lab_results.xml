@@ -4,9 +4,9 @@
         <update_type>lab_results</update_type>
         <smear_test_date_1>01/03/2012</smear_test_date_1>
         <smear_test_result_1>Positive</smear_test_result_1>
-        <smear_test_date_2>01/03/2012</smear_test_date_2>
-        <smear_test_result_2>Positive</smear_test_result_2>
-        <lab_name>XYZ</lab_name>
-        <lab_number>1234</lab_number>
-    </update>
-</case>
+<smear_test_date_2>01/03/2012</smear_test_date_2>
+<smear_test_result_2>Positive</smear_test_result_2>
+<lab_name>XYZ</lab_name>
+<lab_number>1234</lab_number>
+        </update>
+        </case>

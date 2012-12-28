@@ -1,9 +1,7 @@
 package org.motechproject.whp.it.adherence.capture.audit.service;
 
-import org.motechproject.whp.it.SpringIntegrationTest;
 import org.joda.time.LocalDate;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -26,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AdherenceAuditServiceIT extends SpringIntegrationTest {
@@ -53,12 +53,12 @@ public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
         AuditLog auditLog = adherenceAuditService.fetchWeeklyAuditLogs().get(0);
 
-        Assert.assertEquals(3, auditLog.numberOfDosesTaken());
-        Assert.assertEquals("remarks", auditLog.remark());
-        Assert.assertEquals("WEB", auditLog.sourceOfChange());
-        Assert.assertEquals(PatientBuilder.PATIENT_ID, auditLog.patientId());
-        Assert.assertEquals(PatientBuilder.TB_ID, auditLog.tbId());
-        Assert.assertEquals("user", auditLog.user());
+        assertEquals(3, auditLog.numberOfDosesTaken());
+        assertEquals("remarks", auditLog.remark());
+        assertEquals("WEB", auditLog.sourceOfChange());
+        assertEquals(PatientBuilder.PATIENT_ID, auditLog.patientId());
+        assertEquals(PatientBuilder.TB_ID, auditLog.tbId());
+        assertEquals("user", auditLog.user());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
         AuditLog auditLog = adherenceAuditService.fetchWeeklyAuditLogs().get(0);
 
-        Assert.assertEquals("remarks", auditLog.remark());
+        assertEquals("remarks", auditLog.remark());
     }
 
     @Test
@@ -80,24 +80,26 @@ public class AdherenceAuditServiceIT extends SpringIntegrationTest {
 
         AuditLog auditLog = adherenceAuditService.fetchWeeklyAuditLogs().get(0);
 
-        Assert.assertEquals(null, auditLog.remark());
+        assertEquals(null, auditLog.remark());
     }
 
     @Test
     public void shouldAuditDailyAdherenceCaptured(){
         LocalDate pillDate = DateUtil.today();
-        Adherence adherenceData = AdherenceDataBuilder.createLog(pillDate, "providerId", PatientBuilder.TB_ID, PillStatus.Taken);
+        String providerId = "providerId";
+        Adherence adherenceData = AdherenceDataBuilder.createLog(pillDate, providerId, PatientBuilder.TB_ID, PillStatus.Taken);
 
         adherenceAuditService.auditDailyAdherence(patient, Arrays.asList(adherenceData), auditParams);
 
         DailyAdherenceAuditLog auditLog = adherenceAuditService.fetchDailyAuditLogs().get(0);
 
-        Assert.assertEquals(PatientBuilder.PATIENT_ID, auditLog.getPatientId());
-        Assert.assertEquals(PatientBuilder.TB_ID, auditLog.getTbId());
-        Assert.assertEquals(pillDate, auditLog.getPillDate());
-        Assert.assertEquals(PillStatus.Taken, auditLog.getPillStatus());
-        Assert.assertEquals("user", auditLog.getUser());
-        Assert.assertEquals("WEB", auditLog.getSourceOfChange());
+        assertEquals(PatientBuilder.PATIENT_ID, auditLog.getPatientId());
+        assertEquals(PatientBuilder.TB_ID, auditLog.getTbId());
+        assertEquals(pillDate, auditLog.getPillDate());
+        assertEquals(PillStatus.Taken, auditLog.getPillStatus());
+        assertEquals("user", auditLog.getUser());
+        assertEquals("WEB", auditLog.getSourceOfChange());
+        assertEquals(providerId, auditLog.getProviderId());
 
     }
 

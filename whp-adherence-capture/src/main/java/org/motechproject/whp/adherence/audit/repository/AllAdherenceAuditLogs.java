@@ -21,7 +21,7 @@ public class AllAdherenceAuditLogs extends MotechBaseRepository<AuditLog>{
     }
 
     @View(name = "all_adherence_audit_logs", map = "function(doc) {if (doc.type == 'AuditLog') {emit(doc.creationTime, {patientId:doc.patientId, providerId:doc.providerId, tbId:doc.tbId, creationTime:doc.creationTime, doseDate:null, userId:doc.user, numberOfDosesTaken:doc.numberOfDosesTaken, pillStatus:null, sourceOfChange: doc.sourceOfChange});} " +
-            "  if(doc.type == 'DailyAdherenceAuditLog') {emit(doc.creationTime, {patientId:doc.patientId, tbId:doc.tbId, creationTime:doc.creationTime, doseDate:doc.pillDate, userId:doc.user, numberOfDosesTaken:null, pillStatus:doc.pillStatus, sourceOfChange: doc.sourceOfChange});} }")
+            "  if(doc.type == 'DailyAdherenceAuditLog') {emit(doc.creationTime, {patientId:doc.patientId, providerId:doc.providerId, tbId:doc.tbId, creationTime:doc.creationTime, doseDate:doc.pillDate, userId:doc.user, numberOfDosesTaken:null, pillStatus:doc.pillStatus, sourceOfChange: doc.sourceOfChange});} }")
     public List<AdherenceAuditLog> findLogsAsOf(DateTime asOf, int pageNo, int pageSize) {
         ViewQuery q = createQuery("all_adherence_audit_logs").endKey(asOf).skip(pageNo * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceAuditLog.class);

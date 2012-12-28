@@ -1,12 +1,9 @@
 package org.motechproject.whp.service;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.service.PatientService;
 
@@ -47,11 +44,6 @@ public class PatientDataSummaryTest {
     public void shouldRetrieveReportHeader_forCurrentDate() {
         List<String> results = patientDataSummary.patientSummaryHeader();
         assertTrue(results.get(0).contains(new WHPDate(today()).value()));
-    }
-
-    @Test
-    public void shouldRetrieveReportFooter_forPreviousSunday() {
-        List<String> results = patientDataSummary.patientSummaryFooter();
-        assertTrue(results.get(0).contains(new WHPDate(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).value()));
+        assertTrue(results.get(1).contains(new WHPDate(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).value()));
     }
 }
