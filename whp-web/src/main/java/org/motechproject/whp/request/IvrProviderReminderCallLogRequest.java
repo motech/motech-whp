@@ -84,7 +84,7 @@ public class IvrProviderReminderCallLogRequest {
         request.setDisconnectionType(getDisconnectionType());
         request.setReminderType(getReminderType());
         request.setRequestId(getRequestId());
-        request.setAttempt(Integer.parseInt(getAttempt()));
+        request.setAttempt(getAttempt());
         request.setAttemptTime(getAttemptTime());
         request.setCallId(getCallId());
         request.setCallStatus(getCallStatus());

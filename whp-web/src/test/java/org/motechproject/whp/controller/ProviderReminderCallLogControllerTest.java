@@ -74,7 +74,7 @@ public class ProviderReminderCallLogControllerTest {
         assertEquals("1234567890", request.getMsisdn());
         assertEquals("SUCCESS", request.getCallStatus());
         assertEquals("PROVIDER_HANGUP", request.getDisconnectionType());
-        assertEquals(new Integer(1), request.getAttempt());
+        assertEquals("1", request.getAttempt());
         assertEquals("10/12/2012 12:32:35", request.getStartTime());
         assertEquals("10/12/2012 12:33:35", request.getEndTime());
         assertEquals("10/12/2012 12:21:45", request.getAttemptTime());
