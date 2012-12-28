@@ -4,8 +4,9 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.export.annotation.ExportValue;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.util.WHPDate;
 
-import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
+import java.util.Date;
 
 @Data
 public class Adherence {
@@ -58,9 +59,9 @@ public class Adherence {
         return tbId;
     }
 
-    @ExportValue(index = 2, column = "Adherence date")
-    public String pillDate() {
-        return pillDate.toString(DATE_FORMAT);
+    @ExportValue(index = 2, column = "Adherence date", format = WHPDate.DATE_FORMAT)
+    public Date pillDate() {
+        return pillDate.toDate();
     }
 
     @ExportValue(index = 3, column = "Adherence value")
