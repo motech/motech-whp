@@ -227,6 +227,7 @@
                                 <exclude>**/*TestPart.java</exclude>
                                 <exclude>**/functional/**/*Test.java</exclude>
                             </excludes>
+                            <runOrder>alphabetical</runOrder>
                             <redirectTestOutputToFile>true</redirectTestOutputToFile>
                         </configuration>
                     </execution>
