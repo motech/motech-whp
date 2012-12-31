@@ -22,6 +22,8 @@ public class AdherenceConfirmationRequest implements Serializable {
     private String callId;
     @NotBlank
     private String timeTaken;
+    @NotBlank
+    private String ivrFileLength;
 
     public AdherenceConfirmationRequest() {
     }
@@ -55,6 +57,11 @@ public class AdherenceConfirmationRequest implements Serializable {
         return timeTaken;
     }
 
+    @XmlElement(name = "ivr_file_length")
+    public String getIvrFileLength() {
+        return ivrFileLength;
+    }
+
     public int doseTakenCount() {
         return Integer.parseInt(doseTakenCount);
     }
@@ -66,6 +73,7 @@ public class AdherenceConfirmationRequest implements Serializable {
         validationRequest.setProviderId(providerId);
         validationRequest.setPatientId(patientId);
         validationRequest.setTimeTaken(timeTaken);
+        validationRequest.setIvrFileLength(ivrFileLength);
         return validationRequest;
     }
 }

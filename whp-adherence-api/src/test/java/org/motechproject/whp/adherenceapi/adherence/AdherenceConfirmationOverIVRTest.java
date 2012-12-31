@@ -63,14 +63,17 @@ public class AdherenceConfirmationOverIVRTest {
     public void shouldReturnASuccessfulResponseWithReporting() {
         String callId = "callId";
         String doseTakenCount = "3";
+        String ivrFileLength = "20";
 
         AdherenceConfirmationRequest confirmationRequest = new AdherenceConfirmationRequest();
         confirmationRequest.setCallId(callId);
+        confirmationRequest.setIvrFileLength(ivrFileLength);
         confirmationRequest.setDoseTakenCount(doseTakenCount);
 
         ProviderId providerId = mock(ProviderId.class);
         AdherenceValidationRequest validationRequest = new AdherenceValidationRequest();
         validationRequest.setCallId(callId);
+        validationRequest.setIvrFileLength(ivrFileLength);
         validationRequest.setDoseTakenCount(doseTakenCount);
 
         AdherenceValidationResponse validationResponse = AdherenceValidationResponse.success();

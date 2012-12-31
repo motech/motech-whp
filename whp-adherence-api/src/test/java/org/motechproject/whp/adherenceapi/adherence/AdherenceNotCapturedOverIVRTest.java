@@ -43,6 +43,7 @@ public class AdherenceNotCapturedOverIVRTest {
     @Test
     public void shouldReportAndReturnSuccessOnAdherenceNotCapturedOperation() {
         AdherenceNotCapturedRequest adherenceNotCapturedRequest = new AdherenceNotCapturedRequest("patientId");
+        adherenceNotCapturedRequest.setIvrFileLength("20");
         adherenceNotCapturedRequest.setAdherenceCaptureStatus(AdherenceCaptureStatus.NO_INPUT.name());
 
         when(adherenceNotCapturedRequestValidator.validate(adherenceNotCapturedRequest.validationRequest(), providerId)).thenReturn(success());

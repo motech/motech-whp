@@ -50,6 +50,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <patient_id>pat1</patient_id>\n" +
             "    <adherence_value>3</adherence_value>\n" +
             "    <time_taken>7</time_taken>\n" +
+            "    <ivr_file_length>17</ivr_file_length>\n" +
             "</adherence_validation_request>";
 
     public static final String CONFIRMATION_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
@@ -59,6 +60,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <patient_id>pat1</patient_id>\n" +
             "    <adherence_value>3</adherence_value>\n" +
             "    <time_taken>7</time_taken>\n" +
+            "    <ivr_file_length>17</ivr_file_length>\n" +
             "</adherence_confirmation_request>";
 
     public static final String NOT_CAPTURED_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
@@ -68,6 +70,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
             "    <patient_id>pat1</patient_id>\n" +
             "    <type>SKIP_INPUT</type>\n" +
             "    <time_taken>7</time_taken>\n" +
+            "    <ivr_file_length>17</ivr_file_length>\n" +
             "</adherence_not_captured_request>";
 
     public static final String CALL_STATUS_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +

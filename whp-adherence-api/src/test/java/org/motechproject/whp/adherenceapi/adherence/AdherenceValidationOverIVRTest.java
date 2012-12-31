@@ -75,6 +75,7 @@ public class AdherenceValidationOverIVRTest {
         String patientId = "patientid";
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
         adherenceValidationRequest.setPatientId(patientId);
+        adherenceValidationRequest.setIvrFileLength("12");
         adherenceValidationRequest.setDoseTakenCount("2");
         adherenceValidationRequest.setTimeTaken("1000");
 
@@ -87,6 +88,7 @@ public class AdherenceValidationOverIVRTest {
     @Test
     public void shouldReportAdherenceValidationRequestWhenValidationFailed() {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
+        request.setIvrFileLength("12");
 
         when(adherenceValidationRequestValidator.validate(request, providerId)).thenReturn(failure());
 

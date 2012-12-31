@@ -25,6 +25,8 @@ public class AdherenceNotCapturedRequest implements Serializable {
     private String callId;
     @NotBlank
     private String timeTaken;
+    @NotBlank
+    private String ivrFileLength;
 
     public AdherenceNotCapturedRequest() {
     }
@@ -58,12 +60,18 @@ public class AdherenceNotCapturedRequest implements Serializable {
         return timeTaken;
     }
 
+    @XmlElement(name = "ivr_file_length")
+    public String getIvrFileLength() {
+        return ivrFileLength;
+    }
+
     public AdherenceValidationRequest validationRequest() {
         AdherenceValidationRequest validationRequest = new AdherenceValidationRequest();
         validationRequest.setCallId(callId);
         validationRequest.setProviderId(providerId);
         validationRequest.setPatientId(patientId);
         validationRequest.setTimeTaken(timeTaken);
+        validationRequest.setIvrFileLength(ivrFileLength);
         return validationRequest;
     }
 }

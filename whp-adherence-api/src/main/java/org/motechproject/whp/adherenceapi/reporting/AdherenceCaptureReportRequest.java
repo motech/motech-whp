@@ -26,11 +26,16 @@ public class AdherenceCaptureReportRequest {
         withChannelId(captureRequest);
         withCallId(captureRequest);
         withTimeTaken(captureRequest);
+        withIvrFileLength(captureRequest);
         withSubmittedValue(captureRequest);
         withProviderId(captureRequest);
         withValidity(captureRequest);
         withPatient(captureRequest);
         return captureRequest;
+    }
+
+    private void withIvrFileLength(AdherenceCaptureRequest adherenceCaptureRequest) {
+        adherenceCaptureRequest.setIvrFileLength(Long.parseLong(request.getIvrFileLength()));
     }
 
     private AdherenceCaptureRequest withChannelId(AdherenceCaptureRequest adherenceCaptureRequest) {

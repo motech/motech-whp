@@ -22,6 +22,8 @@ public class AdherenceValidationRequest implements Serializable {
     @NotBlank
     private String callId;
     @NotBlank
+    private String ivrFileLength;
+    @NotBlank
     private String timeTaken;
 
     public AdherenceValidationRequest() {
@@ -54,6 +56,11 @@ public class AdherenceValidationRequest implements Serializable {
     @XmlElement(name = "time_taken")
     public String getTimeTaken() {
         return timeTaken;
+    }
+
+    @XmlElement(name = "ivr_file_length")
+    public String getIvrFileLength() {
+        return ivrFileLength;
     }
 
     public int doseTakenCount() {
