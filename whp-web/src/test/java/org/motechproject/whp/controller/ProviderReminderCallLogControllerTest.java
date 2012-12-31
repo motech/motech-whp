@@ -44,7 +44,7 @@ public class ProviderReminderCallLogControllerTest {
                 "    <call_id>call_id</call_id>\n" +
                 "    <reminder_type>ADHERENCE_WINDOW_APPROACHING</reminder_type>\n" +
                 "    <msisdn>1234567890</msisdn>\n" +
-                "    <call_status>SUCCESS</call_status>\n" +
+                "    <call_answered>YES</call_answered>\n" +
                 "    <disconnection_type>PROVIDER_HANGUP</disconnection_type>\n" +
                 "    <start_time>10/12/2012 12:32:35</start_time>\n" +
                 "    <end_time>10/12/2012 12:33:35</end_time> \n" +
@@ -72,7 +72,7 @@ public class ProviderReminderCallLogControllerTest {
         assertEquals("call_id", request.getCallId());
         assertEquals("ADHERENCE_WINDOW_APPROACHING", request.getReminderType());
         assertEquals("1234567890", request.getMsisdn());
-        assertEquals("SUCCESS", request.getCallStatus());
+        assertEquals("YES", request.getCallAnswered());
         assertEquals("PROVIDER_HANGUP", request.getDisconnectionType());
         assertEquals("1", request.getAttempt());
         assertEquals("10/12/2012 12:32:35", request.getStartTime());

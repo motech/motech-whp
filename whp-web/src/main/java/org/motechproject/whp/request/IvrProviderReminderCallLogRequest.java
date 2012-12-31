@@ -17,7 +17,7 @@ public class IvrProviderReminderCallLogRequest {
     private String reminderId;
     private String reminderType;
     private String msisdn;
-    private String callStatus;
+    private String callAnswered;
     private String disconnectionType;
     private String startTime;
     private String endTime;
@@ -49,9 +49,9 @@ public class IvrProviderReminderCallLogRequest {
         return msisdn;
     }
 
-    @XmlElement(name = "call_status")
-    public String getCallStatus() {
-        return callStatus;
+    @XmlElement(name = "call_answered")
+    public String getCallAnswered() {
+        return callAnswered;
     }
 
     @XmlElement(name = "disconnection_type")
@@ -87,7 +87,7 @@ public class IvrProviderReminderCallLogRequest {
         request.setAttempt(getAttempt());
         request.setAttemptTime(getAttemptTime());
         request.setCallId(getCallId());
-        request.setCallStatus(getCallStatus());
+        request.setCallAnswered(getCallAnswered());
         request.setStartTime(getStartTime());
         request.setEndTime(getEndTime());
         request.setMsisdn(getMsisdn());
