@@ -49,7 +49,7 @@ public class AdherenceIVRController {
     @RequestMapping(value = "/summary")
     @ResponseBody
     public AdherenceFlashingResponse adherenceSummary(@RequestBody @Valid AdherenceFlashingRequest request) {
-        return adherenceSummaryOverIVR.value(request, providerId(request.getMsisdn()));
+        return adherenceSummaryOverIVR.value(request, providerIdFromMsisdn(request.getMsisdn()));
     }
 
     @RequestMapping(value = "/validate")
@@ -95,5 +95,9 @@ public class AdherenceIVRController {
 
     private ProviderId providerId(String providerId) {
         return new ProviderId(providerService.findByProviderId(providerId));
+    }
+
+    private ProviderId providerIdFromMsisdn(String msisdn) {
+        return new ProviderId(providerService.findByMobileNumber(msisdn));
     }
 }
