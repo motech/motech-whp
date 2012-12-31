@@ -54,9 +54,9 @@ public class AdherenceRequestValidatorTest {
     }
 
     @Test
-    public void shouldReturnFailureWhenPhoneNumberDoesNotBelongToAnyProvider() {
+    public void shouldReturnFailureWhenThereIsNoValidProviderForTheGivenProviderId() {
         ProviderId emptyProviderId = new ProviderId();
-        assertEquals(INVALID_MOBILE_NUMBER.name(), adherenceRequestValidator.validatePatientProviderMapping("patientId", emptyProviderId).errorMessage());
+        assertEquals(INVALID_PROVIDER.name(), adherenceRequestValidator.validatePatientProviderMapping("patientId", emptyProviderId).errorMessage());
     }
 
     @Test

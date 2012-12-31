@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherenceapi.response.flashing;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
@@ -7,12 +8,19 @@ import static org.junit.Assert.assertEquals;
 
 public class AdherenceFlashingResponseTest {
 
+    private String providerId;
+
+    @Before
+    public void setUp() {
+        providerId = "raj";
+    }
+
     @Test
     public void testRemainingCountWhenOnePatientHasAdherence() {
         assertEquals(
                 2,
                 new AdherenceFlashingResponse(
-                        asList("patientId1"),
+                        providerId, asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
                 ).getPatientRemainingCount().intValue()
         );
@@ -23,7 +31,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 3,
                 new AdherenceFlashingResponse(
-                        asList("patientId4"),
+                        providerId, asList("patientId4"),
                         asList("patientId1", "patientId2", "patientId3")
                 ).getPatientRemainingCount().intValue()
         );
@@ -34,7 +42,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 0,
                 new AdherenceFlashingResponse(
-                        asList("patientId1", "patientId2", "patientId3"),
+                        providerId, asList("patientId1", "patientId2", "patientId3"),
                         asList("patientId1", "patientId2", "patientId3")
                 ).getPatientRemainingCount().intValue()
         );
@@ -45,7 +53,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 0,
                 new AdherenceFlashingResponse(
-                        asList("patientId1", "patientId2", "patientId3", "patientId4"),
+                        providerId, asList("patientId1", "patientId2", "patientId3", "patientId4"),
                         asList("patientId1", "patientId2", "patientId3")
                 ).getPatientRemainingCount().intValue()
         );
@@ -56,7 +64,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 0,
                 new AdherenceFlashingResponse(
-                        asList("patientId2", "patientId3"),
+                        providerId, asList("patientId2", "patientId3"),
                         asList("patientId1")
 
                 ).getPatientGivenCount().intValue()
@@ -68,7 +76,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 1,
                 new AdherenceFlashingResponse(
-                        asList("patientId1"),
+                        providerId, asList("patientId1"),
                         asList("patientId1", "patientId2", "patientId3")
 
                 ).getPatientGivenCount().intValue()
@@ -80,7 +88,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 3,
                 new AdherenceFlashingResponse(
-                        asList("patientId1", "patientId2", "patientId3"),
+                        providerId, asList("patientId1", "patientId2", "patientId3"),
                         asList("patientId1", "patientId2", "patientId3")
 
                 ).getPatientGivenCount().intValue()
@@ -92,7 +100,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 3,
                 new AdherenceFlashingResponse(
-                        asList("patientId1", "patientId2", "patientId3", "patientId4"),
+                        providerId, asList("patientId1", "patientId2", "patientId3", "patientId4"),
                         asList("patientId1", "patientId2", "patientId3")
 
                 ).getPatientGivenCount().intValue()
@@ -104,7 +112,7 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 0,
                 new AdherenceFlashingResponse(
-                        null,
+                        providerId, null,
                         null
 
                 ).getPatientGivenCount().intValue()
@@ -112,10 +120,23 @@ public class AdherenceFlashingResponseTest {
         assertEquals(
                 0,
                 new AdherenceFlashingResponse(
-                        null,
+                        providerId, null,
                         null
 
                 ).getPatientRemainingCount().intValue()
         );
+    }
+
+    @Test
+    public void testAdherenceStatusValues() {
+        AdherenceStatus adherenceStatus = new AdherenceFlashingResponse(
+                providerId, asList("patientId1", "patientId2"),
+                asList("patientId1", "patientId2", "patientId3")
+
+        ).getAdherenceStatus();
+
+        assertEquals(2, adherenceStatus.getPatientGivenCount().intValue());
+        assertEquals(1, adherenceStatus.getPatientRemainingCount().intValue());
+        assertEquals(providerId, adherenceStatus.getProviderId());
     }
 }

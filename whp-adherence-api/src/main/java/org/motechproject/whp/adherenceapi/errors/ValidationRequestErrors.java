@@ -4,19 +4,19 @@ import org.motechproject.whp.adherenceapi.response.AdherenceIVRError;
 
 public class ValidationRequestErrors extends AdherenceErrors {
 
-    private boolean isValidMSISDN;
+    private boolean isValidProvider;
     private boolean isValidPatient;
     private boolean belongsToProvider;
 
-    public ValidationRequestErrors(boolean isValidMSISDN, boolean isValidPatient, boolean belongsToProvider) {
-        this.isValidMSISDN = isValidMSISDN;
+    public ValidationRequestErrors(boolean isValidProvider, boolean isValidPatient, boolean belongsToProvider) {
+        this.isValidProvider = isValidProvider;
         this.isValidPatient = isValidPatient;
         this.belongsToProvider = belongsToProvider;
     }
 
     public AdherenceIVRError error() {
-        if (!isValidMSISDN) {
-            return AdherenceIVRError.INVALID_MOBILE_NUMBER;
+        if (!isValidProvider) {
+            return AdherenceIVRError.INVALID_PROVIDER;
         } else if (!isValidPatient) {
             return AdherenceIVRError.INVALID_PATIENT;
         } else if (!belongsToProvider) {

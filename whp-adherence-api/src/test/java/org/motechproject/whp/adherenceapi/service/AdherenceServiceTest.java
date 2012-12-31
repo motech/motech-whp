@@ -56,7 +56,7 @@ public class AdherenceServiceTest {
         when(whpAdherenceService.patientsWithAdherence(week(today))).thenReturn(patientsWithAdherence);
 
         assertEquals(
-                new AdherenceSummary(patientsWithAdherence, patientsForProvider),
+                new AdherenceSummary(providerId, patientsWithAdherence, patientsForProvider),
                 adherenceService.adherenceSummary(providerId, today)
         );
     }

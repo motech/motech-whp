@@ -63,10 +63,10 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
         List<Patient> patientsWithoutAdherence = asList(new PatientBuilder().withDefaults().withPatientId("patient3").build());
 
         when(adherenceWindow.isValidAdherenceDay(today())).thenReturn(true);
-        when(adherenceService.adherenceSummary(providerId, today())).thenReturn(new AdherenceSummary(patientIdsWithAdherence, patientsWithoutAdherence));
+        when(adherenceService.adherenceSummary(providerId, today())).thenReturn(new AdherenceSummary(providerId, patientIdsWithAdherence, patientsWithoutAdherence));
 
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
-        AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(patientIdsWithAdherence, patientIdsWithoutAdherence);
+        AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(providerId, patientIdsWithAdherence, patientIdsWithoutAdherence);
 
         AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 

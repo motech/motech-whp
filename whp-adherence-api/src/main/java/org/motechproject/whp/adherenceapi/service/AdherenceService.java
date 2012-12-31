@@ -25,7 +25,7 @@ public class AdherenceService {
 
     public AdherenceSummary adherenceSummary(String providerId, LocalDate today) {
         return new AdherenceSummary(
-                whpAdherenceService.patientsWithAdherence(week(today)),
+                providerId, whpAdherenceService.patientsWithAdherence(week(today)),
                 patientService.getAllWithActiveTreatmentForProvider(providerId)
         );
     }

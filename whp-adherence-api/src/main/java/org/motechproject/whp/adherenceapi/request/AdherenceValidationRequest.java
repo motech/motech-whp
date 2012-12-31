@@ -2,9 +2,7 @@ package org.motechproject.whp.adherenceapi.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.whp.common.domain.PhoneNumber;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,8 +18,7 @@ public class AdherenceValidationRequest implements Serializable {
     @NotBlank
     private String doseTakenCount;
     @NotBlank
-    @Length(min = 10)
-    private String msisdn;
+    private String providerId;
     @NotBlank
     private String callId;
     @NotBlank
@@ -44,9 +41,9 @@ public class AdherenceValidationRequest implements Serializable {
         return doseTakenCount;
     }
 
-    @XmlElement(name = "msisdn")
-    public String getMsisdn() {
-        return new PhoneNumber(msisdn).value();
+    @XmlElement(name = "provider_id")
+    public String getProviderId() {
+        return providerId;
     }
 
     @XmlElement(name = "call_id")

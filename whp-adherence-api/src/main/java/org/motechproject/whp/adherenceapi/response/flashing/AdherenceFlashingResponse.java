@@ -31,14 +31,14 @@ public class AdherenceFlashingResponse implements Serializable {
     public AdherenceFlashingResponse() {
     }
 
-    public AdherenceFlashingResponse(List<String> patientsWithAdherence, List<String> patientsForProvider) {
+    public AdherenceFlashingResponse(String providerId, List<String> patientsWithAdherence, List<String> patientsForProvider) {
         if (null != patientsWithAdherence) {
             this.patientsWithAdherence = patientsWithAdherence;
         }
         if (null != patientsForProvider) {
             this.patientsForProvider = patientsForProvider;
         }
-        adherenceStatus = new AdherenceStatus(getPatientRemainingCount(), getPatientGivenCount(), patientsRemaining());
+        adherenceStatus = new AdherenceStatus(providerId, getPatientRemainingCount(), getPatientGivenCount(), patientsRemaining());
     }
 
     @XmlElement(name = "adherence_status")
@@ -67,6 +67,6 @@ public class AdherenceFlashingResponse implements Serializable {
 
     public static AdherenceFlashingResponse successResponse(AdherenceSummary summary) {
         List<String> patientsForProvider = extract(summary.getPatientsUnderProvider(), on(Patient.class).getPatientId());
-        return new AdherenceFlashingResponse(summary.getPatientsWithAdherence(), patientsForProvider);
+        return new AdherenceFlashingResponse(summary.getProviderId(), summary.getPatientsWithAdherence(), patientsForProvider);
     }
 }

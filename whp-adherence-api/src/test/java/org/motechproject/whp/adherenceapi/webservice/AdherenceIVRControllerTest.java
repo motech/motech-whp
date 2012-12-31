@@ -46,7 +46,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public static final String VALIDATION_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_validation_request>\n" +
             "    <call_id>abcd1234</call_id>\n" +
-            "    <msisdn>1234567942</msisdn>\n" +
+            "    <provider_id>raj</provider_id>\n" +
             "    <patient_id>pat1</patient_id>\n" +
             "    <adherence_value>3</adherence_value>\n" +
             "    <time_taken>7</time_taken>\n" +
@@ -55,7 +55,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public static final String CONFIRMATION_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_confirmation_request>\n" +
             "    <call_id>abcd1234</call_id>\n" +
-            "    <msisdn>1234567942</msisdn>\n" +
+            "    <provider_id>raj</provider_id>\n" +
             "    <patient_id>pat1</patient_id>\n" +
             "    <adherence_value>3</adherence_value>\n" +
             "    <time_taken>7</time_taken>\n" +
@@ -64,7 +64,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public static final String NOT_CAPTURED_REQUEST_BODY = "<?xml version=\"1.0\"?>\n" +
             "<adherence_not_captured_request>\n" +
             "    <call_id>abcd1234</call_id>\n" +
-            "    <msisdn>1234567942</msisdn>\n" +
+            "    <provider_id>raj</provider_id>\n" +
             "    <patient_id>pat1</patient_id>\n" +
             "    <type>SKIP_INPUT</type>\n" +
             "    <time_taken>7</time_taken>\n" +
@@ -112,8 +112,9 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithAdherenceSubmissionInformation() throws Exception {
+        String providerId = "raj";
         AdherenceFlashingResponse adherenceFlashingResponse = new AdherenceFlashingResponse(
-                asList("pat0"), asList("pat1", "pat2")
+                providerId, asList("pat0"), asList("pat1", "pat2")
         );
         AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn("0986754322");
@@ -126,6 +127,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 "             <adherence_capture_flashing_response>" +
                         "               <result>success</result>" +
                         "               <adherence_status>" +
+                        "                   <provider_id>raj</provider_id>" +
                         "                   <patient_remaining_count>2</patient_remaining_count>" +
                         "                   <patient_given_count>0</patient_given_count>" +
                         "                   <patients_remaining>" +

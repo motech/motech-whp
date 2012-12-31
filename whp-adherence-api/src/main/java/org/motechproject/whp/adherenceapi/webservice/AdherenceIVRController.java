@@ -55,13 +55,13 @@ public class AdherenceIVRController {
     @RequestMapping(value = "/validate")
     @ResponseBody
     public AdherenceValidationResponse adherenceValidation(@RequestBody @Valid AdherenceValidationRequest request) {
-        return adherenceValidationOverIVR.handleValidationRequest(request, providerId(request.getMsisdn()));
+        return adherenceValidationOverIVR.handleValidationRequest(request, providerId(request.getProviderId()));
     }
 
     @RequestMapping(value = "/confirm")
     @ResponseBody
     public AdherenceValidationResponse adherenceConfirmation(@RequestBody @Valid AdherenceConfirmationRequest request) {
-        AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(request, providerId(request.getMsisdn()));
+        AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(request, providerId(request.getProviderId()));
         if(response.failed())
             return response;
         return null;
@@ -70,7 +70,7 @@ public class AdherenceIVRController {
     @RequestMapping(value = "/notcaptured")
     @ResponseBody
     public AdherenceValidationResponse adherenceNotCaptured(@RequestBody @Valid AdherenceNotCapturedRequest request) {
-        AdherenceValidationResponse response = adherenceNotCapturedOverIVR.recordNotCaptured(request, providerId(request.getMsisdn()));
+        AdherenceValidationResponse response = adherenceNotCapturedOverIVR.recordNotCaptured(request, providerId(request.getProviderId()));
         if(response.failed())
             return response;
         return null;
@@ -93,7 +93,7 @@ public class AdherenceIVRController {
         return new BindingResultXML(e.getBindingResult());
     }
 
-    private ProviderId providerId(String msisdn) {
-        return new ProviderId(providerService.findByMobileNumber(msisdn));
+    private ProviderId providerId(String providerId) {
+        return new ProviderId(providerService.findByProviderId(providerId));
     }
 }
