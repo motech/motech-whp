@@ -24,8 +24,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
+import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
+import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_COMMENCED;
 
 public class ProviderReminderSchedulerTest extends BaseUnitTest {
     @Mock
@@ -54,34 +54,34 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         verify(motechSchedulerService).scheduleJob(captor.capture());
         CronSchedulableJob job = captor.getValue();
 
-        assertEquals(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME, job.getMotechEvent().getSubject());
-        assertEquals(ADHERENCE_WINDOW_APPROACHING.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
+        assertEquals(ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, job.getMotechEvent().getSubject());
+        assertEquals(ADHERENCE_WINDOW_COMMENCED.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
     }
 
     @Test
     public void shouldPersistReminderConfigurationUponScheduling() {
         ProviderReminderConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
 
-        when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_APPROACHING)).thenReturn(currentConfiguration);
+        when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
         providerReminderScheduler.scheduleReminder(currentConfiguration);
-        assertEquals(currentConfiguration, providerReminderScheduler.configuration(ADHERENCE_WINDOW_APPROACHING));
+        assertEquals(currentConfiguration, providerReminderScheduler.configuration(ADHERENCE_WINDOW_COMMENCED));
         verify(allProviderReminderConfigurations).saveOrUpdate(currentConfiguration);
     }
 
     @Test
     public void shouldReturnNextScheduleForAJob() {
-        String subject = ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
-        String jobId = ADHERENCE_WINDOW_APPROACHING.name();
+        String subject = ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
+        String jobId = ADHERENCE_WINDOW_COMMENCED.name();
 
         mockCurrentDate(today());
 
         Date expectedNextFireTime = today().plusDays(2).toDate();
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(asList(expectedNextFireTime));
-        assertEquals(new ProviderReminderConfiguration(ADHERENCE_WINDOW_APPROACHING, expectedNextFireTime), providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
+        assertEquals(new ProviderReminderConfiguration(ADHERENCE_WINDOW_COMMENCED, expectedNextFireTime), providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
-        assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
+        assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
     }
 
     private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
@@ -89,7 +89,7 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         providerReminderConfiguration.setMinute(minutes);
         providerReminderConfiguration.setHour(hour);
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
-        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
+        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
         return providerReminderConfiguration;
     }
 }

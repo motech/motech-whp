@@ -4,14 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
-import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME;
-import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
+import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
 
 public class ReminderEventHandlerTest {
 
@@ -28,9 +26,9 @@ public class ReminderEventHandlerTest {
 
     @Test
     public void shouldRemindProvidersWhenAdherenceWindowApproaches() {
-        MotechEvent motechEvent = new MotechEvent(ADHERENCE_WINDOW_APPROACHING_EVENT_NAME);
-        reminderEventHandler.adherenceWindowApproachingEvent(motechEvent);
-        verify(providerReminderService).alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        MotechEvent motechEvent = new MotechEvent(ADHERENCE_WINDOW_COMMENCED_EVENT_NAME);
+        reminderEventHandler.adherenceWindowCommencedEvent(motechEvent);
+        verify(providerReminderService).alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test

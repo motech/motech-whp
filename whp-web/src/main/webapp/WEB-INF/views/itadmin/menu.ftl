@@ -7,7 +7,7 @@
                 <a id="cmf-admins" href="/whp/cmfAdmin/list"><i class="icon-briefcase icon-white"></i> Manage CMF Admins</a>
             </li>
             <li>
-                <a href="/whp/providerreminder/ADHERENCE_WINDOW_APPROACHING"><i class="icon-time icon-white"></i> Schedule Reminders</a>
+                <a href="/whp/providerreminder/ADHERENCE_WINDOW_COMMENCED"><i class="icon-time icon-white"></i> Schedule Reminders</a>
             </li>
 </ul>
 

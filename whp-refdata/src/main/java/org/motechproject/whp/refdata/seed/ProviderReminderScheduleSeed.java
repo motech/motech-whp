@@ -2,9 +2,6 @@ package org.motechproject.whp.refdata.seed;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.containermapping.domain.AdminContainerMapping;
-import org.motechproject.whp.containermapping.domain.ContainerRange;
-import org.motechproject.whp.containermapping.repository.AllAdminContainerMappings;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
@@ -23,12 +20,12 @@ public class ProviderReminderScheduleSeed {
 
     @Seed(priority = 0, version = "4.1")
     public void load() {
-        ProviderReminderConfiguration adherenceWindowApproachingEvent = new ProviderReminderConfiguration();
-        adherenceWindowApproachingEvent.setDayOfWeek(DayOfWeek.Saturday);
-        adherenceWindowApproachingEvent.setReminderType(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
-        adherenceWindowApproachingEvent.setHour(14);
-        adherenceWindowApproachingEvent.setMinute(30);
+        ProviderReminderConfiguration adherenceWindowCommencedEvent = new ProviderReminderConfiguration();
+        adherenceWindowCommencedEvent.setDayOfWeek(DayOfWeek.Saturday);
+        adherenceWindowCommencedEvent.setReminderType(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        adherenceWindowCommencedEvent.setHour(14);
+        adherenceWindowCommencedEvent.setMinute(30);
 
-        reminderScheduler.scheduleReminder(adherenceWindowApproachingEvent);
+        reminderScheduler.scheduleReminder(adherenceWindowCommencedEvent);
     }
 }

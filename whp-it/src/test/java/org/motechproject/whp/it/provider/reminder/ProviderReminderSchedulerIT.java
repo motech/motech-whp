@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.nextApplicableWeekDay;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
+import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_COMMENCED;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationProviderReminderContext.xml")
@@ -46,13 +46,13 @@ public class ProviderReminderSchedulerIT extends BaseUnitTest {
         ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(30, 10, DayOfWeek.Sunday);
         providerReminderScheduler.scheduleReminder(providerReminderConfiguration);
 
-        String subject = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME;
+        String subject = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
         Date fromDate = now.minusDays(2).toDate();
         Date toDate = now.plusMonths(2).toDate();
 
-        assertEquals(providerReminderConfiguration, providerReminderScheduler.getReminder(ADHERENCE_WINDOW_APPROACHING));
+        assertEquals(providerReminderConfiguration, providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
 
-        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_APPROACHING.name(), fromDate, toDate);
+        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_COMMENCED.name(), fromDate, toDate);
         assertTrue(!timings.isEmpty());
 
         DateTime nextSunday = nextApplicableWeekDay(now, asList(DayOfWeek.Sunday));
@@ -65,7 +65,7 @@ public class ProviderReminderSchedulerIT extends BaseUnitTest {
         providerReminderConfiguration.setMinute(minutes);
         providerReminderConfiguration.setHour(hour);
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
-        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_APPROACHING);
+        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
         return providerReminderConfiguration;
     }
 

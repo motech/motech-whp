@@ -8,6 +8,6 @@ import static org.junit.Assert.assertEquals;
 public class ProviderReminderTypeTest {
     @Test
     public void shouldGetEventSubjectForGivenJobType() {
-        assertEquals(EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME, ProviderReminderType.ADHERENCE_WINDOW_APPROACHING.getEventSubject());
+        assertEquals(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED.getEventSubject());
     }
 }

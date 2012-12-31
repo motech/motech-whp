@@ -17,9 +17,9 @@ public class ReminderEventHandler {
         this.providerReminderService = providerReminderService;
     }
 
-    @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_APPROACHING_EVENT_NAME)
-    public void adherenceWindowApproachingEvent(MotechEvent motechEvent) {
-        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+    @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME)
+    public void adherenceWindowCommencedEvent(MotechEvent motechEvent) {
+        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
     }
 
     @MotechListener(subjects = EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME)

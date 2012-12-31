@@ -47,21 +47,21 @@ public class ProviderAlertServiceTest {
         String phoneNumber = "phoneNumber";
         List<Provider> providers = asList(new Provider("", phoneNumber, "", null));
 
-        alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
-        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING, asList(phoneNumber), UUID).toXML());
+        alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList(phoneNumber), UUID).toXML());
     }
 
     @Test
     public void shouldRaiseRequestForAnyGroupOfProviders() {
-        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
-        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
 
-        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING, asList("anotherPhoneNumber"), UUID).toXML());
+        verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList("anotherPhoneNumber"), UUID).toXML());
     }
 
     @Test
     public void shouldRaiseRequestForAnyTypeOfProviderReminder() {
-        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
         alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_NOT_REPORTED);
 
         verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID).toXML());
@@ -70,10 +70,10 @@ public class ProviderAlertServiceTest {
     @Test
     public void shouldRaiseMoreThanOneRequestWhenTheNumberOfProvidersIsGreaterThenBatchSize() {
         List<Provider> providers = asList(new Provider("", "phoneNumber1", "", null), new Provider("", "phoneNumber2", "", null));
-        ProviderReminderType sameType = ProviderReminderType.ADHERENCE_WINDOW_APPROACHING;
+        ProviderReminderType sameType = ProviderReminderType.ADHERENCE_WINDOW_COMMENCED;
         String sameUUID = UUID;
 
-        alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
         verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber1"), sameUUID).toXML());
         verify(httpClientService).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber2"), sameUUID).toXML());
     }

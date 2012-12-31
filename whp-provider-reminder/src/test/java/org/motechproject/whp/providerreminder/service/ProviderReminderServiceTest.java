@@ -37,14 +37,14 @@ public class ProviderReminderServiceTest {
         List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
 
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(providers);
-        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
-        verify(alertService).raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        verify(alertService).raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test
     public void shouldNotRaiseRequestWhenNoProviderNeedsToSubmitAdherence() {
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(null);
-        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_APPROACHING);
+        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
         verifyZeroInteractions(alertService);
     }
 
