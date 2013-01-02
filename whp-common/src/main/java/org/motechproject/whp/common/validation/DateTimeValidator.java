@@ -17,12 +17,16 @@ public class DateTimeValidator implements ConstraintValidator<DateTimeFormat, St
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        DateTimeFormatter formatter = buildFormatter();
-        try {
-            formatter.parseDateTime(value);
+        if (value == null) {
             return true;
-        } catch (Exception e) {
-            return false;
+        } else {
+            DateTimeFormatter formatter = buildFormatter();
+            try {
+                formatter.parseDateTime(value);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
 

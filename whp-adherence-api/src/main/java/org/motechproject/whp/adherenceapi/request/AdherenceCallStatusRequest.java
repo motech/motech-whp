@@ -23,13 +23,10 @@ public class AdherenceCallStatusRequest implements Serializable {
     private String callId;
     @NotBlank
     private String flashingCallId;
-    @NotBlank
     @DateTimeFormat
     private String attemptTime;
-    @NotBlank
     @DateTimeFormat
     private String startTime;
-    @NotBlank
     @DateTimeFormat
     private String endTime;
     @NotBlank

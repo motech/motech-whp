@@ -47,8 +47,9 @@ public class WHPDateTime {
         return date.toString(DATE_TIME_FORMAT);
     }
 
-    public Date asDate(){
-        return dateTime().toDate();
+    public Date asDate() {
+        DateTime dateTime = dateTime();
+        return null == dateTime ? null : dateTime.toDate();
     }
 
     public DateTime dateTime() {

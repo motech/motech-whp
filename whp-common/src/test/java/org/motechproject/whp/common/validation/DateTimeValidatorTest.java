@@ -16,6 +16,11 @@ public class DateTimeValidatorTest {
     }
 
     @Test
+    public void shouldBeValidWhenValueIsNull() {
+        assertTrue(dateTimeValidator.isValid(null, null));
+    }
+
+    @Test
     public void shouldBeValidOnValueWithValidFormat() {
         assertTrue(dateTimeValidator.isValid("31/12/2012 10:10:10", null));
     }

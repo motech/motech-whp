@@ -46,6 +46,15 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
+    public void shouldBeValidIfStartTimeIsNull() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setStartTime(null);
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(constraintViolations.isEmpty());
+    }
+
+    @Test
     public void shouldBeInvalidWhenEndTimeHasInvalidFormat() {
         AdherenceCallStatusRequest request = validRequest();
         request.setEndTime("invalidTime");
@@ -56,6 +65,15 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
+    public void shouldBeValidWhenEndTimeIsNull() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setEndTime(null);
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(constraintViolations.isEmpty());
+    }
+
+    @Test
     public void shouldBeInvalidWhenAttemptTimeHasInvalidFormat() {
         AdherenceCallStatusRequest request = validRequest();
         request.setAttemptTime("invalidTime");
@@ -63,6 +81,15 @@ public class AdherenceCallStatusRequestTest {
         List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
         assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("invalid date format"));
         assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("attemptTime"));
+    }
+
+    @Test
+    public void shouldBeValidWhenAttemptTimeIsNull() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setAttemptTime(null);
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(constraintViolations.isEmpty());
     }
 
     @Test
@@ -146,7 +173,7 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfPatientCountIsNotANumber(){
+    public void shouldBeInvalidIfPatientCountIsNotANumber() {
         AdherenceCallStatusRequest request = validRequest();
         request.setPatientCount("a");
 
@@ -156,7 +183,7 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfAdherenceCapturedCountIsNotANumber(){
+    public void shouldBeInvalidIfAdherenceCapturedCountIsNotANumber() {
         AdherenceCallStatusRequest request = validRequest();
         request.setAdherenceCapturedCount("a");
 
@@ -166,7 +193,7 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfAdherenceNotCapturedCountIsNotANumber(){
+    public void shouldBeInvalidIfAdherenceNotCapturedCountIsNotANumber() {
         AdherenceCallStatusRequest request = validRequest();
         request.setAdherenceNotCapturedCount("a");
 
