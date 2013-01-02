@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
-import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
@@ -23,8 +22,6 @@ public class ProviderAlertServiceTest {
     public static final String IVRUrl = "some wgn url";
 
     @Mock
-    private IvrConfiguration ivrConfiguration;
-    @Mock
     private UUIDGenerator uuidGenerator;
     @Mock
     private ProviderReminderRequestProperties requestProperties;
@@ -36,10 +33,10 @@ public class ProviderAlertServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        when(ivrConfiguration.getProviderReminderUrl()).thenReturn(IVRUrl);
+        when(requestProperties.getProviderReminderUrl()).thenReturn(IVRUrl);
         when(requestProperties.getBatchSize()).thenReturn(1);
         when(uuidGenerator.uuid()).thenReturn(UUID);
-        alertService = new ProviderAlertService(httpClientService, uuidGenerator, requestProperties, ivrConfiguration);
+        alertService = new ProviderAlertService(httpClientService, uuidGenerator, requestProperties);
     }
 
     @Test

@@ -20,10 +20,10 @@ import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
-import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.providerreminder.ivr.ProviderReminderRequestProperties;
 import org.motechproject.whp.providerreminder.service.ReminderEventHandler;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -56,7 +56,7 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
     @Autowired
     ReminderEventHandler reminderEventHandler;
     @Autowired
-    IvrConfiguration ivrConfiguration;
+    ProviderReminderRequestProperties providerReminderRequestProperties;
 
     @ReplaceWithMock
     @Autowired
@@ -86,7 +86,7 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
         reminderEventHandler.adherenceNotReportedEvent(new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME));
 
         ArgumentCaptor<String> reminderXmlCaptor = ArgumentCaptor.forClass(String.class);
-        verify(httpClientService).post(eq(ivrConfiguration.getProviderReminderUrl()), reminderXmlCaptor.capture());
+        verify(httpClientService).post(eq(providerReminderRequestProperties.getProviderReminderUrl()), reminderXmlCaptor.capture());
         String reminderXml = reminderXmlCaptor.getValue();
 
 

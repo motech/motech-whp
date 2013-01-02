@@ -2,7 +2,6 @@ package org.motechproject.whp.providerreminder.ivr;
 
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.collections.PaginatedList;
-import org.motechproject.whp.common.service.IvrConfiguration;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
@@ -20,22 +19,20 @@ public class ProviderAlertService {
 
     private HttpClientService httpClientService;
     private UUIDGenerator uuidGenerator;
-    private ProviderReminderRequestProperties requestProperties;
-    private final String ivrUrl;
+    private ProviderReminderRequestProperties providerReminderProperties;
 
     @Autowired
-    public ProviderAlertService(HttpClientService httpClientService, UUIDGenerator uuidGenerator, ProviderReminderRequestProperties requestProperties, IvrConfiguration ivrConfiguration) {
+    public ProviderAlertService(HttpClientService httpClientService, UUIDGenerator uuidGenerator, ProviderReminderRequestProperties providerReminderProperties) {
         this.httpClientService = httpClientService;
         this.uuidGenerator = uuidGenerator;
-        this.requestProperties = requestProperties;
-        this.ivrUrl = ivrConfiguration.getProviderReminderUrl();
+        this.providerReminderProperties = providerReminderProperties;
     }
 
     public void raiseIVRRequest(List<Provider> providers, ProviderReminderType event) {
         String uuid = uuidGenerator.uuid();
-        for (List<Provider> someProviders : new PaginatedList<>(providers, requestProperties.getBatchSize())) {
+        for (List<Provider> someProviders : new PaginatedList<>(providers, providerReminderProperties.getBatchSize())) {
             ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(event, extractPhoneNumbers(someProviders), uuid);
-            httpClientService.post(ivrUrl, providerReminderRequest.toXML());
+            httpClientService.post(providerReminderProperties.getProviderReminderUrl(), providerReminderRequest.toXML());
         }
     }
 
