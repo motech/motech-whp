@@ -6,8 +6,17 @@
             <li>
                 <a id="cmf-admins" href="/whp/cmfAdmin/list"><i class="icon-briefcase icon-white"></i> Manage CMF Admins</a>
             </li>
-            <li>
-                <a href="/whp/providerreminder/ADHERENCE_WINDOW_COMMENCED"><i class="icon-time icon-white"></i> Schedule Reminders</a>
-            </li>
+
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Provider Reminders <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="providerReminders">
+                <li>
+                    <a href="/whp/providerreminder/ADHERENCE_WINDOW_COMMENCED">Adherence Window Commenced</a>
+                </li>
+                <li>
+                    <a href="/whp/providerreminder/ADHERENCE_NOT_REPORTED">Adherence Not Reported</a>
+                </li>
+            </ul>
+        </li>
 </ul>
 
