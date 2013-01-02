@@ -84,6 +84,9 @@
                 <entry key="diagnostics">
                     <util:properties location="classpath:diagnostics.properties"/>
                 </entry>
+                <entry key="quartz">
+                    <util:properties location="classpath:quartz.properties"/>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
