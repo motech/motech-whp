@@ -35,9 +35,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static java.util.Arrays.asList;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,7 +88,7 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
         reminderEventHandler.adherenceNotReportedEvent(new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME));
 
         ArgumentCaptor<String> reminderXmlCaptor = ArgumentCaptor.forClass(String.class);
-        verify(httpClientService).post(eq(providerReminderRequestProperties.getProviderReminderUrl()), reminderXmlCaptor.capture());
+        verify(httpClientService).post(eq(providerReminderRequestProperties.getProviderReminderUrl()), reminderXmlCaptor.capture(), any(HashMap.class));
         String reminderXml = reminderXmlCaptor.getValue();
 
 

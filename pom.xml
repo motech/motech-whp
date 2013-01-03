@@ -661,7 +661,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
-
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -695,6 +694,11 @@
             </exclusions>
         </dependency>
         <!--Libs-->
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901.jdbc4</version>
+        </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
