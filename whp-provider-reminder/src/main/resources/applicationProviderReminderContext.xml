@@ -9,7 +9,7 @@
     <import resource="classpath*:applicationCommonContext.xml"/>
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationServiceContext.xml"/>
-    <import resource="classpath*:applicationContextHttpClient.xml"/>
+    <import resource="classpath*:applicationWgnOutboundContext.xml"/>
     <import resource="classpath*:applicationScheduler.xml"/>
     <import resource="classpath*:applicationPlatformCommonAPI.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>

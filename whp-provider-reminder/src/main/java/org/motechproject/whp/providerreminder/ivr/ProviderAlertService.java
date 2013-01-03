@@ -1,11 +1,11 @@
 package org.motechproject.whp.providerreminder.ivr;
 
-import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.collections.PaginatedList;
 import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,22 +17,22 @@ import static ch.lambdaj.Lambda.on;
 @Component
 public class ProviderAlertService {
 
-    private HttpClientService httpClientService;
     private UUIDGenerator uuidGenerator;
     private ProviderReminderRequestProperties providerReminderProperties;
+    private WGNGateway gateway;
 
     @Autowired
-    public ProviderAlertService(HttpClientService httpClientService, UUIDGenerator uuidGenerator, ProviderReminderRequestProperties providerReminderProperties) {
-        this.httpClientService = httpClientService;
+    public ProviderAlertService(UUIDGenerator uuidGenerator, ProviderReminderRequestProperties providerReminderProperties, WGNGateway gateway) {
         this.uuidGenerator = uuidGenerator;
         this.providerReminderProperties = providerReminderProperties;
+        this.gateway = gateway;
     }
 
     public void raiseIVRRequest(List<Provider> providers, ProviderReminderType event) {
         String uuid = uuidGenerator.uuid();
         for (List<Provider> someProviders : new PaginatedList<>(providers, providerReminderProperties.getBatchSize())) {
             ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(event, extractPhoneNumbers(someProviders), uuid);
-            httpClientService.post(providerReminderProperties.getProviderReminderUrl(), providerReminderRequest.toXML());
+            gateway.post(providerReminderProperties.getProviderReminderUrl(), providerReminderRequest.toXML());
         }
     }
 

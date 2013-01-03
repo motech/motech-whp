@@ -18,7 +18,7 @@ public class WgnOutboundPropertiesIT {
 
     @Test
     public void shouldReturnConfigurationForWgnOutbound() {
-        assertEquals("API_KEY", gatewayProperties.getApiKeyName());
+        assertEquals("api-key", gatewayProperties.getApiKeyName());
         assertEquals("123456", gatewayProperties.getApiKeyValue());
     }
 }
