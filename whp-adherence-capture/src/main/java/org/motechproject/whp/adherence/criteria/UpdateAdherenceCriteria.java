@@ -9,10 +9,10 @@ import org.motechproject.whp.patient.domain.PatientStatus;
 public class UpdateAdherenceCriteria {
 
     public static boolean canUpdate(Patient patient) {
-        return isCorrectDayOfWeek() && isPatientOpen(patient);
+        return isWindowOpenToday() && isPatientOpen(patient);
     }
 
-    private static boolean isCorrectDayOfWeek() {
+    public static boolean isWindowOpenToday() {
         LocalDate today = DateUtil.today();
         boolean isLaterThanTuesday = today.getDayOfWeek() > 2;
         boolean isEarlierThanSunday = today.getDayOfWeek() < 7;
@@ -24,6 +24,6 @@ public class UpdateAdherenceCriteria {
     }
 
     public static boolean isWindowClosedToday() {
-        return !isCorrectDayOfWeek();
+        return !isWindowOpenToday();
     }
 }

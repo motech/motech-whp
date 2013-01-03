@@ -1,22 +1,24 @@
 package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
+import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Phases;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
+import org.motechproject.whp.reports.contract.AdherenceSubmissionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +27,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
+import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Component
@@ -34,11 +38,13 @@ public class TreatmentUpdateOrchestrator {
 
     private PatientService patientService;
     private WHPAdherenceService whpAdherenceService;
+    private ReportingPublisherService reportingPublisherService;
 
     @Autowired
-    public TreatmentUpdateOrchestrator(PatientService patientService, WHPAdherenceService whpAdherenceService) {
+    public TreatmentUpdateOrchestrator(PatientService patientService, WHPAdherenceService whpAdherenceService, ReportingPublisherService reportingPublisherService) {
         this.patientService = patientService;
         this.whpAdherenceService = whpAdherenceService;
+        this.reportingPublisherService = reportingPublisherService;
     }
 
     public void adjustPhaseStartDates(String patientId, LocalDate ipStartDate, LocalDate eipStartDate, LocalDate cpStartDate) {
@@ -82,12 +88,17 @@ public class TreatmentUpdateOrchestrator {
 
         whpAdherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
         refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
+
+        String providerId = patient.getCurrentProviderId();
+        AdherenceSubmissionRequest request = createAdherenceSubmissionRequest(providerId, providerId, now());
+        reportingPublisherService.reportAdherenceSubmission(request);
     }
 
     public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
         if (!dailyAdherenceRequests.isEmpty()) {
             whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
             refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
+            reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), now()));
         }
     }
 
@@ -156,4 +167,5 @@ public class TreatmentUpdateOrchestrator {
         attemptPhaseTransition(patient);
         patientService.update(patient);
     }
+
 }

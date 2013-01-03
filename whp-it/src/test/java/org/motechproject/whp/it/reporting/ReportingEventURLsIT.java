@@ -71,4 +71,9 @@ public class ReportingEventURLsIT {
     public void shouldGetProviderReminderCallLogURL() {
         assertThat(reportingEventURLs.getProviderReminderCallLogURL(), is("http://127.0.0.1:9999/whp-reports/providerReminderCallLog/measure"));
     }
+
+    @Test
+    public void shouldGetAdherenceSubmissionURL() {
+        assertThat(reportingEventURLs.getAdherenceSubmissionURL(), is("http://127.0.0.1:9999/whp-reports/adherencesubmission/request"));
+    }
 }

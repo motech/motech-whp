@@ -609,4 +609,11 @@ public class PatientTest {
         Patient privateCategoryPatient = new PatientBuilder().withDefaults().withPrivateCategory().build();
         assertFalse(privateCategoryPatient.getTreatmentCategory().isGovernmentCategory());
     }
+
+    @Test
+    public void shouldFetchProviderIdFromCurrentTreatment() {
+        String providerId = "providerid";
+        Patient patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
+        assertEquals(providerId, patient.getCurrentProviderId());
+    }
 }

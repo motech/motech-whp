@@ -19,6 +19,7 @@ public class ReportingEventURLs {
     private String providerVerificationLogURL;
     private String containerVerificationLogURL;
     private String providerReminderCallLogURL;
+    private String adherenceSubmissionURL;
 
     public String getAdherenceCallLogURL() {
         return whpReportsURL + adherenceCallLogPath;
@@ -62,6 +63,10 @@ public class ReportingEventURLs {
 
     public String getProviderReminderCallLogURL() {
         return whpReportsURL + providerReminderCallLogURL;
+    }
+
+    public String getAdherenceSubmissionURL() {
+        return  whpReportsURL + adherenceSubmissionURL;
     }
 
     @Value("${whp.reports.adherenceCallLog}")
@@ -122,5 +127,10 @@ public class ReportingEventURLs {
     @Value("${whp.reports.providerReminderCallLog}")
     public void setProviderReminderCallLogURL(String providerReminderCallLogURL) {
         this.providerReminderCallLogURL = providerReminderCallLogURL;
+    }
+
+    @Value("${whp.reports.adherenceSubmission}")
+    public void setAdherenceSubmissionURL(String adherenceSubmissionURL) {
+        this.adherenceSubmissionURL = adherenceSubmissionURL;
     }
 }

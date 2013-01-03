@@ -7,6 +7,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.reporting.service.ReportingPublisherService;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -21,6 +22,8 @@ public abstract class TreatmentUpdateOrchestratorTestPart extends BaseUnitTest {
     protected WHPAdherenceService whpAdherenceService;
     @Mock
     protected PatientService patientService;
+    @Mock
+    protected ReportingPublisherService reportingPublisherService;
 
     protected Patient patient;
 
@@ -28,7 +31,7 @@ public abstract class TreatmentUpdateOrchestratorTestPart extends BaseUnitTest {
 
     public void setUp() {
         initMocks(this);
-        treatmentUpdateOrchestrator = new TreatmentUpdateOrchestrator(patientService, whpAdherenceService);
+        treatmentUpdateOrchestrator = new TreatmentUpdateOrchestrator(patientService, whpAdherenceService, reportingPublisherService);
         patient = new PatientBuilder().withDefaults().build();
         patient.startTherapy(today().minusMonths(2));
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);

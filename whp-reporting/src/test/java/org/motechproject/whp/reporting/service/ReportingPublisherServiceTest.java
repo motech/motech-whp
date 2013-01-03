@@ -123,4 +123,12 @@ public class ReportingPublisherServiceTest {
         reportingPublisher.reportContainerVerificationDetailsLog(request);
         verify(httpClientService).post(reportingEventURLs.getContainerVerificationLogURL(), request);
     }
+
+    @Test
+    public void shouldReportAdherenceSubmissionRequest() {
+        AdherenceSubmissionRequest request = new AdherenceSubmissionRequest();
+
+        reportingPublisher.reportAdherenceSubmission(request);
+        verify(httpClientService).post(reportingEventURLs.getAdherenceSubmissionURL(), request);
+    }
 }

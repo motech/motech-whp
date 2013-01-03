@@ -64,4 +64,8 @@ public class ReportingPublisherService {
     public void reportProviderReminderCallLog(ProviderReminderCallLogRequest request) {
         httpClientService.post(reportingEventURLs.getProviderReminderCallLogURL(), request);
     }
+
+    public void reportAdherenceSubmission(AdherenceSubmissionRequest request) {
+        httpClientService.post(reportingEventURLs.getAdherenceSubmissionURL(), request);
+    }
 }
