@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>motech-whp</artifactId>
+        <groupId>org.motechproject.whp</groupId>
+        <version>0.4.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>whp-wgn-outbound</artifactId>
+    <properties>
+        <build.dir>../build</build.dir>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-config</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-http-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-web-security</artifactId>
+        </dependency>
+    </dependencies>
+</project>
