@@ -32,7 +32,7 @@ public class ProviderAlertService {
         String uuid = uuidGenerator.uuid();
         for (List<Provider> someProviders : new PaginatedList<>(providers, providerReminderProperties.getBatchSize())) {
             ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(event, extractPhoneNumbers(someProviders), uuid);
-            gateway.post(providerReminderProperties.getProviderReminderUrl(), providerReminderRequest.toXML());
+            gateway.post(providerReminderProperties.getProviderReminderUrl(), providerReminderRequest);
         }
     }
 

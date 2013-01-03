@@ -9,7 +9,6 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.wgn.outbound.properties.WGNGatewayProperties;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -41,10 +40,18 @@ public class WGNGatewayTest {
 
     @Test
     public void shouldSendAPIKeyAsHeaderInAnyRequest() {
-        Serializable request = null;
+        WGNRequest request = new TestRequest();
 
         gateway.post("url", request);
-        verify(httpClientService).post(eq("url"), eq(request), headers.capture());
+        verify(httpClientService).post(eq("url"), eq(request.toXML()), headers.capture());
         assertEquals(API_KEY_VALUE, headers.getValue().get(API_KEY_NAME));
+    }
+
+    private static class TestRequest implements WGNRequest {
+
+        @Override
+        public String toXML() {
+            return "";
+        }
     }
 }

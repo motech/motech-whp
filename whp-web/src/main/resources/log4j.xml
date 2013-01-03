@@ -6,6 +6,12 @@
         <layout class="org.apache.log4j.PatternLayout"/>
     </appender>
 
+    <appender name="wgnRequests" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+        </layout>
+    </appender>
+
     <logger name="org.springframework" additivity="false">
         <level value="warn"/>
         <appender-ref ref="console"/>
@@ -36,10 +42,14 @@
         <appender-ref ref="console"/>
     </logger>
 
-
     <logger name="org.motechproject.whp.controller" additivity="false">
         <level value="error"/>
         <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="org.motechproject.whp.wgn.outbound" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="wgnRequests"/>
     </logger>
 
     <root>

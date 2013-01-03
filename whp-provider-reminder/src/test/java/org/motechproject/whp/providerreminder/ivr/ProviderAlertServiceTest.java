@@ -45,7 +45,7 @@ public class ProviderAlertServiceTest {
         List<Provider> providers = asList(new Provider("", phoneNumber, "", null));
 
         alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList(phoneNumber), UUID).toXML());
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList(phoneNumber), UUID));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ProviderAlertServiceTest {
         alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
         alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
 
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList("anotherPhoneNumber"), UUID).toXML());
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED, asList("anotherPhoneNumber"), UUID));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ProviderAlertServiceTest {
         alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
         alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ProviderReminderType.ADHERENCE_NOT_REPORTED);
 
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID).toXML());
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ProviderReminderType.ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class ProviderAlertServiceTest {
         String sameUUID = UUID;
 
         alertService.raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber1"), sameUUID).toXML());
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber2"), sameUUID).toXML());
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber1"), sameUUID));
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber2"), sameUUID));
     }
 
     @Test
