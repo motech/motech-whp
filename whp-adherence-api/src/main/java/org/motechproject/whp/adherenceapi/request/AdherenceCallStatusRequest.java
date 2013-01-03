@@ -29,9 +29,7 @@ public class AdherenceCallStatusRequest implements Serializable {
     private String startTime;
     @DateTimeFormat(allowBlank = true)
     private String endTime;
-    @NotBlank
     private String callStatus;
-    @NotBlank
     private String disconnectionType;
     @NotBlank
     @Digits(message = "should be a number", integer = 10, fraction = 0)

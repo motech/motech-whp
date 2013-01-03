@@ -93,13 +93,21 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfCallStatusIsEmpty() {
+    public void shouldBeValidIfCallStatusIsEmpty() {
         AdherenceCallStatusRequest request = validRequest();
         request.setCallStatus("");
 
         List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("may not be empty"));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("callStatus"));
+        assertTrue(constraintViolations.isEmpty());
+    }
+
+    @Test
+    public void shouldBeValidIfCallStatusIsNull() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setCallStatus(null);
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(constraintViolations.isEmpty());
     }
 
     @Test
@@ -123,13 +131,21 @@ public class AdherenceCallStatusRequestTest {
     }
 
     @Test
-    public void shouldBeInvalidIfDisconnectionTypeIsEmpty() {
+    public void shouldBeValidIfDisconnectionTypeIsEmpty() {
         AdherenceCallStatusRequest request = validRequest();
         request.setDisconnectionType("");
 
         List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getMessage()).contains("may not be empty"));
-        assertTrue(extract(constraintViolations, on(ConstraintViolation.class).getPropertyPath().toString()).contains("disconnectionType"));
+        assertTrue(constraintViolations.isEmpty());
+    }
+
+    @Test
+    public void shouldBeValidIfDisconnectionTypeIsNull() {
+        AdherenceCallStatusRequest request = validRequest();
+        request.setDisconnectionType(null);
+
+        List<ConstraintViolation<AdherenceCallStatusRequest>> constraintViolations = new ArrayList<>(localValidatorFactory.validate(request));
+        assertTrue(constraintViolations.isEmpty());
     }
 
     @Test
