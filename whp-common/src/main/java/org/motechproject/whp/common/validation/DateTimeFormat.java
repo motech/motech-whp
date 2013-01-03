@@ -14,6 +14,8 @@ public @interface DateTimeFormat {
 
     String message() default "invalid date format";
 
+    boolean allowBlank() default false;
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

@@ -7,26 +7,35 @@ import org.joda.time.format.DateTimeFormatterBuilder;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 public class DateTimeValidator implements ConstraintValidator<DateTimeFormat, String> {
 
     public static final String DATE_TIME_FORMAT = "dd/MM/ HH:mm:ss";
 
+    private boolean allowBlank;
+
     @Override
     public void initialize(DateTimeFormat dateTimeFormat) {
+        allowBlank = dateTimeFormat.allowBlank();
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        if (value == null) {
+        if (allowBlank && isBlank(value)) {
             return true;
         } else {
-            DateTimeFormatter formatter = buildFormatter();
-            try {
-                formatter.parseDateTime(value);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
+            return validateDate(value);
+        }
+    }
+
+    private boolean validateDate(String value) {
+        DateTimeFormatter formatter = buildFormatter();
+        try {
+            formatter.parseDateTime(value);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
