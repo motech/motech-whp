@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.service;
 
+import org.joda.time.LocalDate;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.annotations.MotechListener;
 import org.motechproject.whp.common.domain.District;
@@ -141,5 +142,9 @@ public class PatientService {
 
     public List<ProviderPatientCount> getAllActiveProviderPatientCount() {
         return allPatients.findAllProviderPatientCount();
+    }
+
+    public ProviderIds getAllProvidersWithPendingAdherence(LocalDate asOf) {
+        return allPatients.findAllProvidersWithoutAdherenceAsOf(asOf);
     }
 }

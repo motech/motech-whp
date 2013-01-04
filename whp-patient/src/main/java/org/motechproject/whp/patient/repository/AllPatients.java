@@ -6,6 +6,7 @@ import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
+import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.domain.ProviderPatientCount;
@@ -113,6 +114,20 @@ public class AllPatients extends MotechBaseRepository<Patient> {
         ViewQuery query = createQuery("provider_with_active_patients_count").group(true).groupLevel(1).reduce(true);
         return listOfProviderPatientCount(db.queryView(query));
 
+    }
+
+
+    @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
+    public ProviderIds findAllProvidersWithAdherenceAsOf(LocalDate asOf) {
+        ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf);
+        return filterProviderIds(db.queryView(query));
+
+    }
+
+    @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
+    public ProviderIds findAllProvidersWithoutAdherenceAsOf(LocalDate asOf) {
+        ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf.minusDays(1)).descending(true);
+        return filterProviderIds(db.queryView(query));
     }
 
     private List<ProviderPatientCount> listOfProviderPatientCount(ViewResult rows) {

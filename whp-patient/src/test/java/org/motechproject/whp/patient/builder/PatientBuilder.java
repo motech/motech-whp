@@ -191,6 +191,11 @@ public class PatientBuilder {
         return this;
     }
 
+    public PatientBuilder withAdherenceProvidedForLastWeek(LocalDate date) {
+        patient.setLastAdherenceWeekStartDate(date);
+        return this;
+    }
+
     public PatientBuilder withAge(int age) {
         patient.getCurrentTherapy().setPatientAge(age);
         return this;

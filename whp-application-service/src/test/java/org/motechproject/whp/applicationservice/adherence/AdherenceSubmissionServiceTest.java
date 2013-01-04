@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.service.AdherenceLogService;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.now;
@@ -105,19 +105,17 @@ public class AdherenceSubmissionServiceTest {
 
     @Test
     public void shouldReturnListOfAllProvidersWithPendingAdherence() {
-        List<ProviderPatientCount> allProviderPatientCounts = asList(new ProviderPatientCount("provider1", 3), new ProviderPatientCount("provider2", 3));
-        List<ProviderPatientCount> providerIdPatientWithAdherenceCounts  = asList(new ProviderPatientCount("provider1", 1), new ProviderPatientCount("provider2", 3));
-        Provider provider1 = new Provider("provider1", "msisdn", "district", now());
+        LocalDate asOfDate = today();
+        ProviderIds providerIds = new ProviderIds(asList("provider1"));
+        List<Provider> expectedProviderList = asList(new Provider("provider1", "msisdn", "district", now()));
 
-        LocalDate yesterday = today().minusDays(1);
-        LocalDate today = today();
+        when(patientService.getAllProvidersWithPendingAdherence(asOfDate)).thenReturn(providerIds);
+        when(providerService.findByProviderIds(providerIds)).thenReturn(expectedProviderList);
 
-        when(patientService.getAllActiveProviderPatientCount()).thenReturn(allProviderPatientCounts);
-        when(adherenceLogService.getProviderPatientWithAdherenceCount(yesterday, today)).thenReturn(providerIdPatientWithAdherenceCounts);
-        when(providerService.findByProviderIds(new ProviderIds(asList("provider1")))).thenReturn(asList(provider1));
+        List<Provider> providersPendingAdherence = adherenceSubmissionService.providersPendingAdherence(asOfDate);
 
-        List<Provider> providersPendingAdherence = adherenceSubmissionService.providersPendingAdherence(yesterday, today);
-
-        assertEquals(asList(provider1), providersPendingAdherence);
+        assertEquals(expectedProviderList, providersPendingAdherence);
+        verify(patientService).getAllProvidersWithPendingAdherence(asOfDate);
+        verify(providerService).findByProviderIds(providerIds);
     }
 }

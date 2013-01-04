@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.service;
 
 
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,6 +41,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PatientServiceTest extends BaseUnitTest {
     PatientService patientService;
@@ -152,6 +154,18 @@ public class PatientServiceTest extends BaseUnitTest {
 
         assertEquals(expectedResult, patientService.getAllActiveProviderPatientCount());
         verify(allPatients).findAllProviderPatientCount();
+    }
+
+    @Test
+    public void shouldReturnProvidersWithPendingAdherence() {
+        ProviderIds expectedProviderIds = new ProviderIds(asList("provider1"));
+        LocalDate asOfDate = currentAdherenceCaptureWeek().startDate();
+        when(allPatients.findAllProvidersWithoutAdherenceAsOf(asOfDate)).thenReturn(expectedProviderIds);
+
+        ProviderIds providerIds = patientService.getAllProvidersWithPendingAdherence(asOfDate);
+
+        assertEquals(expectedProviderIds, providerIds);
+        verify(allPatients).findAllProvidersWithoutAdherenceAsOf(asOfDate);
     }
 
     @After

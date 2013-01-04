@@ -2,7 +2,6 @@ package org.motechproject.whp.applicationservice.adherence;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.service.AdherenceLogService;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
@@ -58,11 +57,8 @@ public class AdherenceSubmissionService {
         return providerService.findByProviderIds(providersWithActivePatients.subtract(providerIdsWithAdherence));
     }
 
-    public List<Provider> providersPendingAdherence(LocalDate from, LocalDate to) {
-        List<ProviderPatientCount> allProviderPatientCounts = patientService.getAllActiveProviderPatientCount();
-        List<ProviderPatientCount> providerIdPatientWithAdherenceCounts = adherenceLogService.getProviderPatientWithAdherenceCount(from, to);
-        AllProviderAdherenceStatus allProviderAdherenceStatus = new AllProviderAdherenceStatus(allProviderPatientCounts, providerIdPatientWithAdherenceCounts);
-        return providerService.findByProviderIds(allProviderAdherenceStatus.providersWithPendingAdherence());
+    public List<Provider> providersPendingAdherence(LocalDate asOf) {
+        return providerService.findByProviderIds(patientService.getAllProvidersWithPendingAdherence(asOf));
     }
 
 }

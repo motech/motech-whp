@@ -10,16 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.adherence.audit.contract.AuditParams;
-import org.motechproject.whp.adherence.builder.WeeklyAdherenceSummaryBuilder;
-import org.motechproject.whp.adherence.criteria.TherapyStartCriteria;
-import org.motechproject.whp.adherence.domain.AdherenceList;
-import org.motechproject.whp.adherence.domain.AdherenceSource;
-import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
-import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
-import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -37,12 +28,13 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static java.util.Arrays.asList;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,20 +60,15 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
     @Autowired
     UUIDGenerator uuidGenerator;
 
-    private AuditParams auditParams = new AuditParams("user", AdherenceSource.WEB, "remarks");
-
     @Test
     public void shouldReturnMobileNumbersProvidersWithAdherencePending() throws IOException, SAXException {
         Provider providerWithoutAdherence = createProvider("providerid1", "1234567890");
-        Provider providerWithCMFAdminAdherence = createProvider("providerid2", "1234567891");
-        Provider providerWithAdherence = createProvider("providerid3", "1234567893");
+        Provider providerAdherenceAtStartOfTreatmentWeek = createProvider("providerid2", "1234567891");
+        Provider providerWithAdherenceAtEndOfTreatmentWeek = createProvider("providerid3", "1234567893");
 
-        Patient patientWithoutAdherence = createPatient("patient1", providerWithoutAdherence);
-        Patient patientWithCMFAdminAdherence = createPatient("patient2", providerWithCMFAdminAdherence);
-        Patient patientWithProviderAdherence = createPatient("patient3", providerWithAdherence);
-
-        updateAdherenceByProvider(patientWithProviderAdherence);
-        updateAdherenceByCMFAdmin(patientWithCMFAdminAdherence);
+        createPatient("patient1", providerWithoutAdherence, today().minusWeeks(2));
+        createPatient("patient2", providerAdherenceAtStartOfTreatmentWeek, currentAdherenceCaptureWeek().startDate());
+        createPatient("patient3", providerWithAdherenceAtEndOfTreatmentWeek, currentAdherenceCaptureWeek().endDate());
 
         when(uuidGenerator.uuid()).thenReturn("request-id");
 
@@ -104,30 +91,12 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
         assertXMLEqual(expectedRequestXML, reminderXml);
     }
 
-    private void updateAdherenceByCMFAdmin(Patient patientWithCMFAdminAdherence) {
-        LocalDate treatmentWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
-        adherenceService.recordDailyAdherence(asList(new DailyAdherenceRequest(treatmentWeekStartDate.getDayOfMonth(),
-                treatmentWeekStartDate.getMonthOfYear(),
-                treatmentWeekStartDate.getYear(), 1)),
-                patientWithCMFAdminAdherence,
-                auditParams);
-    }
 
-    private void updateAdherenceByProvider(Patient patientWithProviderAdherence) {
-        WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
-        AdherenceList adherenceList = AdherenceListMapper.map(patientWithProviderAdherence, weeklyAdherenceSummary);
-        if (TherapyStartCriteria.shouldStartOrRestartTreatment(patientWithProviderAdherence, weeklyAdherenceSummary)) {
-            patientWithProviderAdherence.startTherapy(adherenceList.firstDoseTakenOn());
-        }
-
-        adherenceService.recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patientWithProviderAdherence , auditParams);
-    }
-
-
-    private Patient createPatient(String patientId, Provider provider) {
+    private Patient createPatient(String patientId, Provider provider, LocalDate lastAdherenceDate) {
         Patient patient = new PatientBuilder().withDefaults().withPatientId(patientId)
                 .withProviderId(provider.getProviderId())
                 .withCurrentTreatmentStartDate(new LocalDate().minusDays(14))
+                .withAdherenceProvidedForLastWeek(lastAdherenceDate)
                 .build();
         allPatients.add(patient);
         return patient;

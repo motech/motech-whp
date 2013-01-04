@@ -33,7 +33,7 @@ public class ProviderReminderService {
 
     public void alertProvidersPendingAdherence(ProviderReminderType eventType) {
         TreatmentWeek treatmentWeek = TreatmentWeekInstance.currentAdherenceCaptureWeek();
-        List<Provider> providers = adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate());
+        List<Provider> providers = adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate());
         if (CollectionUtils.isNotEmpty(providers)) {
             alertService.raiseIVRRequest(providers, eventType);
         }

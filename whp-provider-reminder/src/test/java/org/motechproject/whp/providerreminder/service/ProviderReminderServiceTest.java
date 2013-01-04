@@ -54,7 +54,7 @@ public class ProviderReminderServiceTest {
         List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
         TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
 
-        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate(), treatmentWeek.endDate())).thenReturn(providers);
+        when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate())).thenReturn(providers);
         providerReminderService.alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED);
         verify(alertService).raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_NOT_REPORTED);
     }
