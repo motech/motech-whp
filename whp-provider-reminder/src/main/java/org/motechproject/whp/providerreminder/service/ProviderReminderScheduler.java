@@ -30,9 +30,8 @@ public class ProviderReminderScheduler {
     }
 
     public void scheduleReminder(ProviderReminderConfiguration reminderConfiguration) {
-        ProviderReminderType reminderType = reminderConfiguration.getReminderType();
-        MotechEvent motechEvent = providerReminderEvent(reminderType);
-        motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
+        schedule(reminderConfiguration);
+        reminderConfiguration.setScheduled(true);
         allProviderReminderConfigurations.saveOrUpdate(reminderConfiguration);
     }
 
@@ -41,12 +40,26 @@ public class ProviderReminderScheduler {
         if (scheduledJobTimings.isEmpty()) {
             return null;
         } else {
-            return new ProviderReminderConfiguration(jobType, scheduledJobTimings.get(0));
+            ProviderReminderConfiguration configuration = allProviderReminderConfigurations.withType(jobType);
+            configuration.updateDateTimeValues(scheduledJobTimings.get(0));
+            return configuration;
         }
     }
 
     public ProviderReminderConfiguration configuration(ProviderReminderType reminderType) {
         return allProviderReminderConfigurations.withType(reminderType);
+    }
+
+    public void unScheduleReminder(ProviderReminderConfiguration configuration) {
+        configuration.setScheduled(false);
+        motechSchedulerService.unscheduleJob(configuration.getReminderType().getEventSubject(), configuration.getReminderType().name());
+        allProviderReminderConfigurations.saveOrUpdate(configuration);
+    }
+
+    private void schedule(ProviderReminderConfiguration reminderConfiguration) {
+        ProviderReminderType reminderType = reminderConfiguration.getReminderType();
+        MotechEvent motechEvent = providerReminderEvent(reminderType);
+        motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
     }
 
     private MotechEvent providerReminderEvent(ProviderReminderType reminderType) {

@@ -11,6 +11,7 @@ function(doc, req){
         doc.hour = updatedDoc.hour;
         doc.minute = updatedDoc.minute;
         doc.dayOfWeek = updatedDoc.dayOfWeek;
+        doc.scheduled = updatedDoc.scheduled;
         return [doc, {}];
     }
 }

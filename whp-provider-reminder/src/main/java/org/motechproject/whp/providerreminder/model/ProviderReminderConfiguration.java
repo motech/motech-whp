@@ -23,13 +23,18 @@ public class ProviderReminderConfiguration extends MotechBaseDataObject {
     private int minute;
     @NotNull
     private ProviderReminderType reminderType;
+    private boolean scheduled = false;
 
     public ProviderReminderConfiguration() {
     }
 
     public ProviderReminderConfiguration(ProviderReminderType reminderType, Date date) {
-        LocalDateTime localDateTime = new LocalDateTime(date);
         setReminderType(reminderType);
+        updateDateTimeValues(date);
+    }
+
+    public void updateDateTimeValues(Date date) {
+        LocalDateTime localDateTime = new LocalDateTime(date);
         setDayOfWeek(DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek()));
         setHour(localDateTime.getHourOfDay());
         setMinute(localDateTime.getMinuteOfHour());

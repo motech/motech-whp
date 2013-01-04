@@ -64,6 +64,7 @@ public class ProviderReminderSchedulerIT extends BaseUnitTest {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
         providerReminderConfiguration.setMinute(minutes);
         providerReminderConfiguration.setHour(hour);
+        providerReminderConfiguration.setScheduled(false);
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
         providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
         return providerReminderConfiguration;

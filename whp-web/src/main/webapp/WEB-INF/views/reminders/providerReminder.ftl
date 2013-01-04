@@ -8,7 +8,7 @@
             createAutoClosingAlert("#update-alert", 5000);
         </script>
     </#if>
-    <h1>Schedule Reminder</h1>
+    <h1>Schedule Reminder<#if providerReminderConfiguration.scheduled == true><button type="submit" id="unScheduleButton" class="btn btn-primary pull-right"><i class="icon-trash icon-white"></i> Unschedule</button></#if></h1>
         <form id="provider-reminder-form"  autocomplete="off" action="<@spring.url '/providerreminder/update'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
             <div class="form-element">
                 <div class="control-group">
@@ -56,12 +56,25 @@
                 <div class="form-buttons control-group">
                     <div class="controls">
                         <button type="submit" id="registerButton" class="btn btn-primary">
-                            <i class="icon-ok icon-white"></i> Schedule Reminder
+                            <i class="icon-ok icon-white"></i>
+                            <#if providerReminderConfiguration.scheduled == true>Reschedule Reminder
+                            <#else>
+                                Schedule Reminder
+                             </#if>
                         </button>
                         <a id="back" class="btn padding-right" href="<@spring.url ''/>"><i class="icon-remove"></i> Cancel</a>
                     </div>
                 </div>
             </div>
         </form>
+
+        <script type="text/javascript">
+        $('#unScheduleButton').click(function(){
+           var action =  $('#provider-reminder-form').attr('action');
+            $('#provider-reminder-form').attr('action',action+"/unschedule");
+            $('#provider-reminder-form').submit();
+        })
+        </script>
+
     </div>
 </@layout.defaultLayout>

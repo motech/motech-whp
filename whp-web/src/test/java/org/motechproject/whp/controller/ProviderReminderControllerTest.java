@@ -60,4 +60,21 @@ public class ProviderReminderControllerTest {
 
         verify(providerReminderScheduler).scheduleReminder(expectedReminderConfiguration);
     }
+
+    @Test
+    public void shouldUnScheduleReminder() throws Exception {
+        standaloneSetup(providerReminderController)
+                .build()
+                .perform(post("/providerreminder/update/unschedule").param("dayOfWeek", "Sunday").param("hour", "10").param("minute", "30").param("reminderType", ADHERENCE_WINDOW_COMMENCED.name()))
+                .andExpect(view().name("redirect:/providerreminder/" + ADHERENCE_WINDOW_COMMENCED.name()))
+                .andExpect(status().isOk());
+
+        ProviderReminderConfiguration expectedReminderConfiguration = new ProviderReminderConfiguration();
+        expectedReminderConfiguration.setDayOfWeek(Sunday);
+        expectedReminderConfiguration.setHour(10);
+        expectedReminderConfiguration.setMinute(30);
+        expectedReminderConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
+
+        verify(providerReminderScheduler).unScheduleReminder(expectedReminderConfiguration);
+    }
 }

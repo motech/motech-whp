@@ -37,7 +37,7 @@ public class ProviderReminderController extends BaseWebController {
         }
         model.addAttribute(reminderConfiguration);
         if (Flash.has("reminder.updated", request)) {
-            model.addAttribute("message",Flash.in("reminder.updated", request));
+            model.addAttribute("message", Flash.in("reminder.updated", request));
         }
         return "reminders/providerReminder";
     }
@@ -46,6 +46,12 @@ public class ProviderReminderController extends BaseWebController {
     public String updateSchedule(@Valid ProviderReminderConfiguration providerReminderConfiguration, HttpServletRequest request) throws IOException {
         providerReminderScheduler.scheduleReminder(providerReminderConfiguration);
         Flash.out("reminder.updated", "true", request);
+        return "redirect:/providerreminder/" + providerReminderConfiguration.getReminderType().name();
+    }
+
+    @RequestMapping(value = "/update/unschedule", method = POST)
+    public String unSchedule(@Valid ProviderReminderConfiguration providerReminderConfiguration, HttpServletRequest request) throws IOException {
+        providerReminderScheduler.unScheduleReminder(providerReminderConfiguration);
         return "redirect:/providerreminder/" + providerReminderConfiguration.getReminderType().name();
     }
 }

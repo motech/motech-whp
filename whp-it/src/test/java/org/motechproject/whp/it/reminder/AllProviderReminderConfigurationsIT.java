@@ -29,7 +29,7 @@ public class AllProviderReminderConfigurationsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldSaveProviderReminderConfiguration() {
-        ProviderReminderConfiguration providerReminderConfiguration = configuration(DayOfWeek.Monday, 1, 1, ADHERENCE_NOT_REPORTED);
+        ProviderReminderConfiguration providerReminderConfiguration = configuration(DayOfWeek.Monday, 1, 1, ADHERENCE_NOT_REPORTED, false);
         allProviderReminderConfigurations.saveOrUpdate(providerReminderConfiguration);
         assertNotNull(allProviderReminderConfigurations.get(providerReminderConfiguration.getId()));
     }
@@ -37,7 +37,7 @@ public class AllProviderReminderConfigurationsIT extends SpringIntegrationTest {
     @Test
     public void shouldNotMaintainDuplicateCopiesOfConfiguration() {
         ProviderReminderType type = ADHERENCE_NOT_REPORTED;
-        ProviderReminderConfiguration[] configurations = {configuration(DayOfWeek.Monday, 1, 1, type), configuration(DayOfWeek.Tuesday, 2, 2, type)};
+        ProviderReminderConfiguration[] configurations = {configuration(DayOfWeek.Monday, 1, 1, type, false), configuration(DayOfWeek.Tuesday, 2, 2, type, true)};
 
         allProviderReminderConfigurations.saveOrUpdate(configurations[0]);
         allProviderReminderConfigurations.saveOrUpdate(configurations[1]);
@@ -46,13 +46,15 @@ public class AllProviderReminderConfigurationsIT extends SpringIntegrationTest {
         assertEquals(configurations[1].getDayOfWeek(), updatedConfiguration.getDayOfWeek());
         assertEquals(configurations[1].getHour(), updatedConfiguration.getHour());
         assertEquals(configurations[1].getMinute(), updatedConfiguration.getMinute());
+        assertEquals(configurations[1].isScheduled(), updatedConfiguration.isScheduled());
     }
 
-    private ProviderReminderConfiguration configuration(DayOfWeek dayOfWeek, int hour, int minute, ProviderReminderType type) {
+    private ProviderReminderConfiguration configuration(DayOfWeek dayOfWeek, int hour, int minute, ProviderReminderType type, boolean scheduled) {
         ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
         providerReminderConfiguration.setDayOfWeek(dayOfWeek);
         providerReminderConfiguration.setHour(hour);
         providerReminderConfiguration.setMinute(minute);
+        providerReminderConfiguration.setScheduled(scheduled);
         providerReminderConfiguration.setReminderType(type);
         return providerReminderConfiguration;
     }

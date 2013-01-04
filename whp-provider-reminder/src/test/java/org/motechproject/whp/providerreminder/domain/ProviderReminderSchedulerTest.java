@@ -8,6 +8,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.repository.AllProviderReminderConfigurations;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -63,9 +63,39 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         ProviderReminderConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
 
         when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
+
         providerReminderScheduler.scheduleReminder(currentConfiguration);
         assertEquals(currentConfiguration, providerReminderScheduler.configuration(ADHERENCE_WINDOW_COMMENCED));
         verify(allProviderReminderConfigurations).saveOrUpdate(currentConfiguration);
+    }
+
+    @Test
+    public void shouldMarkConfigurationAsScheduledUponScheduling() {
+        ProviderReminderConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+
+        when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
+        providerReminderScheduler.scheduleReminder(currentConfiguration);
+
+        ArgumentCaptor<ProviderReminderConfiguration> captor = ArgumentCaptor.forClass(ProviderReminderConfiguration.class);
+        verify(allProviderReminderConfigurations).saveOrUpdate(captor.capture());
+        assertTrue(captor.getValue().isScheduled());
+    }
+
+    @Test
+    public void shouldUnScheduleReminder() {
+        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        providerReminderScheduler.unScheduleReminder(providerReminderConfiguration);
+        verify(motechSchedulerService).unscheduleJob(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ADHERENCE_WINDOW_COMMENCED.name());
+    }
+
+    @Test
+    public void shouldMarkConfigurationAsUnscheduledUponUnSchedulingReminder() {
+        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        providerReminderScheduler.unScheduleReminder(providerReminderConfiguration);
+
+        ArgumentCaptor<ProviderReminderConfiguration> captor = ArgumentCaptor.forClass(ProviderReminderConfiguration.class);
+        verify(allProviderReminderConfigurations).saveOrUpdate(captor.capture());
+        assertFalse(captor.getValue().isScheduled());
     }
 
     @Test
@@ -74,11 +104,12 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         String jobId = ADHERENCE_WINDOW_COMMENCED.name();
 
         mockCurrentDate(today());
-
         Date expectedNextFireTime = today().plusDays(2).toDate();
+        ProviderReminderConfiguration expectedConfiguration = new ProviderReminderConfiguration(ADHERENCE_WINDOW_COMMENCED, expectedNextFireTime);
 
+        when(allProviderReminderConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(expectedConfiguration);
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(asList(expectedNextFireTime));
-        assertEquals(new ProviderReminderConfiguration(ADHERENCE_WINDOW_COMMENCED, expectedNextFireTime), providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
+        assertEquals(expectedConfiguration, providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
         assertNull(providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
