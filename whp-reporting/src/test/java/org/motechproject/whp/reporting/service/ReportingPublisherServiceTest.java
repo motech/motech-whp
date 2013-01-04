@@ -47,7 +47,6 @@ public class ReportingPublisherServiceTest {
         AdherenceCallLogRequest callLog = new AdherenceCallLogRequest();
         callLog.setStartTime(DateUtil.now().toDate());
         callLog.setEndTime(DateUtil.now().toDate());
-        callLog.setCalledBy(providerId);
         callLog.setProviderId(providerId);
 
         reportingPublisher.reportCallLog(callLog);

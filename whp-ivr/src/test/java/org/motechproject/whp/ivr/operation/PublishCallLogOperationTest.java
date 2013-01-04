@@ -87,7 +87,6 @@ public class PublishCallLogOperationTest {
         callLogRequest.setFlashingCallId(flashingCallId);
         callLogRequest.setEndTime(endTime.toDate());
         callLogRequest.setStartTime(startTime.toDate());
-        callLogRequest.setCalledBy(providerId);
         callLogRequest.setProviderId(providerId);
         callLogRequest.setTotalPatients(totalPatients);
         callLogRequest.setAdherenceCaptured(adherenceCaptured);

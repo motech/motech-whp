@@ -37,7 +37,6 @@ public class PublishCallLogOperation implements INodeOperation {
         AdherenceCallLogRequest callLogRequest = new AdherenceCallLogRequest();
         callLogRequest.setCallStatus(callStatus.name());
         callLogRequest.setCallId(ivrSession.callId());
-        callLogRequest.setCalledBy(ivrSession.providerId());
         callLogRequest.setProviderId(ivrSession.providerId());
         callLogRequest.setStartTime(ivrSession.callStartTime().toDate());
         callLogRequest.setEndTime(callEndTime.toDate());
