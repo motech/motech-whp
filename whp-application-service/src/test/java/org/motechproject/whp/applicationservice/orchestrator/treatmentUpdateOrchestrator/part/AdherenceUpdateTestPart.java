@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
@@ -100,7 +99,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
 
     @Test
     public void shouldReportAdherenceSubmissionAfterCapturingDailyAdherence() {
-        LocalDate tuesday = new LocalDate(2012, 8, 7);
+        DateTime tuesday = new DateTime(2012, 8, 7, 0, 0);
         mockCurrentDate(tuesday);
         patientStub = new PatientStub();
         patientStub.startTherapy(today().minusMonths(2));
@@ -112,7 +111,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
         treatmentUpdateOrchestrator.recordDailyAdherence(new DailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2)), patientStub, auditParams);
 
-        AdherenceSubmissionRequest expectedRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(PROVIDER_ID, auditParams.getUser(), today(), dailyAdherenceRequest1.getDoseDate());
+        AdherenceSubmissionRequest expectedRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(PROVIDER_ID, auditParams.getUser(), tuesday, dailyAdherenceRequest1.getDoseDate());
         verify(reportingPublisherService).reportAdherenceSubmission(expectedRequest);
     }
 
@@ -169,7 +168,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         }
         verify(whpAdherenceService).recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
-        AdherenceSubmissionRequest expectedAdherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider(providerId, today());
+        AdherenceSubmissionRequest expectedAdherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider(providerId, validAdherenceWindowDateTime);
 
         verify(reportingPublisherService).reportAdherenceSubmission(expectedAdherenceSubmissionRequest);
     }

@@ -8,7 +8,7 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.reports.contract.AdherenceSubmissionRequest;
 
 import static junit.framework.Assert.*;
-import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.util.DateUtil.now;
 
 public class AdherenceSubmissionRequestBuilderTest extends BaseUnitTest {
 
@@ -16,13 +16,12 @@ public class AdherenceSubmissionRequestBuilderTest extends BaseUnitTest {
     public void shouldCreateAdherenceSubmissionRequestForAdherenceDay() {
         String providerId = "providerId";
         String submittedBy = "submittedBy";
-        LocalDate date = DateTime.now().withDayOfWeek(DayOfWeek.Sunday.getValue()).toLocalDate();
+        LocalDate date = now().withDayOfWeek(DayOfWeek.Sunday.getValue()).toLocalDate();
         mockCurrentDate(date);
-
-        AdherenceSubmissionRequest adherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(providerId, submittedBy, date, date);
+        AdherenceSubmissionRequest adherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(providerId, submittedBy, now(), date);
         assertEquals(providerId, adherenceSubmissionRequest.getProviderId());
         assertEquals(submittedBy, adherenceSubmissionRequest.getSubmittedBy());
-        assertEquals(date.toDate(), adherenceSubmissionRequest.getSubmissionDate());
+        assertEquals(now().toDate(), adherenceSubmissionRequest.getSubmissionDate());
         assertTrue(adherenceSubmissionRequest.isWithinAdherenceWindow());
     }
 
@@ -30,26 +29,26 @@ public class AdherenceSubmissionRequestBuilderTest extends BaseUnitTest {
     public void shouldCreateAdherenceSubmissionRequestForNonAdherenceDay() {
         String providerId = "providerId";
         String submittedBy = "submittedBy";
+        mockCurrentDate(DateTime.now());
         LocalDate date = DateTime.now().withDayOfWeek(DayOfWeek.Thursday.getValue()).toLocalDate();
-        mockCurrentDate(date);
 
-        AdherenceSubmissionRequest adherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(providerId, submittedBy, date, date);
+        AdherenceSubmissionRequest adherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(providerId, submittedBy, now(), date);
         assertEquals(providerId, adherenceSubmissionRequest.getProviderId());
         assertEquals(submittedBy, adherenceSubmissionRequest.getSubmittedBy());
-        assertEquals(date.toDate(), adherenceSubmissionRequest.getSubmissionDate());
+        assertEquals(now().toDate(), adherenceSubmissionRequest.getSubmissionDate());
         assertFalse(adherenceSubmissionRequest.isWithinAdherenceWindow());
     }
 
     @Test
     public void shouldCreateAdherenceSubmissionRequestByProvider() {
-        mockCurrentDate(today());
+        mockCurrentDate(now());
         String providerId = "provider";
 
-        AdherenceSubmissionRequest request = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider(providerId, today());
+        AdherenceSubmissionRequest request = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider(providerId, now());
 
         assertEquals(providerId, request.getProviderId());
         assertEquals(providerId, request.getSubmittedBy());
-        assertEquals(today().toDate(), request.getSubmissionDate());
+        assertEquals(now().toDate(), request.getSubmissionDate());
         assertTrue(request.isWithinAdherenceWindow());
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest;
@@ -87,7 +88,7 @@ public class TreatmentUpdateOrchestrator {
         refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
 
         String providerId = patient.getCurrentProviderId();
-        AdherenceSubmissionRequest request = createAdherenceSubmissionRequestByProvider(providerId, today());
+        AdherenceSubmissionRequest request = createAdherenceSubmissionRequestByProvider(providerId, now());
         reportingPublisherService.reportAdherenceSubmission(request);
     }
 
@@ -97,7 +98,7 @@ public class TreatmentUpdateOrchestrator {
 
         whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
         refreshPatient(patient, dailyAdherenceRequests.getLastAdherenceProvidedWeekStartDate());
-        reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), today(), dailyAdherenceRequests.maxDoseDate()));
+        reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), now(), dailyAdherenceRequests.maxDoseDate()));
     }
 
     private void recomputePillStatus(Patient patient) {
