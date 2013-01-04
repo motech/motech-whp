@@ -9,10 +9,9 @@ import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
-import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Phases;
@@ -22,15 +21,13 @@ import org.motechproject.whp.reports.contract.AdherenceSubmissionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest;
+import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 @Component
@@ -90,16 +87,17 @@ public class TreatmentUpdateOrchestrator {
         refreshPatient(patient, weeklyAdherenceSummary.getWeek().startDate());
 
         String providerId = patient.getCurrentProviderId();
-        AdherenceSubmissionRequest request = createAdherenceSubmissionRequest(providerId, providerId, now());
+        AdherenceSubmissionRequest request = createAdherenceSubmissionRequestByProvider(providerId, today());
         reportingPublisherService.reportAdherenceSubmission(request);
     }
 
-    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
-        if (!dailyAdherenceRequests.isEmpty()) {
-            whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
-            refreshPatient(patient, getLastAdherenceProvidedWeekStartDate(dailyAdherenceRequests));
-            reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), now()));
-        }
+    public void recordDailyAdherence(DailyAdherenceRequests dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
+        if (dailyAdherenceRequests.isEmpty())
+            return;
+
+        whpAdherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
+        refreshPatient(patient, dailyAdherenceRequests.getLastAdherenceProvidedWeekStartDate());
+        reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), today(), dailyAdherenceRequests.maxDoseDate()));
     }
 
     private void recomputePillStatus(Patient patient) {
@@ -144,21 +142,6 @@ public class TreatmentUpdateOrchestrator {
         while (patient.currentPhaseDoseComplete()) {
             attemptPhaseTransition(patient);
         }
-    }
-
-    private LocalDate getLastAdherenceProvidedWeekStartDate(List<DailyAdherenceRequest> dailyAdherenceRequests) {
-        List<LocalDate> doseDates = getDoseDates(dailyAdherenceRequests);
-        Collections.sort(doseDates);
-        LocalDate lastAdherenceProvidedDate = doseDates.get(doseDates.size() - 1);
-        return new TreatmentWeek(lastAdherenceProvidedDate).startDate();
-    }
-
-    private List<LocalDate> getDoseDates(List<DailyAdherenceRequest> dailyAdherenceRequests) {
-        List<LocalDate> doseDates = new ArrayList<>();
-        for(DailyAdherenceRequest dailyAdherenceRequest : dailyAdherenceRequests) {
-            doseDates.add(dailyAdherenceRequest.getDoseDate());
-        }
-        return doseDates;
     }
 
     private void refreshPatient(Patient patient, LocalDate lastAdherenceWeekStartDate) {

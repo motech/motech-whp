@@ -14,6 +14,8 @@ import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
+import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -25,7 +27,7 @@ import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceSubmissionRequest;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static java.util.Arrays.asList;
@@ -50,6 +52,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
 
     @Mock
     private ReportingPublisherService reportingPublisherService;
+    private DailyAdherenceRequests EMPTY_DAILY_ADHERENCE_REQUESTS;
 
     @Before
     public void setUp() {
@@ -57,6 +60,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         initMocks(this);
         treatmentUpdateOrchestrator = new TreatmentUpdateOrchestrator(patientService, whpAdherenceService, reportingPublisherService);
 
+        EMPTY_DAILY_ADHERENCE_REQUESTS = new DailyAdherenceRequests(new ArrayList<DailyAdherenceRequest>());
     }
 
     @Test
@@ -102,12 +106,14 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         patientStub.startTherapy(today().minusMonths(2));
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
 
-        DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
+        DailyAdherenceRequest dailyAdherenceRequest1 = new DailyAdherenceRequest(7, 8, 2012, 1);
+        DailyAdherenceRequest dailyAdherenceRequest2 = new DailyAdherenceRequest(1, 8, 2012, 1);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(new DailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2)), patientStub, auditParams);
 
-        verify(reportingPublisherService).reportAdherenceSubmission(createAdherenceSubmissionRequest(PROVIDER_ID, auditParams.getUser(), tuesday.toDate()));
+        AdherenceSubmissionRequest expectedRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(PROVIDER_ID, auditParams.getUser(), today(), dailyAdherenceRequest1.getDoseDate());
+        verify(reportingPublisherService).reportAdherenceSubmission(expectedRequest);
     }
 
     @Test
@@ -121,7 +127,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(new DailyAdherenceRequests(asList(dailyAdherenceRequest)), patientStub, auditParams);
 
         assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
@@ -137,7 +143,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         DailyAdherenceRequest dailyAdherenceRequest = new DailyAdherenceRequest(2, 8, 2012, 1);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.WEB, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(new DailyAdherenceRequests(asList(dailyAdherenceRequest)), patientStub, auditParams);
 
         assertEquals(0, patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.IP));
     }
@@ -163,9 +169,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         }
         verify(whpAdherenceService).recordWeeklyAdherence(adherenceList, weeklyAdherenceSummary, patient, auditParams);
 
-        Date submissionDate = DateUtil.now().toDate();
-
-        AdherenceSubmissionRequest expectedAdherenceSubmissionRequest = createAdherenceSubmissionRequest(providerId, providerId, submissionDate);
+        AdherenceSubmissionRequest expectedAdherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider(providerId, today());
 
         verify(reportingPublisherService).reportAdherenceSubmission(expectedAdherenceSubmissionRequest);
     }
@@ -186,7 +190,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(Collections.<DailyAdherenceRequest>emptyList(), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(EMPTY_DAILY_ADHERENCE_REQUESTS, patientStub, auditParams);
 
         verifyNoMoreInteractions(whpAdherenceService);
         verifyNoMoreInteractions(reportingPublisherService);
@@ -199,7 +203,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patientStub);
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
-        treatmentUpdateOrchestrator.recordDailyAdherence(Collections.<DailyAdherenceRequest>emptyList(), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(EMPTY_DAILY_ADHERENCE_REQUESTS, patientStub, auditParams);
 
         verifyNoMoreInteractions(patientService);
     }
@@ -214,7 +218,7 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
         PhaseRecord previousPhase = patient.getCurrentPhase();
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest), patientStub, auditParams);
+        treatmentUpdateOrchestrator.recordDailyAdherence(new DailyAdherenceRequests(asList(dailyAdherenceRequest)), patientStub, auditParams);
 
         assertNotNull(patient.getCurrentPhase());
         assertTrue(previousPhase.equals(patient.getCurrentPhase()));
@@ -265,7 +269,8 @@ public class AdherenceUpdateTestPart extends TreatmentUpdateOrchestratorTestPart
 
         AuditParams auditParams = new AuditParams("admin", AdherenceSource.IVR, "test");
 
-        treatmentUpdateOrchestrator.recordDailyAdherence(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3), patientStub, auditParams);
+        DailyAdherenceRequests dailyAdherenceRequests = new DailyAdherenceRequests(asList(dailyAdherenceRequest1, dailyAdherenceRequest2, dailyAdherenceRequest3));
+        treatmentUpdateOrchestrator.recordDailyAdherence(dailyAdherenceRequests, patientStub, auditParams);
 
         assertThat(patientStub.getLastAdherenceWeekStartDate(), is(new LocalDate(2012, 5, 14)));
         TreatmentWeek treatmentWeek = new TreatmentWeek(dailyAdherenceRequest3.getDoseDate());

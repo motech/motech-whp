@@ -14,6 +14,7 @@ import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.*;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.UpdateAdherenceCriteria.canUpdate;
 
 public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
@@ -64,5 +65,11 @@ public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
             mockCurrentDate(date);
             assertTrue(canUpdate(patient));
         }
+    }
+
+    @Test
+    public void shouldReturnIfDateIsPartOfCurrentAdherenceCaptureWindow() {
+        assertTrue(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today().minusDays(7)));
+        assertFalse(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today()));
     }
 }

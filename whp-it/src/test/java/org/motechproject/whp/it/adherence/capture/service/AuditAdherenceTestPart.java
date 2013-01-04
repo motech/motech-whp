@@ -7,6 +7,7 @@ import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -31,7 +32,8 @@ public class AuditAdherenceTestPart extends WHPAdherenceServiceTestPart {
     @Test
     public void shouldLogAuditAfterRecordingDailyAdherence() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        adherenceService.recordDailyAdherence(asList(new DailyAdherenceRequest(7, 1, 2012, 1)), patient, auditParams);
+        DailyAdherenceRequests dailyAdherenceRequests = new DailyAdherenceRequests(asList(new DailyAdherenceRequest(7, 1, 2012, 1)));
+        adherenceService.recordDailyAdherence(dailyAdherenceRequests, patient, auditParams);
         assertEquals(1, allDailyAdherenceAuditLogs.getAll().size());
 
     }

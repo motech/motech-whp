@@ -14,6 +14,7 @@ import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDateUtil;
@@ -87,7 +88,7 @@ public class WHPAdherenceService {
         }
     }
 
-    public void recordDailyAdherence(List<DailyAdherenceRequest> dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
+    public void recordDailyAdherence(DailyAdherenceRequests dailyAdherenceRequests, Patient patient, AuditParams auditParams) {
         List<Adherence> adherenceData = new ArrayList<>();
 
         for (DailyAdherenceRequest request : dailyAdherenceRequests) {

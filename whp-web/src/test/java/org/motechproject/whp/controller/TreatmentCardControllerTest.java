@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.domain.AdherenceSource;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
+import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.adherence.request.UpdateAdherenceRequest;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -22,7 +22,8 @@ import java.io.IOException;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class TreatmentCardControllerTest extends BaseControllerTest {
@@ -80,7 +81,8 @@ public class TreatmentCardControllerTest extends BaseControllerTest {
         String view = treatmentCardController.update(new Gson().toJson(adherenceData), request);
 
         assertEquals("redirect:/patients/show?patientId=patientid", view);
-        verify(treatmentUpdateOrchestrator).recordDailyAdherence(adherenceData.getDailyAdherenceRequests(), patient, auditParams);
+        DailyAdherenceRequests expectedDailyAdherenceRequests = new DailyAdherenceRequests(adherenceData.getDailyAdherenceRequests());
+        verify(treatmentUpdateOrchestrator).recordDailyAdherence(expectedDailyAdherenceRequests, patient, auditParams);
     }
 
 }
