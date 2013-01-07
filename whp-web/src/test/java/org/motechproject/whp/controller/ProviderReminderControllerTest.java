@@ -3,6 +3,7 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
 import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
 
@@ -20,14 +21,17 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 
 public class ProviderReminderControllerTest {
 
-    private ProviderReminderController providerReminderController;
     @Mock
     private ProviderReminderScheduler providerReminderScheduler;
+    @Mock
+    private EventContext eventContext;
+
+    private ProviderReminderController providerReminderController;
 
     @Before
     public void setUp() {
         initMocks(this);
-        providerReminderController = new ProviderReminderController(providerReminderScheduler);
+        providerReminderController = new ProviderReminderController(eventContext, providerReminderScheduler);
     }
 
     @Test
@@ -42,6 +46,16 @@ public class ProviderReminderControllerTest {
                 .andExpect(model().attribute("providerReminderConfiguration", providerReminderConfiguration))
                 .andExpect(view().name("reminders/providerReminder"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldRemindProvidersOnAdherenceWindowCommenced() throws Exception {
+        standaloneSetup(providerReminderController)
+                .build()
+                .perform(get("/providerreminder/remind").param("type", ADHERENCE_WINDOW_COMMENCED.name()))
+                .andExpect(content().string("Triggered reminder"))
+                .andExpect(status().isOk());
+        verify(eventContext).send(ADHERENCE_WINDOW_COMMENCED.getEventSubject());
     }
 
     @Test

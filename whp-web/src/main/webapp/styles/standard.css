@@ -1221,3 +1221,7 @@ pre {
     top: -17px;
     z-index: 5;
 }
+
+.text-value {
+    padding-top: 7px;
+}

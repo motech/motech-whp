@@ -1,21 +1,43 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-menu.ftl" as layout>
 <@layout.defaultLayout title="Provider Reminder Configuration" entity="itadmin">
+    <div class="modal hide" id="confirm">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+            <h3>Confirm Reminder</h3>
+        </div>
+        <div class="modal-body">
+            Reminders are already scheduled. This will send reminders immediately. Do you still want to continue?
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary"  data-dismiss="modal" id="confirmReminder">OK</button>
+            <button class="btn" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
     <div class="row well form-container offset1-fixed" style="position:relative">
-    <#if message?exists>
-        <div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Successfully updated</div>
-        <script type="text/javascript">
-            createAutoClosingAlert("#update-alert", 5000);
-        </script>
-    </#if>
-    <h1>Schedule Reminder<#if providerReminderConfiguration.scheduled == true><button type="submit" id="unScheduleButton" class="btn btn-primary pull-right"><i class="icon-trash icon-white"></i> Unschedule</button></#if></h1>
+    <div id="alert">
+        <#if message?exists>
+            <div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>Successfully updated</div>
+            <script type="text/javascript">
+                createAutoClosingAlert("#update-alert", 5000);
+            </script>
+        </#if>
+    </div>
+    <h1>
+        Schedule Reminder
+        <div class="pull-right controls">
+            <button type="button" id="manualTrigger" class="btn btn-danger" data-toggle="modal" href="#confirm"><i class="icon-play icon-white"></i> Remind now</button>
+            <#if providerReminderConfiguration.scheduled == true><button type="submit" id="unScheduleButton" class="btn btn-primary"><i class="icon-trash icon-white"></i> Unschedule</button></#if>
+        </div>
+    </h1>
         <form id="provider-reminder-form"  autocomplete="off" action="<@spring.url '/providerreminder/update'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
             <div class="form-element">
                 <div class="control-group">
                     <label class="control-label">Reminder Type</label>
                     <div class="controls">
                         <@spring.bind "providerReminderConfiguration.reminderType" />
-                        <input type="text" id="${spring.status.expression}" name="${spring.status.expression}" value="${spring.status.value?default("")}" readonly=""/>
+                        <input type="hidden" id="${spring.status.expression}" name="${spring.status.expression}" value="${spring.status.value?default("")}" readonly=""/>
+                        <div class="span8 text-value"><strong>${spring.status.value?default("")?replace("_"," ")}</strong></div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -71,8 +93,15 @@
         <script type="text/javascript">
         $('#unScheduleButton').click(function(){
            var action =  $('#provider-reminder-form').attr('action');
-            $('#provider-reminder-form').attr('action',action+"/unschedule");
-            $('#provider-reminder-form').submit();
+           $('#provider-reminder-form').attr('action',action+"/unschedule");
+           $('#provider-reminder-form').submit();
+        })
+        <@spring.bind "providerReminderConfiguration.reminderType" />
+        $('#confirmReminder').click(function(){
+           $.get('/whp/providerreminder/remind?type=${spring.status.value}', function(data){
+                $("#alert").html('<div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>' + data + '</div>');
+                createAutoClosingAlert("#update-alert", 5000);
+           });
         })
         </script>
 
