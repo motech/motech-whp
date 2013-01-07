@@ -16,7 +16,10 @@
                 <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data</a>
             </li>
             <li>
-                <a href="${whpReportsURL}/reports/containerTrackingReport/containerSummary.xls">All container tracking data</a>
+                <a href="${whpReportsURL}/reports/containerTrackingReport/containerSummary.xls">Container tracking data</a>
+            </li>
+            <li>
+                <a href="${whpReportsURL}/reports/providerReminderCallLogs/summary.xls">Provider reminder call logs</a>
             </li>
         </ul>
     </li>
