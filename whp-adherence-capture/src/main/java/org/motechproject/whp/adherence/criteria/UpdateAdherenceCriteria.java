@@ -34,6 +34,6 @@ public class UpdateAdherenceCriteria {
     }
 
     public static boolean isWithinCurrentAdherenceWindow(LocalDate date) {
-        return TreatmentWeekInstance.currentAdherenceCaptureWeek().equals(new TreatmentWeek(date));
+        return TreatmentWeekInstance.currentAdherenceCaptureWeek().equals(new TreatmentWeek(date)) && isWindowOpen(date);
     }
 }

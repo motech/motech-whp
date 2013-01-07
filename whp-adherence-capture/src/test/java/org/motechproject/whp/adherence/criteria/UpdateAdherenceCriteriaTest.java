@@ -69,7 +69,14 @@ public class UpdateAdherenceCriteriaTest extends BaseUnitTest {
 
     @Test
     public void shouldReturnIfDateIsPartOfCurrentAdherenceCaptureWindow() {
-        assertTrue(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today().minusDays(7)));
         assertFalse(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today()));
+
+        LocalDate dateWithinAdherenceWindow = new LocalDate(2013, 1, 1);
+        mockCurrentDate(dateWithinAdherenceWindow);
+        assertTrue(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today().minusDays(7)));
+
+        LocalDate dateOutsideAdherenceWindow = new LocalDate(2013, 1, 4);
+        mockCurrentDate(dateOutsideAdherenceWindow);
+        assertFalse(UpdateAdherenceCriteria.isWithinCurrentAdherenceWindow(today().minusDays(7)));
     }
 }
