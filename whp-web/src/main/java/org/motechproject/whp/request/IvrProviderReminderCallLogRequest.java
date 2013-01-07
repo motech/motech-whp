@@ -59,12 +59,12 @@ public class IvrProviderReminderCallLogRequest {
         return disconnectionType;
     }
 
-    @XmlElement(name = "start_time")
+    @XmlElement(name = "start_time", nillable = true)
     public String getStartTime() {
         return startTime;
     }
 
-    @XmlElement(name = "end_time")
+    @XmlElement(name = "end_time", nillable = true)
     public String getEndTime() {
         return endTime;
     }

@@ -14,7 +14,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/providerreminder")
-public class ProviderReminderCallLogController {
+public class ProviderReminderCallLogController extends BaseWebController {
 
     private ReportingPublisherService reportingPublisherService;
     private ProviderService providerService;
