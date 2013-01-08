@@ -23,12 +23,13 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 
 public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
 
@@ -92,8 +93,15 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
     public void shouldGenerateErrorResponseAndReportFlashingForNonAdherenceDay() {
         AdherenceFlashingRequest adherenceFlashingRequest = createFlashingRequest(msisdn, flashingCallId, callTime);
 
+        List<String> patientIdsWithAdherence = asList("patient1", "patient2");
+        List<Patient> patientsWithoutAdherence = asList(new PatientBuilder().withDefaults().withPatientId("patient3").build());
+
+        AdherenceSummary summary = new AdherenceSummary(providerId, patientIdsWithAdherence, patientsWithoutAdherence);
+
+        when(adherenceService.adherenceSummary(providerId, today())).thenReturn(summary);
+
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
-        AdherenceFlashingResponse expectedResponse = failureResponse(NON_ADHERENCE_DAY.name());
+        AdherenceFlashingResponse expectedResponse = failureResponse(summary, NON_ADHERENCE_DAY.name());
 
         AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 

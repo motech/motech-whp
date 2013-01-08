@@ -21,4 +21,12 @@ public class FlashingRequestErrors extends AdherenceErrors {
             return null;
         }
     }
+
+    public boolean isInValidMSISDN() {
+        return AdherenceIVRError.INVALID_MOBILE_NUMBER.equals(error());
+    }
+
+    public boolean isInValidAdherenceDay() {
+        return AdherenceIVRError.NON_ADHERENCE_DAY.equals(error());
+    }
 }

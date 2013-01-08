@@ -8,13 +8,10 @@ import org.motechproject.whp.patient.domain.Patient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
-import static org.apache.commons.collections.CollectionUtils.intersection;
-import static org.apache.commons.collections.CollectionUtils.subtract;
 
 @XmlRootElement(name = "adherence_capture_flashing_response")
 @EqualsAndHashCode
@@ -22,23 +19,17 @@ public class AdherenceFlashingResponse implements Serializable {
 
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
+
     @XmlElement(name = "error_code")
     private String errorCode;
-    private List<String> patientsWithAdherence = new ArrayList<>();
-    private List<String> patientsForProvider = new ArrayList<>();
+
     private AdherenceStatus adherenceStatus;
 
     public AdherenceFlashingResponse() {
     }
 
     public AdherenceFlashingResponse(String providerId, List<String> patientsWithAdherence, List<String> patientsForProvider) {
-        if (null != patientsWithAdherence) {
-            this.patientsWithAdherence = patientsWithAdherence;
-        }
-        if (null != patientsForProvider) {
-            this.patientsForProvider = patientsForProvider;
-        }
-        adherenceStatus = new AdherenceStatus(providerId, getPatientRemainingCount(), getPatientGivenCount(), patientsRemaining());
+        adherenceStatus = new AdherenceStatus(providerId, patientsForProvider, patientsWithAdherence);
     }
 
     @XmlElement(name = "adherence_status")
@@ -47,25 +38,32 @@ public class AdherenceFlashingResponse implements Serializable {
     }
 
     public Integer getPatientRemainingCount() {
-        return patientsRemaining().size();
+        return adherenceStatus.getPatientRemainingCount();
     }
 
     public Integer getPatientGivenCount() {
-        return intersection(patientsForProvider, patientsWithAdherence).size();
-    }
-
-    private List<String> patientsRemaining() {
-        return new ArrayList<String>(subtract(patientsForProvider, patientsWithAdherence));
+        return adherenceStatus.getPatientGivenCount();
     }
 
     public static AdherenceFlashingResponse failureResponse(String errorCode) {
-        AdherenceFlashingResponse response = new AdherenceFlashingResponse();
+        return failureResponse(errorCode, new AdherenceFlashingResponse());
+    }
+
+    public static AdherenceFlashingResponse failureResponse(AdherenceSummary summary, String errorCode) {
+        return failureResponse(errorCode, buildResponse(summary));
+    }
+
+    public static AdherenceFlashingResponse successResponse(AdherenceSummary summary) {
+        return buildResponse(summary);
+    }
+
+    public static AdherenceFlashingResponse failureResponse(String errorCode, AdherenceFlashingResponse response) {
         response.errorCode = errorCode;
         response.result = WebServiceResponse.failure;
         return response;
     }
 
-    public static AdherenceFlashingResponse successResponse(AdherenceSummary summary) {
+    private static AdherenceFlashingResponse buildResponse(AdherenceSummary summary) {
         List<String> patientsForProvider = extract(summary.getPatientsUnderProvider(), on(Patient.class).getPatientId());
         return new AdherenceFlashingResponse(summary.getProviderId(), summary.getPatientsWithAdherence(), patientsForProvider);
     }

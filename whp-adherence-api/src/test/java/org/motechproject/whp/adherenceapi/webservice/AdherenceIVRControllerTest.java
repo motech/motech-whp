@@ -19,9 +19,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.*;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -117,7 +115,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     public void shouldRespondWithAdherenceSubmissionInformation() throws Exception {
         String providerId = "raj";
         AdherenceFlashingResponse adherenceFlashingResponse = new AdherenceFlashingResponse(
-                providerId, asList("pat0"), asList("pat1", "pat2")
+                providerId, asList("pat0"), asList("pat0", "pat1", "pat2")
         );
         AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn("0986754322");
@@ -132,7 +130,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                         "               <adherence_status>" +
                         "                   <provider_id>raj</provider_id>" +
                         "                   <patient_remaining_count>2</patient_remaining_count>" +
-                        "                   <patient_given_count>0</patient_given_count>" +
+                        "                   <patient_given_count>1</patient_given_count>" +
                         "                   <patients_remaining>" +
                         "                       <patient>" +
                         "                           <id>pat1</id>" +
@@ -173,13 +171,29 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithErrorOnAnInvalidAdherenceDay() throws Exception {
-        when(adherenceSummaryOverIVR.value(any(AdherenceFlashingRequest.class), any(ProviderId.class)))
-                .thenReturn(failureResponse(NON_ADHERENCE_DAY.name()));
+        when(adherenceSummaryOverIVR
+                .value(any(AdherenceFlashingRequest.class), any(ProviderId.class))
+        ).thenReturn(
+                failureResponse(NON_ADHERENCE_DAY.name(), new AdherenceFlashingResponse("raj", asList("pat0"), asList("pat0", "pat1", "pat2")))
+        );
 
         String expectedXml =
                 "            <adherence_capture_flashing_response>" +
                         "      <result>failure</result>" +
                         "      <error_code>NON_ADHERENCE_DAY</error_code>" +
+                        "           <adherence_status>" +
+                        "                   <provider_id>raj</provider_id>" +
+                        "                   <patient_remaining_count>2</patient_remaining_count>" +
+                        "                   <patient_given_count>1</patient_given_count>" +
+                        "                   <patients_remaining>" +
+                        "                       <patient>" +
+                        "                           <id>pat1</id>" +
+                        "                       </patient>" +
+                        "                       <patient>" +
+                        "                           <id>pat2</id>" +
+                        "                       </patient>" +
+                        "                   </patients_remaining>" +
+                        "                </adherence_status>" +
                         "    </adherence_capture_flashing_response>";
 
         standaloneSetup(adherenceIVRController)

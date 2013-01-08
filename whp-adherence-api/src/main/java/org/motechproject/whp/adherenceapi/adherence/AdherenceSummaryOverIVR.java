@@ -42,7 +42,7 @@ public class AdherenceSummaryOverIVR {
     private AdherenceFlashingResponse flashingResponse(ProviderId providerId, LocalDate requestedDate) {
         FlashingRequestErrors errors = new FlashingRequestErrors(!providerId.isEmpty(), isAdherenceDay(requestedDate));
         if (errors.isNotEmpty()) {
-            return failureResponse(errors.errorMessage());
+            return (errors.isInValidAdherenceDay()) ? failureResponse(adherenceSummary(providerId, requestedDate), errors.errorMessage()) : failureResponse(errors.errorMessage());
         } else {
             return successResponse(adherenceSummary(providerId, requestedDate));
         }
