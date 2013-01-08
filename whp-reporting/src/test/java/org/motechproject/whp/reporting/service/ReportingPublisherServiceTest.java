@@ -8,7 +8,9 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
@@ -37,7 +39,7 @@ public class ReportingPublisherServiceTest {
         adherenceCaptureRequest.setProviderId(providerId);
 
         reportingPublisher.reportAdherenceCapture(adherenceCaptureRequest);
-        verify(httpClientService).post(reportingEventURLs.getAdherenceCallLogURL(), adherenceCaptureRequest);
+        verify(httpClientService).post(reportingEventURLs.getAdherencePath(), adherenceCaptureRequest);
     }
 
     @Test
@@ -55,79 +57,114 @@ public class ReportingPublisherServiceTest {
     }
 
     @Test
+    public void shouldPublishCallStatus() throws Exception {
+        String url = "url";
+        when(reportingEventURLs.getCallStatusURL()).thenReturn(url);
+        AdherenceCallStatusRequest callStatusRequest = mock(AdherenceCallStatusRequest.class);
+
+        reportingPublisher.reportCallStatus(callStatusRequest);
+
+        verify(httpClientService).post(url, callStatusRequest);
+    }
+
+    @Test
     public void shouldPublishFlashingLog() throws Exception {
+        String url = "url";
+        when(reportingEventURLs.getFlashingLogURL()).thenReturn(url);
         String providerId = "123456";
         FlashingLogRequest flashingLog = new FlashingLogRequest();
         flashingLog.setProviderId(providerId);
         reportingPublisher.reportFlashingRequest(flashingLog);
 
-        verify(httpClientService).post(reportingEventURLs.getFlashingLogURL(), flashingLog);
+        verify(httpClientService).post(url, flashingLog);
     }
 
     @Test
     public void shouldPublishContainerRegistrationLog() throws Exception {
+        String url = "url";
+        when(reportingEventURLs.getContainerRegistrationLogURL()).thenReturn(url);
 
         ContainerRegistrationReportingRequest sputumTrackingRequest = new ContainerRegistrationReportingRequest();
 
         reportingPublisher.reportContainerRegistration(sputumTrackingRequest);
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), sputumTrackingRequest);
+        verify(httpClientService).post(url, sputumTrackingRequest);
     }
 
     @Test
     public void shouldPublishSputumLabResultsCaptureLog() throws Exception {
+        String url = "url";
+        when(reportingEventURLs.getSputumLabResultsCaptureLogURL()).thenReturn(url);
 
         SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest = new SputumLabResultsCaptureReportingRequest();
 
         reportingPublisher.reportLabResultsCapture(labResultsCaptureReportingRequest);
-        verify(httpClientService).post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), labResultsCaptureReportingRequest);
+        verify(httpClientService).post(url, labResultsCaptureReportingRequest);
 
     }
 
     @Test
     public void shouldPublishContainerStatusUpdateLog() {
+        String url = "url";
+        when(reportingEventURLs.getContainerStatusUpdateLogURL()).thenReturn(url);
+
         ContainerStatusReportingRequest containerStatusReportingRequest = new ContainerStatusReportingRequest();
 
         reportingPublisher.reportContainerStatusUpdate(containerStatusReportingRequest);
-        verify(httpClientService).post(reportingEventURLs.getContainerStatusUpdateLogURL(), containerStatusReportingRequest);
+        verify(httpClientService).post(url, containerStatusReportingRequest);
     }
 
     @Test
     public void shouldPublishContainerPatientMappingLog() {
+        String url = "url";
+        when(reportingEventURLs.getContainerPatientMappingLogURL()).thenReturn(url);
+
         ContainerPatientMappingReportingRequest containerPatientMappingReportingRequest = new ContainerPatientMappingReportingRequest();
 
         reportingPublisher.reportContainerPatientMapping(containerPatientMappingReportingRequest);
-        verify(httpClientService).post(reportingEventURLs.getContainerPatientMappingLogURL(), containerPatientMappingReportingRequest);
+        verify(httpClientService).post(url, containerPatientMappingReportingRequest);
     }
 
     @Test
     public void shouldReportContainerRegistrationCallDetailsLogRequest() {
+        String url = "url";
+        when(reportingEventURLs.getContainerRegistrationCallDetailsLogURL()).thenReturn(url);
+
         ContainerRegistrationCallDetailsLogRequest request = new ContainerRegistrationCallDetailsLogRequest();
 
         reportingPublisher.reportContainerRegistrationCallDetailsLog(request);
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), request);
+        verify(httpClientService).post(url, request);
     }
 
     @Test
     public void shouldReportProviderVerificationLogRequest() {
+        String url = "url";
+        when(reportingEventURLs.getProviderVerificationLogURL()).thenReturn(url);
+
         ProviderVerificationLogRequest request = new ProviderVerificationLogRequest();
 
         reportingPublisher.reportProviderVerificationDetailsLog(request);
-        verify(httpClientService).post(reportingEventURLs.getProviderVerificationLogURL(), request);
+        verify(httpClientService).post(url, request);
     }
 
     @Test
     public void shouldReportContainerVerificationLogRequest() {
+        String url = "url";
+        when(reportingEventURLs.getContainerVerificationLogURL()).thenReturn(url);
+
         ContainerVerificationLogRequest request = new ContainerVerificationLogRequest();
 
         reportingPublisher.reportContainerVerificationDetailsLog(request);
-        verify(httpClientService).post(reportingEventURLs.getContainerVerificationLogURL(), request);
+        verify(httpClientService).post(url, request);
     }
 
     @Test
     public void shouldReportAdherenceSubmissionRequest() {
+        String url = "url";
+        when(reportingEventURLs.getAdherenceSubmissionURL()).thenReturn(url);
+
         AdherenceSubmissionRequest request = new AdherenceSubmissionRequest();
 
         reportingPublisher.reportAdherenceSubmission(request);
-        verify(httpClientService).post(reportingEventURLs.getAdherenceSubmissionURL(), request);
+        verify(httpClientService).post(url, request);
     }
 }

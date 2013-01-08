@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ReportingEventURLs {
 
     private String whpReportsURL;
-    private String adherenceCallLogPath;
+    private String adherencePath;
     private String callLogURL;
     private String flashingLogURL;
     private String containerRegistrationURL;
@@ -20,13 +20,18 @@ public class ReportingEventURLs {
     private String containerVerificationLogURL;
     private String providerReminderCallLogURL;
     private String adherenceSubmissionURL;
+    private String callStatusURL;
 
-    public String getAdherenceCallLogURL() {
-        return whpReportsURL + adherenceCallLogPath;
+    public String getAdherencePath() {
+        return whpReportsURL + adherencePath;
     }
 
     public String getCallLogURL() {
         return whpReportsURL + callLogURL;
+    }
+
+    public String getCallStatusURL() {
+        return whpReportsURL + callStatusURL;
     }
 
     public String getFlashingLogURL() {
@@ -66,12 +71,12 @@ public class ReportingEventURLs {
     }
 
     public String getAdherenceSubmissionURL() {
-        return  whpReportsURL + adherenceSubmissionURL;
+        return whpReportsURL + adherenceSubmissionURL;
     }
 
-    @Value("${whp.reports.adherenceCallLog}")
-    public void setAdherenceCallLogPath(String adherenceCallLogPath) {
-        this.adherenceCallLogPath = adherenceCallLogPath;
+    @Value("${whp.reports.adherence}")
+    public void setAdherencePath(String adherencePath) {
+        this.adherencePath = adherencePath;
     }
 
     @Value("${whp.reports.url}")
@@ -82,6 +87,11 @@ public class ReportingEventURLs {
     @Value("${whp.reports.callLog}")
     public void setCallLogURL(String callLogURL) {
         this.callLogURL = callLogURL;
+    }
+
+    @Value("${whp.reports.adherenceCallStatus}")
+    public void setCallStatusURL(String callStatusURL) {
+        this.callStatusURL = callStatusURL;
     }
 
     @Value("${whp.reports.flashingLog}")

@@ -48,7 +48,7 @@ public class AdherenceCallStatusOverIVRTest {
         when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(success());
 
         assertEquals(success(), adherenceCallStatusOverIVR.recordCallStatus(adherenceCallStatusRequest));
-        verify(reportingService).reportCallLog(new AdherenceCallStatusReportRequest(adherenceCallStatusRequest).callLogRequest());
+        verify(reportingService).reportCallStatus(new AdherenceCallStatusReportRequest(adherenceCallStatusRequest).callStatusRequest());
     }
 
     @Test

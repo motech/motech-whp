@@ -62,7 +62,7 @@ public class AdherenceIVRController {
     @ResponseBody
     public AdherenceValidationResponse adherenceConfirmation(@RequestBody @Valid AdherenceConfirmationRequest request) {
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(request, providerId(request.getProviderId()));
-        if(response.failed())
+        if (response.failed())
             return response;
         return null;
     }
@@ -71,16 +71,16 @@ public class AdherenceIVRController {
     @ResponseBody
     public AdherenceValidationResponse adherenceNotCaptured(@RequestBody @Valid AdherenceNotCapturedRequest request) {
         AdherenceValidationResponse response = adherenceNotCapturedOverIVR.recordNotCaptured(request, providerId(request.getProviderId()));
-        if(response.failed())
+        if (response.failed())
             return response;
         return null;
     }
 
     @RequestMapping(value = "/callstatus")
     @ResponseBody
-    public AdherenceValidationResponse adherenceCallStatus(@RequestBody @Valid AdherenceCallStatusRequest request) {
+    public AdherenceValidationResponse adherenceCallStatus(@RequestBody AdherenceCallStatusRequest request) {
         AdherenceValidationResponse response = adherenceCallStatusOverIVR.recordCallStatus(request);
-        if(response.failed())
+        if (response.failed())
             return response;
         return null;
     }

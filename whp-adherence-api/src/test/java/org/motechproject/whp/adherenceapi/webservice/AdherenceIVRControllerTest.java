@@ -19,7 +19,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.*;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -342,26 +343,5 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                 .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
-    }
-
-    @Test
-    public void shouldRespondWithErrorInCaseOfValidationFailureForCallStatusRequest() throws Exception {
-        String expectedXml =
-                "            <adherence_validation_response>" +
-                        "      <result>failure</result>" +
-                        "      <error>" +
-                        "       <error_code>INVALID_PROVIDER</error_code>" +
-                        "      </error>" +
-                        "    </adherence_validation_response>";
-
-        when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
-                .thenReturn(AdherenceValidationResponse.failure(INVALID_PROVIDER.name()));
-
-        standaloneSetup(adherenceIVRController)
-                .build()
-                .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
-                .andExpect(status().isOk())
-                .andExpect(content().type(MediaType.APPLICATION_XML))
-                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
 }

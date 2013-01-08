@@ -22,7 +22,7 @@ public class ReportingPublisherService {
 
     public void reportAdherenceCapture(AdherenceCaptureRequest adherenceCaptureRequest) {
         logger.info("Posting adherence capture request to the queue");
-        httpClientService.post(reportingEventURLs.getAdherenceCallLogURL(), adherenceCaptureRequest);
+        httpClientService.post(reportingEventURLs.getAdherencePath(), adherenceCaptureRequest);
     }
 
     public void reportCallLog(AdherenceCallLogRequest callLogRequest) {
@@ -67,5 +67,9 @@ public class ReportingPublisherService {
 
     public void reportAdherenceSubmission(AdherenceSubmissionRequest request) {
         httpClientService.post(reportingEventURLs.getAdherenceSubmissionURL(), request);
+    }
+
+    public void reportCallStatus(AdherenceCallStatusRequest request) {
+        httpClientService.post(reportingEventURLs.getCallStatusURL(), request);
     }
 }

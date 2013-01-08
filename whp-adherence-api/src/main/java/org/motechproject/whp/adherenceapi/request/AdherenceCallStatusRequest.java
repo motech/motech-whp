@@ -15,30 +15,17 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class AdherenceCallStatusRequest implements Serializable {
 
-    @NotBlank
     private String providerId;
-    @NotBlank
     private String callAnswered;
-    @NotBlank
     private String callId;
-    @NotBlank
     private String flashingCallId;
-    @DateTimeFormat(allowBlank = true)
     private String attemptTime;
-    @DateTimeFormat(allowBlank = true)
     private String startTime;
-    @DateTimeFormat(allowBlank = true)
     private String endTime;
     private String callStatus;
     private String disconnectionType;
-    @NotBlank
-    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String patientCount;
-    @NotBlank
-    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String adherenceCapturedCount;
-    @NotBlank
-    @Digits(message = "should be a number", integer = 10, fraction = 0)
     private String adherenceNotCapturedCount;
 
     public AdherenceCallStatusRequest() {

@@ -23,7 +23,7 @@ public class AdherenceCallStatusOverIVR {
     public AdherenceValidationResponse recordCallStatus(AdherenceCallStatusRequest request) {
         AdherenceValidationResponse response = adherenceCallStatusRequestValidator.validate(request);
         if(!response.failed()) {
-            reportingService.reportCallLog(new AdherenceCallStatusReportRequest(request).callLogRequest());
+            reportingService.reportCallStatus(new AdherenceCallStatusReportRequest(request).callStatusRequest());
         }
         return response;
     }

@@ -19,12 +19,17 @@ public class ReportingEventURLsIT {
 
     @Test
     public void shouldGetAdherenceCaptureURL() {
-        assertThat(reportingEventURLs.getAdherenceCallLogURL(), is("http://127.0.0.1:9999/whp-reports/adherence/measure"));
+        assertThat(reportingEventURLs.getAdherencePath(), is("http://127.0.0.1:9999/whp-reports/adherence/measure"));
     }
 
     @Test
     public void shouldGetCallLogMeasureURL() {
         assertThat(reportingEventURLs.getCallLogURL(), is("http://127.0.0.1:9999/whp-reports/adherenceCallLog/measure"));
+    }
+
+    @Test
+    public void shouldGetCallStatusMeasureURL() {
+        assertThat(reportingEventURLs.getCallStatusURL(), is("http://127.0.0.1:9999/whp-reports/adherenceCallLog/status/measure"));
     }
 
     @Test
