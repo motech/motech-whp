@@ -75,7 +75,9 @@ public class AdherenceLogServiceIT extends SpringIntegrationTest {
     public void shouldSaveAdherenceLogs() {
         LocalDate now = LocalDate.now();
         AdherenceRecord datum1 = new AdherenceRecord("externalId1", "treatmentId1", now);
+        datum1.district("district1");
         AdherenceRecord datum2 = new AdherenceRecord("externalId1", "treatmentId2", now);
+        datum2.district("district2");
 
         AdherenceLogMapper mapper = new AdherenceLogMapper();
         adherenceLogService.addOrUpdateLogsByDoseDate(asList(datum1, datum2), "externalId1");

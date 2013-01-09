@@ -14,6 +14,7 @@ public class AdherenceRecordMapper {
         request.status(adherence.getPillStatus().getStatus());
         request.tbId(adherence.getTbId());
         request.providerId(adherence.getProviderId());
+        request.district(adherence.getDistrict());
         return request;
     }
 

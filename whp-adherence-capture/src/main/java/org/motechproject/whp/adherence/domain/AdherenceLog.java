@@ -10,8 +10,10 @@ import java.util.Map;
 
 @TypeDiscriminator("doc.type === 'AdherenceLog'")
 public class AdherenceLog extends MotechBaseDataObject {
+
     public static final String PROVIDER_ID = "PROVIDER_ID";
     public static final String TB_ID = "TB_ID";
+    public static final String DISTRICT = "DISTRICT";
 
     @JsonProperty
     private String externalId;
@@ -75,6 +77,15 @@ public class AdherenceLog extends MotechBaseDataObject {
 
     public String providerId() {
         return (String) meta.get(PROVIDER_ID);
+    }
+
+    public AdherenceLog district(String district) {
+        meta.put(DISTRICT, district);
+        return this;
+    }
+
+    public String district() {
+        return (String) meta.get(DISTRICT);
     }
 
     @Override

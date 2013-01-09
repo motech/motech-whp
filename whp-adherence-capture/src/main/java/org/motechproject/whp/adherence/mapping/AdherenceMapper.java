@@ -30,6 +30,7 @@ public class AdherenceMapper {
 
         adherence.setPillStatus(PillStatus.get(adherenceRecord.status()));
         adherence.setPillDay(dayOfWeekOfRecord(adherenceRecord.doseDate()));
+        adherence.setDistrict(adherenceRecord.district());
         return adherence;
     }
 

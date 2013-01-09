@@ -1,11 +1,10 @@
 package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.contract.AdherenceRecord;
-import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
@@ -13,6 +12,7 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
+import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -46,7 +46,7 @@ public class WHPAdherenceService {
         this.allAdherenceLogs = allAdherenceLogs;
     }
 
-    public void recordWeeklyAdherence( AdherenceList adherenceList, WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
+    public void recordWeeklyAdherence(AdherenceList adherenceList, WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
         adherenceLogService.saveOrUpdateAdherence(AdherenceRecordMapper.map(adherenceList));
         adherenceAuditService.auditWeeklyAdherence(patient, weeklyAdherenceSummary, auditParams);
     }
@@ -99,13 +99,15 @@ public class WHPAdherenceService {
             datum.setPillStatus(PillStatus.get(request.getPillStatus()));
             adherenceData.add(datum);
 
-            Treatment doseForTreatment = patient.getTreatment(request.getDoseDate());
-            if (doseForTreatment != null) {
-                datum.setTbId(doseForTreatment.getTbId());
-                datum.setProviderId(doseForTreatment.getProviderId());
+            Treatment treatment = patient.getTreatment(request.getDoseDate());
+            if (treatment != null) {
+                datum.setTbId(treatment.getTbId());
+                datum.setProviderId(treatment.getProviderId());
+                datum.setDistrict(treatment.getProviderDistrict());
             } else {
                 datum.setTbId(WHPConstants.UNKNOWN);
                 datum.setProviderId(WHPConstants.UNKNOWN);
+                datum.setDistrict(WHPConstants.UNKNOWN);
             }
         }
 

@@ -28,6 +28,7 @@ public class AdherenceLogService {
             adherenceLog.status(adherenceRecord.status());
             adherenceLog.tbId(adherenceRecord.tbId());
             adherenceLog.providerId(adherenceRecord.providerId());
+            adherenceLog.district(adherenceRecord.district());
             allAdherenceLogs.add(adherenceLog);
         }
     }

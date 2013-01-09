@@ -2,9 +2,9 @@ package org.motechproject.whp.adherence.mapping;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.PillStatus;
 
 import java.util.Arrays;
@@ -19,6 +19,7 @@ public class AdherenceMapperTest {
         AdherenceRecord adherenceData = new AdherenceRecord(null, null, today);
         adherenceData.tbId("tbId");
         adherenceData.providerId("providerId");
+        adherenceData.district("district");
         return adherenceData;
     }
 
@@ -27,6 +28,12 @@ public class AdherenceMapperTest {
         AdherenceRecord adherenceData = createAdherenceData();
         adherenceData.status(PillStatus.Taken.getStatus());
         assertTrue(new AdherenceMapper().map(Arrays.asList(adherenceData)).get(0).getPillStatus() == PillStatus.Taken);
+    }
+
+    @Test
+    public void shouldSetDistrict() {
+        AdherenceRecord adherenceData = createAdherenceData();
+        assertEquals("district", new AdherenceMapper().map(Arrays.asList(adherenceData)).get(0).getDistrict());
     }
 
     @Test

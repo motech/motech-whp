@@ -25,6 +25,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
@@ -49,6 +50,9 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
     CouchDbConnector dailyAdherenceDbConnector;
     @Autowired
     WHPAdherenceService adherenceService;
+
+    @Autowired
+    TreatmentService treatmentService;
 
     @Autowired
     PatientService patientService;
@@ -126,6 +130,11 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         patientService.createPatient(request);
         return allPatients.findByPatientId(request.getCase_id());
     }
+
+    protected void startTreatment(PatientRequest request) {
+        treatmentService.openTreatment(request);
+    }
+
 
     protected WeeklyAdherenceSummary recordAdherence() {
         Patient patient = allPatients.findByPatientId(PatientBuilder.PATIENT_ID);

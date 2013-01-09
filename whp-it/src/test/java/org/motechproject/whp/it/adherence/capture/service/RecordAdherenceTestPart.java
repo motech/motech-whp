@@ -31,12 +31,13 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
     String patientId;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         super.setup();
         patientId = "patientid";
         patient = new PatientBuilder().withDefaults().withPatientId(patientId).build();
 
     }
+
     @Test
     public void shouldRecordAdherenceForPatient() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
@@ -54,7 +55,6 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         List<Adherence> adherenceLogs = adherenceService.findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), treatmentWeek.startDate(), treatmentWeek.endDate());
 
         assertEquals(3, adherenceLogs.size());
-        // TODO : Write more asserts to check meta on saved adherence
     }
 
     @Test
@@ -82,7 +82,9 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
 
     @Test
     public void shouldSetLatestTbIdAndProviderIdOnAdherenceUpdate() {
-        createPatient(new PatientRequestBuilder().withDefaults().build());
+        PatientRequest request = new PatientRequestBuilder().withDefaults().build();
+        createPatient(request);
+        startTreatment(request);
 
         WeeklyAdherenceSummary weeklyAdherenceSummary = recordAdherence();
         assertValidAdherence(weeklyAdherenceSummary, PatientBuilder.TB_ID, PatientBuilder.PROVIDER_ID);
@@ -98,6 +100,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         Patient patient = allPatients.findByPatientId(PatientBuilder.PATIENT_ID);
         List<Adherence> adherenceList = adherenceService.findLogsInRange(PatientBuilder.PATIENT_ID, patient.currentTherapyId(), weeklyAdherenceSummary.getWeek().startDate(), weeklyAdherenceSummary.getWeek().endDate());
         assertTbAndProviderId(adherenceList.get(0), tbId, providerId);
+        assertEquals(patient.getCurrentTreatment().getProviderDistrict(), adherenceList.get(0).getDistrict());
     }
 
     @Test
@@ -166,7 +169,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         Adherence log3 = createLog(PatientBuilder.PATIENT_ID, new LocalDate(2012, 1, 5), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
         List<Adherence> adherences = asList(log1, log2, log3);
 
-        adherenceService.addOrUpdateLogsByDoseDate(adherences,patient, auditParams);
+        adherenceService.addOrUpdateLogsByDoseDate(adherences, patient, auditParams);
         int dosesTaken = adherenceService.countOfDosesTakenBetween(PatientBuilder.PATIENT_ID, THERAPY_DOC_ID, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 10));
         assertEquals(2, dosesTaken);
     }
@@ -210,7 +213,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         Adherence log2 = createLog(patientId, new LocalDate(2012, 2, 1), PillStatus.Taken, "tbid2", THERAPY_DOC_ID, "providerId1");
         Adherence log3 = createLog(patientId, new LocalDate(2012, 1, 1), PillStatus.Taken, "tbid1", THERAPY_DOC_ID, "providerId1");
         Adherence log4 = createLog(patientId, new LocalDate(2012, 1, 13), PillStatus.Taken, "tbid2", "diffTherapy", "providerId1");
-        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patient, new AuditParams("test",AdherenceSource.WEB,"test"));
+        adherenceService.addOrUpdateLogsByDoseDate(asList(log1, log2, log3, log4), patient, new AuditParams("test", AdherenceSource.WEB, "test"));
 
         AdherenceList adherenceSortedByDate = adherenceService.getAdherenceSortedByDate(patientId, THERAPY_DOC_ID);
 

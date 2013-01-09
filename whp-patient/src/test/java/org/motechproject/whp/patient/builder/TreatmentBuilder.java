@@ -76,7 +76,7 @@ public class TreatmentBuilder {
 
     public TreatmentBuilder withTbRegistrationNumber(String tbRegistrationNo) {
         treatment.setTbRegistrationNumber(tbRegistrationNo);
-        return  this;
+        return this;
     }
 
     public TreatmentBuilder withAddress(Address address) {
@@ -91,6 +91,11 @@ public class TreatmentBuilder {
 
     public TreatmentBuilder withSmearTestResults(SmearTestResults smearTestResults) {
         treatment.setSmearTestResults(smearTestResults);
+        return this;
+    }
+
+    public TreatmentBuilder withProviderDistrict(String district) {
+        treatment.setProviderDistrict(district);
         return this;
     }
 }

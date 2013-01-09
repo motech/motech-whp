@@ -38,6 +38,15 @@ public class AdherenceRecordMapperTest {
     }
 
     @Test
+    public void shouldSetProviderDistrictOnRequest() {
+        String district = "district";
+        Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
+        day.setDistrict(district);
+
+        assertEquals(district, AdherenceRecordMapper.map(day).district());
+    }
+
+    @Test
     public void shouldSetProviderIdOnRequest() {
         Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.NotTaken, TB_ID, PROVIDER_ID);
 
@@ -49,7 +58,7 @@ public class AdherenceRecordMapperTest {
         Adherence day = new Adherence(patient.getPatientId(), patient.currentTherapyId(), Monday, DateUtil.today(), PillStatus.Unknown, TB_ID, PROVIDER_ID);
 
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
-        assertNotNull(currentTreatment  .getTbId());
+        assertNotNull(currentTreatment.getTbId());
         assertEquals(currentTreatment.getTbId(), AdherenceRecordMapper.map(day).tbId());
     }
 

@@ -11,6 +11,7 @@ public class AdherenceRecord {
 
     public static final String PROVIDER_ID = "PROVIDER_ID";
     public static final String TB_ID = "TB_ID";
+    public static final String DISTRICT = "DISTRICT";
 
     @JsonProperty
     private String externalId;
@@ -81,6 +82,14 @@ public class AdherenceRecord {
 
     public String providerId() {
         return (String) meta.get(PROVIDER_ID);
+    }
+
+    public void district(String district) {
+        meta.put(DISTRICT, district);
+    }
+
+    public String district() {
+        return (String) meta.get(DISTRICT);
     }
 
     @Override

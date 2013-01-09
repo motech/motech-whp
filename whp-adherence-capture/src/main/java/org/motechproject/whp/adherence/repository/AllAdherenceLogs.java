@@ -37,6 +37,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         } else {
             existingLog.status(adherenceLog.status());
             existingLog.providerId(adherenceLog.providerId());
+            existingLog.district(adherenceLog.district());
             existingLog.tbId(adherenceLog.tbId());
             update(existingLog);
         }
@@ -213,10 +214,10 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         String providerId = null;
         for (ViewResult.Row row : rows) {
             String currentProviderId = row.getKeyAsNode().get(0).getTextValue();
-            if(currentProviderId.equals(providerId)){
-                patientCount ++;
+            if (currentProviderId.equals(providerId)) {
+                patientCount++;
             } else {
-                if(providerId != null){
+                if (providerId != null) {
                     providerPatientCounts.add(new ProviderPatientCount(providerId, patientCount));
                 }
                 providerId = currentProviderId;
@@ -224,7 +225,7 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
             }
         }
 
-        if(patientCount != 0){
+        if (patientCount != 0) {
             providerPatientCounts.add(new ProviderPatientCount(providerId, patientCount));
         }
         return providerPatientCounts;

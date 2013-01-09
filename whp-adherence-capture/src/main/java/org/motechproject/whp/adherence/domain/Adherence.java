@@ -25,6 +25,8 @@ public class Adherence {
 
     private String providerId;
 
+    private String district;
+
     public Adherence() {
     }
 

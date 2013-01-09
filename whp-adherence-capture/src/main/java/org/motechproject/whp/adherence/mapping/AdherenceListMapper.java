@@ -6,9 +6,9 @@ import org.motechproject.whp.adherence.domain.Adherence;
 import org.motechproject.whp.adherence.domain.AdherenceList;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
+import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.List;
@@ -25,9 +25,13 @@ public class AdherenceListMapper {
             Treatment treatment = patient.getTreatment(pillDate);
             PillStatus pillStatus = weeklyAdherenceSummary.pillStatusOn(pillDay, treatmentCategory);
             if (treatment == null) {
-                adherenceRecords.add(new Adherence(patient.getPatientId(), patient.currentTherapyId(), pillDay, pillDate, pillStatus, WHPConstants.UNKNOWN, WHPConstants.UNKNOWN));
+                Adherence adherence = new Adherence(patient.getPatientId(), patient.currentTherapyId(), pillDay, pillDate, pillStatus, WHPConstants.UNKNOWN, WHPConstants.UNKNOWN);
+                adherence.setDistrict(WHPConstants.UNKNOWN);
+                adherenceRecords.add(adherence);
             } else {
-                adherenceRecords.add(new Adherence(patient.getPatientId(), patient.currentTherapyId(), pillDay, pillDate, pillStatus, treatment.getTbId(), treatment.getProviderId()));
+                Adherence adherence = new Adherence(patient.getPatientId(), patient.currentTherapyId(), pillDay, pillDate, pillStatus, treatment.getTbId(), treatment.getProviderId());
+                adherence.setDistrict(treatment.getProviderDistrict());
+                adherenceRecords.add(adherence);
             }
         }
         return adherenceRecords;
