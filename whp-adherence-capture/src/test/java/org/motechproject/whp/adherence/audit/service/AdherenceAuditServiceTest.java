@@ -43,12 +43,12 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
         int pageNumber = 1;
 
         List<AdherenceAuditLog> expectedAuditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "providerId", "tbId", now, now, "cmfAdmin", 1, PillStatus.Taken, "WEB"));
-        when(allAdherenceAuditLogs.findLogsAsOf(now, pageNumber - 1, pageSize)).thenReturn(expectedAuditLogs);
+        when(allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize)).thenReturn(expectedAuditLogs);
 
         List<AdherenceAuditLog> auditLogs = adherenceAuditService.allAuditLogs(pageNumber);
 
         assertEquals(expectedAuditLogs, auditLogs);
-        verify(allAdherenceAuditLogs).findLogsAsOf(now, pageNumber - 1, pageSize);
+        verify(allAdherenceAuditLogs).findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize);
     }
 
 }
