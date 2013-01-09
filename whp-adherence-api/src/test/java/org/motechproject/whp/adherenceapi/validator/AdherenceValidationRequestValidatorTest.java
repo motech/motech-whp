@@ -8,14 +8,13 @@ import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.ValidationRequestErrors;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 public class AdherenceValidationRequestValidatorTest {
 
@@ -48,10 +47,11 @@ public class AdherenceValidationRequestValidatorTest {
         adherenceValidationRequest.setDoseTakenCount("2");
         adherenceValidationRequest.setTimeTaken("1000");
 
-        when(adherenceService.dosageForPatient(patientId)).thenReturn(new DosageBuilder(2).dosage());
+        Dosage dosage = new DosageBuilder(2).dosage();
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
         when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId)).thenReturn(new ValidationRequestErrors(true, true, true));
 
-        assertEquals(success(), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
+        assertEquals(new AdherenceValidationResponse(dosage).success(), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -63,11 +63,12 @@ public class AdherenceValidationRequestValidatorTest {
         adherenceValidationRequest.setDoseTakenCount("2");
         adherenceValidationRequest.setTimeTaken("1000");
 
-        when(adherenceService.dosageForPatient(patientId)).thenReturn(new DosageBuilder(2).dosage());
+        Dosage dosage = new DosageBuilder(2).dosage();
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
         ValidationRequestErrors errors = new ValidationRequestErrors(true, true, false);
         when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId)).thenReturn(errors);
 
-        assertEquals(failure(errors.errorMessage()), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
+        assertEquals(new AdherenceValidationResponse(dosage).failure(errors.errorMessage()), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
     }
 
     @Test
@@ -84,6 +85,6 @@ public class AdherenceValidationRequestValidatorTest {
         ValidationRequestErrors errors = new ValidationRequestErrors(true, true, true);
         when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId)).thenReturn(errors);
 
-        assertEquals(failure(dosage), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
+        assertEquals(new AdherenceValidationResponse(dosage).invalidAdherenceRange(), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
     }
 }

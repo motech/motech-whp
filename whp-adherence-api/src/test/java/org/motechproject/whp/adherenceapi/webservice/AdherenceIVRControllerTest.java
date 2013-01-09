@@ -9,7 +9,9 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherenceapi.adherence.*;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.*;
+import org.motechproject.whp.adherenceapi.response.AdherenceIVRError;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER;
 import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
@@ -208,7 +211,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithSuccessOnSuccessfulValidation() throws Exception {
         when(adherenceValidationOverIVR.handleValidationRequest(any(AdherenceValidationRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.success());
+                .thenReturn(new AdherenceValidationResponse().success());
 
         String expectedXML =
                 "        <adherence_validation_response>" +
@@ -226,7 +229,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithValidationFailure() throws Exception {
         when(adherenceValidationOverIVR.handleValidationRequest(any(AdherenceValidationRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.failure());
+                .thenReturn(new AdherenceValidationResponse().failure());
 
         String expectedXML =
                 "        <adherence_validation_response>" +
@@ -270,7 +273,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithSuccessOnSuccessfulConfirmation() throws Exception {
         when(adherenceConfirmationOverIVR.confirmAdherence(any(AdherenceConfirmationRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.success());
+                .thenReturn(new AdherenceValidationResponse().success());
 
         standaloneSetup(adherenceIVRController)
                 .build()
@@ -290,7 +293,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                         "    </adherence_validation_response>";
 
         when(adherenceConfirmationOverIVR.confirmAdherence(any(AdherenceConfirmationRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.failure(INVALID_MOBILE_NUMBER.name()));
+                .thenReturn(new AdherenceValidationResponse().failure(INVALID_MOBILE_NUMBER.name()));
 
         standaloneSetup(adherenceIVRController)
                 .build()
@@ -303,7 +306,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithSuccessOnSuccessfulNotCapturedRequest() throws Exception {
         when(adherenceNotCapturedOverIVR.recordNotCaptured(any(AdherenceNotCapturedRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.success());
+                .thenReturn(new AdherenceValidationResponse().success());
 
         standaloneSetup(adherenceIVRController)
                 .build()
@@ -323,7 +326,7 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
                         "    </adherence_validation_response>";
 
         when(adherenceNotCapturedOverIVR.recordNotCaptured(any(AdherenceNotCapturedRequest.class), any(ProviderId.class)))
-                .thenReturn(AdherenceValidationResponse.failure(INVALID_MOBILE_NUMBER.name()));
+                .thenReturn(new AdherenceValidationResponse().failure(INVALID_MOBILE_NUMBER.name()));
 
         standaloneSetup(adherenceIVRController)
                 .build()
@@ -336,12 +339,33 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithSuccessOnSuccessfulCallStatusRequest() throws Exception {
         when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
-                .thenReturn(AdherenceValidationResponse.success());
+                .thenReturn(AdherenceCallStatusValidationResponse.success());
 
         standaloneSetup(adherenceIVRController)
                 .build()
                 .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    public void shouldRespondWithErrorInCaseOfValidationFailureForCallStatusRequest() throws Exception {
+        String expectedXml =
+                "            <adherence_call_status_response>" +
+                        "      <result>failure</result>" +
+                        "      <error>" +
+                        "       <error_code>INVALID_PROVIDER</error_code>" +
+                        "      </error>" +
+                        "    </adherence_call_status_response>";
+
+        when(adherenceCallStatusOverIVR.recordCallStatus(any(AdherenceCallStatusRequest.class)))
+                .thenReturn(AdherenceCallStatusValidationResponse.failure(INVALID_PROVIDER.name()));
+
+        standaloneSetup(adherenceIVRController)
+                .build()
+                .perform(post(IVR_ADHERENCE_CALL_STATUS_PATH).body(CALL_STATUS_REQUEST_BODY.getBytes()).contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andExpect(content().type(MediaType.APPLICATION_XML))
+                .andExpect(content().xml(expectedXml.replaceAll(" ", "")));
     }
 }

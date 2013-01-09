@@ -6,18 +6,15 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceCallStatusReportRequest;
 import org.motechproject.whp.adherenceapi.request.AdherenceCallStatusRequest;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.motechproject.whp.adherenceapi.validator.AdherenceCallStatusRequestValidator;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCallLogRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 public class AdherenceCallStatusOverIVRTest {
 
@@ -45,9 +42,9 @@ public class AdherenceCallStatusOverIVRTest {
         adherenceCallStatusRequest.setAdherenceCapturedCount("3");
         adherenceCallStatusRequest.setAdherenceNotCapturedCount("1");
 
-        when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(success());
+        when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(AdherenceCallStatusValidationResponse.success());
 
-        assertEquals(success(), adherenceCallStatusOverIVR.recordCallStatus(adherenceCallStatusRequest));
+        assertEquals(AdherenceCallStatusValidationResponse.success(), adherenceCallStatusOverIVR.recordCallStatus(adherenceCallStatusRequest));
         verify(reportingService).reportCallStatus(new AdherenceCallStatusReportRequest(adherenceCallStatusRequest).callStatusRequest());
     }
 
@@ -55,9 +52,9 @@ public class AdherenceCallStatusOverIVRTest {
     public void shouldReturnFailureOnAdherenceCallStatusOperationForValidationFailures() {
         AdherenceCallStatusRequest adherenceCallStatusRequest = new AdherenceCallStatusRequest();
 
-        when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(failure());
+        when(adherenceCallStatusRequestValidator.validate(adherenceCallStatusRequest)).thenReturn(AdherenceCallStatusValidationResponse.failure("error"));
 
-        assertEquals(failure(), adherenceCallStatusOverIVR.recordCallStatus(adherenceCallStatusRequest));
+        assertEquals(AdherenceCallStatusValidationResponse.failure("error"), adherenceCallStatusOverIVR.recordCallStatus(adherenceCallStatusRequest));
         verify(reportingService, never()).reportCallLog(any(AdherenceCallLogRequest.class));
     }
 }

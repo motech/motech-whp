@@ -4,6 +4,7 @@ import org.motechproject.whp.adherenceapi.adherence.*;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.*;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.common.error.BindingResultXML;
 import org.motechproject.whp.user.service.ProviderService;
@@ -78,9 +79,9 @@ public class AdherenceIVRController {
 
     @RequestMapping(value = "/callstatus")
     @ResponseBody
-    public AdherenceValidationResponse adherenceCallStatus(@RequestBody AdherenceCallStatusRequest request) {
-        AdherenceValidationResponse response = adherenceCallStatusOverIVR.recordCallStatus(request);
-        if (response.failed())
+    public AdherenceCallStatusValidationResponse adherenceCallStatus(@RequestBody @Valid AdherenceCallStatusRequest request) {
+        AdherenceCallStatusValidationResponse response = adherenceCallStatusOverIVR.recordCallStatus(request);
+        if(response.failed())
             return response;
         return null;
     }

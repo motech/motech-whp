@@ -20,8 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 public class AdherenceValidationOverIVRTest {
 
@@ -54,7 +52,7 @@ public class AdherenceValidationOverIVRTest {
     public void shouldReturnFailureWhenAdherenceInputIsInvalid() {
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
 
-        AdherenceValidationResponse response = failure();
+        AdherenceValidationResponse response = new AdherenceValidationResponse().failure();
         when(adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId)).thenReturn(response);
 
         assertEquals(response, adherenceValidationOverIVR.validateAdherenceInput(adherenceValidationRequest, providerId));
@@ -64,7 +62,7 @@ public class AdherenceValidationOverIVRTest {
     public void shouldReturnSuccessWhenAdherenceInputIsValid() {
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
 
-        AdherenceValidationResponse response = success();
+        AdherenceValidationResponse response = new AdherenceValidationResponse().success();
         when(adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId)).thenReturn(response);
 
         assertEquals(response, adherenceValidationOverIVR.validateAdherenceInput(adherenceValidationRequest, providerId));
@@ -79,7 +77,7 @@ public class AdherenceValidationOverIVRTest {
         adherenceValidationRequest.setDoseTakenCount("2");
         adherenceValidationRequest.setTimeTaken("1000");
 
-        when(adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId)).thenReturn(success());
+        when(adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId)).thenReturn(new AdherenceValidationResponse().success());
 
         adherenceValidationOverIVR.handleValidationRequest(adherenceValidationRequest, providerId);
         verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(adherenceValidationRequest, providerId, true, AdherenceCaptureStatus.VALID).request());
@@ -90,7 +88,7 @@ public class AdherenceValidationOverIVRTest {
         AdherenceValidationRequest request = new AdherenceValidationRequest();
         request.setIvrFileLength("12");
 
-        when(adherenceValidationRequestValidator.validate(request, providerId)).thenReturn(failure());
+        when(adherenceValidationRequestValidator.validate(request, providerId)).thenReturn(new AdherenceValidationResponse().failure());
 
         adherenceValidationOverIVR.handleValidationRequest(request, providerId);
         verify(reportingService).reportAdherenceCapture(new AdherenceCaptureReportRequest(request, providerId, false, AdherenceCaptureStatus.INVALID).request());

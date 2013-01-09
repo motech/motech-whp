@@ -17,29 +17,39 @@ public class AdherenceValidationResponse implements Serializable {
     @XmlElement(name = "result")
     private WebServiceResponse result = WebServiceResponse.success;
 
+    @XmlElement(name = "valid_adherence_range")
+    private ValidAdherenceRange validAdherenceRange;
+
     @XmlElement(name = "error")
-    private AdherenceValidationError error;
+    private AdherenceResponseError error;
 
-    public static AdherenceValidationResponse success() {
-        return new AdherenceValidationResponse();
+    public AdherenceValidationResponse(Dosage dosage) {
+        this.validAdherenceRange = new ValidAdherenceRange(dosage.getTreatmentProvider().name(), dosage.getValidRangeFrom(), dosage.getValidRangeTo());
     }
 
-    public static AdherenceValidationResponse failure() {
-        AdherenceValidationResponse response = new AdherenceValidationResponse();
-        response.result = WebServiceResponse.failure;
-        return response;
+    public AdherenceValidationResponse() {
+
     }
 
-    public static AdherenceValidationResponse failure(Dosage dosage) {
-        AdherenceValidationResponse response = failure();
-        response.error = new ValidRangeError(INVALID_ADHERENCE.name(), dosage);
-        return response;
+    public AdherenceValidationResponse success() {
+        return this;
     }
 
-    public static AdherenceValidationResponse failure(String errorCode) {
-        AdherenceValidationResponse response = failure();
-        response.error = new AdherenceValidationError(errorCode);
-        return response;
+    public AdherenceValidationResponse failure() {
+        result = WebServiceResponse.failure;
+        return this;
+    }
+
+    public AdherenceValidationResponse invalidAdherenceRange() {
+        failure();
+        error = new AdherenceResponseError(INVALID_ADHERENCE.name());
+        return this;
+    }
+
+    public AdherenceValidationResponse failure(String errorCode) {
+        failure();
+        error = new AdherenceResponseError(errorCode);
+        return this;
     }
 
     public boolean failed() {

@@ -49,7 +49,7 @@ public class AdherenceConfirmationOverIVRTest {
         AdherenceValidationRequest validationRequest = new AdherenceValidationRequest();
         validationRequest.setCallId(callId);
 
-        AdherenceValidationResponse validationResponse = AdherenceValidationResponse.failure();
+        AdherenceValidationResponse validationResponse = new AdherenceValidationResponse().failure();
         when(adherenceValidationRequestValidator.validate(validationRequest, providerId)).thenReturn(validationResponse);
 
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(confirmationRequest, providerId);
@@ -76,7 +76,7 @@ public class AdherenceConfirmationOverIVRTest {
         validationRequest.setIvrFileLength(ivrFileLength);
         validationRequest.setDoseTakenCount(doseTakenCount);
 
-        AdherenceValidationResponse validationResponse = AdherenceValidationResponse.success();
+        AdherenceValidationResponse validationResponse = new AdherenceValidationResponse().success();
         when(adherenceValidationRequestValidator.validate(validationRequest, providerId)).thenReturn(validationResponse);
 
         AdherenceValidationResponse response = adherenceConfirmationOverIVR.confirmAdherence(confirmationRequest, providerId);

@@ -6,13 +6,12 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.ValidationRequestErrors;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 public class AdherenceNotCapturedRequestValidatorTest {
 
@@ -44,7 +43,7 @@ public class AdherenceNotCapturedRequestValidatorTest {
         ProviderId providerID = new ProviderId();
         when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerID)).thenReturn(new ValidationRequestErrors(true, true, true));
 
-        assertEquals(success(), adherenceNotCapturedRequestValidator.validate(adherenceValidationRequest, providerID));
+        assertEquals(new AdherenceValidationResponse().success(), adherenceNotCapturedRequestValidator.validate(adherenceValidationRequest, providerID));
     }
 
     @Test
@@ -58,6 +57,6 @@ public class AdherenceNotCapturedRequestValidatorTest {
         ProviderId providerID = new ProviderId();
         when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerID)).thenReturn(new ValidationRequestErrors(true, true, false));
 
-        assertEquals(failure("INVALID_PATIENT_PROVIDER_COMBINATION"), adherenceNotCapturedRequestValidator.validate(adherenceValidationRequest, providerID));
+        assertEquals(new AdherenceValidationResponse().failure("INVALID_PATIENT_PROVIDER_COMBINATION"), adherenceNotCapturedRequestValidator.validate(adherenceValidationRequest, providerID));
     }
 }

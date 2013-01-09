@@ -2,12 +2,9 @@ package org.motechproject.whp.adherenceapi.validator;
 
 import org.motechproject.whp.adherenceapi.errors.AdherenceErrors;
 import org.motechproject.whp.adherenceapi.request.AdherenceCallStatusRequest;
-import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
 
 @Component
 public class AdherenceCallStatusRequestValidator {
@@ -19,10 +16,10 @@ public class AdherenceCallStatusRequestValidator {
         this.adherenceRequestValidator = adherenceRequestValidator;
     }
 
-    public AdherenceValidationResponse validate(AdherenceCallStatusRequest request) {
+    public AdherenceCallStatusValidationResponse validate(AdherenceCallStatusRequest request) {
         AdherenceErrors errors = adherenceRequestValidator.validateProvider(request.getProviderId());
         if (errors.isNotEmpty())
-            return failure(errors.errorMessage());
-        return success();
+            return AdherenceCallStatusValidationResponse.failure(errors.errorMessage());
+        return AdherenceCallStatusValidationResponse.success();
     }
 }

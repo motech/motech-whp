@@ -9,8 +9,6 @@ import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
-
 @Component
 public class AdherenceValidationRequestValidator {
     private AdherenceService adherenceService;
@@ -26,11 +24,11 @@ public class AdherenceValidationRequestValidator {
         AdherenceErrors errors = adherenceRequestValidator.validatePatientProviderMapping(request.getPatientId(), providerId);
         Dosage dosage = adherenceService.dosageForPatient(request.getPatientId());
         if (errors.isNotEmpty()) {
-            return AdherenceValidationResponse.failure(errors.errorMessage());
+            return new AdherenceValidationResponse(dosage).failure(errors.errorMessage());
         } else if (isValidDose(request, dosage)) {
-            return success();
+            return new AdherenceValidationResponse(dosage).success();
         } else {
-            return AdherenceValidationResponse.failure(dosage);
+            return new AdherenceValidationResponse(dosage).invalidAdherenceRange();
         }
     }
 

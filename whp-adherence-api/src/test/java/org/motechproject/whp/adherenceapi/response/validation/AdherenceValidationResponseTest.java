@@ -8,8 +8,8 @@ import static org.junit.Assert.assertTrue;
 public class AdherenceValidationResponseTest {
     @Test
     public void shouldReturnWhetherResponseIsFailureOrNot() {
-        assertTrue(AdherenceValidationResponse.failure().failed());
-        assertTrue(AdherenceValidationResponse.failure("errorCode").failed());
-        assertFalse(AdherenceValidationResponse.success().failed());
+        assertTrue(new AdherenceValidationResponse().failure().failed());
+        assertTrue(new AdherenceValidationResponse().failure("errorCode").failed());
+        assertFalse(new AdherenceValidationResponse().success().failed());
     }
 }

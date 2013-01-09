@@ -7,9 +7,6 @@ import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidatio
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.failure;
-import static org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse.success;
-
 @Component
 public class AdherenceNotCapturedRequestValidator {
     private AdherenceRequestValidator adherenceRequestValidator;
@@ -22,7 +19,7 @@ public class AdherenceNotCapturedRequestValidator {
     public AdherenceValidationResponse validate(AdherenceValidationRequest request, ProviderId providerId) {
         AdherenceErrors errors = adherenceRequestValidator.validatePatientProviderMapping(request.getPatientId(), providerId);
         if (errors.isNotEmpty())
-            return failure(errors.errorMessage());
-        return success();
+            return new AdherenceValidationResponse().failure(errors.errorMessage());
+        return new AdherenceValidationResponse().success();
     }
 }

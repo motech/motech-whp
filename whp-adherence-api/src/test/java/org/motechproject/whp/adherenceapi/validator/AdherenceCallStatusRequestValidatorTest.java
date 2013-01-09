@@ -5,11 +5,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherenceapi.errors.CallStatusRequestErrors;
 import org.motechproject.whp.adherenceapi.request.AdherenceCallStatusRequest;
-import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
+import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -33,7 +32,7 @@ public class AdherenceCallStatusRequestValidatorTest {
 
         when(adherenceRequestValidator.validateProvider(providerId)).thenReturn(new CallStatusRequestErrors(true));
 
-        AdherenceValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
+        AdherenceCallStatusValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
 
         assertFalse(validationResponse.failed());
     }
@@ -46,7 +45,7 @@ public class AdherenceCallStatusRequestValidatorTest {
 
         when(adherenceRequestValidator.validateProvider(providerId)).thenReturn(new CallStatusRequestErrors(false));
 
-        AdherenceValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
+        AdherenceCallStatusValidationResponse validationResponse = adherenceCallStatusRequestValidator.validate(request);
 
         assertTrue(validationResponse.failed());
     }
