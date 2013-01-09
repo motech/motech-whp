@@ -37,8 +37,8 @@ public class AdherenceLogService {
         return allAdherenceLogs.findLogsAsOf(asOf, pageNumber, pageSize);
     }
 
-    public ProviderIds providersWithAdherence(ProviderIds forProviders, LocalDate from, LocalDate to) {
-        return allAdherenceLogs.withKnownAdherenceReportedByProviders(forProviders, from, to);
+    public ProviderIds providersWithAdherence(String district, LocalDate from, LocalDate to) {
+        return allAdherenceLogs.withKnownAdherenceReportedByProviders(district, from, to);
     }
 
     public List<AdherenceRecord> adherence(String externalId, String treatmentId, LocalDate startDate, LocalDate endDate) {

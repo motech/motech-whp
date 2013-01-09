@@ -56,7 +56,7 @@ public class AdherenceSubmissionServiceTest {
 
         when(providerService.findByDistrict(district)).thenReturn(providersInDistrict);
         when(patientService.providersWithActivePatients(providersInDistrict)).thenReturn(providersWithActivePatients);
-        when(adherenceLogService.providersWithAdherence(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
+        when(adherenceLogService.providersWithAdherence(district, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
         when(providerService.findByProviderIds(providersPendingAdherenceThisWeek)).thenReturn(providersPendingAdherence);
 
         assertEquals(providersPendingAdherence, adherenceSubmissionService.providersPendingAdherence(district, yesterday, today));
@@ -70,14 +70,13 @@ public class AdherenceSubmissionServiceTest {
         ArrayList<Provider> providersWithAdherence = new ArrayList<Provider>();
 
         ProviderIds providersInDistrict = new ProviderIds(asList("providerWithActivePatientWithoutAdherence", "providerWithActivePatientWithAdherence", "providerWithoutActivePatient"));
-        ProviderIds providersWithActivePatients = new ProviderIds(asList("providerWithActivePatientWithoutAdherence", "providerWithActivePatientWithAdherence"));
 
         ProviderIds providersWhoSubmittedAdherenceThisWeek = new ProviderIds(asList("providerWithActivePatientWithAdherence"));
         ProviderIds providersPendingAdherenceThisWeek = new ProviderIds(asList("providerWithActivePatientWithoutAdherence"));
 
         when(providerService.findByDistrict(district)).thenReturn(providersInDistrict);
-        when(patientService.providersWithActivePatients(providersInDistrict)).thenReturn(providersWithActivePatients);
-        when(adherenceLogService.providersWithAdherence(providersWithActivePatients, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
+
+        when(adherenceLogService.providersWithAdherence(district, yesterday, today)).thenReturn(providersWhoSubmittedAdherenceThisWeek);
         when(providerService.findByProviderIds(providersPendingAdherenceThisWeek)).thenReturn(providersWithAdherence);
 
         assertEquals(providersWithAdherence, adherenceSubmissionService.providersWithAdherence(district, yesterday, today));

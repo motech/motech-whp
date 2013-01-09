@@ -154,17 +154,13 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return getValues(q);
     }
 
-    @ListFunction(name = "filterLogsNotBelongingToProviders", file = "filterLogs.js")
-    @View(name = "find_by_date", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit(doc.doseDate, doc._id);}}")
-    public ProviderIds withKnownAdherenceReportedByProviders(ProviderIds providersToSearchFor, LocalDate from, LocalDate to) {
-        ViewQuery query = createQuery("find_by_date")
-                .startKey(from)
-                .endKey(to)
+    @View(name = "belonging_to_district", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.DISTRICT, doc.doseDate], doc.meta.PROVIDER_ID);}}")
+    public ProviderIds withKnownAdherenceReportedByProviders(String district, LocalDate from, LocalDate to) {
+        ViewQuery query = createQuery("belonging_to_district")
+                .startKey(ComplexKey.of(district, from))
+                .endKey(ComplexKey.of(district, to))
                 .inclusiveEnd(true)
-                .includeDocs(true)
-                .queryParam("providers", providersToSearchFor.toJSONString())
-                .cacheOk(false)
-                .listName("filterLogsNotBelongingToProviders");
+                .includeDocs(true);
         return new ProviderIds(getValue(db.queryView(query).getRows()));
     }
 

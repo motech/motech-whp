@@ -313,20 +313,23 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnProvidersWithAdherenceReportedFromGivenProviderList() {
+    public void shouldReturnProvidersWithAdherenceReportedInADistrict() {
         ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
-        ProviderIds allProviders = new ProviderIds(asList("providerId1", "providerId2", "providerId3", "providerId4"));
+        String district = "district";
 
         List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1),
                 createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1),
                 createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1));
 
         adherenceLogs.get(0).providerId("providerId1");
+        adherenceLogs.get(0).district(district);
         adherenceLogs.get(1).providerId("providerId2");
+        adherenceLogs.get(1).district(district);
         adherenceLogs.get(2).providerId("providerId3");
+        adherenceLogs.get(2).district(district);
         addAll(adherenceLogs);
 
-        assertEquals(providersWithAdherence, allAdherenceLogs.withKnownAdherenceReportedByProviders(allProviders, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+        assertEquals(providersWithAdherence, allAdherenceLogs.withKnownAdherenceReportedByProviders(district, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
     }
 
     @Test

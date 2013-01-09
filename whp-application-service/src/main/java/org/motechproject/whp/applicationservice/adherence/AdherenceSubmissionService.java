@@ -42,8 +42,7 @@ public class AdherenceSubmissionService {
     }
 
     private ProviderIds providersIdsWithAdherence(String district, LocalDate from, LocalDate to) {
-        ProviderIds providersInDistrict = providerIdsWithActivePatients(district);
-        return adherenceLogService.providersWithAdherence(providersInDistrict, from, to);
+        return adherenceLogService.providersWithAdherence(district, from, to);
     }
 
     private ProviderIds providerIdsWithActivePatients(String district) {
