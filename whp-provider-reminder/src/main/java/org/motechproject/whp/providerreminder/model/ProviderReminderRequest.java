@@ -5,19 +5,16 @@ import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
 import org.motechproject.whp.wgn.outbound.WGNRequest;
 
 import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import javax.xml.bind.annotation.XmlType;
 import java.io.StringWriter;
 import java.util.List;
 
 @EqualsAndHashCode
 @XmlRootElement(name = "provider_reminder_request")
+@XmlType(propOrder={"requestId", "reminderType", "msisdns"})
 public class ProviderReminderRequest implements WGNRequest {
 
     private String requestId;

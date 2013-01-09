@@ -16,12 +16,12 @@ public class ProviderReminderRequestTest {
         ProviderReminderRequest request = new ProviderReminderRequest(ADHERENCE_WINDOW_COMMENCED, asList("msisdn1", "msisdn2"), "requestId");
         String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                 "<provider_reminder_request>\n" +
+                "    <request_id>requestId</request_id>\n" +
+                "    <reminder_type>ADHERENCE_WINDOW_COMMENCED</reminder_type>\n" +
                 "    <msisdns>\n" +
                 "        <msisdn>msisdn1</msisdn>\n" +
                 "        <msisdn>msisdn2</msisdn>\n" +
                 "    </msisdns>\n" +
-                "    <reminder_type>ADHERENCE_WINDOW_COMMENCED</reminder_type>\n" +
-                "    <request_id>requestId</request_id>\n" +
                 "</provider_reminder_request>\n";
 
         assertEquals(expectedXML, request.toXML());
