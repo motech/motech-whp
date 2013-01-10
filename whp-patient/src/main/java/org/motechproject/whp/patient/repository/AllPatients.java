@@ -12,6 +12,7 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.repository.Countable;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.List;
 import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
 
 @Repository
-public class AllPatients extends MotechBaseRepository<Patient> {
+public class AllPatients extends MotechBaseRepository<Patient> implements Countable {
 
 
     private EventContext eventContext;
@@ -66,6 +67,14 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             return null;
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         return singleResult(db.queryView(find_by_patientId, Patient.class));
+    }
+
+    @View(name = "count_patients", map = "function(doc){ if(doc.type === 'Patient') { emit(null,doc._id); } }", reduce = "_count")
+    public String count() {
+        ViewQuery query = createQuery("count_patients").reduce(true);
+        ViewResult rows = db.queryView(query);
+        String firstValue = firstValue(rows);
+        return (null == firstValue) ? "0" : firstValue;
     }
 
     @View(name = "find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
@@ -116,13 +125,13 @@ public class AllPatients extends MotechBaseRepository<Patient> {
 
     }
 
-
     @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
     public ProviderIds findAllProvidersWithAdherenceAsOf(LocalDate asOf) {
         ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf);
         return filterProviderIds(db.queryView(query));
 
     }
+
 
     @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
     public ProviderIds findAllProvidersWithoutAdherenceAsOf(LocalDate asOf) {
@@ -140,6 +149,7 @@ public class AllPatients extends MotechBaseRepository<Patient> {
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
+
         @Override
         public int compare(Patient patient1, Patient patient2) {
             return patient1.getFirstName().compareTo(patient2.getFirstName());
@@ -152,5 +162,9 @@ public class AllPatients extends MotechBaseRepository<Patient> {
             providerIds.add(row.getValue());
         }
         return providerIds;
+    }
+
+    private String firstValue(ViewResult rows) {
+        return (rows.getSize() > 0) ? rows.getRows().get(0).getValue() : null;
     }
 }

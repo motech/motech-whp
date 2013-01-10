@@ -9,6 +9,9 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-tasks icon-white"></i> Diagnostics <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="diagnostics">
             <li>
+               <a id="cmf-admins" href="/whp/count/all">Count of all records</a>
+            </li>
+            <li>
                <a id="cmf-admins" href="/whp/diagnostics/show/all" target="blank">Motech WHP</a>
             </li>
             <li>

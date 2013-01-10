@@ -134,7 +134,7 @@ public class PatientController extends BaseWebController {
         List<Patient> patients;
         if (isNotEmpty(providerId))
             patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
-        else if(isNotEmpty(districtName))
+        else if (isNotEmpty(districtName))
             patients = patientService.searchBy(districtName);
         else
             patients = new ArrayList<>();
@@ -188,7 +188,6 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute(SELECTED_PROVIDER, providerId);
         uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
-
 
 
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {

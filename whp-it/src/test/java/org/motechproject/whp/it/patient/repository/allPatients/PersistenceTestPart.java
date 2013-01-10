@@ -31,6 +31,12 @@ public class PersistenceTestPart extends AllPatientsTestPart {
     }
 
     @Test
+    public void shouldCountPatients() {
+        createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
+        assertEquals("1", allPatients.count());
+    }
+
+    @Test
     public void shouldSaveProfileFields() {
         createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
         Patient savedPatient = allPatients.findByPatientId("cha01100001");

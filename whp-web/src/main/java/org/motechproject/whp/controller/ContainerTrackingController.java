@@ -4,12 +4,12 @@ import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.motechproject.whp.reponse.WHPResponse;
-import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ContainerTrackingController {
+
     protected ContainerService containerService;
     protected ReasonForClosureValidator reasonForClosureValidator;
 

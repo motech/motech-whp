@@ -47,6 +47,12 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldCountProviders() {
+        addAndMarkForDeletion(provider);
+        assertEquals("1", allProviders.count());
+    }
+
+    @Test
     public void shouldUpdateProviderIfAlreadyExists() {
         int sizeBeforeAdding = allProviders.getAll().size();
 
