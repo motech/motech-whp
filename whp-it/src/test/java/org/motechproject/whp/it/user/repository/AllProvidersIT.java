@@ -1,6 +1,5 @@
 package org.motechproject.whp.it.user.repository;
 
-import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
@@ -17,6 +16,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.joda.time.format.DateTimeFormat.forPattern;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllProvidersIT extends SpringIntegrationTest {
@@ -30,7 +30,7 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Before
     public void setUp() {
         provider = new Provider("P00001", "984567876", "district",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
     }
 
     private void addAndMarkForDeletion(Provider provider) {
@@ -51,13 +51,13 @@ public class AllProvidersIT extends SpringIntegrationTest {
         int sizeBeforeAdding = allProviders.getAll().size();
 
         addAndMarkForDeletion(provider);
-        provider.setPrimaryMobile("modifiedNumber");
+        provider.setPrimaryMobile("0000000000");
         allProviders.addOrReplace(provider);
         markForDeletion(provider);
 
         List<Provider> providers = allProviders.getAll();
         assertEquals(sizeBeforeAdding + 1, providers.size());
-        assertEquals("modifiedNumber", allProviders.findByProviderId("P00001").getPrimaryMobile());
+        assertEquals("0000000000", allProviders.findByProviderId("P00001").getPrimaryMobile());
     }
 
     @Test
@@ -68,11 +68,11 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Test
     public void shouldListProviders_ByDistrict() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider2 = new Provider("aa", "984567876", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider3 = new Provider("aa", "984567876", "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
         addAndMarkForDeletion(provider1);
         addAndMarkForDeletion(provider2);
@@ -87,11 +87,11 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Test
     public void shouldListProviders_ByDistrictAndProviderId() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider2 = new Provider("aa", "984567876", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider3 = new Provider("aa", "111111111", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
         addAndMarkForDeletion(provider1);
         addAndMarkForDeletion(provider2);
@@ -106,9 +106,9 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Test
     public void providerSearchShouldBeCaseInsensitive() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider2 = new Provider("aa", "984567876", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
         addAndMarkForDeletion(provider1);
         addAndMarkForDeletion(provider2);
@@ -120,11 +120,11 @@ public class AllProvidersIT extends SpringIntegrationTest {
     @Test
     public void providerSearchShouldBeCaseInsensitive_WhenBothDistrictAndProviderIdAreGiven() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider2 = new Provider("aa", "984567876", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         Provider provider3 = new Provider("aa", "111111111", "districtB",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
         addAndMarkForDeletion(provider1);
         addAndMarkForDeletion(provider2);
@@ -140,7 +140,7 @@ public class AllProvidersIT extends SpringIntegrationTest {
     public void shouldFindProviderByPrimaryMobileNumber() {
         String primaryMobile = "984567876";
         Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         addAndMarkForDeletion(savedProvider);
 
         Provider actualProvider = allProviders.findByMobileNumber(primaryMobile);
@@ -150,11 +150,11 @@ public class AllProvidersIT extends SpringIntegrationTest {
 
     @Test
     public void shouldFindProviderBySecondaryMobileNumber() {
-        String primaryMobile = "primary";
-        String secondaryMobile = "secondary";
-        String tertiaryMobile = "tertiary";
+        String primaryMobile = "0000000000";
+        String secondaryMobile = "1111111111";
+        String tertiaryMobile = "2222222222";
         Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         savedProvider.setSecondaryMobile(secondaryMobile);
         savedProvider.setTertiaryMobile(tertiaryMobile);
 
@@ -166,17 +166,27 @@ public class AllProvidersIT extends SpringIntegrationTest {
 
     @Test
     public void shouldFindProviderByTertiaryMobileNumber() {
-        String primaryMobile = "primary";
-        String secondaryMobile = "secondary";
-        String tertiaryMobile = "tertiary";
+        String primaryMobile = "0000000000";
+        String secondaryMobile = "1111111111";
+        String tertiaryMobile = "2222222222";
         Provider savedProvider = new Provider("ab", primaryMobile, "districtA",
-                DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+                forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
         savedProvider.setSecondaryMobile(secondaryMobile);
         savedProvider.setTertiaryMobile(tertiaryMobile);
 
         addAndMarkForDeletion(savedProvider);
 
         Provider actualProvider = allProviders.findByMobileNumber(tertiaryMobile);
+        assertThat(actualProvider, is(savedProvider));
+    }
+
+    @Test
+    public void shouldFindByLast10DigitsOfMobileNumber() {
+        String primaryMobile = "0000000000";
+        Provider savedProvider = new Provider("ab", primaryMobile, "districtA", forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
+        addAndMarkForDeletion(savedProvider);
+
+        Provider actualProvider = allProviders.findByMobileNumber("0" + primaryMobile);
         assertThat(actualProvider, is(savedProvider));
     }
 

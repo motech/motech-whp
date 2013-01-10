@@ -8,6 +8,7 @@ import org.ektorp.support.View;
 import org.motechproject.dao.BusinessIdNotUniqueException;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.common.domain.PhoneNumber;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.user.domain.Provider;
@@ -66,6 +67,7 @@ public class AllProviders extends MotechBaseRepository<Provider> {
 
     @View(name = "find_by_mobile_number", map = "function(doc) {if (doc.type ==='Provider') {emit(doc.primaryMobile, doc._id);emit(doc.secondaryMobile, doc._id);emit(doc.tertiaryMobile, doc._id);}}")
     public Provider findByMobileNumber(String mobileNumber) {
+        mobileNumber = new PhoneNumber(mobileNumber, true, true).value();
         ViewQuery q = createQuery("find_by_mobile_number").key(mobileNumber).includeDocs(true);
         return singleResult(db.queryView(q, Provider.class));
     }

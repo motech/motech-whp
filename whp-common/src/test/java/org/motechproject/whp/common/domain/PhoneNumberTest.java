@@ -20,7 +20,7 @@ public class PhoneNumberTest {
     }
 
     @Test
-    public void shouldBeNullWhenMSISDNLessThanTenDigits() {
+    public void shouldBeNullWhenMSISDNLessThanTenDigitsWhenNotAllowingShortPhoneNumbers() {
         PhoneNumber phoneNumber = new PhoneNumber("123456789");
         assertNull(phoneNumber.value());
     }
@@ -29,5 +29,11 @@ public class PhoneNumberTest {
     public void shouldBeNullWhenMSISDNIsNotNumeric() {
         PhoneNumber phoneNumber = new PhoneNumber("a234567890");
         assertNull(phoneNumber.value());
+    }
+
+    @Test
+    public void shouldPreserveMSISDNWhenLessThen10DigitsAndAllowingShortPhoneNumbers() {
+        PhoneNumber phoneNumber = new PhoneNumber("123456789", true);
+        assertEquals("123456789", phoneNumber.value());
     }
 }
