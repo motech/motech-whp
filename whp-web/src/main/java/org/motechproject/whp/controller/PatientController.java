@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -92,17 +91,8 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String list(Model uiModel, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String selectedDistrict = (String) session.getAttribute(SELECTED_DISTRICT);
-        String selectedProvider = (String) session.getAttribute(SELECTED_PROVIDER);
-
-        if (StringUtils.isEmpty(selectedDistrict))
-            selectedDistrict = allDistrictsCache.getAll().get(0).getName();
-
-        List<Patient> patients = getPatientsFor(selectedDistrict, selectedProvider);
-        prepareModelForListView(uiModel, patients, selectedDistrict, selectedProvider);
-
+    public String list(Model uiModel) {
+        prepareModelForListView(uiModel, new ArrayList<Patient>(), null, null);
         return "patient/list";
     }
 
@@ -126,12 +116,8 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam("selectedDistrict") String districtName, @RequestParam(SELECTED_PROVIDER) String providerId, Model uiModel, HttpServletRequest request) {
+    public String filterByDistrictAndProvider(@RequestParam(value = "selectedDistrict", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletRequest request) {
         List<Patient> patients = getPatientsFor(districtName, providerId);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(SELECTED_DISTRICT, districtName);
-        session.setAttribute(SELECTED_PROVIDER, providerId);
 
         prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/patientList";
@@ -139,10 +125,12 @@ public class PatientController extends BaseWebController {
 
     private List<Patient> getPatientsFor(String districtName, String providerId) {
         List<Patient> patients;
-        if (isEmpty(providerId))
+        if (isNotEmpty(providerId))
+            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
+        else if(isNotEmpty(districtName))
             patients = patientService.searchBy(districtName);
         else
-            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
+            patients = new ArrayList<>();
 
         return patients;
     }

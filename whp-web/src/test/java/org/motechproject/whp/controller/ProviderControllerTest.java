@@ -99,8 +99,6 @@ public class ProviderControllerTest extends BaseUnitTest {
 
         providerController.loadProviderSearchPage(uiModel);
         verify(uiModel).addAttribute(eq(providerController.DISTRICT_LIST), eq(expectedList));
-        verify(uiModel).addAttribute(eq(providerController.SELECTED_DISTRICT), eq("d1"));
-        verify(uiModel).addAttribute(eq(providerController.PROVIDER_ID), eq(""));
     }
 
     @Test

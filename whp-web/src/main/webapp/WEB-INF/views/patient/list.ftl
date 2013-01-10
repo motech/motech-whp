@@ -15,26 +15,22 @@
                 <form id="searchForm" action="<@spring.url '/patients/search'/>" input method="POST" submitOnEnterKey="true">
                     <div class="row-fluid filters">
                         <div class="control-group span2">
-                            <label class="control-label">Provider District*</label>
-
+                            <label class="control-label">Provider ID</label>
                             <div class="controls">
-                                <select id="district" name="selectedDistrict">
-                                    <#list districts as district>
-                                        <option <#if selectedDistrict == district.name> selected </#if>
-                                                                                        value="${district.name}">${district.name}</option>
-                                    </#list>
-                                </select>
+                                <input type="text" name="selectedProvider" id="providerId" value="${selectedProvider!}">
                             </div>
                         </div>
 
                         <div class="control-group span2">
-                            <label class="control-label">Provider ID</label>
+                            <label class="control-label">Provider District</label>
 
                             <div class="controls">
-                                <select id="providerId" name="selectedProvider"
-                                        <#if selectedProvider??>selectedProviderInSession=${selectedProvider}</#if>
-                                        >
-                                    <!-- AJAX Fetch Provider IDs -->
+                                <select id="district" name="selectedDistrict">
+                                    <option value=""></option>
+                                    <#list districts as district>
+                                        <option <#if selectedDistrict! == district.name> selected </#if>
+                                                                                        value="${district.name}">${district.name}</option>
+                                    </#list>
                                 </select>
                             </div>
                         </div>

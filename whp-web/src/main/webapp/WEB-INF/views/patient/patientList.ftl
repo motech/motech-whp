@@ -36,12 +36,13 @@
     <tr>
         <td class="warning" style="text-align: center" colspan="14">
             <#if selectedProvider?? && selectedProvider != "">
-                No patients found for Provider District as: '${selectedDistrict}' and Provider ID as:
-                '${selectedProvider}'
-                <#else>
-                    No patients found for Provider District as: '${selectedDistrict}'
+                No patients found for  Provider ID: '${selectedProvider!}'
+            <#elseif selectedDistrict?? && selectedDistrict != "">
+                No patients found for  Provider District: '${selectedDistrict!}'
+            <#else>
+                Please select either Provider ID or Provider District
             </#if>
-        </td>
+
     </tr>
         <#else>
             <#list patientList as patient>

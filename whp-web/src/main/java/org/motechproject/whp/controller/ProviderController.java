@@ -3,7 +3,6 @@ package org.motechproject.whp.controller;
 import org.joda.time.LocalDate;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
-import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.user.domain.Provider;
@@ -51,11 +50,7 @@ public class ProviderController extends BaseWebController {
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String loadProviderSearchPage(Model uiModel) throws IOException {
-        List<District> districtList = allDistrictsCache.getAll();
-        String district = districtList.get(0).getName();
-        String providerId = "";
-        initQueryModel(uiModel, district, providerId);
-
+        uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         return "provider/list";
     }
 
@@ -84,12 +79,6 @@ public class ProviderController extends BaseWebController {
     public String printAdherenceStatus(Model uiModel, HttpServletRequest request) {
         showAdherenceStatus(uiModel, request);
         return "provider/printAdherence";
-    }
-
-    private void initQueryModel(Model uiModel, String districtName, String providerId) {
-        uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
-        uiModel.addAttribute(SELECTED_DISTRICT, districtName);
-        uiModel.addAttribute(PROVIDER_ID, providerId);
     }
 
     private void prepareResultsModel(Model uiModel, List<Provider> matchingProviders) {
