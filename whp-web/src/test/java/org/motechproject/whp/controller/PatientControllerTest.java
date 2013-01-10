@@ -27,6 +27,7 @@ import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.context.support.StaticMessageSource;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -208,6 +209,44 @@ public class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void shouldFetchListOfPatientsIfDistrictNameIsPresentInCookies() throws Exception {
+        String district = "Vaishali";
+        Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("providerid").withTreatmentUnderDistrict("some other district").build();
+
+        List<Patient> expectedListOfPatients = asList(patientUnderDistrict);
+
+        when(patientService.searchBy(district)).thenReturn(expectedListOfPatients);
+
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/list").cookie(new Cookie(PatientController.SELECTED_DISTRICT, district)))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("selectedDistrict", district))
+                .andExpect(model().attribute("patientList", expectedListOfPatients))
+                .andExpect(model().attribute("districts", districts))
+                .andExpect(view().name("patient/list"));
+    }
+
+    @Test
+    public void shouldFetchListOfPatientsIfProviderIdIsPresentInCookies() throws Exception {
+        String providerId = "providerid";
+        Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).withTreatmentUnderDistrict("some other district").build();
+
+        List<Patient> expectedListOfPatients = asList(patientUnderDistrict);
+
+        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(expectedListOfPatients);
+
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/list")
+                        .cookie(new Cookie(PatientController.SELECTED_PROVIDER, providerId),
+                                new Cookie(PatientController.SELECTED_DISTRICT, "district")))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("selectedProvider", providerId))
+                .andExpect(model().attribute("patientList", expectedListOfPatients))
+                .andExpect(model().attribute("districts", districts))
+                .andExpect(view().name("patient/list"));
+    }
+
+    @Test
     public void shouldSearchForPatientsByDistrict() throws Exception {
         String district = "Vaishali";
         Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("providerid").withTreatmentUnderDistrict("some other district").build();
@@ -223,10 +262,12 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(model().attribute("selectedDistrict", district))
                 .andExpect(model().attribute("patientList", expectedListOfPatients))
+                .andExpect(cookie().value("selectedDistrict", district))
                 .andExpect(view().name("patient/patientList"));
 
         verify(patientService).searchBy(district);
     }
+
     @Test
     public void shouldSearchForPatientsByProvider() throws Exception {
         String providerId = "provider1";
@@ -246,6 +287,8 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("selectedDistrict", district))
                 .andExpect(model().attribute("selectedProvider", providerId))
                 .andExpect(model().attribute("patientList", expectedListOfPatients))
+                .andExpect(cookie().value("selectedDistrict", district))
+                .andExpect(cookie().value("selectedProvider", providerId))
                 .andExpect(view().name("patient/patientList"));
 
         verify(patientService).getAllWithActiveTreatmentForProvider(providerId);

@@ -24,17 +24,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 import static org.motechproject.util.DateUtil.today;
@@ -91,8 +90,11 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String list(Model uiModel) {
-        prepareModelForListView(uiModel, new ArrayList<Patient>(), null, null);
+    public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
+                       @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
+                       Model uiModel) {
+        List<Patient> patients = getPatientsFor(districtName, providerId);
+        prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/list";
     }
 
@@ -116,11 +118,16 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam(value = "selectedDistrict", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletRequest request) {
+    public String filterByDistrictAndProvider(@RequestParam(value = "selectedDistrict", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
         List<Patient> patients = getPatientsFor(districtName, providerId);
-
         prepareModelForListView(uiModel, patients, districtName, providerId);
+        setSearchParamsIntoCookies(response, districtName, providerId);
         return "patient/patientList";
+    }
+
+    private void setSearchParamsIntoCookies(HttpServletResponse response, String districtName, String providerId) {
+        setCookieValue(response, SELECTED_DISTRICT, districtName);
+        setCookieValue(response, SELECTED_PROVIDER, providerId);
     }
 
     private List<Patient> getPatientsFor(String districtName, String providerId) {
@@ -181,6 +188,8 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute(SELECTED_PROVIDER, providerId);
         uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
+
+
 
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
         String ipStartDate = dateMessage(phaseStartDates.getIpStartDate());
