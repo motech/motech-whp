@@ -87,4 +87,37 @@ public class AdherenceValidationRequestValidatorTest {
 
         assertEquals(new AdherenceValidationResponse(dosage).invalidAdherenceRange(), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
     }
+
+    @Test
+    public void shouldReturnFailureOnValidPatientProviderMappingAndNonNumericInValidDosage() {
+        String patientId = "patientid";
+        Dosage dosage = new DosageBuilder(2).dosage();
+
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
+        adherenceValidationRequest.setPatientId(patientId);
+        adherenceValidationRequest.setDoseTakenCount("*");
+        adherenceValidationRequest.setTimeTaken("1000");
+
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(dosage);
+        ValidationRequestErrors errors = new ValidationRequestErrors(true, true, true);
+        when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId)).thenReturn(errors);
+
+        assertEquals(new AdherenceValidationResponse(dosage).invalidAdherenceRange(), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
+    }
+
+    @Test
+    public void shouldReturnFailureInValidPatient() {
+        String patientId = "patientid";
+
+        AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
+        adherenceValidationRequest.setPatientId(patientId);
+        adherenceValidationRequest.setDoseTakenCount("8");
+        adherenceValidationRequest.setTimeTaken("1000");
+
+        when(adherenceService.dosageForPatient(patientId)).thenReturn(null);
+        ValidationRequestErrors errors = new ValidationRequestErrors(true, false, false);
+        when(adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId)).thenReturn(errors);
+
+        assertEquals(new AdherenceValidationResponse(null).failure(errors.errorMessage()), adherenceValidationRequestValidator.validate(adherenceValidationRequest, providerId));
+    }
 }

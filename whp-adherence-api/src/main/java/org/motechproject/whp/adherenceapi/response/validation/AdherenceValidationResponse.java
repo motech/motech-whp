@@ -24,7 +24,9 @@ public class AdherenceValidationResponse implements Serializable {
     private AdherenceResponseError error;
 
     public AdherenceValidationResponse(Dosage dosage) {
-        this.validAdherenceRange = new ValidAdherenceRange(dosage.getTreatmentProvider().name(), dosage.getValidRangeFrom(), dosage.getValidRangeTo());
+        if(dosage != null) {
+            this.validAdherenceRange = new ValidAdherenceRange(dosage.getTreatmentProvider().name(), dosage.getValidRangeFrom(), dosage.getValidRangeTo());
+        }
     }
 
     public AdherenceValidationResponse() {

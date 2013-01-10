@@ -62,8 +62,4 @@ public class AdherenceValidationRequest implements Serializable {
     public String getIvrFileLength() {
         return ivrFileLength;
     }
-
-    public int doseTakenCount() {
-        return Integer.parseInt(doseTakenCount);
-    }
 }

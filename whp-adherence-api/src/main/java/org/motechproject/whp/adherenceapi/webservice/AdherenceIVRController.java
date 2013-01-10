@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherenceapi.webservice;
 
+import org.apache.log4j.Logger;
 import org.motechproject.whp.adherenceapi.adherence.*;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.*;
@@ -33,6 +34,7 @@ public class AdherenceIVRController {
     private AdherenceConfirmationOverIVR adherenceConfirmationOverIVR;
     private AdherenceNotCapturedOverIVR adherenceNotCapturedOverIVR;
     private AdherenceCallStatusOverIVR adherenceCallStatusOverIVR;
+    private Logger logger = Logger.getLogger(AdherenceIVRController.class);
 
     @Autowired
     public AdherenceIVRController(ProviderService providerService,
@@ -81,7 +83,7 @@ public class AdherenceIVRController {
     @ResponseBody
     public AdherenceCallStatusValidationResponse adherenceCallStatus(@RequestBody @Valid AdherenceCallStatusRequest request) {
         AdherenceCallStatusValidationResponse response = adherenceCallStatusOverIVR.recordCallStatus(request);
-        if(response.failed())
+        if (response.failed())
             return response;
         return null;
     }
@@ -92,6 +94,12 @@ public class AdherenceIVRController {
     public BindingResultXML handleError(MethodArgumentNotValidException e, HttpServletResponse response) {
         response.setContentType(APPLICATION_XML_VALUE);
         return new BindingResultXML(e.getBindingResult());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public void handleException(Exception ex) {
+        logger.error("Error occurred", ex);
     }
 
     private ProviderId providerId(String providerId) {

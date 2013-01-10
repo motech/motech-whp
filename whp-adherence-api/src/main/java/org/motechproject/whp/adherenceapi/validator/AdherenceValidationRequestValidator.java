@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherenceapi.validator;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.AdherenceErrors;
@@ -33,6 +34,7 @@ public class AdherenceValidationRequestValidator {
     }
 
     private boolean isValidDose(AdherenceValidationRequest adherenceValidationRequest, Dosage dosage) {
-        return dosage.isValidInput(adherenceValidationRequest.doseTakenCount());
+        String doseTakenCount = adherenceValidationRequest.getDoseTakenCount();
+        return StringUtils.isNumeric(doseTakenCount) && dosage.isValidInput(Integer.parseInt(doseTakenCount));
     }
 }
