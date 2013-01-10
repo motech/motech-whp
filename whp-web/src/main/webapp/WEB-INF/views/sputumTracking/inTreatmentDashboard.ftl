@@ -37,9 +37,7 @@
                         <div class="control-group span2">
                             <label class="control-label">Provider ID</label>
                             <div class="controls">
-                                 <select id="providerId" name="providerId" data-id="providerId-autocomplete">
-                                     <option value="{{searchCriteria.providerId}}">{{searchCriteria.providerId}}</option>
-                                 </select>
+                                <input type="text" id="providerId" name="providerId" value="{{searchCriteria.providerId}}">
                             </div>
                         </div>
                         <div class="control-group span3 ">

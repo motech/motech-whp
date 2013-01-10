@@ -7,12 +7,6 @@ $(function () {
 
     $("#district").bind("autocomplete-selected", function (event, ui) {
         $("#district").val($(this).val());
-        $("#providerId-autocomplete").val("");
-        initProvidersList();
-    });
-
-    $("#district").bind("invalid-value", function (event, ui) {
-        resetProvidersList();
     });
 
     $(".show-date-button").click(function(){
@@ -23,35 +17,10 @@ $(function () {
         $(this).parent().find(".dates").val("");
     });
 
-    $("#providerId").bind("autocomplete-changed", function (event, ui, data) {
-        $("#providerId").val($(data.item).val());
-    });
-
-    function resetProvidersList() {
-        $("#providerId-autocomplete").val("");
-        $("#providerId").html("");
-        initProvidersList();
-    }
-
-    function initProvidersList() {
-        if ($("#providerId").data('combobox')) {
-            $("#providerId").val("");
-            $("#providerId").data('combobox').destroy();
-        }
-        var selectedProviderId =  $("#providerId").val();
-        $.get("/whp/providers/byDistrict/" + $("#district").val(), function (response) {
-            $("#providerId").html(response);
-            if(selectedProviderId) {
-                $("#providerId").val(selectedProviderId);
-                $("#providerId-autocomplete").val($("#providerId").val());
-            }
-        });
-        $("#providerId").combobox();
-    }
-
     $('#district').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
+
     $('#providerId').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
@@ -64,6 +33,4 @@ $(function () {
             return true;
         }
     }
-
-    initProvidersList();
 });
