@@ -53,6 +53,7 @@ public class ProviderControllerTest extends BaseUnitTest {
             DateTimeFormat.forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
 
     private ProviderController providerController;
+    private String reportsUrl = "reportsUrl";
 
     @Before
     public void setup() {
@@ -82,7 +83,8 @@ public class ProviderControllerTest extends BaseUnitTest {
         districts.add(new District("districtB"));
         when(allDistricts.getAll()).thenReturn(districts);
 
-        providerController = new ProviderController(providerService, adherenceSubmissionService, allDistricts);
+
+        providerController = new ProviderController(providerService, adherenceSubmissionService, allDistricts, reportsUrl);
     }
 
     @Test
@@ -155,8 +157,9 @@ public class ProviderControllerTest extends BaseUnitTest {
         standaloneSetup(providerController).build()
                 .perform(get("/providers/byDistrict/Begusarai"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(1))
+                .andExpect(model().size(2))
                 .andExpect(model().attribute("providerList", providers))
+                .andExpect(model().attribute("reportsURL", reportsUrl))
                 .andExpect(view().name("provider/listByDistrict"));
     }
 

@@ -9,6 +9,7 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.user.uimodel.ProviderRow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class ProviderController extends BaseWebController {
     private ProviderService providerService;
     private AdherenceSubmissionService adherenceSubmissionService;
     private AllDistricts allDistrictsCache;
+    private String reportsUrl;
 
     public static final String PROVIDER_LIST = "providerList";
     public static final String DISTRICT_LIST = "districts";
@@ -40,17 +42,20 @@ public class ProviderController extends BaseWebController {
     public static final String PROVIDED_ADHERENCE_TO = "providedAdherenceTo";
     public static final String PROVIDER_LIST_PENDING_ADHERENCE = "providersPendingAdherence";
     public static final String PROVIDER_LIST_WITH_ADHERENCE = "providersWithAdherence";
+    private static final String REPORTS_URL = "reportsURL";
 
     @Autowired
-    public ProviderController(ProviderService providerService, AdherenceSubmissionService adherenceSubmissionService, AllDistricts allDistrictsCache) {
+    public ProviderController(ProviderService providerService, AdherenceSubmissionService adherenceSubmissionService, AllDistricts allDistrictsCache, @Value("#{whpProperties['whp.reports.url']}") String reportsUrl) {
         this.providerService = providerService;
         this.adherenceSubmissionService = adherenceSubmissionService;
         this.allDistrictsCache = allDistrictsCache;
+        this.reportsUrl = reportsUrl;
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String loadProviderSearchPage(Model uiModel) throws IOException {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
+        uiModel.addAttribute(REPORTS_URL, reportsUrl);
         return "provider/list";
     }
 
@@ -92,5 +97,6 @@ public class ProviderController extends BaseWebController {
             }
         }
         uiModel.addAttribute(PROVIDER_LIST, providerRows);
+        uiModel.addAttribute(REPORTS_URL, reportsUrl);
     }
 }
