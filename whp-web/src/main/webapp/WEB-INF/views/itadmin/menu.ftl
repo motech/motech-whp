@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring />
 <ul class="nav nav-pills pull-left itadmin-menu">
     <li>
         <a id="list-providers" href="/whp/providers/list"><i class="icon-cog icon-white"></i> Manage Providers</a>
@@ -15,7 +16,7 @@
                <a id="cmf-admins" href="/whp/diagnostics/show/all" target="blank">Motech WHP</a>
             </li>
             <li>
-               <a id="cmf-admins" href="${reportsURL}/diagnostics/show/all" target="blank">Motech WHP Reports</a>
+               <a id="cmf-admins" href="<@spring.message 'whp.reports.url'/>"/diagnostics/show/all" target="blank">Motech WHP Reports</a>
             </li>
         </ul>
     </li>
