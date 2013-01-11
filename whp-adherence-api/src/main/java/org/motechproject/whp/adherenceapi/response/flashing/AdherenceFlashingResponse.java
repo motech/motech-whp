@@ -1,17 +1,12 @@
 package org.motechproject.whp.adherenceapi.response.flashing;
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.common.webservice.WebServiceResponse;
-import org.motechproject.whp.patient.domain.Patient;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 
 @XmlRootElement(name = "adherence_capture_flashing_response")
 @EqualsAndHashCode
@@ -28,8 +23,8 @@ public class AdherenceFlashingResponse implements Serializable {
     public AdherenceFlashingResponse() {
     }
 
-    public AdherenceFlashingResponse(String providerId, List<String> patientsWithAdherence, List<String> patientsForProvider) {
-        adherenceStatus = new AdherenceStatus(providerId, patientsForProvider, patientsWithAdherence);
+    public AdherenceFlashingResponse(AdherenceSummaryByProvider adherenceSummary) {
+        adherenceStatus = new AdherenceStatus(adherenceSummary);
     }
 
     @XmlElement(name = "adherence_status")
@@ -37,23 +32,16 @@ public class AdherenceFlashingResponse implements Serializable {
         return adherenceStatus;
     }
 
-    public Integer getPatientRemainingCount() {
-        return adherenceStatus.getPatientRemainingCount();
-    }
-
-    public Integer getPatientGivenCount() {
-        return adherenceStatus.getPatientGivenCount();
-    }
 
     public static AdherenceFlashingResponse failureResponse(String errorCode) {
         return failureResponse(errorCode, new AdherenceFlashingResponse());
     }
 
-    public static AdherenceFlashingResponse failureResponse(AdherenceSummary summary, String errorCode) {
+    public static AdherenceFlashingResponse failureResponse(AdherenceSummaryByProvider summary, String errorCode) {
         return failureResponse(errorCode, buildResponse(summary));
     }
 
-    public static AdherenceFlashingResponse successResponse(AdherenceSummary summary) {
+    public static AdherenceFlashingResponse successResponse(AdherenceSummaryByProvider summary) {
         return buildResponse(summary);
     }
 
@@ -63,8 +51,7 @@ public class AdherenceFlashingResponse implements Serializable {
         return response;
     }
 
-    private static AdherenceFlashingResponse buildResponse(AdherenceSummary summary) {
-        List<String> patientsForProvider = extract(summary.getPatientsUnderProvider(), on(Patient.class).getPatientId());
-        return new AdherenceFlashingResponse(summary.getProviderId(), summary.getPatientsWithAdherence(), patientsForProvider);
+    private static AdherenceFlashingResponse buildResponse(AdherenceSummaryByProvider summary) {
+        return new AdherenceFlashingResponse(summary);
     }
 }

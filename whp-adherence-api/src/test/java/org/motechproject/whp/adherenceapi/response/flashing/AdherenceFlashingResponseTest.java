@@ -1,7 +1,14 @@
 package org.motechproject.whp.adherenceapi.response.flashing;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.Patient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -10,133 +17,33 @@ public class AdherenceFlashingResponseTest {
 
     private String providerId;
 
+    public List<Patient> patientsWithAdherence;
+    public List<Patient> patientsWithoutAdherence;
+    public List<Patient> patients = new ArrayList<>();
+
     @Before
     public void setUp() {
         providerId = "raj";
-    }
+        Patient patientWithAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
+        Patient patientWithAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient2").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
 
-    @Test
-    public void testRemainingCountWhenOnePatientHasAdherence() {
-        assertEquals(
-                2,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1"),
-                        asList("patientId1", "patientId2", "patientId3")
-                ).getPatientRemainingCount().intValue()
-        );
-    }
+        patientsWithAdherence = asList(patientWithAdherence1, patientWithAdherence2);
 
-    @Test
-    public void testRemainingCountWhenNoPatientHasAdherence() {
-        assertEquals(
-                3,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId4"),
-                        asList("patientId1", "patientId2", "patientId3")
-                ).getPatientRemainingCount().intValue()
-        );
-    }
+        Patient patientWithoutAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient3").build();
+        patientsWithoutAdherence = asList(patientWithoutAdherence1);
 
-    @Test
-    public void testRemainingCountWhenAllPatientsHaveAdherence() {
-        assertEquals(
-                0,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1", "patientId2", "patientId3"),
-                        asList("patientId1", "patientId2", "patientId3")
-                ).getPatientRemainingCount().intValue()
-        );
-    }
-
-    @Test
-    public void testRemainingCountPatientsUnderProviderIsSubsetOfPatientsWithAdherence() {
-        assertEquals(
-                0,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1", "patientId2", "patientId3", "patientId4"),
-                        asList("patientId1", "patientId2", "patientId3")
-                ).getPatientRemainingCount().intValue()
-        );
-    }
-
-    @Test
-    public void testAdherenceCountWhenNoPatientHasAdherence() {
-        assertEquals(
-                0,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId2", "patientId3"),
-                        asList("patientId1")
-
-                ).getPatientGivenCount().intValue()
-        );
-    }
-
-    @Test
-    public void testAdherenceCountWhenOnePatientHasAdherence() {
-        assertEquals(
-                1,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1"),
-                        asList("patientId1", "patientId2", "patientId3")
-
-                ).getPatientGivenCount().intValue()
-        );
-    }
-
-    @Test
-    public void testAdherenceCountWhenAllPatientsHaveAdherence() {
-        assertEquals(
-                3,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1", "patientId2", "patientId3"),
-                        asList("patientId1", "patientId2", "patientId3")
-
-                ).getPatientGivenCount().intValue()
-        );
-    }
-
-    @Test
-    public void testAdherenceCountWhenPatientsUnderProviderIsSubsetOfPatientsWithAdherence() {
-        assertEquals(
-                3,
-                new AdherenceFlashingResponse(
-                        providerId, asList("patientId1", "patientId2", "patientId3", "patientId4"),
-                        asList("patientId1", "patientId2", "patientId3")
-
-                ).getPatientGivenCount().intValue()
-        );
-    }
-
-    @Test
-    public void testAdherenceCounts() {
-        assertEquals(
-                0,
-                new AdherenceFlashingResponse(
-                        providerId, null,
-                        null
-
-                ).getPatientGivenCount().intValue()
-        );
-        assertEquals(
-                0,
-                new AdherenceFlashingResponse(
-                        providerId, null,
-                        null
-
-                ).getPatientRemainingCount().intValue()
-        );
+        patients.addAll(patientsWithAdherence);
+        patients.addAll(patientsWithoutAdherence);
     }
 
     @Test
     public void testAdherenceStatusValues() {
-        AdherenceStatus adherenceStatus = new AdherenceFlashingResponse(
-                providerId, asList("patientId1", "patientId2"),
-                asList("patientId1", "patientId2", "patientId3")
-
-        ).getAdherenceStatus();
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProvider(providerId, patients);
+        AdherenceStatus adherenceStatus = new AdherenceFlashingResponse(adherenceSummary).getAdherenceStatus();
 
         assertEquals(2, adherenceStatus.getPatientGivenCount().intValue());
         assertEquals(1, adherenceStatus.getPatientRemainingCount().intValue());
         assertEquals(providerId, adherenceStatus.getProviderId());
+        assertEquals(new PatientsRemaining(adherenceSummary.getAllPatientIdsWithoutAdherence()), adherenceStatus.getPatientsRemaining());
     }
 }

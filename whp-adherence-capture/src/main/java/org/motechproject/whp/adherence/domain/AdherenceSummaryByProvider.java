@@ -2,17 +2,19 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.domain.Patient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.extract;
+import static ch.lambdaj.Lambda.on;
+
 @EqualsAndHashCode
 public class AdherenceSummaryByProvider implements Serializable {
 
+    @Getter
     private String providerId;
     private List<Patient> patients;
     @Getter
@@ -44,8 +46,6 @@ public class AdherenceSummaryByProvider implements Serializable {
     }
 
     private void setAllPatientsWithAdherence() {
-        LocalDate currentWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
-
         allPatientsWithAdherence = new ArrayList<>();
         for (Patient patient : patients) {
             if (patient.hasAdherenceForLastReportingWeekForCurrentTherapy())
@@ -56,5 +56,9 @@ public class AdherenceSummaryByProvider implements Serializable {
     private void setAllPatientsWithoutAdherence() {
         allPatientsWithoutAdherence = new ArrayList<>(patients);
         allPatientsWithoutAdherence.removeAll(allPatientsWithAdherence);
+    }
+
+    public List<String> getAllPatientIdsWithoutAdherence() {
+        return extract(getAllPatientsWithoutAdherence(), on(Patient.class).getPatientId());
     }
 }

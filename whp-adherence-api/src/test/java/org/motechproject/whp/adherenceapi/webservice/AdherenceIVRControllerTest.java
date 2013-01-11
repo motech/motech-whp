@@ -6,24 +6,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherence.builder.AdherenceSummaryByProviderBuilder;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherenceapi.adherence.*;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.*;
-import org.motechproject.whp.adherenceapi.response.AdherenceIVRError;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.http.MediaType;
 
-import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_MOBILE_NUMBER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.INVALID_PROVIDER;
-import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.NON_ADHERENCE_DAY;
+import static org.motechproject.whp.adherenceapi.response.AdherenceIVRError.*;
 import static org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse.failureResponse;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -118,9 +116,15 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
     @Test
     public void shouldRespondWithAdherenceSubmissionInformation() throws Exception {
         String providerId = "raj";
+
+        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProviderBuilder()
+                .withProviderId(providerId)
+                .withPatientsWithAdherence("pat3")
+                .withPatientsWithoutAdherence("pat1", "pat2")
+                .build();
+
         AdherenceFlashingResponse adherenceFlashingResponse = new AdherenceFlashingResponse(
-                providerId, asList("pat0"), asList("pat0", "pat1", "pat2")
-        );
+                adherenceSummaryByProvider);
         AdherenceFlashingRequest flashingRequest = new AdherenceFlashingRequest();
         flashingRequest.setMsisdn("0986754322");
         flashingRequest.setCallId("abcd1234");
@@ -175,10 +179,16 @@ public class AdherenceIVRControllerTest extends BaseUnitTest {
 
     @Test
     public void shouldRespondWithErrorOnAnInvalidAdherenceDay() throws Exception {
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProviderBuilder()
+                .withProviderId("raj")
+                .withPatientsWithAdherence("pat3")
+                .withPatientsWithoutAdherence("pat1", "pat2")
+                .build();
+
         when(adherenceSummaryOverIVR
                 .value(any(AdherenceFlashingRequest.class), any(ProviderId.class))
         ).thenReturn(
-                failureResponse(NON_ADHERENCE_DAY.name(), new AdherenceFlashingResponse("raj", asList("pat0"), asList("pat0", "pat1", "pat2")))
+                failureResponse(NON_ADHERENCE_DAY.name(), new AdherenceFlashingResponse(adherenceSummary))
         );
 
         String expectedXml =

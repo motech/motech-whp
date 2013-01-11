@@ -1,11 +1,10 @@
 package org.motechproject.whp.adherenceapi.service;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.TreatmentProvider;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -22,19 +21,17 @@ import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 
 public class AdherenceServiceTest {
 
     private AdherenceService adherenceService;
-
-    @Mock
-    private WHPAdherenceService whpAdherenceService;
     @Mock
     private PatientService patientService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
+
+    @Mock
+    private AdherenceDataService adherenceDataService;
 
     @Mock
     private ProviderService providerService;
@@ -42,23 +39,20 @@ public class AdherenceServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceService = new AdherenceService(whpAdherenceService, patientService);
+        adherenceService = new AdherenceService(patientService, adherenceDataService);
     }
 
     @Test
     public void shouldSummarizeAdherenceSubmittedByProvider() {
         String providerId = "providerid";
-        LocalDate today = today();
-        List<String> patientsWithAdherence = asList("1234", "5678");
         List<Patient> patientsForProvider = asList(patients("1234"), patients("5678"));
 
         when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(patientsForProvider);
-        when(whpAdherenceService.patientsWithAdherence(week(today))).thenReturn(patientsWithAdherence);
 
-        assertEquals(
-                new AdherenceSummary(providerId, patientsWithAdherence, patientsForProvider),
-                adherenceService.adherenceSummary(providerId, today)
-        );
+        AdherenceSummaryByProvider expectedAdherenceSummary = new AdherenceSummaryByProvider(providerId, patientsForProvider);
+        when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(expectedAdherenceSummary);
+
+        assertEquals(expectedAdherenceSummary, adherenceService.adherenceSummary(providerId));
     }
 
     @Test

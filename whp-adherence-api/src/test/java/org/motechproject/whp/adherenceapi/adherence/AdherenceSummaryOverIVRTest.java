@@ -4,23 +4,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.adherence.builder.AdherenceSummaryByProviderBuilder;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.common.util.WHPDateTime;
-import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.FlashingLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
@@ -59,15 +55,16 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
     public void shouldGenerateResponseAndReportFlashingForValidRequest() {
         AdherenceFlashingRequest adherenceFlashingRequest = createFlashingRequest(msisdn, flashingCallId, callTime);
 
-        List<String> patientIdsWithAdherence = asList("patient1", "patient2");
-        List<String> patientIdsWithoutAdherence = asList("patient3");
-        List<Patient> patientsWithoutAdherence = asList(new PatientBuilder().withDefaults().withPatientId("patient3").build());
-
         when(adherenceWindow.isValidAdherenceDay(today())).thenReturn(true);
-        when(adherenceService.adherenceSummary(providerId, today())).thenReturn(new AdherenceSummary(providerId, patientIdsWithAdherence, patientsWithoutAdherence));
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProviderBuilder()
+                .withProviderId(providerId)
+                .withPatientsWithAdherence("patient1", "patient2")
+                .withPatientsWithoutAdherence("patient3").build();
+
+        when(adherenceService.adherenceSummary(providerId)).thenReturn(adherenceSummary);
 
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
-        AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(providerId, patientIdsWithAdherence, patientIdsWithoutAdherence);
+        AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(adherenceSummary);
 
         AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 
@@ -93,15 +90,15 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
     public void shouldGenerateErrorResponseAndReportFlashingForNonAdherenceDay() {
         AdherenceFlashingRequest adherenceFlashingRequest = createFlashingRequest(msisdn, flashingCallId, callTime);
 
-        List<String> patientIdsWithAdherence = asList("patient1", "patient2");
-        List<Patient> patientsWithoutAdherence = asList(new PatientBuilder().withDefaults().withPatientId("patient3").build());
+        AdherenceSummaryByProvider adherenceSummary = new AdherenceSummaryByProviderBuilder()
+                .withProviderId(providerId)
+                .withPatientsWithAdherence("patient1", "patient2")
+                .withPatientsWithoutAdherence("patient3").build();
 
-        AdherenceSummary summary = new AdherenceSummary(providerId, patientIdsWithAdherence, patientsWithoutAdherence);
-
-        when(adherenceService.adherenceSummary(providerId, today())).thenReturn(summary);
+        when(adherenceService.adherenceSummary(providerId)).thenReturn(adherenceSummary);
 
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
-        AdherenceFlashingResponse expectedResponse = failureResponse(summary, NON_ADHERENCE_DAY.name());
+        AdherenceFlashingResponse expectedResponse = failureResponse(adherenceSummary, NON_ADHERENCE_DAY.name());
 
         AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
 

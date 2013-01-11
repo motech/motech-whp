@@ -2,13 +2,9 @@ package org.motechproject.whp.adherenceapi.response.flashing;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 
 import javax.xml.bind.annotation.XmlElement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.apache.commons.collections.CollectionUtils.*;
 
 @EqualsAndHashCode
 @Getter
@@ -26,28 +22,13 @@ class AdherenceStatus {
     AdherenceStatus() {
     }
 
-    AdherenceStatus(String providerId, List<String> patientsForProvider, List<String> patientsWithAdherence) {
-        patientsForProvider = ifNullThenEmpty(patientsForProvider);
-        patientsWithAdherence = ifNullThenEmpty(patientsWithAdherence);
-        List<String> patientsRemaining = patientsRemaining(patientsForProvider, patientsWithAdherence);
+    AdherenceStatus(AdherenceSummaryByProvider adherenceSummaryByProvider) {
+        this.providerId = adherenceSummaryByProvider.getProviderId();
+        this.patientRemainingCount = adherenceSummaryByProvider.countOfPatientsWithoutAdherence();
+        this.patientGivenCount = adherenceSummaryByProvider.countOfPatientsWithAdherence();
 
-        this.providerId = providerId;
-        this.patientRemainingCount = patientsRemaining.size();
-        this.patientGivenCount = patientGivenCount(patientsForProvider, patientsWithAdherence);
-        if (isNotEmpty(patientsRemaining)) {
-            this.patientsRemaining = new PatientsRemaining(patientsRemaining);
+        if (adherenceSummaryByProvider.hasPatientsWithoutAdherence()) {
+            this.patientsRemaining = new PatientsRemaining(adherenceSummaryByProvider.getAllPatientIdsWithoutAdherence());
         }
-    }
-
-    private Integer patientGivenCount(List<String> patientsForProvider, List<String> patientsWithAdherence) {
-        return intersection(patientsForProvider, patientsWithAdherence).size();
-    }
-
-    private List<String> ifNullThenEmpty(List<String> patients) {
-        return (null == patients) ? Collections.<String>emptyList() : patients;
-    }
-
-    private List<String> patientsRemaining(List<String> patientsForProvider, List<String> patientsWithAdherence) {
-        return new ArrayList<String>(subtract(patientsForProvider, patientsWithAdherence));
     }
 }

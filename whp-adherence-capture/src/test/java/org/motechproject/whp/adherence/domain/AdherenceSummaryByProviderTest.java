@@ -3,7 +3,6 @@ package org.motechproject.whp.adherence.domain;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -26,7 +26,6 @@ public class AdherenceSummaryByProviderTest {
 
     @Before
     public void setUp() {
-        LocalDate lastWeekStartDate = TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate();
         Patient patientWithAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
         Patient patientWithAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient2").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
 
@@ -94,6 +93,13 @@ public class AdherenceSummaryByProviderTest {
         patients.add(patientWithAdherenceForPreviousTherapy);
         AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId", patients);
         assertThat(adherenceSummaryByProvider.getAllPatientsWithAdherence(), hasItem(not(patientWithAdherenceForPreviousTherapy)));
+    }
+
+    @Test
+    public void shouldReturnListOfPatientIdsWithoutAdherence() {
+        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId", patients);
+
+        assertEquals(asList("patient3", "patient4"), adherenceSummaryByProvider.getAllPatientIdsWithoutAdherence());
     }
 
 }

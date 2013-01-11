@@ -1,33 +1,27 @@
 package org.motechproject.whp.adherenceapi.service;
 
-import org.joda.time.LocalDate;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
+import org.motechproject.whp.adherence.service.AdherenceDataService;
 import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
-
 @Service
 public class AdherenceService {
 
-    private WHPAdherenceService whpAdherenceService;
     private PatientService patientService;
+    private AdherenceDataService adherenceDataService;
 
     @Autowired
-    public AdherenceService(WHPAdherenceService whpAdherenceService, PatientService patientService) {
-        this.whpAdherenceService = whpAdherenceService;
+    public AdherenceService(PatientService patientService, AdherenceDataService adherenceDataService) {
         this.patientService = patientService;
+        this.adherenceDataService = adherenceDataService;
     }
 
-    public AdherenceSummary adherenceSummary(String providerId, LocalDate today) {
-        return new AdherenceSummary(
-                providerId, whpAdherenceService.patientsWithAdherence(week(today)),
-                patientService.getAllWithActiveTreatmentForProvider(providerId)
-        );
+    public AdherenceSummaryByProvider adherenceSummary(String providerId) {
+        return adherenceDataService.getAdherenceSummary(providerId);
     }
 
     public Dosage dosageForPatient(String patientId) {

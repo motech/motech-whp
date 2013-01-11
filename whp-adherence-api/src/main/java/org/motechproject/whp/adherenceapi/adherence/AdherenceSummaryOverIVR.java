@@ -2,8 +2,8 @@ package org.motechproject.whp.adherenceapi.adherence;
 
 
 import org.joda.time.LocalDate;
+import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
 import org.motechproject.whp.adherence.service.AdherenceWindow;
-import org.motechproject.whp.adherenceapi.domain.AdherenceSummary;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.FlashingRequestErrors;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;
@@ -42,14 +42,14 @@ public class AdherenceSummaryOverIVR {
     private AdherenceFlashingResponse flashingResponse(ProviderId providerId, LocalDate requestedDate) {
         FlashingRequestErrors errors = new FlashingRequestErrors(!providerId.isEmpty(), isAdherenceDay(requestedDate));
         if (errors.isNotEmpty()) {
-            return (errors.isInValidAdherenceDay()) ? failureResponse(adherenceSummary(providerId, requestedDate), errors.errorMessage()) : failureResponse(errors.errorMessage());
+            return (errors.isInValidAdherenceDay()) ? failureResponse(adherenceSummary(providerId), errors.errorMessage()) : failureResponse(errors.errorMessage());
         } else {
-            return successResponse(adherenceSummary(providerId, requestedDate));
+            return successResponse(adherenceSummary(providerId));
         }
     }
 
-    private AdherenceSummary adherenceSummary(ProviderId providerId, LocalDate requestedDate) {
-        return adherenceService.adherenceSummary(providerId.value(), requestedDate);
+    private AdherenceSummaryByProvider adherenceSummary(ProviderId providerId) {
+        return adherenceService.adherenceSummary(providerId.value());
     }
 
     private FlashingLogRequest flashingLogRequest(AdherenceFlashingRequest adherenceFlashingRequest, ProviderId providerId) {
