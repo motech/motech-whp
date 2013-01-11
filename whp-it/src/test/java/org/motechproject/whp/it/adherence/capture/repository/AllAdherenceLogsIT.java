@@ -26,6 +26,8 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Autowired
     private AllAdherenceLogs allAdherenceLogs;
+    private LocalDate today = DateUtil.today();
+    private LocalDate yesterday = DateUtil.today().minusDays(1);
 
     @After
     public void tearDown() {
@@ -72,26 +74,30 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     public void shouldReturnTakenLogsWhenFindingLogsAsOfGivenDate() {
         LocalDate today = DateUtil.today();
 
-        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
+        AdherenceLog toBeFound = createAdherenceLogWithGivenStatus(today);
+        AdherenceLog olderLog = createAdherenceLogWithGivenStatus(today.minusDays(5));
+        AdherenceLog newerLog = createAdherenceLogWithGivenStatus(today.plusDays(5));
         toBeFound.status(1);
-        addAll(toBeFound);
+        addAll(toBeFound, olderLog, newerLog);
         Assert.assertArrayEquals(
                 new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
-                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 5).toArray()
         );
+    }
+
+    private AdherenceLog createAdherenceLogWithGivenStatus(LocalDate today) {
+        return new AdherenceLog("externalId", "treatmentId", today).status(1);
     }
 
     @Test
     public void shouldReturnNotTakenLogsWhenFindingLogsAsOfGivenDate() {
-        LocalDate today = DateUtil.today();
-
         AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
         toBeFound.status(2);
 
         addAll(toBeFound);
         Assert.assertArrayEquals(
                 new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
-                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).toArray()
         );
     }
 
@@ -103,7 +109,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         toBeFound.status(0);
 
         addAll(toBeFound);
-        assertTrue(allAdherenceLogs.findLogsAsOf(today, 0, 1).isEmpty());
+        assertTrue(allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).isEmpty());
     }
 
     @Test
@@ -118,11 +124,11 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
         Assert.assertArrayEquals(
                 new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1)},
-                allAdherenceLogs.findLogsAsOf(today, 0, 1).toArray()
+                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).toArray()
         );
         Assert.assertArrayEquals(
                 new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient2)},
-                allAdherenceLogs.findLogsAsOf(today, 1, 1).toArray()
+                allAdherenceLogs.findLogsInRange(yesterday, today, 1, 1).toArray()
         );
     }
 
@@ -138,7 +144,7 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
         Assert.assertArrayEquals(
                 new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1), new AdherenceRecord(logToBeFoundForPatient2)},
-                allAdherenceLogs.findLogsAsOf(today, 0, 2).toArray()
+                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 2).toArray()
         );
     }
 
@@ -269,12 +275,12 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldFetchLogsForExternalIdByDateRange() {
-        LocalDate startDate = new LocalDate(2012, 2, 1);
+        LocalDate yesterday = new LocalDate(2012, 2, 1);
         LocalDate dateInBetweenRange = new LocalDate(2012, 5, 5);
         LocalDate endDate = new LocalDate(2012, 5, 10);
 
-        AdherenceLog logBeforeRange = new AdherenceLog("externalId1", "treatmentId1", startDate.minusDays(1));
-        AdherenceLog logInRange1 = new AdherenceLog("externalId1", "treatmentId3", startDate);
+        AdherenceLog logBeforeRange = new AdherenceLog("externalId1", "treatmentId1", yesterday.minusDays(1));
+        AdherenceLog logInRange1 = new AdherenceLog("externalId1", "treatmentId3", yesterday);
         AdherenceLog logInRange2 = new AdherenceLog("externalId1", "treatmentId2", dateInBetweenRange);
         AdherenceLog logInRange3 = new AdherenceLog("externalId1", "treatmentId3", endDate);
         AdherenceLog logAfterRange = new AdherenceLog("externalId1", "treatmentId3", endDate.plusDays(1));
@@ -286,9 +292,9 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         allAdherenceLogs.add(logInRangeButDiffExternalId);
         allAdherenceLogs.add(logAfterRange);
 
-        List<AdherenceLog> result = allAdherenceLogs.findAllLogsForExternalIdInDoseDateRange("externalId1", startDate, endDate);
+        List<AdherenceLog> result = allAdherenceLogs.findAllLogsForExternalIdInDoseDateRange("externalId1", yesterday, endDate);
         assertEquals(3, result.size());
-        Assert.assertEquals(startDate, result.get(0).doseDate());
+        Assert.assertEquals(yesterday, result.get(0).doseDate());
         Assert.assertEquals(dateInBetweenRange, result.get(1).doseDate());
         Assert.assertEquals(endDate, result.get(2).doseDate());
 

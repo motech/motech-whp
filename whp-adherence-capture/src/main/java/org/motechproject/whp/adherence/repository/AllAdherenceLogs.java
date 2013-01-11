@@ -4,7 +4,6 @@ import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
-import org.ektorp.support.ListFunction;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
@@ -65,8 +64,8 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
     }
 
     @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog' && doc.status !== 0 ) {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
-    public List<AdherenceRecord> findLogsAsOf(LocalDate asOf, int pageNumber, int pageSize) {
-        ViewQuery q = createQuery("by_dosageDate").endKey(asOf).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
+    public List<AdherenceRecord> findLogsInRange(LocalDate startDate, LocalDate endDate, int pageNumber, int pageSize) {
+        ViewQuery q = createQuery("by_dosageDate").startKey(startDate).endKey(endDate).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
     }
 

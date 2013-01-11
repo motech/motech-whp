@@ -34,7 +34,7 @@ public class AdherenceLogService {
     }
 
     public List<AdherenceRecord> adherence(LocalDate asOf, int pageNumber, int pageSize) {
-        return allAdherenceLogs.findLogsAsOf(asOf, pageNumber, pageSize);
+        return allAdherenceLogs.findLogsInRange(asOf.minusMonths(3), asOf, pageNumber, pageSize);
     }
 
     public ProviderIds providersWithAdherence(String district, LocalDate from, LocalDate to) {
