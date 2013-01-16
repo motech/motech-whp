@@ -4,10 +4,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 
 import java.io.Serializable;
 
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrAfter;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
@@ -71,7 +71,7 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
         asOfDate = asOfDate.isBefore(this.startDate) ? this.startDate : asOfDate;
         if (asOfDate != null) {
             int totalDoses = 0;
-            LocalDate endDate = this.endDate == null ? today() : this.endDate;
+            LocalDate endDate = this.endDate == null ? TreatmentWeekInstance.currentAdherenceCaptureWeek().endDate() : this.endDate;
             for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
                 totalDoses = totalDoses + numberOf_DDD_Between(asOfDate, endDate, dayOfWeek);
             }

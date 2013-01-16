@@ -130,11 +130,12 @@ public class PatientControllerTest extends BaseControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(5))
+                .andExpect(model().size(6))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("cmfAdminRemarks", cmfAdminRemarks))
                 .andExpect(model().attribute("providerRemarks", auditLogs))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
+                .andExpect(model().attributeExists("patientAlerts"))
                 .andExpect(forwardedUrl("patient/show"));
     }
 

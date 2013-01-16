@@ -94,7 +94,7 @@ public class PatientAlertTest extends BaseUnitTest {
     @Test
     public void shouldRaiseAdherenceMissingAlert() {
         Therapy therapy = mock(Therapy.class);
-
+        mockCurrentDate(new LocalDate(2012, 01, 01));
         when(therapy.getOngoingDoseInterruption()).thenReturn(new DoseInterruption(DateUtil.today().minusWeeks(3)));
 
         Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
@@ -119,5 +119,4 @@ public class PatientAlertTest extends BaseUnitTest {
 
         assertEquals(0, patient.getPatientAlerts().adherenceMissedAlert.getValue());
     }
-
 }

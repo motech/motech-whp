@@ -12,6 +12,7 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
+import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
@@ -22,7 +23,6 @@ import java.util.List;
 import static ch.lambdaj.Lambda.*;
 import static org.joda.time.Weeks.weeksBetween;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
@@ -522,7 +522,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {
-        return weeksBetween(week(interruptionStartDate).endDate(), currentAdherenceCaptureWeek().endDate()).getWeeks();
+        return weeksBetween(new TreatmentWeek(interruptionStartDate).endDate(), currentAdherenceCaptureWeek().endDate()).getWeeks();
     }
 
     public void updateAllAlerts(){
