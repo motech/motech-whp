@@ -13,4 +13,8 @@ public class CumulativeMissedDoseAlert extends PatientAlert {
     public CumulativeMissedDoseAlert(int threshold, int value, LocalDate alertDate) {
         super(threshold, value, alertDate);
     }
+
+    public LocalDate getDateOfReferenceForCumulativeMissedDoses(LocalDate treatmentStartDate){
+        return resetDate != null && resetDate.isAfter(treatmentStartDate) ? resetDate : treatmentStartDate;
+    }
 }

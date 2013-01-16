@@ -61,6 +61,7 @@ public class DoseInterruptions extends ArrayList<DoseInterruption> implements Se
         return cumulativeMissedDoseCount;
     }
 
+    @JsonIgnore
     public DoseInterruption ongoingDoseInterruption() {
         if(!isCurrentlyDoseInterrupted()){
             return null;

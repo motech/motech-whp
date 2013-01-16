@@ -46,6 +46,8 @@ public class Patient extends MotechBaseDataObject {
     private boolean migrated;
 
     private String version = "V2";
+
+    @JsonIgnore
     private PatientAlerts patientAlerts = new PatientAlerts();
 
     public Patient() {
@@ -489,7 +491,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void updateCumulativeMissedDoseAlertStatus() {
-        LocalDate asOfDate = patientAlerts.cumulativeMissedDosesAlert.getResetDate() != null ? patientAlerts.cumulativeMissedDosesAlert.getResetDate() : currentTherapy.getCurrentTreatmentStartDate();
+        LocalDate asOfDate = patientAlerts.cumulativeMissedDosesAlert.getDateOfReferenceForCumulativeMissedDoses(currentTherapy.getCurrentTreatmentStartDate());
         int cumulativeMissedDoses = currentTherapy.getCumulativeMissedDoses(asOfDate);
         patientAlerts.cumulativeMissedDosesAlert = new CumulativeMissedDoseAlert(0, cumulativeMissedDoses, DateUtil.today());
     }
@@ -521,5 +523,11 @@ public class Patient extends MotechBaseDataObject {
 
     private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {
         return weeksBetween(week(interruptionStartDate).endDate(), currentAdherenceCaptureWeek().endDate()).getWeeks();
+    }
+
+    public void updateAllAlerts(){
+        updateTreatmentNotStartedAlertStatus();
+        updateCumulativeMissedDoseAlertStatus();
+        updateAdherenceMissingAlert();
     }
 }

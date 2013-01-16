@@ -102,6 +102,7 @@ public class PatientController extends BaseWebController {
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
         treatmentUpdateOrchestrator.updateDoseInterruptions(patient);
+        patient.updateAllAlerts();
         setupDashboardModel(uiModel, request, patient);
         return "patient/show";
     }
@@ -205,6 +206,7 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
+        uiModel.addAttribute("patientAlerts", patient.getPatientAlerts());
         setUpModelForRemarks(uiModel, patient);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
