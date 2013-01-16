@@ -29,7 +29,7 @@ public class PillTakenSummaries implements Serializable {
 
     @JsonIgnore
     public int getTotalPillsTakenTillLastSunday(LocalDate reference) {
-        if (isOnOrBefore(laterSummary().getSundayDate(), reference)) {
+        if (laterSummary() != null && isOnOrBefore(laterSummary().getSundayDate(), reference)) {
             return laterSummary().getDoseCount();
         } else {
             return dosesInOlderSummary();

@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPDomainException;
 import org.springframework.util.CollectionUtils;
 
@@ -50,5 +51,13 @@ public class DoseInterruptions extends ArrayList<DoseInterruption> implements Se
     public boolean isCurrentlyDoseInterrupted() {
         DoseInterruption latestDoseInterruption = latestInterruption();
         return latestDoseInterruption != null && latestDoseInterruption.isOngoing();
+    }
+
+    public int getCumulativeMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate startDate) {
+        int cumulativeMissedDoseCount = 0;
+        for(DoseInterruption interruption: this){
+            cumulativeMissedDoseCount += interruption.getMissedDoseCount(treatmentCategory, startDate);
+        }
+        return cumulativeMissedDoseCount;
     }
 }

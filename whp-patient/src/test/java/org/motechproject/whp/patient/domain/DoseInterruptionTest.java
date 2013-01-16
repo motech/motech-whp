@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,4 +43,17 @@ public class DoseInterruptionTest {
         assertEquals(20, doseInterruption.getMissedDoseCount(treatmentCategory));
     }
 
+    @Test
+    public void shouldReturnNumberOfMissedDosesForGivenCategoryAndFromGivenStartDate() {
+        LocalDate startDate = new LocalDate(2012, 7, 2);
+        LocalDate endDate = new LocalDate(2012, 7, 21);
+        DoseInterruption doseInterruption = new DoseInterruption(startDate);
+        doseInterruption.endMissedPeriod(endDate);
+
+        TreatmentCategory treatmentCategory = new TreatmentCategory("Commercial/Private Category 1", "11", 7, 8, 56, 4, 28, 18, 126, allDaysOfWeek);
+
+        assertEquals(20, doseInterruption.getMissedDoseCount(treatmentCategory, new LocalDate(2012, 7, 2)));
+        assertEquals(20, doseInterruption.getMissedDoseCount(treatmentCategory, new LocalDate(2012, 7, 1)));
+        assertEquals(0, doseInterruption.getMissedDoseCount(treatmentCategory, new LocalDate(2012, 8, 1)));
+    }
 }

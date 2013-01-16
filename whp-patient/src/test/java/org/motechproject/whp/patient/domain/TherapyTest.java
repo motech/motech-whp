@@ -16,9 +16,10 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.Phase.*;
-import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
+import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
+import static org.motechproject.whp.patient.builder.AllDaysOfWeek.allDaysOfWeek;
 
 public class TherapyTest {
 
@@ -382,5 +383,72 @@ public class TherapyTest {
         therapy.addTreatment(currentTreatment, now());
 
         assertEquals(today.minusDays(1), therapy.getTreatmentStartDate("tbId1"));
+    }
+
+
+    @Test
+    public void shouldReturnCumulativeMissedDosesForCurrentTreatmentBasedOnTreatmentStartDateIfGivenDateIsEarlier() {
+        Treatment historicalTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2012, 10, 01)).withTbId("tbId1").withEndDate(new LocalDate(2012, 12, 01)).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2013, 01, 01)).withTbId("tbId2").build();
+
+        DoseInterruptions doseInterruptions = new DoseInterruptions();
+        doseInterruptions.add(new DoseInterruption(new LocalDate(2012, 10, 01)).endMissedPeriod(new LocalDate(2012, 10, 01)));
+        doseInterruptions.add(new DoseInterruption(new LocalDate(2013, 01, 02)).endMissedPeriod(new LocalDate(2013, 01, 05)));
+
+        Therapy therapy = new TherapyBuilder().withTreatmentStartingOn(historicalTreatment, historicalTreatment.getStartDate())
+                .withTreatmentCategory(new TreatmentCategory("Commercial/Private Category 1", "11", 7, 8, 56, 4, 28, 18, 126, allDaysOfWeek))
+                .withDoseInterruptions(doseInterruptions)
+                .withStartDate(historicalTreatment.getStartDate())
+                .build();
+        therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
+
+         assertEquals(4, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1)));
+    }
+
+    @Test
+    public void shouldReturnCumulativeMissedDosesForCurrentTreatmentBasedOnGivenDateIfItIsLaterThanTreamentStartDate() {
+        Treatment historicalTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2012, 10, 01)).withTbId("tbId1").withEndDate(new LocalDate(2012, 12, 01)).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2013, 01, 01)).withTbId("tbId2").build();
+
+        DoseInterruptions doseInterruptions = new DoseInterruptions();
+        doseInterruptions.add(new DoseInterruption(new LocalDate(2012, 10, 01)).endMissedPeriod(new LocalDate(2012, 10, 01)));
+        doseInterruptions.add(new DoseInterruption(new LocalDate(2013, 01, 02)).endMissedPeriod(new LocalDate(2013, 01, 05)));
+
+        Therapy therapy = new TherapyBuilder().withTreatmentStartingOn(historicalTreatment, historicalTreatment.getStartDate())
+                .withTreatmentCategory(new TreatmentCategory("Commercial/Private Category 1", "11", 7, 8, 56, 4, 28, 18, 126, allDaysOfWeek))
+                .withDoseInterruptions(doseInterruptions)
+                .withStartDate(historicalTreatment.getStartDate())
+                .build();
+        therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
+
+         assertEquals(3, therapy.getCumulativeMissedDoses(new LocalDate(2013, 01, 03)));
+    }
+
+    @Test
+    public void shouldReturnCumulativeMissedDosesAsZeroIfTherapyHasNotStarted() {
+        DoseInterruptions doseInterruptions = new DoseInterruptions();
+        doseInterruptions.add(new DoseInterruption(new LocalDate(2013, 01, 02)).endMissedPeriod(new LocalDate(2013, 01, 05)));
+
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2013, 01, 01)).withTbId("tbId2").build();
+
+        Therapy therapy = new TherapyBuilder().withTreatmentStartingOn(currentTreatment, currentTreatment.getStartDate())
+                .withTreatmentCategory(new TreatmentCategory("Commercial/Private Category 1", "11", 7, 8, 56, 4, 28, 18, 126, allDaysOfWeek))
+                .withDoseInterruptions(doseInterruptions).build();
+        therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
+
+        assertEquals(0, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1)));
+    }
+
+    @Test
+    public void shouldReturnCurrentTreatmentStartDate() {
+        Treatment historicalTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2012, 10, 01)).withTbId("tbId1").withEndDate(new LocalDate(2012, 12, 01)).build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withStartDate(new LocalDate(2013, 01, 01)).withTbId("tbId2").build();
+
+        Therapy therapy = new TherapyBuilder().withTreatmentStartingOn(historicalTreatment, historicalTreatment.getStartDate())
+                .withStartDate(historicalTreatment.getStartDate())
+                .build();
+        therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
+
+        assertEquals(new LocalDate(2013,01,01), therapy.getCurrentTreatmentStartDate());
     }
 }

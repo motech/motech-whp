@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
@@ -43,6 +44,7 @@ public class Patient extends MotechBaseDataObject {
     private boolean migrated;
 
     private String version = "V2";
+    private PatientAlerts patientAlerts = new PatientAlerts();
 
     public Patient() {
     }
@@ -479,8 +481,28 @@ public class Patient extends MotechBaseDataObject {
 
     @JsonIgnore
     public String getCurrentProviderId() {
-        if(!hasCurrentTreatment())
+        if (!hasCurrentTreatment())
             return null;
         return getCurrentTreatment().getProviderId();
+    }
+
+    public void updateCumulativeMissedDoseAlertStatus() {
+        LocalDate asOfDate = patientAlerts.cumulativeMissedDosesAlert.getResetDate() != null ? patientAlerts.cumulativeMissedDosesAlert.getResetDate() : currentTherapy.getCurrentTreatmentStartDate();
+        int cumulativeMissedDoses = currentTherapy.getCumulativeMissedDoses(asOfDate);
+        patientAlerts.cumulativeMissedDosesAlert = new CumulativeMissedDoseAlert(0, cumulativeMissedDoses, DateUtil.today());
+    }
+
+    public void updateTreatmentNotStartedAlertStatus() {
+        int daysElapsed;
+        if (currentTherapy.hasStarted()) {
+            daysElapsed = 0;
+        } else {
+            daysElapsed = getDaysElapsedSinceTreatmentStartDate();
+        }
+        patientAlerts.therapyNotStartedAlert.setValue(daysElapsed);
+    }
+
+    private int getDaysElapsedSinceTreatmentStartDate() {
+        return Days.daysBetween(currentTherapy.getCurrentTreatmentStartDate(), DateUtil.today()).getDays();
     }
 }

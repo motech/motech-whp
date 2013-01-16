@@ -28,23 +28,15 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
         this.startDate = startDate;
     }
 
-    public void endMissedPeriod(LocalDate endDate){
+    public DoseInterruption endMissedPeriod(LocalDate endDate){
         if (isOnOrAfter(endDate, startDate)) {
             this.endDate = endDate;
         }
+        return this;
     }
 
     public int getMissedDoseCount(TreatmentCategory treatmentCategory){
-        if (startDate != null) {
-            int totalDoses = 0;
-            LocalDate endDate = this.endDate == null ? today() : this.endDate;
-            for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
-                totalDoses = totalDoses + numberOf_DDD_Between(startDate, endDate, dayOfWeek);
-            }
-            return totalDoses;
-        } else {
-            return 0;
-        }
+        return getMissedDoseCount(treatmentCategory, this.startDate);
     }
 
     public LocalDate startDate() {
@@ -73,5 +65,19 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
     @JsonIgnore
     public boolean isOngoing() {
         return endDate == null;
+    }
+
+    public int getMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate asOfDate) {
+        asOfDate = asOfDate.isBefore(this.startDate) ? this.startDate : asOfDate;
+        if (asOfDate != null) {
+            int totalDoses = 0;
+            LocalDate endDate = this.endDate == null ? today() : this.endDate;
+            for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
+                totalDoses = totalDoses + numberOf_DDD_Between(asOfDate, endDate, dayOfWeek);
+            }
+            return totalDoses;
+        } else {
+            return 0;
+        }
     }
 }
