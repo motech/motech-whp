@@ -10,6 +10,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNull;
 
 public class DoseInterruptionsTest {
 
@@ -54,7 +55,18 @@ public class DoseInterruptionsTest {
         DoseInterruptions doseInterruptions = new DoseInterruptions(Arrays.asList(doseInterruption1, doseInterruption2, doseInterruption3));
 
         assertEquals(29, doseInterruptions.getCumulativeMissedDoseCount(treatmentCategory,new LocalDate(2012, 7, 2)));
-
     }
 
+    @Test
+    public void shouldReturnOngoingDoseInterruptionIfExists() {
+        DoseInterruption doseInterruption1 = new DoseInterruption(new LocalDate(2012, 7, 2));
+        doseInterruption1.endMissedPeriod(new LocalDate(2012, 7, 21));
+        DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012,7,24));
+
+        DoseInterruptions doseInterruptions = new DoseInterruptions(Arrays.asList(doseInterruption1, doseInterruption2));
+
+        assertEquals(doseInterruption2, doseInterruptions.ongoingDoseInterruption());
+        assertNull(new DoseInterruptions().ongoingDoseInterruption());
+        assertNull(new DoseInterruptions(Arrays.asList(doseInterruption1)).ongoingDoseInterruption());
+    }
 }

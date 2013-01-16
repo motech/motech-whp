@@ -423,4 +423,8 @@ public class Therapy implements Serializable {
     public LocalDate getCurrentTreatmentStartDate() {
         return getCurrentTreatment().getStartDate();
     }
+
+    public DoseInterruption getOngoingDoseInterruption() {
+        return doseInterruptions.ongoingDoseInterruption();
+    }
 }

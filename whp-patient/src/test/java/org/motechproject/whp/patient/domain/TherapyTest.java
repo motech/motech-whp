@@ -14,6 +14,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.Phase.*;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
@@ -449,6 +451,18 @@ public class TherapyTest {
                 .build();
         therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
 
-        assertEquals(new LocalDate(2013,01,01), therapy.getCurrentTreatmentStartDate());
+        assertEquals(new LocalDate(2013, 01, 01), therapy.getCurrentTreatmentStartDate());
+    }
+
+    @Test
+    public void shouldReturnOngoingDoseInterruption() {
+        DoseInterruptions doseInterruptions = mock(DoseInterruptions.class);
+
+        DoseInterruption expectedDoseInterruption = new DoseInterruption();
+        when(doseInterruptions.ongoingDoseInterruption()).thenReturn(expectedDoseInterruption);
+
+        Therapy therapy = new TherapyBuilder().withDoseInterruptions(doseInterruptions).build();
+
+        assertEquals(expectedDoseInterruption, therapy.getOngoingDoseInterruption());
     }
 }

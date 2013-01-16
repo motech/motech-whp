@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
+import static org.joda.time.Weeks.weeksBetween;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.week;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
@@ -504,5 +506,20 @@ public class Patient extends MotechBaseDataObject {
 
     private int getDaysElapsedSinceTreatmentStartDate() {
         return Days.daysBetween(currentTherapy.getCurrentTreatmentStartDate(), DateUtil.today()).getDays();
+    }
+
+    public void updateAdherenceMissingAlert() {
+        DoseInterruption ongoingDoseInterruption = this.getCurrentTherapy().getOngoingDoseInterruption();
+        int weeksElapsed;
+        if(ongoingDoseInterruption != null){
+            weeksElapsed = weeksElapsedSinceLastAdherence(ongoingDoseInterruption.startDate());
+        } else {
+            weeksElapsed = 0;
+        }
+        patientAlerts.adherenceMissedAlert.setValue(weeksElapsed);
+    }
+
+    private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {
+        return weeksBetween(week(interruptionStartDate).endDate(), currentAdherenceCaptureWeek().endDate()).getWeeks();
     }
 }

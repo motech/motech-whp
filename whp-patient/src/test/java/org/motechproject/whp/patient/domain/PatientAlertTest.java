@@ -91,4 +91,33 @@ public class PatientAlertTest extends BaseUnitTest {
         assertEquals(0, patient.getPatientAlerts().therapyNotStartedAlert.getValue());
     }
 
+    @Test
+    public void shouldRaiseAdherenceMissingAlert() {
+        Therapy therapy = mock(Therapy.class);
+
+        when(therapy.getOngoingDoseInterruption()).thenReturn(new DoseInterruption(DateUtil.today().minusWeeks(3)));
+
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
+        PatientAlerts patientAlerts = new PatientAlerts();
+        patient.setPatientAlerts(patientAlerts);
+
+        patient.updateAdherenceMissingAlert();
+
+        assertEquals(3, patient.getPatientAlerts().adherenceMissedAlert.getValue());
+    }
+
+    @Test
+    public void shouldRaiseAdherenceMissingAlert_whenThereIsNoOngoingDoseInterruption() {
+        Therapy therapy = mock(Therapy.class);
+        when(therapy.getOngoingDoseInterruption()).thenReturn(null);
+
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
+        PatientAlerts patientAlerts = new PatientAlerts();
+        patient.setPatientAlerts(patientAlerts);
+
+        patient.updateAdherenceMissingAlert();
+
+        assertEquals(0, patient.getPatientAlerts().adherenceMissedAlert.getValue());
+    }
+
 }

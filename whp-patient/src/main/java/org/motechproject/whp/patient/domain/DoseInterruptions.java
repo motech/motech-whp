@@ -60,4 +60,11 @@ public class DoseInterruptions extends ArrayList<DoseInterruption> implements Se
         }
         return cumulativeMissedDoseCount;
     }
+
+    public DoseInterruption ongoingDoseInterruption() {
+        if(!isCurrentlyDoseInterrupted()){
+            return null;
+        }
+        return latestInterruption();
+    }
 }
