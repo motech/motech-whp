@@ -4,10 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.domain.*;
 
 import static java.util.Arrays.asList;
 import static org.motechproject.model.DayOfWeek.*;
@@ -71,6 +68,11 @@ public class TherapyBuilder {
 
     public TherapyBuilder withTreatmentStartingOn(Treatment treatment, LocalDate startDate) {
         therapy.addTreatment(treatment, DateUtil.newDateTime(startDate));
+        return this;
+    }
+
+    public TherapyBuilder withDoseInterruptions(DoseInterruptions doseInterruptions) {
+        therapy.setDoseInterruptions(doseInterruptions);
         return this;
     }
 }

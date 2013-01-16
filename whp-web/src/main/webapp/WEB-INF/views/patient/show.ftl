@@ -36,6 +36,28 @@
 
         <#include "phaseInfo.ftl"/>
 
+        <div id = "alerts"  class="row-fluid span4">
+            <h3>Alert Details</h3>
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th>Therapy Not Started Alert (days elapsed)</th>
+                    <td>${patientAlerts.therapyNotStartedAlert.value}</td>
+                </tr>
+
+                <tr>
+                    <th>Adherence Missing Alert (weeks elapsed)</th>
+                    <td>${patientAlerts.adherenceMissedAlert.value}</td>
+                </tr>
+
+                <tr>
+                    <th>Cumulative Missed Dose Alert (missed doses count)</th>
+                    <td>${patientAlerts.cumulativeMissedDosesAlert.value}</td>
+                </tr>
+
+            </table>
+        </div>
+
         <div id="treatmentCard"></div>
 
     <br />
