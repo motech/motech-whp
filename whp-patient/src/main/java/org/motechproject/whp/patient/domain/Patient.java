@@ -12,7 +12,6 @@ import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
-import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
@@ -522,7 +521,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {
-        return weeksBetween(new TreatmentWeek(interruptionStartDate).endDate(), currentAdherenceCaptureWeek().endDate()).getWeeks();
+        return weeksBetween(interruptionStartDate, currentAdherenceCaptureWeek().endDate().plusDays(1)).getWeeks();
     }
 
     public void updateAllAlerts(){
