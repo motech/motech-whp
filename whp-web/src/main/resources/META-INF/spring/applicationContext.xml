@@ -88,6 +88,21 @@
                 <entry key="quartz">
                     <util:properties location="classpath:quartz.properties"/>
                 </entry>
+                <entry key="providerReminders">
+                    <util:properties location="classpath:providerReminder.properties"/>
+                </entry>
+                <entry key="waygenext">
+                    <util:properties location="classpath:wgnGateway.properties"/>
+                </entry>
+                <entry key="remedi">
+                    <util:properties location="classpath:remedi.properties"/>
+                </entry>
+                <entry key="whp">
+                    <util:properties location="classpath:whp.properties"/>
+                </entry>
+                <entry key="adherence">
+                    <util:properties location="classpath:adherence.properties"/>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
