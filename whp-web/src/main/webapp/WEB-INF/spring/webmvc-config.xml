@@ -46,6 +46,7 @@
             <mvc:mapping path="/ivr/adherence/confirm"/>
             <mvc:mapping path="/ivr/adherence/notcaptured"/>
             <mvc:mapping path="/ivr/adherence/callstatus"/>
+            <mvc:mapping path="/providerreminder/calllog"/>
             <bean class="org.motechproject.whp.interceptor.APIKeyInterceptor">
                 <constructor-arg value="#{whpProperties['whp.api.key']}"/>
             </bean>
