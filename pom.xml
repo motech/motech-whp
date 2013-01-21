@@ -893,5 +893,10 @@
             </build>
         </profile>
     </profiles>
-
+    <scm>
+        <connection>scm:git:https://github.com/motech/motech-whp</connection>
+        <developerConnection>scm:git:https://github.com/motech/motech-whp</developerConnection>
+        <url>https://github.com/motech/motech-whp</url>
+        <tag>release-0.4.1</tag>
+    </scm>
 </project>
