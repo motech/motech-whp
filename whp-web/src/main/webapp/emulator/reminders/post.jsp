@@ -41,7 +41,7 @@
     output += "Received response:\n";
     output += "Got Request Method Type :" + request.getMethod()+"\n";
     output += "Got Request Query String :\n" + request.getQueryString()+"\n";
-    output += "Got Request Header API Key :\n" + request.getHeader("api-key")+"\n";
+    output += "Got Request Header API Key :\n" + request.getHeader("X-ApiKey")+"\n";
     StringWriter writer = new StringWriter();
     IOUtils.copy(request.getInputStream(), writer);
     output += "Got Request Body: \n" + writer.toString();
