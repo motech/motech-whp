@@ -16,7 +16,7 @@
                <a id="cmf-admins" href="/whp/diagnostics/show/all" target="blank">Motech WHP</a>
             </li>
             <li>
-               <a id="cmf-admins" href="<@spring.message 'whp.reports.url'/>"/diagnostics/show/all" target="blank">Motech WHP Reports</a>
+               <a id="cmf-admins" href="<@spring.message 'whp.reports.url'/>/diagnostics/show/all" target="blank">Motech WHP Reports</a>
             </li>
         </ul>
     </li>
