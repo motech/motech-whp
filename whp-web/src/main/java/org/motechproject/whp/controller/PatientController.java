@@ -14,6 +14,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
+import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
@@ -50,6 +51,7 @@ public class PatientController extends BaseWebController {
     public static final String PATIENT_LIST = "patientList";
     private ProviderService providerService;
     private PatientService patientService;
+    private PatientPagingService patientPagingService;
 
     private WHPAdherenceService whpAdherenceService;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
@@ -61,6 +63,7 @@ public class PatientController extends BaseWebController {
 
     @Autowired
     public PatientController(PatientService patientService,
+                             PatientPagingService patientPagingService,
                              WHPAdherenceService whpAdherenceService,
                              TreatmentCardService treatmentCardService,
                              TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
@@ -71,6 +74,7 @@ public class PatientController extends BaseWebController {
                              ProviderRemarksService providerRemarksService) {
 
         this.patientService = patientService;
+        this.patientPagingService = patientPagingService;
         this.whpAdherenceService = whpAdherenceService;
         this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
@@ -93,7 +97,7 @@ public class PatientController extends BaseWebController {
     public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
                        @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
                        Model uiModel) {
-        List<Patient> patients = getPatientsFor(districtName, providerId);
+        List<Patient> patients = getAllPatients();
         prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/list";
     }
@@ -141,6 +145,13 @@ public class PatientController extends BaseWebController {
 
         return patients;
     }
+
+    private List<Patient> getAllPatients() {
+        List<Patient> patients;
+        patients = patientPagingService.getAll();
+        return patients;
+    }
+
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
     public String adjustPhaseStartDates(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {

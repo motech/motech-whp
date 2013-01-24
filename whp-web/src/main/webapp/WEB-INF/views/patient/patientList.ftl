@@ -1,4 +1,5 @@
 <#import "/spring.ftl" as spring />
+<#import "../paginator.ftl" as paginator>
 <#include "../layout/legend.ftl">
 <div class="">Found <span class="bold">${patientList?size}</span> patient(s)</div>
 <script type="text/javascript"
@@ -12,6 +13,7 @@
     });
 </script>
 
+<@paginator.paginate id = "patient_listing" entity="patient_results" filterSectionId="" contextRoot="/whp" rowsPerPage="5"  stylePath="/resources-${applicationVersion}/styles">
 <table id="patientList" class="table table-striped table-bordered table-condensed" redirectOnRowClick="true">
     <thead>
     <tr>
@@ -45,54 +47,49 @@
 
     </tr>
         <#else>
-            <#list patientList as patient>
-            <tr id="patientList_${patient.patientId}" class="<#if patient.currentTreatmentPaused>paused</#if> link"
-                redirect-url="<@spring.url '/patients/show?patientId=${patient.patientId}' />">
-                <td class="name">${patient.firstName?cap_first}
-                                         <#if patient.lastName?exists>
-                ${patient.lastName?cap_first}
-                </#if>
+        <tr class="patient-listing" ng-repeat="item in data.results"
+            id="PatientRows_{{item.patientId}}"
+            containerId="{{item.patientId}}">
+            <#--<tr id="patientList_{{item.patientId}}"/>-->
+            <#--<tr id="patientList_{{item.patientId}}" class="<#if patient.currentTreatmentPaused>paused</#if> link"-->
+                <#--redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />">-->
+                <td class="name">{{item.firstName}}  </td>
+                <td>{{item.age}}</td>
+                <td id="patient_{{item.patientId}}_Gender">{{item.gender}}</td>
+                <td class="patientId">{{item.patientId}}</td>
+                <td class="tbId">{{item.tbId}}</td>
+                <td id="patient_{{item.patientId}}_ProviderId">{{item.currentTreatment.providerId}}</td>
+                <td id="patient_{{item.patientId}}_Village">
+                {{item.currentTreatment.patientAddress.address_village}}
                 </td>
-                <td>${patient.currentTherapy.patientAge!}</td>
-                <td id="patient_${patient.patientId}_Gender">${patient.gender}</td>
-                <td class="patientId">
-                    <#if (patient.nearingPhaseTransition || patient.transitioning) && !patient.orHasBeenOnCp>
-                        <img id="achtung" class="pull-left"
-                             src="<@spring.url '/resources-${applicationVersion}/img/smallwarning.png'/>"/>
-                    </#if>
-                    <b>${patient.patientId}</b>
+                <td id="patient_{{item.patientId}}_District">{{item.currentTreatment.providerDistrict}}</td>
+                <td id="patient_{{item.patientId}}_TreatmentCategory">
+                {{item.currentTherapy.treatmentCategory.name}}
                 </td>
-                <td class="tbId">${patient.currentTreatment.tbId}</td>
-                <td id="patient_${patient.patientId}_ProviderId">${patient.currentTreatment.providerId}</td>
-                <td id="patient_${patient.patientId}_Village">
-                ${patient.currentTreatment.patientAddress.address_village}
+                <td id="patient_{{item.patientId}}_TherapyCreationDate">
+                    <#--<#if patient.currentTreatment.startDate?? >-->
+                                {{item.currentTreatment.startDateAsString}}
+                            <#--</#if>-->
                 </td>
-                <td id="patient_${patient.patientId}_District">${patient.currentTreatment.providerDistrict}</td>
-                <td id="patient_${patient.patientId}_TreatmentCategory">
-                ${patient.currentTherapy.treatmentCategory.name}
+                <td id="patient_{{item.patientId}}_TreatmentStartDate">
+                    <#--<#if patient.currentTherapy.startDate?? >-->
+                                {{item.currentTherapy.startDateAsString}}
+                            <#--</#if>-->
                 </td>
-                <td id="patient_${patient.patientId}_TherapyCreationDate">
-                    <#if patient.currentTreatment.startDate?? >
-                                ${patient.currentTreatment.startDateAsString}
-                            </#if>
+                <td id="patient_{{item.patientId}}_IPProgress">
+                {{item.IPProgress}}
                 </td>
-                <td id="patient_${patient.patientId}_TreatmentStartDate">
-                    <#if patient.currentTherapy.startDate?? >
-                                ${patient.currentTherapy.startDateAsString}
-                            </#if>
+                <td id="patient_{{item.patientId}}_CPProgress">
+                {{item.CPProgress}}
                 </td>
-                <td id="patient_${patient.patientId}_IPProgress">
-                ${patient.IPProgress}
-                </td>
-                <td id="patient_${patient.patientId}_CPProgress">
-                ${patient.CPProgress}
-                </td>
-                <td id="patient_${patient.patientId}_MissedDoses">
-                ${patient.cumulativeDosesNotTaken}
+                <td id="patient_{{item.patientId}}_MissedDoses">
+                {{item.cumulativeDosesNotTaken}}
                 </td>
             </tr>
-            </#list>
+
     </#if>
     </tbody>
 </table>
+</@paginator.paginate>
+<@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
 

@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -17,6 +18,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
+import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
@@ -58,6 +60,9 @@ public class PatientControllerTest extends BaseControllerTest {
     @Mock
     ProviderService providerService;
     @Mock
+    PatientPagingService patientPagingService;
+
+    @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
     WHPAdherenceService whpAdherenceService;
@@ -92,7 +97,7 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, whpAdherenceService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
+        patientController = new PatientController(patientService, patientPagingService, whpAdherenceService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -208,6 +213,8 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/list"));
     }
 
+    //TODO: Nishi, Abhi- future feature
+    @Ignore
     @Test
     public void shouldFetchListOfPatientsIfDistrictNameIsPresentInCookies() throws Exception {
         String district = "Vaishali";
@@ -226,6 +233,8 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/list"));
     }
 
+    //TODO: Nishi, Abhi- future feature
+    @Ignore
     @Test
     public void shouldFetchListOfPatientsIfProviderIdIsPresentInCookies() throws Exception {
         String providerId = "providerid";
@@ -292,6 +301,23 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/patientList"));
 
         verify(patientService).getAllWithActiveTreatmentForProvider(providerId);
+    }
+
+    @Test
+    public void shouldFetchAllPatients() throws Exception {
+
+        List<Patient> expectedLisOfPatients = asList(patient);
+
+        when(patientPagingService.getAll()).thenReturn(expectedLisOfPatients);
+
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/list"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("patientList", expectedLisOfPatients))
+                .andExpect(view().name("patient/list"));
+
+        verify(patientPagingService).getAll();
+
     }
 
 }
