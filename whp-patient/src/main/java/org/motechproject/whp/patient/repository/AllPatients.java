@@ -9,7 +9,6 @@ import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.scheduler.context.EventContext;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.Countable;
@@ -118,12 +117,6 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     public void createViewForProvidersWithActivePatients() {
     }
 
-    @View(name = "provider_with_active_patients_count", map = "classpath:filterProvidersWithActivePatients.js", reduce = "_count")
-    public List<ProviderPatientCount> findAllProviderPatientCount() {
-        ViewQuery query = createQuery("provider_with_active_patients_count").group(true).groupLevel(1).reduce(true);
-        return listOfProviderPatientCount(db.queryView(query));
-
-    }
 
     @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
     public ProviderIds findAllProvidersWithAdherenceAsOf(LocalDate asOf) {
@@ -137,15 +130,6 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     public ProviderIds findAllProvidersWithoutAdherenceAsOf(LocalDate asOf) {
         ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf.minusDays(1)).descending(true);
         return filterProviderIds(db.queryView(query));
-    }
-
-    private List<ProviderPatientCount> listOfProviderPatientCount(ViewResult rows) {
-        List<ProviderPatientCount> providerPatientCounts = new ArrayList<>();
-        for (ViewResult.Row row : rows) {
-            providerPatientCounts.add(new ProviderPatientCount(row.getKey(), row.getValueAsInt()));
-        }
-
-        return providerPatientCounts;
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {

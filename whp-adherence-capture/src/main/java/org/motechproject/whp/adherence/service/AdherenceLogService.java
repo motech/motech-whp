@@ -5,7 +5,6 @@ import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,9 +63,5 @@ public class AdherenceLogService {
 
     public ProviderIds providersWithAdherence(LocalDate from, LocalDate to) {
         return allAdherenceLogs.findProvidersWithAdherence(from, to);
-    }
-
-    public List<ProviderPatientCount> getProviderPatientWithAdherenceCount(LocalDate from, LocalDate to) {
-        return allAdherenceLogs.findAllProviderPatientWithAdherenceCount(from, to);
     }
 }

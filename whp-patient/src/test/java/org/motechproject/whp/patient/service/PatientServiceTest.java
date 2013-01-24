@@ -148,15 +148,6 @@ public class PatientServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldReturnProviderPatientCount() {
-        List<ProviderPatientCount> expectedResult = asList(new ProviderPatientCount("provider1", 3));
-        when(allPatients.findAllProviderPatientCount()).thenReturn(expectedResult);
-
-        assertEquals(expectedResult, patientService.getAllActiveProviderPatientCount());
-        verify(allPatients).findAllProviderPatientCount();
-    }
-
-    @Test
     public void shouldReturnProvidersWithPendingAdherence() {
         ProviderIds expectedProviderIds = new ProviderIds(asList("provider1"));
         LocalDate asOfDate = currentAdherenceCaptureWeek().startDate();

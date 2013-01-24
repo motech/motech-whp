@@ -9,7 +9,6 @@ import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -195,34 +194,4 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return new ArrayList<>(ids);
     }
 
-    @View(name = "find_provider_patient_with_adherence_count", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.PROVIDER_ID, doc.externalId, doc.doseDate], null);}}", reduce = "_count")
-    public List<ProviderPatientCount> findAllProviderPatientWithAdherenceCount(LocalDate from, LocalDate to) {
-        ComplexKey startKey = ComplexKey.of(null, null, from);
-        ComplexKey endKey = ComplexKey.of(ComplexKey.emptyObject(), ComplexKey.emptyObject(), to);
-        ViewQuery query = createQuery("find_provider_patient_with_adherence_count").startKey(startKey).endKey(endKey).group(true).groupLevel(2).reduce(true);
-        return getProviderPatientCountWithAdherence(db.queryView(query));
-    }
-
-    private List<ProviderPatientCount> getProviderPatientCountWithAdherence(ViewResult rows) {
-        List<ProviderPatientCount> providerPatientCounts = new ArrayList<>();
-        int patientCount = 0;
-        String providerId = null;
-        for (ViewResult.Row row : rows) {
-            String currentProviderId = row.getKeyAsNode().get(0).getTextValue();
-            if (currentProviderId.equals(providerId)) {
-                patientCount++;
-            } else {
-                if (providerId != null) {
-                    providerPatientCounts.add(new ProviderPatientCount(providerId, patientCount));
-                }
-                providerId = currentProviderId;
-                patientCount = 1;
-            }
-        }
-
-        if (patientCount != 0) {
-            providerPatientCounts.add(new ProviderPatientCount(providerId, patientCount));
-        }
-        return providerPatientCounts;
-    }
 }
