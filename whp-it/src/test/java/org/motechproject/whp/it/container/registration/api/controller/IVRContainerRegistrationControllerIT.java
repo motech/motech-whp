@@ -46,10 +46,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
-import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationContainerRegistrationApiContext.xml")
 public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest {

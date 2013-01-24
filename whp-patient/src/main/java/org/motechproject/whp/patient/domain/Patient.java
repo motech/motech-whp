@@ -24,9 +24,7 @@ import static org.joda.time.Weeks.weeksBetween;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
-import static org.motechproject.whp.patient.domain.PatientAlertType.AdherenceMissing;
 import static org.motechproject.whp.patient.domain.PatientAlertType.CumulativeMissedDoses;
-import static org.motechproject.whp.patient.domain.PatientAlertType.TreatmentNotStarted;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -46,12 +44,10 @@ public class Patient extends MotechBaseDataObject {
     private List<Therapy> therapyHistory = new ArrayList<>();
 
     private LocalDate lastAdherenceWeekStartDate;
-    private boolean migrated;
-
-    private String version = "V2";
-
-    @JsonIgnore
     private PatientAlerts patientAlerts = new PatientAlerts();
+
+    private boolean migrated;
+    private String version = "V2";
 
     public Patient() {
     }
@@ -496,7 +492,7 @@ public class Patient extends MotechBaseDataObject {
     public void updateCumulativeMissedDoseAlertStatus() {
         LocalDate asOfDate = getDateOfReferenceForCumulativeMissedDoses();
         int cumulativeMissedDoses = currentTherapy.getCumulativeMissedDoses(asOfDate);
-        PatientAlert alert = patientAlerts.getAlert(CumulativeMissedDoses);
+        PatientAlert alert = patientAlerts.cumulativeMissedDoseAlert();
         alert.setValue(cumulativeMissedDoses);
         alert.setAlertDate(today());
     }
@@ -515,7 +511,7 @@ public class Patient extends MotechBaseDataObject {
         } else {
             daysElapsed = getDaysElapsedSinceTreatmentStartDate();
         }
-        patientAlerts.getAlert(TreatmentNotStarted).setValue(daysElapsed);
+        patientAlerts.treatmentNotStartedAlert().setValue(daysElapsed);
     }
 
     private int getDaysElapsedSinceTreatmentStartDate() {
@@ -530,7 +526,7 @@ public class Patient extends MotechBaseDataObject {
         } else {
             weeksElapsed = 0;
         }
-        patientAlerts.getAlert(AdherenceMissing).setValue(weeksElapsed);
+        patientAlerts.adherenceMissingAlert().setValue(weeksElapsed);
     }
 
     private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {

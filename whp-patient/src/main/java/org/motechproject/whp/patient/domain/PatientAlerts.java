@@ -1,8 +1,11 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 public class PatientAlerts {
     private Map<PatientAlertType, PatientAlert> alerts = new HashMap<>();
 
