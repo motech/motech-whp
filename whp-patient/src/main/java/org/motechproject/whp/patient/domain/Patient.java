@@ -13,18 +13,20 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDateUtil;
+import org.motechproject.whp.patient.domain.alerts.PatientAlert;
+import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
 import static org.joda.time.Weeks.weeksBetween;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
-import static org.motechproject.whp.patient.domain.PatientAlertType.CumulativeMissedDoses;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -489,12 +491,9 @@ public class Patient extends MotechBaseDataObject {
         return getCurrentTreatment().getProviderId();
     }
 
-    public void updateCumulativeMissedDoseAlertStatus() {
+    public int cumulativeMissedDoses() {
         LocalDate asOfDate = getDateOfReferenceForCumulativeMissedDoses();
-        int cumulativeMissedDoses = currentTherapy.getCumulativeMissedDoses(asOfDate);
-        PatientAlert alert = patientAlerts.cumulativeMissedDoseAlert();
-        alert.setValue(cumulativeMissedDoses);
-        alert.setAlertDate(today());
+        return currentTherapy.getCumulativeMissedDoses(asOfDate);
     }
 
     private LocalDate getDateOfReferenceForCumulativeMissedDoses() {
@@ -504,38 +503,33 @@ public class Patient extends MotechBaseDataObject {
         return alertResetDate != null && alertResetDate.isAfter(treatmentStartDate) ? alertResetDate : treatmentStartDate;
     }
 
-    public void updateTreatmentNotStartedAlertStatus() {
-        int daysElapsed;
+    @JsonIgnore
+    public int getDaysSinceTherapyHasNotStarted() {
         if (currentTherapy.hasStarted()) {
-            daysElapsed = 0;
-        } else {
-            daysElapsed = getDaysElapsedSinceTreatmentStartDate();
+            return 0;
         }
-        patientAlerts.treatmentNotStartedAlert().setValue(daysElapsed);
+        return getDaysElapsedSinceTreatmentStartDate();
     }
 
     private int getDaysElapsedSinceTreatmentStartDate() {
         return Days.daysBetween(currentTherapy.getCurrentTreatmentStartDate(), DateUtil.today()).getDays();
     }
 
-    public void updateAdherenceMissingAlert() {
+    @JsonIgnore
+    public int getWeeksElapsedSinceLastDose() {
         DoseInterruption ongoingDoseInterruption = this.getCurrentTherapy().getOngoingDoseInterruption();
-        int weeksElapsed;
-        if(ongoingDoseInterruption != null){
-            weeksElapsed = weeksElapsedSinceLastAdherence(ongoingDoseInterruption.startDate());
-        } else {
-            weeksElapsed = 0;
+        if(ongoingDoseInterruption == null){
+            return 0;
         }
-        patientAlerts.adherenceMissingAlert().setValue(weeksElapsed);
+        return weeksElapsedSinceLastDose(ongoingDoseInterruption.startDate());
     }
 
-    private int weeksElapsedSinceLastAdherence(LocalDate interruptionStartDate) {
+    private int weeksElapsedSinceLastDose(LocalDate interruptionStartDate) {
         return weeksBetween(interruptionStartDate, currentAdherenceCaptureWeek().endDate().plusDays(1)).getWeeks();
     }
 
-    public void updateAllAlerts(){
-        updateTreatmentNotStartedAlertStatus();
-        updateCumulativeMissedDoseAlertStatus();
-        updateAdherenceMissingAlert();
+    @JsonIgnore
+    public void updatePatientAlert(PatientAlertType alertType, int value, int severity){
+        patientAlerts.updateAlertStatus(alertType, value, severity);
     }
 }

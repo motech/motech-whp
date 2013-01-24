@@ -5,12 +5,14 @@ import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.domain.alerts.PatientAlert;
+import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PatientAlertTest extends BaseUnitTest {
+public class PatientAlertUpdateTest extends BaseUnitTest {
 
     @Test
     public void shouldUpdateCumulativeMissedDosesAlertStatusBasedOnCurrentTreatmentStartDate() {
@@ -24,9 +26,7 @@ public class PatientAlertTest extends BaseUnitTest {
 
         Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
 
-        patient.updateCumulativeMissedDoseAlertStatus();
-
-        assertEquals(expectedCumulativeMissedDoses, patient.getPatientAlerts().cumulativeMissedDoseAlert().getValue());
+        assertEquals(expectedCumulativeMissedDoses, patient.cumulativeMissedDoses());
     }
 
     @Test
@@ -45,9 +45,7 @@ public class PatientAlertTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.updateCumulativeMissedDoseAlertStatus();
-
-        assertEquals(expectedCumulativeMissedDoses, patient.getPatientAlerts().cumulativeMissedDoseAlert().getValue());
+        assertEquals(expectedCumulativeMissedDoses, patient.cumulativeMissedDoses());
     }
 
     @Test
@@ -65,9 +63,7 @@ public class PatientAlertTest extends BaseUnitTest {
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.updateTreatmentNotStartedAlertStatus();
-
-        assertEquals(elapsedDaysSinceTBRegistration, patient.getPatientAlerts().treatmentNotStartedAlert().getValue());
+        assertEquals(elapsedDaysSinceTBRegistration, patient.getDaysSinceTherapyHasNotStarted());
     }
 
     @Test
@@ -85,13 +81,11 @@ public class PatientAlertTest extends BaseUnitTest {
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.updateTreatmentNotStartedAlertStatus();
-
-        assertEquals(0, patient.getPatientAlerts().treatmentNotStartedAlert().getValue());
+        assertEquals(0, patient.getDaysSinceTherapyHasNotStarted());
     }
 
     @Test
-    public void shouldRaiseAdherenceMissingAlert() {
+    public void shouldReturnWeeksElapsedSinceLastDose() {
         Therapy therapy = mock(Therapy.class);
         mockCurrentDate(new LocalDate(2012, 01, 01));
         when(therapy.getOngoingDoseInterruption()).thenReturn(new DoseInterruption(DateUtil.today().minusWeeks(3)));
@@ -100,13 +94,11 @@ public class PatientAlertTest extends BaseUnitTest {
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.updateAdherenceMissingAlert();
-
-        assertEquals(3, patient.getPatientAlerts().adherenceMissingAlert().getValue());
+        assertEquals(3, patient.getWeeksElapsedSinceLastDose());
     }
 
     @Test
-    public void shouldRaiseAdherenceMissingAlert_whenThereIsNoOngoingDoseInterruption() {
+    public void shouldReturnWeeksElapsedSinceLastDose_whenThereIsNoOngoingDoseInterruption() {
         Therapy therapy = mock(Therapy.class);
         when(therapy.getOngoingDoseInterruption()).thenReturn(null);
 
@@ -114,8 +106,8 @@ public class PatientAlertTest extends BaseUnitTest {
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.updateAdherenceMissingAlert();
+        patient.getWeeksElapsedSinceLastDose();
 
-        assertEquals(0, patient.getPatientAlerts().adherenceMissingAlert().getValue());
+        assertEquals(0, patient.getWeeksElapsedSinceLastDose());
     }
 }

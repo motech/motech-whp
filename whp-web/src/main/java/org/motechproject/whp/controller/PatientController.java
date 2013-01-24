@@ -102,7 +102,6 @@ public class PatientController extends BaseWebController {
     public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
         Patient patient = patientService.findByPatientId(patientId);
         treatmentUpdateOrchestrator.updateDoseInterruptions(patient);
-        patient.updateAllAlerts();
         setupDashboardModel(uiModel, request, patient);
         return "patient/show";
     }

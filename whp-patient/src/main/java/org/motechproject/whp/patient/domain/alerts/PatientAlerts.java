@@ -1,9 +1,14 @@
-package org.motechproject.whp.patient.domain;
+package org.motechproject.whp.patient.domain.alerts;
 
 import lombok.Data;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.TreatmentNotStarted;
 
 @Data
 public class PatientAlerts {
@@ -20,15 +25,18 @@ public class PatientAlerts {
     }
 
     public PatientAlert cumulativeMissedDoseAlert(){
-        return getAlert(PatientAlertType.CumulativeMissedDoses);
+        return getAlert(CumulativeMissedDoses);
     }
 
     public PatientAlert adherenceMissingAlert(){
-        return getAlert(PatientAlertType.AdherenceMissing);
+        return getAlert(AdherenceMissing);
     }
 
     public PatientAlert treatmentNotStartedAlert(){
-        return getAlert(PatientAlertType.TreatmentNotStarted);
+        return getAlert(TreatmentNotStarted);
     }
 
+    public void updateAlertStatus(PatientAlertType alertType, int value, int severity) {
+        getAlert(alertType).update(value, severity);
+    }
 }
