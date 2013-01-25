@@ -39,11 +39,45 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         AllAlertProcessors allAlertProcessors = new AllAlertProcessors(alertProcessorSet, alertConfigurations);
 
-        allAlertProcessors.process(patient);
+        allAlertProcessors.processBasedOnAlertConfiguration(patient);
 
         verify(alertProcessor1).process(patient);
         verify(alertProcessor2, never()).process(patient);
         verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert);
     }
 
+    @Test
+    public void shouldRunAllAlertProcessors() {
+        Patient patient = mock(Patient.class);
+
+        Set<AlertProcessor> alertProcessorSet = new HashSet();
+        AlertProcessor alertProcessor1 = mock(AlertProcessor.class);
+        AlertProcessor alertProcessor2 = mock(AlertProcessor.class);
+
+        int adherenceMissingAlertValue = 5;
+        int severityForAdherenceMissingAlert = 2;
+        int severityForCumulativeMissedDoseAlert = 2;
+        int cumulativeMissedDoseValue = 3;
+
+        when(alertProcessor1.alertType()).thenReturn(AdherenceMissing);
+        when(alertProcessor1.process(patient)).thenReturn(adherenceMissingAlertValue);
+        when(alertProcessor2.alertType()).thenReturn(CumulativeMissedDoses);
+        when(alertProcessor2.process(patient)).thenReturn(cumulativeMissedDoseValue);
+        alertProcessorSet.add(alertProcessor1);
+        alertProcessorSet.add(alertProcessor2);
+
+        AllAlertConfigurations alertConfigurations = mock(AllAlertConfigurations.class);
+        when(alertConfigurations.getAlertSeverityFor(AdherenceMissing, adherenceMissingAlertValue)).thenReturn(severityForAdherenceMissingAlert);
+        when(alertConfigurations.getAlertSeverityFor(CumulativeMissedDoses, cumulativeMissedDoseValue)).thenReturn(severityForCumulativeMissedDoseAlert);
+
+        AllAlertProcessors allAlertProcessors = new AllAlertProcessors(alertProcessorSet, alertConfigurations);
+
+        allAlertProcessors.processAll(patient);
+
+        verify(alertProcessor1).process(patient);
+        verify(alertProcessor2).process(patient);
+        verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert);
+        verify(patient).updatePatientAlert(CumulativeMissedDoses, cumulativeMissedDoseValue, severityForCumulativeMissedDoseAlert);
+
+    }
 }

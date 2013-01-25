@@ -33,7 +33,7 @@ public class AllAlertProcessorsIT {
         Patient patient = mock(Patient.class);
         when(allAlertConfigurations.shouldRunToday(any(PatientAlertType.class))).thenReturn(true);
 
-        allAlertProcessors.process(patient);
+        allAlertProcessors.processAll(patient);
 
         verify(adherenceMissingAlertProcessor).process(patient);
     }

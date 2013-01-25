@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Component
 public class AllAlertProcessors {
-
     private Set<AlertProcessor> alertProcessors;
     private AllAlertConfigurations alertConfigurations;
 
@@ -20,7 +19,13 @@ public class AllAlertProcessors {
         this.alertConfigurations = alertConfigurations;
     }
 
-    public void process(Patient patient) {
+    public void processAll(Patient patient) {
+        for(AlertProcessor alertProcessor : alertProcessors){
+             processAlert(alertProcessor, patient);
+        }
+    }
+
+    public void processBasedOnAlertConfiguration(Patient patient) {
         for(AlertProcessor alertProcessor : alertProcessors){
             if(alertConfigurations.shouldRunToday(alertProcessor.alertType()))
                 processAlert(alertProcessor, patient);
