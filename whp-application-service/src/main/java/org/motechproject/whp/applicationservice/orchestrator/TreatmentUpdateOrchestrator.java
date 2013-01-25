@@ -73,7 +73,6 @@ public class TreatmentUpdateOrchestrator {
                 patient.dosesResumedOnAfterBeingInterrupted(doseDate);
             }
         }
-        patientService.update(patient);
     }
 
     public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {

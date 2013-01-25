@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.motechproject.whp.common.domain.Phase;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.motechproject.whp.common.domain.Phase.*;
 
@@ -27,7 +26,7 @@ public class AdjustPhaseDatesTestPart extends TreatmentUpdateOrchestratorTestPar
         assertEquals(ipStartDate, patient.getCurrentTherapy().getPhaseStartDate(IP));
         assertEquals(eipStartDate, patient.getCurrentTherapy().getPhaseStartDate(EIP));
         assertEquals(cpStartDate, patient.getCurrentTherapy().getPhaseStartDate(CP));
-        verify(patientService, times(3)).update(patient);
+        verify(patientService).update(patient);
     }
 
     @Test
