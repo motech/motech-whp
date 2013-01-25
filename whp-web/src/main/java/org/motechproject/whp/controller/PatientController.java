@@ -122,7 +122,7 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam(value = "selectedDistrict", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
+    public String filterByDistrictAndProvider(@RequestParam(value = "district", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
         List<Patient> patients = getPatientsFor(districtName, providerId);
         prepareModelForListView(uiModel, patients, districtName, providerId);
         setSearchParamsIntoCookies(response, districtName, providerId);
@@ -151,6 +151,18 @@ public class PatientController extends BaseWebController {
         patients = patientPagingService.getAll();
         return patients;
     }
+
+//    private List<Patient> getPagedPatientsFor(String district, String providerId) {
+//        List<Patient> patients;
+//        if (isNotEmpty(providerId))
+//            patients = patientPagingService.getAllWithActiveTreatmentForProvider(providerId);
+//        else if (isNotEmpty(district))
+//            patients = patientPagingService.searchBy(districtName);
+//        else
+//            patients = new ArrayList<>();
+//
+//        return patients;
+//    }
 
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)

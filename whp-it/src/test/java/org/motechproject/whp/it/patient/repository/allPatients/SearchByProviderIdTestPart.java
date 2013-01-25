@@ -1,6 +1,7 @@
 package org.motechproject.whp.it.patient.repository.allPatients;
 
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
@@ -11,10 +12,17 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 public class SearchByProviderIdTestPart extends AllPatientsTestPart {
+
+    @Before
+    public void setUp() {
+        allPatients.removeAll();
+    }
 
     @Test
     public void shouldFetchPatientsByCurrentProviderId() {
@@ -97,5 +105,24 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
 
         List<Patient> patients = allPatients.getAllUnderActiveTreatmentInDistrict(PROVIDER_DISTRICT);
         assertPatientEquals(asList(patient1, patient3), patients);
+    }
+
+
+    @Test
+    public void shouldFetchByDistrictForGivenPageNumber(){
+
+        String provider1 = "provider1";
+        String provider2 = "provider2";
+        String provider3 = "provider3";
+
+        Patient patient1 = createPatient("patientId1", provider1, PROVIDER_DISTRICT);
+        Patient patient2 = createPatient("patientId2", provider2, PROVIDER_DISTRICT);
+        Patient patient3 = createPatient("patientId3", provider3, PROVIDER_DISTRICT);
+
+        Integer startIndex = 1;
+        Integer rowsPerPage = 2;
+        List<Patient> patients = allPatients.getAllUnderActiveTreatmentInDistrictForAGivenPage(PROVIDER_DISTRICT, startIndex, rowsPerPage);
+        assertPatientEquals(asList(patient3), patients);
+        assertThat(patients.size(), is(1));
     }
 }

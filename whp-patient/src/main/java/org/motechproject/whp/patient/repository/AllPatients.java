@@ -8,6 +8,8 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.exception.WHPErrorCode;
@@ -98,6 +100,14 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
         return patients;
     }
 
+    @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
+    public List<Patient> getAllUnderActiveTreatmentInDistrictForAGivenPage(String district, Integer startIndex, Integer rowsPerPage) {
+        ViewQuery q = createQuery("find_by_district_having_active_treatment_v1").skip(startIndex * rowsPerPage).limit(rowsPerPage).key(district).includeDocs(true);
+        List<Patient> patients = db.queryView(q, Patient.class);
+        Collections.sort(patients, new PatientComparatorByFirstName());
+        return patients;
+    }
+
     public ProviderIds providersWithActivePatients(ProviderIds providersToSearchFor) {
         ViewQuery query = createQuery("with_active_patients").keys(providersToSearchFor.asList());
         return filterProviderIds(db.queryView(query));
@@ -112,6 +122,14 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     public List<Patient> getAll(int pageNumber, int pageSize) {
         ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
         return db.queryView(query, Patient.class);
+    }
+
+    public List<Patient> filter(FilterParams nonEmptyParams, SortParams sortCriteria, int startIndex, Integer rowsPerPage) {
+         if (nonEmptyParams.containsKey("selectedDistrict")){
+             return getAllUnderActiveTreatmentInDistrictForAGivenPage(nonEmptyParams.get("selectedDistrict").toString(), startIndex, rowsPerPage);
+         }
+        else
+             return getAll(startIndex, rowsPerPage);
     }
 
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
