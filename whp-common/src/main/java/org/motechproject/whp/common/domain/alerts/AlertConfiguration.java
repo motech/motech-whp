@@ -1,33 +1,24 @@
 package org.motechproject.whp.common.domain.alerts;
 
-import org.springframework.stereotype.Component;
+import lombok.Data;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.util.DateUtil;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-@Component
+@Data
 public class AlertConfiguration {
-    Map<PatientAlertType, AlertThresholds> alertConfigurationMap;
+    private PatientAlertType alertType;
+    private AlertThresholds alertThresholds;
+    private List<DayOfWeek> daysOfWeek;
 
-    public AlertConfiguration() {
-        alertConfigurationMap = new HashMap<>();
-        alertConfigurationMap.put(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds());
-        alertConfigurationMap.put(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds());
+    public AlertConfiguration(PatientAlertType alertType, AlertThresholds alertThresholds, List<DayOfWeek> daysOfWeek) {
+        this.alertType = alertType;
+        this.alertThresholds = alertThresholds;
+        this.daysOfWeek = daysOfWeek;
     }
 
-    private AlertThresholds getAdherenceMissingAlertThresholds() {
-        return new AlertThresholds(1, 2, 6);
-    }
-
-    private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(5, 10, 20);
-    }
-
-    private AlertThresholds getAlertThresholds(PatientAlertType alertType){
-        return alertConfigurationMap.get(alertType);
-    }
-
-    public AlertThreshold getThresholdFor(PatientAlertType alertType, int value){
-       return getAlertThresholds(alertType).getThreshold(value);
+    public boolean shouldRunToday() {
+        return daysOfWeek.contains(DayOfWeek.getDayOfWeek(DateUtil.today()));
     }
 }
