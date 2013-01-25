@@ -9,6 +9,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -38,11 +39,12 @@ public class PatientService {
     private RequestValidator validator;
     private ProviderService providerService;
     private AllDistricts allDistricts;
+    private PatientAlertService patientAlertService;
 
     @Autowired
     public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks, UpdateCommandFactory updateCommandFactory,
-                          RequestValidator validator, ProviderService providerService, AllDistricts allDistricts) {
+                          RequestValidator validator, ProviderService providerService, AllDistricts allDistricts, PatientAlertService patientAlertService) {
         this.allPatients = allPatients;
         this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
@@ -50,6 +52,7 @@ public class PatientService {
         this.validator = validator;
         this.providerService = providerService;
         this.allDistricts = allDistricts;
+        this.patientAlertService = patientAlertService;
     }
 
     public void createPatient(PatientRequest patientRequest) {
@@ -74,7 +77,12 @@ public class PatientService {
     }
 
     public void update(Patient updatedPatient) {
+        updatePatientAlerts(updatedPatient);
         allPatients.update(updatedPatient);
+    }
+
+    private void updatePatientAlerts(Patient updatedPatient) {
+        patientAlertService.updatePatientAlerts(updatedPatient);
     }
 
     public List<Patient> searchBy(String districtName) {
@@ -121,7 +129,7 @@ public class PatientService {
 
         for (Patient patient : patients) {
             patient.getCurrentTreatment().setProviderDistrict(provider.getDistrict());
-            update(patient);
+            allPatients.update(patient);
         }
     }
 

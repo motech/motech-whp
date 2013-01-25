@@ -10,12 +10,12 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.common.domain.ProviderPatientCount;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
@@ -58,6 +58,8 @@ public class PatientServiceTest extends BaseUnitTest {
     ProviderService providerService;
     @Mock
     private AllDistricts allDistricts;
+    @Mock
+    private PatientAlertService patientAlertService;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -67,7 +69,7 @@ public class PatientServiceTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
-        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, updateCommandFactory, requestValidator, providerService, allDistricts);
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, updateCommandFactory, requestValidator, providerService, allDistricts, patientAlertService);
     }
 
     @Test
@@ -159,8 +161,19 @@ public class PatientServiceTest extends BaseUnitTest {
         verify(allPatients).findAllProvidersWithoutAdherenceAsOf(asOfDate);
     }
 
+    @Test
+    public void shouldUpdatePatientAlertsWhenPatientIsUpdated() {
+        Patient patient = mock(Patient.class);
+        patientService.update(patient);
+
+        verify(patientAlertService).updatePatientAlerts(patient);
+        verify(allPatients).update(patient);
+    }
+
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(allPatients);
+        verifyNoMoreInteractions(patientAlertService);
     }
 }
