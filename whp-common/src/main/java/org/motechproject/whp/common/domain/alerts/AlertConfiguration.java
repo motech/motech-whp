@@ -16,7 +16,7 @@ public class AlertConfiguration {
     }
 
     private AlertThresholds getAdherenceMissingAlertThresholds() {
-        return new AlertThresholds(10);
+        return new AlertThresholds(1, 2, 6);
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
