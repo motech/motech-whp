@@ -3,7 +3,6 @@ package org.motechproject.whp.controller;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
-import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
@@ -51,7 +50,6 @@ public class PatientController extends BaseWebController {
     private ProviderService providerService;
     private PatientService patientService;
 
-    private WHPAdherenceService whpAdherenceService;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
@@ -61,7 +59,6 @@ public class PatientController extends BaseWebController {
 
     @Autowired
     public PatientController(PatientService patientService,
-                             WHPAdherenceService whpAdherenceService,
                              TreatmentCardService treatmentCardService,
                              TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                              ProviderService providerService,
@@ -71,7 +68,6 @@ public class PatientController extends BaseWebController {
                              ProviderRemarksService providerRemarksService) {
 
         this.patientService = patientService;
-        this.whpAdherenceService = whpAdherenceService;
         this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
