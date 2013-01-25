@@ -25,7 +25,7 @@ public class PatientAlertServiceTest {
     @Test
     public void shouldFetchPatientAndUpdateDoseInterruptions() {
         Patient patient = mock(Patient.class);
-        patientAlertService.updatePatientAlerts(patient, true);
+        patientAlertService.updatePatientAlerts(patient);
 
         verify(allAlertProcessors).processAll(patient);
     }

@@ -82,7 +82,7 @@ public class PatientService {
     }
 
     private void updatePatientAlerts(Patient updatedPatient) {
-        patientAlertService.updatePatientAlerts(updatedPatient, true);
+        patientAlertService.updatePatientAlerts(updatedPatient);
     }
 
     public List<Patient> searchBy(String districtName) {
