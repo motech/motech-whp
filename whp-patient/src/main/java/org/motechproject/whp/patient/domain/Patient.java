@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
-import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -22,11 +21,10 @@ import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.*;
 import static org.joda.time.Weeks.weeksBetween;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
-import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
+import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -279,21 +277,6 @@ public class Patient extends MotechBaseDataObject {
         return getLastCompletedPhase().remainingDoses(currentTherapy.getTreatmentCategory());
     }
 
-    @JsonIgnore
-    public String getIPProgress() {
-        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTakenInIntensivePhases();
-        int totalDoseCount = currentTherapy.getTotalDoesInIntensivePhases();
-
-        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
-    }
-
-    @JsonIgnore
-    public String getCPProgress() {
-        int totalDoseCount = currentTherapy.getTotalDoesIn(Phase.CP);
-        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTaken(Phase.CP);
-        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
-    }
-
     public boolean currentPhaseDoseComplete() {
         return currentTherapy.currentPhaseDoseComplete();
     }
@@ -355,23 +338,6 @@ public class Patient extends MotechBaseDataObject {
         ArrayList<Treatment> treatments = new ArrayList<>();
         treatments.addAll(currentTherapy.getTreatments());
         return treatments;
-    }
-
-    //TODO : Should be moved to UIModel
-    private String doseCompletionMessage(int totalDoseCount, int totalDoseTakenCount) {
-        if (totalDoseCount == 0) {
-            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, 0.0f);
-        } else {
-            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, (totalDoseTakenCount / (float) totalDoseCount) * 100);
-        }
-    }
-
-    @JsonIgnore
-    private Therapy getTherapy(String therapyUid) {
-        if (currentTherapy.getUid().equals(therapyUid)) return currentTherapy;
-
-        List<Therapy> therapyList = select(therapyHistory, having(on(Therapy.class).getUid(), Matchers.equalTo(therapyUid)));
-        return therapyList.get(0);
     }
 
     @JsonIgnore
