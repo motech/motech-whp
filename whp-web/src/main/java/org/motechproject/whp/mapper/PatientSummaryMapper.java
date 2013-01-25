@@ -1,6 +1,5 @@
 package org.motechproject.whp.mapper;
 
-import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.uimodel.PatientSummary;
@@ -29,10 +28,10 @@ public class PatientSummaryMapper {
     private PatientSummary map(Patient patient) {
         PatientSummary patientSummary = new PatientSummary();
         patientSummary.setAge(patient.getAge());
-        patientSummary.setCpTreatmentProgress(getCPProgress(patient));
+        patientSummary.setCpTreatmentProgress(patient.getCPProgress());
         patientSummary.setCumulativeMissedDoses(patient.getCumulativeDosesNotTaken());
         patientSummary.setDiseaseClass(extractDiseaseClass(patient));
-        patientSummary.setIpTreatmentProgress(getIPProgress(patient));
+        patientSummary.setIpTreatmentProgress(patient.getIPProgress());
         patientSummary.setName(buildPatientName(patient));
         patientSummary.setGender(patient.getGender());
         patientSummary.setPatientId(patient.getPatientId());
@@ -154,28 +153,4 @@ public class PatientSummaryMapper {
         }
         return nameBuilder.toString();
     }
-
-    String getIPProgress(Patient patient) {
-        int totalDoseTakenCount = patient.getCurrentTherapy().getNumberOfDosesTakenInIntensivePhases();
-        int totalDoseCount = patient.getCurrentTherapy().getTotalDoesInIntensivePhases();
-
-        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
-    }
-
-
-    String getCPProgress(Patient patient) {
-        int totalDoseCount = patient.getCurrentTherapy().getTotalDoesIn(Phase.CP);
-        int totalDoseTakenCount = patient.getCurrentTherapy().getNumberOfDosesTaken(Phase.CP);
-        return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
-    }
-
-    private String doseCompletionMessage(int totalDoseCount, int totalDoseTakenCount) {
-        if (totalDoseCount == 0) {
-            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, 0.0f);
-        } else {
-            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, (totalDoseTakenCount / (float) totalDoseCount) * 100);
-        }
-    }
-
 }
-

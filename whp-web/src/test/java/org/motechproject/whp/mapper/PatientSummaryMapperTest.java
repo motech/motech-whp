@@ -18,7 +18,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PatientSummaryMapperTest {
 
@@ -59,49 +58,6 @@ public class PatientSummaryMapperTest {
         assertEquals(null, patientSummaries.get(0).getPreTreatmentWeight());
     }
 
-
-
-    @Test
-    public void shouldReturnFormattedIPProgress() {
-        Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
-
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
-
-        patient.endLatestPhase(today().minusMonths(4));
-
-        patient.nextPhaseName(Phase.EIP);
-        patient.startNextPhase();
-
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
-
-        //(24:IP + 9:EIP) / (24:IP + 12:EIP)
-        assertEquals("33/36 (91.67%)", patientSummaryMapper.getIPProgress(patient));
-    }
-
-    @Test
-    public void shouldReturnFormattedCPProgress() {
-        Patient patient = PatientBuilder.patient();
-        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
-        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
-
-        patient.endLatestPhase(today().minusMonths(4));
-
-        patient.nextPhaseName(Phase.EIP);
-        patient.startNextPhase();
-        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(11));
-
-        patient.endLatestPhase(today().minusMonths(3));
-
-        patient.nextPhaseName(Phase.CP);
-        patient.startNextPhase();
-        patient.setNumberOfDosesTaken(Phase.CP, 35, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
-
-        //(24:IP + 9:EIP) / (24:IP + 12:EIP)
-        assertEquals("35/54 (64.81%)", patientSummaryMapper.getCPProgress(patient));
-    }
-
-
     private void verifyInactivePatientSummary(PatientSummary patientSummary, Patient inactivePatient) {
         verifyActivePatientSummary(patientSummary, inactivePatient);
         assertEquals(patientSummary.getTreatmentClosingDate(), inactivePatient.getCurrentTreatment().getEndDate().toDate());
@@ -110,10 +66,10 @@ public class PatientSummaryMapperTest {
 
     private void verifyActivePatientSummary(PatientSummary patientSummary, Patient patient) {
         assertEquals(patientSummary.getAge(), patient.getAge());
-        assertEquals(patientSummary.getCpTreatmentProgress(), patientSummaryMapper.getCPProgress(patient));
+        assertEquals(patientSummary.getCpTreatmentProgress(), patient.getCPProgress());
         assertEquals(patientSummary.getCumulativeMissedDoses(), Integer.valueOf(patient.getCumulativeDosesNotTaken()));
         assertEquals(patientSummary.getDiseaseClass(), patient.getCurrentTherapy().getDiseaseClass().value());
-        assertEquals(patientSummary.getIpTreatmentProgress(), patientSummaryMapper.getIPProgress(patient));
+        assertEquals(patientSummary.getIpTreatmentProgress(), patient.getIPProgress());
         assertEquals(patientSummary.getName(), patient.getFirstName() + " " + patient.getLastName());
         assertEquals(patientSummary.getGender(), patient.getGender());
         assertEquals(patientSummary.getPatientId(), patient.getPatientId());
