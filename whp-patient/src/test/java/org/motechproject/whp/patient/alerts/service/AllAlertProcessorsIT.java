@@ -1,11 +1,11 @@
-package org.motechproject.whp.patientalerts.service;
+package org.motechproject.whp.patient.alerts.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patientalerts.processor.AdherenceMissingAlertProcessor;
+import org.motechproject.whp.patient.alerts.processor.AdherenceMissingAlertProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationPatientAlertsContext.xml")
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationPatientContext.xml")
 public class AllAlertProcessorsIT {
 
     @ReplaceWithMock

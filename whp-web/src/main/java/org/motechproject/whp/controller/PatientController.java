@@ -154,14 +154,6 @@ public class PatientController extends BaseWebController {
         return String.format("redirect:/patients/show?patientId=%s", patientId);
     }
 
-    @RequestMapping(value = "dashboard", method = RequestMethod.POST)
-    public String update(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
-        Patient updatedPatient = phaseStartDates.mapNewPhaseInfoToPatient(patientService.findByPatientId(patientId));
-        patientService.update(updatedPatient);
-        flashOutDateUpdatedMessage(patientId, phaseStartDates, httpServletRequest);
-        return String.format("redirect:/patients/dashboard?patientId=%s", patientId);
-    }
-
     private void passAdherenceSavedMessageToListView(Model uiModel, HttpServletRequest request) {
         String message = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (StringUtils.isNotEmpty(message)) {

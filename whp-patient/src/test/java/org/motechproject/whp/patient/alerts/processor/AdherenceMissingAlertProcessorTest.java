@@ -1,4 +1,4 @@
-package org.motechproject.whp.patientalerts.processor;
+package org.motechproject.whp.patient.alerts.processor;
 
 import org.junit.Test;
 import org.motechproject.whp.common.domain.alerts.AlertConfiguration;

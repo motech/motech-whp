@@ -1,8 +1,8 @@
-package org.motechproject.whp.patientalerts.service;
+package org.motechproject.whp.patient.alerts.service;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patientalerts.processor.AlertProcessor;
+import org.motechproject.whp.patient.alerts.processor.AlertProcessor;
 
 import java.util.HashSet;
 import java.util.Set;
