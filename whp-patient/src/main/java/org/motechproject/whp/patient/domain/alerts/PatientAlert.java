@@ -14,6 +14,9 @@ public class PatientAlert {
     private int alertSeverity;
     private LocalDate resetDate;
 
+    public PatientAlert() {
+    }
+
     public PatientAlert(PatientAlertType alertType) {
         this.alertType = alertType;
     }
