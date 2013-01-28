@@ -12,7 +12,7 @@ public class AdherenceMissingAlertProcessorTest {
     public void shouldReturnMissingWeeksOfAdherenceForPatient() {
         Patient patient = mock(Patient.class);
         int weeksElapsedSinceLastDose = 5;
-        when(patient.isCurrentTreatmentPaused()).thenReturn(true);
+        when(patient.isCurrentTreatmentPaused()).thenReturn(false);
         when(patient.getWeeksElapsedSinceLastDose()).thenReturn(weeksElapsedSinceLastDose);
 
         AdherenceMissingAlertProcessor adherenceMissingAlertProcessor = new AdherenceMissingAlertProcessor();
