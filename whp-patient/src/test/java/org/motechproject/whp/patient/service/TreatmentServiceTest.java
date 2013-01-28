@@ -3,21 +3,16 @@ package org.motechproject.whp.patient.service;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.mapper.PatientMapper;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 
-import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -43,27 +38,6 @@ public class TreatmentServiceTest {
         Patient patient = new PatientBuilder().withDefaults().build();
         when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
         treatmentService = new TreatmentService(patientService, patientMapper, patientAlertScheduler);
-    }
-
-    @Test
-    public void shouldOverwriteDiseaseClass_DuringTransferIn() {
-        String providerId = "provider-id";
-        PatientRequest transferInRequest = new PatientRequestBuilder()
-                .withMandatoryFieldsForTransferInTreatment()
-                .withProviderId(providerId)
-                .withDiseaseClass(DiseaseClass.E)
-                .build();
-
-        when(providerService.findByProviderId(providerId))
-                .thenReturn(new ProviderBuilder()
-                        .withProviderId(providerId)
-                        .withDistrict("district").build());
-
-        treatmentService.transferInPatient(transferInRequest);
-
-        ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
-        verify(patientService).update(patientArgumentCaptor.capture());
-        assertEquals(DiseaseClass.E, patientArgumentCaptor.getValue().getCurrentTherapy().getDiseaseClass());
     }
 
     @Test

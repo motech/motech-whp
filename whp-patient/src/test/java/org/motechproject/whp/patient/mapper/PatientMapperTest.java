@@ -140,6 +140,7 @@ public class PatientMapperTest {
                 .withTbId("newTbId")
                 .withPatientAge(60)
                 .withProviderId(NEW_PROVIDER_ID)
+                .withDiseaseClass(DiseaseClass.E)
                 .build();
 
         String newDistrictName = "new-district";
@@ -153,6 +154,7 @@ public class PatientMapperTest {
 
         assertSame(therapy, patient.getCurrentTherapy());
         assertTreatment(transferInRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
+        assertEquals(DiseaseClass.E, patient.getCurrentTherapy().getDiseaseClass());
         verify(providerService).findByProviderId(NEW_PROVIDER_ID);
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(newDistrictName));
     }
