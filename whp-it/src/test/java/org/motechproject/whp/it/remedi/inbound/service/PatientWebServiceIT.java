@@ -12,6 +12,9 @@ import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.command.UpdateCommandFactory;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
@@ -30,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
@@ -51,6 +55,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     PatientRequestMapper patientRequestMapper;
     @Autowired
     private AllDistricts allDistricts;
+    @Autowired
+    private UpdateCommandFactory updateCommandFactory;
 
     PatientWebService patientWebService;
     private District district;
@@ -67,7 +73,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     public void setUp() {
         district = new District("district");
         allDistricts.add(district);
-        patientWebService = new PatientWebService(patientService, validator, patientRequestMapper);
+        patientWebService = new PatientWebService(patientService, validator, patientRequestMapper, updateCommandFactory);
     }
 
     @Test
@@ -382,6 +388,26 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertNull(smearTestRecord.getSmear_test_result_2());
         assertNull(smearTestRecord.getSmear_test_date_1());
         assertNull(smearTestRecord.getSmear_test_date_2());
+    }
+
+    @Test
+    public void patientCanBeTransferredToAnotherProvider_WhenHeWasTransferredOutForPreviousTreatment() {
+        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(createPatientRequest);
+        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.TransferredOut).build();
+        patientWebService.update(closeRequest);
+
+        assertTrue(patientWebService.canBeTransferred(createPatientRequest.getCase_id()));
+    }
+
+    @Test
+    public void patientCannotBeTransferredToAnotherProvider_WhenHeWasNotTransferredOutForPreviousTreatment() {
+        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
+        patientService.createPatient(createPatientRequest);
+        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.Died).build();
+        patientWebService.update(closeRequest);
+
+        assertFalse(patientWebService.canBeTransferred(createPatientRequest.getCase_id()));
     }
 
     @After

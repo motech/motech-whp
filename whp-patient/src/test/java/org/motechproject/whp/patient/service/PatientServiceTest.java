@@ -69,7 +69,7 @@ public class PatientServiceTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
-        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, updateCommandFactory, requestValidator, providerService, allDistricts, patientAlertService);
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, allDistricts, patientAlertService);
     }
 
     @Test

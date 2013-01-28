@@ -348,26 +348,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void patientCanBeTransferredToAnotherProvider_WhenHeWasTransferredOutForPreviousTreatment() {
-        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
-        patientService.createPatient(createPatientRequest);
-        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.TransferredOut).build();
-        patientService.update(closeRequest);
-
-        assertTrue(patientService.canBeTransferred(createPatientRequest.getCase_id()));
-    }
-
-    @Test
-    public void patientCannotBeTransferredToAnotherProvider_WhenHeWasNotTransferredOutForPreviousTreatment() {
-        PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();
-        patientService.createPatient(createPatientRequest);
-        PatientRequest closeRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment().withTreatmentOutcome(TreatmentOutcome.Died).build();
-        patientService.update(closeRequest);
-
-        assertFalse(patientService.canBeTransferred(createPatientRequest.getCase_id()));
-    }
-
-    @Test
     public void shouldSetStartDateAndIPStartDateOnTherapyUponCreatingNewPatient() {
         LocalDate today = today();
         PatientRequest createPatientRequest = new PatientRequestBuilder().withDefaults().build();

@@ -29,6 +29,7 @@ import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.webservice.service.PatientWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -56,6 +57,8 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
 
     @Autowired
     PatientService patientService;
+    @Autowired
+    PatientWebService patientWebService;
     @Autowired
     AllAdherenceLogs allAdherenceLogs;
     @Autowired

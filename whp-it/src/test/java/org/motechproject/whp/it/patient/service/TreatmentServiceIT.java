@@ -19,6 +19,7 @@ import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.repository.AllProviders;
+import org.motechproject.whp.webservice.service.PatientWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -34,6 +35,8 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     private AllPatients allPatients;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private PatientWebService patientWebService;
     @Autowired
     AllProviders allProviders;
     @Autowired
@@ -84,7 +87,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
@@ -93,7 +96,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
@@ -108,7 +111,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertFalse(updatedPatient.isOnActiveTreatment());
@@ -122,7 +125,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         String newProviderId = "new-provider-id";
         createProvider(newProviderId, "newDistrict");
@@ -134,7 +137,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
@@ -149,7 +152,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertEquals(DiseaseClass.P, updatedPatient.getCurrentTherapy().getDiseaseClass());
@@ -162,7 +165,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withTbId(TB_ID)
                 .build();
 
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertEquals(DiseaseClass.E, updatedPatient.getCurrentTherapy().getDiseaseClass());
@@ -176,7 +179,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
@@ -186,7 +189,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
                 .build();
-        patientService.update(updatePatientRequest);
+        patientWebService.update(updatePatientRequest);
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         SmearTestRecord smearTestRecord = updatedPatient.getSmearTestResults().get(0);
@@ -201,67 +204,6 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         assertEquals(DateUtil.newDate(2012, 5, 19), weightStatisticsRecord.getMeasuringDate());
         assertEquals(30.00, weightStatisticsRecord.getWeight());
     }
-//
-//    @Test
-//    public void shouldTransferInPatient_WhenMinimumRequiredFieldsAreSent() {
-//
-//        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-//        patientService.createPatient(patientRequest);
-//
-//        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-//
-//        String newProviderId = "newProviderId";
-//        String tbId = "newTbId";
-//        DateTime now = now();
-//
-//        treatmentService.transferInPatient(newProviderId, patient, tbId, "" , now, new SmearTestResults(), new WeightStatistics());
-//
-//        Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
-//
-//        assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentTreatment().getPatientType());
-//
-//        assertEquals(newProviderId.toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
-//        assertEquals(tbId.toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-//        assertEquals("", updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
-//        assertEquals(now.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-//        assertEquals(now, updatedPatient.getLastModifiedDate());
-//
-//        assertTrue(patient.getCurrentTreatment().getSmearTestResults().isEmpty());
-//        assertTrue(patient.getCurrentTreatment().getWeightStatistics().isEmpty());
-//    }
-//
-//    @Test
-//    public void shouldTransferInPatient_WithNewlySent_SmearTestResultsAndWeightStatistics() {
-//
-//        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
-//        patientService.createPatient(patientRequest);
-//
-//        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
-//
-//        String newProviderId = "newProviderId";
-//        String tbId = "newTbId";
-//        String newTbRegistrationNumber = "newTbRegistrationNumber";
-//        DateTime now = now();
-//
-//        treatmentService.transferInPatient(newProviderId, patient, tbId, newTbRegistrationNumber, now, patientRequest.getSmearTestResults(), patientRequest.getWeightStatistics());
-//
-//        Patient updatedPatient = allPatients.findByPatientId(patient.getPatientId());
-//
-//        assertEquals(newProviderId.toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
-//        assertEquals(tbId.toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-//        assertEquals(newTbRegistrationNumber, updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
-//        assertEquals(now.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-//        assertEquals(now, updatedPatient.getLastModifiedDate());
-//        assertEquals(PatientType.TransferredIn, updatedPatient.getCurrentTreatment().getPatientType());
-//
-//        assertEquals(1, patient.getCurrentTreatment().getSmearTestResults().size());
-//        assertEquals(DateUtil.newDate(2010, 5, 19), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_date_1());
-//        assertEquals(DateUtil.newDate(2010, 5, 21), patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_date_2());
-//        assertEquals(SmearTestResult.Positive, patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_result_1());
-//        assertEquals(SmearTestResult.Positive, patient.getCurrentTreatment().getSmearTestResults().latestResult().getSmear_test_result_2());
-//        assertEquals(DateUtil.newDate(2010, 5, 19), patient.getCurrentTreatment().getWeightStatistics().latestResult().getMeasuringDate());
-//        assertEquals(Double.valueOf(99.7), patient.getCurrentTreatment().getWeightStatistics().latestResult().getWeight());
-//    }
 
     @After
     public void tearDown() {

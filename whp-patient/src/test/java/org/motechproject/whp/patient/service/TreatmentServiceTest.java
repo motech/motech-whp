@@ -9,7 +9,6 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.mapper.PatientMapper;
-import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
@@ -23,7 +22,7 @@ import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
 public class TreatmentServiceTest {
 
     @Mock
-    private AllPatients allPatients;
+    private PatientService patientService;
     @Mock
     private ProviderService providerService;
 
@@ -36,9 +35,9 @@ public class TreatmentServiceTest {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
         Patient patient = new PatientBuilder().withDefaults().build();
-        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
 
-        treatmentService = new TreatmentService(allPatients, patientMapper);
+        treatmentService = new TreatmentService(patientService, patientMapper);
     }
 
     @Test
@@ -58,8 +57,7 @@ public class TreatmentServiceTest {
         treatmentService.transferInPatient(transferInRequest);
 
         ArgumentCaptor<Patient> patientArgumentCaptor = ArgumentCaptor.forClass(Patient.class);
-        verify(allPatients).update(patientArgumentCaptor.capture());
+        verify(patientService).update(patientArgumentCaptor.capture());
         assertEquals(DiseaseClass.E, patientArgumentCaptor.getValue().getCurrentTherapy().getDiseaseClass());
     }
-
 }

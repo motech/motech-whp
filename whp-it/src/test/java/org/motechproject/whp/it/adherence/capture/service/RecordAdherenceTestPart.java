@@ -89,8 +89,8 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         WeeklyAdherenceSummary weeklyAdherenceSummary = recordAdherence();
         assertValidAdherence(weeklyAdherenceSummary, PatientBuilder.TB_ID, PatientBuilder.PROVIDER_ID);
 
-        patientService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForCloseTreatment().build());
-        patientService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForTransferInTreatment().withTbRegistrationDate(DateUtil.now().minusDays(10)).withDateModified(DateUtil.now().minusDays(10)).build());
+        patientWebService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForCloseTreatment().build());
+        patientWebService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForTransferInTreatment().withTbRegistrationDate(DateUtil.now().minusDays(10)).withDateModified(DateUtil.now().minusDays(10)).build());
         recordAdherence();
 
         assertValidAdherence(weeklyAdherenceSummary, PatientRequestBuilder.NEW_TB_ID, PatientRequestBuilder.NEW_PROVIDER_ID);
