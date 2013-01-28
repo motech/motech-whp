@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.service;
 
+import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.mapper.PatientMapper;
@@ -11,11 +12,13 @@ public class TreatmentService {
 
     private PatientService patientService;
     private PatientMapper patientMapper;
+    private PatientAlertScheduler patientAlertScheduler;
 
     @Autowired
-    public TreatmentService(PatientService patientService, PatientMapper patientMapper) {
+    public TreatmentService(PatientService patientService, PatientMapper patientMapper, PatientAlertScheduler patientAlertScheduler) {
         this.patientService = patientService;
         this.patientMapper = patientMapper;
+        this.patientAlertScheduler = patientAlertScheduler;
     }
 
     public void openTreatment(PatientRequest patientRequest) {
@@ -23,12 +26,14 @@ public class TreatmentService {
 
         patientMapper.mapNewTreatmentForCategoryChange(patientRequest, patient);
         patientService.update(patient);
+        patientAlertScheduler.scheduleJob(patient.getPatientId());
     }
 
     public void closeTreatment(PatientRequest patientRequest) {
         Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
         patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
         patientService.update(patient);
+        patientAlertScheduler.unscheduleJob(patient.getPatientId());
     }
 
     public void pauseTreatment(PatientRequest patientRequest) {
@@ -49,5 +54,6 @@ public class TreatmentService {
         patientMapper.mapTreatmentForTransferIn(patientRequest, patient);
         patient.reviveLatestTherapy();
         patientService.update(patient);
+        patientAlertScheduler.scheduleJob(patient.getPatientId());
     }
 }
