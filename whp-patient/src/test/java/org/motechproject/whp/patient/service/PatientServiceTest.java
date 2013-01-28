@@ -11,13 +11,9 @@ import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
@@ -57,8 +53,6 @@ public class PatientServiceTest extends BaseUnitTest {
     @Mock
     ProviderService providerService;
     @Mock
-    private AllDistricts allDistricts;
-    @Mock
     private PatientAlertService patientAlertService;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -69,7 +63,7 @@ public class PatientServiceTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
-        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, allDistricts, patientAlertService);
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, patientAlertService);
     }
 
     @Test
@@ -111,16 +105,6 @@ public class PatientServiceTest extends BaseUnitTest {
         verify(allPatients).update(patient1);
         verify(allPatients).update(patient2);
         verify(allPatients).getAllWithActiveTreatmentFor(providerId);
-    }
-
-    @Test
-    public void shouldThrowErrorWhenWrongDistrictIsUsedToCreatePatient() {
-        expectedException.expect(WHPRuntimeException.class);
-        expectedException.expectMessage(WHPErrorCode.INVALID_DISTRICT.getMessage());
-        String district = "myOwnDistrict";
-        when(allDistricts.findByName(district)).thenReturn(null);
-
-        patientService.createPatient(new PatientRequestBuilder().withDefaults().withAddressDistrict(district).build());
     }
 
     @Test

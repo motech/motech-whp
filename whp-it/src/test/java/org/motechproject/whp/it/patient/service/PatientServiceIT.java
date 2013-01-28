@@ -236,15 +236,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionInCreatePatientIfDistrictIsInvalid() {
-        expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withAddressDistrict("some invalid district")
-                .build();
-        patientService.createPatient(patientRequest);
-    }
-
-    @Test
     public void shouldThrowExceptionIfCurrentTreatmentCannotBeClosedBecauseTbIdIsWrongAndTreatmentIsAlreadyClosed() {
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();

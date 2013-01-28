@@ -3,11 +3,7 @@ package org.motechproject.whp.patient.service;
 import org.joda.time.LocalDate;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.annotations.MotechListener;
-import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -31,26 +27,21 @@ public class PatientService {
     private PatientMapper patientMapper;
     private AllTherapyRemarks allTherapyRemarks;
     private ProviderService providerService;
-    private AllDistricts allDistricts;
     private PatientAlertService patientAlertService;
 
     @Autowired
     public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks,
                           ProviderService providerService,
-                          AllDistricts allDistricts,
                           PatientAlertService patientAlertService) {
         this.allPatients = allPatients;
         this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
         this.providerService = providerService;
-        this.allDistricts = allDistricts;
         this.patientAlertService = patientAlertService;
     }
 
     public void createPatient(PatientRequest patientRequest) {
-        validateDistrict(patientRequest);
-
         Patient patient = patientMapper.mapPatient(patientRequest);
         allPatients.add(patient);
     }
@@ -113,12 +104,6 @@ public class PatientService {
 
     public ProviderIds providersWithActivePatients() {
         return allPatients.providersWithActivePatients();
-    }
-
-    private void validateDistrict(PatientRequest patientRequest) {
-        District district = allDistricts.findByName(patientRequest.getAddress().getAddress_district());
-        if (district == null)
-            throw new WHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
     }
 
     public ProviderIds getAllProvidersWithPendingAdherence(LocalDate asOf) {
