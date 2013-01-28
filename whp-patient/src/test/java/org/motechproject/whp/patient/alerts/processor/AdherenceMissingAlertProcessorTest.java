@@ -9,14 +9,25 @@ import static org.mockito.Mockito.*;
 public class AdherenceMissingAlertProcessorTest {
 
     @Test
-    public void shouldUpdateAdherenceMissingAlertOnPatient() {
+    public void shouldReturnMissingWeeksOfAdherenceForPatient() {
         Patient patient = mock(Patient.class);
         int weeksElapsedSinceLastDose = 5;
+        when(patient.isCurrentTreatmentPaused()).thenReturn(true);
         when(patient.getWeeksElapsedSinceLastDose()).thenReturn(weeksElapsedSinceLastDose);
 
         AdherenceMissingAlertProcessor adherenceMissingAlertProcessor = new AdherenceMissingAlertProcessor();
         assertEquals(weeksElapsedSinceLastDose, adherenceMissingAlertProcessor.process(patient));
 
         verify(patient).getWeeksElapsedSinceLastDose();
+    }
+
+    @Test
+    public void shouldReturnAlertValueAsZeroForPausedPatients() {
+        Patient patient = mock(Patient.class);
+        when(patient.isCurrentTreatmentPaused()).thenReturn(true);
+        when(patient.getWeeksElapsedSinceLastDose()).thenReturn(5);
+
+        AdherenceMissingAlertProcessor adherenceMissingAlertProcessor = new AdherenceMissingAlertProcessor();
+        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
     }
 }
