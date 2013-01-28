@@ -97,7 +97,7 @@
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter District:</span>
-            <input id="address_district" class="span4" type="text" value="Muzafarrpur"/>
+            <input id="address_district" class="span4" type="text" value="Patna"/>
         </div>
         <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Address state:</span>
