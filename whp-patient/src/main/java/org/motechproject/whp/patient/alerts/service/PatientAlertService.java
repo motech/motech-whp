@@ -13,7 +13,11 @@ public class PatientAlertService {
         this.allAlertProcessors = allAlertProcessors;
     }
 
-    public void updatePatientAlerts(Patient patient) {
+    public void processAllAlerts(Patient patient) {
         allAlertProcessors.processAll(patient);
+    }
+
+    public void processAlertsBasedOnConfiguration(Patient patient) {
+        allAlertProcessors.processBasedOnAlertConfiguration(patient);
     }
 }

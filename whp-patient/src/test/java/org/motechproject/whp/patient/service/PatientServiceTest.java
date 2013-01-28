@@ -166,7 +166,16 @@ public class PatientServiceTest extends BaseUnitTest {
         Patient patient = mock(Patient.class);
         patientService.update(patient);
 
-        verify(patientAlertService).updatePatientAlerts(patient);
+        verify(patientAlertService).processAllAlerts(patient);
+        verify(allPatients).update(patient);
+    }
+
+    @Test
+    public void shouldUpdatePatientAlertsBasedOnAlertConfiguration() {
+        Patient patient = mock(Patient.class);
+        patientService.updateBasedOnAlertConfiguration(patient);
+
+        verify(patientAlertService).processAlertsBasedOnConfiguration(patient);
         verify(allPatients).update(patient);
     }
 

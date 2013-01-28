@@ -64,12 +64,13 @@ public class PatientService {
     }
 
     public void update(Patient updatedPatient) {
-        updatePatientAlerts(updatedPatient);
+        patientAlertService.processAllAlerts(updatedPatient);
         allPatients.update(updatedPatient);
     }
 
-    private void updatePatientAlerts(Patient updatedPatient) {
-        patientAlertService.updatePatientAlerts(updatedPatient);
+    public void updateBasedOnAlertConfiguration(Patient patient) {
+        patientAlertService.processAlertsBasedOnConfiguration(patient);
+        allPatients.update(patient);
     }
 
     public List<Patient> searchBy(String districtName) {

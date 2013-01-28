@@ -88,6 +88,12 @@ public class TreatmentUpdateOrchestrator {
         reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), now(), dailyAdherenceRequests.maxDoseDate()));
     }
 
+    public void processAlertsBasedOnConfiguration(String patientId) {
+        Patient patient = patientService.findByPatientId(patientId);
+        updateDoseInterruptions(patient);
+        patientService.updateBasedOnAlertConfiguration(patient);
+    }
+
     private void recomputePillStatus(Patient patient) {
         updateDoseTakenCount(patient);
         updateDoseInterruptions(patient);
@@ -138,5 +144,4 @@ public class TreatmentUpdateOrchestrator {
         attemptPhaseTransition(patient);
         patientService.update(patient);
     }
-
 }

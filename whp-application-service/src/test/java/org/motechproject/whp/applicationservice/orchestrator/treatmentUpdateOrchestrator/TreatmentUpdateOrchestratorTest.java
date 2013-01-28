@@ -9,7 +9,8 @@ import org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrch
         AdherenceUpdateTestPart.class,
         SetNextPhaseTestPart.class,
         PhaseTransitionTestPart.class,
-        AdjustPhaseDatesTestPart.class
+        AdjustPhaseDatesTestPart.class,
+        PatientAlertUpdateTestPart.class
 })
 public class TreatmentUpdateOrchestratorTest {
 }
